@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  backend:
+    build:
+      context: backend
+    container_name: backend
+    restart: always
+    ports:
+      - "127.0.0.1:3001:3001"
+  frontend:
+    build:
+      context: frontend
+    container_name: frontend
+    restart: always
+    ports:
+      - "127.0.0.1:3000:3000"

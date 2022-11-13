@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kioku-backend-deployment
+  labels:
+    app: kioku-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kioku-backend
+  template:
+    metadata:
+      labels:
+        app: kioku-backend
+    spec:
+      containers:
+      - name: kioku-backend
+        image: ghcr.io/memetoasty/kioku/kioku-backend:latest
+        ports:
+        - containerPort: 3001
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kioku-backend-service
+spec:
+  selector:
+    app: kioku-backend
+  ports:
+    - port: 8082
+      targetPort: 3001
+  type: LoadBalancer

@@ -30,6 +30,6 @@ spec:
   selector:
     app: kioku-backend
   ports:
-    - port: 8082
+    - port: 8084
       targetPort: 3001
   type: LoadBalancer

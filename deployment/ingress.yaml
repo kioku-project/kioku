@@ -5,6 +5,8 @@ metadata:
   name: endpoint-ingress
   labels:
     app: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
     - host: app.kioku.dev

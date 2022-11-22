@@ -18,6 +18,7 @@ spec:
       containers:
       - name: kioku-backend
         image: ghcr.io/memetoasty/kioku/kioku-backend:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3001
 

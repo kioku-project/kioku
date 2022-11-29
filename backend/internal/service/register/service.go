@@ -3,6 +3,7 @@ package register
 import (
 	"errors"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 	"github.com/kioku-project/kioku/pkg/common/db"
 	"github.com/kioku-project/kioku/pkg/user"
@@ -20,6 +21,8 @@ func New() (s *LoginService) {
 	db.InitializeDB()
 
 	app := fiber.New()
+	// TODO Restrict CORS
+	app.Use(cors.New())
 	s = &LoginService{db: db.InitializeDB(), app: app}
 	app.Post("/api/register", s.Register)
 	return

@@ -8,6 +8,6 @@ RUN go mod graph | awk '{if ($1 !~ "@") print $2}' | xargs go get
 
 COPY . .
 
-RUN go build -o /register_service /build/cmd/service/register/main.go
+RUN go build -o /login_service /build/cmd/service/login/main.go
 
-ENTRYPOINT [ "/register_service" ]
+ENTRYPOINT [ "/login_service" ]

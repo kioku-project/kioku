@@ -14,7 +14,18 @@ services:
     container_name: register_service
     restart: always
     ports:
-      - "127.0.0.1:3001:3001"
+      - "127.0.0.1:3001:80"
+    env_file:
+      - ./backend/.env
+
+  login_service:
+    build:
+      context: backend
+      dockerfile: cmd/service/login/Dockerfile
+    container_name: login_service
+    restart: always
+    ports:
+      - "127.0.0.1:3002:80"
     env_file:
       - ./backend/.env
 

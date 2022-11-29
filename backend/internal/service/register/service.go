@@ -11,32 +11,32 @@ import (
 	"gorm.io/gorm"
 )
 
-type LoginService struct {
+type RegisterService struct {
 	db  *gorm.DB
 	app *fiber.App
 }
 
-func New() (s *LoginService) {
+func New() (s *RegisterService) {
 	_ = godotenv.Load(".env", ".env.example")
 	db.InitializeDB()
 
 	app := fiber.New()
 	// TODO Restrict CORS
 	app.Use(cors.New())
-	s = &LoginService{db: db.InitializeDB(), app: app}
+	s = &RegisterService{db: db.InitializeDB(), app: app}
 	app.Post("/api/register", s.Register)
 	return
 }
 
-func (s *LoginService) Listen(addr string) error {
+func (s *RegisterService) Listen(addr string) error {
 	return s.app.Listen(addr)
 }
 
-func (s *LoginService) Shutdown() error {
+func (s *RegisterService) Shutdown() error {
 	return s.app.Shutdown()
 }
 
-func (s *LoginService) Register(ctx *fiber.Ctx) error {
+func (s *RegisterService) Register(ctx *fiber.Ctx) error {
 
 	data := map[string]string{}
 	if err := ctx.BodyParser(&data); err != nil {

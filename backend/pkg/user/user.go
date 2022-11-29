@@ -5,8 +5,9 @@ import (
 )
 
 type User struct {
-	ID     uint
-	Name   string
-	EMail  string
-	Groups []group.Group `gorm:"many2many:group_users"`
+	ID       uint          `json:"id"`
+	Name     string        `json:"name"`
+	Email    string        `json:"email"`
+	Password string        `json:"password"`
+	Groups   []group.Group `gorm:"many2many:group_users" json:"groups"`
 }

@@ -1,13 +1,23 @@
 version: "3"
 
 services:
-  backend:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+
+  register_service:
     build:
       context: backend
-    container_name: backend
+      dockerfile: cmd/service/register/Dockerfile
+    container_name: register_service
     restart: always
     ports:
       - "127.0.0.1:3001:3001"
+
   frontend:
     build:
       context: frontend

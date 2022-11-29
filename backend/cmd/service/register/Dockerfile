@@ -11,6 +11,6 @@ RUN go mod graph | awk '{if ($1 !~ "@") print $2}' | xargs go get
 
 COPY . .
 
-RUN go build -o /kioku_server /build/cmd/server/main.go
+RUN go build -o /register_service /build/cmd/service/register/main.go
 
-ENTRYPOINT [ "/kioku_server" ]
+ENTRYPOINT [ "/register_service" ]

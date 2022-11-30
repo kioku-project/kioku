@@ -1,4 +1,4 @@
-name: Frontend
+name: Register Service
 
 on:
   push:
@@ -14,7 +14,7 @@ on:
         description: 'Image version'
         required: true
 env:
-  SERVICE_IMAGE_NAME: "kioku_frontend"
+  SERVICE_IMAGE_NAME: "kioku_register"
 
 jobs:
   build_push_and_deploy:
@@ -48,5 +48,5 @@ jobs:
           context: ./backend
           file: ./backend/cmd/service/register/Dockerfile
           push: true
-          tags: ghcr.io/kioku-project/${{ env.REGISTER_SERVICE_IMAGE_NAME }}:latest
+          tags: ghcr.io/kioku-project/${{ env.SERVICE_IMAGE_NAME }}:latest
           labels: commit_sha_short=${{ steps.vars.outputs.sha_short }}

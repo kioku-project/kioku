@@ -45,6 +45,7 @@ jobs:
       - name: Build Frontend
         uses: docker/build-push-action@v3
         with:
+          context: ./frontend
           file: ./frontend/Dockerfile
           push: true
           tags: ghcr.io/kioku-project/${{ env.FRONTEND_SERVICE_IMAGE_NAME }}:latest
@@ -53,6 +54,7 @@ jobs:
       - name: Build Login Service
         uses: docker/build-push-action@v3
         with:
+          context: ./backend/cmd/service/login
           file: ./backend/cmd/service/login/Dockerfile
           push: true
           tags: ghcr.io/kioku-project/${{ env.LOGIN_SERVICE_IMAGE_NAME }}:latest
@@ -61,6 +63,7 @@ jobs:
       - name: Build Register Service
         uses: docker/build-push-action@v3
         with:
+          context: ./backend/cmd/service/register
           file: ./backend/cmd/service/register/Dockerfile
           push: true
           tags: ghcr.io/kioku-project/${{ env.REGISTER_SERVICE_IMAGE_NAME }}:latest

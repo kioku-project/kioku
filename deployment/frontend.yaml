@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: kioku-frontend
-        image: ghcr.io/memetoasty/kioku/kioku-frontend:latest
+        image: ghcr.io/kioku-project/kioku_frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 3000

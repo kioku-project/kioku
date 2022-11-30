@@ -12,7 +12,7 @@ spec:
     - host: app.kioku.dev
       http:
         paths:
-          - path: /
+          - path: / # TODO: Fix backend calls in services / create new ingress
             pathType: Prefix
             backend:
               service:

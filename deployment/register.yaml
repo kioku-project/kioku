@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kioku-register-deployment
+  labels:
+    app: kioku-register
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kioku-register
+  template:
+    metadata:
+      labels:
+        app: kioku-register
+    spec:
+      containers:
+      - name: kioku-backend
+        image: ghcr.io/kioku-project/kioku_register
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3001
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kioku-register-service
+spec:
+  selector:
+    app: kioku-register
+  ports:
+    - port: 8084
+      targetPort: 3001
+  type: LoadBalancer

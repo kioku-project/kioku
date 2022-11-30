@@ -1,0 +1,4 @@
+# TODO
+# Add PV
+# Add PV-Claim for PV
+# Add Postgresql Deployment that consumes PV-Claim

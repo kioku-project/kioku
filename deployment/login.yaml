@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kioku-backend-deployment
+  name: kioku-login-deployment
   labels:
-    app: kioku-backend
+    app: kioku-login
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: kioku-backend
+      app: kioku-login
   template:
     metadata:
       labels:
-        app: kioku-backend
+        app: kioku-login
     spec:
       containers:
       - name: kioku-backend
-        image: ghcr.io/memetoasty/kioku/kioku-backend:latest
+        image: ghcr.io/kioku-project/kioku_login
         imagePullPolicy: Always
         ports:
         - containerPort: 3001
@@ -26,10 +26,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kioku-backend-service
+  name: kioku-login-service
 spec:
   selector:
-    app: kioku-backend
+    app: kioku-login
   ports:
     - port: 8084
       targetPort: 3001

@@ -6,7 +6,9 @@ on:
     paths:
     - 'backend/cmd/service/login/**'
   pull_request:
-    branches: [ main, ci-build-images ]
+    branches: [ main ]
+    paths:
+    - 'backend/cmd/service/login/**'
 
   workflow_dispatch:
     inputs:

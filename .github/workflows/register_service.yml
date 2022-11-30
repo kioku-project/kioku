@@ -6,7 +6,9 @@ on:
     paths:
     - 'backend/cmd/service/register/**'
   pull_request:
-    branches: [ main, ci-build-images ]
+    branches: [ main ]
+    paths:
+    - 'backend/cmd/service/register/**'
 
   workflow_dispatch:
     inputs:
@@ -17,7 +19,7 @@ env:
   SERVICE_IMAGE_NAME: "kioku_register"
 
 jobs:
-  build_push_and_deploy:
+  register:
     runs-on: ubuntu-latest
 
     steps:

@@ -7,8 +7,6 @@ on:
     - 'frontend/**'
   pull_request:
     branches: [ main, ci-build-images ]
-    paths:
-    - 'frontend/**'
 
   workflow_dispatch:
     inputs:

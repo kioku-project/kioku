@@ -7,8 +7,6 @@ on:
     - 'backend/cmd/service/register/**'
   pull_request:
     branches: [ main, ci-build-images ]
-    paths:
-    - 'backend/cmd/service/register/**'
 
   workflow_dispatch:
     inputs:

@@ -1,10 +1,14 @@
-name: CI
+name: Frontend
 
 on:
   push:
     branches: [ main ]
+    paths:
+    - 'backend/cmd/service/login/**'
   pull_request:
     branches: [ main, ci-build-images ]
+    paths:
+    - 'backend/cmd/service/login/**'
 
   workflow_dispatch:
     inputs:
@@ -12,9 +16,7 @@ on:
         description: 'Image version'
         required: true
 env:
-  LOGIN_SERVICE_IMAGE_NAME: "kioku_login"
-  REGISTER_SERVICE_IMAGE_NAME: "kioku_register"
-  FRONTEND_SERVICE_IMAGE_NAME: "kioku_frontend"
+  SERVICE_IMAGE_NAME: "kioku_frontend"
 
 jobs:
   build_push_and_deploy:
@@ -42,15 +44,6 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Frontend
-        uses: docker/build-push-action@v3
-        with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
-          push: true
-          tags: ghcr.io/kioku-project/${{ env.FRONTEND_SERVICE_IMAGE_NAME }}:latest
-          labels: commit_sha_short=${{ steps.vars.outputs.sha_short }}
-      
       - name: Build Login Service
         uses: docker/build-push-action@v3
         with:
@@ -58,13 +51,4 @@ jobs:
           file: ./backend/cmd/service/login/Dockerfile
           push: true
           tags: ghcr.io/kioku-project/${{ env.LOGIN_SERVICE_IMAGE_NAME }}:latest
-          labels: commit_sha_short=${{ steps.vars.outputs.sha_short }}
-      
-      - name: Build Register Service
-        uses: docker/build-push-action@v3
-        with:
-          context: ./backend
-          file: ./backend/cmd/service/register/Dockerfile
-          push: true
-          tags: ghcr.io/kioku-project/${{ env.REGISTER_SERVICE_IMAGE_NAME }}:latest
           labels: commit_sha_short=${{ steps.vars.outputs.sha_short }}

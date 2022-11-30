@@ -46,7 +46,7 @@ jobs:
           context: ./
           file: ./frontend/Dockerfile
           push: true
-          tags: ghcr.io/friesenjungs/${{ env.FRONTEND_SERVICE_IMAGE_NAME }}:latest
+          tags: ghcr.io/kioku-project/${{ env.FRONTEND_SERVICE_IMAGE_NAME }}:latest
           labels: commit_sha_short=${{ steps.vars.outputs.sha_short }}
       
       - name: Build Login Service
@@ -55,7 +55,7 @@ jobs:
           context: ./
           file: ./backend/cmd/service/login/Dockerfile
           push: true
-          tags: ghcr.io/friesenjungs/${{ env.LOGIN_SERVICE_IMAGE_NAME }}:latest
+          tags: ghcr.io/kioku-project/${{ env.LOGIN_SERVICE_IMAGE_NAME }}:latest
           labels: commit_sha_short=${{ steps.vars.outputs.sha_short }}
       
       - name: Build Register Service
@@ -64,5 +64,5 @@ jobs:
           context: ./
           file: ./backend/cmd/service/register/Dockerfile
           push: true
-          tags: ghcr.io/friesenjungs/${{ env.REGISTER_SERVICE_IMAGE_NAME }}:latest
+          tags: ghcr.io/kioku-project/${{ env.REGISTER_SERVICE_IMAGE_NAME }}:latest
           labels: commit_sha_short=${{ steps.vars.outputs.sha_short }}

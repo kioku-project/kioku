@@ -1,4 +1,5 @@
 FROM golang:1.19.3-alpine3.16
+LABEL org.opencontainers.image.source=https://github.com/kioku-project/kioku
 
 WORKDIR /build
 

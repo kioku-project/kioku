@@ -16,7 +16,7 @@ spec:
         app: kioku-login
     spec:
       containers:
-      - name: kioku-backend
+      - name: kioku-login
         image: ghcr.io/kioku-project/kioku_login
         imagePullPolicy: Always
         ports:

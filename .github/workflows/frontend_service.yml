@@ -2,11 +2,11 @@ name: Frontend
 
 on:
   push:
-    branches: [ main, service_deployment ]
+    branches: [ main, service-deployment ]
     paths:
     - 'frontend/**'
   pull_request:
-    branches: [ main, service_deployment ]
+    branches: [ main, service-deployment ]
     #paths:
     #- 'frontend/**'
 

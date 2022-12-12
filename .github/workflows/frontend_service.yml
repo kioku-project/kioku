@@ -2,13 +2,13 @@ name: Frontend
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, service_deployment ]
     paths:
     - 'frontend/**'
   pull_request:
-    branches: [ main ]
-    paths:
-    - 'frontend/**'
+    branches: [ main, service_deployment ]
+    #paths:
+    #- 'frontend/**'
 
   workflow_dispatch:
     inputs:
@@ -17,6 +17,7 @@ on:
         required: true
 env:
   SERVICE_IMAGE_NAME: "kioku_frontend"
+  NEXT_PUBLIC_ENVIRONMENT: "production"
 
 jobs:
   frontend:

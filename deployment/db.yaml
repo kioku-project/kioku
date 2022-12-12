@@ -45,30 +45,29 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:10.1
+          image: postgres:latest
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 5432
-          env:
-          - name: POSTGRESS_USER
-            valueFrom:
-              secretKeyRef:
+          envFrom:
+            - secretRef:
                 name: database-secret
-                key: user
-          - name: POSTGRESS_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: database-secret
-                key: password
-          - name: POSTGRESS_DB
-            valueFrom:
-              secretKeyRef:
-                name: database-secret
-                key: name
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgredb
       volumes:
         - name: postgredb
           persistentVolumeClaim:
-            claimName: postgres-pv-claim
+            claimName: kioku-db-volume-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  selector:
+    app: db
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: LoadBalancer

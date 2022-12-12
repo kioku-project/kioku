@@ -2,13 +2,13 @@ name: Frontend
 
 on:
   push:
-    branches: [ main, service-deployment ]
+    branches: [ main ]
     paths:
     - 'frontend/**'
   pull_request:
-    branches: [ main, service-deployment ]
-    #paths:
-    #- 'frontend/**'
+    branches: [ main ]
+    paths:
+    - 'frontend/**'
 
   workflow_dispatch:
     inputs:
@@ -47,6 +47,8 @@ jobs:
 
       - name: Build Frontend
         uses: docker/build-push-action@v3
+        env:
+          NEXT_PUBLIC_ENVIRONMENT: "production"
         with:
           context: ./frontend
           file: ./frontend/Dockerfile

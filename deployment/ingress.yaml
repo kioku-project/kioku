@@ -6,7 +6,7 @@ metadata:
   labels:
     app: nginx
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    #nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
     - host: app.kioku.dev

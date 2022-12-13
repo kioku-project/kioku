@@ -16,11 +16,11 @@ spec:
         app: kioku-register
     spec:
       containers:
-      - name: kioku-backend
+      - name: kioku-register
         image: ghcr.io/kioku-project/kioku_register
         imagePullPolicy: Always
         ports:
-        - containerPort: 3001
+        - containerPort: 80
         envFrom:
           - secretRef:
               name: database-secret
@@ -34,5 +34,5 @@ spec:
     app: kioku-register
   ports:
     - port: 8084
-      targetPort: 3001
+      targetPort: 80
   type: LoadBalancer

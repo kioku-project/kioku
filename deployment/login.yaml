@@ -20,7 +20,7 @@ spec:
         image: ghcr.io/kioku-project/kioku_login
         imagePullPolicy: Always
         ports:
-        - containerPort: 3001
+        - containerPort: 80
         envFrom:
           - secretRef:
               name: database-secret
@@ -35,5 +35,5 @@ spec:
     app: kioku-login
   ports:
     - port: 8084
-      targetPort: 3001
+      targetPort: 80
   type: LoadBalancer

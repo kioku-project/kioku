@@ -6,7 +6,7 @@ metadata:
   labels:
     app: kioku-frontend
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: kioku-frontend
@@ -21,6 +21,11 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
         env:
           - name: NEXT_PUBLIC_ENVIRONMENT
             value: production
@@ -37,3 +42,16 @@ spec:
     - port: 8082
       targetPort: 3000
   type: LoadBalancer
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+ name: hpa-kioku-frontend-deployment
+spec:
+ scaleTargetRef:
+   apiVersion: apps/v1
+   kind: Deployment
+   name: kioku-frontend-deployment
+ minReplicas: 1
+ maxReplicas: 10
+ targetCPUUtilizationPercentage: 50

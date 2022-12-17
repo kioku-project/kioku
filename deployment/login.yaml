@@ -6,7 +6,7 @@ metadata:
   labels:
     app: kioku-login
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: kioku-login
@@ -21,6 +21,11 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
         envFrom:
           - secretRef:
               name: database-secret
@@ -37,3 +42,16 @@ spec:
     - port: 8084
       targetPort: 80
   type: LoadBalancer
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+ name: hpa-kioku-login-deployment
+spec:
+ scaleTargetRef:
+   apiVersion: apps/v1
+   kind: Deployment
+   name: kioku-login-deployment
+ minReplicas: 1
+ maxReplicas: 10
+ targetCPUUtilizationPercentage: 50

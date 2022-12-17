@@ -17,6 +17,7 @@ on:
         required: true
 env:
   SERVICE_IMAGE_NAME: "kioku_frontend"
+  NEXT_PUBLIC_ENVIRONMENT: "production"
 
 jobs:
   frontend:
@@ -46,6 +47,8 @@ jobs:
 
       - name: Build Frontend
         uses: docker/build-push-action@v3
+        env:
+          NEXT_PUBLIC_ENVIRONMENT: "production"
         with:
           context: ./frontend
           file: ./frontend/Dockerfile

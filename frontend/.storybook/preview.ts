@@ -1,6 +1,8 @@
+import "../styles/globals.css"
+
 export const parameters = {
   backgrounds: {
-    default: 'light',
+    default: 'dark',
   },
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {

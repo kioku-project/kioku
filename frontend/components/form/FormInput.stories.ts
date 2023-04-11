@@ -6,7 +6,7 @@ const meta: Meta<typeof FormInput> = {
     title: 'Form/FormInput',
     component: FormInput,
     tags: ['autodocs'],
-    argTypes: {
+    args: {
         id: 'InputId'
     },
 };
@@ -20,7 +20,7 @@ export const TextInput: Story = {
         name: 'text',
         label: 'Text Input',
     },
-};  
+};
 
 export const EmailInput: Story = {
     args: {
@@ -28,7 +28,7 @@ export const EmailInput: Story = {
         name: 'email',
         label: 'Email Input',
     },
-};  
+};
 
 export const PasswordInput: Story = {
     args: {

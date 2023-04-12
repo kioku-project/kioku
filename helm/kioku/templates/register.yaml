@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.register.name }}-deployment"
+  labels:
+    {{- include "kioku.register.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "kioku.register.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kioku.register.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Values.register.name }}
+        image: "{{ .Values.register.image }}:{{ .Values.register.tag }}"
+      {{ if eq .Values.mode "production" }}
+        imagePullPolicy: Always
+      {{ else }}
+        imagePullPolicy: Never
+      {{ end }}
+        ports:
+        - containerPort: {{ .Values.register.port }}
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+        envFrom:
+          - secretRef:
+              name: {{ .Values.database.secret.name }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.register.name }}-service"
+spec:
+  selector:
+    {{- include "kioku.register.labels" . | nindent 4 }}
+  ports:
+    - port: {{ .Values.register.port }}
+      targetPort: {{ .Values.register.port }}
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+ name: "hpa-{{ .Values.register.name }}-deployment"
+spec:
+ scaleTargetRef:
+   apiVersion: apps/v1
+   kind: Deployment
+   name: "{{ .Values.register.name }}-deployment"
+ minReplicas: {{ .Values.register.autoscaler.min }}
+ maxReplicas: {{ .Values.register.autoscaler.max }}
+ targetCPUUtilizationPercentage: {{ .Values.register.autoscaler.targetCPUUtilizationPercentage }}

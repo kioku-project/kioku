@@ -1,0 +1,77 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: "{{ include "kioku.fullname" . }}-db-volume"
+  labels:
+    type: local
+    {{- include "kioku.labels" . | nindent 4 }}
+    {{- include "kioku.database.labels" . | nindent 4 }}
+spec:
+  storageClassName: manual
+  capacity:
+    storage: {{ .Values.database.size | quote }}
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.database.mountPath | quote }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: "{{ include "kioku.fullname" . }}-db-volume-claim"
+  labels:
+    {{- include "kioku.labels" . | nindent 4 }}
+    {{- include "kioku.database.labels" . | nindent 4 }}
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.database.size | quote }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.database.name }}
+  labels:
+    {{- include "kioku.labels" . | nindent 4 }}
+    {{- include "kioku.database.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.database.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "kioku.database.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kioku.database.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Values.database.containerName }}
+          image: "{{ .Values.database.image }}:{{ .Values.database.tag }}"
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: {{ .Values.database.port }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.database.secret.name }}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb
+      volumes:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: "{{ include "kioku.fullname" . }}-db-volume-claim"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.database.name }}-service"
+spec:
+  selector:
+    {{- include "kioku.database.labels" . | nindent 4 }}
+  ports:
+    - port: {{ .Values.database.port }}
+      targetPort: {{ .Values.database.port }}
+  type: ClusterIP

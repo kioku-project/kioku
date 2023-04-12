@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.frontend.name }}-deployment"
+  labels:
+    {{- include "kioku.frontend.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "kioku.frontend.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kioku.frontend.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Values.frontend.name }}
+        image: "{{ .Values.frontend.image }}:{{ .Values.frontend.tag }}"
+      {{ if eq .Values.mode "production" }}
+        imagePullPolicy: Always
+      {{ else }}
+        imagePullPolicy: Never
+      {{ end }}
+        ports:
+        - containerPort: {{ .Values.frontend.port }}
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+        env:
+          # TODO: Export to values.yaml
+          - name: NEXT_PUBLIC_ENVIRONMENT
+            value: production
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.frontend.name }}-service"
+spec:
+  selector:
+    {{- include "kioku.frontend.labels" . | nindent 4 }}
+  ports:
+    - port: {{ .Values.frontend.port }}
+      targetPort: {{ .Values.frontend.containerPort }}
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+ name: "hpa-{{ .Values.frontend.name }}-deployment"
+spec:
+ scaleTargetRef:
+   apiVersion: apps/v1
+   kind: Deployment
+   name: "{{ .Values.frontend.name }}-deployment"
+ minReplicas: {{ .Values.frontend.autoscaler.min }}
+ maxReplicas: {{ .Values.frontend.autoscaler.max }}
+ targetCPUUtilizationPercentage: {{ .Values.frontend.autoscaler.targetCPUUtilizationPercentage }}

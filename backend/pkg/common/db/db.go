@@ -15,14 +15,15 @@ import (
 
 func InitializeDB() *gorm.DB {
 	var (
-		host     = "db"
+		host     = os.Getenv("POSTGRES_HOST")
 		username = os.Getenv("POSTGRES_USER")
 		password = os.Getenv("POSTGRES_PASSWORD")
 		dbname   = os.Getenv("POSTGRES_DB")
+		port     = os.Getenv("POSTGRES_PORT")
 	)
 
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:5432/%s?sslmode=disable",
-		username, password, host, dbname)
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
+		username, password, host, port, dbname)
 	var err error
 	DB, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
 	if err != nil {

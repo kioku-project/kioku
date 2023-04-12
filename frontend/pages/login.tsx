@@ -139,8 +139,8 @@ export default function Page() {
 			return;
 		}
 		let url =
-			process.env.NEXT_PUBLIC_ENVIRONMENT === "production"
-				? "https://app.kioku.dev/api/login"
+			process.env.NEXT_PUBLIC_ENVIRONMENT !== "develop"
+				? "/api/login"
 				: "http://localhost:3002/api/login";
 		const response = await fetch(url, {
 			method: "POST",
@@ -181,8 +181,8 @@ export default function Page() {
 		}
 		if (password?.value === passwordRepeat?.value) {
 			let url =
-				process.env.NEXT_PUBLIC_ENVIRONMENT === "production"
-					? "https://app.kioku.dev/api/register"
+				process.env.NEXT_PUBLIC_ENVIRONMENT !== "develop"
+					? "/api/register"
 					: "http://localhost:3001/api/register";
 			const response = await fetch(url, {
 				method: "POST",

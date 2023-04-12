@@ -6,7 +6,7 @@ metadata:
   labels:
     app: nginx
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    #nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
     - host: app.kioku.dev
@@ -19,6 +19,20 @@ spec:
                 name: kioku-frontend-service
                 port:
                   number: 8082
+          - path: /api/login
+            pathType: Prefix
+            backend:
+              service:
+                name: kioku-login-service
+                port:
+                  number: 8084
+          - path: /api/register
+            pathType: Prefix
+            backend:
+              service:
+                name: kioku-register-service
+                port:
+                  number: 8084
           - path: /hello
             pathType: Exact
             backend:
@@ -26,10 +40,3 @@ spec:
                 name: hello-world-service
                 port:
                   number: 8083
-          - path: /backend
-            pathType: Exact
-            backend:
-              service:
-                name: kioku-backend-service
-                port:
-                  number: 8084

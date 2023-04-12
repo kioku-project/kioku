@@ -12,11 +12,13 @@ on:
 
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Image version'
+      tag:
+        description: 'Image Tag'
+        default: latest
         required: true
 env:
   SERVICE_IMAGE_NAME: "kioku_frontend"
+  NEXT_PUBLIC_ENVIRONMENT: "production"
 
 jobs:
   frontend:
@@ -46,9 +48,11 @@ jobs:
 
       - name: Build Frontend
         uses: docker/build-push-action@v3
+        env:
+          NEXT_PUBLIC_ENVIRONMENT: "production"
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: ghcr.io/kioku-project/${{ env.SERVICE_IMAGE_NAME }}:latest
+          tags: ghcr.io/kioku-project/${{ env.SERVICE_IMAGE_NAME }}:${{ inputs.tag || 'latest' }}
           labels: commit_sha_short=${{ steps.vars.outputs.sha_short }}

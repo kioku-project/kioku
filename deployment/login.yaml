@@ -2,56 +2,56 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kioku-frontend-deployment
+  name: kioku-login-deployment
   labels:
-    app: kioku-frontend
+    app: kioku-login
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kioku-frontend
+      app: kioku-login
   template:
     metadata:
       labels:
-        app: kioku-frontend
+        app: kioku-login
     spec:
       containers:
-      - name: kioku-frontend
-        image: ghcr.io/kioku-project/kioku_frontend:latest
+      - name: kioku-login
+        image: ghcr.io/kioku-project/kioku_login
         imagePullPolicy: Always
         ports:
-        - containerPort: 3000
+        - containerPort: 80
         resources:
           limits:
             cpu: 500m
           requests:
             cpu: 200m
-        env:
-          - name: NEXT_PUBLIC_ENVIRONMENT
-            value: production
+        envFrom:
+          - secretRef:
+              name: database-secret
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: kioku-frontend-service
+  name: kioku-login-service
 spec:
   selector:
-    app: kioku-frontend
+    app: kioku-login
   ports:
-    - port: 8082
-      targetPort: 3000
+    - port: 8084
+      targetPort: 80
   type: LoadBalancer
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: hpa-kioku-frontend-deployment
+ name: hpa-kioku-login-deployment
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: kioku-frontend-deployment
+   name: kioku-login-deployment
  minReplicas: 1
  maxReplicas: 10
  targetCPUUtilizationPercentage: 50

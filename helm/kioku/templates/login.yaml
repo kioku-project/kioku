@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.login.name }}-deployment"
+  labels:
+    {{- include "kioku.login.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "kioku.login.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kioku.login.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Values.login.name }}
+        image: "{{ .Values.login.image }}:{{ .Values.login.tag }}"
+      {{ if eq .Values.mode "production" }}
+        imagePullPolicy: Always
+      {{ else }}
+        imagePullPolicy: Never
+      {{ end }}
+        ports:
+        - containerPort: {{ .Values.login.port }}
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+        envFrom:
+          - secretRef:
+              name: {{ .Values.database.secret.name }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.login.name }}-service"
+spec:
+  selector:
+    {{- include "kioku.login.labels" . | nindent 4 }}
+  ports:
+    - port: {{ .Values.login.port }}
+      targetPort: {{ .Values.login.port }}
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+ name: "hpa-{{ .Values.login.name }}-deployment"
+spec:
+ scaleTargetRef:
+   apiVersion: apps/v1
+   kind: Deployment
+   name: "{{ .Values.login.name }}-deployment"
+ minReplicas: {{ .Values.login.autoscaler.min }}
+ maxReplicas: {{ .Values.login.autoscaler.max }}
+ targetCPUUtilizationPercentage: {{ .Values.login.autoscaler.targetCPUUtilizationPercentage }}

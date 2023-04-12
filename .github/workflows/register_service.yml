@@ -12,8 +12,9 @@ on:
 
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Image version'
+      tag:
+        description: 'Image Tag'
+        default: latest
         required: true
 env:
   SERVICE_IMAGE_NAME: "kioku_register"
@@ -50,5 +51,5 @@ jobs:
           context: ./backend
           file: ./backend/cmd/service/register/Dockerfile
           push: true
-          tags: ghcr.io/kioku-project/${{ env.SERVICE_IMAGE_NAME }}:latest
+          tags: ghcr.io/kioku-project/${{ env.SERVICE_IMAGE_NAME }}:${{ inputs.tag || 'latest' }}
           labels: commit_sha_short=${{ steps.vars.outputs.sha_short }}

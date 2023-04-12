@@ -9,7 +9,7 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=5fc807733b36"
+    "chromatic": "npx chromatic"
   },
   "dependencies": {
     "@next/font": "^13.0.5",

@@ -18,6 +18,10 @@ interface FormInputProps {
      */
     label?: string;
     /**
+     * FormInput value
+     */
+    value?: string;
+    /**
      * Is the FormInput required?
      */
     required?: boolean;
@@ -27,18 +31,17 @@ interface FormInputProps {
  * UI component for text inputs
  */
 export const FormInput = ({
-    id,
-    type,
     name,
     label,
     required = true,
     ...props
 }: FormInputProps) => {
     return (<>
-        <label htmlFor="name">{label}</label>
+        <label htmlFor={name}>{label}</label>
         <input
-            id={id}
+            name={name}
             className="p-2 rounded-md bg-white mb-2"
+            required={required}
             {...props}
         />
     </>

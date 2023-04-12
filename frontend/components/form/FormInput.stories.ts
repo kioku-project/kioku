@@ -19,6 +19,7 @@ export const TextInput: Story = {
         type: 'text',
         name: 'text',
         label: 'Text Input',
+        value: 'Test'
     },
 };
 
@@ -27,6 +28,7 @@ export const EmailInput: Story = {
         type: 'email',
         name: 'email',
         label: 'Email Input',
+        value: 'test@example.com'
     },
 };
 
@@ -35,5 +37,6 @@ export const PasswordInput: Story = {
         type: 'password',
         name: 'password',
         label: 'Password Input',
+        value: 'superSecret!'
     },
 };  

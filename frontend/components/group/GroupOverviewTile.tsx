@@ -29,8 +29,12 @@ export default function GroupOverviewTile({
 				<b>{name}</b>
 			</h1>
 			<div className="flex items-center p-4 gap-4 overflow-x-scroll">
-				{decks.map((deck) => (
-					<DeckOverviewTile name={deck.name} count={deck.count} />
+				{decks.map((deck, i) => (
+					<DeckOverviewTile
+						key={i}
+						name={deck.name}
+						count={deck.count}
+					/>
 				))}
 			</div>
 		</div>

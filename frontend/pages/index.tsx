@@ -17,7 +17,7 @@ export default function Home() {
 		if (username === "") {
 			router.push("/login");
 		}
-	}, []);
+	}, [router, username]);
 	if (username !== "") {
 		return (
 			<Navigation>

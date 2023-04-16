@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Router, useRouter } from "next/router";
 import Image from "next/image";
 import { UserProvider, UserContext } from "../contexts/user";
-import { Inter } from "@next/font/google";
+import { Inter } from "next/font/google";
 import Head from "next/head";
 
 import { ToastContainer, toast } from "react-toastify";

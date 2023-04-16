@@ -10,7 +10,7 @@ interface GroupOverviewTileProps {
 	 */
 	name: string;
 	/**
-	 * Decks to be displayed in a Group
+	 * Decks to be displayed in a group
 	 */
 	decks: { name: string; count: number }[];
 }

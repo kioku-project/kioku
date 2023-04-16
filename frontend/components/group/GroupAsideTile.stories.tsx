@@ -13,14 +13,14 @@ const meta: Meta<typeof GroupAsideTile> = {
 export default meta;
 type Story = StoryObj<typeof GroupAsideTile>;
 
-export const Default: Story = {
+export const WithCardsDue: Story = {
 	args: {
 		name: "Example Group",
 		count: 2,
 	},
 };
 
-export const NoCards: Story = {
+export const NoCardsDue: Story = {
 	args: {
 		name: "Example Group",
 		count: 0,

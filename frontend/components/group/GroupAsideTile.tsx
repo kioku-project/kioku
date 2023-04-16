@@ -14,7 +14,7 @@ interface GroupAsideTileProps {
 }
 
 /**
- * UI component for A group in the side bar
+ * UI component for a group in the side bar
  */
 export default function GroupAsideTile({
 	id,

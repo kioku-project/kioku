@@ -13,14 +13,14 @@ const meta: Meta<typeof DeckOverviewTile> = {
 export default meta;
 type Story = StoryObj<typeof DeckOverviewTile>;
 
-export const Default: Story = {
+export const WithCardsDue: Story = {
 	args: {
 		name: "Example Deck",
 		count: 2,
 	},
 };
 
-export const NoCards: Story = {
+export const NoCardsDue: Story = {
 	args: {
 		name: "Example Deck",
 		count: 0,

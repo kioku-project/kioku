@@ -1,17 +1,9 @@
 import Head from "next/head";
-import Image from "next/image";
-import { Router, useRouter } from "next/router";
-import { PropsWithChildren, useContext, useEffect, useState } from "react";
-import { UserContext } from "../../contexts/user";
-import styles from "../styles/Home.module.css";
+import { PropsWithChildren, useState } from "react";
 import Navbar from "./Navbar";
 import GroupAsideTile from "../group/GroupAsideTile";
-import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import React from "react";
-import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import GroupOverviewTile from "../group/GroupOverviewTile";
 
 export default function Navigation({ children }: PropsWithChildren) {
 	const [asideOpen, toggleAside] = useState<boolean>(true);

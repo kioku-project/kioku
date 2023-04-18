@@ -25,6 +25,10 @@ interface FormInputProps {
      * Is the FormInput required?
      */
     required?: boolean;
+    /**
+     * Additional classes
+     */
+    additionalClasses?: string;
 }
 
 /**
@@ -34,13 +38,14 @@ export const FormInput = ({
     name,
     label,
     required = true,
+    additionalClasses = "",
     ...props
 }: FormInputProps) => {
     return (<>
         <label htmlFor={name}>{label}</label>
         <input
             name={name}
-            className="p-2 rounded-md bg-white mb-2"
+            className={`p-2 rounded-md bg-white mb-2 ${additionalClasses}`}
             required={required}
             {...props}
         />

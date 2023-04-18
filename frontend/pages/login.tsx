@@ -27,20 +27,22 @@ export default function Page() {
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<div className="w-screen h-screen select-none flex items-center">
-				<div className="w-full h-fit flex flex-col items-center justify-center md:justify-evenly md:flex-row rounded-3xl bg-blue-50 m-10 min-w-max">
-					<div className="flex flex-col items-center mb-0 md:mb-10 md:mr-2 m-10 rounded-lg">
-						<Image
-							src="/kioku-logo.svg"
-							alt="Kioku Logo"
-							width={320}
-							height={180}
-						/>
-						<span
-							className={`${inter.className} font-extralight mt-5 tracking-[0.5em] text-6xl indent-[0.5em]`}
+			<div className="min-w-screen flex min-h-screen select-none items-center p-5 md:p-10">
+				<div className="flex h-fit w-full flex-col items-center rounded-3xl bg-blue-50 md:flex-row">
+					<div className="m-5 mb-0 flex w-2/3 flex-col items-center rounded-l md:m-10 md:w-1/2 md:justify-center">
+						<div className="relative my-5 h-[120px] w-full">
+							<Image
+								src="/kioku-logo.svg"
+								alt="Kioku Logo"
+								className="object-contain"
+								fill
+							/>
+						</div>
+						<p
+							className={`${inter.className} text-clip indent-[0.5em] text-5xl font-extralight tracking-[0.5em] md:text-6xl`}
 						>
 							kioku
-						</span>
+						</p>
 					</div>
 					{formView()}
 				</div>
@@ -57,9 +59,11 @@ export default function Page() {
 	function formView() {
 		return (
 			<div
-				className={`bg-[#9EADC8] w-2/3 md:w-1/3 h-fit rounded-3xl flex flex-col items-center text-black ${inter.className} min-w-max mr-10 md:mr-2 m-10`}
+				className={`flex h-fit w-5/6 flex-col items-center rounded-3xl bg-[#9EADC8] text-black ${inter.className} m-5 mt-10 md:mt-5 md:w-1/2 md:justify-center`}
 			>
-				<h1 className="text-2xl mt-5 mb-4">{login ? "Login" : "Register"}</h1>
+				<h1 className="mb-4 mt-5 text-2xl">
+					{login ? "Login" : "Register"}
+				</h1>
 				{forms()}
 			</div>
 		);
@@ -68,7 +72,9 @@ export default function Page() {
 	function loginButton() {
 		return (
 			<>
-				<FormButton id="login" value="Login"
+				<FormButton
+					id="login"
+					value="Login"
 					onClick={() => {
 						if (login) {
 							// TODO: login logic
@@ -78,7 +84,10 @@ export default function Page() {
 						}
 					}}
 				/>
-				<span className="hover:cursor-pointer" onClick={() => setLogin(!login)}>
+				<span
+					className="hover:cursor-pointer"
+					onClick={() => setLogin(!login)}
+				>
 					or register
 				</span>
 			</>
@@ -88,7 +97,9 @@ export default function Page() {
 	function registerButton() {
 		return (
 			<>
-				<FormButton id="register" value="Register"
+				<FormButton
+					id="register"
+					value="Register"
 					onClick={() => {
 						if (login) {
 							// TODO: login logic
@@ -98,7 +109,10 @@ export default function Page() {
 						}
 					}}
 				/>
-				<span className="hover:cursor-pointer" onClick={() => setLogin(!login)}>
+				<span
+					className="hover:cursor-pointer"
+					onClick={() => setLogin(!login)}
+				>
 					or login
 				</span>
 			</>
@@ -109,21 +123,45 @@ export default function Page() {
 		return (
 			<form
 				onSubmit={(e) => e.preventDefault()}
-				className="flex flex-col items-center ml-5 mr-5"
+				className="flex w-full flex-col items-center"
 			>
-				<FormInput id="email" type="email" name="email" label='Email' />
+				<FormInput
+					id="email"
+					type="email"
+					name="email"
+					label="Email"
+					additionalClasses="w-5/6 md:w-2/3"
+				/>
 				{!login && (
 					<>
-						<FormInput id="name" type="text" name="name" label='Name'/>
+						<FormInput
+							id="name"
+							type="text"
+							name="name"
+							label="Name"
+							additionalClasses="w-5/6 md:w-2/3"
+						/>
 					</>
 				)}
-				<FormInput id="password" type="password" name="password" label='Password'/>
+				<FormInput
+					id="password"
+					type="password"
+					name="password"
+					label="Password"
+					additionalClasses="w-5/6 md:w-2/3"
+				/>
 				{!login && (
 					<>
-						<FormInput id="passwordRepeat" type="password" name="passwordRepeat" label='Repeat Password' />
+						<FormInput
+							id="passwordRepeat"
+							type="password"
+							name="passwordRepeat"
+							label="Repeat Password"
+							additionalClasses="w-5/6 md:w-2/3"
+						/>
 					</>
 				)}
-				<div className="flex gap-2 mt-5 mb-5 items-center">
+				<div className="mb-5 mt-5 flex items-center gap-2">
 					{login ? loginButton() : registerButton()}
 				</div>
 			</form>
@@ -158,7 +196,9 @@ export default function Page() {
 			setUsername(text);
 			router.push("/");
 		} else {
-			toast.error("Wrong username or password", { toastId: "accountToast" });
+			toast.error("Wrong username or password", {
+				toastId: "accountToast",
+			});
 		}
 	}
 
@@ -199,10 +239,14 @@ export default function Page() {
 				toast.info("Account was created!", { toastId: "accountToast" });
 				setLogin(true);
 			} else {
-				toast.error("Account already exists!", { toastId: "accountToast" });
+				toast.error("Account already exists!", {
+					toastId: "accountToast",
+				});
 			}
 		} else {
-			toast.error("The passwords do not match!", { toastId: "passwordToast" });
+			toast.error("The passwords do not match!", {
+				toastId: "passwordToast",
+			});
 		}
 	}
 }

@@ -130,7 +130,7 @@ export default function Page() {
 					type="email"
 					name="email"
 					label="Email"
-					additionalClasses="w-5/6 md:w-2/3"
+					className="w-5/6 md:w-2/3"
 				/>
 				{!login && (
 					<>
@@ -139,7 +139,7 @@ export default function Page() {
 							type="text"
 							name="name"
 							label="Name"
-							additionalClasses="w-5/6 md:w-2/3"
+							className="w-5/6 md:w-2/3"
 						/>
 					</>
 				)}
@@ -148,7 +148,7 @@ export default function Page() {
 					type="password"
 					name="password"
 					label="Password"
-					additionalClasses="w-5/6 md:w-2/3"
+					className="w-5/6 md:w-2/3"
 				/>
 				{!login && (
 					<>
@@ -157,7 +157,7 @@ export default function Page() {
 							type="password"
 							name="passwordRepeat"
 							label="Repeat Password"
-							additionalClasses="w-5/6 md:w-2/3"
+							className="w-5/6 md:w-2/3"
 						/>
 					</>
 				)}

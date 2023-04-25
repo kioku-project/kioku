@@ -176,10 +176,7 @@ export default function Page() {
 		if (email?.value === "" || password?.value === "") {
 			return;
 		}
-		let url =
-			process.env.NEXT_PUBLIC_ENVIRONMENT !== "develop"
-				? "/api/login"
-				: "http://localhost:3002/api/login";
+		let url = "/api/login"
 		const response = await fetch(url, {
 			method: "POST",
 			headers: {
@@ -220,10 +217,7 @@ export default function Page() {
 			return;
 		}
 		if (password?.value === passwordRepeat?.value) {
-			let url =
-				process.env.NEXT_PUBLIC_ENVIRONMENT !== "develop"
-					? "/api/register"
-					: "http://localhost:3001/api/register";
+			let url = "/api/register"
 			const response = await fetch(url, {
 				method: "POST",
 				headers: {

@@ -1,0 +1,36 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registerservice
+  labels:
+    app: registerservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registerservice
+  template:
+    metadata:
+      labels:
+        app: registerservice
+    spec:
+      containers:
+      - name: registerservice
+        securityContext:
+          allowPrivilegeEscalation: false
+        image: registerservice:latest
+        envFrom:
+        - configMapRef:
+            name: registerservice-env
+        readinessProbe:
+          grpc:
+            port: 41888
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          grpc:
+            port: 41888
+          initialDelaySeconds: 10
+          timeoutSeconds: 5

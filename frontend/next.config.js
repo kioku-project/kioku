@@ -7,6 +7,14 @@ const nextConfig = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://envoy:8081/api/:path*',
+      },
+    ];
+  },
 }
 
 module.exports = nextConfig

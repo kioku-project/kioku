@@ -19,7 +19,7 @@ export const Login: Story = {};
 export const Register: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const registerButton = await canvas.getByText('or register');
+    const registerButton = await canvas.getByText('Create an account');
     await userEvent.click(registerButton);
   },
 };

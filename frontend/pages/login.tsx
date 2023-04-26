@@ -20,6 +20,7 @@ export default function Page() {
 	const [login, setLogin] = useState(true); // true = login, false = register
 	const router = useRouter();
 	const { username, setUsername } = useContext(UserContext);
+
 	return (
 		<div>
 			<Head>
@@ -27,10 +28,11 @@ export default function Page() {
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<div className="min-w-screen flex min-h-screen select-none items-center p-5 md:p-10">
-				<div className="flex h-fit w-full flex-col items-center rounded-3xl bg-blue-50 md:flex-row">
-					<div className="m-5 mb-0 flex w-2/3 flex-col items-center rounded-l md:m-10 md:w-1/2 md:justify-center">
-						<div className="relative my-5 h-[120px] w-full">
+
+			<div className="min-w-screen flex min-h-screen select-none items-center justify-center sm:p-5 md:p-10">
+				<div className="flex min-h-screen w-full flex-col items-center justify-evenly bg-blue-100 p-10 align-middle sm:min-h-fit sm:rounded-3xl md:flex-row xl:w-5/6">
+					<div className="m-5 flex w-2/3 flex-col items-center md:m-10 md:w-1/2 md:justify-center">
+						<div className="relative mb-5 h-[120px] w-full">
 							<Image
 								src="/kioku-logo.svg"
 								alt="Kioku Logo"
@@ -39,12 +41,32 @@ export default function Page() {
 							/>
 						</div>
 						<p
-							className={`${inter.className} text-clip indent-[0.5em] text-5xl font-extralight tracking-[0.5em] md:text-6xl`}
+							className={`${inter.className} text-clip indent-[0.5em] text-4xl font-extralight tracking-[0.5em] sm:text-5xl md:text-6xl`}
 						>
 							kioku
 						</p>
 					</div>
-					{formView()}
+					<div
+						className={`flex w-full flex-col items-center rounded-2xl bg-lightblue p-5 sm:w-5/6 md:w-1/2 lg:w-1/3 ${inter.className}`}
+					>
+						<h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-darkblue">
+							{login
+								? "Sign in to your account"
+								: "Create an account"}
+						</h2>
+						{forms()}
+						<p className="text-center text-sm text-gray-500">
+							{login
+								? "Not registered? "
+								: "Aleready registered? "}
+							<a
+								className="whitespace-nowrap font-semibold text-darkblue hover:cursor-pointer hover:text-eggshell"
+								onClick={() => setLogin(!login)}
+							>
+								{login ? "Create an account" : "Sign in"}
+							</a>
+						</p>
+					</div>
 				</div>
 			</div>
 			<ToastContainer
@@ -56,114 +78,48 @@ export default function Page() {
 		</div>
 	);
 
-	function formView() {
-		return (
-			<div
-				className={`flex h-fit w-5/6 flex-col items-center rounded-3xl bg-[#9EADC8] text-black ${inter.className} m-5 mt-10 md:mt-5 md:w-1/2 md:justify-center`}
-			>
-				<h1 className="mb-4 mt-5 text-2xl">
-					{login ? "Login" : "Register"}
-				</h1>
-				{forms()}
-			</div>
-		);
-	}
-
-	function loginButton() {
-		return (
-			<>
-				<FormButton
-					id="login"
-					value="Login"
-					onClick={() => {
-						if (login) {
-							// TODO: login logic
-							loginLogic().then(result => {}).catch(error => {});
-						} else {
-							registerLogic().then(result => {}).catch(error => {});
-						}
-					}}
-				/>
-				<span
-					className="hover:cursor-pointer"
-					onClick={() => setLogin(!login)}
-				>
-					or register
-				</span>
-			</>
-		);
-	}
-
-	function registerButton() {
-		return (
-			<>
-				<FormButton
-					id="register"
-					value="Register"
-					onClick={() => {
-						if (login) {
-							// TODO: login logic 
-							loginLogic().then(result => {}).catch(error => {});
-						} else {
-							registerLogic().then(result => {}).catch(error => {});
-						}
-					}}
-				/>
-				<span
-					className="hover:cursor-pointer"
-					onClick={() => setLogin(!login)}
-				>
-					or login
-				</span>
-			</>
-		);
-	}
-
 	function forms() {
 		return (
 			<form
 				onSubmit={(e) => e.preventDefault()}
-				className="flex w-full flex-col items-center"
+				className="my-5 flex w-5/6 flex-col items-center space-y-4"
 			>
-				<FormInput
-					id="email"
-					type="email"
-					name="email"
-					label="Email"
-					className="w-5/6 md:w-2/3"
-				/>
+				<FormInput id="email" type="email" name="email" label="Email" />
 				{!login && (
-					<>
-						<FormInput
-							id="name"
-							type="text"
-							name="name"
-							label="Name"
-							className="w-5/6 md:w-2/3"
-						/>
-					</>
+					<FormInput id="name" type="text" name="name" label="Name" />
 				)}
 				<FormInput
 					id="password"
 					type="password"
 					name="password"
 					label="Password"
-					className="w-5/6 md:w-2/3"
 				/>
 				{!login && (
-					<>
-						<FormInput
-							id="passwordRepeat"
-							type="password"
-							name="passwordRepeat"
-							label="Repeat Password"
-							className="w-5/6 md:w-2/3"
-						/>
-					</>
+					<FormInput
+						id="passwordRepeat"
+						type="password"
+						name="passwordRepeat"
+						label="Repeat Password"
+					/>
 				)}
-				<div className="mb-5 mt-5 flex items-center gap-2">
-					{login ? loginButton() : registerButton()}
-				</div>
+
+				<FormButton
+					id={login ? "login" : "register"}
+					value={login ? "Login" : "Register"}
+					style="primary"
+					className="w-full"
+					onClick={() => {
+						if (login) {
+							loginLogic()
+								.then((result) => {})
+								.catch((error) => {});
+						} else {
+							registerLogic()
+								.then((result) => {})
+								.catch((error) => {});
+						}
+					}}
+				/>
 			</form>
 		);
 	}
@@ -176,7 +132,7 @@ export default function Page() {
 		if (email?.value === "" || password?.value === "") {
 			return;
 		}
-		let url = "/api/login"
+		let url = "/api/login";
 		const response = await fetch(url, {
 			method: "POST",
 			headers: {
@@ -217,7 +173,7 @@ export default function Page() {
 			return;
 		}
 		if (password?.value === passwordRepeat?.value) {
-			let url = "/api/register"
+			let url = "/api/register";
 			const response = await fetch(url, {
 				method: "POST",
 				headers: {

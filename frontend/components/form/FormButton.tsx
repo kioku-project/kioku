@@ -1,36 +1,50 @@
-import React from 'react';
+import React from "react";
 
 interface FormButtonProps {
-    /**
-     * unique identifier
-     */
-    id: string;
-    /**
-     * Button contents
-     */
-    value: string;
-    /**
-     * Additional classes
-     */
-    className?: string;
-    /**
-     * optional click handler
-     */
-    onClick?: () => void;
+	/**
+	 * unique identifier
+	 */
+	id: string;
+	/**
+	 * Button contents
+	 */
+	value: string;
+	/**
+	 * Button styling
+	 */
+	style?: string;
+	/**
+	 * Additional classes
+	 */
+	className?: string;
+	/**
+	 * optional click handler
+	 */
+	onClick?: () => void;
+}
+
+function getStyle(style: string): string {
+	const getStyle: { [style: string]: string } = {
+		primary: "bg-darkblue border-darkblue text-eggshell hover:bg-lightblue",
+	};
+	return getStyle[style] ?? getStyle.primary;
 }
 
 /**
  * UI component for submitting forms
  */
 export const FormButton = ({
-    className,
-    ...props
+	className,
+	style = "",
+	...props
 }: FormButtonProps) => {
-    return (
-        <input
-            type='submit'
-            className={`p-2 rounded-md bg-white hover:cursor-pointer transition ease-in-out delay-100 hover:-translate-y-0.5 hover:scale-105 hover:bg-gray-100 duration-200 ${className || ''}`}
-            {...props}
-        />
-    );
-}
+	return (
+		<input
+			type="submit"
+			className={`flex justify-center rounded-md border-2 px-3 py-1.5 text-center text-sm font-semibold leading-6 shadow-sm outline-none hover:cursor-pointer ${getStyle(
+				style
+			)} ${className || ""}`}
+			{...props}
+		/>
+	);
+};

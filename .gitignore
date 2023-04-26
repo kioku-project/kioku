@@ -1,6 +1,3 @@
 .idea
 *secret.yaml
 .DS_STORE
-*.pb.go
-*.pb.micro.go
-*.pb

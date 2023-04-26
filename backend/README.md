@@ -8,6 +8,8 @@ Set up the specialized go-micro CLI for kioku by running
 
 Additionally, you need to set up the `protoc` compiler in your environment. See [here](https://grpc.io/docs/protoc-installation/) for installation instructions according to your system.
 
+And finally, you need to install `make` on your system. Mac users can install it alongside common developer packages via `xcode-select --install`, Windows users are able to obtain it via [Chocolatey](https://chocolatey.org/install) by using the command `choco install make`.
+
 ## Create a new service
 1. Set up a new service
 

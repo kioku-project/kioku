@@ -21,9 +21,9 @@ func (e *Loginservice) Login(ctx context.Context, req *pb.LoginserviceRequest, r
 		return errors.New("This user does not exist")
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
-	if err == nil {
-		rsp.Name = user.Name
-		return nil
+	if err != nil {
+		return errors.New("This email or password is wrong")
 	}
-	return errors.New("This email or password is wrong")
+	rsp.Name = user.Name
+	return nil
 }

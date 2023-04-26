@@ -22,6 +22,7 @@ func (e *Registerservice) Register(ctx context.Context, req *pb.RegisterserviceR
 		return errors.New("This user already exists")
 	}
 
+	// TODO: further username verification required (length, bad chars, ...)
 	newUser := model.User{
 		Email: req.Email,
 		Name: req.Name,

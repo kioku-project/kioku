@@ -24,11 +24,11 @@ export default function DeckOverviewTile({
 	return (
 		<div
 			id={id}
-			className="flex flex-col justify-center items-center w-40 h-52 bg-white rounded-md"
+			className="flex h-52 w-40 flex-col items-center justify-center rounded-md bg-white"
 		>
-			<div className="relative w-32 h-32 bg-[#B7B7B7] rounded-md m-2">
+			<div className="relative m-2 h-32 w-32 rounded-md bg-[#B7B7B7]">
 				{count > 0 && (
-					<div className="flex justify-center items-center text-white text-xs h-4 px-1 bg-red-600 rounded-sm absolute right-[-0.2rem] top-[-0.2rem]">
+					<div className="absolute right-[-0.2rem] top-[-0.2rem] flex h-4 items-center justify-center rounded-sm bg-red px-1 text-xs text-white">
 						<span>
 							<b>{count}</b>
 						</span>

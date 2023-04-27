@@ -22,11 +22,11 @@ export default function GroupAsideTile({
 	count,
 }: GroupAsideTileProps) {
 	return (
-		<div id={id} className="flex m-4 gap-4 items-center">
+		<div id={id} className="m-4 flex items-center gap-4">
 			<div className="relative">
-				<div className="bg-white w-8 h-8 rounded-md" />
+				<div className="h-8 w-8 rounded-md bg-white" />
 				{count > 0 && (
-					<div className="bg-red-600 rounded-sm h-4 px-1 absolute bottom-[-0.5rem] right-[-0.5rem] flex justify-center items-center">
+					<div className="absolute bottom-[-0.5rem] right-[-0.5rem] flex h-4 items-center justify-center rounded-sm bg-red px-1">
 						<span className="text-xs font-bold text-white">
 							{count}
 						</span>

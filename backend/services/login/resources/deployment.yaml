@@ -1,0 +1,36 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login
+  labels:
+    app: login
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: login
+  template:
+    metadata:
+      labels:
+        app: login
+    spec:
+      containers:
+      - name: login
+        securityContext:
+          allowPrivilegeEscalation: false
+        image: login:latest
+        envFrom:
+        - configMapRef:
+            name: login-env
+        readinessProbe:
+          grpc:
+            port: 41888
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          grpc:
+            port: 41888
+          initialDelaySeconds: 10
+          timeoutSeconds: 5

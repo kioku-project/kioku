@@ -10,7 +10,7 @@ services:
   register_service:
     build:
       context: backend
-      dockerfile: services/registerservice/Dockerfile
+      dockerfile: services/register/Dockerfile
     container_name: register_service
     restart: always
     env_file:
@@ -23,7 +23,7 @@ services:
   login_service:
     build:
       context: backend
-      dockerfile: services/loginservice/Dockerfile
+      dockerfile: services/login/Dockerfile
     container_name: login_service
     restart: always
     env_file:

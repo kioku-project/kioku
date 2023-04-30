@@ -37,7 +37,7 @@ static_resources:
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.grpc_json_transcoder.v3.GrpcJsonTranscoder
                       proto_descriptor: "/proto/combined.pb"
-                      services: ["loginservice.Loginservice", "registerservice.Registerservice"]
+                      services: ["login.Login", "register.Register"]
                       match_incoming_request_route: true
                       print_options:
                         add_whitespace: true

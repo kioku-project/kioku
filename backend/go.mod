@@ -7,7 +7,7 @@ require (
 	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.1
 	github.com/go-micro/plugins/v4/server/grpc v1.2.0
 	github.com/joho/godotenv v1.5.1
-	go-micro.dev/v4 v4.10.1
+	go-micro.dev/v4 v4.10.2
 	google.golang.org/grpc v1.54.0
 	gorm.io/driver/postgres v1.5.0
 	gorm.io/gorm v1.25.0
@@ -25,7 +25,7 @@ require (
 
 require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect
-	github.com/ProtonMail/go-crypto v0.0.0-20230424174541-a2e3b023bd29 // indirect
+	github.com/ProtonMail/go-crypto v0.0.0-20230426101702-58e86b294756 // indirect
 	github.com/acomagu/bufpipe v1.0.4 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/cloudflare/circl v1.3.2 // indirect
@@ -47,7 +47,7 @@ require (
 	github.com/imdario/mergo v0.3.15 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
-	github.com/miekg/dns v1.1.53 // indirect
+	github.com/miekg/dns v1.1.54 // indirect
 	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect

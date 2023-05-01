@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package frontend;
+
+option go_package = "./proto;frontend";
+
+service Frontend {}

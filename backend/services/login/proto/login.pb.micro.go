@@ -5,7 +5,6 @@ package login
 
 import (
 	fmt "fmt"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	proto "google.golang.org/protobuf/proto"
 	math "math"
 )
@@ -31,14 +30,7 @@ var _ server.Option
 // Api Endpoints for Login service
 
 func NewLoginEndpoints() []*api.Endpoint {
-	return []*api.Endpoint{
-		{
-			Name:    "Login.Login",
-			Path:    []string{"/api/login"},
-			Method:  []string{"POST"},
-			Handler: "rpc",
-		},
-	}
+	return []*api.Endpoint{}
 }
 
 // Client API for Login service
@@ -83,12 +75,6 @@ func RegisterLoginHandler(s server.Server, hdlr LoginHandler, opts ...server.Han
 		login
 	}
 	h := &loginHandler{hdlr}
-	opts = append(opts, api.WithEndpoint(&api.Endpoint{
-		Name:    "Login.Login",
-		Path:    []string{"/api/login"},
-		Method:  []string{"POST"},
-		Handler: "rpc",
-	}))
 	return s.Handle(s.NewHandler(&Login{h}, opts...))
 }
 

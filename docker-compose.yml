@@ -7,11 +7,11 @@ services:
     env_file:
       - ./backend/.env
 
-  register_service:
+  frontend_proxy:
     build:
       context: backend
-      dockerfile: services/register/Dockerfile
-    container_name: register_service
+      dockerfile: services/frontend/Dockerfile
+    container_name: frontend_proxy
     restart: always
     env_file:
       - ./backend/.env
@@ -33,16 +33,18 @@ services:
     depends_on:
       - db
 
-  envoy:
-    image: envoyproxy/envoy:v1.20-latest
-    ports:
-      - '8081:8081'
-    volumes:
-      - ./envoy.yaml:/etc/envoy/envoy.yaml
-      - ./backend/services/combined.pb:/proto/combined.pb
+  register_service:
+    build:
+      context: backend
+      dockerfile: services/register/Dockerfile
+    container_name: register_service
+    restart: always
+    env_file:
+      - ./backend/.env
+    environment:
+      - MICRO_REGISTRY=mdns
     depends_on:
-      - register_service
-      - login_service
+      - db
 
   frontend:
     build:
@@ -52,4 +54,6 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:
-      - envoy
+      - frontend_proxy
+      - login_service
+      - register_service

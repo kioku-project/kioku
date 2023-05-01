@@ -27,11 +27,7 @@ And finally, you need to install `make` on your system. Mac users can install it
     
     Add a new service in `docker-compose.yml` for the created service.
 
-4. Adjust the environment for local development
-    
-    You need to create a protobuf file for all combined services in the landscape. This can be achieved with the following commands:
-
-        cd backend/services
-        protoc --proto_path=. -I../googleapis --include_imports --descriptor_set_out=combined.pb */proto/*.proto
-
-    For local development, envoy is used as a proxy for the gRPC services and is also handling JSON to gRPC transcoding for the frontend. After adding a new service, you can update the `envoy.yaml` config accordingly. You need to add it to the services in the `http_filters` section, and you are also required to create a new cluster and route match so that envoy knows where to route specific requests.
+4. Adjust the proxy rules in the frontend service to be able to serve the new service if needed
+    1. Create a new handler in `backend/services/frontend/handler/frontend.go` for a new api endpoint
+    2. In `backend/services/frontend/main.go`, add the new handler with the desired route
+    3. Adjust all the relevant Dockerfiles to integrate the new proto files of the new service

@@ -7,13 +7,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	pb "github.com/kioku-project/kioku/services/register/proto"
+	pblogin "github.com/kioku-project/kioku/services/login/proto"
 	"github.com/kioku-project/kioku/store"
 	"github.com/kioku-project/kioku/pkg/model"
 )
 
-type Register struct{store store.Store}
+type Register struct{
+	store store.Store
+	loginService pblogin.LoginService
+}
 
-func New(s store.Store) *Register { return &Register{store: s} }
+func New(s store.Store, lS pblogin.LoginService) *Register { return &Register{store: s, loginService: lS} }
 
 func (e *Register) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.RegisterResponse) error {
 	logger.Infof("Received Register.Register request: %v", req)
@@ -33,8 +37,22 @@ func (e *Register) Register(ctx context.Context, req *pb.RegisterRequest, rsp *p
 		return errors.New("Error while hashing password")
 	}
 	newUser.Password = string(hash)
-	e.store.RegisterNewUser(&newUser)
 
-	rsp.Name = newUser.Name
+	dberr := e.store.RegisterNewUser(&newUser)
+	if dberr != nil {
+		logger.Infof("Error while inserting into db: %v", dberr.Error())
+	}
+
+	// Call the login service
+	rspLogin, err := e.loginService.Login(context.TODO(), &pblogin.LoginRequest{Email: req.Email, Password: req.Password})
+	if err != nil {
+		logger.Infof("Login service error: %v", err.Error())
+		return err
+	}
+
+	// Print response of login service
+	logger.Infof("Login service response: %v", rspLogin)
+
+	rsp.Name = rspLogin.Name
 	return nil
 }

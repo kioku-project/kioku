@@ -6,6 +6,7 @@ import (
 	"github.com/kioku-project/kioku/services/register/handler"
 	"github.com/kioku-project/kioku/store"
 	pb "github.com/kioku-project/kioku/services/register/proto"
+	pblogin "github.com/kioku-project/kioku/services/login/proto"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
@@ -32,9 +33,6 @@ func main() {
 		logger.Fatal("Failed to initialize database:", err)
 	}
 
-	// Create a new instance of the service handler with the initialized database connection
-	svc := handler.New(dbStore)
-
 	// Create service
 	srv := micro.NewService(
 		micro.Server(grpcs.NewServer(server.Address(servicePort))),
@@ -44,6 +42,9 @@ func main() {
 		micro.Name(service),
 		micro.Version(version),
 	)
+
+	// Create a new instance of the service handler with the initialized database connection
+	svc := handler.New(dbStore, pblogin.NewLoginService("login", srv.Client()))
 
 	// Register handler
 	if err := pb.RegisterRegisterHandler(srv.Server(), svc); err != nil {

@@ -5,7 +5,6 @@ package register
 
 import (
 	fmt "fmt"
-	_ "google.golang.org/genproto/googleapis/api/annotations"
 	proto "google.golang.org/protobuf/proto"
 	math "math"
 )
@@ -31,14 +30,7 @@ var _ server.Option
 // Api Endpoints for Register service
 
 func NewRegisterEndpoints() []*api.Endpoint {
-	return []*api.Endpoint{
-		{
-			Name:    "Register.Register",
-			Path:    []string{"/api/register"},
-			Method:  []string{"POST"},
-			Handler: "rpc",
-		},
-	}
+	return []*api.Endpoint{}
 }
 
 // Client API for Register service
@@ -83,12 +75,6 @@ func RegisterRegisterHandler(s server.Server, hdlr RegisterHandler, opts ...serv
 		register
 	}
 	h := &registerHandler{hdlr}
-	opts = append(opts, api.WithEndpoint(&api.Endpoint{
-		Name:    "Register.Register",
-		Path:    []string{"/api/register"},
-		Method:  []string{"POST"},
-		Handler: "rpc",
-	}))
 	return s.Handle(s.NewHandler(&Register{h}, opts...))
 }
 

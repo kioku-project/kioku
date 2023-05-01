@@ -18,7 +18,6 @@ RUN make init && go mod download
 COPY services/login/ services/login
 COPY store/ store/
 COPY pkg/ pkg/
-COPY googleapis/ googleapis/
 WORKDIR /go/src/kioku/services/login
 RUN make proto tidy build
 

@@ -1,16 +1,11 @@
 syntax = "proto3";
 
 package login;
-import "google/api/annotations.proto";
 
 option go_package = "./proto;login";
 
 service Login {
-	rpc Login(LoginRequest) returns (LoginResponse) {
-	option (google.api.http) = {
-		post: "/api/login"
-    };
-  }
+	rpc Login(LoginRequest) returns (LoginResponse) {}
 }
 
 message LoginRequest {

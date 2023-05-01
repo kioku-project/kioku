@@ -1,16 +1,11 @@
 syntax = "proto3";
 
 package register;
-import "google/api/annotations.proto";
 
 option go_package = "./proto;register";
 
 service Register {
-	rpc Register(RegisterRequest) returns (RegisterResponse) {
-	option (google.api.http) = {
-    	post: "/api/register"
-    };
-  }
+	rpc Register(RegisterRequest) returns (RegisterResponse) {}
 }
 
 message RegisterRequest {

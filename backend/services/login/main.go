@@ -4,8 +4,8 @@ import (
 	"go-micro.dev/v4/server"
 
 	"github.com/kioku-project/kioku/services/login/handler"
-	"github.com/kioku-project/kioku/store"
 	pb "github.com/kioku-project/kioku/services/login/proto"
+	"github.com/kioku-project/kioku/store"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
@@ -20,20 +20,16 @@ var (
 )
 
 const (
-    servicePort = ":8080" // You can change this to your desired port
+	servicePort = ":8080" // You can change this to your desired port
 )
 
 func main() {
-
 
 	// Initialize the database connection
 	dbStore, err := store.NewPostgresStore()
 	if err != nil {
 		logger.Fatal("Failed to initialize database:", err)
 	}
-
-	// Create a new instance of the service handler with the initialized database connection
-	svc := handler.New(dbStore)
 
 	// Create service
 	srv := micro.NewService(
@@ -44,6 +40,9 @@ func main() {
 		micro.Name(service),
 		micro.Version(version),
 	)
+
+	// Create a new instance of the service handler with the initialized database connection
+	svc := handler.New(dbStore)
 
 	// Register handler
 	if err := pb.RegisterLoginHandler(srv.Server(), svc); err != nil {

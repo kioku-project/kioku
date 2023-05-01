@@ -8,7 +8,7 @@ init:
 
 .PHONY: proto
 proto:
-	@protoc --proto_path=. -I../../googleapis --include_imports --micro_out=. --go_out=:. --descriptor_set_out=proto/register.pb proto/register.proto
+	@protoc --proto_path=. --micro_out=. --go_out=:. proto/register.proto
 	@protoc --proto_path=. --micro_out=. --go_out=:. proto/health.proto
 	
 

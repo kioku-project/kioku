@@ -1,5 +1,8 @@
 FROM golang:alpine AS builder
 
+RUN addgroup -S kioku \
+    && adduser -S kioku -G kioku
+
 # Set Go env
 ENV CGO_ENABLED=0 GOOS=linux
 WORKDIR /go/src/kioku
@@ -25,6 +28,8 @@ RUN make proto tidy build
 
 # Deployment container
 FROM scratch
+COPY --from=builder /etc/passwd /etc/passwd
+USER kioku
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /bin/grpc_health_probe /bin/

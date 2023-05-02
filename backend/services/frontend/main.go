@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/gofiber/fiber/v2"
 
 	"github.com/kioku-project/kioku/services/frontend/handler"
@@ -10,6 +13,7 @@ import (
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
+	"go-micro.dev/v4/server"
 
 	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
 
@@ -18,19 +22,24 @@ import (
 )
 
 var (
-	service = "frontend"
-	version = "latest"
+	service        = "frontend"
+	version        = "latest"
+	serviceAddress = fmt.Sprintf("%s%s", os.Getenv("HOSTNAME"), ":8080")
 )
 
 func main() {
+
+	logger.Info("Trying to listen on: ", serviceAddress)
+
 	// Create service
 	srv := micro.NewService(
-		micro.Server(grpcs.NewServer()),
+		micro.Server(grpcs.NewServer(server.Address(serviceAddress))),
 		micro.Client(grpcc.NewClient()),
 	)
 	srv.Init(
 		micro.Name(service),
 		micro.Version(version),
+		micro.Address(serviceAddress),
 	)
 
 	// Create a new instance of the service handler with the initialized database connection

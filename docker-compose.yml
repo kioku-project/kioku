@@ -15,8 +15,6 @@ services:
     restart: always
     env_file:
       - ./backend/.env
-    environment:
-      - MICRO_REGISTRY=mdns
     depends_on:
       - db
 
@@ -28,8 +26,6 @@ services:
     restart: always
     env_file:
       - ./backend/.env
-    environment:
-      - MICRO_REGISTRY=mdns
     depends_on:
       - db
 
@@ -41,8 +37,6 @@ services:
     restart: always
     env_file:
       - ./backend/.env
-    environment:
-      - MICRO_REGISTRY=mdns
     depends_on:
       - db
 
@@ -57,3 +51,11 @@ services:
       - frontend_proxy
       - login_service
       - register_service
+  
+  go-micro-dashboard:
+    image: xpunch/go-micro-dashboard:latest
+    container_name: micro-dashboard
+    ports:
+      - "127.0.0.1:3001:8082"
+    env_file:
+      - ./backend/.env

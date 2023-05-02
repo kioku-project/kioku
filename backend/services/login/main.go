@@ -1,7 +1,8 @@
 package main
 
 import (
-	"go-micro.dev/v4/server"
+	"fmt"
+	"os"
 
 	"github.com/kioku-project/kioku/services/login/handler"
 	pb "github.com/kioku-project/kioku/services/login/proto"
@@ -9,6 +10,7 @@ import (
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
+	"go-micro.dev/v4/server"
 
 	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
 
@@ -17,12 +19,9 @@ import (
 )
 
 var (
-	service = "login"
-	version = "latest"
-)
-
-const (
-	servicePort = ":8080" // You can change this to your desired port
+	service        = "login"
+	version        = "latest"
+	serviceAddress = fmt.Sprintf("%s%s", os.Getenv("HOSTNAME"), ":8080")
 )
 
 func main() {
@@ -33,15 +32,17 @@ func main() {
 		logger.Fatal("Failed to initialize database:", err)
 	}
 
+	logger.Info("Trying to listen on: ", serviceAddress)
+
 	// Create service
 	srv := micro.NewService(
-		micro.Server(grpcs.NewServer(server.Address(servicePort))),
+		micro.Server(grpcs.NewServer(server.Address(serviceAddress))),
 		micro.Client(grpcc.NewClient()),
 	)
 	srv.Init(
 		micro.Name(service),
 		micro.Version(version),
-		micro.Address(servicePort),
+		micro.Address(serviceAddress),
 	)
 
 	// Create a new instance of the service handler with the initialized database connection

@@ -18,17 +18,10 @@ spec:
                 name: "{{ .Values.frontend.name }}-service"
                 port:
                   number: {{ .Values.frontend.port }}
-          - path: {{ .Values.login.httpPath }}
+          - path: {{ .Values.frontend_proxy.httpPath }}
             pathType: Prefix
             backend:
               service:
-                name: "{{ .Values.login.name }}-service"
+                name: "{{ .Values.frontend_proxy.name }}-service"
                 port:
-                  number: {{ .Values.login.port }}
-          - path: {{ .Values.register.httpPath }}
-            pathType: Prefix
-            backend:
-              service:
-                name: "{{ .Values.register.name }}-service"
-                port:
-                  number: {{ .Values.register.port }}
+                  number: {{ .Values.frontend_proxy.port }}

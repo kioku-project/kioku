@@ -72,6 +72,14 @@ Register labels
 */}}
 {{- define "kioku.register.labels" -}}
 app.kubernetes.io/name: {{ .Values.register.name }}
+app: {{ .Values.register.name }}
+{{- end }}
+
+{{/*
+Frontend Proxy labels
+*/}}
+{{- define "kioku.frontend_proxy.labels" -}}
+app.kubernetes.io/name: {{ .Values.frontend_proxy.name }}
 {{- end }}
 
 

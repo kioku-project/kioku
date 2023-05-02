@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.frontend_proxy.name }}-deployment"
+  labels:
+    {{- include "kioku.frontend_proxy.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "kioku.frontend_proxy.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kioku.frontend_proxy.labels" . | nindent 8 }}
+    spec:
+      serviceAccountName: go-micro
+      containers:
+      - name: {{ .Values.frontend_proxy.name }}
+        image: "{{ .Values.frontend_proxy.image }}:{{ .Values.frontend_proxy.tag }}"
+      {{ if eq .Values.mode "production" }}
+        imagePullPolicy: Always
+      {{ else }}
+        imagePullPolicy: Never
+      {{ end }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 0
+        ports:
+        - containerPort: {{ .Values.frontend_proxy.containerPort }}
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500M
+          requests:
+            cpu: 200m
+            memory: 200M
+        envFrom:
+          - configMapRef:
+              name: service-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.frontend_proxy.name }}-service"
+spec:
+  selector:
+    {{- include "kioku.frontend_proxy.labels" . | nindent 4 }}
+  ports:
+    - port: {{ .Values.frontend_proxy.port }}
+      targetPort: {{ .Values.frontend_proxy.containerPort }}
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+ name: "hpa-{{ .Values.frontend_proxy.name }}-deployment"
+spec:
+ scaleTargetRef:
+   apiVersion: apps/v1
+   kind: Deployment
+   name: "{{ .Values.frontend_proxy.name }}-deployment"
+ minReplicas: {{ .Values.frontend_proxy.autoscaler.min }}
+ maxReplicas: {{ .Values.frontend_proxy.autoscaler.max }}
+ targetCPUUtilizationPercentage: {{ .Values.frontend_proxy.autoscaler.targetCPUUtilizationPercentage }}

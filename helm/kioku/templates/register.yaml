@@ -15,6 +15,7 @@ spec:
       labels:
         {{- include "kioku.register.labels" . | nindent 8 }}
     spec:
+      serviceAccountName: go-micro
       containers:
       - name: {{ .Values.register.name }}
         image: "{{ .Values.register.image }}:{{ .Values.register.tag }}"
@@ -24,16 +25,26 @@ spec:
         imagePullPolicy: Never
       {{ end }}
         ports:
-        - containerPort: {{ .Values.register.port }}
+          - containerPort: 8080
         resources:
           limits:
             cpu: 500m
+            memory: 500M
           requests:
             cpu: 200m
+            memory: 200M
+        env:
+          - name: HOSTNAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: PORT
+            value: "8080"
         envFrom:
           - secretRef:
               name: {{ .Values.database.secret.name }}
-
+          - configMapRef:
+              name: service-env
 ---
 apiVersion: v1
 kind: Service
@@ -43,9 +54,8 @@ spec:
   selector:
     {{- include "kioku.register.labels" . | nindent 4 }}
   ports:
-    - port: {{ .Values.register.port }}
-      targetPort: {{ .Values.register.port }}
-  type: LoadBalancer
+    - port: 8080
+      targetPort: 8080
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler

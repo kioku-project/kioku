@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"go-micro.dev/v4/server"
 
 	pblogin "github.com/kioku-project/kioku/services/login/proto"
@@ -18,12 +21,9 @@ import (
 )
 
 var (
-	service = "register"
-	version = "latest"
-)
-
-const (
-	servicePort = ":8080" // You can change this to your desired port
+	service     = "register"
+	version     = "latest"
+	servicePort = fmt.Sprintf("%s%s", os.Getenv("HOSTNAME"), ":8080")
 )
 
 func main() {
@@ -33,6 +33,8 @@ func main() {
 	if err != nil {
 		logger.Fatal("Failed to initialize database:", err)
 	}
+
+	logger.Info("Listening on: ", servicePort)
 
 	// Create service
 	srv := micro.NewService(

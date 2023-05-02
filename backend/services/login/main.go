@@ -10,6 +10,8 @@ import (
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
 
+	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
+
 	grpcc "github.com/go-micro/plugins/v4/client/grpc"
 	grpcs "github.com/go-micro/plugins/v4/server/grpc"
 )
@@ -39,6 +41,7 @@ func main() {
 	srv.Init(
 		micro.Name(service),
 		micro.Version(version),
+		micro.Address(servicePort),
 	)
 
 	// Create a new instance of the service handler with the initialized database connection

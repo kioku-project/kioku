@@ -11,6 +11,8 @@ import (
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
 
+	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
+
 	grpcc "github.com/go-micro/plugins/v4/client/grpc"
 	grpcs "github.com/go-micro/plugins/v4/server/grpc"
 )

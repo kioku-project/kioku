@@ -3,13 +3,15 @@ package main
 import (
 	"go-micro.dev/v4/server"
 
-	"github.com/kioku-project/kioku/services/register/handler"
-	"github.com/kioku-project/kioku/store"
-	pb "github.com/kioku-project/kioku/services/register/proto"
 	pblogin "github.com/kioku-project/kioku/services/login/proto"
+	"github.com/kioku-project/kioku/services/register/handler"
+	pb "github.com/kioku-project/kioku/services/register/proto"
+	"github.com/kioku-project/kioku/store"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
+
+	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
 
 	grpcc "github.com/go-micro/plugins/v4/client/grpc"
 	grpcs "github.com/go-micro/plugins/v4/server/grpc"
@@ -21,11 +23,10 @@ var (
 )
 
 const (
-    servicePort = ":8080" // You can change this to your desired port
+	servicePort = ":8080" // You can change this to your desired port
 )
 
 func main() {
-
 
 	// Initialize the database connection
 	dbStore, err := store.NewPostgresStore()
@@ -41,6 +42,7 @@ func main() {
 	srv.Init(
 		micro.Name(service),
 		micro.Version(version),
+		micro.Address(servicePort),
 	)
 
 	// Create a new instance of the service handler with the initialized database connection

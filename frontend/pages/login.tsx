@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Router, useRouter } from "next/router";
 import Image from "next/image";
-import { UserProvider, UserContext } from "../contexts/user";
+import { UserContext } from "../contexts/user";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 
@@ -58,9 +58,9 @@ export default function Page() {
 						<p className="text-center text-sm text-gray-500">
 							{login
 								? "Not registered? "
-								: "Aleready registered? "}
+								: "Already registered? "}
 							<a
-								className="whitespace-nowrap font-semibold text-darkblue hover:cursor-pointer hover:text-eggshell"
+								className="whitespace-nowrap font-semibold text-darkblue transition hover:cursor-pointer hover:text-eggshell"
 								onClick={() => setLogin(!login)}
 							>
 								{login ? "Create an account" : "Sign in"}

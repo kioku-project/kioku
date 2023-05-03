@@ -75,12 +75,12 @@ export default function Page() {
 				<FormButton
 					id="login"
 					value="Login"
-					onClick={() => {
+					onClick={async () => {
 						if (login) {
 							// TODO: login logic
-							loginLogic().then();
+							await loginLogic().then();
 						} else {
-							registerLogic().then();
+							await registerLogic().then();
 						}
 					}}
 				/>
@@ -100,12 +100,12 @@ export default function Page() {
 				<FormButton
 					id="register"
 					value="Register"
-					onClick={() => {
+					onClick={async () => {
 						if (login) {
 							// TODO: login logic
-							loginLogic().then();
+							await loginLogic().then();
 						} else {
-							registerLogic().then();
+							await registerLogic().then();
 						}
 					}}
 				/>

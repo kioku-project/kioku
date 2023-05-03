@@ -52,11 +52,6 @@ func main() {
 	app.Post("/api/login", svc.LoginHandler)
 	app.Post("/api/register", svc.RegisterHandler)
 
-	// Register the handler with the micro framework
-	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {
-	// 	logger.Fatal(err)
-	// }
-
 	// Register handler
 	if err := pb.RegisterHealthHandler(srv.Server(), new(handler.Health)); err != nil {
 		logger.Fatal(err)

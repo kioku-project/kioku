@@ -1,0 +1,26 @@
+name: Build Production Images
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-frontend:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_frontend
+      image-tag: prod
+      path: ./frontend
+
+  build-register:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_register
+      image-tag: prod
+      path: ./backend/services/register
+  
+  build-login:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_login
+      image-tag: prod
+      path: ./backend/services/login

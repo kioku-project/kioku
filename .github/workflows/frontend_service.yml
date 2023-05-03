@@ -1,58 +1,19 @@
-name: Frontend
+name: Web-UI Service
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-    - 'frontend/**'
   pull_request:
     branches: [ main ]
     paths:
     - 'frontend/**'
 
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Image Tag'
-        default: latest
-        required: true
+
 env:
-  SERVICE_IMAGE_NAME: "kioku_frontend"
   NEXT_PUBLIC_ENVIRONMENT: "production"
 
 jobs:
-  frontend:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set outputs
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-      - name: Check outputs
-        run: echo "Commit - ${{ steps.vars.outputs.sha_short }}"
-
-      - name: Login to GitHub Packages
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Build Frontend
-        uses: docker/build-push-action@v3
-        env:
-          NEXT_PUBLIC_ENVIRONMENT: "production"
-        with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
-          push: true
-          tags: ghcr.io/kioku-project/${{ env.SERVICE_IMAGE_NAME }}:${{ inputs.tag || 'latest' }}
-          labels: commit_sha_short=${{ steps.vars.outputs.sha_short }}
+  build-frontend:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_frontend
+      image-tag: ${GITHUB_REF##*/}
+      path: ./frontend

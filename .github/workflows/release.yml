@@ -24,3 +24,10 @@ jobs:
       image-name: kioku_login
       image-tag: prod
       path: ./backend/services/login
+  
+  build-frontend-proxy:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_frontend_proxy
+      image-tag: prod
+      path: ./backend/services/frontend

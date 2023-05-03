@@ -1,0 +1,15 @@
+name: Frontend Proxy Service
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+    - 'backend/services/frontend/**'
+
+jobs:
+  build-frontend-proxy:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_frontend_proxy
+      image-tag: ${GITHUB_REF##*/}
+      path: ./backend/service/frontend/**

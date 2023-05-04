@@ -25,7 +25,7 @@ interface FormButtonProps {
 
 function getStyle(style: string): string {
 	const getStyle: { [style: string]: string } = {
-		primary: "bg-darkblue border-darkblue text-eggshell hover:bg-lightblue",
+		primary: "bg-darkblue border-darkblue text-eggshell",
 	};
 	return getStyle[style] ?? getStyle.primary;
 }
@@ -41,7 +41,7 @@ export const FormButton = ({
 	return (
 		<input
 			type="submit"
-			className={`flex justify-center rounded-md border-2 px-3 py-1.5 text-center text-sm font-semibold leading-6 shadow-sm outline-none hover:cursor-pointer ${getStyle(
+			className={`flex justify-center rounded-md border-2 px-3 py-1.5 text-center text-sm font-semibold leading-6 shadow-sm outline-none transition hover:scale-105 hover:cursor-pointer ${getStyle(
 				style
 			)} ${className ?? ""}`}
 			{...props}

@@ -3,6 +3,7 @@ import { Logo } from "../graphics/Logo";
 import { Inter } from "next/font/google";
 import { Button } from "../input/Button";
 import router from "next/router";
+import { ArrowRight } from "react-feather";
 
 const inter = Inter({
 	weight: ["200", "400"],
@@ -29,13 +30,14 @@ export const Header = ({ className }: HeaderProps) => {
 			<Logo></Logo>
 			<Button
 				id="loginButton"
-				value="Login &rarr;"
 				style="secondary"
-				className="invisible justify-end sm:visible"
+				className="invisible h-full justify-end sm:visible"
 				onClick={() => {
 					router.push("/login");
 				}}
-			></Button>
+			>
+				Login <ArrowRight className="ml-1 h-2/3"></ArrowRight>
+			</Button>
 		</div>
 	);
 };

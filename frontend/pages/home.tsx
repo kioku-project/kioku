@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { Button } from "../components/input/Button";
 import Cards from "../components/graphics/Cards";
 import { Header } from "../components/navigation/Header";
+import { ArrowRight } from "react-feather";
 
 export default function Page() {
 	const router = useRouter();
@@ -21,20 +22,23 @@ export default function Page() {
 					</p>
 					<div className="flex flex-row space-x-3 md:space-x-5">
 						<Button
-							value="Get started"
 							id="getstartedButton"
 							onClick={() => {
 								router.push("/login");
 							}}
-						></Button>
+						>
+							Get started
+						</Button>
 						<Button
-							value="Learn more &rarr;"
 							id="lernmoreButton"
 							style="secondary"
 							onClick={() => {
 								router.push("/learn");
 							}}
-						></Button>
+						>
+							Learn more
+							<ArrowRight className="ml-1 h-2/3"></ArrowRight>
+						</Button>
 					</div>
 				</div>
 				<div className="my-auto hidden md:block md:w-1/3">

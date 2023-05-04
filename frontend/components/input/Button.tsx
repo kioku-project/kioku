@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 interface ButtonProps {
 	/**
@@ -8,7 +8,7 @@ interface ButtonProps {
 	/**
 	 * Button contents
 	 */
-	value?: string;
+	children: ReactNode;
 	/**
 	 * Button styling
 	 */
@@ -25,10 +25,8 @@ interface ButtonProps {
 
 function getStyle(style: string): string {
 	const getStyle: { [style: string]: string } = {
-		primary:
-			"bg-darkblue border-darkblue text-eggshell hover:bg-lightblue shadow-sm",
-		secondary:
-			"bg-transparent border-transparent hover:bg-lightblue text-darkblue",
+		primary: "bg-darkblue border-darkblue text-eggshell shadow-sm",
+		secondary: "bg-transparent border-transparent text-darkblue",
 	};
 	return getStyle[style] ?? getStyle.primary;
 }
@@ -36,15 +34,20 @@ function getStyle(style: string): string {
 /**
  * UI component for user interactions
  */
-export const Button = ({ className, value, style, ...props }: ButtonProps) => {
+export const Button = ({
+	className,
+	style,
+	children,
+	...props
+}: ButtonProps) => {
 	return (
 		<button
-			className={`flex justify-center rounded-md border-2 px-3 py-1.5 text-center text-xs font-bold leading-6 outline-none transition hover:cursor-pointer sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl ${getStyle(
+			className={`flex items-center justify-center rounded-md border-2 px-3 py-1.5 text-center text-xs font-bold leading-6 outline-none transition hover:scale-105 hover:cursor-pointer sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl ${getStyle(
 				style ?? ""
 			)} ${className ?? ""}`}
 			{...props}
 		>
-			{value}
+			{children}
 		</button>
 	);
 };

@@ -43,7 +43,7 @@ export default function Page() {
 						<p
 							className={`${inter.className} text-clip indent-[0.5em] text-4xl font-extralight tracking-[0.5em] sm:text-5xl md:text-6xl`}
 						>
-							kioku
+							Kioku
 						</p>
 					</div>
 					<div

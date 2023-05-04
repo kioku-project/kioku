@@ -29,7 +29,7 @@ export const Header = ({ className }: HeaderProps) => {
 			<Logo></Logo>
 			<Button
 				id="loginButton"
-				value="Login &#129030;"
+				value="Login &rarr;"
 				style="secondary"
 				className="invisible justify-end sm:visible"
 				onClick={() => {

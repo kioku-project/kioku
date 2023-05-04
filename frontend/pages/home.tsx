@@ -28,7 +28,7 @@ export default function Page() {
 							}}
 						></Button>
 						<Button
-							value="Learn more &#129030;"
+							value="Learn more &rarr;"
 							id="lernmoreButton"
 							style="secondary"
 							onClick={() => {

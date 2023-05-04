@@ -37,31 +37,31 @@ export default function Page() {
 					></FeatureCard>
 					<FeatureCard
 						header="Individual"
-						description="Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximise your potential!"
+						description="Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 						icon={<Compass className="text-darkblue"></Compass>}
 					></FeatureCard>
 				</div>
 				<div className="flex flex-col md:flex-row">
 					<FeatureCard
 						header="Compatible"
-						description="Kioku is compatible with Anki, allowing yout to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
+						description="Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
 						icon={<Code className="text-darkblue"></Code>}
 					></FeatureCard>
 					<FeatureCard
 						header="Informative"
-						description="We provide you with detailed statistics and and insights into your study progress. Identify areas of improvement to optimise your strategy for maximum effectiveness!"
+						description="We provide you with detailed statistics and and insights into your study progress. Identify areas of improvement to optimize your strategy for maximum effectiveness!"
 						icon={<BarChart2 className="text-darkblue"></BarChart2>}
 					></FeatureCard>
 				</div>
 				<div className="flex flex-col md:flex-row">
 					<FeatureCard
 						header="Available"
-						description="Access your flaschcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
+						description="Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 						icon={<Cloud className="text-darkblue"></Cloud>}
 					></FeatureCard>
 					<FeatureCard
 						header="Entertaining"
-						description="Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better result and stay on track with your personal learning goals! "
+						description="Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals! "
 						icon={<Award className="text-darkblue"></Award>}
 					></FeatureCard>
 				</div>

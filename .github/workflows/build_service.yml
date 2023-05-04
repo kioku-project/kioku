@@ -51,7 +51,7 @@ jobs:
         if: inputs.image-tag != ''
         uses: docker/build-push-action@v3
         with:
-          context: ${{ inputs.path }}
+          context: ${{ inputs.context }}
           file: ${{ inputs.path }}/Dockerfile
           push: true
           tags: ghcr.io/kioku-project/${{ inputs.image-name }}:${{ inputs.image-tag }}

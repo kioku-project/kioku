@@ -27,3 +27,24 @@ export const Secondary: Story = {
 		style: "secondary",
 	},
 };
+
+export const Small: Story = {
+	args: {
+		children: "Small",
+		size: "small",
+	},
+};
+
+export const Medium: Story = {
+	args: {
+		children: "Medium",
+		size: "medium",
+	},
+};
+
+export const Large: Story = {
+	args: {
+		children: "Large",
+		size: "large",
+	},
+};

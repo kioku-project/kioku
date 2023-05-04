@@ -14,6 +14,10 @@ interface ButtonProps {
 	 */
 	style?: "primary" | "secondary";
 	/**
+	 * Button size
+	 */
+	size?: "small" | "medium" | "large";
+	/**
 	 * Additional classes
 	 */
 	className?: string;
@@ -31,20 +35,30 @@ function getStyle(style: string): string {
 	return getStyle[style] ?? getStyle.primary;
 }
 
+function getSize(size: string): string {
+	const getSize: { [size: string]: string } = {
+		small: "px-3 py-1.5 text-xs sm:text-xs md:text-sm lg:px-3 lg:py-1.5 lg:text-base xl:text-lg",
+		medium: "px-3 py-1.5 text-xs sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl",
+		large: "px-5 py-3 text-sm sm:text-base md:text-lg lg:px-5 lg:py-3 lg:text-xl xl:text-2xl",
+	};
+	return getSize[size] ?? getSize.medium;
+}
+
 /**
  * UI component for user interactions
  */
 export const Button = ({
 	className,
 	style,
+	size,
 	children,
 	...props
 }: ButtonProps) => {
 	return (
 		<button
-			className={`flex items-center justify-center rounded-md border-2 px-3 py-1.5 text-center text-xs font-bold leading-6 outline-none transition hover:scale-105 hover:cursor-pointer sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl ${getStyle(
+			className={`flex items-center justify-center rounded-md border-2 text-center font-bold outline-none transition hover:scale-105 hover:cursor-pointer ${getStyle(
 				style ?? ""
-			)} ${className ?? ""}`}
+			)} ${getSize(size ?? "")} ${className ?? ""}`}
 			{...props}
 		>
 			{children}

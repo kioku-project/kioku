@@ -26,7 +26,7 @@ export const Logo = ({ className, text = true }: LogoProps) => {
 	return (
 		<div
 			className={`flex flex-row items-center hover:cursor-pointer ${
-				className || ""
+				className ?? ""
 			}`}
 			onClick={() => {
 				router.push("/home");

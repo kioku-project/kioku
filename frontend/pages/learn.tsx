@@ -1,6 +1,5 @@
-import { useContext, ReactElement } from "react";
+import { ReactElement } from "react";
 import { useRouter } from "next/router";
-import { UserContext } from "../contexts/user";
 import { Header } from "../components/navigation/Header";
 import { Users, BarChart2, Cloud, Code, Compass, Award } from "react-feather";
 
@@ -99,7 +98,7 @@ const FeatureCard = ({
 	return (
 		<div
 			className={`flex w-full flex-row space-x-3 py-5 leading-7 md:w-1/2 ${
-				className || ""
+				className ?? ""
 			}`}
 		>
 			{icon}

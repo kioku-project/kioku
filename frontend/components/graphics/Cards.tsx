@@ -2,7 +2,6 @@ export default function Cards() {
 	return (
 		<svg
 			width="40vw"
-			height="h-full"
 			viewBox="0 0 514 680"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
@@ -15,7 +14,7 @@ export default function Cards() {
 				rx="7"
 				fill="#FFFFF3"
 				stroke="#9EADC8"
-				stroke-width="8"
+				strokeWidth="8"
 				className="drop-shadow-2xl"
 			/>
 			<rect
@@ -26,7 +25,7 @@ export default function Cards() {
 				rx="7"
 				fill="#FFFFF3"
 				stroke="#F3A712"
-				stroke-width="8"
+				strokeWidth="8"
 				className="drop-shadow-2xl"
 			/>
 			<rect
@@ -37,7 +36,7 @@ export default function Cards() {
 				rx="13"
 				fill="#FFFFF3"
 				stroke="#29335C"
-				stroke-width="8"
+				strokeWidth="8"
 				className="drop-shadow-2xl"
 			/>
 		</svg>

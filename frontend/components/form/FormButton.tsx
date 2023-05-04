@@ -43,7 +43,7 @@ export const FormButton = ({
 			type="submit"
 			className={`flex justify-center rounded-md border-2 px-3 py-1.5 text-center text-sm font-semibold leading-6 shadow-sm outline-none hover:cursor-pointer ${getStyle(
 				style
-			)} ${className || ""}`}
+			)} ${className ?? ""}`}
 			{...props}
 		/>
 	);

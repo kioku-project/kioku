@@ -23,7 +23,7 @@ export const Header = ({ className }: HeaderProps) => {
 	return (
 		<div
 			className={`flex items-center justify-between p-5 md:p-10 ${
-				className || ""
+				className ?? ""
 			}`}
 		>
 			<Logo></Logo>

@@ -40,8 +40,8 @@ export const Button = ({ className, value, style, ...props }: ButtonProps) => {
 	return (
 		<button
 			className={`flex justify-center rounded-md border-2 px-3 py-1.5 text-center text-xs font-bold leading-6 outline-none transition hover:cursor-pointer sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl ${getStyle(
-				style || ""
-			)} ${className || ""}`}
+				style ?? ""
+			)} ${className ?? ""}`}
 			{...props}
 		>
 			{value}

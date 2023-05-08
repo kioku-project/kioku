@@ -11,29 +11,40 @@ services:
     build:
       context: backend
       dockerfile: services/frontend/Dockerfile
-    container_name: frontend_proxy
+    container_name: kioku-frontend_proxy
     restart: always
     env_file:
       - ./backend/.env
     depends_on:
       - db
 
-  login_service:
+  user_service:
     build:
       context: backend
-      dockerfile: services/login/Dockerfile
-    container_name: login_service
+      dockerfile: services/user/Dockerfile
+    container_name: kioku-user_service
+    restart: always
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+  
+  carddeck_service:
+    build:
+      context: backend
+      dockerfile: services/carddeck/Dockerfile
+    container_name: kioku-carddeck_service
     restart: always
     env_file:
       - ./backend/.env
     depends_on:
       - db
 
-  register_service:
+  collaboration_service:
     build:
       context: backend
-      dockerfile: services/register/Dockerfile
-    container_name: register_service
+      dockerfile: services/collaboration/Dockerfile
+    container_name: kioku-collaboration_service
     restart: always
     env_file:
       - ./backend/.env
@@ -43,19 +54,34 @@ services:
   frontend:
     build:
       context: frontend
-    container_name: frontend
+    container_name: kioku-frontend
     restart: always
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:
       - frontend_proxy
-      - login_service
-      - register_service
+      - user_service
+      - carddeck_service
+      - collaboration_service
   
   go-micro-dashboard:
     image: xpunch/go-micro-dashboard:latest
-    container_name: micro-dashboard
+    container_name: kioku-micro-dashboard
     ports:
       - "127.0.0.1:3001:8082"
     env_file:
       - ./backend/.env
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: kioku-pgadmin
+    restart: always
+    ports:
+      - "127.0.0.1:3002:80"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  pgadmin-data:

@@ -1,7 +1,9 @@
 package model
 
 type Card struct {
-	ID     uint
-	DeckID uint
-	Deck   Deck
+	ID        uint `gorm:"primaryKey"`
+	DeckID    uint
+	Deck      Deck
+	Frontside string
+	Backside  string
 }

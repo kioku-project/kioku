@@ -5,9 +5,9 @@ import (
 )
 
 type Deck struct {
-	ID        uint
-	Name      string
-	CreatedAt time.Time
-	GroupID   uint
+	ID        uint      `gorm:"primaryKey"`
+	Name      string    `gorm:"not null"`
+	CreatedAt time.Time `gorm:"not null"`
+	GroupID   uint      `gorm:"not null"`
 	Group     Group
 }

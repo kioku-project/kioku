@@ -19,8 +19,9 @@ chmod +x /bin/grpc_health_probe
 COPY services/frontend/Makefile go.mod go.sum ./
 RUN make init && go mod download 
 COPY services/frontend/ services/frontend
-COPY services/login/proto/login.* services/login/proto/
-COPY services/register/proto/register.* services/register/proto/
+COPY services/user/proto/user.* services/user/proto/
+COPY services/carddeck/proto/carddeck.* services/carddeck/proto/
+COPY services/collaboration/proto/collaboration.* services/collaboration/proto/
 COPY store/ store/
 COPY pkg/ pkg/
 WORKDIR /go/src/kioku/services/frontend

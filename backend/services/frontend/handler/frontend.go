@@ -1,23 +1,28 @@
 package handler
 
 import (
+	"strconv"
+
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
-	pblogin "github.com/kioku-project/kioku/services/login/proto"
-	pbregister "github.com/kioku-project/kioku/services/register/proto"
+	pbcarddeck "github.com/kioku-project/kioku/services/carddeck/proto"
+	pbcollab "github.com/kioku-project/kioku/services/collaboration/proto"
+	pbuser "github.com/kioku-project/kioku/services/user/proto"
 	"go-micro.dev/v4/logger"
-	"time"
 )
 
 type Frontend struct {
-	loginService    pblogin.LoginService
-	registerService pbregister.RegisterService
+	userService          pbuser.UserService
+	carddeckService      pbcarddeck.CarddeckService
+	collaborationService pbcollab.CollaborationService
 }
 
-func New(loginService pblogin.LoginService, registerService pbregister.RegisterService) *Frontend {
-	return &Frontend{loginService: loginService, registerService: registerService}
+func New(userService pbuser.UserService, carddeckService pbcarddeck.CarddeckService, collaborationService pbcollab.CollaborationService) *Frontend {
+	return &Frontend{userService: userService, carddeckService: carddeckService, collaborationService: collaborationService}
 }
 
 func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
@@ -71,7 +76,7 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	if reqUser.Password == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "No Password given")
 	}
-	rspLogin, err := e.loginService.Login(c.Context(), &pblogin.LoginRequest{Email: reqUser.Email, Password: reqUser.Password})
+	rspLogin, err := e.userService.Login(c.Context(), &pbuser.LoginRequest{Email: reqUser.Email, Password: reqUser.Password})
 	if err != nil {
 		return err
 	}
@@ -121,9 +126,64 @@ func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
 	if data["password"] == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "No Password given")
 	}
-	rspRegister, err := e.registerService.Register(c.Context(), &pbregister.RegisterRequest{Email: data["email"], Name: data["name"], Password: data["password"]})
+	rspRegister, err := e.userService.Register(c.Context(), &pbuser.RegisterRequest{Email: data["email"], Name: data["name"], Password: data["password"]})
 	if err != nil {
 		return err
 	}
 	return c.SendString(rspRegister.Name)
+}
+
+func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
+	data := map[string]string{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if data["userID"] == "" {
+		return fiber.NewError(fiber.StatusBadRequest, "No user id given")
+	}
+	if data["deckName"] == "" {
+		return fiber.NewError(fiber.StatusBadRequest, "No deck name given")
+	}
+	if data["groupName"] == "" {
+		return fiber.NewError(fiber.StatusBadRequest, "No group name given")
+	}
+	userID, err := strconv.ParseUint(data["userID"], 10, 64)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid user id")
+	}
+	rspCardDeck, err := e.carddeckService.CreateDeck(c.Context(), &pbcarddeck.DeckRequest{UserID: userID, DeckName: data["deckName"], GroupName: data["groupName"]})
+	if err != nil {
+		return err
+	}
+	strSuccess := strconv.FormatBool(rspCardDeck.Success)
+	return c.SendString(strSuccess)
+}
+
+func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
+	data := map[string]string{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if data["userID"] == "" {
+		return fiber.NewError(fiber.StatusBadRequest, "No user id given")
+	}
+	if data["deckName"] == "" {
+		return fiber.NewError(fiber.StatusBadRequest, "No deck name given")
+	}
+	if data["frontside"] == "" {
+		return fiber.NewError(fiber.StatusBadRequest, "No frontside given")
+	}
+	if data["backside"] == "" {
+		return fiber.NewError(fiber.StatusBadRequest, "No backside given")
+	}
+	userID, err := strconv.ParseUint(data["userID"], 10, 64)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid user id")
+	}
+	rspCardDeck, err := e.carddeckService.CreateCard(c.Context(), &pbcarddeck.CardRequest{UserID: userID, DeckName: data["deckName"], Frontside: data["frontside"], Backside: data["backside"]})
+	if err != nil {
+		return err
+	}
+	strSuccess := strconv.FormatBool(rspCardDeck.Success)
+	return c.SendString(strSuccess)
 }

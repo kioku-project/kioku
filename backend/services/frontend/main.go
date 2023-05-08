@@ -2,15 +2,17 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 	"github.com/joho/godotenv"
 	helper "github.com/kioku-project/kioku/pkg/helper"
+	pbcarddeck "github.com/kioku-project/kioku/services/carddeck/proto"
+	pbcollab "github.com/kioku-project/kioku/services/collaboration/proto"
 	"github.com/kioku-project/kioku/services/frontend/handler"
 	pb "github.com/kioku-project/kioku/services/frontend/proto"
-	pblogin "github.com/kioku-project/kioku/services/login/proto"
-	pbregister "github.com/kioku-project/kioku/services/register/proto"
-	"os"
+	pbuser "github.com/kioku-project/kioku/services/user/proto"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
@@ -46,8 +48,9 @@ func main() {
 
 	// Create a new instance of the service handler with the initialized database connection
 	svc := handler.New(
-		pblogin.NewLoginService("login", srv.Client()),
-		pbregister.NewRegisterService("register", srv.Client()),
+		pbuser.NewUserService("user", srv.Client()),
+		pbcarddeck.NewCarddeckService("carddeck", srv.Client()),
+		pbcollab.NewCollaborationService("collaboration", srv.Client()),
 	)
 
 	app := fiber.New()
@@ -71,6 +74,9 @@ func main() {
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {
 	// 	logger.Fatal(err)
 	// }
+
+	app.Post("/api/deck", svc.CreateDeckHandler)
+	app.Post("/api/card", svc.CreateCardHandler)
 
 	// Register handler
 	if err := pb.RegisterHealthHandler(srv.Server(), new(handler.Health)); err != nil {

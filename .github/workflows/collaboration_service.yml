@@ -1,0 +1,15 @@
+name: Collaboration Service
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+    - 'backend/services/collaboration/**'
+
+jobs:
+  build-collaboration:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_collaboration
+      path: ./backend/services/collaboration
+      context: ./backend

@@ -1,0 +1,15 @@
+name: Carddeck Service
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+    - 'backend/services/carddeck/**'
+
+jobs:
+  build-collaboration:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_carddeck
+      path: ./backend/services/carddeck
+      context: ./backend

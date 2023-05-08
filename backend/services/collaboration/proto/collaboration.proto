@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package collaboration;
+
+option go_package = "./proto;collaboration";
+
+service Collaboration {
+	rpc CreateNewGroupWithAdmin(GroupRequest) returns (SuccessResponse) {}
+	rpc GetGroupUserRole(GroupRequest) returns (GroupRoleResponse) {}
+}
+
+enum GroupRole {
+	READ = 0;
+	WRITE = 1;
+	ADMIN = 2;
+}
+
+message GroupRequest {
+	uint64 userID = 1;
+	string groupName = 2;
+}
+
+message SuccessResponse {
+	bool success = 1;
+}
+
+message GroupRoleResponse {
+	uint64 groupID = 1;
+	GroupRole groupRole = 2;
+}

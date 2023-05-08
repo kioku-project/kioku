@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/kioku-project/kioku/services/register/proto"
+	pb "github.com/kioku-project/kioku/services/user/proto"
 )
 
 type Health struct{}

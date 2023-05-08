@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package login;
+package user;
 
-option go_package = "./proto;login";
+option go_package = "./proto;user";
 
 service Health {
   rpc Check(HealthCheckRequest) returns (HealthCheckResponse) {}

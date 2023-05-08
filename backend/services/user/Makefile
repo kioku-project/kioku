@@ -8,7 +8,7 @@ init:
 
 .PHONY: proto
 proto:
-	@protoc --proto_path=. --micro_out=. --go_out=:. proto/login.proto
+	@protoc --proto_path=. --micro_out=. --go_out=:. proto/user.proto
 	@protoc --proto_path=. --micro_out=. --go_out=:. proto/health.proto
 	
 
@@ -22,7 +22,7 @@ tidy:
 
 .PHONY: build
 build:
-	@go build -o login *.go
+	@go build -o user *.go
 
 .PHONY: test
 test:
@@ -30,4 +30,4 @@ test:
 
 .PHONY: docker
 docker:
-	@docker build -t backend/services/login:latest --file Dockerfile ../../.
+	@docker build -t backend/services/user:latest --file Dockerfile ../../. 

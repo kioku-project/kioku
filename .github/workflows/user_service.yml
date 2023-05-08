@@ -1,15 +1,15 @@
-name: Login Service
+name: User Service
 
 on:
   pull_request:
     branches: [ main ]
     paths:
-    - 'backend/services/login/**'
+    - 'backend/services/user/**'
 
 jobs:
   build-login:
     uses: ./.github/workflows/build_service.yml
     with:
-      image-name: kioku_login
-      path: ./backend/services/login
+      image-name: kioku_user
+      path: ./backend/services/user
       context: ./backend

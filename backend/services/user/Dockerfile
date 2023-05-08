@@ -16,13 +16,13 @@ wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-pro
 chmod +x /bin/grpc_health_probe
 
 # Build Go binary
-COPY services/register/Makefile go.mod go.sum ./
+COPY services/user/Makefile go.mod go.sum ./
 RUN make init && go mod download 
-COPY services/register/ services/register
-COPY services/login/proto/login.* services/login/proto/
+COPY services/user/ services/user
+COPY services/collaboration/proto/collaboration.* services/collaboration/proto/
 COPY store/ store/
 COPY pkg/ pkg/
-WORKDIR /go/src/kioku/services/register
+WORKDIR /go/src/kioku/services/user
 RUN make proto tidy build
 
 # Deployment container
@@ -32,6 +32,6 @@ USER kioku
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /bin/grpc_health_probe /bin/
-COPY --from=builder /go/src/kioku/services/register/register /register
-ENTRYPOINT ["/register"]
+COPY --from=builder /go/src/kioku/services/user/user /user
+ENTRYPOINT ["/user"]
 CMD []

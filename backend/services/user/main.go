@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kioku-project/kioku/services/login/handler"
-	pb "github.com/kioku-project/kioku/services/login/proto"
+	pbcollab "github.com/kioku-project/kioku/services/collaboration/proto"
+	"github.com/kioku-project/kioku/services/user/handler"
+	pb "github.com/kioku-project/kioku/services/user/proto"
 	"github.com/kioku-project/kioku/store"
 
 	"go-micro.dev/v4"
@@ -19,7 +20,7 @@ import (
 )
 
 var (
-	service        = "login"
+	service        = "user"
 	version        = "latest"
 	serviceAddress = fmt.Sprintf("%s%s", os.Getenv("HOSTNAME"), ":8080")
 )
@@ -27,7 +28,7 @@ var (
 func main() {
 
 	// Initialize the database connection
-	dbStore, err := store.NewPostgresStore()
+	dbStore, err := store.NewUserStore()
 	if err != nil {
 		logger.Fatal("Failed to initialize database:", err)
 	}
@@ -46,10 +47,10 @@ func main() {
 	)
 
 	// Create a new instance of the service handler with the initialized database connection
-	svc := handler.New(dbStore)
+	svc := handler.New(dbStore, pbcollab.NewCollaborationService("collaboration", srv.Client()))
 
 	// Register handler
-	if err := pb.RegisterLoginHandler(srv.Server(), svc); err != nil {
+	if err := pb.RegisterUserHandler(srv.Server(), svc); err != nil {
 		logger.Fatal(err)
 	}
 	if err := pb.RegisterHealthHandler(srv.Server(), new(handler.Health)); err != nil {

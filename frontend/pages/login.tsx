@@ -151,8 +151,8 @@ export default function Page() {
 	}
 
 	async function registerLogic() {
-		let email = document.querySelector("#email") as HTMLInputElement | null;
-		let name = document.querySelector("#name") as HTMLInputElement | null;
+		let email = document.querySelector("#email") as HTMLInputElement;
+		let name = document.querySelector("#name") as HTMLInputElement;
 		let password = document.querySelector(
 			"#password"
 		) as HTMLInputElement | null;

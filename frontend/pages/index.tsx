@@ -1,11 +1,11 @@
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import React from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import GroupOverviewTile from "../components/group/GroupOverviewTile";
 import Navigation from "../components/navigation/Navigation";
 import Authenticated from "../components/accessControl/Authenticated";
+import React from "react";
 
 export default function Home() {
 	return (

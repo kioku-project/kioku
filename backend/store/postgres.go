@@ -94,9 +94,9 @@ func (s *PostgresStore) CreateDeck(newDeck *model.Deck) error {
 	return rsp.Error
 }
 
-func (s *PostgresStore) FindDeckByName(deckName string) (*model.Deck, error) {
+func (s *PostgresStore) FindDeckByPublicID(publicID string) (*model.Deck, error) {
 	var deck model.Deck
-	err := s.db.Where(model.Deck{Name: deckName}).First(&deck).Error
+	err := s.db.Where(model.Deck{PublicID: publicID}).First(&deck).Error
 	if err != nil {
 		return nil, err
 	}
@@ -117,9 +117,9 @@ func (s *PostgresStore) CreateNewGroupWithAdmin(adminUserID uint, newGroup *mode
 	return rsp.Error
 }
 
-func (s *PostgresStore) FindGroupByName(groupName string) (*model.Group, error) {
+func (s *PostgresStore) FindGroupByPublicID(publicID string) (*model.Group, error) {
 	var group model.Group
-	err := s.db.Where(model.Group{Name: groupName}).First(&group).Error
+	err := s.db.Where(model.Group{PublicID: publicID}).First(&group).Error
 	if err != nil {
 		return nil, err
 	}

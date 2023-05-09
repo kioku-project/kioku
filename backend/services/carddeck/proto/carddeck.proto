@@ -5,23 +5,23 @@ package carddeck;
 option go_package = "./proto;carddeck";
 
 service Carddeck {
-	rpc CreateCard(CardRequest) returns (SuccessResponse) {}
-	rpc CreateDeck(DeckRequest) returns (SuccessResponse) {}
+	rpc CreateCard(CardRequest) returns (PublicIDResponse) {}
+	rpc CreateDeck(DeckRequest) returns (PublicIDResponse) {}
 }
 
 message CardRequest {
 	uint64 userID = 1;
-	string deckName = 2;
+	string deckPublicID = 2;
 	string frontside = 3;
 	string backside = 4;
 }
 
 message DeckRequest {
 	uint64 userID = 1;
-	string deckName = 2;
-	string groupName = 3;
+	string groupPublicID = 2;
+	string deckName = 3;
 }
 
-message SuccessResponse {
-	bool success = 1;
+message PublicIDResponse {
+	string publicID = 1;
 }

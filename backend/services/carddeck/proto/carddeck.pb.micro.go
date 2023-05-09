@@ -36,8 +36,8 @@ func NewCarddeckEndpoints() []*api.Endpoint {
 // Client API for Carddeck service
 
 type CarddeckService interface {
-	CreateCard(ctx context.Context, in *CardRequest, opts ...client.CallOption) (*SuccessResponse, error)
-	CreateDeck(ctx context.Context, in *DeckRequest, opts ...client.CallOption) (*SuccessResponse, error)
+	CreateCard(ctx context.Context, in *CardRequest, opts ...client.CallOption) (*PublicIDResponse, error)
+	CreateDeck(ctx context.Context, in *DeckRequest, opts ...client.CallOption) (*PublicIDResponse, error)
 }
 
 type carddeckService struct {
@@ -52,9 +52,9 @@ func NewCarddeckService(name string, c client.Client) CarddeckService {
 	}
 }
 
-func (c *carddeckService) CreateCard(ctx context.Context, in *CardRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+func (c *carddeckService) CreateCard(ctx context.Context, in *CardRequest, opts ...client.CallOption) (*PublicIDResponse, error) {
 	req := c.c.NewRequest(c.name, "Carddeck.CreateCard", in)
-	out := new(SuccessResponse)
+	out := new(PublicIDResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -62,9 +62,9 @@ func (c *carddeckService) CreateCard(ctx context.Context, in *CardRequest, opts 
 	return out, nil
 }
 
-func (c *carddeckService) CreateDeck(ctx context.Context, in *DeckRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+func (c *carddeckService) CreateDeck(ctx context.Context, in *DeckRequest, opts ...client.CallOption) (*PublicIDResponse, error) {
 	req := c.c.NewRequest(c.name, "Carddeck.CreateDeck", in)
-	out := new(SuccessResponse)
+	out := new(PublicIDResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -75,14 +75,14 @@ func (c *carddeckService) CreateDeck(ctx context.Context, in *DeckRequest, opts 
 // Server API for Carddeck service
 
 type CarddeckHandler interface {
-	CreateCard(context.Context, *CardRequest, *SuccessResponse) error
-	CreateDeck(context.Context, *DeckRequest, *SuccessResponse) error
+	CreateCard(context.Context, *CardRequest, *PublicIDResponse) error
+	CreateDeck(context.Context, *DeckRequest, *PublicIDResponse) error
 }
 
 func RegisterCarddeckHandler(s server.Server, hdlr CarddeckHandler, opts ...server.HandlerOption) error {
 	type carddeck interface {
-		CreateCard(ctx context.Context, in *CardRequest, out *SuccessResponse) error
-		CreateDeck(ctx context.Context, in *DeckRequest, out *SuccessResponse) error
+		CreateCard(ctx context.Context, in *CardRequest, out *PublicIDResponse) error
+		CreateDeck(ctx context.Context, in *DeckRequest, out *PublicIDResponse) error
 	}
 	type Carddeck struct {
 		carddeck
@@ -95,10 +95,10 @@ type carddeckHandler struct {
 	CarddeckHandler
 }
 
-func (h *carddeckHandler) CreateCard(ctx context.Context, in *CardRequest, out *SuccessResponse) error {
+func (h *carddeckHandler) CreateCard(ctx context.Context, in *CardRequest, out *PublicIDResponse) error {
 	return h.CarddeckHandler.CreateCard(ctx, in, out)
 }
 
-func (h *carddeckHandler) CreateDeck(ctx context.Context, in *DeckRequest, out *SuccessResponse) error {
+func (h *carddeckHandler) CreateDeck(ctx context.Context, in *DeckRequest, out *PublicIDResponse) error {
 	return h.CarddeckHandler.CreateDeck(ctx, in, out)
 }

@@ -36,7 +36,7 @@ func NewCollaborationEndpoints() []*api.Endpoint {
 // Client API for Collaboration service
 
 type CollaborationService interface {
-	CreateNewGroupWithAdmin(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
+	CreateNewGroupWithAdmin(ctx context.Context, in *GroupCreateRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	GetGroupUserRole(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupRoleResponse, error)
 }
 
@@ -52,7 +52,7 @@ func NewCollaborationService(name string, c client.Client) CollaborationService 
 	}
 }
 
-func (c *collaborationService) CreateNewGroupWithAdmin(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+func (c *collaborationService) CreateNewGroupWithAdmin(ctx context.Context, in *GroupCreateRequest, opts ...client.CallOption) (*SuccessResponse, error) {
 	req := c.c.NewRequest(c.name, "Collaboration.CreateNewGroupWithAdmin", in)
 	out := new(SuccessResponse)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -75,13 +75,13 @@ func (c *collaborationService) GetGroupUserRole(ctx context.Context, in *GroupRe
 // Server API for Collaboration service
 
 type CollaborationHandler interface {
-	CreateNewGroupWithAdmin(context.Context, *GroupRequest, *SuccessResponse) error
+	CreateNewGroupWithAdmin(context.Context, *GroupCreateRequest, *SuccessResponse) error
 	GetGroupUserRole(context.Context, *GroupRequest, *GroupRoleResponse) error
 }
 
 func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, opts ...server.HandlerOption) error {
 	type collaboration interface {
-		CreateNewGroupWithAdmin(ctx context.Context, in *GroupRequest, out *SuccessResponse) error
+		CreateNewGroupWithAdmin(ctx context.Context, in *GroupCreateRequest, out *SuccessResponse) error
 		GetGroupUserRole(ctx context.Context, in *GroupRequest, out *GroupRoleResponse) error
 	}
 	type Collaboration struct {
@@ -95,7 +95,7 @@ type collaborationHandler struct {
 	CollaborationHandler
 }
 
-func (h *collaborationHandler) CreateNewGroupWithAdmin(ctx context.Context, in *GroupRequest, out *SuccessResponse) error {
+func (h *collaborationHandler) CreateNewGroupWithAdmin(ctx context.Context, in *GroupCreateRequest, out *SuccessResponse) error {
 	return h.CollaborationHandler.CreateNewGroupWithAdmin(ctx, in, out)
 }
 

@@ -46,7 +46,7 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 		logger.Infof("Error while inserting into db: %v", dberr.Error())
 	}
 
-	rspGroup, err := e.collaborationService.CreateNewGroupWithAdmin(context.TODO(), &pbcollab.GroupRequest{UserID: uint64(newUser.ID), GroupName: "Home Group"})
+	rspGroup, err := e.collaborationService.CreateNewGroupWithAdmin(context.TODO(), &pbcollab.GroupCreateRequest{UserID: uint64(newUser.ID), GroupName: "Home Group"})
 	if err != nil || !rspGroup.Success {
 		logger.Infof("Collaboration service error: %v", err.Error())
 		return err

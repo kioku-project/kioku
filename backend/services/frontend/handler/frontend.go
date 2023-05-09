@@ -144,18 +144,15 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 	if data["deckName"] == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "No deck name given")
 	}
-	if data["groupName"] == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No group name given")
-	}
 	userID, err := strconv.ParseUint(data["userID"], 10, 64)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Invalid user id")
 	}
-	rspCardDeck, err := e.carddeckService.CreateDeck(c.Context(), &pbcarddeck.DeckRequest{UserID: userID, DeckName: data["deckName"], GroupName: data["groupName"]})
+	rspCardDeck, err := e.carddeckService.CreateDeck(c.Context(), &pbcarddeck.DeckRequest{UserID: userID, GroupPublicID: data["groupPublicID"], DeckName: data["deckName"]})
 	if err != nil {
 		return err
 	}
-	strSuccess := strconv.FormatBool(rspCardDeck.Success)
+	strSuccess := rspCardDeck.PublicID
 	return c.SendString(strSuccess)
 }
 
@@ -167,8 +164,8 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 	if data["userID"] == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "No user id given")
 	}
-	if data["deckName"] == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No deck name given")
+	if data["deckPublicID"] == "" {
+		return fiber.NewError(fiber.StatusBadRequest, "No deck public id given")
 	}
 	if data["frontside"] == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "No frontside given")
@@ -180,10 +177,10 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Invalid user id")
 	}
-	rspCardDeck, err := e.carddeckService.CreateCard(c.Context(), &pbcarddeck.CardRequest{UserID: userID, DeckName: data["deckName"], Frontside: data["frontside"], Backside: data["backside"]})
+	rspCardDeck, err := e.carddeckService.CreateCard(c.Context(), &pbcarddeck.CardRequest{UserID: userID, DeckPublicID: data["deckPublicID"], Frontside: data["frontside"], Backside: data["backside"]})
 	if err != nil {
 		return err
 	}
-	strSuccess := strconv.FormatBool(rspCardDeck.Success)
+	strSuccess := rspCardDeck.PublicID
 	return c.SendString(strSuccess)
 }

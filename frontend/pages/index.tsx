@@ -1,9 +1,8 @@
-import { Router, useRouter } from "next/router";
-import { useContext, useEffect } from "react";
+import { useRouter } from "next/router";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../contexts/user";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import React from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import GroupOverviewTile from "../components/group/GroupOverviewTile";
@@ -11,7 +10,7 @@ import Navigation from "../components/navigation/Navigation";
 
 export default function Home() {
 	const router = useRouter();
-	const { username, setUsername } = useContext(UserContext);
+	const { username } = useContext(UserContext);
 
 	useEffect(() => {
 		if (username === "") {
@@ -29,7 +28,7 @@ export default function Home() {
 					Hello, {username} 👋
 				</h1>
 				<p>You have 10 cards in 2 different decks to learn</p>
-				<div className="flex justify-center m-4 mx-24">
+				<div className="m-4 mx-24 flex justify-center">
 					<CalendarHeatmap
 						startDate={new Date("2023-01-01")}
 						endDate={new Date("2023-12-31")}

@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { UserContext } from "../contexts/user";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 
@@ -10,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { FormInput } from "../components/form/FormInput";
 import { FormButton } from "../components/form/FormButton";
+import { setCookie } from "cookies-next";
+import jwtDecode, { JwtPayload } from "jwt-decode";
 
 const inter = Inter({
 	weight: ["200", "400"],
@@ -19,8 +20,6 @@ const inter = Inter({
 export default function Page() {
 	const [login, setLogin] = useState(true); // true = login, false = register
 	const router = useRouter();
-	const { username, setUsername } = useContext(UserContext);
-
 	return (
 		<div>
 			<Head>
@@ -145,8 +144,6 @@ export default function Page() {
 		});
 		if (response.ok) {
 			toast.info("Logged in!", { toastId: "accountToast" });
-			const text = await response.text();
-			setUsername(text);
 			router.push("/");
 		} else {
 			toast.error("Wrong username or password", {

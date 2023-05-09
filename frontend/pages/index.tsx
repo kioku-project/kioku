@@ -1,6 +1,3 @@
-import { Router, useRouter } from "next/router";
-import { useContext, useEffect } from "react";
-import { UserContext } from "../contexts/user";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import React from "react";
@@ -8,28 +5,21 @@ import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import GroupOverviewTile from "../components/group/GroupOverviewTile";
 import Navigation from "../components/navigation/Navigation";
+import Authenticated from "../components/accessControl/Authenticated";
 
 export default function Home() {
-	const router = useRouter();
-	const { username, setUsername } = useContext(UserContext);
-
-	useEffect(() => {
-		if (username === "") {
-			router.push("/login");
-		}
-	}, [router, username]);
-	if (username !== "") {
-		return (
+	return (
+		<Authenticated>
 			<Navigation>
 				<h1
 					className="text-xl font-bold"
 					data-tooltip-id="my-tooltip"
 					data-tooltip-content="Hello world!"
 				>
-					Hello, {username} 👋
+					Hello 👋
 				</h1>
 				<p>You have 10 cards in 2 different decks to learn</p>
-				<div className="flex justify-center m-4 mx-24">
+				<div className="m-4 mx-24 flex justify-center">
 					<CalendarHeatmap
 						startDate={new Date("2023-01-01")}
 						endDate={new Date("2023-12-31")}
@@ -83,6 +73,6 @@ export default function Home() {
 				/>
 				<Tooltip id="heatmap-tooltip" />
 			</Navigation>
-		);
-	}
+		</Authenticated>
+	);
 }

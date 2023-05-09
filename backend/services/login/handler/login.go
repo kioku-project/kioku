@@ -10,7 +10,7 @@ import (
 	"github.com/kioku-project/kioku/store"
 )
 
-type Login struct{store store.Store}
+type Login struct{ store store.Store }
 
 func New(s store.Store) *Login { return &Login{store: s} }
 
@@ -25,5 +25,7 @@ func (e *Login) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.LoginRe
 		return errors.New("This email or password is wrong")
 	}
 	rsp.Name = user.Name
+	rsp.Id = uint64(user.ID)
+	logger.Infof("Name: %v", user.Name)
 	return nil
 }

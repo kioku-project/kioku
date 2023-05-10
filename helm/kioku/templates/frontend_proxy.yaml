@@ -40,6 +40,8 @@ spec:
         envFrom:
           - configMapRef:
               name: service-env
+          - secretRef:
+              name: {{ .Values.frontend_proxy.keySecret }}
 ---
 apiVersion: v1
 kind: Service

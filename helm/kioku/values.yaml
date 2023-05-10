@@ -20,7 +20,7 @@ database:
 frontend:
   name: kioku-frontend
   image: ghcr.io/kioku-project/kioku_frontend
-  tag: latest
+  tag: prod
   port: 80
   containerPort: 3000
 
@@ -34,8 +34,10 @@ frontend:
 frontend_proxy:
   name: kioku-frontend-proxy
   image: ghcr.io/kioku-project/kioku_frontend_proxy
-  tag: latest
+  tag: prod
   httpPath: /api
+
+  keySecret: frontend-proxy-key-secret
 
   port: 80
   containerPort: 80
@@ -49,7 +51,7 @@ frontend_proxy:
 login:
   name: kioku-login
   image: ghcr.io/kioku-project/kioku_login
-  tag: latest
+  tag: prod
 
   autoscaler:
     min: 1
@@ -59,7 +61,7 @@ login:
 register:
   name: kioku-register
   image: ghcr.io/kioku-project/kioku_register
-  tag: latest
+  tag: prod
 
   autoscaler:
     min: 1

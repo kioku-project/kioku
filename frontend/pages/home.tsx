@@ -33,7 +33,7 @@ export default function Page() {
 							id="lernmoreButton"
 							style="secondary"
 							onClick={() => {
-								router.push("/learn");
+								router.push("/features");
 							}}
 						>
 							Learn more

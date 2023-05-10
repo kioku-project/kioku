@@ -12,7 +12,7 @@ export default function Authenticated({ children }: PropsWithChildren) {
 			if (!hasCookie("access_token")) {
 				await reauth();
 			}
-			let cookie = getCookie("access_token")!.toString();
+			const cookie = getCookie("access_token")!.toString();
 			const decoded = jwtDecode<JwtPayload>(cookie);
 			if (!decoded.exp || decoded.exp > Math.floor(Date.now() / 1000)) {
 				await reauth();

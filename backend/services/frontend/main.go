@@ -1,13 +1,12 @@
 package main
 
 import (
-	"crypto/x509"
-	pem2 "encoding/pem"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
+	helper "github.com/kioku-project/kioku/pkg/helper"
 	"os"
 	"time"
 
@@ -58,24 +57,9 @@ func main() {
 	app.Post("/api/login", svc.LoginHandler)
 	app.Post("/api/register", svc.RegisterHandler)
 
-	pem, _ := pem2.Decode([]byte(os.Getenv("JWT_PRIVATE_KEY")))
-	priv, err := x509.ParseECPrivateKey(pem.Bytes)
-	if err != nil {
-		logger.Info(err)
-	}
-
 	app.Get("/api/reauth", func(c *fiber.Ctx) error {
 		tokenString := c.Cookies("refresh_token", "NOT_GIVEN")
-		if tokenString == "NOT_GIVEN" {
-			return fiber.NewError(fiber.StatusUnauthorized, "Please re-authenticate")
-		}
-		refreshToken, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			// Validate the alg is what you expect:
-			if _, ok := token.Method.(*jwt.SigningMethodECDSA); !ok {
-				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-			}
-			return priv.Public(), nil
-		})
+		refreshToken, err := helper.ParseJWTToken(tokenString)
 		if err != nil {
 			return fiber.NewError(fiber.StatusBadRequest, err.Error())
 		}
@@ -84,39 +68,15 @@ func main() {
 			return fiber.NewError(fiber.StatusUnauthorized, "Please re-authenticate")
 		}
 
-		pem, _ := pem2.Decode([]byte(os.Getenv("JWT_PRIVATE_KEY")))
-		priv, err := x509.ParseECPrivateKey(pem.Bytes)
-		if err != nil {
-			logger.Info(err)
-		}
-
-		aTExp := time.Now().Add(time.Minute * 30)
-		rTExp := time.Now().Add(time.Hour * 24 * 7)
-
-		accessClaims := jwt.MapClaims{
-			"sub":   claims["sub"],
-			"email": claims["email"],
-			"name":  claims["name"],
-			"exp":   aTExp.Unix(),
-		}
-		refreshClaims := jwt.MapClaims{
-			"sub":   claims["sub"],
-			"email": claims["email"],
-			"name":  claims["name"],
-			"exp":   rTExp.Unix(),
-		}
-
-		// Create token
-		accessToken := jwt.NewWithClaims(jwt.SigningMethodES512, accessClaims)
-		newRefreshToken := jwt.NewWithClaims(jwt.SigningMethodES512, refreshClaims)
 		// Generate encoded token and send it as response.
-		aTString, err := accessToken.SignedString(priv)
-
+		aTExp := time.Now().Add(time.Minute * 30)
+		aTString, err := helper.CreateJWTTokenString(aTExp, claims["sub"], claims["email"], claims["name"])
 		if err != nil {
 			logger.Infof("%v", err)
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
-		rTString, err := newRefreshToken.SignedString(priv)
+		rTExp := time.Now().Add(time.Hour * 24 * 7)
+		rTString, err := helper.CreateJWTTokenString(rTExp, claims["sub"], claims["email"], claims["name"])
 		if err != nil {
 			logger.Infof("%v", err)
 			return c.SendStatus(fiber.StatusInternalServerError)
@@ -140,7 +100,7 @@ func main() {
 	// JWT Middleware
 	app.Use(jwtware.New(jwtware.Config{
 		SigningMethod: "ES512",
-		SigningKey:    priv.Public(),
+		SigningKey:    helper.GetJWTPublicKey(),
 	}))
 	////
 	// - add endpoints where authentication is needed below this block.

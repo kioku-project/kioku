@@ -1,15 +1,12 @@
 package handler
 
 import (
-	"crypto/x509"
-	pem2 "encoding/pem"
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pblogin "github.com/kioku-project/kioku/services/login/proto"
 	pbregister "github.com/kioku-project/kioku/services/register/proto"
 	"go-micro.dev/v4/logger"
-	"os"
 	"time"
 )
 
@@ -37,39 +34,15 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 		return err
 	}
 
-	pem, _ := pem2.Decode([]byte(os.Getenv("JWT_PRIVATE_KEY")))
-	priv, err := x509.ParseECPrivateKey(pem.Bytes)
-	if err != nil {
-		logger.Info(err)
-		return fiber.NewError(fiber.StatusInternalServerError, "Could not load private key for jwt signing")
-	}
-
-	aTExp := time.Now().Add(time.Minute * 30)
-	rTExp := time.Now().Add(time.Hour * 24 * 7)
-	accessClaims := jwt.MapClaims{
-		"sub":   rspLogin.Id,
-		"email": reqUser.Email,
-		"name":  rspLogin.Name,
-		"exp":   aTExp.Unix(),
-	}
-	refreshClaims := jwt.MapClaims{
-		"sub":   rspLogin.Id,
-		"email": reqUser.Email,
-		"name":  rspLogin.Name,
-		"exp":   rTExp.Unix(),
-	}
-
-	// Create token
-	accessToken := jwt.NewWithClaims(jwt.SigningMethodES512, accessClaims)
-	refreshToken := jwt.NewWithClaims(jwt.SigningMethodES512, refreshClaims)
-
 	// Generate encoded tokens and send them as response.
-	aTString, err := accessToken.SignedString(priv)
+	aTExp := time.Now().Add(time.Minute * 30)
+	aTString, err := helper.CreateJWTTokenString(aTExp, rspLogin.Id, reqUser.Email, rspLogin.Name)
 	if err != nil {
 		logger.Infof("%v", err)
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
-	rTString, err := refreshToken.SignedString(priv)
+	rTExp := time.Now().Add(time.Hour * 24 * 7)
+	rTString, err := helper.CreateJWTTokenString(rTExp, rspLogin.Id, reqUser.Email, rspLogin.Name)
 	if err != nil {
 		logger.Infof("%v", err)
 		return c.SendStatus(fiber.StatusInternalServerError)

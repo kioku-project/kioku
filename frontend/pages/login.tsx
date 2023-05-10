@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { Inter } from "next/font/google";
@@ -9,8 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { FormInput } from "../components/form/FormInput";
 import { FormButton } from "../components/form/FormButton";
-import { setCookie } from "cookies-next";
-import jwtDecode, { JwtPayload } from "jwt-decode";
 
 const inter = Inter({
 	weight: ["200", "400"],

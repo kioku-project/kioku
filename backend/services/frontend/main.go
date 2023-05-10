@@ -4,16 +4,13 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
 	helper "github.com/kioku-project/kioku/pkg/helper"
-	"os"
-	"time"
-
 	"github.com/kioku-project/kioku/services/frontend/handler"
 	pb "github.com/kioku-project/kioku/services/frontend/proto"
 	pblogin "github.com/kioku-project/kioku/services/login/proto"
 	pbregister "github.com/kioku-project/kioku/services/register/proto"
+	"os"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
@@ -56,51 +53,15 @@ func main() {
 	app := fiber.New()
 	app.Post("/api/login", svc.LoginHandler)
 	app.Post("/api/register", svc.RegisterHandler)
-
-	app.Get("/api/reauth", func(c *fiber.Ctx) error {
-		tokenString := c.Cookies("refresh_token", "NOT_GIVEN")
-		refreshToken, err := helper.ParseJWTToken(tokenString)
-		if err != nil {
-			return fiber.NewError(fiber.StatusBadRequest, err.Error())
-		}
-		claims, ok := refreshToken.Claims.(jwt.MapClaims)
-		if !ok || !refreshToken.Valid {
-			return fiber.NewError(fiber.StatusUnauthorized, "Please re-authenticate")
-		}
-
-		// Generate encoded token and send it as response.
-		aTExp := time.Now().Add(time.Minute * 30)
-		aTString, err := helper.CreateJWTTokenString(aTExp, claims["sub"], claims["email"], claims["name"])
-		if err != nil {
-			logger.Infof("%v", err)
-			return c.SendStatus(fiber.StatusInternalServerError)
-		}
-		rTExp := time.Now().Add(time.Hour * 24 * 7)
-		rTString, err := helper.CreateJWTTokenString(rTExp, claims["sub"], claims["email"], claims["name"])
-		if err != nil {
-			logger.Infof("%v", err)
-			return c.SendStatus(fiber.StatusInternalServerError)
-		}
-
-		c.Cookie(&fiber.Cookie{
-			Name:    "access_token",
-			Value:   aTString,
-			Path:    "/",
-			Expires: aTExp,
-		})
-		c.Cookie(&fiber.Cookie{
-			Name:     "refresh_token",
-			Value:    rTString,
-			Path:     "/",
-			Expires:  rTExp,
-			HTTPOnly: true,
-		})
-		return c.SendStatus(200)
-	})
+	app.Get("/api/reauth", svc.ReauthHandler)
 	// JWT Middleware
+	pub, err := helper.GetJWTPublicKey()
+	if err != nil {
+		panic("Could not parse JWT public / private keypair")
+	}
 	app.Use(jwtware.New(jwtware.Config{
 		SigningMethod: "ES512",
-		SigningKey:    helper.GetJWTPublicKey(),
+		SigningKey:    pub,
 	}))
 	////
 	// - add endpoints where authentication is needed below this block.

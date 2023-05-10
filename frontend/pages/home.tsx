@@ -9,7 +9,7 @@ export default function Page() {
 
 	return (
 		<div className="min-w-screen flex h-screen select-none flex-col bg-eggshell">
-			<Header></Header>
+			<Header login={false}></Header>
 			<div className="flex grow flex-row overflow-hidden">
 				<div className="flex w-full flex-col justify-center space-y-3 p-5 md:w-2/3 md:space-y-5 md:p-10">
 					<p className="text-2xl font-bold text-darkblue sm:text-3xl md:text-4xl lg:text-5xl">

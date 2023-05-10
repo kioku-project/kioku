@@ -1,78 +1,47 @@
-import CalendarHeatmap from "react-calendar-heatmap";
-import "react-calendar-heatmap/dist/styles.css";
-import { Tooltip } from "react-tooltip";
-import "react-tooltip/dist/react-tooltip.css";
-import GroupOverviewTile from "../components/group/GroupOverviewTile";
-import Navigation from "../components/navigation/Navigation";
-import Authenticated from "../components/accessControl/Authenticated";
+import { useRouter } from "next/router";
 import React from "react";
+import "react-calendar-heatmap/dist/styles.css";
+import "react-tooltip/dist/react-tooltip.css";
+import Authenticated from "../components/accessControl/Authenticated";
+import DeckOverview from "../components/deck/DeckOverview";
+import { Header } from "../components/navigation/Header";
 
 export default function Home() {
+	const router = useRouter();
 	return (
 		<Authenticated>
-			<Navigation>
-				<h1
-					className="text-xl font-bold"
-					data-tooltip-id="my-tooltip"
-					data-tooltip-content="Hello world!"
-				>
-					Hello 👋
-				</h1>
-				<p>You have 10 cards in 2 different decks to learn</p>
-				<div className="m-4 mx-24 flex justify-center">
-					<CalendarHeatmap
-						startDate={new Date("2023-01-01")}
-						endDate={new Date("2023-12-31")}
-						showWeekdayLabels={true}
-						transformDayElement={(element, value, index) =>
-							React.cloneElement(element, {
-								rx: 2,
-								ry: 2,
-								"data-tooltip-id": "heatmap-tooltip",
-								"data-tooltip-content": `${
-									value?.count || 0
-								} cards reviewed`,
-								style: {
-									stroke:
-										value?.date ==
-											new Date()
-												.toISOString()
-												.split("T")[0] && "black",
-								},
-							})
-						}
-						values={[
-							{ date: "2023-01-01", count: 12 },
-							{ date: "2023-01-22", count: 122 },
-							{ date: "2023-01-30", count: 38 },
-							{ date: "2023-04-06", count: 38 },
-							// ...and so on
+			<div className="min-w-screen flex h-screen select-none flex-col bg-eggshell">
+				<Header login={true}></Header>
+				<div className="space-y-10 p-10">
+					<DeckOverview
+						name="Your personal Decks"
+						id="personalDecks"
+						decks={[
+							{ name: "Japan", count: 0 },
+							{ name: "BWL Grundlagen", count: 1 },
+							{ name: "Marketing", count: 2 },
+							{ name: "Mathe", count: 3 },
+							{ name: "English", count: 4 },
+							{ name: "Deck 1", count: 5 },
+							{ name: "Deck 2", count: 6 },
+							{ name: "Deck 3", count: 7 },
+							{ name: "Deck 4", count: 8 },
+							{ name: "Deck 5", count: 9 },
+							{ name: "Deck 6", count: 10 },
+							{ name: "Deck 7", count: 11 },
 						]}
-					/>
+					></DeckOverview>
+					<DeckOverview
+						name="Your Groups"
+						id="groupDecks"
+						decks={[
+							{ name: "Japan Class", count: 0 },
+							{ name: "DHBW", count: 1 },
+							{ name: "BWL", count: 2 },
+						]}
+					></DeckOverview>
 				</div>
-				<GroupOverviewTile
-					name="Group1"
-					decks={[
-						{ name: "Deck1", count: 1 },
-						{ name: "Deck2", count: 2 },
-					]}
-				/>
-				<GroupOverviewTile
-					name="Group2"
-					decks={[
-						{ name: "Deck1", count: 1 },
-						{ name: "Deck2", count: 2 },
-					]}
-				/>
-				<GroupOverviewTile
-					name="Group3"
-					decks={[
-						{ name: "Deck1", count: 1 },
-						{ name: "Deck2", count: 2 },
-					]}
-				/>
-				<Tooltip id="heatmap-tooltip" />
-			</Navigation>
+			</div>
 		</Authenticated>
 	);
 }

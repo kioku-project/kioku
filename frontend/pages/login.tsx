@@ -151,9 +151,9 @@ export default function Page() {
 	}
 
 	async function registerLogic() {
-		let email = document.querySelector("#email") as HTMLInputElement;
-		let name = document.querySelector("#name") as HTMLInputElement;
-		let password = document.querySelector(
+		const email = document.querySelector("#email") as HTMLInputElement;
+		const name = document.querySelector("#name") as HTMLInputElement;
+		const password = document.querySelector(
 			"#password"
 		) as HTMLInputElement | null;
 		let passwordRepeat = document.querySelector(

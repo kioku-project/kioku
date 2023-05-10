@@ -5,12 +5,13 @@ import (
 	"crypto/ecdsa"
 	"crypto/x509"
 	pem2 "encoding/pem"
+	"errors"
 	"fmt"
-	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v5"
-	"go-micro.dev/v4/logger"
 	"os"
 	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+	"go-micro.dev/v4/logger"
 )
 
 func getJWTPrivateKey() (*ecdsa.PrivateKey, error) {
@@ -36,14 +37,18 @@ func GetJWTPublicKey() (crypto.PublicKey, error) {
 func ParseJWTToken(tokenString string) (*jwt.Token, error) {
 
 	if tokenString == "NOT_GIVEN" {
-		return nil, fiber.NewError(fiber.StatusUnauthorized, "Please re-authenticate")
+		return nil, errors.New("please re-authenticate")
 	}
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodECDSA); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return GetJWTPublicKey(), nil
+		pub, err := GetJWTPublicKey()
+		if err != nil {
+			return nil, errors.New("could not parse JWT public / private keypair")
+		}
+		return pub, nil
 	})
 	if err != nil {
 		return nil, err

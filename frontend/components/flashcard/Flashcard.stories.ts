@@ -8,16 +8,20 @@ const meta: Meta<typeof Card> = {
 	tags: ["autodocs"],
 	args: {
 		id: "CardId",
-		card: {
-			front: {
+		card: [
+			{
 				header: "Front Header",
 				description: "Front Description",
 			},
-			back: {
+			{
+				header: "Middle Header",
+				description: "Middle Description",
+			},
+			{
 				header: "Back Header",
 				description: "Back Description",
 			},
-		},
+		],
 		cardsleft: 16,
 	},
 };
@@ -29,21 +33,34 @@ export const Front: Story = {
 	args: {},
 };
 
+export const Middle: Story = {
+	args: {
+		cardSide: 1,
+	},
+};
+
 export const Back: Story = {
 	args: {
-		turned: true,
+		cardSide: 2,
 	},
 };
 
 export const EditFront: Story = {
 	args: {
-		edit: true,
+		isEdit: true,
+	},
+};
+
+export const EditMiddle: Story = {
+	args: {
+		cardSide: 1,
+		isEdit: true,
 	},
 };
 
 export const EditBack: Story = {
 	args: {
-		turned: true,
-		edit: true,
+		cardSide: 2,
+		isEdit: true,
 	},
 };

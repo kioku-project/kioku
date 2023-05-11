@@ -10,18 +10,15 @@ interface CardProps {
 	/**
 	 * Flashcard
 	 */
-	card: {
-		front: { header: string; description: string };
-		back: { header: string; description: string };
-	};
+	card: { header: string; description: string }[];
 	/**
 	 * How many cards a left on the stack
 	 */
 	cardsleft: number;
 	/**
-	 * Show front or backside
+	 * CardSide to show
 	 */
-	isTurned?: boolean;
+	cardSide?: number;
 	/**
 	 * Enables edit mode
 	 */
@@ -39,14 +36,21 @@ export const Card = ({
 	id,
 	card,
 	cardsleft,
-	isTurned = false,
+	cardSide = 0,
 	isEdit = false,
 	className,
 }: CardProps) => {
-	const [turned, setTurned] = useState(isTurned);
-	const [edit, setEdit] = useState(isEdit);
 	const [flashCard, setFlashCard] = useState(card);
 	const [tempCard, setTempCard] = useState(flashCard);
+	const [side, setSide] = useState(cardSide % tempCard.length);
+	const [edit, setEdit] = useState(isEdit);
+
+	function editField(field: "header" | "description", value: string) {
+		const card = structuredClone(tempCard);
+		card[side][field] = value;
+		setTempCard(card);
+	}
+
 	return (
 		<div
 			id={id}
@@ -55,39 +59,18 @@ export const Card = ({
 			}`}
 		>
 			<div className="flex h-full flex-row justify-between">
-				{edit ? (
-					<div className="flex w-full flex-col">
-						<div className="flex flex-row items-center justify-between">
-							<input
-								className="w-full border-0 bg-eggshell text-lg outline-none sm:text-xl md:text-2xl lg:text-3xl"
-								value={
-									turned
-										? tempCard.back.header
-										: tempCard.front.header
-								}
-								placeholder="Header"
-								onChange={(event) => {
-									setTempCard(
-										turned
-											? {
-													...tempCard,
-													back: {
-														...tempCard.back,
-														header: event.target
-															.value,
-													},
-											  }
-											: {
-													...tempCard,
-													front: {
-														...tempCard.front,
-														header: event.target
-															.value,
-													},
-											  }
-									);
-								}}
-							></input>
+				<div className="flex w-full flex-col">
+					<div className="flex flex-row items-center justify-between">
+						<input
+							className="w-full border-0 bg-eggshell text-lg outline-none sm:text-xl md:text-2xl lg:text-3xl"
+							value={tempCard[side].header}
+							placeholder="Header"
+							readOnly={!edit}
+							onChange={(event) =>
+								editField("header", event.target.value)
+							}
+						></input>
+						{edit ? (
 							<div className="flex flex-row space-x-3">
 								<Check
 									className="hover:cursor-pointer"
@@ -104,75 +87,53 @@ export const Card = ({
 									}}
 								></X>
 							</div>
-						</div>
-						<input
-							className="w-full border-0 bg-eggshell text-base text-gray-400 outline-none sm:text-lg md:text-xl lg:text-2xl"
-							value={
-								turned
-									? tempCard.back.description
-									: tempCard.front.description
-							}
-							placeholder="Description"
-							onChange={(event) => {
-								setTempCard(
-									turned
-										? {
-												...tempCard,
-												back: {
-													...tempCard.back,
-													description:
-														event.target.value,
-												},
-										  }
-										: {
-												...tempCard,
-												front: {
-													...tempCard.front,
-													description:
-														event.target.value,
-												},
-										  }
-								);
-							}}
-						></input>
-					</div>
-				) : (
-					<div className="flex w-full flex-col">
-						<div className="flex flex-row items-center justify-between">
-							<div className="text-lg sm:text-xl md:text-2xl lg:text-3xl">
-								{turned
-									? tempCard.back.header
-									: tempCard.front.header}
+						) : (
+							<div className="flex flex-row space-x-3">
+								<Edit2
+									className="hover:cursor-pointer"
+									onClick={() => setEdit(true)}
+								></Edit2>
 							</div>
-							<Edit2
-								className="hover:cursor-pointer"
-								onClick={() => setEdit(true)}
-							></Edit2>
-						</div>
-						<div className="text-base text-gray-400 sm:text-lg md:text-xl lg:text-2xl">
-							{turned
-								? tempCard.back.description
-								: tempCard.front.description}
-						</div>
+						)}
 					</div>
-				)}
+					<input
+						className="w-full border-0 bg-eggshell text-base text-gray-400 outline-none sm:text-lg md:text-xl lg:text-2xl"
+						value={tempCard[+side].description}
+						placeholder="Description"
+						readOnly={!edit}
+						onChange={(event) =>
+							editField("description", event.target.value)
+						}
+					></input>
+				</div>
 			</div>
 			<hr className="border-1 border-gray-400" />
-			{!turned ? (
+			{!side ? (
 				<div className="flex flex-row items-center justify-between">
 					<div className="flex h-8 items-center text-sm font-semibold text-gray-400 sm:h-full">
 						{cardsleft} cards left
 					</div>
 					<ArrowRight
 						className="hidden h-8 hover:cursor-pointer sm:block md:h-10 lg:h-12"
-						onClick={() => setTurned(true)}
+						onClick={() => setSide(side + 1)}
+					></ArrowRight>
+				</div>
+			) : side < tempCard.length - 1 ? (
+				<div className="flex flex-row items-center justify-between">
+					<ArrowLeft
+						className="hidden h-8 hover:cursor-pointer sm:block md:h-10 lg:h-12"
+						onClick={() => setSide(side - 1)}
+					></ArrowLeft>
+					<ArrowRight
+						className="hidden h-8 hover:cursor-pointer sm:block md:h-10 lg:h-12"
+						onClick={() => setSide(side + 1)}
 					></ArrowRight>
 				</div>
 			) : (
 				<div className="flex flex-row items-center justify-between">
 					<ArrowLeft
 						className="hidden h-8 hover:cursor-pointer sm:block md:h-10 lg:h-12"
-						onClick={() => setTurned(false)}
+						onClick={() => setSide(side - 1)}
 					></ArrowLeft>
 					<div className="flex w-full flex-row justify-between space-x-1 sm:justify-end">
 						<Button

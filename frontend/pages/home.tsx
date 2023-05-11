@@ -24,7 +24,7 @@ export default function Page() {
 						<Button
 							id="getstartedButton"
 							onClick={() => {
-								router.push("/login");
+								router.push("/");
 							}}
 						>
 							Get started

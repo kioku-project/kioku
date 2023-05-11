@@ -12,7 +12,7 @@ interface CardProps {
 	 */
 	card: { header: string; description: string }[];
 	/**
-	 * How many cards a left on the stack
+	 * How many cards are left on the stack
 	 */
 	cardsleft: number;
 	/**
@@ -98,7 +98,7 @@ export const Card = ({
 					</div>
 					<input
 						className="w-full border-0 bg-eggshell text-base text-gray-400 outline-none sm:text-lg md:text-xl lg:text-2xl"
-						value={tempCard[+side].description}
+						value={tempCard[side].description}
 						placeholder="Description"
 						readOnly={!edit}
 						onChange={(event) =>
@@ -108,58 +108,54 @@ export const Card = ({
 				</div>
 			</div>
 			<hr className="border-1 border-gray-400" />
-			{!side ? (
-				<div className="flex flex-row items-center justify-between">
+			<div className="flex flex-row items-center justify-between">
+				{/* Show amount of cards left if on first side */}
+				{!side && (
 					<div className="flex h-8 items-center text-sm font-semibold text-gray-400 sm:h-full">
 						{cardsleft} cards left
 					</div>
-					<ArrowRight
-						className="hidden h-8 hover:cursor-pointer sm:block md:h-10 lg:h-12"
-						onClick={() => setSide(side + 1)}
-					></ArrowRight>
-				</div>
-			) : side < tempCard.length - 1 ? (
-				<div className="flex flex-row items-center justify-between">
+				)}
+				{/* Show arrow left if not on first side */}
+				{side > 0 && (
 					<ArrowLeft
-						className="hidden h-8 hover:cursor-pointer sm:block md:h-10 lg:h-12"
+						className="h-8 hover:cursor-pointer md:h-10 lg:h-12"
 						onClick={() => setSide(side - 1)}
 					></ArrowLeft>
+				)}
+				{/* Show arrow right if we're not on the last side */}
+				{side < tempCard.length - 1 && (
 					<ArrowRight
-						className="hidden h-8 hover:cursor-pointer sm:block md:h-10 lg:h-12"
+						className="h-8 hover:cursor-pointer md:h-10 lg:h-12"
 						onClick={() => setSide(side + 1)}
 					></ArrowRight>
-				</div>
-			) : (
-				<div className="flex flex-row items-center justify-between">
-					<ArrowLeft
-						className="hidden h-8 hover:cursor-pointer sm:block md:h-10 lg:h-12"
-						onClick={() => setSide(side - 1)}
-					></ArrowLeft>
-					<div className="flex w-full flex-row justify-between space-x-1 sm:justify-end">
+				)}
+				{/* Show rating buttons if on last side */}
+				{side >= tempCard.length - 1 && (
+					<div className="flex w-full flex-row justify-end space-x-1">
 						<Button
 							id="buttonHardId"
 							size="small"
-							className="w-1/3 sm:w-auto"
+							className="w-auto"
 						>
 							Hard
 						</Button>
 						<Button
 							id="buttonMediumId"
 							size="small"
-							className="w-1/3 sm:w-auto"
+							className="w-auto"
 						>
 							Medium
 						</Button>
 						<Button
 							id="buttonEasyId"
 							size="small"
-							className="w-1/3 sm:w-auto"
+							className="w-auto"
 						>
 							Easy
 						</Button>
 					</div>
-				</div>
-			)}
+				)}
+			</div>
 		</div>
 	);
 };

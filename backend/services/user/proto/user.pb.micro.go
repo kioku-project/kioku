@@ -36,8 +36,8 @@ func NewUserEndpoints() []*api.Endpoint {
 // Client API for User service
 
 type UserService interface {
-	Register(ctx context.Context, in *RegisterRequest, opts ...client.CallOption) (*NameResponse, error)
-	Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*NameResponse, error)
+	Register(ctx context.Context, in *RegisterRequest, opts ...client.CallOption) (*NameIDResponse, error)
+	Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*NameIDResponse, error)
 	GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*UserIDResponse, error)
 }
 
@@ -53,9 +53,9 @@ func NewUserService(name string, c client.Client) UserService {
 	}
 }
 
-func (c *userService) Register(ctx context.Context, in *RegisterRequest, opts ...client.CallOption) (*NameResponse, error) {
+func (c *userService) Register(ctx context.Context, in *RegisterRequest, opts ...client.CallOption) (*NameIDResponse, error) {
 	req := c.c.NewRequest(c.name, "User.Register", in)
-	out := new(NameResponse)
+	out := new(NameIDResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -63,9 +63,9 @@ func (c *userService) Register(ctx context.Context, in *RegisterRequest, opts ..
 	return out, nil
 }
 
-func (c *userService) Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*NameResponse, error) {
+func (c *userService) Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*NameIDResponse, error) {
 	req := c.c.NewRequest(c.name, "User.Login", in)
-	out := new(NameResponse)
+	out := new(NameIDResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -86,15 +86,15 @@ func (c *userService) GetUserIDFromEmail(ctx context.Context, in *UserIDRequest,
 // Server API for User service
 
 type UserHandler interface {
-	Register(context.Context, *RegisterRequest, *NameResponse) error
-	Login(context.Context, *LoginRequest, *NameResponse) error
+	Register(context.Context, *RegisterRequest, *NameIDResponse) error
+	Login(context.Context, *LoginRequest, *NameIDResponse) error
 	GetUserIDFromEmail(context.Context, *UserIDRequest, *UserIDResponse) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
 	type user interface {
-		Register(ctx context.Context, in *RegisterRequest, out *NameResponse) error
-		Login(ctx context.Context, in *LoginRequest, out *NameResponse) error
+		Register(ctx context.Context, in *RegisterRequest, out *NameIDResponse) error
+		Login(ctx context.Context, in *LoginRequest, out *NameIDResponse) error
 		GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, out *UserIDResponse) error
 	}
 	type User struct {
@@ -108,11 +108,11 @@ type userHandler struct {
 	UserHandler
 }
 
-func (h *userHandler) Register(ctx context.Context, in *RegisterRequest, out *NameResponse) error {
+func (h *userHandler) Register(ctx context.Context, in *RegisterRequest, out *NameIDResponse) error {
 	return h.UserHandler.Register(ctx, in, out)
 }
 
-func (h *userHandler) Login(ctx context.Context, in *LoginRequest, out *NameResponse) error {
+func (h *userHandler) Login(ctx context.Context, in *LoginRequest, out *NameIDResponse) error {
 	return h.UserHandler.Login(ctx, in, out)
 }
 

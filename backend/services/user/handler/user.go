@@ -22,7 +22,7 @@ func New(s store.UserStore, cS pbcollab.CollaborationService) *User {
 	return &User{store: s, collaborationService: cS}
 }
 
-func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.NameResponse) error {
+func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.NameIDResponse) error {
 	logger.Infof("Received User.Register request: %v", req)
 	_, err := e.store.FindUserByEmail(req.Email)
 	if err == nil {
@@ -53,10 +53,12 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	}
 
 	rsp.Name = newUser.Name
+	rsp.Id = uint64(newUser.ID)
+	logger.Infof("Name: %v", newUser.Name)
 	return nil
 }
 
-func (e *User) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.NameResponse) error {
+func (e *User) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.NameIDResponse) error {
 	logger.Infof("Received User.Login request: %v", req)
 	user, err := e.store.FindUserByEmail(req.Email)
 	if err != nil {
@@ -67,6 +69,8 @@ func (e *User) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.NameResp
 		return errors.New("this email or password is wrong")
 	}
 	rsp.Name = user.Name
+	rsp.Id = uint64(user.ID)
+	logger.Infof("Name: %v", user.Name)
 	return nil
 }
 

@@ -17,6 +17,9 @@ import (
 func getJWTPrivateKey() (*ecdsa.PrivateKey, error) {
 
 	pem, _ := pem2.Decode([]byte(os.Getenv("JWT_PRIVATE_KEY")))
+	if pem == nil {
+		panic("JWT Private Key not given")
+	}
 	priv, err := x509.ParseECPrivateKey(pem.Bytes)
 	if err != nil {
 		logger.Info(err)

@@ -70,13 +70,13 @@ func main() {
 	// - add endpoints where authentication is needed below this block.
 	////
 
+	app.Post("/api/deck", svc.CreateDeckHandler)
+	app.Post("/api/card", svc.CreateCardHandler)
+
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {
 	// 	logger.Fatal(err)
 	// }
-
-	app.Post("/api/deck", svc.CreateDeckHandler)
-	app.Post("/api/card", svc.CreateCardHandler)
 
 	// Register handler
 	if err := pb.RegisterHealthHandler(srv.Server(), new(handler.Health)); err != nil {

@@ -5,8 +5,8 @@ package user;
 option go_package = "./proto;user";
 
 service User {
-	rpc Register(RegisterRequest) returns (NameResponse) {}
-	rpc Login(LoginRequest) returns (NameResponse) {}
+	rpc Register(RegisterRequest) returns (NameIDResponse) {}
+	rpc Login(LoginRequest) returns (NameIDResponse) {}
 	rpc GetUserIDFromEmail(UserIDRequest) returns (UserIDResponse) {}
 }
 
@@ -21,8 +21,9 @@ message LoginRequest {
   	string password = 2;
 }
 
-message NameResponse {
-	string name = 1;
+message NameIDResponse {
+	uint64 id = 1;
+	string name = 2;
 }
 
 message UserIDRequest {

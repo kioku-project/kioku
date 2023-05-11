@@ -69,9 +69,11 @@ func main() {
 	////
 	// - add endpoints where authentication is needed below this block.
 	////
-
-	app.Post("/api/deck", svc.CreateDeckHandler)
-	app.Post("/api/card", svc.CreateCardHandler)
+	app.Get("/api/group", svc.GetUserGroupsHandler)
+	app.Get("/api/group/:groupID/deck", svc.GetGroupDecksHandler)
+	app.Post("/api/group/:groupID/deck", svc.CreateDeckHandler)
+	app.Get("/api/deck/:deckID/card", svc.GetDeckCardsHandler)
+	app.Post("/api/deck/:deckID/card", svc.CreateCardHandler)
 
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {

@@ -1,12 +1,10 @@
 package handler
 
 import (
-	"strconv"
-
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbcarddeck "github.com/kioku-project/kioku/services/carddeck/proto"
@@ -138,17 +136,11 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	if data["userID"] == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No user id given")
-	}
 	if data["deckName"] == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "No deck name given")
 	}
-	userID, err := strconv.ParseUint(data["userID"], 10, 64)
-	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "Invalid user id")
-	}
-	rspCardDeck, err := e.carddeckService.CreateDeck(c.Context(), &pbcarddeck.DeckRequest{UserID: userID, GroupPublicID: data["groupPublicID"], DeckName: data["deckName"]})
+	userID := helper.GetUserIDFromContext(c)
+	rspCardDeck, err := e.carddeckService.CreateDeck(c.Context(), &pbcarddeck.CreateDeckRequest{UserID: userID, GroupPublicID: c.Params("groupID"), DeckName: data["deckName"]})
 	if err != nil {
 		return err
 	}
@@ -161,26 +153,44 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	if data["userID"] == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No user id given")
-	}
-	if data["deckPublicID"] == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No deck public id given")
-	}
 	if data["frontside"] == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "No frontside given")
 	}
 	if data["backside"] == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "No backside given")
 	}
-	userID, err := strconv.ParseUint(data["userID"], 10, 64)
-	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "Invalid user id")
-	}
-	rspCardDeck, err := e.carddeckService.CreateCard(c.Context(), &pbcarddeck.CardRequest{UserID: userID, DeckPublicID: data["deckPublicID"], Frontside: data["frontside"], Backside: data["backside"]})
+	userID := helper.GetUserIDFromContext(c)
+	rspCardDeck, err := e.carddeckService.CreateCard(c.Context(), &pbcarddeck.CreateCardRequest{UserID: userID, DeckPublicID: c.Params("deckID"), Frontside: data["frontside"], Backside: data["backside"]})
 	if err != nil {
 		return err
 	}
 	strSuccess := rspCardDeck.PublicID
 	return c.SendString(strSuccess)
+}
+
+func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspUserGroups, err := e.collaborationService.GetUserGroups(c.Context(), &pbcollab.UserGroupsRequest{UserID: userID})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspUserGroups)
+}
+
+func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGroupDecks, err := e.carddeckService.GetGroupDecks(c.Context(), &pbcarddeck.GroupDecksRequest{UserID: userID, GroupPublicID: c.Params("groupID")})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspGroupDecks)
+}
+
+func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspDeckCards, err := e.carddeckService.GetDeckCards(c.Context(), &pbcarddeck.DeckCardsRequest{UserID: userID, DeckPublicID: c.Params("deckID")})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspDeckCards)
 }

@@ -96,7 +96,7 @@ func (s *PostgresStore) CreateDeck(newDeck *model.Deck) error {
 
 func (s *PostgresStore) FindDeckByPublicID(publicID string) (*model.Deck, error) {
 	var deck model.Deck
-	err := s.db.Where(model.Deck{PublicID: publicID}).First(&deck).Error
+	err := s.db.Where(model.Deck{PublicID: publicID}).Preload("Cards").First(&deck).Error
 	if err != nil {
 		return nil, err
 	}
@@ -106,6 +106,15 @@ func (s *PostgresStore) FindDeckByPublicID(publicID string) (*model.Deck, error)
 func (s *PostgresStore) CreateCard(newCard *model.Card) error {
 	rsp := s.db.Create(&newCard)
 	return rsp.Error
+}
+
+func (s *PostgresStore) FindDecksByGroupID(groupID uint) (*[]model.Deck, error) {
+	var decks []model.Deck
+	err := s.db.Where(model.GroupUserRole{GroupID: groupID}).Find(&decks).Error
+	if err != nil {
+		return nil, err
+	}
+	return &decks, nil
 }
 
 func (s *PostgresStore) CreateNewGroupWithAdmin(adminUserID uint, newGroup *model.Group) error {
@@ -133,4 +142,15 @@ func (s *PostgresStore) GetGroupUserRole(userID uint, groupID uint) (*model.Role
 		return nil, err
 	}
 	return &groupUser.RoleType, nil
+}
+
+func (s *PostgresStore) FindGroupsByUserID(userID uint) (*[]model.Group, error) {
+	var groups []model.Group
+	err := s.db.Joins("Join group_user_roles on group_user_roles.group_id = groups.id").
+		Where("group_user_roles.user_id = ?", userID).
+		Find(&groups).Error
+	if err != nil {
+		return nil, err
+	}
+	return &groups, nil
 }

@@ -10,7 +10,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"go-micro.dev/v4/logger"
 )
 
@@ -78,4 +79,10 @@ func CreateJWTTokenString(exp time.Time, id interface{}, email interface{}, name
 		return "", err
 	}
 	return tokenString, nil
+}
+
+func GetUserIDFromContext(c *fiber.Ctx) uint64 {
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	return uint64(claims["sub"].(float64))
 }

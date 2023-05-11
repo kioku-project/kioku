@@ -14,6 +14,7 @@ type Deck struct {
 	PublicID  string    `gorm:"unique;not null"`
 	GroupID   uint      `gorm:"not null"`
 	Group     Group
+	Cards     []Card `gorm:"foreignKey:DeckID"`
 }
 
 func (d *Deck) BeforeCreate(db *gorm.DB) error {

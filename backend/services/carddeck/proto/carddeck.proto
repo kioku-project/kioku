@@ -5,18 +5,20 @@ package carddeck;
 option go_package = "./proto;carddeck";
 
 service Carddeck {
-	rpc CreateCard(CardRequest) returns (PublicIDResponse) {}
-	rpc CreateDeck(DeckRequest) returns (PublicIDResponse) {}
+	rpc CreateCard(CreateCardRequest) returns (PublicIDResponse) {}
+	rpc CreateDeck(CreateDeckRequest) returns (PublicIDResponse) {}
+	rpc GetDeckCards(DeckCardsRequest) returns (DeckCardsResponse) {}
+	rpc GetGroupDecks(GroupDecksRequest) returns (GroupDecksResponse) {}
 }
 
-message CardRequest {
+message CreateCardRequest {
 	uint64 userID = 1;
 	string deckPublicID = 2;
 	string frontside = 3;
 	string backside = 4;
 }
 
-message DeckRequest {
+message CreateDeckRequest {
 	uint64 userID = 1;
 	string groupPublicID = 2;
 	string deckName = 3;
@@ -24,4 +26,33 @@ message DeckRequest {
 
 message PublicIDResponse {
 	string publicID = 1;
+}
+
+message DeckCardsRequest {
+	uint64 userID = 1;
+	string deckPublicID = 2;
+}
+
+message DeckCardsResponse {
+	repeated Card cards = 1;
+}
+
+message Card {
+	string cardPublicID = 1;
+	string frontside = 2;
+	string backside = 3;
+}
+
+message GroupDecksRequest {
+	uint64 userID = 1;
+	string groupPublicID = 2;
+}
+
+message GroupDecksResponse {
+	repeated Deck decks = 1;
+}
+
+message Deck {
+	string deckPublicID = 1;
+	string deckName = 2;
 }

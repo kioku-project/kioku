@@ -36,8 +36,10 @@ func NewCollaborationEndpoints() []*api.Endpoint {
 // Client API for Collaboration service
 
 type CollaborationService interface {
-	CreateNewGroupWithAdmin(ctx context.Context, in *GroupCreateRequest, opts ...client.CallOption) (*SuccessResponse, error)
+	CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	GetGroupUserRole(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupRoleResponse, error)
+	GetUserGroups(ctx context.Context, in *UserGroupsRequest, opts ...client.CallOption) (*UserGroupsResponse, error)
+	FindGroupByPublicID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupResponse, error)
 }
 
 type collaborationService struct {
@@ -52,7 +54,7 @@ func NewCollaborationService(name string, c client.Client) CollaborationService 
 	}
 }
 
-func (c *collaborationService) CreateNewGroupWithAdmin(ctx context.Context, in *GroupCreateRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+func (c *collaborationService) CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, opts ...client.CallOption) (*SuccessResponse, error) {
 	req := c.c.NewRequest(c.name, "Collaboration.CreateNewGroupWithAdmin", in)
 	out := new(SuccessResponse)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -72,17 +74,41 @@ func (c *collaborationService) GetGroupUserRole(ctx context.Context, in *GroupRe
 	return out, nil
 }
 
+func (c *collaborationService) GetUserGroups(ctx context.Context, in *UserGroupsRequest, opts ...client.CallOption) (*UserGroupsResponse, error) {
+	req := c.c.NewRequest(c.name, "Collaboration.GetUserGroups", in)
+	out := new(UserGroupsResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *collaborationService) FindGroupByPublicID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupResponse, error) {
+	req := c.c.NewRequest(c.name, "Collaboration.FindGroupByPublicID", in)
+	out := new(GroupResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Collaboration service
 
 type CollaborationHandler interface {
-	CreateNewGroupWithAdmin(context.Context, *GroupCreateRequest, *SuccessResponse) error
+	CreateNewGroupWithAdmin(context.Context, *CreateGroupRequest, *SuccessResponse) error
 	GetGroupUserRole(context.Context, *GroupRequest, *GroupRoleResponse) error
+	GetUserGroups(context.Context, *UserGroupsRequest, *UserGroupsResponse) error
+	FindGroupByPublicID(context.Context, *GroupRequest, *GroupResponse) error
 }
 
 func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, opts ...server.HandlerOption) error {
 	type collaboration interface {
-		CreateNewGroupWithAdmin(ctx context.Context, in *GroupCreateRequest, out *SuccessResponse) error
+		CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, out *SuccessResponse) error
 		GetGroupUserRole(ctx context.Context, in *GroupRequest, out *GroupRoleResponse) error
+		GetUserGroups(ctx context.Context, in *UserGroupsRequest, out *UserGroupsResponse) error
+		FindGroupByPublicID(ctx context.Context, in *GroupRequest, out *GroupResponse) error
 	}
 	type Collaboration struct {
 		collaboration
@@ -95,10 +121,18 @@ type collaborationHandler struct {
 	CollaborationHandler
 }
 
-func (h *collaborationHandler) CreateNewGroupWithAdmin(ctx context.Context, in *GroupCreateRequest, out *SuccessResponse) error {
+func (h *collaborationHandler) CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, out *SuccessResponse) error {
 	return h.CollaborationHandler.CreateNewGroupWithAdmin(ctx, in, out)
 }
 
 func (h *collaborationHandler) GetGroupUserRole(ctx context.Context, in *GroupRequest, out *GroupRoleResponse) error {
 	return h.CollaborationHandler.GetGroupUserRole(ctx, in, out)
+}
+
+func (h *collaborationHandler) GetUserGroups(ctx context.Context, in *UserGroupsRequest, out *UserGroupsResponse) error {
+	return h.CollaborationHandler.GetUserGroups(ctx, in, out)
+}
+
+func (h *collaborationHandler) FindGroupByPublicID(ctx context.Context, in *GroupRequest, out *GroupResponse) error {
+	return h.CollaborationHandler.FindGroupByPublicID(ctx, in, out)
 }

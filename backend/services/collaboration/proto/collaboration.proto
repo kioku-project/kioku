@@ -5,8 +5,10 @@ package collaboration;
 option go_package = "./proto;collaboration";
 
 service Collaboration {
-	rpc CreateNewGroupWithAdmin(GroupCreateRequest) returns (SuccessResponse) {}
+	rpc CreateNewGroupWithAdmin(CreateGroupRequest) returns (SuccessResponse) {}
 	rpc GetGroupUserRole(GroupRequest) returns (GroupRoleResponse) {}
+	rpc GetUserGroups(UserGroupsRequest) returns (UserGroupsResponse) {}
+	rpc FindGroupByPublicID(GroupRequest) returns (GroupResponse) {}
 }
 
 enum GroupRole {
@@ -15,7 +17,7 @@ enum GroupRole {
 	ADMIN = 2;
 }
 
-message GroupCreateRequest {
+message CreateGroupRequest {
 	uint64 userID = 1;
 	string groupName = 2;
 }
@@ -25,6 +27,10 @@ message GroupRequest {
 	string groupPublicID = 2;
 }
 
+message UserGroupsRequest {
+	uint64 userID = 1;
+}
+
 message SuccessResponse {
 	bool success = 1;
 }
@@ -32,4 +38,18 @@ message SuccessResponse {
 message GroupRoleResponse {
 	uint64 groupID = 1;
 	GroupRole groupRole = 2;
+}
+
+message GroupResponse {
+	uint64 groupID = 1;
+	string groupName = 2;
+}
+
+message UserGroupsResponse {
+	repeated Group groups = 1;
+}
+
+message Group {
+	string groupName = 1;
+	string groupPublicID = 2;
 }

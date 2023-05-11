@@ -8,7 +8,7 @@ require (
 	github.com/go-micro/plugins/v4/server/grpc v1.2.0
 	github.com/gofiber/fiber/v2 v2.44.0
 	github.com/gofiber/jwt/v3 v3.3.9
-	github.com/golang-jwt/jwt/v5 v5.0.0
+	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/joho/godotenv v1.5.1
 	go-micro.dev/v4 v4.10.2
 	google.golang.org/grpc v1.55.0
@@ -19,7 +19,6 @@ require (
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
-	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgx/v5 v5.3.1 // indirect

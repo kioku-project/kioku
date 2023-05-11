@@ -20,5 +20,5 @@ func GeneratePublicID() string {
 }
 
 func ConvertRandomIDToModelID(identifier byte, randomPublicID string) string {
-	return fmt.Sprintf("#%c-%s", identifier, randomPublicID)
+	return fmt.Sprintf("%c-%s", identifier, randomPublicID)
 }

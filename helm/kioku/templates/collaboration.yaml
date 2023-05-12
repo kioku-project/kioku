@@ -2,23 +2,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ .Values.login.name }}-deployment"
+  name: "{{ .Values.collaboration.name }}-deployment"
   labels:
-    {{- include "kioku.login.labels" . | nindent 4 }}
+    {{- include "kioku.collaboration.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "kioku.login.labels" . | nindent 6 }}
+      {{- include "kioku.collaboration.labels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "kioku.login.labels" . | nindent 8 }}
+        {{- include "kioku.collaboration.labels" . | nindent 8 }}
     spec:
       serviceAccountName: go-micro
       containers:
-      - name: {{ .Values.login.name }}
-        image: "{{ .Values.login.image }}:{{ .Values.login.tag }}"
+      - name: {{ .Values.collaboration.name }}
+        image: "{{ .Values.collaboration.image }}:{{ .Values.collaboration.tag }}"
       {{ if eq .Values.mode "production" }}
         imagePullPolicy: Always
       {{ else }}
@@ -40,7 +40,6 @@ spec:
                 fieldPath: metadata.name
           - name: PORT
             value: "8080"
-
         envFrom:
           - secretRef:
               name: {{ .Values.database.secret.name }}
@@ -50,10 +49,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Values.login.name }}-service"
+  name: "{{ .Values.collaboration.name }}-service"
 spec:
   selector:
-    {{- include "kioku.login.labels" . | nindent 4 }}
+    {{- include "kioku.collaboration.labels" . | nindent 4 }}
   ports:
     - port: 8080
       targetPort: 8080
@@ -61,12 +60,12 @@ spec:
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: "hpa-{{ .Values.login.name }}-deployment"
+ name: "hpa-{{ .Values.collaboration.name }}-deployment"
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: "{{ .Values.login.name }}-deployment"
- minReplicas: {{ .Values.login.autoscaler.min }}
- maxReplicas: {{ .Values.login.autoscaler.max }}
- targetCPUUtilizationPercentage: {{ .Values.login.autoscaler.targetCPUUtilizationPercentage }}
+   name: "{{ .Values.collaboration.name }}-deployment"
+ minReplicas: {{ .Values.collaboration.autoscaler.min }}
+ maxReplicas: {{ .Values.collaboration.autoscaler.max }}
+ targetCPUUtilizationPercentage: {{ .Values.collaboration.autoscaler.targetCPUUtilizationPercentage }}

@@ -63,16 +63,16 @@ app.kubernetes.io/name: {{ .Values.frontend.name }}
 {{/*
 Login labels
 */}}
-{{- define "kioku.login.labels" -}}
-app.kubernetes.io/name: {{ .Values.login.name }}
+{{- define "kioku.carddeck.labels" -}}
+app.kubernetes.io/name: {{ .Values.carddeck.name }}
 {{- end }}
 
 {{/*
 Register labels
 */}}
-{{- define "kioku.register.labels" -}}
-app.kubernetes.io/name: {{ .Values.register.name }}
-app: {{ .Values.register.name }}
+{{- define "kioku.user.labels" -}}
+app.kubernetes.io/name: {{ .Values.user.name }}
+app: {{ .Values.user.name }}
 {{- end }}
 
 {{/*
@@ -80,6 +80,13 @@ Frontend Proxy labels
 */}}
 {{- define "kioku.frontend_proxy.labels" -}}
 app.kubernetes.io/name: {{ .Values.frontend_proxy.name }}
+{{- end }}
+
+{{/*
+Collaboration labels
+*/}}
+{{- define "kioku.collaboration.labels" -}}
+app.kubernetes.io/name: {{ .Values.collaboration.name }}
 {{- end }}
 
 

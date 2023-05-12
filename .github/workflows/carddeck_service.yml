@@ -7,7 +7,7 @@ on:
     - 'backend/services/carddeck/**'
 
 jobs:
-  build-collaboration:
+  build-carddeck:
     uses: ./.github/workflows/build_service.yml
     with:
       image-name: kioku_carddeck

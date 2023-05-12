@@ -12,20 +12,20 @@ jobs:
       path: ./frontend
       context: ./frontend
 
-  build-register:
+  build-carddeck:
     uses: ./.github/workflows/build_service.yml
     with:
-      image-name: kioku_register
+      image-name: kioku_carddeck
       image-tag: prod
-      path: ./backend/services/register
+      path: ./backend/services/carddeck
       context: ./backend
   
-  build-login:
+  build-user:
     uses: ./.github/workflows/build_service.yml
     with:
-      image-name: kioku_login
+      image-name: kioku_user
       image-tag: prod
-      path: ./backend/services/login
+      path: ./backend/services/user
       context: ./backend
   
   build-frontend-proxy:
@@ -34,4 +34,12 @@ jobs:
       image-name: kioku_frontend_proxy
       image-tag: prod
       path: ./backend/services/frontend
+      context: ./backend
+  
+  build-collaboration:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_collaboration
+      image-tag: prod
+      path: ./backend/services/collaboration
       context: ./backend

@@ -2,23 +2,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ .Values.register.name }}-deployment"
+  name: "{{ .Values.user.name }}-deployment"
   labels:
-    {{- include "kioku.register.labels" . | nindent 4 }}
+    {{- include "kioku.user.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "kioku.register.labels" . | nindent 6 }}
+      {{- include "kioku.user.labels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "kioku.register.labels" . | nindent 8 }}
+        {{- include "kioku.user.labels" . | nindent 8 }}
     spec:
       serviceAccountName: go-micro
       containers:
-      - name: {{ .Values.register.name }}
-        image: "{{ .Values.register.image }}:{{ .Values.register.tag }}"
+      - name: {{ .Values.user.name }}
+        image: "{{ .Values.user.image }}:{{ .Values.user.tag }}"
       {{ if eq .Values.mode "production" }}
         imagePullPolicy: Always
       {{ else }}
@@ -49,10 +49,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Values.register.name }}-service"
+  name: "{{ .Values.user.name }}-service"
 spec:
   selector:
-    {{- include "kioku.register.labels" . | nindent 4 }}
+    {{- include "kioku.user.labels" . | nindent 4 }}
   ports:
     - port: 8080
       targetPort: 8080
@@ -60,12 +60,12 @@ spec:
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: "hpa-{{ .Values.register.name }}-deployment"
+ name: "hpa-{{ .Values.user.name }}-deployment"
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: "{{ .Values.register.name }}-deployment"
- minReplicas: {{ .Values.register.autoscaler.min }}
- maxReplicas: {{ .Values.register.autoscaler.max }}
- targetCPUUtilizationPercentage: {{ .Values.register.autoscaler.targetCPUUtilizationPercentage }}
+   name: "{{ .Values.user.name }}-deployment"
+ minReplicas: {{ .Values.user.autoscaler.min }}
+ maxReplicas: {{ .Values.user.autoscaler.max }}
+ targetCPUUtilizationPercentage: {{ .Values.user.autoscaler.targetCPUUtilizationPercentage }}

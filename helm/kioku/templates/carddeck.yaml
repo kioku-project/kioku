@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.carddeck.name }}-deployment"
+  labels:
+    {{- include "kioku.carddeck.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "kioku.carddeck.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kioku.carddeck.labels" . | nindent 8 }}
+    spec:
+      serviceAccountName: go-micro
+      containers:
+      - name: {{ .Values.carddeck.name }}
+        image: "{{ .Values.carddeck.image }}:{{ .Values.carddeck.tag }}"
+      {{ if eq .Values.mode "production" }}
+        imagePullPolicy: Always
+      {{ else }}
+        imagePullPolicy: Never
+      {{ end }}
+        ports:
+          - containerPort: 8080
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500M
+          requests:
+            cpu: 200m
+            memory: 200M
+        env:
+          - name: HOSTNAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: PORT
+            value: "8080"
+
+        envFrom:
+          - secretRef:
+              name: {{ .Values.database.secret.name }}
+          - configMapRef:
+              name: service-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.carddeck.name }}-service"
+spec:
+  selector:
+    {{- include "kioku.carddeck.labels" . | nindent 4 }}
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+ name: "hpa-{{ .Values.carddeck.name }}-deployment"
+spec:
+ scaleTargetRef:
+   apiVersion: apps/v1
+   kind: Deployment
+   name: "{{ .Values.carddeck.name }}-deployment"
+ minReplicas: {{ .Values.carddeck.autoscaler.min }}
+ maxReplicas: {{ .Values.carddeck.autoscaler.max }}
+ targetCPUUtilizationPercentage: {{ .Values.carddeck.autoscaler.targetCPUUtilizationPercentage }}

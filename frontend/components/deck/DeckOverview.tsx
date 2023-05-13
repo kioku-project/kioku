@@ -35,8 +35,8 @@ export default function DeckOverview({
 		>
 			<div className="text-lg font-bold text-darkblue">{name}</div>
 			<div className="flex snap-x flex-row space-x-5 overflow-x-scroll">
-				{decks.map((deck, i) => (
-					<Deck id="DeckId" key={i} deck={deck} />
+				{decks.map((deck) => (
+					<Deck id="DeckId" key={deck.name} deck={deck} />
 				))}
 				<Deck id="createDeckId"></Deck>
 			</div>

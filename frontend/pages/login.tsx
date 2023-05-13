@@ -122,10 +122,10 @@ export default function Page() {
 	}
 
 	async function loginLogic() {
-		let email = document.querySelector("#email") as HTMLInputElement | null;
-		let password = document.querySelector(
+		const email = document.querySelector("#email") as HTMLInputElement;
+		const password = document.querySelector(
 			"#password"
-		) as HTMLInputElement | null;
+		) as HTMLInputElement;
 		if (email?.value === "" || password?.value === "") {
 			return;
 		}
@@ -155,10 +155,10 @@ export default function Page() {
 		const name = document.querySelector("#name") as HTMLInputElement;
 		const password = document.querySelector(
 			"#password"
-		) as HTMLInputElement | null;
+		) as HTMLInputElement;
 		let passwordRepeat = document.querySelector(
 			"#passwordRepeat"
-		) as HTMLInputElement | null;
+		) as HTMLInputElement;
 		if (
 			email?.value === "" ||
 			name?.value === "" ||

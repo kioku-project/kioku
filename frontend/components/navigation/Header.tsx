@@ -35,7 +35,7 @@ export const Header = ({ login, className }: HeaderProps) => {
 			{login ? (
 				<div className="flex flex-row">
 					<LogOut
-						className="text-darkblue hover:cursor-pointer"
+						className="text-kiokuDarkBlue hover:cursor-pointer"
 						onClick={
 							() => {} //TODO: logout logic
 						}

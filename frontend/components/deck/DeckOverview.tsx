@@ -33,7 +33,7 @@ export default function DeckOverview({
 			id={id}
 			className={`flex flex-col space-y-2 rounded-md ${className ?? ""}`}
 		>
-			<div className="text-lg font-bold text-darkblue">{name}</div>
+			<div className="text-lg font-bold text-kiokuDarkBlue">{name}</div>
 			<div className="flex snap-x flex-row space-x-5 overflow-x-scroll">
 				{decks.map((deck) => (
 					<Deck id="DeckId" key={deck.name} deck={deck} />

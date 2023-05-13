@@ -38,7 +38,7 @@ interface FormInputProps {
 function getStyle(style: string): string {
 	const getStyle: { [style: string]: string } = {
 		primary:
-			"border-eggshell bg-eggshell text-gray-900 invalid:border-red focus:border-darkblue",
+			"border-eggshell bg-eggshell text-gray-900 invalid:border-red focus:border-kiokuDarkBlue",
 	};
 	return getStyle[style] ?? getStyle.primary;
 }

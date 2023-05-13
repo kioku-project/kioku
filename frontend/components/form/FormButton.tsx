@@ -25,7 +25,7 @@ interface FormButtonProps {
 
 function getStyle(style: string): string {
 	const getStyle: { [style: string]: string } = {
-		primary: "bg-darkblue border-darkblue text-eggshell",
+		primary: "bg-kiokuDarkBlue border-kiokuDarkBlue text-eggshell",
 	};
 	return getStyle[style] ?? getStyle.primary;
 }

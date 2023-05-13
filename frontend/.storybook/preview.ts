@@ -16,6 +16,7 @@ export const parameters = {
 				"Pages",
 				"Components",
 				"Navigation",
+				"Statistics",
 				"Input",
 				"Form",
 				"Graphics",

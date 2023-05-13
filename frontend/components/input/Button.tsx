@@ -29,8 +29,9 @@ interface ButtonProps {
 
 function getStyle(style: string): string {
 	const getStyle: { [style: string]: string } = {
-		primary: "bg-darkblue border-darkblue text-eggshell shadow-sm",
-		secondary: "bg-transparent border-transparent text-darkblue",
+		primary:
+			"bg-kiokuDarkBlue border-kiokuDarkBlue text-eggshell shadow-sm",
+		secondary: "bg-transparent border-transparent text-kiokuDarkBlue",
 	};
 	return getStyle[style] ?? getStyle.primary;
 }

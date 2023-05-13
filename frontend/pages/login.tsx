@@ -44,9 +44,9 @@ export default function Page() {
 						</p>
 					</div>
 					<div
-						className={`flex w-full flex-col items-center rounded-2xl bg-lightblue p-5 sm:w-5/6 md:w-1/2 lg:w-1/3 ${inter.className}`}
+						className={`flex w-full flex-col items-center rounded-2xl bg-kiokuLightBlue p-5 sm:w-5/6 md:w-1/2 lg:w-1/3 ${inter.className}`}
 					>
-						<h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-darkblue">
+						<h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-kiokuDarkBlue">
 							{login
 								? "Sign in to your account"
 								: "Create an account"}
@@ -57,7 +57,7 @@ export default function Page() {
 								? "Not registered? "
 								: "Already registered? "}
 							<a
-								className="whitespace-nowrap font-semibold text-darkblue transition hover:cursor-pointer hover:text-eggshell"
+								className="whitespace-nowrap font-semibold text-kiokuDarkBlue transition hover:cursor-pointer hover:text-eggshell"
 								onClick={() => setLogin(!login)}
 							>
 								{login ? "Create an account" : "Sign in"}

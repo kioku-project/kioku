@@ -18,12 +18,12 @@ export default function Page() {
 				<Header login={false}></Header>
 				<div className="mx-auto flex flex-col justify-center p-5 text-base leading-7 md:w-2/3 md:p-10 md:text-center">
 					<a
-						className="text-lg font-semibold text-lightblue hover:cursor-pointer"
+						className="text-lg font-semibold text-kiokuLightBlue hover:cursor-pointer"
 						onClick={() => router.push("/login")}
 					>
 						Get started
 					</a>
-					<div className="mb-7 mt-1 text-3xl font-semibold leading-7 text-darkblue sm:text-4xl">
+					<div className="mb-7 mt-1 text-3xl font-semibold leading-7 text-kiokuDarkBlue sm:text-4xl">
 						Discover Kioku&apos;s awesome Features
 					</div>
 					<div className="text-lg leading-8 text-gray-600">
@@ -40,25 +40,29 @@ export default function Page() {
 						<FeatureCard
 							header="Collaborative"
 							description="Collaborate with your friends and fellow students in groups and work on shared decks. Learn together and motivate each other!"
-							icon={<Users className="text-darkblue"></Users>}
+							icon={
+								<Users className="text-kiokuDarkBlue"></Users>
+							}
 						></FeatureCard>
 						<FeatureCard
 							header="Individual"
 							description="Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
-							icon={<Compass className="text-darkblue"></Compass>}
+							icon={
+								<Compass className="text-kiokuDarkBlue"></Compass>
+							}
 						></FeatureCard>
 					</div>
 					<div className="flex flex-col md:flex-row md:space-x-5">
 						<FeatureCard
 							header="Compatible"
 							description="Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
-							icon={<Code className="text-darkblue"></Code>}
+							icon={<Code className="text-kiokuDarkBlue"></Code>}
 						></FeatureCard>
 						<FeatureCard
 							header="Informative"
 							description="We provide you with detailed statistics and insights into your study progress. Identify areas of improvement to optimize your strategy for maximum effectiveness!"
 							icon={
-								<BarChart2 className="text-darkblue"></BarChart2>
+								<BarChart2 className="text-kiokuDarkBlue"></BarChart2>
 							}
 						></FeatureCard>
 					</div>
@@ -66,12 +70,16 @@ export default function Page() {
 						<FeatureCard
 							header="Available"
 							description="Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
-							icon={<Cloud className="text-darkblue"></Cloud>}
+							icon={
+								<Cloud className="text-kiokuDarkBlue"></Cloud>
+							}
 						></FeatureCard>
 						<FeatureCard
 							header="Entertaining"
 							description="Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
-							icon={<Award className="text-darkblue"></Award>}
+							icon={
+								<Award className="text-kiokuDarkBlue"></Award>
+							}
 						></FeatureCard>
 					</div>
 				</div>
@@ -113,7 +121,7 @@ const FeatureCard = ({
 		>
 			{icon}
 			<div className="flex w-full flex-col">
-				<p className="font-semibold text-darkblue">{header}</p>
+				<p className="font-semibold text-kiokuDarkBlue">{header}</p>
 				<p className="text-gray-400">{description}</p>
 			</div>
 		</div>

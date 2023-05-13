@@ -54,7 +54,7 @@ export const Card = ({
 	return (
 		<div
 			id={id}
-			className={`mx-auto my-auto flex h-5/6 w-5/6 flex-col space-y-3 rounded-xl border-2 border-darkblue bg-eggshell p-5 font-semibold text-darkblue shadow-lg sm:h-4/5 sm:w-4/5 md:h-3/4 md:w-3/4 lg:h-2/3 lg:w-2/3 lg:p-10 ${
+			className={`mx-auto my-auto flex h-5/6 w-5/6 flex-col space-y-3 rounded-xl border-2 border-kiokuDarkBlue bg-eggshell p-5 font-semibold text-kiokuDarkBlue shadow-lg sm:h-4/5 sm:w-4/5 md:h-3/4 md:w-3/4 lg:h-2/3 lg:w-2/3 lg:p-10 ${
 				className ?? ""
 			}`}
 		>

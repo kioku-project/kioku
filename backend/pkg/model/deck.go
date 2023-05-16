@@ -18,8 +18,10 @@ type Deck struct {
 }
 
 func (d *Deck) BeforeCreate(db *gorm.DB) (err error) {
-	d.PublicID, err = helper.FindFreePublicID(db, 10, helper.GeneratePublicID, 'D', func(candidate string) *Deck {
-		return &Deck{PublicID: candidate}
+	newPublicID, err := helper.FindFreePublicID(db, 10, func() (helper.PublicID, *Deck) {
+		id := helper.GeneratePublicID('D')
+		return id, &Deck{PublicID: id.GetStringRepresentation()}
 	})
+	d.PublicID = newPublicID.GetStringRepresentation()
 	return
 }

@@ -27,8 +27,15 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 	if err != nil {
 		return err
 	}
+	roleRsp, err := e.collaborationService.GetGroupUserRole(context.TODO(), &pbcollab.GroupRequest{UserID: req.UserID, GroupPublicID: deck.Group.PublicID})
+	if err != nil {
+		return err
+	}
+	if roleRsp.GroupRole != pbcollab.GroupRole_ADMIN && roleRsp.GroupRole != pbcollab.GroupRole_WRITE {
+		return err
+	}
 	newCard := model.Card{
-		DeckID:    deck.GroupID,
+		DeckID:    deck.ID,
 		Frontside: req.Frontside,
 		Backside:  req.Backside,
 	}
@@ -44,6 +51,9 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 	logger.Infof("Received Carddeck.CreateDeck request: %v", req)
 	roleRsp, err := e.collaborationService.GetGroupUserRole(context.TODO(), &pbcollab.GroupRequest{UserID: req.UserID, GroupPublicID: req.GroupPublicID})
 	if err != nil {
+		return err
+	}
+	if roleRsp.GroupRole != pbcollab.GroupRole_ADMIN && roleRsp.GroupRole != pbcollab.GroupRole_WRITE {
 		return err
 	}
 	newDeck := model.Deck{

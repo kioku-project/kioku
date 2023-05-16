@@ -36,7 +36,7 @@ func main() {
 
 	// Create service
 	srv := micro.NewService(
-		micro.Server(grpcs.NewServer(server.Address(serviceAddress))),
+		micro.Server(grpcs.NewServer(server.Address(serviceAddress), server.Wait(nil))),
 		micro.Client(grpcc.NewClient()),
 	)
 	srv.Init(

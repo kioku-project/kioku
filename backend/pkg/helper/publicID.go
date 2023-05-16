@@ -9,9 +9,12 @@ import (
 	"gorm.io/gorm"
 )
 
-var (
-	random  = *rand.New(rand.NewSource(time.Now().UnixNano()))
+const (
 	charset = "abcdefghijklmnopqrstuvwxyz0123456789"
+)
+
+var (
+	random = rand.New(rand.NewSource(time.Now().UnixNano()))
 )
 
 var ErrRetryCountExceeded = errors.New("exceeded retry count")
@@ -33,25 +36,23 @@ func (i PublicID) GetStringRepresentation() string {
 	return fmt.Sprintf("%c-%s", i.prefix, i.id)
 }
 
-func FindFreePublicID[T any](
+func FindFreePublicID[T, C any](
 	db *gorm.DB,
 	retries int,
-	generator func(prefix rune) PublicID,
-	prefix rune,
-	where func(candidate string) *T,
-) (res string, err error) {
+	where func() (C, *T),
+) (res C, err error) {
 	var currentTry int
 	var t T
 	for {
 		currentTry++
 		if currentTry > retries {
-			err = errors.New("exceeded retry count")
+			err = ErrRetryCountExceeded
 			return
 		}
-		candidate := generator(prefix)
-		if err = db.Where(where(candidate.GetStringRepresentation())).First(&t).Error; err != nil {
+		candidate, val := where()
+		if err = db.Where(val).First(&t).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				return candidate.GetStringRepresentation(), nil
+				return candidate, nil
 			}
 			return
 		}

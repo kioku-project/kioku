@@ -39,11 +39,11 @@ func (e *Collaboration) GetGroupUserRole(ctx context.Context, req *pb.GroupReque
 		return err
 	}
 	rsp.GroupID = uint64(group.ID)
-	if *role == model.RoleRead {
+	if role == model.RoleRead {
+		rsp.GroupRole = pb.GroupRole_READ
+	} else if role == model.RoleWrite {
 		rsp.GroupRole = pb.GroupRole_WRITE
-	} else if *role == model.RoleWrite {
-		rsp.GroupRole = pb.GroupRole_WRITE
-	} else if *role == model.RoleAdmin {
+	} else if role == model.RoleAdmin {
 		rsp.GroupRole = pb.GroupRole_ADMIN
 	}
 	return nil

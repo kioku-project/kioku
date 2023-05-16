@@ -11,21 +11,15 @@ import (
 	"github.com/kioku-project/kioku/pkg/model"
 )
 
-type PostgresStore struct {
+type GormStore struct {
 	db *gorm.DB
 }
 
-type UserStoreImpl struct {
-	PostgresStore
-}
+type UserStoreImpl GormStore
 
-type CardDeckStoreImpl struct {
-	PostgresStore
-}
+type CardDeckStoreImpl GormStore
 
-type CollaborationStoreImpl struct {
-	PostgresStore
-}
+type CollaborationStoreImpl GormStore
 
 func NewPostgresStore() (*gorm.DB, error) {
 	_ = godotenv.Load("../.env", "../.env.example")
@@ -48,7 +42,7 @@ func NewUserStore() (UserStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &UserStoreImpl{PostgresStore: PostgresStore{db: db}}, nil
+	return &UserStoreImpl{db: db}, nil
 }
 
 func NewCardDeckStore() (CardDeckStore, error) {
@@ -60,7 +54,7 @@ func NewCardDeckStore() (CardDeckStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &CardDeckStoreImpl{PostgresStore: PostgresStore{db: db}}, nil
+	return &CardDeckStoreImpl{db: db}, nil
 }
 
 func NewCollaborationStore() (CollaborationStore, error) {
@@ -80,7 +74,7 @@ func NewCollaborationStore() (CollaborationStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &CollaborationStoreImpl{PostgresStore: PostgresStore{db: db}}, nil
+	return &CollaborationStoreImpl{db: db}, nil
 }
 
 func (s *UserStoreImpl) FindUserByEmail(email string) (user *model.User, err error) {
@@ -122,18 +116,18 @@ func (s *CollaborationStoreImpl) CreateNewGroupWithAdmin(adminUserID uint, newGr
 	return rsp.Error
 }
 
-func (s *PostgresStore) FindGroupByPublicID(publicID string) (group *model.Group, err error) {
+func (s *CollaborationStoreImpl) FindGroupByPublicID(publicID string) (group *model.Group, err error) {
 	err = s.db.Where(model.Group{PublicID: publicID}).First(&group).Error
 	return
 }
 
-func (s *CollaborationStoreImpl) GetGroupUserRole(userID uint, groupID uint) (*model.RoleType, error) {
+func (s *CollaborationStoreImpl) GetGroupUserRole(userID uint, groupID uint) (model.RoleType, error) {
 	var groupUser model.GroupUserRole
 	err := s.db.Where(model.GroupUserRole{GroupID: groupID, UserID: userID}).First(&groupUser).Error
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	return &groupUser.RoleType, nil
+	return groupUser.RoleType, nil
 }
 
 func (s *CollaborationStoreImpl) FindGroupsByUserID(userID uint) (groups []model.Group, err error) {

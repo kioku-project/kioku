@@ -15,8 +15,10 @@ type Card struct {
 }
 
 func (c *Card) BeforeCreate(db *gorm.DB) (err error) {
-	c.PublicID, err = helper.FindFreePublicID(db, 10, helper.GeneratePublicID, 'C', func(candidate string) *Card {
-		return &Card{PublicID: candidate}
+	newPublicID, err := helper.FindFreePublicID(db, 10, func() (helper.PublicID, *Card) {
+		id := helper.GeneratePublicID('C')
+		return id, &Card{PublicID: id.GetStringRepresentation()}
 	})
+	c.PublicID = newPublicID.GetStringRepresentation()
 	return
 }

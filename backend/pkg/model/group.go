@@ -13,8 +13,10 @@ type Group struct {
 }
 
 func (g *Group) BeforeCreate(db *gorm.DB) (err error) {
-	g.PublicID, err = helper.FindFreePublicID(db, 10, helper.GeneratePublicID, 'G', func(candidate string) *Group {
-		return &Group{PublicID: candidate}
+	newPublicID, err := helper.FindFreePublicID(db, 10, func() (helper.PublicID, *Group) {
+		id := helper.GeneratePublicID('G')
+		return id, &Group{PublicID: id.GetStringRepresentation()}
 	})
+	g.PublicID = newPublicID.GetStringRepresentation()
 	return
 }

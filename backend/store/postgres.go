@@ -15,6 +15,18 @@ type PostgresStore struct {
 	db *gorm.DB
 }
 
+type UserStoreImpl struct {
+	PostgresStore
+}
+
+type CardDeckStoreImpl struct {
+	PostgresStore
+}
+
+type CollaborationStoreImpl struct {
+	PostgresStore
+}
+
 func NewPostgresStore() (*gorm.DB, error) {
 	_ = godotenv.Load("../.env", "../.env.example")
 	host := os.Getenv("POSTGRES_HOST")
@@ -24,14 +36,10 @@ func NewPostgresStore() (*gorm.DB, error) {
 	port := os.Getenv("POSTGRES_PORT")
 
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", username, password, host, port, dbname)
-	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
-	if err != nil {
-		return nil, err
-	}
-	return db, nil
+	return gorm.Open(postgres.Open(connStr), &gorm.Config{})
 }
 
-func NewUserStore() (*PostgresStore, error) {
+func NewUserStore() (UserStore, error) {
 	db, err := NewPostgresStore()
 	if err != nil {
 		return nil, err
@@ -40,10 +48,10 @@ func NewUserStore() (*PostgresStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &PostgresStore{db: db}, nil
+	return &UserStoreImpl{PostgresStore: PostgresStore{db: db}}, nil
 }
 
-func NewCardDeckStore() (*PostgresStore, error) {
+func NewCardDeckStore() (CardDeckStore, error) {
 	db, err := NewPostgresStore()
 	if err != nil {
 		return nil, err
@@ -52,10 +60,10 @@ func NewCardDeckStore() (*PostgresStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &PostgresStore{db: db}, nil
+	return &CardDeckStoreImpl{PostgresStore: PostgresStore{db: db}}, nil
 }
 
-func NewCollaborationStore() (*PostgresStore, error) {
+func NewCollaborationStore() (CollaborationStore, error) {
 	db, err := NewPostgresStore()
 	if err != nil {
 		return nil, err
@@ -72,52 +80,40 @@ func NewCollaborationStore() (*PostgresStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &PostgresStore{db: db}, nil
+	return &CollaborationStoreImpl{PostgresStore: PostgresStore{db: db}}, nil
 }
 
-func (s *PostgresStore) FindUserByEmail(email string) (*model.User, error) {
-	var usr model.User
-	err := s.db.Where(model.User{Email: email}).First(&usr).Error
-	if err != nil {
-		return nil, err
-	}
-	return &usr, nil
+func (s *UserStoreImpl) FindUserByEmail(email string) (user *model.User, err error) {
+	err = s.db.Where(model.User{Email: email}).First(&user).Error
+	return
 }
 
-func (s *PostgresStore) RegisterNewUser(newUser *model.User) error {
+func (s *UserStoreImpl) RegisterNewUser(newUser *model.User) error {
 	rsp := s.db.Create(&newUser)
 	return rsp.Error
 }
 
-func (s *PostgresStore) CreateDeck(newDeck *model.Deck) error {
+func (s *CardDeckStoreImpl) CreateDeck(newDeck *model.Deck) error {
 	rsp := s.db.Create(&newDeck)
 	return rsp.Error
 }
 
-func (s *PostgresStore) FindDeckByPublicID(publicID string) (*model.Deck, error) {
-	var deck model.Deck
-	err := s.db.Where(model.Deck{PublicID: publicID}).Preload("Cards").First(&deck).Error
-	if err != nil {
-		return nil, err
-	}
-	return &deck, nil
+func (s *CardDeckStoreImpl) FindDeckByPublicID(publicID string) (deck *model.Deck, err error) {
+	err = s.db.Where(model.Deck{PublicID: publicID}).Preload("Cards").First(&deck).Error
+	return
 }
 
-func (s *PostgresStore) CreateCard(newCard *model.Card) error {
+func (s *CardDeckStoreImpl) CreateCard(newCard *model.Card) error {
 	rsp := s.db.Create(&newCard)
 	return rsp.Error
 }
 
-func (s *PostgresStore) FindDecksByGroupID(groupID uint) (*[]model.Deck, error) {
-	var decks []model.Deck
-	err := s.db.Where(model.GroupUserRole{GroupID: groupID}).Find(&decks).Error
-	if err != nil {
-		return nil, err
-	}
-	return &decks, nil
+func (s *CardDeckStoreImpl) FindDecksByGroupID(groupID uint) (decks []model.Deck, err error) {
+	err = s.db.Where(model.GroupUserRole{GroupID: groupID}).Find(&decks).Error
+	return
 }
 
-func (s *PostgresStore) CreateNewGroupWithAdmin(adminUserID uint, newGroup *model.Group) error {
+func (s *CollaborationStoreImpl) CreateNewGroupWithAdmin(adminUserID uint, newGroup *model.Group) error {
 	rsp := s.db.Create(&newGroup)
 	if rsp.Error != nil {
 		return rsp.Error
@@ -126,16 +122,12 @@ func (s *PostgresStore) CreateNewGroupWithAdmin(adminUserID uint, newGroup *mode
 	return rsp.Error
 }
 
-func (s *PostgresStore) FindGroupByPublicID(publicID string) (*model.Group, error) {
-	var group model.Group
-	err := s.db.Where(model.Group{PublicID: publicID}).First(&group).Error
-	if err != nil {
-		return nil, err
-	}
-	return &group, nil
+func (s *PostgresStore) FindGroupByPublicID(publicID string) (group *model.Group, err error) {
+	err = s.db.Where(model.Group{PublicID: publicID}).First(&group).Error
+	return
 }
 
-func (s *PostgresStore) GetGroupUserRole(userID uint, groupID uint) (*model.RoleType, error) {
+func (s *CollaborationStoreImpl) GetGroupUserRole(userID uint, groupID uint) (*model.RoleType, error) {
 	var groupUser model.GroupUserRole
 	err := s.db.Where(model.GroupUserRole{GroupID: groupID, UserID: userID}).First(&groupUser).Error
 	if err != nil {
@@ -144,13 +136,9 @@ func (s *PostgresStore) GetGroupUserRole(userID uint, groupID uint) (*model.Role
 	return &groupUser.RoleType, nil
 }
 
-func (s *PostgresStore) FindGroupsByUserID(userID uint) (*[]model.Group, error) {
-	var groups []model.Group
-	err := s.db.Joins("Join group_user_roles on group_user_roles.group_id = groups.id").
+func (s *CollaborationStoreImpl) FindGroupsByUserID(userID uint) (groups []model.Group, err error) {
+	err = s.db.Joins("Join group_user_roles on group_user_roles.group_id = groups.id").
 		Where("group_user_roles.user_id = ?", userID).
 		Find(&groups).Error
-	if err != nil {
-		return nil, err
-	}
-	return &groups, nil
+	return
 }

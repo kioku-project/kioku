@@ -12,16 +12,9 @@ type Group struct {
 	Users    []User `gorm:"many2many:group_user_roles;"`
 }
 
-func (g *Group) BeforeCreate(db *gorm.DB) error {
-	var group Group
-	isUnique := false
-	for !isUnique {
-		randomPublicID := helper.GeneratePublicID()
-		err := db.Where(Group{PublicID: helper.ConvertRandomIDToModelID('G', randomPublicID)}).First(&group).Error
-		if err != nil {
-			isUnique = true
-			g.PublicID = helper.ConvertRandomIDToModelID('G', randomPublicID)
-		}
-	}
-	return nil
+func (g *Group) BeforeCreate(db *gorm.DB) (err error) {
+	g.PublicID, err = helper.FindFreePublicID(db, 10, helper.GeneratePublicID, 'G', func(candidate string) *Group {
+		return &Group{PublicID: candidate}
+	})
+	return
 }

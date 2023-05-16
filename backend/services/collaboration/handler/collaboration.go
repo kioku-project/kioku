@@ -55,8 +55,8 @@ func (e *Collaboration) GetUserGroups(ctx context.Context, req *pb.UserGroupsReq
 	if err != nil {
 		return err
 	}
-	rsp.Groups = make([]*pb.Group, len(*group))
-	for i, group := range *group {
+	rsp.Groups = make([]*pb.Group, len(group))
+	for i, group := range group {
 		rsp.Groups[i] = &pb.Group{
 			GroupPublicID: group.PublicID,
 			GroupName:     group.Name,

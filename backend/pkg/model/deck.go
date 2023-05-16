@@ -17,16 +17,9 @@ type Deck struct {
 	Cards     []Card `gorm:"foreignKey:DeckID"`
 }
 
-func (d *Deck) BeforeCreate(db *gorm.DB) error {
-	var deck Deck
-	isUnique := false
-	for !isUnique {
-		randomPublicID := helper.GeneratePublicID()
-		err := db.Where(Deck{PublicID: helper.ConvertRandomIDToModelID('D', randomPublicID)}).First(&deck).Error
-		if err != nil {
-			isUnique = true
-			d.PublicID = helper.ConvertRandomIDToModelID('D', randomPublicID)
-		}
-	}
-	return nil
+func (d *Deck) BeforeCreate(db *gorm.DB) (err error) {
+	d.PublicID, err = helper.FindFreePublicID(db, 10, helper.GeneratePublicID, 'D', func(candidate string) *Deck {
+		return &Deck{PublicID: candidate}
+	})
+	return
 }

@@ -12,16 +12,16 @@ import (
 	"github.com/kioku-project/kioku/store"
 )
 
-type Carddeck struct {
+type CardDeck struct {
 	store                store.CardDeckStore
 	collaborationService pbcollab.CollaborationService
 }
 
-func New(s store.CardDeckStore, cS pbcollab.CollaborationService) *Carddeck {
-	return &Carddeck{store: s, collaborationService: cS}
+func New(s store.CardDeckStore, cS pbcollab.CollaborationService) *CardDeck {
+	return &CardDeck{store: s, collaborationService: cS}
 }
 
-func (e *Carddeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rsp *pb.PublicIDResponse) error {
+func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rsp *pb.PublicIDResponse) error {
 	logger.Infof("Received Carddeck.CreateCard request: %v", req)
 	deck, err := e.store.FindDeckByPublicID(req.DeckPublicID)
 	if err != nil {
@@ -40,7 +40,7 @@ func (e *Carddeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 	return nil
 }
 
-func (e *Carddeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rsp *pb.PublicIDResponse) error {
+func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rsp *pb.PublicIDResponse) error {
 	logger.Infof("Received Carddeck.CreateDeck request: %v", req)
 	roleRsp, err := e.collaborationService.GetGroupUserRole(context.TODO(), &pbcollab.GroupRequest{UserID: req.UserID, GroupPublicID: req.GroupPublicID})
 	if err != nil {
@@ -59,7 +59,7 @@ func (e *Carddeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 	return nil
 }
 
-func (e *Carddeck) GetDeckCards(ctx context.Context, req *pb.DeckCardsRequest, rsp *pb.DeckCardsResponse) error {
+func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.DeckCardsRequest, rsp *pb.DeckCardsResponse) error {
 	logger.Infof("Received Carddeck.GetDeckCards request: %v", req)
 	deck, err := e.store.FindDeckByPublicID(req.DeckPublicID)
 	if err != nil {
@@ -76,15 +76,18 @@ func (e *Carddeck) GetDeckCards(ctx context.Context, req *pb.DeckCardsRequest, r
 	return nil
 }
 
-func (e *Carddeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest, rsp *pb.GroupDecksResponse) error {
+func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest, rsp *pb.GroupDecksResponse) error {
 	logger.Infof("Received Carddeck.GetGroupDecks request: %v", req)
 	groupRsp, err := e.collaborationService.FindGroupByPublicID(context.TODO(), &pbcollab.GroupRequest{UserID: req.UserID, GroupPublicID: req.GroupPublicID})
+	if err != nil {
+		return err
+	}
 	decks, err := e.store.FindDecksByGroupID(uint(groupRsp.GroupID))
 	if err != nil {
 		return err
 	}
-	rsp.Decks = make([]*pb.Deck, len(*decks))
-	for i, deck := range *decks {
+	rsp.Decks = make([]*pb.Deck, len(decks))
+	for i, deck := range decks {
 		rsp.Decks[i] = &pb.Deck{
 			DeckPublicID: deck.PublicID,
 			DeckName:     deck.Name,

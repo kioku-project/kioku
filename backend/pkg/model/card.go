@@ -14,16 +14,9 @@ type Card struct {
 	Backside  string `gorm:"not null"`
 }
 
-func (c *Card) BeforeCreate(db *gorm.DB) error {
-	var card Card
-	isUnique := false
-	for !isUnique {
-		randomPublicID := helper.GeneratePublicID()
-		err := db.Where(Card{PublicID: helper.ConvertRandomIDToModelID('C', randomPublicID)}).First(&card).Error
-		if err != nil {
-			isUnique = true
-			c.PublicID = helper.ConvertRandomIDToModelID('C', randomPublicID)
-		}
-	}
-	return nil
+func (c *Card) BeforeCreate(db *gorm.DB) (err error) {
+	c.PublicID, err = helper.FindFreePublicID(db, 10, helper.GeneratePublicID, 'C', func(candidate string) *Card {
+		return &Card{PublicID: candidate}
+	})
+	return
 }

@@ -33,7 +33,6 @@ var (
 	version        = "latest"
 	serviceAddress = fmt.Sprintf("%s%s", os.Getenv("HOSTNAME"), ":8080")
 	jaegerUrl      = os.Getenv("JAEGER_ADDRESS")
-	tracer         = otel.Tracer(service)
 )
 
 func main() {
@@ -72,11 +71,8 @@ func main() {
 		pbuser.NewUserService("user", srv.Client()),
 		pbcarddeck.NewCarddeckService("carddeck", srv.Client()),
 		pbcollab.NewCollaborationService("collaboration", srv.Client()),
-		tracer,
 	)
 	app := fiber.New()
-	otelfiber.WithTracerProvider(tp)
-	otelfiber.WithPropagators(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
 	app.Use(otelfiber.Middleware())
 	app.Post("/api/login", svc.LoginHandler)

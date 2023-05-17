@@ -21,8 +21,8 @@ type Frontend struct {
 	tracer               trace.Tracer
 }
 
-func New(userService pbuser.UserService, carddeckService pbcarddeck.CarddeckService, collaborationService pbcollab.CollaborationService, tracer trace.Tracer) *Frontend {
-	return &Frontend{userService: userService, carddeckService: carddeckService, collaborationService: collaborationService, tracer: tracer}
+func New(userService pbuser.UserService, carddeckService pbcarddeck.CarddeckService, collaborationService pbcollab.CollaborationService) *Frontend {
+	return &Frontend{userService: userService, carddeckService: carddeckService, collaborationService: collaborationService}
 }
 
 func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
@@ -76,7 +76,7 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	if reqUser.Password == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "No Password given")
 	}
-	rspLogin, err := e.userService.Login(c.Context(), &pbuser.LoginRequest{Email: reqUser.Email, Password: reqUser.Password})
+	rspLogin, err := e.userService.Login(c.UserContext(), &pbuser.LoginRequest{Email: reqUser.Email, Password: reqUser.Password})
 	if err != nil {
 		return err
 	}
@@ -126,7 +126,7 @@ func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
 	if data["password"] == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "No Password given")
 	}
-	rspRegister, err := e.userService.Register(c.Context(), &pbuser.RegisterRequest{Email: data["email"], Name: data["name"], Password: data["password"]})
+	rspRegister, err := e.userService.Register(c.UserContext(), &pbuser.RegisterRequest{Email: data["email"], Name: data["name"], Password: data["password"]})
 	if err != nil {
 		return err
 	}
@@ -142,7 +142,7 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "No deck name given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspCardDeck, err := e.carddeckService.CreateDeck(c.Context(), &pbcarddeck.CreateDeckRequest{UserID: userID, GroupPublicID: c.Params("groupID"), DeckName: data["deckName"]})
+	rspCardDeck, err := e.carddeckService.CreateDeck(c.UserContext(), &pbcarddeck.CreateDeckRequest{UserID: userID, GroupPublicID: c.Params("groupID"), DeckName: data["deckName"]})
 	if err != nil {
 		return err
 	}
@@ -162,7 +162,7 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "No backside given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspCardDeck, err := e.carddeckService.CreateCard(c.Context(), &pbcarddeck.CreateCardRequest{UserID: userID, DeckPublicID: c.Params("deckID"), Frontside: data["frontside"], Backside: data["backside"]})
+	rspCardDeck, err := e.carddeckService.CreateCard(c.UserContext(), &pbcarddeck.CreateCardRequest{UserID: userID, DeckPublicID: c.Params("deckID"), Frontside: data["frontside"], Backside: data["backside"]})
 	if err != nil {
 		return err
 	}
@@ -172,7 +172,7 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspUserGroups, err := e.collaborationService.GetUserGroups(c.Context(), &pbcollab.UserGroupsRequest{UserID: userID})
+	rspUserGroups, err := e.collaborationService.GetUserGroups(c.UserContext(), &pbcollab.UserGroupsRequest{UserID: userID})
 	if err != nil {
 		return err
 	}
@@ -181,7 +181,7 @@ func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspGroupDecks, err := e.carddeckService.GetGroupDecks(c.Context(), &pbcarddeck.GroupDecksRequest{UserID: userID, GroupPublicID: c.Params("groupID")})
+	rspGroupDecks, err := e.carddeckService.GetGroupDecks(c.UserContext(), &pbcarddeck.GroupDecksRequest{UserID: userID, GroupPublicID: c.Params("groupID")})
 	if err != nil {
 		return err
 	}
@@ -190,7 +190,7 @@ func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeckCards, err := e.carddeckService.GetDeckCards(c.Context(), &pbcarddeck.DeckCardsRequest{UserID: userID, DeckPublicID: c.Params("deckID")})
+	rspDeckCards, err := e.carddeckService.GetDeckCards(c.UserContext(), &pbcarddeck.DeckCardsRequest{UserID: userID, DeckPublicID: c.Params("deckID")})
 	if err != nil {
 		return err
 	}

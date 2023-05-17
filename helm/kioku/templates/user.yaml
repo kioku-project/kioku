@@ -38,6 +38,8 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.name
+          - name: JAEGER_ADDRESS
+            value: "http://simplest-collector.observability.svc.cluster.local:14268/api/traces"
           - name: PORT
             value: "8080"
         envFrom:

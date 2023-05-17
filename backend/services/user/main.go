@@ -1,9 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"strings"
+	"time"
 
+	"github.com/kioku-project/kioku/pkg/helper"
 	pbcollab "github.com/kioku-project/kioku/services/collaboration/proto"
 	"github.com/kioku-project/kioku/services/user/handler"
 	pb "github.com/kioku-project/kioku/services/user/proto"
@@ -12,6 +16,10 @@ import (
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
 	"go-micro.dev/v4/server"
+
+	"github.com/go-micro/plugins/v4/wrapper/trace/opentelemetry"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
 
 	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
 
@@ -23,6 +31,7 @@ var (
 	service        = "user"
 	version        = "latest"
 	serviceAddress = fmt.Sprintf("%s%s", os.Getenv("HOSTNAME"), ":8080")
+	jaegerUrl = os.Getenv("JAEGER_ADDRESS")
 )
 
 func main() {
@@ -34,17 +43,46 @@ func main() {
 	}
 
 	logger.Info("Trying to listen on: ", serviceAddress)
-
-	// Create service
-	srv := micro.NewService(
-		micro.Server(grpcs.NewServer(server.Address(serviceAddress), server.Wait(nil))),
-		micro.Client(grpcc.NewClient()),
-	)
-	srv.Init(
+	
+	opts := []micro.Option{
 		micro.Name(service),
 		micro.Version(version),
 		micro.Address(serviceAddress),
+	}
+
+	// Create service
+	srv := micro.NewService(
+		micro.Server(grpcs.NewServer(server.Address(serviceAddress))),
+		micro.Client(grpcc.NewClient()),
 	)
+
+	// Initiliaze tracing
+	if jaegerUrl != "" {
+		tp, err := helper.NewTracerProvider(service, srv.Server().Options().Id, version, jaegerUrl)
+		if err != nil {
+			logger.Fatal(err)
+		}
+		defer func() {
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+			defer cancel()
+			if err := tp.Shutdown(ctx); err != nil {
+				logger.Fatal(err)
+			}
+		}()
+		otel.SetTracerProvider(tp)
+		otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
+		traceOpts := []opentelemetry.Option{
+			opentelemetry.WithHandleFilter(func(ctx context.Context, r server.Request) bool {
+				if e := r.Endpoint(); strings.HasPrefix(e, "Health.") {
+					return true
+				}
+				return false
+			}),
+		}
+		opts = append(opts, micro.WrapHandler(opentelemetry.NewHandlerWrapper(traceOpts...)))
+	}
+
+	srv.Init(opts...)
 
 	// Create a new instance of the service handler with the initialized database connection
 	svc := handler.New(dbStore, pbcollab.NewCollaborationService("collaboration", srv.Client()))

@@ -28,7 +28,7 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 	if err != nil {
 		return err
 	}
-	roleRsp, err := e.collaborationService.GetGroupUserRole(context.TODO(), &pbcollab.GroupRequest{UserID: req.UserID, GroupPublicID: deck.Group.PublicID})
+	roleRsp, err := e.collaborationService.GetGroupUserRole(ctx, &pbcollab.GroupRequest{UserID: req.UserID, GroupPublicID: deck.Group.PublicID})
 	if err != nil {
 		return err
 	}
@@ -50,7 +50,7 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 
 func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rsp *pb.PublicIDResponse) error {
 	logger.Infof("Received Carddeck.CreateDeck request: %v", req)
-	roleRsp, err := e.collaborationService.GetGroupUserRole(context.TODO(), &pbcollab.GroupRequest{UserID: req.UserID, GroupPublicID: req.GroupPublicID})
+	roleRsp, err := e.collaborationService.GetGroupUserRole(ctx, &pbcollab.GroupRequest{UserID: req.UserID, GroupPublicID: req.GroupPublicID})
 	if err != nil {
 		return err
 	}
@@ -89,7 +89,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.DeckCardsRequest, r
 
 func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest, rsp *pb.GroupDecksResponse) error {
 	logger.Infof("Received Carddeck.GetGroupDecks request: %v", req)
-	groupRsp, err := e.collaborationService.FindGroupByPublicID(context.TODO(), &pbcollab.GroupRequest{UserID: req.UserID, GroupPublicID: req.GroupPublicID})
+	groupRsp, err := e.collaborationService.FindGroupByPublicID(ctx, &pbcollab.GroupRequest{UserID: req.UserID, GroupPublicID: req.GroupPublicID})
 	if err != nil {
 		return err
 	}

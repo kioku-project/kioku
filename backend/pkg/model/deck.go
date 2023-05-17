@@ -8,20 +8,19 @@ import (
 )
 
 type Deck struct {
-	ID        uint      `gorm:"primaryKey"`
+	ID        string    `gorm:"primaryKey"`
 	Name      string    `gorm:"not null"`
 	CreatedAt time.Time `gorm:"not null"`
-	PublicID  string    `gorm:"unique;not null"`
-	GroupID   uint      `gorm:"not null"`
-	Group     Group
-	Cards     []Card `gorm:"foreignKey:DeckID"`
+	GroupID   string    `gorm:"not null"`
+	Group     Group     `gorm:"foreignKey:GroupID"`
+	Cards     []Card    `gorm:"foreignKey:DeckID"`
 }
 
 func (d *Deck) BeforeCreate(db *gorm.DB) (err error) {
-	newPublicID, err := helper.FindFreePublicID(db, 10, func() (helper.PublicID, *Deck) {
-		id := helper.GeneratePublicID('D')
-		return id, &Deck{PublicID: id.GetStringRepresentation()}
+	newID, err := helper.FindFreeID(db, 10, func() (helper.PublicID, *Deck) {
+		id := helper.GenerateID('D')
+		return id, &Deck{ID: id.GetStringRepresentation()}
 	})
-	d.PublicID = newPublicID.GetStringRepresentation()
+	d.ID = newID.GetStringRepresentation()
 	return
 }

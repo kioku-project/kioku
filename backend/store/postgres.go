@@ -78,7 +78,7 @@ func NewCollaborationStore() (CollaborationStore, error) {
 }
 
 func (s *UserStoreImpl) FindUserByEmail(email string) (user *model.User, err error) {
-	err = s.db.Where(model.User{Email: email}).First(&user).Error
+	err = s.db.Where(model.User{Email: email}).Preload("Groups").First(&user).Error
 	return
 }
 
@@ -92,8 +92,8 @@ func (s *CardDeckStoreImpl) CreateDeck(newDeck *model.Deck) error {
 	return rsp.Error
 }
 
-func (s *CardDeckStoreImpl) FindDeckByPublicID(publicID string) (deck *model.Deck, err error) {
-	err = s.db.Where(model.Deck{PublicID: publicID}).Preload("Cards").First(&deck).Error
+func (s *CardDeckStoreImpl) FindDeckByID(ID string) (deck *model.Deck, err error) {
+	err = s.db.Where(model.Deck{ID: ID}).Preload("Group").Preload("Cards").First(&deck).Error
 	return
 }
 
@@ -102,12 +102,12 @@ func (s *CardDeckStoreImpl) CreateCard(newCard *model.Card) error {
 	return rsp.Error
 }
 
-func (s *CardDeckStoreImpl) FindDecksByGroupID(groupID uint) (decks []model.Deck, err error) {
+func (s *CardDeckStoreImpl) FindDecksByGroupID(groupID string) (decks []model.Deck, err error) {
 	err = s.db.Where(model.GroupUserRole{GroupID: groupID}).Find(&decks).Error
 	return
 }
 
-func (s *CollaborationStoreImpl) CreateNewGroupWithAdmin(adminUserID uint, newGroup *model.Group) error {
+func (s *CollaborationStoreImpl) CreateNewGroupWithAdmin(adminUserID string, newGroup *model.Group) error {
 	rsp := s.db.Create(&newGroup)
 	if rsp.Error != nil {
 		return rsp.Error
@@ -116,12 +116,12 @@ func (s *CollaborationStoreImpl) CreateNewGroupWithAdmin(adminUserID uint, newGr
 	return rsp.Error
 }
 
-func (s *CollaborationStoreImpl) FindGroupByPublicID(publicID string) (group *model.Group, err error) {
-	err = s.db.Where(model.Group{PublicID: publicID}).First(&group).Error
+func (s *CollaborationStoreImpl) FindGroupByID(ID string) (group *model.Group, err error) {
+	err = s.db.Where(model.Group{ID: ID}).First(&group).Error
 	return
 }
 
-func (s *CollaborationStoreImpl) GetGroupUserRole(userID uint, groupID uint) (model.RoleType, error) {
+func (s *CollaborationStoreImpl) GetGroupUserRole(userID string, groupID string) (model.RoleType, error) {
 	var groupUser model.GroupUserRole
 	err := s.db.Where(model.GroupUserRole{GroupID: groupID, UserID: userID}).First(&groupUser).Error
 	if err != nil {
@@ -130,7 +130,7 @@ func (s *CollaborationStoreImpl) GetGroupUserRole(userID uint, groupID uint) (mo
 	return groupUser.RoleType, nil
 }
 
-func (s *CollaborationStoreImpl) FindGroupsByUserID(userID uint) (groups []model.Group, err error) {
+func (s *CollaborationStoreImpl) FindGroupsByUserID(userID string) (groups []model.Group, err error) {
 	err = s.db.Joins("Join group_user_roles on group_user_roles.group_id = groups.id").
 		Where("group_user_roles.user_id = ?", userID).
 		Find(&groups).Error

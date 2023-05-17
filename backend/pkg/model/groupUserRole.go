@@ -9,8 +9,8 @@ const (
 )
 
 type GroupUserRole struct {
-	GroupID  uint `gorm:"primaryKey"`
-	UserID   uint `gorm:"primaryKey"`
+	GroupID  string `gorm:"primaryKey"`
+	UserID   string `gorm:"primaryKey"`
 	RoleType RoleType
 
 	Group Group `gorm:"foreignKey:GroupID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`

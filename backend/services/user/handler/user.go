@@ -46,14 +46,14 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 		logger.Infof("Error while inserting into db: %v", dberr.Error())
 	}
 
-	rspGroup, err := e.collaborationService.CreateNewGroupWithAdmin(context.TODO(), &pbcollab.CreateGroupRequest{UserID: uint64(newUser.ID), GroupName: "Home Group"})
+	rspGroup, err := e.collaborationService.CreateNewGroupWithAdmin(context.TODO(), &pbcollab.CreateGroupRequest{UserID: newUser.ID, GroupName: "Home Group"})
 	if err != nil || !rspGroup.Success {
 		logger.Infof("Collaboration service error: %v", err.Error())
 		return err
 	}
 
 	rsp.Name = newUser.Name
-	rsp.Id = uint64(newUser.ID)
+	rsp.ID = newUser.ID
 	logger.Infof("Name: %v", newUser.Name)
 	return nil
 }
@@ -69,7 +69,7 @@ func (e *User) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.NameIDRe
 		return errors.New("this email or password is wrong")
 	}
 	rsp.Name = user.Name
-	rsp.Id = uint64(user.ID)
+	rsp.ID = user.ID
 	logger.Infof("Name: %v", user.Name)
 	return nil
 }
@@ -80,6 +80,6 @@ func (e *User) GetUserIDFromEmail(ctx context.Context, req *pb.UserIDRequest, rs
 	if err != nil {
 		return err
 	}
-	rsp.Id = uint64(user.ID)
+	rsp.ID = user.ID
 	return nil
 }

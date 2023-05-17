@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	charset = "abcdefghijklmnopqrstuvwxyz0123456789"
+	charset = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ123456789"
 )
 
 var (
@@ -24,8 +24,8 @@ type PublicID struct {
 	id     string
 }
 
-func GeneratePublicID(prefix rune) PublicID {
-	randomPublicID := make([]byte, 6)
+func GenerateID(prefix rune) PublicID {
+	randomPublicID := make([]byte, 8)
 	for i := range randomPublicID {
 		randomPublicID[i] = charset[random.Intn(len(charset))]
 	}
@@ -36,7 +36,7 @@ func (i PublicID) GetStringRepresentation() string {
 	return fmt.Sprintf("%c-%s", i.prefix, i.id)
 }
 
-func FindFreePublicID[T, C any](
+func FindFreeID[T, C any](
 	db *gorm.DB,
 	retries int,
 	where func() (C, *T),

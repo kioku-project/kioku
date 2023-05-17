@@ -19,7 +19,7 @@ func (e *Collaboration) CreateNewGroupWithAdmin(ctx context.Context, req *pb.Cre
 	newGroup := model.Group{
 		Name: req.GroupName,
 	}
-	err := e.store.CreateNewGroupWithAdmin(uint(req.UserID), &newGroup)
+	err := e.store.CreateNewGroupWithAdmin(req.UserID, &newGroup)
 	if err != nil {
 		return err
 	}
@@ -29,16 +29,16 @@ func (e *Collaboration) CreateNewGroupWithAdmin(ctx context.Context, req *pb.Cre
 
 func (e *Collaboration) GetGroupUserRole(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupRoleResponse) error {
 	logger.Infof("Received Collaboration.GetUserGroupRole request: %v", req)
-	group, err := e.store.FindGroupByPublicID(req.GroupPublicID)
+	group, err := e.store.FindGroupByID(req.GroupID)
 	if err != nil {
 		return err
 	}
 	logger.Infof("Obtain role entry from database: UserID(%v) GroupID(%v)", req.UserID, group.ID)
-	role, err := e.store.GetGroupUserRole(uint(req.UserID), group.ID)
+	role, err := e.store.GetGroupUserRole(req.UserID, group.ID)
 	if err != nil {
 		return err
 	}
-	rsp.GroupID = uint64(group.ID)
+	rsp.GroupID = group.ID
 	if role == model.RoleRead {
 		rsp.GroupRole = pb.GroupRole_READ
 	} else if role == model.RoleWrite {
@@ -51,27 +51,27 @@ func (e *Collaboration) GetGroupUserRole(ctx context.Context, req *pb.GroupReque
 
 func (e *Collaboration) GetUserGroups(ctx context.Context, req *pb.UserGroupsRequest, rsp *pb.UserGroupsResponse) error {
 	logger.Infof("Received Carddeck.GetUserGroups request: %v", req)
-	group, err := e.store.FindGroupsByUserID(uint(req.UserID))
+	group, err := e.store.FindGroupsByUserID(req.UserID)
 	if err != nil {
 		return err
 	}
 	rsp.Groups = make([]*pb.Group, len(group))
 	for i, group := range group {
 		rsp.Groups[i] = &pb.Group{
-			GroupPublicID: group.PublicID,
-			GroupName:     group.Name,
+			GroupID:   group.ID,
+			GroupName: group.Name,
 		}
 	}
 	return nil
 }
 
-func (e *Collaboration) FindGroupByPublicID(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupResponse) error {
-	logger.Infof("Received Carddeck.FindGroupByPublicID request: %v", req)
-	group, err := e.store.FindGroupByPublicID(req.GroupPublicID)
+func (e *Collaboration) FindGroupByID(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupResponse) error {
+	logger.Infof("Received Carddeck.FindGroupByID request: %v", req)
+	group, err := e.store.FindGroupByID(req.GroupID)
 	if err != nil {
 		return err
 	}
-	rsp.GroupID = uint64(group.ID)
+	rsp.GroupID = group.ID
 	rsp.GroupName = group.Name
 	return nil
 }

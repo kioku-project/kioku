@@ -18,11 +18,11 @@ message RegisterRequest {
 
 message LoginRequest {
 	string email = 1;
-  	string password = 2;
+	string password = 2;
 }
 
 message NameIDResponse {
-	uint64 id = 1;
+	string ID = 1;
 	string name = 2;
 }
 
@@ -31,5 +31,5 @@ message UserIDRequest {
 }
 
 message UserIDResponse {
-	uint64 id = 1;
+	string ID = 1;
 }

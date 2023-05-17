@@ -81,8 +81,8 @@ func CreateJWTTokenString(exp time.Time, id interface{}, email interface{}, name
 	return tokenString, nil
 }
 
-func GetUserIDFromContext(c *fiber.Ctx) uint64 {
+func GetUserIDFromContext(c *fiber.Ctx) string {
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
-	return uint64(claims["sub"].(float64))
+	return claims["sub"].(string)
 }

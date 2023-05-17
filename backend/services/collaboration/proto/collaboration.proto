@@ -8,7 +8,7 @@ service Collaboration {
 	rpc CreateNewGroupWithAdmin(CreateGroupRequest) returns (SuccessResponse) {}
 	rpc GetGroupUserRole(GroupRequest) returns (GroupRoleResponse) {}
 	rpc GetUserGroups(UserGroupsRequest) returns (UserGroupsResponse) {}
-	rpc FindGroupByPublicID(GroupRequest) returns (GroupResponse) {}
+	rpc FindGroupByID(GroupRequest) returns (GroupResponse) {}
 }
 
 enum GroupRole {
@@ -18,17 +18,17 @@ enum GroupRole {
 }
 
 message CreateGroupRequest {
-	uint64 userID = 1;
+	string userID = 1;
 	string groupName = 2;
 }
 
 message GroupRequest {
-	uint64 userID = 1;
-	string groupPublicID = 2;
+	string userID = 1;
+	string groupID = 2;
 }
 
 message UserGroupsRequest {
-	uint64 userID = 1;
+	string userID = 1;
 }
 
 message SuccessResponse {
@@ -36,12 +36,12 @@ message SuccessResponse {
 }
 
 message GroupRoleResponse {
-	uint64 groupID = 1;
+	string groupID = 1;
 	GroupRole groupRole = 2;
 }
 
 message GroupResponse {
-	uint64 groupID = 1;
+	string groupID = 1;
 	string groupName = 2;
 }
 
@@ -51,5 +51,5 @@ message UserGroupsResponse {
 
 message Group {
 	string groupName = 1;
-	string groupPublicID = 2;
+	string groupID = 2;
 }

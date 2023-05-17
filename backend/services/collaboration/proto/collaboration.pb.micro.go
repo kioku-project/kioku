@@ -39,7 +39,7 @@ type CollaborationService interface {
 	CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	GetGroupUserRole(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupRoleResponse, error)
 	GetUserGroups(ctx context.Context, in *UserGroupsRequest, opts ...client.CallOption) (*UserGroupsResponse, error)
-	FindGroupByPublicID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupResponse, error)
+	FindGroupByID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupResponse, error)
 }
 
 type collaborationService struct {
@@ -84,8 +84,8 @@ func (c *collaborationService) GetUserGroups(ctx context.Context, in *UserGroups
 	return out, nil
 }
 
-func (c *collaborationService) FindGroupByPublicID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupResponse, error) {
-	req := c.c.NewRequest(c.name, "Collaboration.FindGroupByPublicID", in)
+func (c *collaborationService) FindGroupByID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupResponse, error) {
+	req := c.c.NewRequest(c.name, "Collaboration.FindGroupByID", in)
 	out := new(GroupResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -100,7 +100,7 @@ type CollaborationHandler interface {
 	CreateNewGroupWithAdmin(context.Context, *CreateGroupRequest, *SuccessResponse) error
 	GetGroupUserRole(context.Context, *GroupRequest, *GroupRoleResponse) error
 	GetUserGroups(context.Context, *UserGroupsRequest, *UserGroupsResponse) error
-	FindGroupByPublicID(context.Context, *GroupRequest, *GroupResponse) error
+	FindGroupByID(context.Context, *GroupRequest, *GroupResponse) error
 }
 
 func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, opts ...server.HandlerOption) error {
@@ -108,7 +108,7 @@ func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, op
 		CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, out *SuccessResponse) error
 		GetGroupUserRole(ctx context.Context, in *GroupRequest, out *GroupRoleResponse) error
 		GetUserGroups(ctx context.Context, in *UserGroupsRequest, out *UserGroupsResponse) error
-		FindGroupByPublicID(ctx context.Context, in *GroupRequest, out *GroupResponse) error
+		FindGroupByID(ctx context.Context, in *GroupRequest, out *GroupResponse) error
 	}
 	type Collaboration struct {
 		collaboration
@@ -133,6 +133,6 @@ func (h *collaborationHandler) GetUserGroups(ctx context.Context, in *UserGroups
 	return h.CollaborationHandler.GetUserGroups(ctx, in, out)
 }
 
-func (h *collaborationHandler) FindGroupByPublicID(ctx context.Context, in *GroupRequest, out *GroupResponse) error {
-	return h.CollaborationHandler.FindGroupByPublicID(ctx, in, out)
+func (h *collaborationHandler) FindGroupByID(ctx context.Context, in *GroupRequest, out *GroupResponse) error {
+	return h.CollaborationHandler.FindGroupByID(ctx, in, out)
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/gofiber/contrib/otelfiber"
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 	"github.com/joho/godotenv"
@@ -16,7 +17,6 @@ import (
 	pbuser "github.com/kioku-project/kioku/services/user/proto"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
-	"github.com/gofiber/contrib/otelfiber"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
@@ -32,8 +32,8 @@ var (
 	service        = "frontend"
 	version        = "latest"
 	serviceAddress = fmt.Sprintf("%s%s", os.Getenv("HOSTNAME"), ":8080")
-	jaegerUrl = os.Getenv("JAEGER_ADDRESS")
-	tracer = otel.Tracer(service)
+	jaegerUrl      = os.Getenv("JAEGER_ADDRESS")
+	tracer         = otel.Tracer(service)
 )
 
 func main() {
@@ -74,8 +74,10 @@ func main() {
 		pbcollab.NewCollaborationService("collaboration", srv.Client()),
 		tracer,
 	)
-
 	app := fiber.New()
+	otelfiber.WithTracerProvider(tp)
+	otelfiber.WithPropagators(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
+
 	app.Use(otelfiber.Middleware())
 	app.Post("/api/login", svc.LoginHandler)
 	app.Post("/api/register", svc.RegisterHandler)

@@ -37,6 +37,9 @@ spec:
           requests:
             cpu: 200m
             memory: 200M
+        env:
+          - name: JAEGER_ADDRESS
+            value: "http://simplest-collector.observability.svc.cluster.local:14268/api/traces"
         envFrom:
           - configMapRef:
               name: service-env

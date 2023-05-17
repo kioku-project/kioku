@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -12,7 +11,6 @@ import (
 	pbcollab "github.com/kioku-project/kioku/services/collaboration/proto"
 	pbuser "github.com/kioku-project/kioku/services/user/proto"
 	"go-micro.dev/v4/logger"
-	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -20,7 +18,7 @@ type Frontend struct {
 	userService          pbuser.UserService
 	carddeckService      pbcarddeck.CarddeckService
 	collaborationService pbcollab.CollaborationService
-	tracer trace.Tracer
+	tracer               trace.Tracer
 }
 
 func New(userService pbuser.UserService, carddeckService pbcarddeck.CarddeckService, collaborationService pbcollab.CollaborationService, tracer trace.Tracer) *Frontend {
@@ -28,8 +26,6 @@ func New(userService pbuser.UserService, carddeckService pbcarddeck.CarddeckServ
 }
 
 func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
-	_, span := e.tracer.Start(context.TODO(), "reauth")
-	defer span.End()
 	tokenString := c.Cookies("refresh_token", "NOT_GIVEN")
 	refreshToken, err := helper.ParseJWTToken(tokenString)
 	if err != nil {
@@ -70,8 +66,6 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
-	_, span := e.tracer.Start(context.TODO(), "login")
-	defer span.End()
 	var reqUser model.User
 	if err := c.BodyParser(&reqUser); err != nil {
 		return err
@@ -119,8 +113,6 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
-	_, span := e.tracer.Start(context.TODO(), "createDeck")
-	defer span.End()
 	data := map[string]string{}
 	if err := c.BodyParser(&data); err != nil {
 		return err
@@ -150,8 +142,6 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "No deck name given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	_, span := e.tracer.Start(context.TODO(), "createDeck", trace.WithAttributes(attribute.Int64("userId", int64(userID))))
-	defer span.End()
 	rspCardDeck, err := e.carddeckService.CreateDeck(c.Context(), &pbcarddeck.CreateDeckRequest{UserID: userID, GroupPublicID: c.Params("groupID"), DeckName: data["deckName"]})
 	if err != nil {
 		return err
@@ -172,8 +162,6 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "No backside given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	_, span := e.tracer.Start(context.TODO(), "createCard", trace.WithAttributes(attribute.Int64("userId", int64(userID))))
-	defer span.End()
 	rspCardDeck, err := e.carddeckService.CreateCard(c.Context(), &pbcarddeck.CreateCardRequest{UserID: userID, DeckPublicID: c.Params("deckID"), Frontside: data["frontside"], Backside: data["backside"]})
 	if err != nil {
 		return err
@@ -184,8 +172,6 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	_, span := e.tracer.Start(context.TODO(), "getUserGroups", trace.WithAttributes(attribute.Int64("userId", int64(userID))))
-	defer span.End()
 	rspUserGroups, err := e.collaborationService.GetUserGroups(c.Context(), &pbcollab.UserGroupsRequest{UserID: userID})
 	if err != nil {
 		return err
@@ -195,8 +181,6 @@ func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	_, span := e.tracer.Start(context.TODO(), "getGroupDecks", trace.WithAttributes(attribute.Int64("userId", int64(userID))))
-	defer span.End()
 	rspGroupDecks, err := e.carddeckService.GetGroupDecks(c.Context(), &pbcarddeck.GroupDecksRequest{UserID: userID, GroupPublicID: c.Params("groupID")})
 	if err != nil {
 		return err
@@ -206,8 +190,6 @@ func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	_, span := e.tracer.Start(context.TODO(), "getDeckCards", trace.WithAttributes(attribute.Int64("userId", int64(userID))))
-	defer span.End()
 	rspDeckCards, err := e.carddeckService.GetDeckCards(c.Context(), &pbcarddeck.DeckCardsRequest{UserID: userID, DeckPublicID: c.Params("deckID")})
 	if err != nil {
 		return err

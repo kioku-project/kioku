@@ -6,6 +6,7 @@ import (
 
 	"go-micro.dev/v4/logger"
 
+	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pb "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbcollab "github.com/kioku-project/kioku/services/collaboration/proto"
@@ -32,7 +33,7 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 		return err
 	}
 	if roleRsp.GroupRole != pbcollab.GroupRole_ADMIN && roleRsp.GroupRole != pbcollab.GroupRole_WRITE {
-		return err
+		return helper.ErrNotAuthorized
 	}
 	newCard := model.Card{
 		DeckID:    deck.ID,
@@ -54,7 +55,7 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 		return err
 	}
 	if roleRsp.GroupRole != pbcollab.GroupRole_ADMIN && roleRsp.GroupRole != pbcollab.GroupRole_WRITE {
-		return err
+		return helper.ErrNotAuthorized
 	}
 	newDeck := model.Deck{
 		Name:      req.DeckName,

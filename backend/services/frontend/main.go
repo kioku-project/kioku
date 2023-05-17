@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -13,6 +14,9 @@ import (
 	"github.com/kioku-project/kioku/services/frontend/handler"
 	pb "github.com/kioku-project/kioku/services/frontend/proto"
 	pbuser "github.com/kioku-project/kioku/services/user/proto"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
+	"github.com/gofiber/contrib/otelfiber"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
@@ -28,12 +32,29 @@ var (
 	service        = "frontend"
 	version        = "latest"
 	serviceAddress = fmt.Sprintf("%s%s", os.Getenv("HOSTNAME"), ":8080")
+	jaegerUrl = os.Getenv("JAEGER_ADDRESS")
+	tracer = otel.Tracer(service)
 )
 
 func main() {
 
 	logger.Info("Trying to listen on: ", serviceAddress)
 	_ = godotenv.Load("../.env", "../.env.example")
+
+	tp, err := helper.NewTracerProvider(service, service, version, jaegerUrl)
+
+	if err != nil {
+		logger.Error("Error starting tracer provider: %v", err)
+	}
+
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			logger.Error("Error shutting down tracer provider: %v", err)
+		}
+	}()
+
+	otel.SetTracerProvider(tp)
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
 	// Create service
 	srv := micro.NewService(
@@ -51,9 +72,11 @@ func main() {
 		pbuser.NewUserService("user", srv.Client()),
 		pbcarddeck.NewCarddeckService("carddeck", srv.Client()),
 		pbcollab.NewCollaborationService("collaboration", srv.Client()),
+		tracer,
 	)
 
 	app := fiber.New()
+	app.Use(otelfiber.Middleware())
 	app.Post("/api/login", svc.LoginHandler)
 	app.Post("/api/register", svc.RegisterHandler)
 	app.Get("/api/reauth", svc.ReauthHandler)

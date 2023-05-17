@@ -34,7 +34,7 @@ frontend:
 frontend_proxy:
   name: kioku-frontend-proxy
   image: ghcr.io/kioku-project/kioku_frontend_proxy
-  tag: prod
+  tag: feature-tracing
   httpPath: /api
 
   keySecret: frontend-proxy-key-secret
@@ -51,7 +51,7 @@ frontend_proxy:
 carddeck:
   name: kioku-carddeck
   image: ghcr.io/kioku-project/kioku_carddeck
-  tag: prod
+  tag: feature-tracing
 
   autoscaler:
     min: 1
@@ -61,7 +61,7 @@ carddeck:
 user:
   name: kioku-user
   image: ghcr.io/kioku-project/kioku_user
-  tag: prod
+  tag: feature-tracing
 
   autoscaler:
     min: 1
@@ -71,7 +71,7 @@ user:
 collaboration:
   name: kioku-collaboration
   image: ghcr.io/kioku-project/kioku_collaboration
-  tag: prod
+  tag: feature-tracing
 
   autoscaler:
     min: 1

@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	charset = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ123456789"
+	charset = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789"
 )
 
 var (
@@ -39,7 +39,7 @@ func (i PublicID) GetStringRepresentation() string {
 func FindFreeID[T, C any](
 	db *gorm.DB,
 	retries int,
-	where func() (C, *T),
+	with func() (C, *T),
 ) (res C, err error) {
 	var currentTry int
 	var t T
@@ -49,7 +49,7 @@ func FindFreeID[T, C any](
 			err = ErrRetryCountExceeded
 			return
 		}
-		candidate, val := where()
+		candidate, val := with()
 		if err = db.Where(val).First(&t).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return candidate, nil

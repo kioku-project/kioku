@@ -7,12 +7,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 	"github.com/joho/godotenv"
-	helper "github.com/kioku-project/kioku/pkg/helper"
-	pbcarddeck "github.com/kioku-project/kioku/services/carddeck/proto"
-	pbcollab "github.com/kioku-project/kioku/services/collaboration/proto"
+	"github.com/kioku-project/kioku/pkg/helper"
+	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
+	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
 	"github.com/kioku-project/kioku/services/frontend/handler"
 	pb "github.com/kioku-project/kioku/services/frontend/proto"
-	pbuser "github.com/kioku-project/kioku/services/user/proto"
+	pbUser "github.com/kioku-project/kioku/services/user/proto"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
@@ -20,8 +20,8 @@ import (
 
 	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
 
-	grpcc "github.com/go-micro/plugins/v4/client/grpc"
-	grpcs "github.com/go-micro/plugins/v4/server/grpc"
+	grpcClient "github.com/go-micro/plugins/v4/client/grpc"
+	grpcServer "github.com/go-micro/plugins/v4/server/grpc"
 )
 
 var (
@@ -37,8 +37,8 @@ func main() {
 
 	// Create service
 	srv := micro.NewService(
-		micro.Server(grpcs.NewServer(server.Address(serviceAddress), server.Wait(nil))),
-		micro.Client(grpcc.NewClient()),
+		micro.Server(grpcServer.NewServer(server.Address(serviceAddress), server.Wait(nil))),
+		micro.Client(grpcClient.NewClient()),
 	)
 	srv.Init(
 		micro.Name(service),
@@ -48,9 +48,9 @@ func main() {
 
 	// Create a new instance of the service handler with the initialized database connection
 	svc := handler.New(
-		pbuser.NewUserService("user", srv.Client()),
-		pbcarddeck.NewCarddeckService("carddeck", srv.Client()),
-		pbcollab.NewCollaborationService("collaboration", srv.Client()),
+		pbUser.NewUserService("user", srv.Client()),
+		pbCardDeck.NewCarddeckService("carddeck", srv.Client()),
+		pbCollaboration.NewCollaborationService("collaboration", srv.Client()),
 	)
 
 	app := fiber.New()

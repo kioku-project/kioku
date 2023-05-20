@@ -9,14 +9,14 @@ type UserStore interface {
 
 type CardDeckStore interface {
 	CreateDeck(newDeck *model.Deck) error
-	FindDeckByID(ID string) (*model.Deck, error)
+	FindDeckByID(deckID string) (*model.Deck, error)
 	CreateCard(newCard *model.Card) error
 	FindDecksByGroupID(groupID string) ([]model.Deck, error)
 }
 
 type CollaborationStore interface {
 	CreateNewGroupWithAdmin(adminUserID string, newGroup *model.Group) error
-	FindGroupByID(ID string) (*model.Group, error)
+	FindGroupByID(groupID string) (*model.Group, error)
 	GetGroupUserRole(userID string, groupID string) (model.RoleType, error)
 	FindGroupsByUserID(userID string) ([]model.Group, error)
 }

@@ -1,7 +1,9 @@
 package store
 
 import (
+	"errors"
 	"fmt"
+	"github.com/kioku-project/kioku/pkg/helper"
 	"os"
 
 	"gorm.io/driver/postgres"
@@ -79,45 +81,65 @@ func NewCollaborationStore() (CollaborationStore, error) {
 
 func (s *UserStoreImpl) FindUserByEmail(email string) (user *model.User, err error) {
 	err = s.db.Where(model.User{Email: email}).Preload("Groups").First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = helper.ErrStoreNoExistingUserWithEmail
+		}
+	}
 	return
 }
 
-func (s *UserStoreImpl) RegisterNewUser(newUser *model.User) error {
-	rsp := s.db.Create(&newUser)
-	return rsp.Error
-}
-
-func (s *CardDeckStoreImpl) CreateDeck(newDeck *model.Deck) error {
-	rsp := s.db.Create(&newDeck)
-	return rsp.Error
-}
-
-func (s *CardDeckStoreImpl) FindDeckByID(ID string) (deck *model.Deck, err error) {
-	err = s.db.Where(model.Deck{ID: ID}).Preload("Group").Preload("Cards").First(&deck).Error
+func (s *UserStoreImpl) RegisterNewUser(newUser *model.User) (err error) {
+	err = s.db.Create(&newUser).Error
 	return
 }
 
-func (s *CardDeckStoreImpl) CreateCard(newCard *model.Card) error {
-	rsp := s.db.Create(&newCard)
-	return rsp.Error
+func (s *CardDeckStoreImpl) CreateDeck(newDeck *model.Deck) (err error) {
+	err = s.db.Create(&newDeck).Error
+	return
+}
+
+func (s *CardDeckStoreImpl) FindDeckByID(deckID string) (deck *model.Deck, err error) {
+	err = s.db.Where(model.Deck{ID: deckID}).Preload("Group").Preload("Cards").First(&deck).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = helper.ErrStoreNoEntryWithID
+		}
+	}
+	return
+}
+
+func (s *CardDeckStoreImpl) CreateCard(newCard *model.Card) (err error) {
+	err = s.db.Create(&newCard).Error
+	return
 }
 
 func (s *CardDeckStoreImpl) FindDecksByGroupID(groupID string) (decks []model.Deck, err error) {
 	err = s.db.Where(model.GroupUserRole{GroupID: groupID}).Find(&decks).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = helper.ErrStoreNoEntryWithID
+		}
+	}
 	return
 }
 
-func (s *CollaborationStoreImpl) CreateNewGroupWithAdmin(adminUserID string, newGroup *model.Group) error {
-	rsp := s.db.Create(&newGroup)
-	if rsp.Error != nil {
-		return rsp.Error
+func (s *CollaborationStoreImpl) CreateNewGroupWithAdmin(adminUserID string, newGroup *model.Group) (err error) {
+	err = s.db.Create(&newGroup).Error
+	if err != nil {
+		return
 	}
-	rsp = s.db.Create(model.GroupUserRole{GroupID: newGroup.ID, UserID: adminUserID, RoleType: model.RoleAdmin})
-	return rsp.Error
+	err = s.db.Create(model.GroupUserRole{GroupID: newGroup.ID, UserID: adminUserID, RoleType: model.RoleAdmin}).Error
+	return
 }
 
-func (s *CollaborationStoreImpl) FindGroupByID(ID string) (group *model.Group, err error) {
-	err = s.db.Where(model.Group{ID: ID}).First(&group).Error
+func (s *CollaborationStoreImpl) FindGroupByID(groupID string) (group *model.Group, err error) {
+	err = s.db.Where(model.Group{ID: groupID}).First(&group).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = helper.ErrStoreNoEntryWithID
+		}
+	}
 	return
 }
 
@@ -125,6 +147,9 @@ func (s *CollaborationStoreImpl) GetGroupUserRole(userID string, groupID string)
 	var groupUser model.GroupUserRole
 	err := s.db.Where(model.GroupUserRole{GroupID: groupID, UserID: userID}).First(&groupUser).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return "", helper.ErrStoreNoEntryWithID
+		}
 		return "", err
 	}
 	return groupUser.RoleType, nil
@@ -134,5 +159,10 @@ func (s *CollaborationStoreImpl) FindGroupsByUserID(userID string) (groups []mod
 	err = s.db.Joins("Join group_user_roles on group_user_roles.group_id = groups.id").
 		Where("group_user_roles.user_id = ?", userID).
 		Find(&groups).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = helper.ErrStoreNoEntryWithID
+		}
+	}
 	return
 }

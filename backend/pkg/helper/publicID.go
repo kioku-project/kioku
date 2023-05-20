@@ -17,8 +17,6 @@ var (
 	random = rand.New(rand.NewSource(time.Now().UnixNano()))
 )
 
-var ErrRetryCountExceeded = errors.New("exceeded retry count")
-
 type PublicID struct {
 	prefix rune
 	id     string
@@ -46,7 +44,7 @@ func FindFreeID[T, C any](
 	for {
 		currentTry++
 		if currentTry > retries {
-			err = ErrRetryCountExceeded
+			err = ErrStoreRetryCountExceeded
 			return
 		}
 		candidate, val := with()

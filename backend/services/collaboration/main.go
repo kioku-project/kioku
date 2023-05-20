@@ -14,8 +14,8 @@ import (
 
 	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
 
-	grpcc "github.com/go-micro/plugins/v4/client/grpc"
-	grpcs "github.com/go-micro/plugins/v4/server/grpc"
+	grpcClient "github.com/go-micro/plugins/v4/client/grpc"
+	grpcServer "github.com/go-micro/plugins/v4/server/grpc"
 )
 
 var (
@@ -36,8 +36,8 @@ func main() {
 
 	// Create service
 	srv := micro.NewService(
-		micro.Server(grpcs.NewServer(server.Address(serviceAddress), server.Wait(nil))),
-		micro.Client(grpcc.NewClient()),
+		micro.Server(grpcServer.NewServer(server.Address(serviceAddress), server.Wait(nil))),
+		micro.Client(grpcClient.NewClient()),
 	)
 	srv.Init(
 		micro.Name(service),

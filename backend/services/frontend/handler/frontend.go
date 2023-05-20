@@ -1,26 +1,40 @@
 package handler
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
-	pbcarddeck "github.com/kioku-project/kioku/services/carddeck/proto"
-	pbcollab "github.com/kioku-project/kioku/services/collaboration/proto"
-	pbuser "github.com/kioku-project/kioku/services/user/proto"
+	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
+	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
+	pbUser "github.com/kioku-project/kioku/services/user/proto"
+	microError "go-micro.dev/v4/errors"
 	"go-micro.dev/v4/logger"
 )
 
 type Frontend struct {
-	userService          pbuser.UserService
-	carddeckService      pbcarddeck.CarddeckService
-	collaborationService pbcollab.CollaborationService
+	userService          pbUser.UserService
+	cardDeckService      pbCardDeck.CarddeckService
+	collaborationService pbCollaboration.CollaborationService
 }
 
-func New(userService pbuser.UserService, carddeckService pbcarddeck.CarddeckService, collaborationService pbcollab.CollaborationService) *Frontend {
-	return &Frontend{userService: userService, carddeckService: carddeckService, collaborationService: collaborationService}
+func New(userService pbUser.UserService, cardDeckService pbCardDeck.CarddeckService, collaborationService pbCollaboration.CollaborationService) *Frontend {
+	return &Frontend{userService: userService, cardDeckService: cardDeckService, collaborationService: collaborationService}
+}
+
+func handleMicroError(err error) error {
+	parsedError := microError.Parse(err.Error())
+	logger.Infof("Error from %s containing code (%d) and error detail (%s)", parsedError.Id, parsedError.Code, parsedError.Detail)
+	if parsedError.Code == http.StatusBadRequest {
+		return helper.ErrFiberBadRequest(parsedError.Detail)
+	} else if parsedError.Code == http.StatusUnauthorized {
+		return helper.ErrFiberUnauthorized(parsedError.Detail)
+	} else {
+		return helper.ErrFiberInternalServerError(parsedError.Detail)
+	}
 }
 
 func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
@@ -31,7 +45,7 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 	}
 	claims, ok := refreshToken.Claims.(jwt.MapClaims)
 	if !ok || !refreshToken.Valid {
-		return fiber.NewError(fiber.StatusUnauthorized, "Please re-authenticate")
+		return helper.ErrFiberUnauthorized("Please re-authenticate")
 	}
 
 	// Generate encoded token and send it as response.
@@ -63,20 +77,21 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 	})
 	return c.SendStatus(200)
 }
+
 func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	var reqUser model.User
 	if err := c.BodyParser(&reqUser); err != nil {
 		return err
 	}
 	if reqUser.Email == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No E-Mail given")
+		return helper.ErrFiberBadRequest("no e-mail given")
 	}
 	if reqUser.Password == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No Password given")
+		return helper.ErrFiberBadRequest("no password given")
 	}
-	rspLogin, err := e.userService.Login(c.Context(), &pbuser.LoginRequest{Email: reqUser.Email, Password: reqUser.Password})
+	rspLogin, err := e.userService.Login(c.Context(), &pbUser.LoginRequest{Email: reqUser.Email, Password: reqUser.Password})
 	if err != nil {
-		return err
+		return handleMicroError(err)
 	}
 
 	// Generate encoded tokens and send them as response.
@@ -116,17 +131,17 @@ func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
 		return err
 	}
 	if data["email"] == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No E-Mail given")
+		return helper.ErrFiberBadRequest("no e-mail given")
 	}
 	if data["name"] == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No Name given")
+		return helper.ErrFiberBadRequest("no name given")
 	}
 	if data["password"] == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No Password given")
+		return helper.ErrFiberBadRequest("no password given")
 	}
-	rspRegister, err := e.userService.Register(c.Context(), &pbuser.RegisterRequest{Email: data["email"], Name: data["name"], Password: data["password"]})
+	rspRegister, err := e.userService.Register(c.Context(), &pbUser.RegisterRequest{Email: data["email"], Name: data["name"], Password: data["password"]})
 	if err != nil {
-		return err
+		return handleMicroError(err)
 	}
 	return c.SendString(rspRegister.Name)
 }
@@ -137,12 +152,12 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 		return err
 	}
 	if data["deckName"] == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No deck name given")
+		return helper.ErrFiberBadRequest("no deck name given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspCardDeck, err := e.carddeckService.CreateDeck(c.Context(), &pbcarddeck.CreateDeckRequest{UserID: userID, GroupID: c.Params("groupID"), DeckName: data["deckName"]})
+	rspCardDeck, err := e.cardDeckService.CreateDeck(c.Context(), &pbCardDeck.CreateDeckRequest{UserID: userID, GroupID: c.Params("groupID"), DeckName: data["deckName"]})
 	if err != nil {
-		return err
+		return handleMicroError(err)
 	}
 	strSuccess := rspCardDeck.ID
 	return c.SendString(strSuccess)
@@ -154,15 +169,15 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 		return err
 	}
 	if data["frontside"] == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No frontside given")
+		return helper.ErrFiberBadRequest("no card frontside given")
 	}
 	if data["backside"] == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "No backside given")
+		return helper.ErrFiberBadRequest("no card backside given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspCardDeck, err := e.carddeckService.CreateCard(c.Context(), &pbcarddeck.CreateCardRequest{UserID: userID, DeckID: c.Params("deckID"), Frontside: data["frontside"], Backside: data["backside"]})
+	rspCardDeck, err := e.cardDeckService.CreateCard(c.Context(), &pbCardDeck.CreateCardRequest{UserID: userID, DeckID: c.Params("deckID"), Frontside: data["frontside"], Backside: data["backside"]})
 	if err != nil {
-		return err
+		return handleMicroError(err)
 	}
 	strSuccess := rspCardDeck.ID
 	return c.SendString(strSuccess)
@@ -170,27 +185,27 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspUserGroups, err := e.collaborationService.GetUserGroups(c.Context(), &pbcollab.UserGroupsRequest{UserID: userID})
+	rspUserGroups, err := e.collaborationService.GetUserGroups(c.Context(), &pbCollaboration.UserGroupsRequest{UserID: userID})
 	if err != nil {
-		return err
+		return handleMicroError(err)
 	}
 	return c.JSON(rspUserGroups)
 }
 
 func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspGroupDecks, err := e.carddeckService.GetGroupDecks(c.Context(), &pbcarddeck.GroupDecksRequest{UserID: userID, GroupID: c.Params("groupID")})
+	rspGroupDecks, err := e.cardDeckService.GetGroupDecks(c.Context(), &pbCardDeck.GroupDecksRequest{UserID: userID, GroupID: c.Params("groupID")})
 	if err != nil {
-		return err
+		return handleMicroError(err)
 	}
 	return c.JSON(rspGroupDecks)
 }
 
 func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeckCards, err := e.carddeckService.GetDeckCards(c.Context(), &pbcarddeck.DeckCardsRequest{UserID: userID, DeckID: c.Params("deckID")})
+	rspDeckCards, err := e.cardDeckService.GetDeckCards(c.Context(), &pbCardDeck.DeckCardsRequest{UserID: userID, DeckID: c.Params("deckID")})
 	if err != nil {
-		return err
+		return handleMicroError(err)
 	}
 	return c.JSON(rspDeckCards)
 }

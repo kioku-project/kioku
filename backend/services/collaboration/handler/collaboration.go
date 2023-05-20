@@ -2,6 +2,8 @@ package handler
 
 import (
 	"context"
+	"errors"
+	"github.com/kioku-project/kioku/pkg/helper"
 
 	"go-micro.dev/v4/logger"
 
@@ -24,6 +26,7 @@ func (e *Collaboration) CreateNewGroupWithAdmin(ctx context.Context, req *pb.Cre
 		return err
 	}
 	rsp.Success = true
+	logger.Infof("Successfully created new group (%s) with user (%s) as admin", newGroup.ID, req.UserID)
 	return nil
 }
 
@@ -31,11 +34,17 @@ func (e *Collaboration) GetGroupUserRole(ctx context.Context, req *pb.GroupReque
 	logger.Infof("Received Collaboration.GetUserGroupRole request: %v", req)
 	group, err := e.store.FindGroupByID(req.GroupID)
 	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.ErrMicroNoEntryWithID(helper.CollaborationServiceID)
+		}
 		return err
 	}
-	logger.Infof("Obtain role entry from database: UserID(%v) GroupID(%v)", req.UserID, group.ID)
+	logger.Infof("Found group with id %s", req.GroupID)
 	role, err := e.store.GetGroupUserRole(req.UserID, group.ID)
 	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.ErrMicroNoEntryWithID(helper.CollaborationServiceID)
+		}
 		return err
 	}
 	rsp.GroupID = group.ID
@@ -46,32 +55,41 @@ func (e *Collaboration) GetGroupUserRole(ctx context.Context, req *pb.GroupReque
 	} else if role == model.RoleAdmin {
 		rsp.GroupRole = pb.GroupRole_ADMIN
 	}
+	logger.Infof("Obtained role (%s) for group (%s) for user (%s)", rsp.GroupRole.String(), req.GroupID, req.UserID)
 	return nil
 }
 
 func (e *Collaboration) GetUserGroups(ctx context.Context, req *pb.UserGroupsRequest, rsp *pb.UserGroupsResponse) error {
-	logger.Infof("Received Carddeck.GetUserGroups request: %v", req)
-	group, err := e.store.FindGroupsByUserID(req.UserID)
+	logger.Infof("Received Collaboration.GetUserGroups request: %v", req)
+	groups, err := e.store.FindGroupsByUserID(req.UserID)
 	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.ErrMicroNoEntryWithID(helper.CollaborationServiceID)
+		}
 		return err
 	}
-	rsp.Groups = make([]*pb.Group, len(group))
-	for i, group := range group {
+	rsp.Groups = make([]*pb.Group, len(groups))
+	for i, group := range groups {
 		rsp.Groups[i] = &pb.Group{
 			GroupID:   group.ID,
 			GroupName: group.Name,
 		}
 	}
+	logger.Infof("Found %d groups for user with id %s", len(groups), req.UserID)
 	return nil
 }
 
 func (e *Collaboration) FindGroupByID(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupResponse) error {
-	logger.Infof("Received Carddeck.FindGroupByID request: %v", req)
+	logger.Infof("Received Collaboration.FindGroupByID request: %v", req)
 	group, err := e.store.FindGroupByID(req.GroupID)
 	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.ErrMicroNoEntryWithID(helper.CollaborationServiceID)
+		}
 		return err
 	}
 	rsp.GroupID = group.ID
 	rsp.GroupName = group.Name
+	logger.Infof("Found group with id %s", req.GroupID)
 	return nil
 }

@@ -1,0 +1,47 @@
+name: SonarScan
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+env:
+  GOLANG_PROTOBUF_REGISTRATION_CONFLICT: ignore
+
+jobs:
+  sonarcloud-backend:
+    name: SonarCloud Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run golang tests
+        run: |
+          cd backend
+          go test -json ./... > report.json
+          go test -coverprofile=coverage.out ./...
+          cd ..
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: backend
+          args: >
+            -X
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACKEND }}
+  sonarcloud-frontend:
+    name: SonarCloud Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: frontend
+          args: >
+            -X
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}

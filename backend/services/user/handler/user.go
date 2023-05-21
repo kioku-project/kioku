@@ -49,8 +49,8 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	if err != nil {
 		return err
 	}
-	rspGroup, err := e.collaborationService.CreateNewGroupWithAdmin(context.TODO(), &pbCollaboration.CreateGroupRequest{UserID: newUser.ID, GroupName: "Home Group"})
-	if err != nil || !rspGroup.Success {
+	_, err = e.collaborationService.CreateNewGroupWithAdmin(context.TODO(), &pbCollaboration.CreateGroupRequest{UserID: newUser.ID, GroupName: "Home Group", IsDefault: true})
+	if err != nil {
 		return err
 	}
 	rsp.Name = newUser.Name

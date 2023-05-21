@@ -163,6 +163,28 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 	return c.SendString(strSuccess)
 }
 
+func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
+	data := map[string]*string{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspCardDeck, err := e.cardDeckService.ModifyDeck(c.Context(), &pbCardDeck.ModifyDeckRequest{UserID: userID, DeckID: c.Params("deckID"), DeckName: data["deckName"]})
+	if err != nil || !rspCardDeck.Success {
+		return handleMicroError(err)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspCardDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCardDeck.DeckRequest{UserID: userID, DeckID: c.Params("deckID")})
+	if err != nil || !rspCardDeck.Success {
+		return handleMicroError(err)
+	}
+	return c.SendStatus(200)
+}
+
 func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 	data := map[string]string{}
 	if err := c.BodyParser(&data); err != nil {
@@ -183,6 +205,28 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 	return c.SendString(strSuccess)
 }
 
+func (e *Frontend) ModifyCardHandler(c *fiber.Ctx) error {
+	data := map[string]*string{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspCardDeck, err := e.cardDeckService.ModifyCard(c.Context(), &pbCardDeck.ModifyCardRequest{UserID: userID, CardID: c.Params("cardID"), Frontside: data["frontside"], Backside: data["backside"]})
+	if err != nil || !rspCardDeck.Success {
+		return handleMicroError(err)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspCardDeck, err := e.cardDeckService.DeleteCard(c.Context(), &pbCardDeck.DeleteCardRequest{UserID: userID, CardID: c.Params("cardID")})
+	if err != nil || !rspCardDeck.Success {
+		return handleMicroError(err)
+	}
+	return c.SendStatus(200)
+}
+
 func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspUserGroups, err := e.collaborationService.GetUserGroups(c.Context(), &pbCollaboration.UserGroupsRequest{UserID: userID})
@@ -190,6 +234,45 @@ func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
 		return handleMicroError(err)
 	}
 	return c.JSON(rspUserGroups)
+}
+
+func (e *Frontend) CreateGroupHandler(c *fiber.Ctx) error {
+	data := map[string]string{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if data["groupName"] == "" {
+		return helper.ErrFiberBadRequest("no group name given")
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspCreateGroup, err := e.collaborationService.CreateNewGroupWithAdmin(c.Context(), &pbCollaboration.CreateGroupRequest{UserID: userID, GroupName: data["groupName"], IsDefault: false})
+	if err != nil {
+		return handleMicroError(err)
+	}
+	strSuccess := rspCreateGroup.ID
+	return c.SendString(strSuccess)
+}
+
+func (e *Frontend) ModifyGroupHandler(c *fiber.Ctx) error {
+	data := map[string]*string{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspModifyGroup, err := e.collaborationService.ModifyGroup(c.Context(), &pbCollaboration.ModifyGroupRequest{UserID: userID, GroupID: c.Params("groupID"), GroupName: data["groupName"]})
+	if err != nil || !rspModifyGroup.Success {
+		return handleMicroError(err)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) DeleteGroupHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspDeleteGroup, err := e.collaborationService.DeleteGroup(c.Context(), &pbCollaboration.GroupRequest{UserID: userID, GroupID: c.Params("groupID")})
+	if err != nil || !rspDeleteGroup.Success {
+		return handleMicroError(err)
+	}
+	return c.SendStatus(200)
 }
 
 func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
@@ -203,7 +286,7 @@ func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeckCards, err := e.cardDeckService.GetDeckCards(c.Context(), &pbCardDeck.DeckCardsRequest{UserID: userID, DeckID: c.Params("deckID")})
+	rspDeckCards, err := e.cardDeckService.GetDeckCards(c.Context(), &pbCardDeck.DeckRequest{UserID: userID, DeckID: c.Params("deckID")})
 	if err != nil {
 		return handleMicroError(err)
 	}

@@ -6,9 +6,12 @@ import (
 )
 
 type Group struct {
-	ID    string `gorm:"primaryKey"`
-	Name  string `gorm:"not null"`
-	Users []User `gorm:"many2many:group_user_roles;"`
+	ID        string          `gorm:"primaryKey"`
+	Name      string          `gorm:"not null"`
+	IsDefault bool            `gorm:"not null"`
+	Users     []User          `gorm:"many2many:group_user_roles;"`
+	Decks     []Deck          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Roles     []GroupUserRole `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func (g *Group) BeforeCreate(db *gorm.DB) (err error) {

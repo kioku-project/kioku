@@ -4,10 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/kioku-project/kioku/pkg/helper"
-	"os"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/kioku-project/kioku/pkg/model"
@@ -124,6 +123,45 @@ func (s *CardDeckStoreImpl) FindDecksByGroupID(groupID string) (decks []model.De
 	return
 }
 
+func (s *CardDeckStoreImpl) FindCardByID(cardID string) (card *model.Card, err error) {
+	err = s.db.Where(model.Card{ID: cardID}).Preload("Deck").Find(&card).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = helper.ErrStoreNoEntryWithID
+		}
+	}
+	return
+}
+
+func (s *CardDeckStoreImpl) DeleteCard(card *model.Card) (err error) {
+	err = s.db.Delete(card).Error
+	return
+}
+
+func (s *CardDeckStoreImpl) DeleteDeck(deck *model.Deck) (err error) {
+	err = s.db.Delete(deck).Error
+	return
+}
+
+func (s *CardDeckStoreImpl) ModifyCard(card *model.Card) (err error) {
+	err = s.db.Save(&model.Card{
+		ID:        card.ID,
+		DeckID:    card.DeckID,
+		Frontside: card.Frontside,
+		Backside:  card.Backside,
+	}).Error
+	return
+}
+
+func (s *CardDeckStoreImpl) ModifyDeck(deck *model.Deck) (err error) {
+	err = s.db.Save(&model.Deck{
+		ID:      deck.ID,
+		Name:    deck.Name,
+		GroupID: deck.GroupID,
+	}).Error
+	return
+}
+
 func (s *CollaborationStoreImpl) CreateNewGroupWithAdmin(adminUserID string, newGroup *model.Group) (err error) {
 	err = s.db.Create(&newGroup).Error
 	if err != nil {
@@ -164,5 +202,19 @@ func (s *CollaborationStoreImpl) FindGroupsByUserID(userID string) (groups []mod
 			err = helper.ErrStoreNoEntryWithID
 		}
 	}
+	return
+}
+
+func (s *CollaborationStoreImpl) DeleteGroup(group *model.Group) (err error) {
+	err = s.db.Delete(group).Error
+	return
+}
+
+func (s *CollaborationStoreImpl) ModifyGroup(group *model.Group) (err error) {
+	err = s.db.Save(&model.Group{
+		ID:        group.ID,
+		Name:      group.Name,
+		IsDefault: group.IsDefault,
+	}).Error
 	return
 }

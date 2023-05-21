@@ -23,6 +23,20 @@ func New(s store.CardDeckStore, cS pbCollaboration.CollaborationService) *CardDe
 	return &CardDeck{store: s, collaborationService: cS}
 }
 
+func (e *CardDeck) securityRoleHandler(ctx context.Context, userID string, groupID string, requiredRole pbCollaboration.GroupRole) error {
+	logger.Infof("Requesting group role for user (%s)", userID)
+	roleRsp, err := e.collaborationService.GetGroupUserRole(ctx, &pbCollaboration.GroupRequest{UserID: userID, GroupID: groupID})
+	if err != nil {
+		return err
+	}
+	logger.Infof("Obtained group role (%s) for user (%s)", roleRsp.GroupRole.String(), userID)
+	if !helper.IsAuthorized(roleRsp.GroupRole, requiredRole) {
+		return helper.ErrMicroNotAuthorized(helper.CardDeckServiceID)
+	}
+	logger.Infof("Authenticated group role (%s) for user (%s)", roleRsp.GroupRole.String(), userID)
+	return nil
+}
+
 func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rsp *pb.IDResponse) error {
 	logger.Infof("Received CardDeck.CreateCard request: %v", req)
 	deck, err := e.store.FindDeckByID(req.DeckID)
@@ -33,13 +47,8 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 		return err
 	}
 	logger.Infof("Found deck with id %s", req.DeckID)
-	roleRsp, err := e.collaborationService.GetGroupUserRole(context.TODO(), &pbCollaboration.GroupRequest{UserID: req.UserID, GroupID: deck.GroupID})
-	if err != nil {
+	if err := e.securityRoleHandler(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
 		return err
-	}
-	logger.Infof("Obtained group role (%s) for user (%s)", roleRsp.GroupRole.String(), req.UserID)
-	if roleRsp.GroupRole != pbCollaboration.GroupRole_ADMIN && roleRsp.GroupRole != pbCollaboration.GroupRole_WRITE {
-		return helper.ErrMicroNotAuthorized(helper.CardDeckServiceID)
 	}
 	newCard := model.Card{
 		DeckID:    deck.ID,
@@ -51,26 +60,71 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 		return err
 	}
 	rsp.ID = newCard.ID
-	logger.Infof("Successfully created new card in deck (%s): %s", req.DeckID, newCard.ID)
+	logger.Infof("Successfully created new card (%s) in deck (%s)", newCard.ID, req.DeckID)
+	return nil
+}
+
+func (e *CardDeck) ModifyCard(ctx context.Context, req *pb.ModifyCardRequest, rsp *pb.SuccessResponse) error {
+	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
+	card, err := e.store.FindCardByID(req.CardID)
+	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
+		}
+		return err
+	}
+	logger.Infof("Found card with id %s", req.CardID)
+	if err := e.securityRoleHandler(ctx, req.UserID, card.Deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
+		return err
+	}
+	if req.Frontside != nil {
+		card.Frontside = *req.Frontside
+	}
+	if req.Backside != nil {
+		card.Backside = *req.Backside
+	}
+	err = e.store.ModifyCard(card)
+	if err != nil {
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully modified card (%s) in deck (%s)", req.CardID, card.DeckID)
+	return nil
+}
+
+func (e *CardDeck) DeleteCard(ctx context.Context, req *pb.DeleteCardRequest, rsp *pb.SuccessResponse) error {
+	logger.Infof("Received CardDeck.DeleteCard request: %v", req)
+	card, err := e.store.FindCardByID(req.CardID)
+	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
+		}
+		return err
+	}
+	logger.Infof("Found card with id %s", req.CardID)
+	if err := e.securityRoleHandler(ctx, req.UserID, card.Deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
+		return err
+	}
+	err = e.store.DeleteCard(card)
+	if err != nil {
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully deleted card (%s) in deck (%s)", req.CardID, card.DeckID)
 	return nil
 }
 
 func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rsp *pb.IDResponse) error {
 	logger.Infof("Received CardDeck.CreateDeck request: %v", req)
-	roleRsp, err := e.collaborationService.GetGroupUserRole(context.TODO(), &pbCollaboration.GroupRequest{UserID: req.UserID, GroupID: req.GroupID})
-	if err != nil {
+	if err := e.securityRoleHandler(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
 		return err
-	}
-	logger.Infof("Obtained role (%s) for group (%s) for user (%s)", roleRsp.GroupRole.String(), req.GroupID, req.UserID)
-	if roleRsp.GroupRole != pbCollaboration.GroupRole_ADMIN && roleRsp.GroupRole != pbCollaboration.GroupRole_WRITE {
-		return helper.ErrMicroNotAuthorized(helper.CardDeckServiceID)
 	}
 	newDeck := model.Deck{
 		Name:      req.DeckName,
 		CreatedAt: time.Now(),
-		GroupID:   roleRsp.GroupID,
+		GroupID:   req.GroupID,
 	}
-	err = e.store.CreateDeck(&newDeck)
+	err := e.store.CreateDeck(&newDeck)
 	if err != nil {
 		return err
 	}
@@ -79,7 +133,54 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 	return nil
 }
 
-func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.DeckCardsRequest, rsp *pb.DeckCardsResponse) error {
+func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rsp *pb.SuccessResponse) error {
+	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
+	deck, err := e.store.FindDeckByID(req.DeckID)
+	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
+		}
+		return err
+	}
+	logger.Infof("Found deck with id %s", req.DeckID)
+	if err := e.securityRoleHandler(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
+		return err
+	}
+	if req.DeckName != nil {
+		deck.Name = *req.DeckName
+	}
+	err = e.store.ModifyDeck(deck)
+	if err != nil {
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully modified deck (%s) in group (%s)", req.DeckID, deck.GroupID)
+	return nil
+}
+
+func (e *CardDeck) DeleteDeck(ctx context.Context, req *pb.DeckRequest, rsp *pb.SuccessResponse) error {
+	logger.Infof("Received CardDeck.DeleteDeck request: %v", req)
+	deck, err := e.store.FindDeckByID(req.DeckID)
+	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
+		}
+		return err
+	}
+	logger.Infof("Found deck with id %s", req.DeckID)
+	if err := e.securityRoleHandler(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
+		return err
+	}
+	err = e.store.DeleteDeck(deck)
+	if err != nil {
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully deleted deck (%s) in group (%s)", req.DeckID, deck.GroupID)
+	return nil
+}
+
+func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.DeckRequest, rsp *pb.DeckCardsResponse) error {
 	logger.Infof("Received CardDeck.GetDeckCards request: %v", req)
 	deck, err := e.store.FindDeckByID(req.DeckID)
 	logger.Infof("Found deck with id %s", req.DeckID)
@@ -87,6 +188,9 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.DeckCardsRequest, r
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
 		}
+		return err
+	}
+	if err := e.securityRoleHandler(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_READ); err != nil {
 		return err
 	}
 	rsp.Cards = make([]*pb.Card, len(deck.Cards))
@@ -103,12 +207,10 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.DeckCardsRequest, r
 
 func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest, rsp *pb.GroupDecksResponse) error {
 	logger.Infof("Received CardDeck.GetGroupDecks request: %v", req)
-	groupRsp, err := e.collaborationService.FindGroupByID(context.TODO(), &pbCollaboration.GroupRequest{UserID: req.UserID, GroupID: req.GroupID})
-	if err != nil {
+	if err := e.securityRoleHandler(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_READ); err != nil {
 		return err
 	}
-	logger.Infof("Found group with id %s", req.GroupID)
-	decks, err := e.store.FindDecksByGroupID(groupRsp.GroupID)
+	decks, err := e.store.FindDecksByGroupID(req.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)

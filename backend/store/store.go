@@ -12,6 +12,11 @@ type CardDeckStore interface {
 	FindDeckByID(deckID string) (*model.Deck, error)
 	CreateCard(newCard *model.Card) error
 	FindDecksByGroupID(groupID string) ([]model.Deck, error)
+	FindCardByID(cardID string) (*model.Card, error)
+	DeleteCard(card *model.Card) error
+	DeleteDeck(deck *model.Deck) error
+	ModifyCard(card *model.Card) error
+	ModifyDeck(deck *model.Deck) error
 }
 
 type CollaborationStore interface {
@@ -19,4 +24,6 @@ type CollaborationStore interface {
 	FindGroupByID(groupID string) (*model.Group, error)
 	GetGroupUserRole(userID string, groupID string) (model.RoleType, error)
 	FindGroupsByUserID(userID string) ([]model.Group, error)
+	DeleteGroup(group *model.Group) error
+	ModifyGroup(group *model.Group) error
 }

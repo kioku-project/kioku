@@ -6,8 +6,12 @@ option go_package = "./proto;carddeck";
 
 service Carddeck {
 	rpc CreateCard(CreateCardRequest) returns (IDResponse) {}
+	rpc ModifyCard(ModifyCardRequest) returns (SuccessResponse) {}
+	rpc DeleteCard(DeleteCardRequest) returns (SuccessResponse) {}
 	rpc CreateDeck(CreateDeckRequest) returns (IDResponse) {}
-	rpc GetDeckCards(DeckCardsRequest) returns (DeckCardsResponse) {}
+	rpc ModifyDeck(ModifyDeckRequest) returns (SuccessResponse) {}
+	rpc DeleteDeck(DeckRequest) returns (SuccessResponse) {}
+	rpc GetDeckCards(DeckRequest) returns (DeckCardsResponse) {}
 	rpc GetGroupDecks(GroupDecksRequest) returns (GroupDecksResponse) {}
 }
 
@@ -18,17 +22,39 @@ message CreateCardRequest {
 	string backside = 4;
 }
 
+message ModifyCardRequest {
+	string userID = 1;
+	string cardID = 2;
+	optional string frontside = 3;
+	optional string backside = 4;
+}
+
+message DeleteCardRequest {
+	string userID = 1;
+	string cardID = 2;
+}
+
 message CreateDeckRequest {
 	string userID = 1;
 	string groupID = 2;
 	string deckName = 3;
 }
 
+message ModifyDeckRequest {
+	string userID = 1;
+	string deckID = 2;
+	optional string deckName = 3;
+}
+
 message IDResponse {
 	string ID = 1;
 }
 
-message DeckCardsRequest {
+message SuccessResponse {
+	bool success = 1;
+}
+
+message DeckRequest {
 	string userID = 1;
 	string deckID = 2;
 }

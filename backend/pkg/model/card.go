@@ -8,7 +8,7 @@ import (
 type Card struct {
 	ID        string `gorm:"primaryKey"`
 	DeckID    string `gorm:"not null"`
-	Deck      Deck   `gorm:"foreignKey:DeckID"`
+	Deck      Deck
 	Frontside string `gorm:"not null"`
 	Backside  string `gorm:"not null"`
 }

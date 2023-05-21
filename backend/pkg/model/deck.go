@@ -12,8 +12,8 @@ type Deck struct {
 	Name      string    `gorm:"not null"`
 	CreatedAt time.Time `gorm:"not null"`
 	GroupID   string    `gorm:"not null"`
-	Group     Group     `gorm:"foreignKey:GroupID"`
-	Cards     []Card    `gorm:"foreignKey:DeckID"`
+	Group     Group
+	Cards     []Card `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func (d *Deck) BeforeCreate(db *gorm.DB) (err error) {

@@ -5,10 +5,12 @@ package collaboration;
 option go_package = "./proto;collaboration";
 
 service Collaboration {
-	rpc CreateNewGroupWithAdmin(CreateGroupRequest) returns (SuccessResponse) {}
+	rpc CreateNewGroupWithAdmin(CreateGroupRequest) returns (IDResponse) {}
+	rpc ModifyGroup(ModifyGroupRequest) returns (SuccessResponse) {}
 	rpc GetGroupUserRole(GroupRequest) returns (GroupRoleResponse) {}
 	rpc GetUserGroups(UserGroupsRequest) returns (UserGroupsResponse) {}
 	rpc FindGroupByID(GroupRequest) returns (GroupResponse) {}
+	rpc DeleteGroup(GroupRequest) returns (SuccessResponse) {}
 }
 
 enum GroupRole {
@@ -20,6 +22,13 @@ enum GroupRole {
 message CreateGroupRequest {
 	string userID = 1;
 	string groupName = 2;
+	bool isDefault = 3;
+}
+
+message ModifyGroupRequest {
+	string userID = 1;
+	string groupID = 2;
+	optional string groupName = 3;
 }
 
 message GroupRequest {
@@ -29,6 +38,10 @@ message GroupRequest {
 
 message UserGroupsRequest {
 	string userID = 1;
+}
+
+message IDResponse {
+	string ID = 1;
 }
 
 message SuccessResponse {
@@ -52,4 +65,5 @@ message UserGroupsResponse {
 message Group {
 	string groupName = 1;
 	string groupID = 2;
+	bool isDefault = 3;
 }

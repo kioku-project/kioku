@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"errors"
 	"go-micro.dev/v4/logger"
 	"time"
 
@@ -41,11 +40,8 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest,
 	if err := e.securityRoleHandler(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_READ); err != nil {
 		return err
 	}
-	decks, err := e.store.FindDecksByGroupID(req.GroupID)
+	decks, err := helper.FindEntityWrapper(e.store.FindDecksByGroupID, req.GroupID, helper.CardDeckServiceID)
 	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
-		}
 		return err
 	}
 	rsp.Decks = make([]*pb.Deck, len(decks))
@@ -80,14 +76,10 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 
 func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
-	deck, err := e.store.FindDeckByID(req.DeckID)
+	deck, err := helper.FindEntityWrapper(e.store.FindDeckByID, req.DeckID, helper.CardDeckServiceID)
 	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
-		}
 		return err
 	}
-	logger.Infof("Found deck with id %s", req.DeckID)
 	if err := e.securityRoleHandler(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
 		return err
 	}
@@ -105,14 +97,10 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rs
 
 func (e *CardDeck) DeleteDeck(ctx context.Context, req *pb.DeckRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.DeleteDeck request: %v", req)
-	deck, err := e.store.FindDeckByID(req.DeckID)
+	deck, err := helper.FindEntityWrapper(e.store.FindDeckByID, req.DeckID, helper.CardDeckServiceID)
 	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
-		}
 		return err
 	}
-	logger.Infof("Found deck with id %s", req.DeckID)
 	if err := e.securityRoleHandler(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
 		return err
 	}
@@ -127,12 +115,8 @@ func (e *CardDeck) DeleteDeck(ctx context.Context, req *pb.DeckRequest, rsp *pb.
 
 func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.DeckRequest, rsp *pb.DeckCardsResponse) error {
 	logger.Infof("Received CardDeck.GetDeckCards request: %v", req)
-	deck, err := e.store.FindDeckByID(req.DeckID)
-	logger.Infof("Found deck with id %s", req.DeckID)
+	deck, err := helper.FindEntityWrapper(e.store.FindDeckByID, req.DeckID, helper.CardDeckServiceID)
 	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
-		}
 		return err
 	}
 	if err := e.securityRoleHandler(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_READ); err != nil {
@@ -152,14 +136,10 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.DeckRequest, rsp *p
 
 func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rsp *pb.IDResponse) error {
 	logger.Infof("Received CardDeck.CreateCard request: %v", req)
-	deck, err := e.store.FindDeckByID(req.DeckID)
+	deck, err := helper.FindEntityWrapper(e.store.FindDeckByID, req.DeckID, helper.CardDeckServiceID)
 	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
-		}
 		return err
 	}
-	logger.Infof("Found deck with id %s", req.DeckID)
 	if err := e.securityRoleHandler(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
 		return err
 	}
@@ -179,14 +159,10 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 
 func (e *CardDeck) ModifyCard(ctx context.Context, req *pb.ModifyCardRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
-	card, err := e.store.FindCardByID(req.CardID)
+	card, err := helper.FindEntityWrapper(e.store.FindCardByID, req.CardID, helper.CardDeckServiceID)
 	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
-		}
 		return err
 	}
-	logger.Infof("Found card with id %s", req.CardID)
 	if err := e.securityRoleHandler(ctx, req.UserID, card.Deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
 		return err
 	}
@@ -207,14 +183,10 @@ func (e *CardDeck) ModifyCard(ctx context.Context, req *pb.ModifyCardRequest, rs
 
 func (e *CardDeck) DeleteCard(ctx context.Context, req *pb.DeleteCardRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.DeleteCard request: %v", req)
-	card, err := e.store.FindCardByID(req.CardID)
+	card, err := helper.FindEntityWrapper(e.store.FindCardByID, req.CardID, helper.CardDeckServiceID)
 	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.ErrMicroNoEntryWithID(helper.CardDeckServiceID)
-		}
 		return err
 	}
-	logger.Infof("Found card with id %s", req.CardID)
 	if err := e.securityRoleHandler(ctx, req.UserID, card.Deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
 		return err
 	}

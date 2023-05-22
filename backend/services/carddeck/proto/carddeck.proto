@@ -4,34 +4,29 @@ package carddeck;
 
 option go_package = "./proto;carddeck";
 
-service Carddeck {
-	rpc CreateCard(CreateCardRequest) returns (IDResponse) {}
-	rpc ModifyCard(ModifyCardRequest) returns (SuccessResponse) {}
-	rpc DeleteCard(DeleteCardRequest) returns (SuccessResponse) {}
+service CardDeck {
+	rpc GetGroupDecks(GroupDecksRequest) returns (GroupDecksResponse) {}
 	rpc CreateDeck(CreateDeckRequest) returns (IDResponse) {}
 	rpc ModifyDeck(ModifyDeckRequest) returns (SuccessResponse) {}
 	rpc DeleteDeck(DeckRequest) returns (SuccessResponse) {}
 	rpc GetDeckCards(DeckRequest) returns (DeckCardsResponse) {}
-	rpc GetGroupDecks(GroupDecksRequest) returns (GroupDecksResponse) {}
+	rpc CreateCard(CreateCardRequest) returns (IDResponse) {}
+	rpc ModifyCard(ModifyCardRequest) returns (SuccessResponse) {}
+	rpc DeleteCard(DeleteCardRequest) returns (SuccessResponse) {}
 }
 
-message CreateCardRequest {
+message GroupDecksRequest {
 	string userID = 1;
-	string deckID = 2;
-	string frontside = 3;
-	string backside = 4;
+	string groupID = 2;
 }
 
-message ModifyCardRequest {
-	string userID = 1;
-	string cardID = 2;
-	optional string frontside = 3;
-	optional string backside = 4;
+message GroupDecksResponse {
+	repeated Deck decks = 1;
 }
 
-message DeleteCardRequest {
-	string userID = 1;
-	string cardID = 2;
+message Deck {
+	string deckID = 1;
+	string deckName = 2;
 }
 
 message CreateDeckRequest {
@@ -40,14 +35,14 @@ message CreateDeckRequest {
 	string deckName = 3;
 }
 
+message IDResponse {
+	string ID = 1;
+}
+
 message ModifyDeckRequest {
 	string userID = 1;
 	string deckID = 2;
 	optional string deckName = 3;
-}
-
-message IDResponse {
-	string ID = 1;
 }
 
 message SuccessResponse {
@@ -69,16 +64,21 @@ message Card {
 	string backside = 3;
 }
 
-message GroupDecksRequest {
+message CreateCardRequest {
 	string userID = 1;
-	string groupID = 2;
+	string deckID = 2;
+	string frontside = 3;
+	string backside = 4;
 }
 
-message GroupDecksResponse {
-	repeated Deck decks = 1;
+message ModifyCardRequest {
+	string userID = 1;
+	string cardID = 2;
+	optional string frontside = 3;
+	optional string backside = 4;
 }
 
-message Deck {
-	string deckID = 1;
-	string deckName = 2;
+message DeleteCardRequest {
+	string userID = 1;
+	string cardID = 2;
 }

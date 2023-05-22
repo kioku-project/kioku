@@ -50,7 +50,7 @@ func main() {
 	svc := handler.New(dbStore, pbCollaboration.NewCollaborationService("collaboration", srv.Client()))
 
 	// Register handler
-	if err := pb.RegisterCarddeckHandler(srv.Server(), svc); err != nil {
+	if err := pb.RegisterCardDeckHandler(srv.Server(), svc); err != nil {
 		logger.Fatal(err)
 	}
 	if err := pb.RegisterHealthHandler(srv.Server(), new(handler.Health)); err != nil {

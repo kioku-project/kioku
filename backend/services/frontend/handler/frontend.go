@@ -1,11 +1,11 @@
 package handler
 
 import (
+	"github.com/golang-jwt/jwt/v4"
 	"net/http"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
@@ -17,11 +17,11 @@ import (
 
 type Frontend struct {
 	userService          pbUser.UserService
-	cardDeckService      pbCardDeck.CarddeckService
+	cardDeckService      pbCardDeck.CardDeckService
 	collaborationService pbCollaboration.CollaborationService
 }
 
-func New(userService pbUser.UserService, cardDeckService pbCardDeck.CarddeckService, collaborationService pbCollaboration.CollaborationService) *Frontend {
+func New(userService pbUser.UserService, cardDeckService pbCardDeck.CardDeckService, collaborationService pbCollaboration.CollaborationService) *Frontend {
 	return &Frontend{userService: userService, cardDeckService: cardDeckService, collaborationService: collaborationService}
 }
 
@@ -37,45 +37,25 @@ func handleMicroError(err error) error {
 	}
 }
 
-func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
-	tokenString := c.Cookies("refresh_token", "NOT_GIVEN")
-	refreshToken, err := helper.ParseJWTToken(tokenString)
+func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
+	data := map[string]string{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if data["email"] == "" {
+		return helper.ErrFiberBadRequest("no e-mail given")
+	}
+	if data["name"] == "" {
+		return helper.ErrFiberBadRequest("no name given")
+	}
+	if data["password"] == "" {
+		return helper.ErrFiberBadRequest("no password given")
+	}
+	rspRegister, err := e.userService.Register(c.Context(), &pbUser.RegisterRequest{Email: data["email"], Name: data["name"], Password: data["password"]})
 	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+		return handleMicroError(err)
 	}
-	claims, ok := refreshToken.Claims.(jwt.MapClaims)
-	if !ok || !refreshToken.Valid {
-		return helper.ErrFiberUnauthorized("Please re-authenticate")
-	}
-
-	// Generate encoded token and send it as response.
-	aTExp := time.Now().Add(time.Minute * 30)
-	aTString, err := helper.CreateJWTTokenString(aTExp, claims["sub"], claims["email"], claims["name"])
-	if err != nil {
-		logger.Infof("%v", err)
-		return c.SendStatus(fiber.StatusInternalServerError)
-	}
-	rTExp := time.Now().Add(time.Hour * 24 * 7)
-	rTString, err := helper.CreateJWTTokenString(rTExp, claims["sub"], claims["email"], claims["name"])
-	if err != nil {
-		logger.Infof("%v", err)
-		return c.SendStatus(fiber.StatusInternalServerError)
-	}
-
-	c.Cookie(&fiber.Cookie{
-		Name:    "access_token",
-		Value:   aTString,
-		Path:    "/",
-		Expires: aTExp,
-	})
-	c.Cookie(&fiber.Cookie{
-		Name:     "refresh_token",
-		Value:    rTString,
-		Path:     "/",
-		Expires:  rTExp,
-		HTTPOnly: true,
-	})
-	return c.SendStatus(200)
+	return c.SendString(rspRegister.Name)
 }
 
 func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
@@ -125,105 +105,44 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
-func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
-	data := map[string]string{}
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-	if data["email"] == "" {
-		return helper.ErrFiberBadRequest("no e-mail given")
-	}
-	if data["name"] == "" {
-		return helper.ErrFiberBadRequest("no name given")
-	}
-	if data["password"] == "" {
-		return helper.ErrFiberBadRequest("no password given")
-	}
-	rspRegister, err := e.userService.Register(c.Context(), &pbUser.RegisterRequest{Email: data["email"], Name: data["name"], Password: data["password"]})
+func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
+	tokenString := c.Cookies("refresh_token", "NOT_GIVEN")
+	refreshToken, err := helper.ParseJWTToken(tokenString)
 	if err != nil {
-		return handleMicroError(err)
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
-	return c.SendString(rspRegister.Name)
-}
+	claims, ok := refreshToken.Claims.(jwt.MapClaims)
+	if !ok || !refreshToken.Valid {
+		return helper.ErrFiberUnauthorized("Please re-authenticate")
+	}
 
-func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
-	data := map[string]string{}
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-	if data["deckName"] == "" {
-		return helper.ErrFiberBadRequest("no deck name given")
-	}
-	userID := helper.GetUserIDFromContext(c)
-	rspCardDeck, err := e.cardDeckService.CreateDeck(c.Context(), &pbCardDeck.CreateDeckRequest{UserID: userID, GroupID: c.Params("groupID"), DeckName: data["deckName"]})
+	// Generate encoded token and send it as response.
+	aTExp := time.Now().Add(time.Minute * 30)
+	aTString, err := helper.CreateJWTTokenString(aTExp, claims["sub"], claims["email"], claims["name"])
 	if err != nil {
-		return handleMicroError(err)
+		logger.Infof("%v", err)
+		return c.SendStatus(fiber.StatusInternalServerError)
 	}
-	strSuccess := rspCardDeck.ID
-	return c.SendString(strSuccess)
-}
-
-func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
-	data := map[string]*string{}
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-	userID := helper.GetUserIDFromContext(c)
-	rspCardDeck, err := e.cardDeckService.ModifyDeck(c.Context(), &pbCardDeck.ModifyDeckRequest{UserID: userID, DeckID: c.Params("deckID"), DeckName: data["deckName"]})
-	if err != nil || !rspCardDeck.Success {
-		return handleMicroError(err)
-	}
-	return c.SendStatus(200)
-}
-
-func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
-	userID := helper.GetUserIDFromContext(c)
-	rspCardDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCardDeck.DeckRequest{UserID: userID, DeckID: c.Params("deckID")})
-	if err != nil || !rspCardDeck.Success {
-		return handleMicroError(err)
-	}
-	return c.SendStatus(200)
-}
-
-func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
-	data := map[string]string{}
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-	if data["frontside"] == "" {
-		return helper.ErrFiberBadRequest("no card frontside given")
-	}
-	if data["backside"] == "" {
-		return helper.ErrFiberBadRequest("no card backside given")
-	}
-	userID := helper.GetUserIDFromContext(c)
-	rspCardDeck, err := e.cardDeckService.CreateCard(c.Context(), &pbCardDeck.CreateCardRequest{UserID: userID, DeckID: c.Params("deckID"), Frontside: data["frontside"], Backside: data["backside"]})
+	rTExp := time.Now().Add(time.Hour * 24 * 7)
+	rTString, err := helper.CreateJWTTokenString(rTExp, claims["sub"], claims["email"], claims["name"])
 	if err != nil {
-		return handleMicroError(err)
+		logger.Infof("%v", err)
+		return c.SendStatus(fiber.StatusInternalServerError)
 	}
-	strSuccess := rspCardDeck.ID
-	return c.SendString(strSuccess)
-}
 
-func (e *Frontend) ModifyCardHandler(c *fiber.Ctx) error {
-	data := map[string]*string{}
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-	userID := helper.GetUserIDFromContext(c)
-	rspCardDeck, err := e.cardDeckService.ModifyCard(c.Context(), &pbCardDeck.ModifyCardRequest{UserID: userID, CardID: c.Params("cardID"), Frontside: data["frontside"], Backside: data["backside"]})
-	if err != nil || !rspCardDeck.Success {
-		return handleMicroError(err)
-	}
-	return c.SendStatus(200)
-}
-
-func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
-	userID := helper.GetUserIDFromContext(c)
-	rspCardDeck, err := e.cardDeckService.DeleteCard(c.Context(), &pbCardDeck.DeleteCardRequest{UserID: userID, CardID: c.Params("cardID")})
-	if err != nil || !rspCardDeck.Success {
-		return handleMicroError(err)
-	}
+	c.Cookie(&fiber.Cookie{
+		Name:    "access_token",
+		Value:   aTString,
+		Path:    "/",
+		Expires: aTExp,
+	})
+	c.Cookie(&fiber.Cookie{
+		Name:     "refresh_token",
+		Value:    rTString,
+		Path:     "/",
+		Expires:  rTExp,
+		HTTPOnly: true,
+	})
 	return c.SendStatus(200)
 }
 
@@ -284,6 +203,45 @@ func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
 	return c.JSON(rspGroupDecks)
 }
 
+func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
+	data := map[string]string{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if data["deckName"] == "" {
+		return helper.ErrFiberBadRequest("no deck name given")
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspCreateDeck, err := e.cardDeckService.CreateDeck(c.Context(), &pbCardDeck.CreateDeckRequest{UserID: userID, GroupID: c.Params("groupID"), DeckName: data["deckName"]})
+	if err != nil {
+		return handleMicroError(err)
+	}
+	strSuccess := rspCreateDeck.ID
+	return c.SendString(strSuccess)
+}
+
+func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
+	data := map[string]*string{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspModifyDeck, err := e.cardDeckService.ModifyDeck(c.Context(), &pbCardDeck.ModifyDeckRequest{UserID: userID, DeckID: c.Params("deckID"), DeckName: data["deckName"]})
+	if err != nil || !rspModifyDeck.Success {
+		return handleMicroError(err)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspDeleteDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCardDeck.DeckRequest{UserID: userID, DeckID: c.Params("deckID")})
+	if err != nil || !rspDeleteDeck.Success {
+		return handleMicroError(err)
+	}
+	return c.SendStatus(200)
+}
+
 func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspDeckCards, err := e.cardDeckService.GetDeckCards(c.Context(), &pbCardDeck.DeckRequest{UserID: userID, DeckID: c.Params("deckID")})
@@ -291,4 +249,46 @@ func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
 		return handleMicroError(err)
 	}
 	return c.JSON(rspDeckCards)
+}
+
+func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
+	data := map[string]string{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if data["frontside"] == "" {
+		return helper.ErrFiberBadRequest("no card frontside given")
+	}
+	if data["backside"] == "" {
+		return helper.ErrFiberBadRequest("no card backside given")
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspCreateCard, err := e.cardDeckService.CreateCard(c.Context(), &pbCardDeck.CreateCardRequest{UserID: userID, DeckID: c.Params("deckID"), Frontside: data["frontside"], Backside: data["backside"]})
+	if err != nil {
+		return handleMicroError(err)
+	}
+	strSuccess := rspCreateCard.ID
+	return c.SendString(strSuccess)
+}
+
+func (e *Frontend) ModifyCardHandler(c *fiber.Ctx) error {
+	data := map[string]*string{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspModifyCard, err := e.cardDeckService.ModifyCard(c.Context(), &pbCardDeck.ModifyCardRequest{UserID: userID, CardID: c.Params("cardID"), Frontside: data["frontside"], Backside: data["backside"]})
+	if err != nil || !rspModifyCard.Success {
+		return handleMicroError(err)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspDeleteCard, err := e.cardDeckService.DeleteCard(c.Context(), &pbCardDeck.DeleteCardRequest{UserID: userID, CardID: c.Params("cardID")})
+	if err != nil || !rspDeleteCard.Success {
+		return handleMicroError(err)
+	}
+	return c.SendStatus(200)
 }

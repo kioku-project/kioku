@@ -49,7 +49,7 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	if err != nil {
 		return err
 	}
-	_, err = e.collaborationService.CreateNewGroupWithAdmin(context.TODO(), &pbCollaboration.CreateGroupRequest{UserID: newUser.ID, GroupName: "Home Group", IsDefault: true})
+	_, err = e.collaborationService.CreateNewGroupWithAdmin(ctx, &pbCollaboration.CreateGroupRequest{UserID: newUser.ID, GroupName: "Home Group", IsDefault: true})
 	if err != nil {
 		return err
 	}
@@ -59,7 +59,7 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	return nil
 }
 
-func (e *User) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.NameIDResponse) error {
+func (e *User) Login(_ context.Context, req *pb.LoginRequest, rsp *pb.NameIDResponse) error {
 	logger.Infof("Received User.Login request: %v", req)
 	user, err := e.store.FindUserByEmail(req.Email)
 	if err != nil {
@@ -78,7 +78,7 @@ func (e *User) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.NameIDRe
 	return nil
 }
 
-func (e *User) GetUserIDFromEmail(ctx context.Context, req *pb.UserIDRequest, rsp *pb.UserIDResponse) error {
+func (e *User) GetUserIDFromEmail(_ context.Context, req *pb.UserIDRequest, rsp *pb.UserIDResponse) error {
 	logger.Infof("Received User.GetUserIDFromEmail request: %v", req)
 	user, err := e.store.FindUserByEmail(req.Email)
 	if err != nil {

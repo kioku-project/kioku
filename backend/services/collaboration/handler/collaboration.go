@@ -45,7 +45,28 @@ func (e *Collaboration) securityRoleHandler(_ context.Context, userID string, gr
 	return nil
 }
 
-func (e *Collaboration) CreateNewGroupWithAdmin(ctx context.Context, req *pb.CreateGroupRequest, rsp *pb.IDResponse) error {
+func (e *Collaboration) GetUserGroups(_ context.Context, req *pb.UserGroupsRequest, rsp *pb.UserGroupsResponse) error {
+	logger.Infof("Received Collaboration.GetUserGroups request: %v", req)
+	groups, err := e.store.FindGroupsByUserID(req.UserID)
+	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.ErrMicroNoEntryWithID(helper.CollaborationServiceID)
+		}
+		return err
+	}
+	rsp.Groups = make([]*pb.Group, len(groups))
+	for i, group := range groups {
+		rsp.Groups[i] = &pb.Group{
+			GroupID:   group.ID,
+			GroupName: group.Name,
+			IsDefault: group.IsDefault,
+		}
+	}
+	logger.Infof("Found %d groups for user with id %s", len(groups), req.UserID)
+	return nil
+}
+
+func (e *Collaboration) CreateNewGroupWithAdmin(_ context.Context, req *pb.CreateGroupRequest, rsp *pb.IDResponse) error {
 	logger.Infof("Received Collaboration.CreateNewGroupWithAdmin request: %v", req)
 	newGroup := model.Group{
 		Name:      req.GroupName,
@@ -89,59 +110,6 @@ func (e *Collaboration) ModifyGroup(ctx context.Context, req *pb.ModifyGroupRequ
 	return nil
 }
 
-func (e *Collaboration) GetGroupUserRole(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupRoleResponse) error {
-	logger.Infof("Received Collaboration.GetUserGroupRole request: %v", req)
-	role, err := e.store.GetGroupUserRole(req.UserID, req.GroupID)
-	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.ErrMicroNoEntryWithID(helper.CollaborationServiceID)
-		}
-		return err
-	}
-	logger.Infof("Found group with id %s", req.GroupID)
-	rsp.GroupID = req.GroupID
-	protoRole := e.migrateModelRoleToProtoRole(role)
-	rsp.GroupRole = protoRole
-	logger.Infof("Obtained role (%s) for group (%s) for user (%s)", rsp.GroupRole.String(), req.GroupID, req.UserID)
-	return nil
-}
-
-func (e *Collaboration) GetUserGroups(ctx context.Context, req *pb.UserGroupsRequest, rsp *pb.UserGroupsResponse) error {
-	logger.Infof("Received Collaboration.GetUserGroups request: %v", req)
-	groups, err := e.store.FindGroupsByUserID(req.UserID)
-	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.ErrMicroNoEntryWithID(helper.CollaborationServiceID)
-		}
-		return err
-	}
-	rsp.Groups = make([]*pb.Group, len(groups))
-	for i, group := range groups {
-		rsp.Groups[i] = &pb.Group{
-			GroupID:   group.ID,
-			GroupName: group.Name,
-			IsDefault: group.IsDefault,
-		}
-	}
-	logger.Infof("Found %d groups for user with id %s", len(groups), req.UserID)
-	return nil
-}
-
-func (e *Collaboration) FindGroupByID(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupResponse) error {
-	logger.Infof("Received Collaboration.FindGroupByID request: %v", req)
-	group, err := e.store.FindGroupByID(req.GroupID)
-	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.ErrMicroNoEntryWithID(helper.CollaborationServiceID)
-		}
-		return err
-	}
-	rsp.GroupID = group.ID
-	rsp.GroupName = group.Name
-	logger.Infof("Found group with id %s", req.GroupID)
-	return nil
-}
-
 func (e *Collaboration) DeleteGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.DeleteGroup request: %v", req)
 	if err := e.securityRoleHandler(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
@@ -165,5 +133,37 @@ func (e *Collaboration) DeleteGroup(ctx context.Context, req *pb.GroupRequest, r
 	}
 	rsp.Success = true
 	logger.Infof("Successfully deleted group (%s)", req.GroupID)
+	return nil
+}
+
+func (e *Collaboration) GetGroupUserRole(_ context.Context, req *pb.GroupRequest, rsp *pb.GroupRoleResponse) error {
+	logger.Infof("Received Collaboration.GetUserGroupRole request: %v", req)
+	role, err := e.store.GetGroupUserRole(req.UserID, req.GroupID)
+	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.ErrMicroNoEntryWithID(helper.CollaborationServiceID)
+		}
+		return err
+	}
+	logger.Infof("Found group with id %s", req.GroupID)
+	rsp.GroupID = req.GroupID
+	protoRole := e.migrateModelRoleToProtoRole(role)
+	rsp.GroupRole = protoRole
+	logger.Infof("Obtained role (%s) for group (%s) for user (%s)", rsp.GroupRole.String(), req.GroupID, req.UserID)
+	return nil
+}
+
+func (e *Collaboration) FindGroupByID(_ context.Context, req *pb.GroupRequest, rsp *pb.GroupResponse) error {
+	logger.Infof("Received Collaboration.FindGroupByID request: %v", req)
+	group, err := e.store.FindGroupByID(req.GroupID)
+	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.ErrMicroNoEntryWithID(helper.CollaborationServiceID)
+		}
+		return err
+	}
+	rsp.GroupID = group.ID
+	rsp.GroupName = group.Name
+	logger.Infof("Found group with id %s", req.GroupID)
 	return nil
 }

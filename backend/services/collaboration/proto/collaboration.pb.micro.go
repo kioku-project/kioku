@@ -36,12 +36,12 @@ func NewCollaborationEndpoints() []*api.Endpoint {
 // Client API for Collaboration service
 
 type CollaborationService interface {
+	GetUserGroups(ctx context.Context, in *UserGroupsRequest, opts ...client.CallOption) (*UserGroupsResponse, error)
 	CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, opts ...client.CallOption) (*IDResponse, error)
 	ModifyGroup(ctx context.Context, in *ModifyGroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
-	GetGroupUserRole(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupRoleResponse, error)
-	GetUserGroups(ctx context.Context, in *UserGroupsRequest, opts ...client.CallOption) (*UserGroupsResponse, error)
-	FindGroupByID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupResponse, error)
 	DeleteGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
+	GetGroupUserRole(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupRoleResponse, error)
+	FindGroupByID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupResponse, error)
 }
 
 type collaborationService struct {
@@ -54,6 +54,16 @@ func NewCollaborationService(name string, c client.Client) CollaborationService 
 		c:    c,
 		name: name,
 	}
+}
+
+func (c *collaborationService) GetUserGroups(ctx context.Context, in *UserGroupsRequest, opts ...client.CallOption) (*UserGroupsResponse, error) {
+	req := c.c.NewRequest(c.name, "Collaboration.GetUserGroups", in)
+	out := new(UserGroupsResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *collaborationService) CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, opts ...client.CallOption) (*IDResponse, error) {
@@ -76,9 +86,9 @@ func (c *collaborationService) ModifyGroup(ctx context.Context, in *ModifyGroupR
 	return out, nil
 }
 
-func (c *collaborationService) GetGroupUserRole(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupRoleResponse, error) {
-	req := c.c.NewRequest(c.name, "Collaboration.GetGroupUserRole", in)
-	out := new(GroupRoleResponse)
+func (c *collaborationService) DeleteGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+	req := c.c.NewRequest(c.name, "Collaboration.DeleteGroup", in)
+	out := new(SuccessResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -86,9 +96,9 @@ func (c *collaborationService) GetGroupUserRole(ctx context.Context, in *GroupRe
 	return out, nil
 }
 
-func (c *collaborationService) GetUserGroups(ctx context.Context, in *UserGroupsRequest, opts ...client.CallOption) (*UserGroupsResponse, error) {
-	req := c.c.NewRequest(c.name, "Collaboration.GetUserGroups", in)
-	out := new(UserGroupsResponse)
+func (c *collaborationService) GetGroupUserRole(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupRoleResponse, error) {
+	req := c.c.NewRequest(c.name, "Collaboration.GetGroupUserRole", in)
+	out := new(GroupRoleResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -106,35 +116,25 @@ func (c *collaborationService) FindGroupByID(ctx context.Context, in *GroupReque
 	return out, nil
 }
 
-func (c *collaborationService) DeleteGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error) {
-	req := c.c.NewRequest(c.name, "Collaboration.DeleteGroup", in)
-	out := new(SuccessResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // Server API for Collaboration service
 
 type CollaborationHandler interface {
+	GetUserGroups(context.Context, *UserGroupsRequest, *UserGroupsResponse) error
 	CreateNewGroupWithAdmin(context.Context, *CreateGroupRequest, *IDResponse) error
 	ModifyGroup(context.Context, *ModifyGroupRequest, *SuccessResponse) error
-	GetGroupUserRole(context.Context, *GroupRequest, *GroupRoleResponse) error
-	GetUserGroups(context.Context, *UserGroupsRequest, *UserGroupsResponse) error
-	FindGroupByID(context.Context, *GroupRequest, *GroupResponse) error
 	DeleteGroup(context.Context, *GroupRequest, *SuccessResponse) error
+	GetGroupUserRole(context.Context, *GroupRequest, *GroupRoleResponse) error
+	FindGroupByID(context.Context, *GroupRequest, *GroupResponse) error
 }
 
 func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, opts ...server.HandlerOption) error {
 	type collaboration interface {
+		GetUserGroups(ctx context.Context, in *UserGroupsRequest, out *UserGroupsResponse) error
 		CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, out *IDResponse) error
 		ModifyGroup(ctx context.Context, in *ModifyGroupRequest, out *SuccessResponse) error
-		GetGroupUserRole(ctx context.Context, in *GroupRequest, out *GroupRoleResponse) error
-		GetUserGroups(ctx context.Context, in *UserGroupsRequest, out *UserGroupsResponse) error
-		FindGroupByID(ctx context.Context, in *GroupRequest, out *GroupResponse) error
 		DeleteGroup(ctx context.Context, in *GroupRequest, out *SuccessResponse) error
+		GetGroupUserRole(ctx context.Context, in *GroupRequest, out *GroupRoleResponse) error
+		FindGroupByID(ctx context.Context, in *GroupRequest, out *GroupResponse) error
 	}
 	type Collaboration struct {
 		collaboration
@@ -147,6 +147,10 @@ type collaborationHandler struct {
 	CollaborationHandler
 }
 
+func (h *collaborationHandler) GetUserGroups(ctx context.Context, in *UserGroupsRequest, out *UserGroupsResponse) error {
+	return h.CollaborationHandler.GetUserGroups(ctx, in, out)
+}
+
 func (h *collaborationHandler) CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, out *IDResponse) error {
 	return h.CollaborationHandler.CreateNewGroupWithAdmin(ctx, in, out)
 }
@@ -155,18 +159,14 @@ func (h *collaborationHandler) ModifyGroup(ctx context.Context, in *ModifyGroupR
 	return h.CollaborationHandler.ModifyGroup(ctx, in, out)
 }
 
+func (h *collaborationHandler) DeleteGroup(ctx context.Context, in *GroupRequest, out *SuccessResponse) error {
+	return h.CollaborationHandler.DeleteGroup(ctx, in, out)
+}
+
 func (h *collaborationHandler) GetGroupUserRole(ctx context.Context, in *GroupRequest, out *GroupRoleResponse) error {
 	return h.CollaborationHandler.GetGroupUserRole(ctx, in, out)
 }
 
-func (h *collaborationHandler) GetUserGroups(ctx context.Context, in *UserGroupsRequest, out *UserGroupsResponse) error {
-	return h.CollaborationHandler.GetUserGroups(ctx, in, out)
-}
-
 func (h *collaborationHandler) FindGroupByID(ctx context.Context, in *GroupRequest, out *GroupResponse) error {
 	return h.CollaborationHandler.FindGroupByID(ctx, in, out)
-}
-
-func (h *collaborationHandler) DeleteGroup(ctx context.Context, in *GroupRequest, out *SuccessResponse) error {
-	return h.CollaborationHandler.DeleteGroup(ctx, in, out)
 }

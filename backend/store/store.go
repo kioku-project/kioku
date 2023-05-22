@@ -3,27 +3,27 @@ package store
 import "github.com/kioku-project/kioku/pkg/model"
 
 type UserStore interface {
-	FindUserByEmail(email string) (*model.User, error)
 	RegisterNewUser(newUser *model.User) error
+	FindUserByEmail(email string) (*model.User, error)
 }
 
 type CardDeckStore interface {
-	CreateDeck(newDeck *model.Deck) error
-	FindDeckByID(deckID string) (*model.Deck, error)
-	CreateCard(newCard *model.Card) error
 	FindDecksByGroupID(groupID string) ([]model.Deck, error)
-	FindCardByID(cardID string) (*model.Card, error)
-	DeleteCard(card *model.Card) error
-	DeleteDeck(deck *model.Deck) error
-	ModifyCard(card *model.Card) error
+	FindDeckByID(deckID string) (*model.Deck, error)
+	CreateDeck(newDeck *model.Deck) error
 	ModifyDeck(deck *model.Deck) error
+	DeleteDeck(deck *model.Deck) error
+	FindCardByID(cardID string) (*model.Card, error)
+	CreateCard(newCard *model.Card) error
+	ModifyCard(card *model.Card) error
+	DeleteCard(card *model.Card) error
 }
 
 type CollaborationStore interface {
-	CreateNewGroupWithAdmin(adminUserID string, newGroup *model.Group) error
-	FindGroupByID(groupID string) (*model.Group, error)
-	GetGroupUserRole(userID string, groupID string) (model.RoleType, error)
 	FindGroupsByUserID(userID string) ([]model.Group, error)
-	DeleteGroup(group *model.Group) error
+	FindGroupByID(groupID string) (*model.Group, error)
+	CreateNewGroupWithAdmin(adminUserID string, newGroup *model.Group) error
 	ModifyGroup(group *model.Group) error
+	DeleteGroup(group *model.Group) error
+	GetGroupUserRole(userID string, groupID string) (model.RoleType, error)
 }

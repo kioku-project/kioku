@@ -20,42 +20,38 @@ var (
 	ErrStoreNoExistingUserWithEmail = errors.New("no existing user with email")
 )
 
-func ErrMicroNotAuthorized(id ClientID) error {
+func NewMicroNotAuthorizedErr(id ClientID) error {
 	return microErrors.Unauthorized(string(id), "user not authorized")
 }
 
-func ErrMicroNoEntryWithID(id ClientID) error {
+func NewMicroNoEntryWithIDErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "no entry with id")
 }
 
-func ErrMicroNoExistingUserWithEmail(id ClientID) error {
+func NewMicroNoExistingUserWithEmailErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "no existing user with email")
 }
 
-func ErrMicroUserAlreadyExists(id ClientID) error {
+func NewMicroUserAlreadyExistsErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "this user already exists")
 }
 
-func ErrMicroInvalidUserNameFormat(id ClientID) error {
+func NewMicroInvalidUserNameFormatErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "invalid user name format")
 }
 
-func ErrMicroHashingFailed(id ClientID) error {
+func NewMicroHashingFailedErr(id ClientID) error {
 	return microErrors.InternalServerError(string(id), "error while hashing password")
 }
 
-func ErrMicroInvalidEmailOrPassword(id ClientID) error {
+func NewMicroInvalidEmailOrPasswordErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "invalid email or password")
 }
 
-func ErrFiberBadRequest(detail string) error {
+func NewFiberBadRequestErr(detail string) error {
 	return fiber.NewError(fiber.StatusBadRequest, detail)
 }
 
-func ErrFiberUnauthorized(detail string) error {
+func NewFiberUnauthorizedErr(detail string) error {
 	return fiber.NewError(fiber.StatusUnauthorized, detail)
-}
-
-func ErrFiberInternalServerError(detail string) error {
-	return fiber.NewError(fiber.StatusInternalServerError, detail)
 }

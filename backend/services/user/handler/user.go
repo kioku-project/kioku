@@ -27,12 +27,12 @@ func New(s store.UserStore, cS pbCollaboration.CollaborationService) *User {
 func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.NameIDResponse) error {
 	logger.Infof("Received User.Register request: %v", req)
 	if _, err := e.store.FindUserByEmail(req.Email); err == nil {
-		return helper.ErrMicroUserAlreadyExists(helper.UserServiceID)
+		return helper.NewMicroUserAlreadyExistsErr(helper.UserServiceID)
 	} else if !errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
 		return err
 	}
 	if isMatch, err := regexp.MatchString("^[a-zA-Z0-9-._~]{3,20}$", req.Name); !isMatch {
-		return helper.ErrMicroInvalidUserNameFormat(helper.UserServiceID)
+		return helper.NewMicroInvalidUserNameFormatErr(helper.UserServiceID)
 	} else if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.MinCost)
 	if err != nil {
-		return helper.ErrMicroHashingFailed(helper.UserServiceID)
+		return helper.NewMicroHashingFailedErr(helper.UserServiceID)
 	}
 	newUser.Password = string(hash)
 	err = e.store.RegisterNewUser(&newUser)
@@ -64,13 +64,13 @@ func (e *User) Login(_ context.Context, req *pb.LoginRequest, rsp *pb.NameIDResp
 	user, err := e.store.FindUserByEmail(req.Email)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
-			return helper.ErrMicroNoExistingUserWithEmail(helper.UserServiceID)
+			return helper.NewMicroNoExistingUserWithEmailErr(helper.UserServiceID)
 		}
 		return err
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
-		return helper.ErrMicroInvalidEmailOrPassword(helper.UserServiceID)
+		return helper.NewMicroInvalidEmailOrPasswordErr(helper.UserServiceID)
 	}
 	rsp.Name = user.Name
 	rsp.ID = user.ID
@@ -83,7 +83,7 @@ func (e *User) GetUserIDFromEmail(_ context.Context, req *pb.UserIDRequest, rsp 
 	user, err := e.store.FindUserByEmail(req.Email)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.ErrMicroNoEntryWithID(helper.UserServiceID)
+			return helper.NewMicroNoEntryWithIDErr(helper.UserServiceID)
 		}
 		return err
 	}

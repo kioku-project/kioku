@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	microErrors "go-micro.dev/v4/errors"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -53,7 +54,15 @@ func main() {
 		pbCollaboration.NewCollaborationService("collaboration", srv.Client()),
 	)
 
-	app := fiber.New()
+	fiberConfig := fiber.Config{
+		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			parsedError := microErrors.Parse(err.Error())
+			logger.Infof("Error from %s containing code (%d) and error detail (%s)", parsedError.Id, parsedError.Code, parsedError.Detail)
+			return ctx.Status(int(parsedError.Code)).SendString(parsedError.Detail)
+		},
+	}
+
+	app := fiber.New(fiberConfig)
 	app.Post("/api/register", svc.RegisterHandler)
 	app.Post("/api/login", svc.LoginHandler)
 	app.Get("/api/reauth", svc.ReauthHandler)

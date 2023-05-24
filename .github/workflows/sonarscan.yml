@@ -19,13 +19,12 @@ jobs:
           cd backend
           go test -json ./... > report.json
           go test -coverprofile=coverage.out ./...
-          cd ..
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: backend
-          args: >
+          args: >-
             -X
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -40,7 +39,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: frontend
-          args: >
+          args: >-
             -X
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any

@@ -9,8 +9,8 @@ import (
 )
 
 func TestUser(t *testing.T) {
-	var mockUserStore store.UserStore = nil
-	var mockCollaborationService pbcollab.CollaborationService = nil
+	var mockUserStore store.UserStore
+	var mockCollaborationService pbcollab.CollaborationService
 
 	userService := handler.New(mockUserStore, mockCollaborationService)
 

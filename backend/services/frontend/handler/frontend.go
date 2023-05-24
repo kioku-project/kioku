@@ -92,7 +92,7 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
-	tokenString := c.Cookies("refresh_token", "NOT_GIVEN")
+	tokenString := c.Cookies("refresh_token")
 	refreshToken, err := helper.ParseJWTToken(tokenString)
 	if err != nil {
 		return helper.NewFiberUnauthorizedErr(err.Error())

@@ -40,7 +40,7 @@ func GetJWTPublicKey() (crypto.PublicKey, error) {
 
 func ParseJWTToken(tokenString string) (*jwt.Token, error) {
 
-	if tokenString == "NOT_GIVEN" {
+	if tokenString == "" {
 		return nil, errors.New("please re-authenticate")
 	}
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

@@ -3,14 +3,14 @@ package handler_test
 import (
 	"testing"
 
-	pbcollab "github.com/kioku-project/kioku/services/collaboration/proto"
+	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
 	"github.com/kioku-project/kioku/services/user/handler"
 	"github.com/kioku-project/kioku/store"
 )
 
 func TestUser(t *testing.T) {
 	var mockUserStore store.UserStore
-	var mockCollaborationService pbcollab.CollaborationService
+	var mockCollaborationService pbCollaboration.CollaborationService
 
 	userService := handler.New(mockUserStore, mockCollaborationService)
 

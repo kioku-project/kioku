@@ -7,7 +7,8 @@ option go_package = "./proto;user";
 service User {
 	rpc Register(RegisterRequest) returns (NameIDResponse) {}
 	rpc Login(LoginRequest) returns (NameIDResponse) {}
-	rpc GetUserIDFromEmail(UserIDRequest) returns (UserIDResponse) {}
+	rpc GetUserIDFromEmail(UserIDRequest) returns (UserID) {}
+	rpc GetUserInformation(UserInformationRequest) returns (UserInformationResponse) {}
 }
 
 message RegisterRequest {
@@ -30,6 +31,20 @@ message UserIDRequest {
 	string email = 1;
 }
 
-message UserIDResponse {
-	string ID = 1;
+message UserID {
+	string userID = 1;
+}
+
+message UserInformationRequest {
+	repeated UserID userIDs = 1;
+}
+
+message UserInformationResponse {
+	repeated UserInformation users = 1;
+}
+
+message UserInformation {
+	string userID = 1;
+	string email = 2;
+	string name = 3;
 }

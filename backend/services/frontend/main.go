@@ -78,10 +78,19 @@ func main() {
 	////
 	// - add endpoints where authentication is needed below this block.
 	////
+	app.Get("/api/user/invitation", svc.GetGroupInvitationsHandler)
+	app.Put("/api/user/invitation/:invitationID", svc.ManageGroupInvitationHandler)
+
 	app.Get("/api/group", svc.GetUserGroupsHandler)
 	app.Post("/api/group", svc.CreateGroupHandler)
 	app.Put("/api/group/:groupID", svc.ModifyGroupHandler)
 	app.Delete("/api/group/:groupID", svc.DeleteGroupHandler)
+
+	app.Get("/api/group/:groupID/member", svc.GetGroupMembersHandler)
+	app.Get("/api/group/:groupID/member/request", svc.GetGroupMemberRequestsHandler)
+	app.Post("/api/group/:groupID/member/request", svc.RequestToJoinGroupHandler)
+	app.Put("/api/group/:groupID/member/request/:requestID", svc.ManageGroupMemberRequestHandler)
+	app.Post("/api/group/:groupID/member/invite", svc.InviteUserToGroupHandler)
 
 	app.Get("/api/group/:groupID/deck", svc.GetGroupDecksHandler)
 	app.Post("/api/group/:groupID/deck", svc.CreateDeckHandler)

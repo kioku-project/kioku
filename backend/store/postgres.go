@@ -64,7 +64,7 @@ func NewCollaborationStore() (CollaborationStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = db.AutoMigrate(&model.Group{}, &model.GroupUserRole{})
+	err = db.AutoMigrate(&model.Group{}, &model.GroupUserRole{}, &model.GroupAdmission{})
 	if err != nil {
 		return nil, err
 	}
@@ -79,6 +79,13 @@ func (s *UserStoreImpl) RegisterNewUser(newUser *model.User) error {
 func (s *UserStoreImpl) FindUserByEmail(email string) (user *model.User, err error) {
 	email = strings.ToLower(email)
 	if err = s.db.Where(model.User{Email: email}).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoExistingUserWithEmail
+	}
+	return
+}
+
+func (s *UserStoreImpl) FindUserByID(userID string) (user *model.User, err error) {
+	if err = s.db.Where(model.User{ID: userID}).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoExistingUserWithEmail
 	}
 	return
@@ -164,6 +171,10 @@ func (s *CollaborationStoreImpl) CreateNewGroupWithAdmin(adminUserID string, new
 	return s.db.Create(model.GroupUserRole{GroupID: newGroup.ID, UserID: adminUserID, RoleType: model.RoleAdmin}).Error
 }
 
+func (s *CollaborationStoreImpl) AddNewMemberToGroup(userID string, groupID string) error {
+	return s.db.Create(model.GroupUserRole{GroupID: groupID, UserID: userID, RoleType: model.RoleRead}).Error
+}
+
 func (s *CollaborationStoreImpl) ModifyGroup(group *model.Group) (err error) {
 	err = s.db.Save(&model.Group{
 		ID:        group.ID,
@@ -184,4 +195,47 @@ func (s *CollaborationStoreImpl) GetGroupUserRole(userID string, groupID string)
 	}
 	groupRole = groupUser.RoleType
 	return
+}
+
+func (s *CollaborationStoreImpl) GetGroupMemberRoles(groupID string) (groupMembers []model.GroupUserRole, err error) {
+	if err = s.db.Where(model.GroupUserRole{GroupID: groupID}).Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *CollaborationStoreImpl) CreateNewGroupAdmission(newAdmission *model.GroupAdmission) error {
+	return s.db.Create(&newAdmission).Error
+}
+
+func (s *CollaborationStoreImpl) FindGroupRequestsByGroupID(groupID string) (groupAdmissions []model.GroupAdmission, err error) {
+	if err = s.db.Where(model.GroupAdmission{GroupID: groupID, AdmissionStatus: model.Requested}).Find(&groupAdmissions).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *CollaborationStoreImpl) FindGroupInvitationsByUserID(userID string) (groupAdmissions []model.GroupAdmission, err error) {
+	if err = s.db.Where(model.GroupAdmission{UserID: userID, AdmissionStatus: model.Invited}).Preload("Group").Find(&groupAdmissions).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *CollaborationStoreImpl) FindGroupAdmissionByUserAndGroupID(userID string, groupID string) (groupAdmission *model.GroupAdmission, err error) {
+	if err = s.db.Where(model.GroupAdmission{UserID: userID, GroupID: groupID}).First(&groupAdmission).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *CollaborationStoreImpl) FindGroupAdmissionByID(admissionID string) (groupAdmission *model.GroupAdmission, err error) {
+	if err = s.db.Where(model.GroupAdmission{ID: admissionID}).First(&groupAdmission).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *CollaborationStoreImpl) DeleteGroupAdmission(admission *model.GroupAdmission) error {
+	return s.db.Delete(admission).Error
 }

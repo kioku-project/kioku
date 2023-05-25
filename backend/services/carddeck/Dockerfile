@@ -19,6 +19,7 @@ chmod +x /bin/grpc_health_probe
 COPY services/carddeck/Makefile go.mod go.sum ./
 RUN make init && go mod download 
 COPY services/carddeck/ services/carddeck
+COPY services/user/proto/user.* services/user/proto/
 COPY services/collaboration/proto/collaboration.* services/collaboration/proto/
 COPY store/ store/
 COPY pkg/ pkg/

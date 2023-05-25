@@ -74,6 +74,29 @@
 			"response": []
 		},
 		{
+			"name": "Get Group Invitations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/user/invitation",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"invitation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get Groups",
 			"request": {
 				"method": "GET",
@@ -96,12 +119,12 @@
 			"response": []
 		},
 		{
-			"name": "Get Decks",
+			"name": "Get Group Members",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "127.0.0.1:3000/api/group/{g-id}/deck",
+					"raw": "127.0.0.1:3000/api/group/:groupID/member",
 					"host": [
 						"127",
 						"0",
@@ -112,8 +135,75 @@
 					"path": [
 						"api",
 						"group",
-						"{g-id}",
+						":groupID",
+						"member"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Group Member Requests",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/group/:groupID/member/request",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"group",
+						":groupID",
+						"member",
+						"request"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Decks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/group/:groupID/deck",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"group",
+						":groupID",
 						"deck"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -125,7 +215,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "127.0.0.1:3000/api/deck/{d-id}/card",
+					"raw": "127.0.0.1:3000/api/deck/:deckID/card",
 					"host": [
 						"127",
 						"0",
@@ -136,8 +226,14 @@
 					"path": [
 						"api",
 						"deck",
-						"{d-id}",
+						":deckID",
 						"card"
+					],
+					"variable": [
+						{
+							"key": "deckID",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -175,21 +271,12 @@
 			"response": []
 		},
 		{
-			"name": "New Deck",
+			"name": "Request To Join Group",
 			"request": {
 				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"deckName\": \"test deck\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "127.0.0.1:3000/api/group/{g-id}/deck",
+					"raw": "127.0.0.1:3000/api/group/:groupID/member/request",
 					"host": [
 						"127",
 						"0",
@@ -200,8 +287,94 @@
 					"path": [
 						"api",
 						"group",
-						"{g-id}",
+						":groupID",
+						"member",
+						"request"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invite User To Group",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"invitedUserEmail\": \"test@test.de\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/api/group/:groupID/member/invite",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"group",
+						":groupID",
+						"member",
+						"invite"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Deck",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"deckName\": \"test group\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/api/group/:groupID/deck",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"group",
+						":groupID",
 						"deck"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -222,7 +395,7 @@
 					}
 				},
 				"url": {
-					"raw": "127.0.0.1:3000/api/deck/{d-id}/card",
+					"raw": "127.0.0.1:3000/api/deck/:deckID/card",
 					"host": [
 						"127",
 						"0",
@@ -233,8 +406,53 @@
 					"path": [
 						"api",
 						"deck",
-						"{d-id}",
+						":deckID",
 						"card"
+					],
+					"variable": [
+						{
+							"key": "deckID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manage Group Invitation",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"isAccepted\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/api/user/invitation/:invitationID",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"invitation",
+						":invitationID"
+					],
+					"variable": [
+						{
+							"key": "invitationID",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -247,7 +465,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"groupName\": \"test group\"\n}",
+					"raw": "{\n    \"groupName\": \"test group 2\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -255,7 +473,7 @@
 					}
 				},
 				"url": {
-					"raw": "127.0.0.1:3000/api/group/{g-id}",
+					"raw": "127.0.0.1:3000/api/group/:groupID",
 					"host": [
 						"127",
 						"0",
@@ -266,7 +484,58 @@
 					"path": [
 						"api",
 						"group",
-						"{g-id}"
+						":groupID"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manage Group Member Request",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"isAccepted\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/api/group/:groupID/member/request/:requestID",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"group",
+						":groupID",
+						"member",
+						"request",
+						":requestID"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						},
+						{
+							"key": "requestID",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -287,7 +556,7 @@
 					}
 				},
 				"url": {
-					"raw": "127.0.0.1:3000/api/deck/{d-id}",
+					"raw": "127.0.0.1:3000/api/deck/:deckID",
 					"host": [
 						"127",
 						"0",
@@ -298,7 +567,13 @@
 					"path": [
 						"api",
 						"deck",
-						"{d-id}"
+						":deckID"
+					],
+					"variable": [
+						{
+							"key": "deckID",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -311,7 +586,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"frontside\": \"test card\",\n    \"backside\": \"this is a test\"\n}",
+					"raw": "{\n    \"frontside\": \"test card\",\n    \"backside\": \"this is a test 2\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -319,7 +594,7 @@
 					}
 				},
 				"url": {
-					"raw": "127.0.0.1:3000/api/card/{c-id}",
+					"raw": "127.0.0.1:3000/api/card/:cardID",
 					"host": [
 						"127",
 						"0",
@@ -330,7 +605,13 @@
 					"path": [
 						"api",
 						"card",
-						"{c-id}"
+						":cardID"
+					],
+					"variable": [
+						{
+							"key": "cardID",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -342,7 +623,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "127.0.0.1:3000/api/group/{g-id}",
+					"raw": "127.0.0.1:3000/api/group/:groupID",
 					"host": [
 						"127",
 						"0",
@@ -353,7 +634,13 @@
 					"path": [
 						"api",
 						"group",
-						"{g-id}"
+						":groupID"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -365,7 +652,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "127.0.0.1:3000/api/deck/{d-id}",
+					"raw": "127.0.0.1:3000/api/deck/:deckID",
 					"host": [
 						"127",
 						"0",
@@ -376,7 +663,13 @@
 					"path": [
 						"api",
 						"deck",
-						"{d-id}"
+						":deckID"
+					],
+					"variable": [
+						{
+							"key": "deckID",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -388,7 +681,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "127.0.0.1:3000/api/card/{c-id}",
+					"raw": "127.0.0.1:3000/api/card/:cardID",
 					"host": [
 						"127",
 						"0",
@@ -399,7 +692,13 @@
 					"path": [
 						"api",
 						"card",
-						"{c-id}"
+						":cardID"
+					],
+					"variable": [
+						{
+							"key": "cardID",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -411,7 +710,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "",
+				"value": "eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QzQHRlc3QuZGUiLCJleHAiOjE2ODUwNDkzNzIsIm5hbWUiOiJUZXN0Iiwic3ViIjoiVS1SM3hCbmh5aCJ9.AEY0VTL7S56VZhjmNYpxJ2x9g_K7vAwuYgiChpQz8TjpFVELu62t4SyL1Jf5OgyvTo2oTbRFE0tCaxTHewsQCFOvAK6qdNH6MJwlnX374AnIAFC67tCe84HReyETwLCoiqE5-IjbjHKqcyc1VP5UzNpSbFBr7slQklF5APNfpAk9-PbH",
 				"type": "string"
 			}
 		]

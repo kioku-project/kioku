@@ -40,6 +40,18 @@ func NewMicroInvalidUserNameFormatErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "invalid user name format")
 }
 
+func NewMicroInvalidParameterData(id ClientID) error {
+	return microErrors.BadRequest(string(id), "invalid parameter data")
+}
+
+func NewMicroUserAlreadyInGroupErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "user already in group")
+}
+
+func NewMicroUserAdmissionInProgress(id ClientID) error {
+	return microErrors.BadRequest(string(id), "user already invited")
+}
+
 func NewMicroHashingFailedErr(id ClientID) error {
 	return microErrors.InternalServerError(string(id), "error while hashing password")
 }

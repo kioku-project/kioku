@@ -132,9 +132,31 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+func (e *Frontend) GetGroupInvitationsHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGroupInvitations, err := e.collaborationService.GetGroupInvitations(c.Context(), &pbCollaboration.UserIDRequest{UserID: userID})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspGroupInvitations)
+}
+
+func (e *Frontend) ManageGroupInvitationHandler(c *fiber.Ctx) error {
+	var data map[string]bool
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspManageInvitation, err := e.collaborationService.ManageGroupInvitation(c.Context(), &pbCollaboration.ManageGroupInvitationRequest{UserID: userID, AdmissionID: c.Params("requestID"), RequestResponse: data["isAccepted"]})
+	if err != nil || !rspManageInvitation.Success {
+		return err
+	}
+	return c.SendStatus(200)
+}
+
 func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspUserGroups, err := e.collaborationService.GetUserGroups(c.Context(), &pbCollaboration.UserGroupsRequest{UserID: userID})
+	rspUserGroups, err := e.collaborationService.GetUserGroups(c.Context(), &pbCollaboration.UserIDRequest{UserID: userID})
 	if err != nil {
 		return err
 	}
@@ -175,6 +197,62 @@ func (e *Frontend) DeleteGroupHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspDeleteGroup, err := e.collaborationService.DeleteGroup(c.Context(), &pbCollaboration.GroupRequest{UserID: userID, GroupID: c.Params("groupID")})
 	if err != nil || !rspDeleteGroup.Success {
+		return err
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) GetGroupMembersHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGroupMembers, err := e.collaborationService.GetGroupMembers(c.Context(), &pbCollaboration.GroupRequest{UserID: userID, GroupID: c.Params("groupID")})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspGroupMembers)
+}
+
+func (e *Frontend) GetGroupMemberRequestsHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspMemberRequests, err := e.collaborationService.GetGroupMemberRequests(c.Context(), &pbCollaboration.GroupRequest{UserID: userID, GroupID: c.Params("groupID")})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspMemberRequests)
+}
+
+func (e *Frontend) ManageGroupMemberRequestHandler(c *fiber.Ctx) error {
+	var data map[string]bool
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspManageRequest, err := e.collaborationService.ManageGroupMemberRequest(c.Context(), &pbCollaboration.ManageGroupMemberRequestRequest{UserID: userID, GroupID: c.Params("groupID"), AdmissionID: c.Params("requestID"), RequestResponse: data["isAccepted"]})
+	if err != nil || !rspManageRequest.Success {
+		return err
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) RequestToJoinGroupHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspJoinGroupRequest, err := e.collaborationService.RequestToJoinGroup(c.Context(), &pbCollaboration.GroupRequest{UserID: userID, GroupID: c.Params("groupID")})
+	if err != nil || !rspJoinGroupRequest.Success {
+		return err
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) InviteUserToGroupHandler(c *fiber.Ctx) error {
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if data["invitedUserEmail"] == "" {
+		return helper.NewFiberBadRequestErr("no email for user to invite given")
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspInviteUser, err := e.collaborationService.InviteUserToGroup(c.Context(), &pbCollaboration.GroupInvitationRequest{UserID: userID, GroupID: c.Params("groupID"), InvitedUserEmail: data["invitedUserEmail"]})
+	if err != nil || !rspInviteUser.Success {
 		return err
 	}
 	return c.SendStatus(200)

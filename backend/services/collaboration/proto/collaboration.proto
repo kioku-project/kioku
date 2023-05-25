@@ -5,16 +5,39 @@ package collaboration;
 option go_package = "./proto;collaboration";
 
 service Collaboration {
-	rpc GetUserGroups(UserGroupsRequest) returns (UserGroupsResponse) {}
+	rpc GetGroupInvitations(UserIDRequest) returns (GroupInvitationsResponse) {}
+	rpc ManageGroupInvitation(ManageGroupInvitationRequest) returns (SuccessResponse) {}
+	rpc GetUserGroups(UserIDRequest) returns (UserGroupsResponse) {}
 	rpc CreateNewGroupWithAdmin(CreateGroupRequest) returns (IDResponse) {}
 	rpc ModifyGroup(ModifyGroupRequest) returns (SuccessResponse) {}
 	rpc DeleteGroup(GroupRequest) returns (SuccessResponse) {}
+	rpc GetGroupMembers(GroupRequest) returns (GroupMembersResponse) {}
+	rpc GetGroupMemberRequests(GroupRequest) returns (GroupMemberRequestsResponse) {}
+	rpc ManageGroupMemberRequest(ManageGroupMemberRequestRequest) returns (SuccessResponse) {}
+	rpc RequestToJoinGroup(GroupRequest) returns (SuccessResponse) {}
+	rpc InviteUserToGroup(GroupInvitationRequest) returns (SuccessResponse) {}
 	rpc GetGroupUserRole(GroupRequest) returns (GroupRoleResponse) {}
 	rpc FindGroupByID(GroupRequest) returns (GroupResponse) {}
 }
 
-message UserGroupsRequest {
+message UserIDRequest {
 	string userID = 1;
+}
+
+message GroupInvitationsResponse {
+	repeated GroupInvitation groupInvitation = 1;
+}
+
+message GroupInvitation {
+	string admissionID = 1;
+	string groupID = 2;
+	string groupName = 3;
+}
+
+message ManageGroupInvitationRequest {
+	string userID = 1;
+	string admissionID = 2;
+	bool requestResponse = 3;
 }
 
 message UserGroupsResponse {
@@ -50,6 +73,42 @@ message GroupRequest {
 
 message SuccessResponse {
 	bool success = 1;
+}
+
+message GroupMembersResponse {
+	repeated UserWithRole users = 1;
+}
+
+message GroupMemberRequestsResponse {
+	repeated MemberRequest memberRequests = 1;
+}
+
+message MemberRequest {
+	string admissionID = 1;
+	User user = 2;
+}
+
+message User {
+	string userID = 1;
+	string name = 2;
+}
+
+message ManageGroupMemberRequestRequest {
+	string userID = 1;
+	string groupID = 2;
+	string admissionID = 3;
+	bool requestResponse = 4;
+}
+
+message GroupInvitationRequest {
+	string userID = 1;
+	string groupID = 2;
+	string invitedUserEmail = 3;
+}
+
+message UserWithRole {
+	User user = 1;
+	GroupRole groupRole = 2;
 }
 
 message GroupRoleResponse {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/kioku-project/kioku/services/collaboration/handler"
 	pb "github.com/kioku-project/kioku/services/collaboration/proto"
+	pbUser "github.com/kioku-project/kioku/services/user/proto"
 	"github.com/kioku-project/kioku/store"
 
 	"go-micro.dev/v4"
@@ -46,7 +47,7 @@ func main() {
 	)
 
 	// Create a new instance of the service handler with the initialized database connection
-	svc := handler.New(dbStore)
+	svc := handler.New(dbStore, pbUser.NewUserService("user", srv.Client()))
 
 	// Register handler
 	if err := pb.RegisterCollaborationHandler(srv.Server(), svc); err != nil {

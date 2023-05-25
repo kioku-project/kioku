@@ -19,6 +19,7 @@ chmod +x /bin/grpc_health_probe
 COPY services/collaboration/Makefile go.mod go.sum ./
 RUN make init && go mod download 
 COPY services/collaboration/ services/collaboration
+COPY services/user/proto/user.* services/user/proto/
 COPY store/ store/
 COPY pkg/ pkg/
 WORKDIR /go/src/kioku/services/collaboration

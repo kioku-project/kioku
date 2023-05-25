@@ -78,7 +78,7 @@ func (e *User) Login(_ context.Context, req *pb.LoginRequest, rsp *pb.NameIDResp
 	return nil
 }
 
-func (e *User) GetUserIDFromEmail(_ context.Context, req *pb.UserIDRequest, rsp *pb.UserIDResponse) error {
+func (e *User) GetUserIDFromEmail(_ context.Context, req *pb.UserIDRequest, rsp *pb.UserID) error {
 	logger.Infof("Received User.GetUserIDFromEmail request: %v", req)
 	user, err := e.store.FindUserByEmail(req.Email)
 	if err != nil {
@@ -87,7 +87,25 @@ func (e *User) GetUserIDFromEmail(_ context.Context, req *pb.UserIDRequest, rsp 
 		}
 		return err
 	}
-	rsp.ID = user.ID
+	rsp.UserID = user.ID
 	logger.Infof("Found user with id %s", user.ID)
+	return nil
+}
+
+func (e *User) GetUserInformation(_ context.Context, req *pb.UserInformationRequest, rsp *pb.UserInformationResponse) error {
+	logger.Infof("Received User.GetUserInformation request: %v", req)
+	rsp.Users = make([]*pb.UserInformation, len(req.UserIDs))
+	for i, user := range req.UserIDs {
+		user, err := e.store.FindUserByID(user.UserID)
+		if err != nil {
+			return err
+		}
+		rsp.Users[i] = &pb.UserInformation{
+			UserID: user.ID,
+			Name:   user.Name,
+			Email:  user.Email,
+		}
+	}
+	logger.Infof("Found %d users for given IDs", len(rsp.Users))
 	return nil
 }

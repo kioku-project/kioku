@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"github.com/kioku-project/kioku/pkg/converter"
 	"go-micro.dev/v4/logger"
 	"time"
 
@@ -44,13 +45,7 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest,
 	if err != nil {
 		return err
 	}
-	rsp.Decks = make([]*pb.Deck, len(decks))
-	for i, deck := range decks {
-		rsp.Decks[i] = &pb.Deck{
-			DeckID:   deck.ID,
-			DeckName: deck.Name,
-		}
-	}
+	rsp.Decks = converter.ConvertToTypeArray(decks, converter.StoreDeckToProtoDeckConverter)
 	logger.Infof("Found %d decks in group with id %s", len(decks), req.GroupID)
 	return nil
 }
@@ -60,12 +55,16 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
 		return err
 	}
+	err := helper.CheckForValidName(req.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID)
+	if err != nil {
+		return err
+	}
 	newDeck := model.Deck{
 		Name:      req.DeckName,
 		CreatedAt: time.Now(),
 		GroupID:   req.GroupID,
 	}
-	err := e.store.CreateDeck(&newDeck)
+	err = e.store.CreateDeck(&newDeck)
 	if err != nil {
 		return err
 	}
@@ -84,6 +83,10 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rs
 		return err
 	}
 	if req.DeckName != nil {
+		err := helper.CheckForValidName(*req.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID)
+		if err != nil {
+			return err
+		}
 		deck.Name = *req.DeckName
 	}
 	err = e.store.ModifyDeck(deck)
@@ -122,14 +125,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.DeckRequest, rsp *p
 	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_READ); err != nil {
 		return err
 	}
-	rsp.Cards = make([]*pb.Card, len(deck.Cards))
-	for i, card := range deck.Cards {
-		rsp.Cards[i] = &pb.Card{
-			CardID:    card.ID,
-			Frontside: card.Frontside,
-			Backside:  card.Backside,
-		}
-	}
+	rsp.Cards = converter.ConvertToTypeArray(deck.Cards, converter.StoreCardToProtoCardConverter)
 	logger.Infof("Found %d cards in deck with id %s", len(deck.Cards), req.DeckID)
 	return nil
 }

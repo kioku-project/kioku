@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/kioku-project/kioku/pkg/helper"
-	"regexp"
-
 	"go-micro.dev/v4/logger"
 	"golang.org/x/crypto/bcrypt"
 
@@ -31,9 +29,8 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	} else if !errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
 		return err
 	}
-	if isMatch, err := regexp.MatchString("^[a-zA-Z0-9-._~]{3,20}$", req.Name); !isMatch {
-		return helper.NewMicroInvalidUserNameFormatErr(helper.UserServiceID)
-	} else if err != nil {
+	err := helper.CheckForValidName(req.Name, helper.UserNameRegex, helper.UserServiceID)
+	if err != nil {
 		return err
 	}
 	newUser := model.User{

@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
 
 	"go-micro.dev/v4/logger"
@@ -69,14 +70,7 @@ func (e *Collaboration) GetGroupInvitations(_ context.Context, req *pb.UserIDReq
 	if err != nil && !errors.Is(err, helper.ErrStoreNoEntryWithID) {
 		return err
 	}
-	rsp.GroupInvitation = make([]*pb.GroupInvitation, len(groupInvitations))
-	for i, invitation := range groupInvitations {
-		rsp.GroupInvitation[i] = &pb.GroupInvitation{
-			AdmissionID: invitation.ID,
-			GroupID:     invitation.GroupID,
-			GroupName:   invitation.Group.Name,
-		}
-	}
+	rsp.GroupInvitation = converter.ConvertToTypeArray(groupInvitations, converter.StoreGroupAdmissionToProtoGroupInvitationConverter)
 	logger.Infof("Found %d invitations for user with id %s", len(groupInvitations), req.UserID)
 	return nil
 }
@@ -98,7 +92,7 @@ func (e *Collaboration) ManageGroupInvitation(_ context.Context, req *pb.ManageG
 		}
 		logPrefix = "accepted"
 	}
-	logger.Infof("User %s %s request of to join group with id %s", groupAdmission.UserID, logPrefix, groupAdmission.GroupID)
+	logger.Infof("User %s %s request to join group with id %s", groupAdmission.UserID, logPrefix, groupAdmission.GroupID)
 	if err = e.store.DeleteGroupAdmission(groupAdmission); err != nil {
 		return err
 	}
@@ -114,26 +108,23 @@ func (e *Collaboration) GetUserGroups(_ context.Context, req *pb.UserIDRequest, 
 	if err != nil {
 		return err
 	}
-	rsp.Groups = make([]*pb.Group, len(groups))
-	for i, group := range groups {
-		rsp.Groups[i] = &pb.Group{
-			GroupID:   group.ID,
-			GroupName: group.Name,
-			IsDefault: group.IsDefault,
-		}
-	}
+	rsp.Groups = converter.ConvertToTypeArray(groups, converter.StoreGroupToProtoGroupConverter)
 	logger.Infof("Found %d groups for user with id %s", len(groups), req.UserID)
 	return nil
 }
 
 func (e *Collaboration) CreateNewGroupWithAdmin(_ context.Context, req *pb.CreateGroupRequest, rsp *pb.IDResponse) error {
 	logger.Infof("Received Collaboration.CreateNewGroupWithAdmin request: %v", req)
+	err := helper.CheckForValidName(req.GroupName, helper.GroupAndDeckNameRegex, helper.UserServiceID)
+	if err != nil {
+		return err
+	}
 	newGroup := model.Group{
 		Name:      req.GroupName,
 		IsDefault: req.IsDefault,
 		GroupType: model.Private,
 	}
-	err := e.store.CreateNewGroupWithAdmin(req.UserID, &newGroup)
+	err = e.store.CreateNewGroupWithAdmin(req.UserID, &newGroup)
 	if err != nil {
 		return err
 	}
@@ -156,6 +147,10 @@ func (e *Collaboration) ModifyGroup(ctx context.Context, req *pb.ModifyGroupRequ
 		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 	}
 	if req.GroupName != nil {
+		err = helper.CheckForValidName(*req.GroupName, helper.GroupAndDeckNameRegex, helper.UserServiceID)
+		if err != nil {
+			return err
+		}
 		group.Name = *req.GroupName
 	}
 	err = e.store.ModifyGroup(group)
@@ -199,7 +194,7 @@ func (e *Collaboration) GetGroupMembers(ctx context.Context, req *pb.GroupReques
 		return err
 	}
 	logger.Infof("Found %d member roles in group with id %s", len(groupMembers), req.GroupID)
-	userIDs := helper.ConvertToProtoUserIDs(groupMembers, func(role model.GroupUserRole) string { return role.UserID })
+	userIDs := converter.ConvertToTypeArray(groupMembers, converter.StoreGroupUserRoleToProtoUserIDConverter)
 	logger.Infof("Requesting information of users in group from user service")
 	users, err := e.userService.GetUserInformation(ctx, &pbUser.UserInformationRequest{UserIDs: userIDs})
 	if err != nil {
@@ -229,7 +224,7 @@ func (e *Collaboration) GetGroupMemberRequests(ctx context.Context, req *pb.Grou
 		return err
 	}
 	logger.Infof("Found %d requests for group with id %s", len(groupRequests), req.GroupID)
-	userIDs := helper.ConvertToProtoUserIDs(groupRequests, func(admission model.GroupAdmission) string { return admission.UserID })
+	userIDs := converter.ConvertToTypeArray(groupRequests, converter.StoreGroupAdmissionToProtoUserIDConverter)
 	logger.Infof("Requesting information of users in group from user service")
 	users, err := e.userService.GetUserInformation(ctx, &pbUser.UserInformationRequest{UserIDs: userIDs})
 	if err != nil {

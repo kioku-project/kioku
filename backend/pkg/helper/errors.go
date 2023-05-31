@@ -40,7 +40,7 @@ func NewMicroInvalidUserNameFormatErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "invalid user name format")
 }
 
-func NewMicroInvalidParameterData(id ClientID) error {
+func NewMicroInvalidParameterDataErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "invalid parameter data")
 }
 

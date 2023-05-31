@@ -465,7 +465,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"groupName\": \"test group 2\"\n}",
+					"raw": "{\n    \"groupName\": \"test group 2\",\n    \"groupType\": \"public\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -710,7 +710,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QzQHRlc3QuZGUiLCJleHAiOjE2ODUwNDkzNzIsIm5hbWUiOiJUZXN0Iiwic3ViIjoiVS1SM3hCbmh5aCJ9.AEY0VTL7S56VZhjmNYpxJ2x9g_K7vAwuYgiChpQz8TjpFVELu62t4SyL1Jf5OgyvTo2oTbRFE0tCaxTHewsQCFOvAK6qdNH6MJwlnX374AnIAFC67tCe84HReyETwLCoiqE5-IjbjHKqcyc1VP5UzNpSbFBr7slQklF5APNfpAk9-PbH",
+				"value": "",
 				"type": "string"
 			}
 		]

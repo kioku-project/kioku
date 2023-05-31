@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/kioku-project/kioku/pkg/converter"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -182,11 +183,15 @@ func (e *Frontend) CreateGroupHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) ModifyGroupHandler(c *fiber.Ctx) error {
 	var data map[string]*string
+	var groupType pbCollaboration.GroupType
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspModifyGroup, err := e.collaborationService.ModifyGroup(c.Context(), &pbCollaboration.ModifyGroupRequest{UserID: userID, GroupID: c.Params("groupID"), GroupName: data["groupName"]})
+	if data["groupType"] != nil {
+		groupType = converter.MigrateStringGroupTypeToProtoGroupType(*data["groupType"])
+	}
+	rspModifyGroup, err := e.collaborationService.ModifyGroup(c.Context(), &pbCollaboration.ModifyGroupRequest{UserID: userID, GroupID: c.Params("groupID"), GroupName: data["groupName"], GroupType: &groupType})
 	if err != nil || !rspModifyGroup.Success {
 		return err
 	}

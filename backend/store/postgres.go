@@ -180,6 +180,7 @@ func (s *CollaborationStoreImpl) ModifyGroup(group *model.Group) (err error) {
 		ID:        group.ID,
 		Name:      group.Name,
 		IsDefault: group.IsDefault,
+		GroupType: group.GroupType,
 	}).Error
 	return
 }

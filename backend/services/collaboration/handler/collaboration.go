@@ -23,17 +23,6 @@ func New(s store.CollaborationStore, uS pbUser.UserService) *Collaboration {
 	return &Collaboration{store: s, userService: uS}
 }
 
-func migrateModelRoleToProtoRole(modelRole model.RoleType) (protoRole pb.GroupRole) {
-	if modelRole == model.RoleRead {
-		protoRole = pb.GroupRole_READ
-	} else if modelRole == model.RoleWrite {
-		protoRole = pb.GroupRole_WRITE
-	} else if modelRole == model.RoleAdmin {
-		protoRole = pb.GroupRole_ADMIN
-	}
-	return
-}
-
 func (e *Collaboration) checkForGroupAndAdmission(userID string, groupID string) error {
 	if _, err := e.store.GetGroupUserRole(userID, groupID); err == nil {
 		return helper.NewMicroUserAlreadyInGroupErr(helper.CollaborationServiceID)
@@ -55,7 +44,7 @@ func (e *Collaboration) checkUserRoleAccess(_ context.Context, userID string, gr
 		}
 		return err
 	}
-	protoRole := migrateModelRoleToProtoRole(role)
+	protoRole := converter.MigrateModelRoleToProtoRole(role)
 	logger.Infof("Obtained group role (%s) for user (%s)", protoRole.String(), userID)
 	if !helper.IsAuthorized(protoRole, requiredRole) {
 		return helper.NewMicroNotAuthorizedErr(helper.CardDeckServiceID)
@@ -83,7 +72,7 @@ func (e *Collaboration) ManageGroupInvitation(_ context.Context, req *pb.ManageG
 	}
 	logger.Infof("Found group admission with id %s", groupAdmission.ID)
 	if groupAdmission.UserID != req.UserID || groupAdmission.AdmissionStatus != model.Invited {
-		return helper.NewMicroInvalidParameterData(helper.CollaborationServiceID)
+		return helper.NewMicroInvalidParameterDataErr(helper.CollaborationServiceID)
 	}
 	logPrefix := "rejected"
 	if req.RequestResponse {
@@ -135,7 +124,7 @@ func (e *Collaboration) CreateNewGroupWithAdmin(_ context.Context, req *pb.Creat
 
 func (e *Collaboration) ModifyGroup(ctx context.Context, req *pb.ModifyGroupRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.ModifyGroup request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
 		return err
 	}
 	group, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
@@ -152,6 +141,9 @@ func (e *Collaboration) ModifyGroup(ctx context.Context, req *pb.ModifyGroupRequ
 			return err
 		}
 		group.Name = *req.GroupName
+	}
+	if req.GroupType != nil && *req.GroupType != pb.GroupType_INVALID {
+		group.GroupType = converter.MigrateProtoGroupTypeToModelGroupType(*req.GroupType)
 	}
 	err = e.store.ModifyGroup(group)
 	if err != nil {
@@ -207,7 +199,7 @@ func (e *Collaboration) GetGroupMembers(ctx context.Context, req *pb.GroupReques
 				UserID: user.UserID,
 				Name:   user.Name,
 			},
-			GroupRole: migrateModelRoleToProtoRole(groupMembers[i].RoleType),
+			GroupRole: converter.MigrateModelRoleToProtoRole(groupMembers[i].RoleType),
 		}
 	}
 	logger.Infof("Found %d users in group with id %s", len(rsp.Users), req.GroupID)
@@ -255,7 +247,7 @@ func (e *Collaboration) ManageGroupMemberRequest(ctx context.Context, req *pb.Ma
 	}
 	logger.Infof("Found group admission with id %s", groupAdmission.ID)
 	if groupAdmission.GroupID != req.GroupID || groupAdmission.AdmissionStatus != model.Requested {
-		return helper.NewMicroInvalidParameterData(helper.CollaborationServiceID)
+		return helper.NewMicroInvalidParameterDataErr(helper.CollaborationServiceID)
 	}
 	logPrefix := "Rejected"
 	if req.RequestResponse {
@@ -276,7 +268,17 @@ func (e *Collaboration) ManageGroupMemberRequest(ctx context.Context, req *pb.Ma
 
 func (e *Collaboration) RequestToJoinGroup(_ context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.RequestToJoinGroup request: %v", req)
-	err := e.checkForGroupAndAdmission(req.UserID, req.GroupID)
+	group, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
+	if err != nil {
+		return err
+	}
+	logger.Infof("Found group with id %s", group.ID)
+	if group.GroupType == model.Private {
+		logger.Infof("Group with id %s is private", group.ID)
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
+	logger.Infof("Group with id %s is public", group.ID)
+	err = e.checkForGroupAndAdmission(req.UserID, req.GroupID)
 	if err != nil {
 		return err
 	}
@@ -334,7 +336,7 @@ func (e *Collaboration) GetGroupUserRole(_ context.Context, req *pb.GroupRequest
 	}
 	logger.Infof("Found group with id %s by obtaining role", req.GroupID)
 	rsp.GroupID = req.GroupID
-	protoRole := migrateModelRoleToProtoRole(role)
+	protoRole := converter.MigrateModelRoleToProtoRole(role)
 	rsp.GroupRole = protoRole
 	logger.Infof("Obtained role (%s) for group (%s) for user (%s)", rsp.GroupRole.String(), req.GroupID, req.UserID)
 	return nil

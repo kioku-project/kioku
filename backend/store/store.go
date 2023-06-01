@@ -18,6 +18,10 @@ type CardDeckStore interface {
 	CreateCard(newCard *model.Card) error
 	ModifyCard(card *model.Card) error
 	DeleteCard(card *model.Card) error
+	FindCardSidesByCardID(cardID string) ([]model.CardSide, error)
+	FindCardSideByID(cardSideID string) (*model.CardSide, error)
+	CreateCardSide(newCardSide *model.CardSide) error
+	ModifyCardSide(cardSide *model.CardSide) error
 }
 
 type CollaborationStore interface {

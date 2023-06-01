@@ -393,9 +393,9 @@ func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeleteDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCardDeck.DeckRequest{
-		UserID: userID,
-		DeckID: c.Params("deckID"),
+	rspDeleteDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCardDeck.DeleteWithIDRequest{
+		UserID:   userID,
+		EntityID: c.Params("deckID"),
 	})
 	if err != nil {
 		return err
@@ -418,22 +418,18 @@ func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
-	var data map[string]string
+	var data map[string][]string
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	if data["frontside"] == "" {
-		return helper.NewFiberBadRequestErr("no card frontside given")
-	}
-	if data["backside"] == "" {
-		return helper.NewFiberBadRequestErr("no card backside given")
+	if len(data["sides"]) == 0 {
+		return helper.NewFiberBadRequestErr("no card sides given")
 	}
 	userID := helper.GetUserIDFromContext(c)
 	rspCreateCard, err := e.cardDeckService.CreateCard(c.Context(), &pbCardDeck.CreateCardRequest{
-		UserID:    userID,
-		DeckID:    c.Params("deckID"),
-		Frontside: data["frontside"],
-		Backside:  data["backside"],
+		UserID: userID,
+		DeckID: c.Params("deckID"),
+		Sides:  data["sides"],
 	})
 	if err != nil {
 		return err
@@ -442,35 +438,48 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 	return c.SendString(strSuccess)
 }
 
-func (e *Frontend) ModifyCardHandler(c *fiber.Ctx) error {
-	var data map[string]*string
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
+func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspModifyCard, err := e.cardDeckService.ModifyCard(c.Context(), &pbCardDeck.ModifyCardRequest{
-		UserID:    userID,
-		CardID:    c.Params("cardID"),
-		Frontside: data["frontside"],
-		Backside:  data["backside"],
+	rspDeleteCard, err := e.cardDeckService.DeleteCard(c.Context(), &pbCardDeck.DeleteWithIDRequest{
+		UserID:   userID,
+		EntityID: c.Params("cardID"),
 	})
 	if err != nil {
 		return err
-	} else if !rspModifyCard.Success {
+	} else if !rspDeleteCard.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)
 }
 
-func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
+func (e *Frontend) ModifyCardSideHandler(c *fiber.Ctx) error {
+	var data map[string]*string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
 	userID := helper.GetUserIDFromContext(c)
-	rspDeleteCard, err := e.cardDeckService.DeleteCard(c.Context(), &pbCardDeck.DeleteCardRequest{
-		UserID: userID,
-		CardID: c.Params("cardID"),
+	rspModifyCardSide, err := e.cardDeckService.ModifyCardSide(c.Context(), &pbCardDeck.ModifyCardSideRequest{
+		UserID:     userID,
+		CardSideID: c.Params("cardSideID"),
+		Content:    data["content"],
 	})
 	if err != nil {
 		return err
-	} else if !rspDeleteCard.Success {
+	} else if !rspModifyCardSide.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) DeleteCardSideHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspDeleteCardSide, err := e.cardDeckService.DeleteCardSide(c.Context(), &pbCardDeck.DeleteWithIDRequest{
+		UserID:   userID,
+		EntityID: c.Params("cardSideID"),
+	})
+	if err != nil {
+		return err
+	} else if !rspDeleteCardSide.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)

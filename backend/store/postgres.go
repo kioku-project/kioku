@@ -52,7 +52,7 @@ func NewCardDeckStore() (CardDeckStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = db.AutoMigrate(&model.Card{}, &model.Deck{})
+	err = db.AutoMigrate(&model.CardSide{}, &model.Card{}, &model.Deck{})
 	if err != nil {
 		return nil, err
 	}
@@ -136,16 +136,58 @@ func (s *CardDeckStoreImpl) CreateCard(newCard *model.Card) error {
 
 func (s *CardDeckStoreImpl) ModifyCard(card *model.Card) (err error) {
 	err = s.db.Save(&model.Card{
-		ID:        card.ID,
-		DeckID:    card.DeckID,
-		Frontside: card.Frontside,
-		Backside:  card.Backside,
+		ID:              card.ID,
+		DeckID:          card.DeckID,
+		FirstCardSideID: card.FirstCardSideID,
 	}).Error
 	return
 }
 
 func (s *CardDeckStoreImpl) DeleteCard(card *model.Card) error {
 	return s.db.Delete(card).Error
+}
+
+func (s *CardDeckStoreImpl) FindCardSidesByCardID(cardID string) ([]model.CardSide, error) {
+	card, err := s.FindCardByID(cardID)
+	if err != nil {
+		return nil, err
+	}
+	var cardSides []model.CardSide
+	nextCardSideID := card.FirstCardSideID
+	for finished := false; !finished; {
+		cardSide, err := s.FindCardSideByID(nextCardSideID)
+		if err != nil {
+			return nil, err
+		}
+		cardSides = append(cardSides, *cardSide)
+		if cardSide.NextCardSideID == "" {
+			finished = true
+		} else {
+			nextCardSideID = cardSide.NextCardSideID
+		}
+	}
+	return cardSides, nil
+}
+
+func (s *CardDeckStoreImpl) FindCardSideByID(cardSideID string) (cardSide *model.CardSide, err error) {
+	if err = s.db.Where(model.CardSide{ID: cardSideID}).Preload("Card").Find(&cardSide).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *CardDeckStoreImpl) CreateCardSide(newCardSide *model.CardSide) error {
+	return s.db.Create(&newCardSide).Error
+}
+
+func (s *CardDeckStoreImpl) ModifyCardSide(cardSide *model.CardSide) error {
+	return s.db.Save(&model.CardSide{
+		ID:                 cardSide.ID,
+		CardID:             cardSide.CardID,
+		Content:            cardSide.Content,
+		PreviousCardSideID: cardSide.PreviousCardSideID,
+		NextCardSideID:     cardSide.NextCardSideID,
+	}).Error
 }
 
 func (s *CollaborationStoreImpl) FindGroupsByUserID(userID string) (groups []model.Group, err error) {

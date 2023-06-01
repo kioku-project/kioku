@@ -8,11 +8,12 @@ service CardDeck {
 	rpc GetGroupDecks(GroupDecksRequest) returns (GroupDecksResponse) {}
 	rpc CreateDeck(CreateDeckRequest) returns (IDResponse) {}
 	rpc ModifyDeck(ModifyDeckRequest) returns (SuccessResponse) {}
-	rpc DeleteDeck(DeckRequest) returns (SuccessResponse) {}
+	rpc DeleteDeck(DeleteWithIDRequest) returns (SuccessResponse) {}
 	rpc GetDeckCards(DeckRequest) returns (DeckCardsResponse) {}
 	rpc CreateCard(CreateCardRequest) returns (IDResponse) {}
-	rpc ModifyCard(ModifyCardRequest) returns (SuccessResponse) {}
-	rpc DeleteCard(DeleteCardRequest) returns (SuccessResponse) {}
+	rpc DeleteCard(DeleteWithIDRequest) returns (SuccessResponse) {}
+	rpc ModifyCardSide(ModifyCardSideRequest) returns (SuccessResponse) {}
+	rpc DeleteCardSide(DeleteWithIDRequest) returns (SuccessResponse) {}
 }
 
 message GroupDecksRequest {
@@ -49,6 +50,11 @@ message SuccessResponse {
 	bool success = 1;
 }
 
+message DeleteWithIDRequest {
+	string userID = 1;
+	string entityID = 2;
+}
+
 message DeckRequest {
 	string userID = 1;
 	string deckID = 2;
@@ -60,25 +66,22 @@ message DeckCardsResponse {
 
 message Card {
 	string cardID = 1;
-	string frontside = 2;
-	string backside = 3;
+	repeated CardSide sides = 2;
+}
+
+message CardSide {
+	string cardSideID = 1;
+	string content = 2;
 }
 
 message CreateCardRequest {
 	string userID = 1;
 	string deckID = 2;
-	string frontside = 3;
-	string backside = 4;
+	repeated string sides = 3;
 }
 
-message ModifyCardRequest {
+message ModifyCardSideRequest {
 	string userID = 1;
-	string cardID = 2;
-	optional string frontside = 3;
-	optional string backside = 4;
-}
-
-message DeleteCardRequest {
-	string userID = 1;
-	string cardID = 2;
+	string cardSideID = 2;
+	optional string content = 3;
 }

@@ -77,10 +77,9 @@ func StoreDeckToProtoDeckConverter(deck model.Deck) *pbCardDeck.Deck {
 	}
 }
 
-func StoreCardToProtoCardConverter(card model.Card) *pbCardDeck.Card {
-	return &pbCardDeck.Card{
-		CardID:    card.ID,
-		Frontside: card.Frontside,
-		Backside:  card.Backside,
+func StoreCardSideToProtoCardSideConverter(cardSide model.CardSide) *pbCardDeck.CardSide {
+	return &pbCardDeck.CardSide{
+		CardSideID: cardSide.ID,
+		Content:    cardSide.Content,
 	}
 }

@@ -6,11 +6,11 @@ import (
 )
 
 type Card struct {
-	ID        string `gorm:"primaryKey"`
-	DeckID    string `gorm:"not null"`
-	Deck      Deck
-	Frontside string `gorm:"not null"`
-	Backside  string `gorm:"not null"`
+	ID              string `gorm:"primaryKey"`
+	DeckID          string `gorm:"not null"`
+	Deck            Deck
+	FirstCardSideID string     `gorm:"not null"`
+	CardSides       []CardSide `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func (c *Card) BeforeCreate(db *gorm.DB) (err error) {

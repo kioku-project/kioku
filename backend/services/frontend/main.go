@@ -99,8 +99,10 @@ func main() {
 
 	app.Get("/api/decks/:deckID/cards", svc.GetDeckCardsHandler)
 	app.Post("/api/decks/:deckID/cards", svc.CreateCardHandler)
-	app.Put("/api/cards/:cardID", svc.ModifyCardHandler)
 	app.Delete("/api/cards/:cardID", svc.DeleteCardHandler)
+
+	app.Put("/api/cardSide/:cardSideID", svc.ModifyCardSideHandler)
+	app.Delete("/api/cardSide/:cardSideID", svc.DeleteCardSideHandler)
 
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {

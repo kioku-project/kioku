@@ -307,8 +307,7 @@ func (e *Collaboration) InviteUserToGroup(ctx context.Context, req *pb.GroupInvi
 		return err
 	}
 	logger.Infof("Got user id %s for email %s", userRsp.UserID, req.InvitedUserEmail)
-	err = e.checkForGroupAndAdmission(userRsp.UserID, req.GroupID)
-	if err != nil {
+	if err = e.checkForGroupAndAdmission(userRsp.UserID, req.GroupID); err != nil {
 		return err
 	}
 	newAdmission := model.GroupAdmission{
@@ -316,8 +315,7 @@ func (e *Collaboration) InviteUserToGroup(ctx context.Context, req *pb.GroupInvi
 		GroupID:         req.GroupID,
 		AdmissionStatus: model.Invited,
 	}
-	err = e.store.CreateNewGroupAdmission(&newAdmission)
-	if err != nil {
+	if err = e.store.CreateNewGroupAdmission(&newAdmission); err != nil {
 		return err
 	}
 	rsp.Success = true

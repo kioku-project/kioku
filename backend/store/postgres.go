@@ -73,7 +73,7 @@ func NewCollaborationStore() (CollaborationStore, error) {
 
 func (s *UserStoreImpl) RegisterNewUser(newUser *model.User) error {
 	newUser.Email = strings.ToLower(newUser.Email)
-	return s.db.Create(&newUser).Error
+	return s.db.Create(newUser).Error
 }
 
 func (s *UserStoreImpl) FindUserByEmail(email string) (user *model.User, err error) {
@@ -106,7 +106,7 @@ func (s *CardDeckStoreImpl) FindDeckByID(deckID string) (deck *model.Deck, err e
 }
 
 func (s *CardDeckStoreImpl) CreateDeck(newDeck *model.Deck) error {
-	return s.db.Create(&newDeck).Error
+	return s.db.Create(newDeck).Error
 }
 
 func (s *CardDeckStoreImpl) ModifyDeck(deck *model.Deck) (err error) {
@@ -131,7 +131,7 @@ func (s *CardDeckStoreImpl) FindCardByID(cardID string) (card *model.Card, err e
 }
 
 func (s *CardDeckStoreImpl) CreateCard(newCard *model.Card) error {
-	return s.db.Create(&newCard).Error
+	return s.db.Create(newCard).Error
 }
 
 func (s *CardDeckStoreImpl) ModifyCard(card *model.Card) (err error) {
@@ -165,14 +165,14 @@ func (s *CollaborationStoreImpl) FindGroupByID(groupID string) (group *model.Gro
 }
 
 func (s *CollaborationStoreImpl) CreateNewGroupWithAdmin(adminUserID string, newGroup *model.Group) error {
-	if err := s.db.Create(&newGroup).Error; err != nil {
+	if err := s.db.Create(newGroup).Error; err != nil {
 		return err
 	}
-	return s.db.Create(model.GroupUserRole{GroupID: newGroup.ID, UserID: adminUserID, RoleType: model.RoleAdmin}).Error
+	return s.db.Create(&model.GroupUserRole{GroupID: newGroup.ID, UserID: adminUserID, RoleType: model.RoleAdmin}).Error
 }
 
 func (s *CollaborationStoreImpl) AddNewMemberToGroup(userID string, groupID string) error {
-	return s.db.Create(model.GroupUserRole{GroupID: groupID, UserID: userID, RoleType: model.RoleRead}).Error
+	return s.db.Create(&model.GroupUserRole{GroupID: groupID, UserID: userID, RoleType: model.RoleRead}).Error
 }
 
 func (s *CollaborationStoreImpl) ModifyGroup(group *model.Group) (err error) {
@@ -206,7 +206,7 @@ func (s *CollaborationStoreImpl) GetGroupMemberRoles(groupID string) (groupMembe
 }
 
 func (s *CollaborationStoreImpl) CreateNewGroupAdmission(newAdmission *model.GroupAdmission) error {
-	return s.db.Create(&newAdmission).Error
+	return s.db.Create(newAdmission).Error
 }
 
 func (s *CollaborationStoreImpl) FindGroupRequestsByGroupID(groupID string) (groupAdmissions []model.GroupAdmission, err error) {

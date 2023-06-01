@@ -11,6 +11,7 @@ type ClientID string
 const (
 	CardDeckServiceID      ClientID = "services.cardDeck"
 	CollaborationServiceID ClientID = "services.collaboration"
+	FrontendServiceID      ClientID = "services.frontend"
 	UserServiceID          ClientID = "services.user"
 )
 
@@ -58,6 +59,10 @@ func NewMicroHashingFailedErr(id ClientID) error {
 
 func NewMicroInvalidEmailOrPasswordErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "invalid email or password")
+}
+
+func NewMicroNotSuccessfulResponseErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "operation not successful")
 }
 
 func NewFiberBadRequestErr(detail string) error {

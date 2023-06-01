@@ -29,8 +29,7 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	} else if !errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
 		return err
 	}
-	err := helper.CheckForValidName(req.Name, helper.UserNameRegex, helper.UserServiceID)
-	if err != nil {
+	if err := helper.CheckForValidName(req.Name, helper.UserNameRegex, helper.UserServiceID); err != nil {
 		return err
 	}
 	newUser := model.User{

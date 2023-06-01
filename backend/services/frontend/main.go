@@ -78,29 +78,29 @@ func main() {
 	////
 	// - add endpoints where authentication is needed below this block.
 	////
-	app.Get("/api/user/invitation", svc.GetGroupInvitationsHandler)
-	app.Put("/api/user/invitation/:invitationID", svc.ManageGroupInvitationHandler)
+	app.Get("/api/user/invitations", svc.GetGroupInvitationsHandler)
+	app.Put("/api/user/invitations/:invitationID", svc.ManageGroupInvitationHandler)
 
-	app.Get("/api/group", svc.GetUserGroupsHandler)
-	app.Post("/api/group", svc.CreateGroupHandler)
-	app.Put("/api/group/:groupID", svc.ModifyGroupHandler)
-	app.Delete("/api/group/:groupID", svc.DeleteGroupHandler)
+	app.Get("/api/groups", svc.GetUserGroupsHandler)
+	app.Post("/api/groups", svc.CreateGroupHandler)
+	app.Put("/api/groups/:groupID", svc.ModifyGroupHandler)
+	app.Delete("/api/groups/:groupID", svc.DeleteGroupHandler)
 
-	app.Get("/api/group/:groupID/member", svc.GetGroupMembersHandler)
-	app.Get("/api/group/:groupID/member/request", svc.GetGroupMemberRequestsHandler)
-	app.Post("/api/group/:groupID/member/request", svc.RequestToJoinGroupHandler)
-	app.Put("/api/group/:groupID/member/request/:requestID", svc.ManageGroupMemberRequestHandler)
-	app.Post("/api/group/:groupID/member/invite", svc.InviteUserToGroupHandler)
+	app.Get("/api/groups/:groupID/members", svc.GetGroupMembersHandler)
+	app.Get("/api/groups/:groupID/members/requests", svc.GetGroupMemberRequestsHandler)
+	app.Post("/api/groups/:groupID/members/requests", svc.RequestToJoinGroupHandler)
+	app.Put("/api/groups/:groupID/members/requests/:requestID", svc.ManageGroupMemberRequestHandler)
+	app.Post("/api/groups/:groupID/members/invite", svc.InviteUserToGroupHandler)
 
-	app.Get("/api/group/:groupID/deck", svc.GetGroupDecksHandler)
-	app.Post("/api/group/:groupID/deck", svc.CreateDeckHandler)
-	app.Put("/api/deck/:deckID", svc.ModifyDeckHandler)
-	app.Delete("/api/deck/:deckID", svc.DeleteDeckHandler)
+	app.Get("/api/groups/:groupID/decks", svc.GetGroupDecksHandler)
+	app.Post("/api/groups/:groupID/decks", svc.CreateDeckHandler)
+	app.Put("/api/decks/:deckID", svc.ModifyDeckHandler)
+	app.Delete("/api/decks/:deckID", svc.DeleteDeckHandler)
 
-	app.Get("/api/deck/:deckID/card", svc.GetDeckCardsHandler)
-	app.Post("/api/deck/:deckID/card", svc.CreateCardHandler)
-	app.Put("/api/card/:cardID", svc.ModifyCardHandler)
-	app.Delete("/api/card/:cardID", svc.DeleteCardHandler)
+	app.Get("/api/decks/:deckID/cards", svc.GetDeckCardsHandler)
+	app.Post("/api/decks/:deckID/cards", svc.CreateCardHandler)
+	app.Put("/api/cards/:cardID", svc.ModifyCardHandler)
+	app.Delete("/api/cards/:cardID", svc.DeleteCardHandler)
 
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {

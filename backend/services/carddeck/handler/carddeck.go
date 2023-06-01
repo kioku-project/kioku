@@ -55,8 +55,7 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
 		return err
 	}
-	err := helper.CheckForValidName(req.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID)
-	if err != nil {
+	if err := helper.CheckForValidName(req.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID); err != nil {
 		return err
 	}
 	newDeck := model.Deck{
@@ -64,8 +63,7 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 		CreatedAt: time.Now(),
 		GroupID:   req.GroupID,
 	}
-	err = e.store.CreateDeck(&newDeck)
-	if err != nil {
+	if err := e.store.CreateDeck(&newDeck); err != nil {
 		return err
 	}
 	rsp.ID = newDeck.ID

@@ -420,6 +420,45 @@
 			"response": []
 		},
 		{
+			"name": "New Card Side",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"placeBeforeCardSideID\": \"\",\n    \"content\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/api/cards/:cardID/cardSides",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"cards",
+						":cardID",
+						"cardSides"
+					],
+					"variable": [
+						{
+							"key": "cardID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Manage Group Invitation",
 			"request": {
 				"method": "PUT",

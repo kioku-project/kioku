@@ -190,12 +190,14 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 		} else {
 			firstCardSideID = newCardSide.ID
 		}
+		logger.Infof("Created card side %s and updated references", newCardSide.ID)
 		previousCardSide = newCardSide
 	}
 	newCard.FirstCardSideID = firstCardSideID
 	if err := e.store.ModifyCard(&newCard); err != nil {
 		return err
 	}
+	logger.Infof("Modified first card reference in card %s", newCard.ID)
 	rsp.ID = newCard.ID
 	logger.Infof("Successfully created new card (%s) in deck (%s)", newCard.ID, req.DeckID)
 	return nil
@@ -216,6 +218,70 @@ func (e *CardDeck) DeleteCard(ctx context.Context, req *pb.DeleteWithIDRequest, 
 	}
 	rsp.Success = true
 	logger.Infof("Successfully deleted card (%s) in deck (%s)", req.EntityID, card.DeckID)
+	return nil
+}
+
+func (e *CardDeck) CreateCardSide(ctx context.Context, req *pb.CreateCardSideRequest, rsp *pb.IDResponse) error {
+	logger.Infof("Received CardDeck.CreateCardSide request: %v", req)
+	card, err := helper.FindStoreEntity(e.store.FindCardByID, req.CardID, helper.CardDeckServiceID)
+	if err != nil {
+		return err
+	}
+	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
+		return err
+	}
+	var previousCardSideIDForNewCardSide string
+	var newPreviousCard, newNextCard *model.CardSide
+	if req.PlaceBeforeCardSideID != "" {
+		newNextCard, err = helper.FindStoreEntity(e.store.FindCardSideByID, req.PlaceBeforeCardSideID, helper.CardDeckServiceID)
+		if err != nil {
+			return err
+		}
+		if newNextCard.PreviousCardSideID != "" {
+			if newPreviousCard, err = helper.FindStoreEntity(e.store.FindCardSideByID, newNextCard.PreviousCardSideID, helper.CardDeckServiceID); err != nil {
+				return err
+			}
+		}
+		previousCardSideIDForNewCardSide = newNextCard.PreviousCardSideID
+	} else {
+		newPreviousCard, err = helper.FindStoreEntity(e.store.FindLastCardSideOfCardByID, req.CardID, helper.CardDeckServiceID)
+		if err != nil {
+			return err
+		}
+		previousCardSideIDForNewCardSide = newPreviousCard.ID
+	}
+	newCardSide := model.CardSide{
+		CardID:             card.ID,
+		Content:            req.Content,
+		PreviousCardSideID: previousCardSideIDForNewCardSide,
+		NextCardSideID:     req.PlaceBeforeCardSideID,
+	}
+	err = e.store.CreateCardSide(&newCardSide)
+	if err != nil {
+		return err
+	}
+	if newPreviousCard != nil {
+		newPreviousCard.NextCardSideID = newCardSide.ID
+		err = e.store.ModifyCardSide(newPreviousCard)
+		if err != nil {
+			return err
+		}
+	} else {
+		card.FirstCardSideID = newCardSide.ID
+		err = e.store.ModifyCard(card)
+		if err != nil {
+			return err
+		}
+	}
+	if newNextCard != nil {
+		newNextCard.PreviousCardSideID = newCardSide.ID
+		err = e.store.ModifyCardSide(newNextCard)
+		if err != nil {
+			return err
+		}
+	}
+	rsp.ID = newCardSide.ID
+	logger.Infof("Successfully created card side (%s) in card (%s)", newCardSide.ID, card.ID)
 	return nil
 }
 

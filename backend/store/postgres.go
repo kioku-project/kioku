@@ -176,6 +176,13 @@ func (s *CardDeckStoreImpl) FindCardSideByID(cardSideID string) (cardSide *model
 	return
 }
 
+func (s *CardDeckStoreImpl) FindLastCardSideOfCardByID(cardID string) (cardSide *model.CardSide, err error) {
+	if err = s.db.Where(model.CardSide{CardID: cardID, NextCardSideID: ""}).Preload("Card").Find(&cardSide).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
 func (s *CardDeckStoreImpl) CreateCardSide(newCardSide *model.CardSide) error {
 	return s.db.Create(&newCardSide).Error
 }

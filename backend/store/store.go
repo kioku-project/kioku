@@ -20,6 +20,7 @@ type CardDeckStore interface {
 	DeleteCard(card *model.Card) error
 	FindCardSidesByCardID(cardID string) ([]model.CardSide, error)
 	FindCardSideByID(cardSideID string) (*model.CardSide, error)
+	FindLastCardSideOfCardByID(cardID string) (*model.CardSide, error)
 	CreateCardSide(newCardSide *model.CardSide) error
 	ModifyCardSide(cardSide *model.CardSide) error
 }

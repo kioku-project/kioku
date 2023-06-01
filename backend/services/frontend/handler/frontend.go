@@ -212,8 +212,7 @@ func (e *Frontend) CreateGroupHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	strSuccess := rspCreateGroup.ID
-	return c.SendString(strSuccess)
+	return c.SendString(rspCreateGroup.ID)
 }
 
 func (e *Frontend) ModifyGroupHandler(c *fiber.Ctx) error {
@@ -368,8 +367,7 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	strSuccess := rspCreateDeck.ID
-	return c.SendString(strSuccess)
+	return c.SendString(rspCreateDeck.ID)
 }
 
 func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
@@ -434,8 +432,7 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	strSuccess := rspCreateCard.ID
-	return c.SendString(strSuccess)
+	return c.SendString(rspCreateCard.ID)
 }
 
 func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
@@ -450,6 +447,28 @@ func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)
+}
+
+func (e *Frontend) CreateCardSideHandler(c *fiber.Ctx) error {
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	var content string
+	if content = strings.TrimSpace(data["content"]); content == "" {
+		return helper.NewFiberBadRequestErr("no content given")
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspCreateCardSide, err := e.cardDeckService.CreateCardSide(c.Context(), &pbCardDeck.CreateCardSideRequest{
+		UserID:                userID,
+		CardID:                c.Params("cardID"),
+		PlaceBeforeCardSideID: data["placeBeforeCardSideID"],
+		Content:               content,
+	})
+	if err != nil {
+		return nil
+	}
+	return c.SendString(rspCreateCardSide.ID)
 }
 
 func (e *Frontend) ModifyCardSideHandler(c *fiber.Ctx) error {

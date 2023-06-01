@@ -57,6 +57,9 @@ func main() {
 	fiberConfig := fiber.Config{
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 			parsedError := microErrors.Parse(err.Error())
+			if parsedError.Code == 0 {
+				parsedError.Code = fiber.StatusInternalServerError
+			}
 			logger.Infof("Error from %s containing code (%d) and error detail (%s)", parsedError.Id, parsedError.Code, parsedError.Detail)
 			return ctx.Status(int(parsedError.Code)).SendString(parsedError.Detail)
 		},
@@ -101,6 +104,7 @@ func main() {
 	app.Post("/api/decks/:deckID/cards", svc.CreateCardHandler)
 	app.Delete("/api/cards/:cardID", svc.DeleteCardHandler)
 
+	app.Post("/api/cards/:cardID/cardSides", svc.CreateCardSideHandler)
 	app.Put("/api/cardSide/:cardSideID", svc.ModifyCardSideHandler)
 	app.Delete("/api/cardSide/:cardSideID", svc.DeleteCardSideHandler)
 

@@ -12,6 +12,7 @@ service CardDeck {
 	rpc GetDeckCards(DeckRequest) returns (DeckCardsResponse) {}
 	rpc CreateCard(CreateCardRequest) returns (IDResponse) {}
 	rpc DeleteCard(DeleteWithIDRequest) returns (SuccessResponse) {}
+	rpc CreateCardSide(CreateCardSideRequest) returns (IDResponse) {}
 	rpc ModifyCardSide(ModifyCardSideRequest) returns (SuccessResponse) {}
 	rpc DeleteCardSide(DeleteWithIDRequest) returns (SuccessResponse) {}
 }
@@ -78,6 +79,13 @@ message CreateCardRequest {
 	string userID = 1;
 	string deckID = 2;
 	repeated string sides = 3;
+}
+
+message CreateCardSideRequest {
+	string userID = 1;
+	string cardID = 2;
+	string placeBeforeCardSideID = 3;
+	string content = 4;
 }
 
 message ModifyCardSideRequest {

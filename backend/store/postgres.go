@@ -197,6 +197,10 @@ func (s *CardDeckStoreImpl) ModifyCardSide(cardSide *model.CardSide) error {
 	}).Error
 }
 
+func (s *CardDeckStoreImpl) DeleteCardSide(cardSide *model.CardSide) error {
+	return s.db.Delete(cardSide).Error
+}
+
 func (s *CollaborationStoreImpl) FindGroupsByUserID(userID string) (groups []model.Group, err error) {
 	if err = s.db.Joins("Join group_user_roles on group_user_roles.group_id = groups.id").
 		Where("group_user_roles.user_id = ?", userID).

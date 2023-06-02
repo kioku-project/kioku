@@ -23,6 +23,7 @@ type CardDeckStore interface {
 	FindLastCardSideOfCardByID(cardID string) (*model.CardSide, error)
 	CreateCardSide(newCardSide *model.CardSide) error
 	ModifyCardSide(cardSide *model.CardSide) error
+	DeleteCardSide(cardSide *model.CardSide) error
 }
 
 type CollaborationStore interface {

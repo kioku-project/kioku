@@ -742,6 +742,35 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Delete Card Side",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/cardSide/:cardSideID",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"cardSide",
+						":cardSideID"
+					],
+					"variable": [
+						{
+							"key": "cardSideID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {

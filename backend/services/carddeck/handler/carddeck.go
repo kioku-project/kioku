@@ -244,11 +244,13 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pb.CreateCardSideReq
 		}
 		previousCardSideIDForNewCardSide = newNextCard.PreviousCardSideID
 	} else {
-		newPreviousCard, err = helper.FindStoreEntity(e.store.FindLastCardSideOfCardByID, req.CardID, helper.CardDeckServiceID)
-		if err != nil {
-			return err
+		if card.FirstCardSideID != "" {
+			newPreviousCard, err = helper.FindStoreEntity(e.store.FindLastCardSideOfCardByID, req.CardID, helper.CardDeckServiceID)
+			if err != nil {
+				return err
+			}
+			previousCardSideIDForNewCardSide = newPreviousCard.ID
 		}
-		previousCardSideIDForNewCardSide = newPreviousCard.ID
 	}
 	newCardSide := model.CardSide{
 		CardID:             card.ID,
@@ -331,7 +333,15 @@ func (e *CardDeck) DeleteCardSide(ctx context.Context, req *pb.DeleteWithIDReque
 				return err
 			}
 			card.FirstCardSideID = cardSideToDelete.NextCardSideID
+			err = e.store.ModifyCard(card)
+			if err != nil {
+				return err
+			}
 		}
+	}
+	err = e.store.DeleteCardSide(cardSideToDelete)
+	if err != nil {
+		return err
 	}
 	rsp.Success = true
 	logger.Infof("Successfully deleted card side %s of card %s", req.EntityID, cardSideToDelete.CardID)

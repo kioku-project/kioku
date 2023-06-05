@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { Card } from "./Flashcard";
+import { Flashcard } from "./Flashcard";
 
-const meta: Meta<typeof Card> = {
+const meta: Meta<typeof Flashcard> = {
 	title: "Components/Flashcard",
-	component: Card,
+	component: Flashcard,
 	tags: ["autodocs"],
 	args: {
 		id: "CardId",
-		card: [
+		sides: [
 			{
 				header: "Front Header",
 				description: "Front Description",
@@ -22,12 +22,11 @@ const meta: Meta<typeof Card> = {
 				description: "Back Description",
 			},
 		],
-		cardsleft: 16,
 	},
 };
 
 export default meta;
-type Story = StoryObj<typeof Card>;
+type Story = StoryObj<typeof Flashcard>;
 
 export const Front: Story = {
 	args: {},
@@ -62,5 +61,11 @@ export const EditBack: Story = {
 	args: {
 		cardSide: 2,
 		isEdit: true,
+	},
+};
+
+export const FullSize: Story = {
+	args: {
+		fullSize: true,
 	},
 };

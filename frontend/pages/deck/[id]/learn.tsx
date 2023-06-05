@@ -1,7 +1,7 @@
-import { Header } from "../components/navigation/Header";
-import { Card } from "../components/flashcard/Flashcard";
+import { Header } from "../../../components/navigation/Header";
+import { Flashcard } from "../../../components/flashcard/Flashcard";
 import Head from "next/head";
-import Authenticated from "../components/accessControl/Authenticated";
+import Authenticated from "../../../components/accessControl/Authenticated";
 
 export default function Page() {
 	return (
@@ -14,9 +14,9 @@ export default function Page() {
 			<Authenticated>
 				<div className="min-w-screen flex h-screen select-none flex-col bg-eggshell">
 					<Header login={true}></Header>
-					<Card
+					<Flashcard
 						id="flashcardId"
-						card={[
+						sides={[
 							{
 								header: "Front Header",
 								description: "Front Description",
@@ -30,8 +30,7 @@ export default function Page() {
 								description: "Back Description",
 							},
 						]}
-						cardsleft={16}
-					></Card>
+					></Flashcard>
 				</div>
 			</Authenticated>
 		</div>

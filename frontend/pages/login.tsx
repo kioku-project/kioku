@@ -81,15 +81,31 @@ export default function Page() {
 				onSubmit={(e) => e.preventDefault()}
 				className="my-5 flex w-5/6 flex-col items-center space-y-4"
 			>
-				<FormInput id="email" type="email" name="email" label="Email" />
+				<FormInput
+					id="email"
+					type="email"
+					name="email"
+					label="Email"
+					style="primary"
+					className="sm:text-sm"
+				/>
 				{!login && (
-					<FormInput id="name" type="text" name="name" label="Name" />
+					<FormInput
+						id="name"
+						type="text"
+						name="name"
+						label="Name"
+						style="primary"
+						className="sm:text-sm"
+					/>
 				)}
 				<FormInput
 					id="password"
 					type="password"
 					name="password"
 					label="Password"
+					style="primary"
+					className="sm:text-sm"
 				/>
 				{!login && (
 					<FormInput
@@ -97,6 +113,8 @@ export default function Page() {
 						type="password"
 						name="passwordRepeat"
 						label="Repeat Password"
+						style="primary"
+						className="sm:text-sm"
 					/>
 				)}
 

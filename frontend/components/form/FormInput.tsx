@@ -1,4 +1,5 @@
-import React from "react";
+import React, { ChangeEventHandler } from "react";
+import { EventsType } from "react-tooltip";
 
 interface FormInputProps {
 	/**
@@ -22,6 +23,10 @@ interface FormInputProps {
 	 */
 	value?: string;
 	/**
+	 * FormInput placeholder
+	 */
+	placeholder?: string;
+	/**
 	 * FormInput styling
 	 */
 	style?: string;
@@ -30,17 +35,25 @@ interface FormInputProps {
 	 */
 	required?: boolean;
 	/**
+	 * Is the FormInput read only?
+	 */
+	readOnly?: boolean;
+	/**
 	 * Additional classes
 	 */
 	className?: string;
+	/**
+	 * optional change handler
+	 */
+	onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 function getStyle(style: string): string {
 	const getStyle: { [style: string]: string } = {
 		primary:
-			"border-eggshell bg-eggshell text-gray-900 invalid:border-red focus:border-kiokuDarkBlue",
+			"invalid:border-red px-1.5 py-1.5 font-medium text-kiokuDarkBlue focus:border-kiokuDarkBlue",
 	};
-	return getStyle[style] ?? getStyle.primary;
+	return getStyle[style] ?? "";
 }
 
 /**
@@ -55,18 +68,15 @@ export const FormInput = ({
 	...props
 }: FormInputProps) => {
 	return (
-		<div className="flex w-full flex-col">
-			<label
-				htmlFor={name}
-				className="block text-sm font-medium leading-6 text-gray-600"
-			>
+		<div className="flex w-full flex-col text-kiokuDarkBlue">
+			<label htmlFor={name} className="">
 				{label}
 			</label>
 			<input
 				name={name}
-				className={`block w-full rounded-md border-2 px-1.5 py-1.5 outline-none sm:text-sm sm:leading-6 ${getStyle(
+				className={`w-full rounded-md border-2 border-eggshell bg-eggshell outline-none ${getStyle(
 					style
-				)}`}
+				)} ${className ?? ""}`}
 				{...props}
 			/>
 		</div>

@@ -27,10 +27,11 @@ export async function authedFetch(
 		await reauth();
 	}
 	const answ = await fetch(input, {
-		headers: {
-			Authorization: "Bearer " + getCookie("access_token"),
-		},
 		...init,
+		headers: Object.assign(
+			{ Authorization: "Bearer " + getCookie("access_token") },
+			init?.headers
+		),
 	});
 	return answ;
 }

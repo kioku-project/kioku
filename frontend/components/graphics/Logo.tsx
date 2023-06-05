@@ -33,8 +33,8 @@ export const Logo = ({ className, text = true }: LogoProps) => {
 			}}
 		>
 			<Image
-				src="./kioku-logo.svg"
-				alt="Koiku"
+				src="/kioku-logo.svg"
+				alt="Kioku"
 				height={0}
 				width={0}
 				className="w-16 hover:cursor-pointer md:w-20 lg:w-24"

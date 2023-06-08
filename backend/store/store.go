@@ -24,6 +24,7 @@ type CardDeckStore interface {
 	CreateCardSide(newCardSide *model.CardSide) error
 	ModifyCardSide(cardSide *model.CardSide) error
 	DeleteCardSide(cardSide *model.CardSide) error
+	DeleteCardSidesOfCardByID(cardID string) error
 }
 
 type CollaborationStore interface {

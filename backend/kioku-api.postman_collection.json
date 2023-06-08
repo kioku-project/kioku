@@ -387,7 +387,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"sides\": [\n        \"side 1\",\n        \"side 2\",\n        \"side 3\"\n    ]\n}",
+					"raw": "{\n    \"sides\": [\n        {\n            \"header\": \"side 1\",\n            \"description\": \"front\"\n        },\n        {\n            \"header\": \"side 2\",\n            \"description\": \"back\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -426,7 +426,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"placeBeforeCardSideID\": \"\",\n    \"content\": \"\"\n}",
+					"raw": "{\n    \"placeBeforeCardSideID\": \"\",\n    \"header\": \"side 3\",\n    \"description\": \"back\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -619,13 +619,13 @@
 			"response": []
 		},
 		{
-			"name": "Modify CardSide",
+			"name": "Modify Card",
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"content\": \"side 4\"\n}",
+					"raw": "{\n    \"sides\": [\n        {\n            \"header\": \"front new\",\n            \"description\": \"front new\"\n        },\n        {\n            \"header\": \"back new\",\n            \"description\": \"back new\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -633,7 +633,7 @@
 					}
 				},
 				"url": {
-					"raw": "127.0.0.1:3000/api/cardsides/:cardSideID",
+					"raw": "127.0.0.1:3000/api/cards/:cardID",
 					"host": [
 						"127",
 						"0",
@@ -643,7 +643,45 @@
 					"port": "3000",
 					"path": [
 						"api",
-						"cardsides",
+						"cards",
+						":cardID"
+					],
+					"variable": [
+						{
+							"key": "cardID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modify CardSide",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"header\": \"side 3\",\n    \"description\": \"description\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/api/cardSides/:cardSideID",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"cardSides",
 						":cardSideID"
 					],
 					"variable": [
@@ -749,7 +787,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "127.0.0.1:3000/api/cardSide/:cardSideID",
+					"raw": "127.0.0.1:3000/api/cardSides/:cardSideID",
 					"host": [
 						"127",
 						"0",
@@ -759,7 +797,7 @@
 					"port": "3000",
 					"path": [
 						"api",
-						"cardSide",
+						"cardSides",
 						":cardSideID"
 					],
 					"variable": [

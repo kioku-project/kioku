@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package carddeck;
+package cardDeck;
 
-option go_package = "./proto;carddeck";
+option go_package = "./proto;cardDeck";
 
 service CardDeck {
 	rpc GetGroupDecks(GroupDecksRequest) returns (GroupDecksResponse) {}
@@ -11,6 +11,7 @@ service CardDeck {
 	rpc DeleteDeck(DeleteWithIDRequest) returns (SuccessResponse) {}
 	rpc GetDeckCards(DeckRequest) returns (DeckCardsResponse) {}
 	rpc CreateCard(CreateCardRequest) returns (IDResponse) {}
+	rpc ModifyCard(ModifyCardRequest) returns (SuccessResponse) {}
 	rpc DeleteCard(DeleteWithIDRequest) returns (SuccessResponse) {}
 	rpc CreateCardSide(CreateCardSideRequest) returns (IDResponse) {}
 	rpc ModifyCardSide(ModifyCardSideRequest) returns (SuccessResponse) {}
@@ -72,24 +73,35 @@ message Card {
 
 message CardSide {
 	string cardSideID = 1;
-	string content = 2;
+	CardSideContent content = 2;
+}
+
+message CardSideContent {
+	string header = 1;
+	string description = 2;
 }
 
 message CreateCardRequest {
 	string userID = 1;
 	string deckID = 2;
-	repeated string sides = 3;
+	repeated CardSideContent sides = 3;
+}
+
+message ModifyCardRequest {
+	string userID = 1;
+	string cardID = 2;
+	repeated CardSideContent sides = 3;
 }
 
 message CreateCardSideRequest {
 	string userID = 1;
 	string cardID = 2;
 	string placeBeforeCardSideID = 3;
-	string content = 4;
+	CardSideContent content = 4;
 }
 
 message ModifyCardSideRequest {
 	string userID = 1;
 	string cardSideID = 2;
-	optional string content = 3;
+	optional CardSideContent content = 3;
 }

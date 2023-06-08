@@ -7,8 +7,8 @@ import (
 )
 
 var (
-	UserNameRegex         *regexp.Regexp = regexp.MustCompile("^[a-zA-Z0-9-._~]{3,20}$")
-	GroupAndDeckNameRegex *regexp.Regexp = regexp.MustCompile("^[a-zA-Z0-9-._~ ]{3,20}$")
+	UserNameRegex         = regexp.MustCompile("^[a-zA-Z0-9-._~]{3,20}$")
+	GroupAndDeckNameRegex = regexp.MustCompile("^[a-zA-Z0-9-._~ ]{3,20}$")
 )
 
 func IsAuthorized(groupRole pbCollaboration.GroupRole, requiredRole pbCollaboration.GroupRole) bool {

@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	service        = "carddeck"
+	service        = "cardDeck"
 	version        = "latest"
 	serviceAddress = fmt.Sprintf("%s%s", os.Getenv("HOSTNAME"), ":8080")
 )

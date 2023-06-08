@@ -29,7 +29,7 @@ func (e *Collaboration) checkForGroupAndAdmission(userID string, groupID string)
 	}
 	logger.Infof("User with id %s is not part of group with id %s", userID, groupID)
 	if _, err := e.store.FindGroupAdmissionByUserAndGroupID(userID, groupID); err == nil {
-		return helper.NewMicroUserAdmissionInProgress(helper.CollaborationServiceID)
+		return helper.NewMicroUserAdmissionInProgressErr(helper.CollaborationServiceID)
 	}
 	logger.Infof("User with id %s has no running admission process for group with id %s", userID, groupID)
 	return nil

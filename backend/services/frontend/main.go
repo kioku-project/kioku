@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
-	jwtware "github.com/gofiber/jwt/v3"
+	jwtWare "github.com/gofiber/jwt/v3"
 	"github.com/joho/godotenv"
 	"github.com/kioku-project/kioku/pkg/helper"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
@@ -50,7 +50,7 @@ func main() {
 	// Create a new instance of the service handler with the initialized database connection
 	svc := handler.New(
 		pbUser.NewUserService("user", srv.Client()),
-		pbCardDeck.NewCardDeckService("carddeck", srv.Client()),
+		pbCardDeck.NewCardDeckService("cardDeck", srv.Client()),
 		pbCollaboration.NewCollaborationService("collaboration", srv.Client()),
 	)
 
@@ -74,7 +74,7 @@ func main() {
 	if err != nil {
 		panic("Could not parse JWT public / private keypair")
 	}
-	app.Use(jwtware.New(jwtware.Config{
+	app.Use(jwtWare.New(jwtWare.Config{
 		SigningMethod: "ES512",
 		SigningKey:    pub,
 	}))
@@ -102,11 +102,12 @@ func main() {
 
 	app.Get("/api/decks/:deckID/cards", svc.GetDeckCardsHandler)
 	app.Post("/api/decks/:deckID/cards", svc.CreateCardHandler)
+	app.Put("/api/cards/:cardID", svc.ModifyCardHandler)
 	app.Delete("/api/cards/:cardID", svc.DeleteCardHandler)
 
 	app.Post("/api/cards/:cardID/cardSides", svc.CreateCardSideHandler)
-	app.Put("/api/cardSide/:cardSideID", svc.ModifyCardSideHandler)
-	app.Delete("/api/cardSide/:cardSideID", svc.DeleteCardSideHandler)
+	app.Put("/api/cardSides/:cardSideID", svc.ModifyCardSideHandler)
+	app.Delete("/api/cardSides/:cardSideID", svc.DeleteCardSideHandler)
 
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {

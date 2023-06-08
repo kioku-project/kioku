@@ -9,7 +9,8 @@ type CardSide struct {
 	ID                 string `gorm:"primaryKey"`
 	CardID             string `gorm:"not null"`
 	Card               Card
-	Content            string `gorm:"not null"`
+	Header             string `gorm:"not null"`
+	Description        string `gorm:"not null"`
 	PreviousCardSideID string
 	NextCardSideID     string
 }

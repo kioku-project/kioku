@@ -49,8 +49,12 @@ func NewMicroUserAlreadyInGroupErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "user already in group")
 }
 
-func NewMicroUserAdmissionInProgress(id ClientID) error {
+func NewMicroUserAdmissionInProgressErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "user already invited")
+}
+
+func NewMicroCardSideNotInGivenCardErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "card side not in given card")
 }
 
 func NewMicroHashingFailedErr(id ClientID) error {

@@ -124,7 +124,7 @@ func (s *CardDeckStoreImpl) DeleteDeck(deck *model.Deck) error {
 }
 
 func (s *CardDeckStoreImpl) FindCardByID(cardID string) (card *model.Card, err error) {
-	if err = s.db.Where(model.Card{ID: cardID}).Preload("Deck").Find(&card).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(model.Card{ID: cardID}).Preload("Deck").First(&card).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
@@ -170,14 +170,14 @@ func (s *CardDeckStoreImpl) FindCardSidesByCardID(cardID string) ([]model.CardSi
 }
 
 func (s *CardDeckStoreImpl) FindCardSideByID(cardSideID string) (cardSide *model.CardSide, err error) {
-	if err = s.db.Where(model.CardSide{ID: cardSideID}).Preload("Card").Find(&cardSide).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(model.CardSide{ID: cardSideID}).Preload("Card").First(&cardSide).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
 func (s *CardDeckStoreImpl) FindLastCardSideOfCardByID(cardID string) (cardSide *model.CardSide, err error) {
-	if err = s.db.Where(model.CardSide{CardID: cardID, NextCardSideID: ""}).Preload("Card").Find(&cardSide).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(model.CardSide{CardID: cardID, NextCardSideID: ""}).Preload("Card").First(&cardSide).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
@@ -191,7 +191,8 @@ func (s *CardDeckStoreImpl) ModifyCardSide(cardSide *model.CardSide) error {
 	return s.db.Save(&model.CardSide{
 		ID:                 cardSide.ID,
 		CardID:             cardSide.CardID,
-		Content:            cardSide.Content,
+		Header:             cardSide.Header,
+		Description:        cardSide.Description,
 		PreviousCardSideID: cardSide.PreviousCardSideID,
 		NextCardSideID:     cardSide.NextCardSideID,
 	}).Error
@@ -199,6 +200,10 @@ func (s *CardDeckStoreImpl) ModifyCardSide(cardSide *model.CardSide) error {
 
 func (s *CardDeckStoreImpl) DeleteCardSide(cardSide *model.CardSide) error {
 	return s.db.Delete(cardSide).Error
+}
+
+func (s *CardDeckStoreImpl) DeleteCardSidesOfCardByID(cardID string) error {
+	return s.db.Where(&model.CardSide{CardID: cardID}).Delete(&model.CardSide{}).Error
 }
 
 func (s *CollaborationStoreImpl) FindGroupsByUserID(userID string) (groups []model.Group, err error) {

@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package carddeck;
+package cardDeck;
 
-option go_package = "./proto;carddeck";
+option go_package = "./proto;cardDeck";
 
 service Health {
   rpc Check(HealthCheckRequest) returns (HealthCheckResponse) {}

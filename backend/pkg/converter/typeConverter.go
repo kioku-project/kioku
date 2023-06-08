@@ -80,6 +80,24 @@ func StoreDeckToProtoDeckConverter(deck model.Deck) *pbCardDeck.Deck {
 func StoreCardSideToProtoCardSideConverter(cardSide model.CardSide) *pbCardDeck.CardSide {
 	return &pbCardDeck.CardSide{
 		CardSideID: cardSide.ID,
-		Content:    cardSide.Content,
+		Content: &pbCardDeck.CardSideContent{
+			Header:      cardSide.Header,
+			Description: cardSide.Description,
+		},
+	}
+}
+
+func FiberCardSideContentToProtoCardSideContent(cardSide FiberCardSideContent) *pbCardDeck.CardSideContent {
+	return &pbCardDeck.CardSideContent{
+		Header:      cardSide.Header,
+		Description: cardSide.Description,
+	}
+}
+
+func ProtoUserWithRoleToFiberGroupMember(groupMembers *pbCollaboration.UserWithRole) FiberGroupMember {
+	return FiberGroupMember{
+		UserID:    groupMembers.User.UserID,
+		Name:      groupMembers.User.Name,
+		GroupRole: groupMembers.GroupRole.String(),
 	}
 }

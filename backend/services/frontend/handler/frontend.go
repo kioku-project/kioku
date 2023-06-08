@@ -262,7 +262,9 @@ func (e *Frontend) GetGroupMembersHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(rspGroupMembers)
+	return c.JSON(converter.FiberGetGroupMembersResponseBody{
+		Members: converter.ConvertToTypeArray(rspGroupMembers.Users, converter.ProtoUserWithRoleToFiberGroupMember),
+	})
 }
 
 func (e *Frontend) GetGroupMemberRequestsHandler(c *fiber.Ctx) error {
@@ -416,23 +418,45 @@ func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
-	var data map[string][]string
+	var data converter.FiberCreateCardRequestBody
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	if len(data["sides"]) == 0 {
-		return helper.NewFiberBadRequestErr("no card sides given")
+	if len(data.Sides) == 0 {
+		return helper.NewFiberBadRequestErr("new card should at least have one side")
 	}
 	userID := helper.GetUserIDFromContext(c)
 	rspCreateCard, err := e.cardDeckService.CreateCard(c.Context(), &pbCardDeck.CreateCardRequest{
 		UserID: userID,
 		DeckID: c.Params("deckID"),
-		Sides:  data["sides"],
+		Sides:  converter.ConvertToTypeArray(data.Sides, converter.FiberCardSideContentToProtoCardSideContent),
 	})
 	if err != nil {
 		return err
 	}
 	return c.SendString(rspCreateCard.ID)
+}
+
+func (e *Frontend) ModifyCardHandler(c *fiber.Ctx) error {
+	var data converter.FiberModifyCardRequestBody
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if len(data.Sides) == 0 {
+		return helper.NewFiberBadRequestErr("modified card should at least have one side")
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspModifyCard, err := e.cardDeckService.ModifyCard(c.Context(), &pbCardDeck.ModifyCardRequest{
+		UserID: userID,
+		CardID: c.Params("cardID"),
+		Sides:  converter.ConvertToTypeArray(data.Sides, converter.FiberCardSideContentToProtoCardSideContent),
+	})
+	if err != nil {
+		return err
+	} else if !rspModifyCard.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
 }
 
 func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
@@ -450,29 +474,25 @@ func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) CreateCardSideHandler(c *fiber.Ctx) error {
-	var data map[string]string
+	var data converter.FiberCreateCardSideRequestBody
 	if err := c.BodyParser(&data); err != nil {
 		return err
-	}
-	var content string
-	if content = strings.TrimSpace(data["content"]); content == "" {
-		return helper.NewFiberBadRequestErr("no content given")
 	}
 	userID := helper.GetUserIDFromContext(c)
 	rspCreateCardSide, err := e.cardDeckService.CreateCardSide(c.Context(), &pbCardDeck.CreateCardSideRequest{
 		UserID:                userID,
 		CardID:                c.Params("cardID"),
-		PlaceBeforeCardSideID: data["placeBeforeCardSideID"],
-		Content:               content,
+		PlaceBeforeCardSideID: data.PlaceBeforeCardSideID,
+		Content:               converter.FiberCardSideContentToProtoCardSideContent(data.FiberCardSideContent),
 	})
 	if err != nil {
-		return nil
+		return err
 	}
 	return c.SendString(rspCreateCardSide.ID)
 }
 
 func (e *Frontend) ModifyCardSideHandler(c *fiber.Ctx) error {
-	var data map[string]*string
+	var data converter.FiberModifyCardSideRequestBody
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
@@ -480,7 +500,7 @@ func (e *Frontend) ModifyCardSideHandler(c *fiber.Ctx) error {
 	rspModifyCardSide, err := e.cardDeckService.ModifyCardSide(c.Context(), &pbCardDeck.ModifyCardSideRequest{
 		UserID:     userID,
 		CardSideID: c.Params("cardSideID"),
-		Content:    data["content"],
+		Content:    converter.FiberCardSideContentToProtoCardSideContent(data.FiberCardSideContent),
 	})
 	if err != nil {
 		return err

@@ -200,7 +200,7 @@ export default function Page() {
 				}),
 			});
 			if (response.ok) {
-				toast.info("Account was created!", { toastId: "accountToast" });
+				toast.info("Account created!", { toastId: "accountToast" });
 				setLogin(true);
 			} else {
 				toast.error("Account already exists!", {

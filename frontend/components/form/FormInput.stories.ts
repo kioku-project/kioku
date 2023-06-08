@@ -43,13 +43,23 @@ export const PasswordInput: Story = {
 
 export const Primary: Story = {
 	args: {
-		style: "primary",
+		label: "Primary",
 		value: "Test",
+		style: "primary",
+	},
+};
+
+export const Secondary: Story = {
+	args: {
+		label: "Secondary",
+		value: "Test",
+		style: "secondary",
 	},
 };
 
 export const Placeholder: Story = {
 	args: {
+		label: "Placeholder",
 		placeholder: "Placeholder",
 	},
 };

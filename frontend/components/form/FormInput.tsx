@@ -29,7 +29,7 @@ interface FormInputProps {
 	/**
 	 * FormInput styling
 	 */
-	style?: string;
+	style?: "primary" | "secondary";
 	/**
 	 * Is the FormInput required?
 	 */
@@ -48,10 +48,19 @@ interface FormInputProps {
 	onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-function getStyle(style: string): string {
+function getLabelStyle(style: string): string {
+	const getStyle: { [style: string]: string } = {
+		primary: "text-kiokuDarkBlue",
+		secondary: "text-kiokuDarkBlue font-bold",
+	};
+	return getStyle[style] ?? "";
+}
+
+function getInputStyle(style: string): string {
 	const getStyle: { [style: string]: string } = {
 		primary:
-			"invalid:border-red px-1.5 py-1.5 font-medium text-kiokuDarkBlue focus:border-kiokuDarkBlue",
+			"border-2 border-eggshell bg-eggshell invalid:border-red px-1.5 py-1.5 font-medium text-kiokuDarkBlue focus:border-kiokuDarkBlue",
+		secondary: "text-kiokuLightBlue font-medium bg-transparent",
 	};
 	return getStyle[style] ?? "";
 }
@@ -63,20 +72,20 @@ export const FormInput = ({
 	name,
 	label,
 	required = true,
-	style = "",
+	style,
 	className,
 	...props
 }: FormInputProps) => {
 	return (
-		<div className="flex w-full flex-col text-kiokuDarkBlue">
-			<label htmlFor={name} className="">
+		<div className={`flex w-full flex-col ${className ?? ""}`}>
+			<label htmlFor={name} className={`${getLabelStyle(style!)}`}>
 				{label}
 			</label>
 			<input
 				name={name}
-				className={`w-full rounded-md border-2 border-eggshell bg-eggshell outline-none ${getStyle(
-					style
-				)} ${className ?? ""}`}
+				className={`w-full rounded-md outline-none ${getInputStyle(
+					style!
+				)}`}
 				{...props}
 			/>
 		</div>

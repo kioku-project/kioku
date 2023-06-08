@@ -14,6 +14,10 @@ interface FormButtonProps {
 	 */
 	style?: string;
 	/**
+	 * Button size
+	 */
+	size?: "small" | "medium" | "large";
+	/**
 	 * Additional classes
 	 */
 	className?: string;
@@ -25,9 +29,19 @@ interface FormButtonProps {
 
 function getStyle(style: string): string {
 	const getStyle: { [style: string]: string } = {
-		primary: "bg-kiokuDarkBlue border-kiokuDarkBlue text-eggshell",
+		primary:
+			"border-2 border-kiokuDarkBlue bg-kiokuDarkBlue font-semibold text-eggshell",
 	};
 	return getStyle[style] ?? getStyle.primary;
+}
+
+function getSize(size: string): string {
+	const getSize: { [size: string]: string } = {
+		small: "px-3 py-1.5 text-xs sm:text-xs md:text-sm lg:px-3 lg:py-1.5 lg:text-base xl:text-lg",
+		medium: "px-3 py-1.5 text-xs sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl",
+		large: "px-5 py-3 text-sm sm:text-base md:text-lg lg:px-5 lg:py-3 lg:text-xl xl:text-2xl",
+	};
+	return getSize[size] ?? getSize.medium;
 }
 
 /**
@@ -35,15 +49,16 @@ function getStyle(style: string): string {
  */
 export const FormButton = ({
 	className,
-	style = "",
+	style,
+	size,
 	...props
 }: FormButtonProps) => {
 	return (
 		<input
 			type="submit"
-			className={`flex justify-center rounded-md border-2 px-3 py-1.5 text-center text-sm font-semibold leading-6 shadow-sm outline-none transition hover:scale-105 hover:cursor-pointer ${getStyle(
-				style
-			)} ${className ?? ""}`}
+			className={`flex justify-center rounded-md  text-center  shadow-sm outline-none transition hover:scale-105 hover:cursor-pointer ${getStyle(
+				style ?? ""
+			)} ${className ?? ""} ${getSize(size ?? "")}`}
 			{...props}
 		/>
 	);

@@ -28,6 +28,20 @@ export const Secondary: Story = {
 	},
 };
 
+export const Error: Story = {
+	args: {
+		children: "Error",
+		style: "error",
+	},
+};
+
+export const Warning: Story = {
+	args: {
+		children: "Warning",
+		style: "warning",
+	},
+};
+
 export const Small: Story = {
 	args: {
 		children: "Small",

@@ -12,7 +12,7 @@ interface ButtonProps {
 	/**
 	 * Button styling
 	 */
-	style?: "primary" | "secondary";
+	style?: "primary" | "secondary" | "error" | "warning";
 	/**
 	 * Button size
 	 */
@@ -32,6 +32,8 @@ function getStyle(style: string): string {
 		primary:
 			"bg-kiokuDarkBlue border-kiokuDarkBlue text-eggshell shadow-sm",
 		secondary: "bg-transparent border-transparent text-kiokuDarkBlue",
+		error: "bg-kiokuRed border-kiokuRed text-white",
+		warning: "bg-kiokuYellow border-kiokuYellow text-white",
 	};
 	return getStyle[style] ?? getStyle.primary;
 }
@@ -57,7 +59,7 @@ export const Button = ({
 }: ButtonProps) => {
 	return (
 		<button
-			className={`flex items-center justify-center rounded-md border-2 text-center font-bold outline-none transition hover:scale-105 hover:cursor-pointer ${getStyle(
+			className={`flex items-center justify-center rounded-md border-2 text-center font-semibold outline-none transition hover:scale-105 hover:cursor-pointer ${getStyle(
 				style ?? ""
 			)} ${getSize(size ?? "")} ${className ?? ""}`}
 			{...props}

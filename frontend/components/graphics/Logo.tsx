@@ -17,19 +17,27 @@ interface LogoProps {
 	 * Additional classes
 	 */
 	className?: string;
+	/**
+	 * alternative click handler
+	 */
+	onClick?: () => void;
 }
 
 /**
  * UI component for displaying the Kioku Logo
  */
-export const Logo = ({ className, text = true }: LogoProps) => {
+export const Logo = ({ className, text = true, onClick }: LogoProps) => {
 	return (
 		<div
 			className={`flex flex-row items-center hover:cursor-pointer ${
 				className ?? ""
 			}`}
 			onClick={() => {
-				router.push("/home");
+				if (onClick) {
+					onClick();
+				} else {
+					router.push("/");
+				}
 			}}
 		>
 			<Image

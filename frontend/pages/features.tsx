@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { useRouter } from "next/router";
-import { Header } from "../components/navigation/Header";
+import { Navbar } from "../components/navigation/Navbar";
 import { Users, BarChart2, Cloud, Code, Compass, Award } from "react-feather";
 import Head from "next/head";
 
@@ -15,10 +15,10 @@ export default function Page() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<div className="min-w-screen flex h-screen select-none flex-col bg-eggshell">
-				<Header
+				<Navbar
 					login={false}
 					onClick={() => router.push("/home")}
-				></Header>
+				></Navbar>
 				<div className="mx-auto flex flex-col justify-center p-5 text-base leading-7 md:w-2/3 md:p-10 md:text-center">
 					<a
 						className="text-lg font-semibold text-kiokuLightBlue hover:cursor-pointer"

@@ -11,7 +11,7 @@ const inter = Inter({
 	subsets: ["latin"],
 });
 
-interface HeaderProps {
+interface NavbarProps {
 	/**
 	 * show login or logout button
 	 */
@@ -29,7 +29,7 @@ interface HeaderProps {
 /**
  * UI component for diplaying the Header
  */
-export const Header = ({ login, className, onClick }: HeaderProps) => {
+export const Navbar = ({ login, className, onClick }: NavbarProps) => {
 	return (
 		<div
 			className={`flex items-center justify-between p-5 md:p-10 ${

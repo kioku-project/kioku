@@ -1,4 +1,4 @@
-import { Header } from "../../../components/navigation/Header";
+import { Navbar } from "../../../components/navigation/Navbar";
 import { Flashcard } from "../../../components/flashcard/Flashcard";
 import Head from "next/head";
 import Authenticated from "../../../components/accessControl/Authenticated";
@@ -13,7 +13,7 @@ export default function Page() {
 			</Head>
 			<Authenticated>
 				<div className="min-w-screen flex h-screen select-none flex-col bg-eggshell">
-					<Header login={true}></Header>
+					<Navbar login={true}></Navbar>
 					<Flashcard
 						id="flashcardId"
 						sides={[

@@ -9,7 +9,7 @@ import {
 	FileMinus,
 } from "react-feather";
 import { Button } from "../input/Button";
-import { FormInput } from "../form/FormInput";
+import { InputField } from "../form/InputField";
 
 interface FlashcardProps {
 	/**
@@ -76,7 +76,7 @@ export const Flashcard = ({
 			<div className="flex h-full flex-row justify-between">
 				<div className="flex w-full flex-col">
 					<div className="flex flex-row items-center justify-between">
-						<FormInput
+						<InputField
 							id="headerInputId"
 							type="text"
 							name="headerInput"
@@ -87,7 +87,7 @@ export const Flashcard = ({
 							onChange={(event) =>
 								editField("header", event.target.value)
 							}
-						></FormInput>
+						></InputField>
 						{edit ? (
 							<div className="flex flex-row items-center space-x-5">
 								{tempCard.length > 1 && (
@@ -157,7 +157,7 @@ export const Flashcard = ({
 							</div>
 						)}
 					</div>
-					<FormInput
+					<InputField
 						id="descriptionInputId"
 						type="text"
 						name="descriptionInput"
@@ -168,7 +168,7 @@ export const Flashcard = ({
 						onChange={(event) =>
 							editField("description", event.target.value)
 						}
-					></FormInput>
+					></InputField>
 				</div>
 			</div>
 			<hr className="border-1 border-kiokuLightBlue" />

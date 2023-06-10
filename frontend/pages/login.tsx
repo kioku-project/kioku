@@ -7,7 +7,7 @@ import Head from "next/head";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { FormInput } from "../components/form/FormInput";
+import { InputField } from "../components/form/InputField";
 import { FormButton } from "../components/form/FormButton";
 
 const inter = Inter({
@@ -81,7 +81,7 @@ export default function Page() {
 				onSubmit={(e) => e.preventDefault()}
 				className="my-5 flex w-5/6 flex-col items-center space-y-4"
 			>
-				<FormInput
+				<InputField
 					id="email"
 					type="email"
 					name="email"
@@ -90,7 +90,7 @@ export default function Page() {
 					className="sm:text-sm"
 				/>
 				{!login && (
-					<FormInput
+					<InputField
 						id="name"
 						type="text"
 						name="name"
@@ -99,7 +99,7 @@ export default function Page() {
 						className="sm:text-sm"
 					/>
 				)}
-				<FormInput
+				<InputField
 					id="password"
 					type="password"
 					name="password"
@@ -108,7 +108,7 @@ export default function Page() {
 					className="sm:text-sm"
 				/>
 				{!login && (
-					<FormInput
+					<InputField
 						id="passwordRepeat"
 						type="password"
 						name="passwordRepeat"

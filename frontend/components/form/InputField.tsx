@@ -1,41 +1,40 @@
 import React, { ChangeEventHandler } from "react";
-import { EventsType } from "react-tooltip";
 
-interface FormInputProps {
+interface InputFieldProps {
 	/**
 	 * unique identifier
 	 */
 	id: string;
 	/**
-	 * FormInput type
+	 * InputField type
 	 */
 	type: string;
 	/**
-	 * FormInput name
+	 * InputField name
 	 */
 	name: string;
 	/**
-	 * optional FormInput label
+	 * optional InputField label
 	 */
 	label?: string;
 	/**
-	 * FormInput value
+	 * InputField value
 	 */
 	value?: string;
 	/**
-	 * FormInput placeholder
+	 * InputField placeholder
 	 */
 	placeholder?: string;
 	/**
-	 * FormInput styling
+	 * InputField styling
 	 */
 	style?: "primary" | "secondary";
 	/**
-	 * Is the FormInput required?
+	 * Is the InputField required?
 	 */
 	required?: boolean;
 	/**
-	 * Is the FormInput read only?
+	 * Is the InputField read only?
 	 */
 	readOnly?: boolean;
 	/**
@@ -68,14 +67,14 @@ function getInputStyle(style: string): string {
 /**
  * UI component for text inputs
  */
-export const FormInput = ({
+export const InputField = ({
 	name,
 	label,
 	required = true,
 	style,
 	className,
 	...props
-}: FormInputProps) => {
+}: InputFieldProps) => {
 	return (
 		<div className={`flex w-full flex-col ${className ?? ""}`}>
 			<label htmlFor={name} className={`${getLabelStyle(style!)}`}>

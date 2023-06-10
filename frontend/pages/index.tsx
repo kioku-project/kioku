@@ -1,7 +1,7 @@
 import React from "react";
 import Authenticated from "../components/accessControl/Authenticated";
 import DeckOverview from "../components/deck/DeckOverview";
-import { Header } from "../components/navigation/Header";
+import { Navbar } from "../components/navigation/Navbar";
 import Head from "next/head";
 
 export default function Home() {
@@ -14,7 +14,7 @@ export default function Home() {
 			</Head>
 			<Authenticated>
 				<div className="min-w-screen flex h-screen select-none flex-col bg-eggshell">
-					<Header login={true}></Header>
+					<Navbar login={true}></Navbar>
 					<div className="space-y-10 p-10">
 						<DeckOverview
 							name="Your personal Decks"

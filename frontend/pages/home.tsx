@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { Button } from "../components/input/Button";
 import Cards from "../components/graphics/Cards";
-import { Header } from "../components/navigation/Header";
+import { Navbar } from "../components/navigation/Navbar";
 import { ArrowRight } from "react-feather";
 import Head from "next/head";
 
@@ -16,10 +16,10 @@ export default function Page() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<div className="min-w-screen flex h-screen select-none flex-col bg-eggshell">
-				<Header
+				<Navbar
 					login={false}
 					onClick={() => router.push("/home")}
-				></Header>
+				></Navbar>
 				<div className="flex grow flex-row overflow-hidden">
 					<div className="flex w-full flex-col justify-center space-y-3 p-5 md:w-2/3 md:space-y-5 md:p-10">
 						<p className="text-2xl font-bold text-kiokuDarkBlue sm:text-3xl md:text-4xl lg:text-5xl">

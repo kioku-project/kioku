@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
     - 'backend/services/collaboration/**'
+    - 'backend/store/**'
 
 jobs:
   build-collaboration:

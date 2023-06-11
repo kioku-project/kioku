@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
     - 'backend/services/carddeck/**'
+    - 'backend/store/**'
 
 jobs:
   build-carddeck:

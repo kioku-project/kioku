@@ -86,6 +86,43 @@ func (e *CardDeck) generateCardSidesForCard(card model.Card, sides []*pb.CardSid
 	return nil
 }
 
+func (e *CardDeck) updateCardSideReferences(cardSidesToUpdate [2]string, index int) error {
+	side, err := helper.FindStoreEntity(e.store.FindCardSideByID, cardSidesToUpdate[index], helper.CollaborationServiceID)
+	if err != nil {
+		return err
+	}
+	if index%2 == 0 {
+		side.NextCardSideID = cardSidesToUpdate[1]
+	} else {
+		side.PreviousCardSideID = cardSidesToUpdate[0]
+	}
+	if err = e.store.ModifyCardSide(side); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (e *CardDeck) updateCardReferences(cardSideToDelete *model.CardSide) (bool, error) {
+	isLastCardSide := false
+	card, err := helper.FindStoreEntity(e.store.FindCardByID, cardSideToDelete.CardID, helper.CollaborationServiceID)
+	if err != nil {
+		return false, err
+	}
+	if cardSideToDelete.NextCardSideID == "" {
+		isLastCardSide = true
+		logger.Infof("Card side %s is the last from card %s - will delete card", card.ID, cardSideToDelete.CardID)
+		if err = e.store.DeleteCard(card); err != nil {
+			return false, err
+		}
+	} else {
+		card.FirstCardSideID = cardSideToDelete.NextCardSideID
+		if err = e.store.ModifyCard(card); err != nil {
+			return false, err
+		}
+	}
+	return isLastCardSide, nil
+}
+
 func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest, rsp *pb.GroupDecksResponse) error {
 	logger.Infof("Received CardDeck.GetGroupDecks request: %v", req)
 	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_READ); err != nil {
@@ -381,34 +418,14 @@ func (e *CardDeck) DeleteCardSide(ctx context.Context, req *pb.IDRequest, rsp *p
 	cardSidesToUpdate := [2]string{cardSideToDelete.PreviousCardSideID, cardSideToDelete.NextCardSideID}
 	for index, cardSideToUpdate := range cardSidesToUpdate {
 		if cardSideToUpdate != "" {
-			side, err := helper.FindStoreEntity(e.store.FindCardSideByID, cardSideToUpdate, helper.CollaborationServiceID)
+			err = e.updateCardSideReferences(cardSidesToUpdate, index)
 			if err != nil {
-				return err
-			}
-			if index%2 == 0 {
-				side.NextCardSideID = cardSideToDelete.NextCardSideID
-			} else {
-				side.PreviousCardSideID = cardSideToDelete.PreviousCardSideID
-			}
-			if err = e.store.ModifyCardSide(side); err != nil {
 				return err
 			}
 		} else if index%2 == 0 {
-			card, err := helper.FindStoreEntity(e.store.FindCardByID, cardSideToDelete.CardID, helper.CollaborationServiceID)
+			isLastCardSide, err = e.updateCardReferences(cardSideToDelete)
 			if err != nil {
 				return err
-			}
-			if cardSideToDelete.NextCardSideID == "" {
-				isLastCardSide = true
-				logger.Infof("Card side %s is the last from card %s - will delete card", req.EntityID, cardSideToDelete.CardID)
-				if err = e.store.DeleteCard(card); err != nil {
-					return err
-				}
-			} else {
-				card.FirstCardSideID = cardSideToDelete.NextCardSideID
-				if err = e.store.ModifyCard(card); err != nil {
-					return err
-				}
 			}
 		}
 	}

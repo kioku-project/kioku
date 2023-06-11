@@ -10,7 +10,9 @@ export default function Authenticated({ children }: PropsWithChildren) {
 	useEffect(() => {
 		(async () => {
 			if (!hasCookie("access_token")) {
-				await reauth();
+				if (!(await reauth())) {
+					return;
+				}
 			}
 			const cookie = getCookie("access_token")!.toString();
 			const decoded = jwtDecode<JwtPayload>(cookie);

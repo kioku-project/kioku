@@ -1,13 +1,15 @@
 import { getCookie, hasCookie } from "cookies-next";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 
-export async function reauth() {
+// Returns true if reauth successful, false if relocation in progress
+export async function reauth(): Promise<boolean> {
 	const answ = await fetch("/api/reauth", {
 		credentials: "include",
 	});
 	if (answ.status !== 200) {
 		window.location.replace("/login");
 	}
+	return answ.status === 200;
 }
 
 export async function authedFetch(
@@ -15,7 +17,9 @@ export async function authedFetch(
 	init?: RequestInit | undefined
 ) {
 	if (!hasCookie("access_token")) {
-		await reauth();
+		if (!(await reauth())) {
+			return;
+		}
 	}
 	const accessToken = getCookie("access_token");
 	const decoded = jwtDecode<JwtPayload>(accessToken!.toString());

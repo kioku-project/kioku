@@ -12,7 +12,7 @@ type FiberGroupMember struct {
 }
 
 type FiberGroup struct {
-	GroupID          string `json:"userID"`
+	GroupID          string `json:"groupID"`
 	GroupName        string `json:"groupName"`
 	GroupDescription string `json:"groupDescription"`
 	IsDefault        bool   `json:"isDefault"`

@@ -40,6 +40,11 @@ spec:
                 fieldPath: metadata.name
           - name: PORT
             value: "8080"
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ print "postgres." .Values.database.databaseName ".credentials.postgresql.acid.zalan.do" }}
+                key: password
         envFrom:
           - secretRef:
               name: {{ .Values.database.secret.name }}

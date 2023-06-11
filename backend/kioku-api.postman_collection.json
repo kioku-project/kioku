@@ -74,6 +74,28 @@
 			"response": []
 		},
 		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/logout",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get User",
 			"request": {
 				"method": "GET",
@@ -613,7 +635,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"groupName\": \"test group\",\n    \"groupType\": \"public\"\n}",
+					"raw": "{\n    \"groupName\": \"test group 2\",\n    \"groupType\": \"PRIVATE\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

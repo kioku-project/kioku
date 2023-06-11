@@ -147,6 +147,21 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+func (e *Frontend) LogoutHandler(c *fiber.Ctx) error {
+	c.Cookie(&fiber.Cookie{
+		Name:    "access_token",
+		Path:    "/",
+		Expires: time.Now().Add(-time.Minute * 30),
+	})
+	c.Cookie(&fiber.Cookie{
+		Name:     "refresh_token",
+		Path:     "/",
+		Expires:  time.Now().Add(-time.Minute * 30),
+		HTTPOnly: true,
+	})
+	return c.SendStatus(200)
+}
+
 func (e *Frontend) GetUserHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspGetUser, err := e.userService.GetUserProfileInformation(c.Context(), &pbUser.UserID{
@@ -199,7 +214,9 @@ func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(rspUserGroups)
+	return c.JSON(converter.FiberGetUserGroupsResponseBody{
+		Groups: converter.ConvertToTypeArray(rspUserGroups.Groups, converter.ProtoGroupToFiberGroupConverter),
+	})
 }
 
 func (e *Frontend) CreateGroupHandler(c *fiber.Ctx) error {
@@ -246,8 +263,10 @@ func (e *Frontend) ModifyGroupHandler(c *fiber.Ctx) error {
 	}
 	userID := helper.GetUserIDFromContext(c)
 	var groupType pbCollaboration.GroupType
-	if gt := strings.TrimSpace(*data["groupType"]); gt != "" {
-		groupType = converter.MigrateStringGroupTypeToProtoGroupType(gt)
+	if data["groupType"] != nil {
+		if gt := strings.TrimSpace(*data["groupType"]); gt != "" {
+			groupType = converter.MigrateStringGroupTypeToProtoGroupType(gt)
+		}
 	}
 	rspModifyGroup, err := e.collaborationService.ModifyGroup(c.Context(), &pbCollaboration.ModifyGroupRequest{
 		UserID:    userID,
@@ -300,7 +319,9 @@ func (e *Frontend) GetGroupMemberRequestsHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(rspMemberRequests)
+	return c.JSON(converter.FiberGetGroupMemberRequestsResponseBody{
+		MemberRequests: converter.ConvertToTypeArray(rspMemberRequests.MemberRequests, converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter),
+	})
 }
 
 func (e *Frontend) ManageGroupMemberRequestHandler(c *fiber.Ctx) error {

@@ -81,6 +81,8 @@ func main() {
 	////
 	// - add endpoints where authentication is needed below this block.
 	////
+	app.Post("/api/logout", svc.LogoutHandler)
+
 	app.Get("/api/user", svc.GetUserHandler)
 	app.Get("/api/user/invitations", svc.GetGroupInvitationsHandler)
 	app.Put("/api/user/invitations/:invitationID", svc.ManageGroupInvitationHandler)

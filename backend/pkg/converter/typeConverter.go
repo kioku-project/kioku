@@ -37,9 +37,9 @@ func MigrateProtoGroupTypeToModelGroupType(protoType pbCollaboration.GroupType) 
 }
 
 func MigrateStringGroupTypeToProtoGroupType(stringType string) pbCollaboration.GroupType {
-	if stringType == "public" {
+	if stringType == pbCollaboration.GroupType_PUBLIC.String() {
 		return pbCollaboration.GroupType_PUBLIC
-	} else if stringType == "private" {
+	} else if stringType == pbCollaboration.GroupType_PRIVATE.String() {
 		return pbCollaboration.GroupType_PRIVATE
 	}
 	return pbCollaboration.GroupType_INVALID
@@ -69,6 +69,14 @@ func StoreGroupAdmissionToProtoGroupInvitationConverter(groupAdmission model.Gro
 	}
 }
 
+func ProtoGroupMemberRequestToFiberGroupMemberRequestConverter(groupMemberRequest *pbCollaboration.MemberRequest) FiberGroupMemberRequest {
+	return FiberGroupMemberRequest{
+		AdmissionID: groupMemberRequest.AdmissionID,
+		UserID:      groupMemberRequest.User.UserID,
+		Name:        groupMemberRequest.User.Name,
+	}
+}
+
 func StoreGroupToProtoGroupConverter(group model.Group) *pbCollaboration.Group {
 	return &pbCollaboration.Group{
 		GroupID:          group.ID,
@@ -76,6 +84,16 @@ func StoreGroupToProtoGroupConverter(group model.Group) *pbCollaboration.Group {
 		GroupDescription: group.Description,
 		IsDefault:        group.IsDefault,
 		GroupType:        MigrateModelGroupTypeToProtoGroupType(group.GroupType),
+	}
+}
+
+func ProtoGroupToFiberGroupConverter(group *pbCollaboration.Group) FiberGroup {
+	return FiberGroup{
+		GroupID:          group.GroupID,
+		GroupName:        group.GroupName,
+		GroupDescription: group.GroupDescription,
+		IsDefault:        group.IsDefault,
+		GroupType:        group.GroupType.String(),
 	}
 }
 

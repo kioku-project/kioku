@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { Button } from "../input/Button";
 import router from "next/router";
 import { ArrowRight, LogOut } from "react-feather";
+import { authedFetch } from "../../util/reauth"
 
 const inter = Inter({
 	weight: ["200", "400"],
@@ -37,7 +38,14 @@ export const Header = ({ login, className }: HeaderProps) => {
 					<LogOut
 						className="text-kiokuDarkBlue hover:cursor-pointer"
 						onClick={
-							() => {} //TODO: logout logic
+							async () => {
+								const response = await authedFetch("/api/logout", {
+									method: "POST"
+								});
+								if (response?.ok) {
+									location.reload()
+								}
+							}
 						}
 					></LogOut>
 				</div>

@@ -2,14 +2,11 @@ mode: production
 
 database:
   name: kioku-database
-  containerName: postgres
 
-  image: postgres
-  tag: latest
+  databaseName: kioku
+  userName: kioku
 
-  replicaCount: 1
-
-  port: 5432
+  instances: 2
 
   size: 10Gi
   mountPath: /mnt/data

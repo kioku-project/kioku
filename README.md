@@ -1,7 +1,23 @@
 # Kioku
 Welcome to the kioku-project!
 
+## Deploy Kioku to Kubernetes cluster
 
+### Prerequisites
+- Kubernetes cluster
+    - Ingress controller
+- [`helm`](https://helm.sh/)
+
+### Installation
+
+It is generally recommended to install Kioku to a fresh Kubernetes cluster, because there are some dependent deployments, which are all being deployed using the `deploy.sh`:
+- [`postgres-operator`](https://github.com/zalando/postgres-operator)
+
+From the root-directory of the repository execute the following:
+
+```bash
+./deploy.sh
+```
 
 ## Setup Storybook and Chromatic
  

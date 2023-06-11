@@ -1,0 +1,44 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+    name: {{ .Values.database.databaseName }}
+spec:
+    teamId: {{ .Values.database.databaseName }}
+    numberOfInstances: {{ .Values.database.instances }}
+    users:
+        {{ .Values.database.userName }}: []
+    
+    postgresql:
+        version: "15"
+        parameters:  # Expert section
+            shared_buffers: "32MB"
+            max_connections: "100"
+            log_statement: "all"
+    
+    enableConnectionPooler: true
+    enableReplicaConnectionPooler: true
+
+    connectionPooler:
+        numberOfInstances: 1
+        resources:
+            requests:
+                cpu: 100m
+                memory: 100Mi
+            limits:
+                cpu: "0.2"
+                memory: 100Mi
+
+
+    databases:
+        {{ .Values.database.databaseName }}: {{ .Values.database.userName }}
+    
+    volume:
+        size: {{ .Values.database.size }}
+
+    resources:
+        requests:
+            cpu: 10m
+            memory: 100Mi
+        limits:
+            cpu: 500m
+            memory: 500Mi

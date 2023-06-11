@@ -38,15 +38,17 @@ func NewCardDeckEndpoints() []*api.Endpoint {
 type CardDeckService interface {
 	GetGroupDecks(ctx context.Context, in *GroupDecksRequest, opts ...client.CallOption) (*GroupDecksResponse, error)
 	CreateDeck(ctx context.Context, in *CreateDeckRequest, opts ...client.CallOption) (*IDResponse, error)
+	GetDeck(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*DeckResponse, error)
 	ModifyDeck(ctx context.Context, in *ModifyDeckRequest, opts ...client.CallOption) (*SuccessResponse, error)
-	DeleteDeck(ctx context.Context, in *DeleteWithIDRequest, opts ...client.CallOption) (*SuccessResponse, error)
-	GetDeckCards(ctx context.Context, in *DeckRequest, opts ...client.CallOption) (*DeckCardsResponse, error)
+	DeleteDeck(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*SuccessResponse, error)
+	GetDeckCards(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*DeckCardsResponse, error)
 	CreateCard(ctx context.Context, in *CreateCardRequest, opts ...client.CallOption) (*IDResponse, error)
+	GetCard(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*Card, error)
 	ModifyCard(ctx context.Context, in *ModifyCardRequest, opts ...client.CallOption) (*SuccessResponse, error)
-	DeleteCard(ctx context.Context, in *DeleteWithIDRequest, opts ...client.CallOption) (*SuccessResponse, error)
+	DeleteCard(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	CreateCardSide(ctx context.Context, in *CreateCardSideRequest, opts ...client.CallOption) (*IDResponse, error)
 	ModifyCardSide(ctx context.Context, in *ModifyCardSideRequest, opts ...client.CallOption) (*SuccessResponse, error)
-	DeleteCardSide(ctx context.Context, in *DeleteWithIDRequest, opts ...client.CallOption) (*SuccessResponse, error)
+	DeleteCardSide(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*SuccessResponse, error)
 }
 
 type cardDeckService struct {
@@ -81,6 +83,16 @@ func (c *cardDeckService) CreateDeck(ctx context.Context, in *CreateDeckRequest,
 	return out, nil
 }
 
+func (c *cardDeckService) GetDeck(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*DeckResponse, error) {
+	req := c.c.NewRequest(c.name, "CardDeck.GetDeck", in)
+	out := new(DeckResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *cardDeckService) ModifyDeck(ctx context.Context, in *ModifyDeckRequest, opts ...client.CallOption) (*SuccessResponse, error) {
 	req := c.c.NewRequest(c.name, "CardDeck.ModifyDeck", in)
 	out := new(SuccessResponse)
@@ -91,7 +103,7 @@ func (c *cardDeckService) ModifyDeck(ctx context.Context, in *ModifyDeckRequest,
 	return out, nil
 }
 
-func (c *cardDeckService) DeleteDeck(ctx context.Context, in *DeleteWithIDRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+func (c *cardDeckService) DeleteDeck(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*SuccessResponse, error) {
 	req := c.c.NewRequest(c.name, "CardDeck.DeleteDeck", in)
 	out := new(SuccessResponse)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -101,7 +113,7 @@ func (c *cardDeckService) DeleteDeck(ctx context.Context, in *DeleteWithIDReques
 	return out, nil
 }
 
-func (c *cardDeckService) GetDeckCards(ctx context.Context, in *DeckRequest, opts ...client.CallOption) (*DeckCardsResponse, error) {
+func (c *cardDeckService) GetDeckCards(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*DeckCardsResponse, error) {
 	req := c.c.NewRequest(c.name, "CardDeck.GetDeckCards", in)
 	out := new(DeckCardsResponse)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -121,6 +133,16 @@ func (c *cardDeckService) CreateCard(ctx context.Context, in *CreateCardRequest,
 	return out, nil
 }
 
+func (c *cardDeckService) GetCard(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*Card, error) {
+	req := c.c.NewRequest(c.name, "CardDeck.GetCard", in)
+	out := new(Card)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *cardDeckService) ModifyCard(ctx context.Context, in *ModifyCardRequest, opts ...client.CallOption) (*SuccessResponse, error) {
 	req := c.c.NewRequest(c.name, "CardDeck.ModifyCard", in)
 	out := new(SuccessResponse)
@@ -131,7 +153,7 @@ func (c *cardDeckService) ModifyCard(ctx context.Context, in *ModifyCardRequest,
 	return out, nil
 }
 
-func (c *cardDeckService) DeleteCard(ctx context.Context, in *DeleteWithIDRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+func (c *cardDeckService) DeleteCard(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*SuccessResponse, error) {
 	req := c.c.NewRequest(c.name, "CardDeck.DeleteCard", in)
 	out := new(SuccessResponse)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -161,7 +183,7 @@ func (c *cardDeckService) ModifyCardSide(ctx context.Context, in *ModifyCardSide
 	return out, nil
 }
 
-func (c *cardDeckService) DeleteCardSide(ctx context.Context, in *DeleteWithIDRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+func (c *cardDeckService) DeleteCardSide(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*SuccessResponse, error) {
 	req := c.c.NewRequest(c.name, "CardDeck.DeleteCardSide", in)
 	out := new(SuccessResponse)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -176,30 +198,34 @@ func (c *cardDeckService) DeleteCardSide(ctx context.Context, in *DeleteWithIDRe
 type CardDeckHandler interface {
 	GetGroupDecks(context.Context, *GroupDecksRequest, *GroupDecksResponse) error
 	CreateDeck(context.Context, *CreateDeckRequest, *IDResponse) error
+	GetDeck(context.Context, *IDRequest, *DeckResponse) error
 	ModifyDeck(context.Context, *ModifyDeckRequest, *SuccessResponse) error
-	DeleteDeck(context.Context, *DeleteWithIDRequest, *SuccessResponse) error
-	GetDeckCards(context.Context, *DeckRequest, *DeckCardsResponse) error
+	DeleteDeck(context.Context, *IDRequest, *SuccessResponse) error
+	GetDeckCards(context.Context, *IDRequest, *DeckCardsResponse) error
 	CreateCard(context.Context, *CreateCardRequest, *IDResponse) error
+	GetCard(context.Context, *IDRequest, *Card) error
 	ModifyCard(context.Context, *ModifyCardRequest, *SuccessResponse) error
-	DeleteCard(context.Context, *DeleteWithIDRequest, *SuccessResponse) error
+	DeleteCard(context.Context, *IDRequest, *SuccessResponse) error
 	CreateCardSide(context.Context, *CreateCardSideRequest, *IDResponse) error
 	ModifyCardSide(context.Context, *ModifyCardSideRequest, *SuccessResponse) error
-	DeleteCardSide(context.Context, *DeleteWithIDRequest, *SuccessResponse) error
+	DeleteCardSide(context.Context, *IDRequest, *SuccessResponse) error
 }
 
 func RegisterCardDeckHandler(s server.Server, hdlr CardDeckHandler, opts ...server.HandlerOption) error {
 	type cardDeck interface {
 		GetGroupDecks(ctx context.Context, in *GroupDecksRequest, out *GroupDecksResponse) error
 		CreateDeck(ctx context.Context, in *CreateDeckRequest, out *IDResponse) error
+		GetDeck(ctx context.Context, in *IDRequest, out *DeckResponse) error
 		ModifyDeck(ctx context.Context, in *ModifyDeckRequest, out *SuccessResponse) error
-		DeleteDeck(ctx context.Context, in *DeleteWithIDRequest, out *SuccessResponse) error
-		GetDeckCards(ctx context.Context, in *DeckRequest, out *DeckCardsResponse) error
+		DeleteDeck(ctx context.Context, in *IDRequest, out *SuccessResponse) error
+		GetDeckCards(ctx context.Context, in *IDRequest, out *DeckCardsResponse) error
 		CreateCard(ctx context.Context, in *CreateCardRequest, out *IDResponse) error
+		GetCard(ctx context.Context, in *IDRequest, out *Card) error
 		ModifyCard(ctx context.Context, in *ModifyCardRequest, out *SuccessResponse) error
-		DeleteCard(ctx context.Context, in *DeleteWithIDRequest, out *SuccessResponse) error
+		DeleteCard(ctx context.Context, in *IDRequest, out *SuccessResponse) error
 		CreateCardSide(ctx context.Context, in *CreateCardSideRequest, out *IDResponse) error
 		ModifyCardSide(ctx context.Context, in *ModifyCardSideRequest, out *SuccessResponse) error
-		DeleteCardSide(ctx context.Context, in *DeleteWithIDRequest, out *SuccessResponse) error
+		DeleteCardSide(ctx context.Context, in *IDRequest, out *SuccessResponse) error
 	}
 	type CardDeck struct {
 		cardDeck
@@ -220,15 +246,19 @@ func (h *cardDeckHandler) CreateDeck(ctx context.Context, in *CreateDeckRequest,
 	return h.CardDeckHandler.CreateDeck(ctx, in, out)
 }
 
+func (h *cardDeckHandler) GetDeck(ctx context.Context, in *IDRequest, out *DeckResponse) error {
+	return h.CardDeckHandler.GetDeck(ctx, in, out)
+}
+
 func (h *cardDeckHandler) ModifyDeck(ctx context.Context, in *ModifyDeckRequest, out *SuccessResponse) error {
 	return h.CardDeckHandler.ModifyDeck(ctx, in, out)
 }
 
-func (h *cardDeckHandler) DeleteDeck(ctx context.Context, in *DeleteWithIDRequest, out *SuccessResponse) error {
+func (h *cardDeckHandler) DeleteDeck(ctx context.Context, in *IDRequest, out *SuccessResponse) error {
 	return h.CardDeckHandler.DeleteDeck(ctx, in, out)
 }
 
-func (h *cardDeckHandler) GetDeckCards(ctx context.Context, in *DeckRequest, out *DeckCardsResponse) error {
+func (h *cardDeckHandler) GetDeckCards(ctx context.Context, in *IDRequest, out *DeckCardsResponse) error {
 	return h.CardDeckHandler.GetDeckCards(ctx, in, out)
 }
 
@@ -236,11 +266,15 @@ func (h *cardDeckHandler) CreateCard(ctx context.Context, in *CreateCardRequest,
 	return h.CardDeckHandler.CreateCard(ctx, in, out)
 }
 
+func (h *cardDeckHandler) GetCard(ctx context.Context, in *IDRequest, out *Card) error {
+	return h.CardDeckHandler.GetCard(ctx, in, out)
+}
+
 func (h *cardDeckHandler) ModifyCard(ctx context.Context, in *ModifyCardRequest, out *SuccessResponse) error {
 	return h.CardDeckHandler.ModifyCard(ctx, in, out)
 }
 
-func (h *cardDeckHandler) DeleteCard(ctx context.Context, in *DeleteWithIDRequest, out *SuccessResponse) error {
+func (h *cardDeckHandler) DeleteCard(ctx context.Context, in *IDRequest, out *SuccessResponse) error {
 	return h.CardDeckHandler.DeleteCard(ctx, in, out)
 }
 
@@ -252,6 +286,6 @@ func (h *cardDeckHandler) ModifyCardSide(ctx context.Context, in *ModifyCardSide
 	return h.CardDeckHandler.ModifyCardSide(ctx, in, out)
 }
 
-func (h *cardDeckHandler) DeleteCardSide(ctx context.Context, in *DeleteWithIDRequest, out *SuccessResponse) error {
+func (h *cardDeckHandler) DeleteCardSide(ctx context.Context, in *IDRequest, out *SuccessResponse) error {
 	return h.CardDeckHandler.DeleteCardSide(ctx, in, out)
 }

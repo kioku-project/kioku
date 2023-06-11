@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"go-micro.dev/v4/logger"
 	"golang.org/x/crypto/bcrypt"
@@ -45,7 +46,7 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	if err != nil {
 		return err
 	}
-	_, err = e.collaborationService.CreateNewGroupWithAdmin(ctx, &pbCollaboration.CreateGroupRequest{UserID: newUser.ID, GroupName: "Home Group", IsDefault: true})
+	_, err = e.collaborationService.CreateNewGroupWithAdmin(ctx, &pbCollaboration.CreateGroupRequest{UserID: newUser.ID, GroupName: "Home Group", GroupDescription: "Your personal deck space", IsDefault: true})
 	if err != nil {
 		return err
 	}
@@ -103,5 +104,16 @@ func (e *User) GetUserInformation(_ context.Context, req *pb.UserInformationRequ
 		}
 	}
 	logger.Infof("Found %d users for given IDs", len(rsp.Users))
+	return nil
+}
+
+func (e *User) GetUserProfileInformation(_ context.Context, req *pb.UserID, rsp *pb.UserProfileInformationResponse) error {
+	logger.Infof("Received User.GetUserProfileInformation request: %v", req)
+	user, err := e.store.FindUserByID(req.UserID)
+	if err != nil {
+		return err
+	}
+	*rsp = *converter.StoreUserToProtoUserProfileInformationResponseConverter(*user)
+	logger.Infof("Found profile information for user with id %s", req.UserID)
 	return nil
 }

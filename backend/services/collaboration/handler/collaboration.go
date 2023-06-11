@@ -109,9 +109,10 @@ func (e *Collaboration) CreateNewGroupWithAdmin(_ context.Context, req *pb.Creat
 		return err
 	}
 	newGroup := model.Group{
-		Name:      req.GroupName,
-		IsDefault: req.IsDefault,
-		GroupType: model.Private,
+		Name:        req.GroupName,
+		Description: req.GroupDescription,
+		IsDefault:   req.IsDefault,
+		GroupType:   model.Private,
 	}
 	err = e.store.CreateNewGroupWithAdmin(req.UserID, &newGroup)
 	if err != nil {
@@ -119,6 +120,21 @@ func (e *Collaboration) CreateNewGroupWithAdmin(_ context.Context, req *pb.Creat
 	}
 	rsp.ID = newGroup.ID
 	logger.Infof("Successfully created new group (%s) with user (%s) as admin", newGroup.ID, req.UserID)
+	return nil
+}
+
+func (e *Collaboration) GetGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.Group) error {
+	logger.Infof("Received Collaboration.GetGroup request: %v", req)
+	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_READ); err != nil {
+		return err
+	}
+	group, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
+	if err != nil {
+		return err
+	}
+	*rsp = *converter.StoreGroupToProtoGroupConverter(*group)
+	rsp.GroupType = converter.MigrateModelGroupTypeToProtoGroupType(group.GroupType)
+	logger.Infof("Successfully got information for group %s", req.GroupID)
 	return nil
 }
 
@@ -141,6 +157,9 @@ func (e *Collaboration) ModifyGroup(ctx context.Context, req *pb.ModifyGroupRequ
 			return err
 		}
 		group.Name = *req.GroupName
+	}
+	if req.GroupDescription != nil {
+		group.Description = *req.GroupDescription
 	}
 	if req.GroupType != nil && *req.GroupType != pb.GroupType_INVALID {
 		group.GroupType = converter.MigrateProtoGroupTypeToModelGroupType(*req.GroupType)
@@ -340,13 +359,13 @@ func (e *Collaboration) GetGroupUserRole(_ context.Context, req *pb.GroupRequest
 	return nil
 }
 
-func (e *Collaboration) FindGroupByID(_ context.Context, req *pb.GroupRequest, rsp *pb.GroupResponse) error {
+func (e *Collaboration) FindGroupByID(_ context.Context, req *pb.GroupRequest, rsp *pb.Group) error {
 	logger.Infof("Received Collaboration.FindGroupByID request: %v", req)
 	group, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}
-	rsp.GroupID = group.ID
-	rsp.GroupName = group.Name
+	*rsp = *converter.StoreGroupToProtoGroupConverter(*group)
+	logger.Infof("Successfully found group with id %s", req.GroupID)
 	return nil
 }

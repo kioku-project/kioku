@@ -9,6 +9,7 @@ service User {
 	rpc Login(LoginRequest) returns (NameIDResponse) {}
 	rpc GetUserIDFromEmail(UserIDRequest) returns (UserID) {}
 	rpc GetUserInformation(UserInformationRequest) returns (UserInformationResponse) {}
+	rpc GetUserProfileInformation(UserID) returns (UserProfileInformationResponse) {}
 }
 
 message RegisterRequest {
@@ -44,6 +45,12 @@ message UserInformationResponse {
 }
 
 message UserInformation {
+	string userID = 1;
+	string email = 2;
+	string name = 3;
+}
+
+message UserProfileInformationResponse {
 	string userID = 1;
 	string email = 2;
 	string name = 3;

@@ -15,6 +15,7 @@ const (
 type Group struct {
 	ID             string          `gorm:"primaryKey"`
 	Name           string          `gorm:"not null"`
+	Description    string          `gorm:"not null"`
 	IsDefault      bool            `gorm:"not null"`
 	GroupType      GroupType       `gorm:"not null"`
 	Decks          []Deck          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`

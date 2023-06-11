@@ -45,6 +45,14 @@ func MigrateStringGroupTypeToProtoGroupType(stringType string) pbCollaboration.G
 	return pbCollaboration.GroupType_INVALID
 }
 
+func StoreUserToProtoUserProfileInformationResponseConverter(user model.User) *pbUser.UserProfileInformationResponse {
+	return &pbUser.UserProfileInformationResponse{
+		UserID: user.ID,
+		Email:  user.Email,
+		Name:   user.Name,
+	}
+}
+
 func StoreGroupUserRoleToProtoUserIDConverter(role model.GroupUserRole) *pbUser.UserID {
 	return &pbUser.UserID{UserID: role.UserID}
 }
@@ -63,10 +71,11 @@ func StoreGroupAdmissionToProtoGroupInvitationConverter(groupAdmission model.Gro
 
 func StoreGroupToProtoGroupConverter(group model.Group) *pbCollaboration.Group {
 	return &pbCollaboration.Group{
-		GroupID:   group.ID,
-		GroupName: group.Name,
-		IsDefault: group.IsDefault,
-		GroupType: MigrateModelGroupTypeToProtoGroupType(group.GroupType),
+		GroupID:          group.ID,
+		GroupName:        group.Name,
+		GroupDescription: group.Description,
+		IsDefault:        group.IsDefault,
+		GroupType:        MigrateModelGroupTypeToProtoGroupType(group.GroupType),
 	}
 }
 
@@ -77,13 +86,27 @@ func StoreDeckToProtoDeckConverter(deck model.Deck) *pbCardDeck.Deck {
 	}
 }
 
+func StoreDeckToProtoDeckResponseConverter(deck model.Deck) *pbCardDeck.DeckResponse {
+	return &pbCardDeck.DeckResponse{
+		DeckID:    deck.ID,
+		DeckName:  deck.Name,
+		CreatedAT: deck.CreatedAt.Unix(),
+		GroupID:   deck.GroupID,
+	}
+}
+
+func StoreCardToProtoCardConverter(card model.Card) *pbCardDeck.Card {
+	return &pbCardDeck.Card{
+		CardID: card.ID,
+		Sides:  ConvertToTypeArray(card.CardSides, StoreCardSideToProtoCardSideConverter),
+	}
+}
+
 func StoreCardSideToProtoCardSideConverter(cardSide model.CardSide) *pbCardDeck.CardSide {
 	return &pbCardDeck.CardSide{
-		CardSideID: cardSide.ID,
-		Content: &pbCardDeck.CardSideContent{
-			Header:      cardSide.Header,
-			Description: cardSide.Description,
-		},
+		CardSideID:  cardSide.ID,
+		Header:      cardSide.Header,
+		Description: cardSide.Description,
 	}
 }
 

@@ -9,6 +9,7 @@ service Collaboration {
 	rpc ManageGroupInvitation(ManageGroupInvitationRequest) returns (SuccessResponse) {}
 	rpc GetUserGroups(UserIDRequest) returns (UserGroupsResponse) {}
 	rpc CreateNewGroupWithAdmin(CreateGroupRequest) returns (IDResponse) {}
+	rpc GetGroup(GroupRequest) returns (Group) {}
 	rpc ModifyGroup(ModifyGroupRequest) returns (SuccessResponse) {}
 	rpc DeleteGroup(GroupRequest) returns (SuccessResponse) {}
 	rpc GetGroupMembers(GroupRequest) returns (GroupMembersResponse) {}
@@ -17,7 +18,7 @@ service Collaboration {
 	rpc RequestToJoinGroup(GroupRequest) returns (SuccessResponse) {}
 	rpc InviteUserToGroup(GroupInvitationRequest) returns (SuccessResponse) {}
 	rpc GetGroupUserRole(GroupRequest) returns (GroupRoleResponse) {}
-	rpc FindGroupByID(GroupRequest) returns (GroupResponse) {}
+	rpc FindGroupByID(GroupRequest) returns (Group) {}
 }
 
 message UserIDRequest {
@@ -47,21 +48,24 @@ message UserGroupsResponse {
 message Group {
 	string groupID = 1;
 	string groupName = 2;
-	bool isDefault = 3;
-	GroupType groupType = 4;
+	string groupDescription = 3;
+	bool isDefault = 4;
+	GroupType groupType = 5;
 }
 
 message CreateGroupRequest {
 	string userID = 1;
 	string groupName = 2;
-	bool isDefault = 3;
+	string groupDescription = 3;
+	bool isDefault = 4;
 }
 
 message ModifyGroupRequest {
 	string userID = 1;
 	string groupID = 2;
 	optional string groupName = 3;
-	optional GroupType groupType = 4;
+	optional string groupDescription = 4;
+	optional GroupType groupType = 5;
 }
 
 enum GroupType {
@@ -128,9 +132,4 @@ enum GroupRole {
 	READ = 0;
 	WRITE = 1;
 	ADMIN = 2;
-}
-
-message GroupResponse {
-	string groupID = 1;
-	string groupName = 2;
 }

@@ -40,6 +40,7 @@ type UserService interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*NameIDResponse, error)
 	GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*UserID, error)
 	GetUserInformation(ctx context.Context, in *UserInformationRequest, opts ...client.CallOption) (*UserInformationResponse, error)
+	GetUserProfileInformation(ctx context.Context, in *UserID, opts ...client.CallOption) (*UserProfileInformationResponse, error)
 }
 
 type userService struct {
@@ -94,6 +95,16 @@ func (c *userService) GetUserInformation(ctx context.Context, in *UserInformatio
 	return out, nil
 }
 
+func (c *userService) GetUserProfileInformation(ctx context.Context, in *UserID, opts ...client.CallOption) (*UserProfileInformationResponse, error) {
+	req := c.c.NewRequest(c.name, "User.GetUserProfileInformation", in)
+	out := new(UserProfileInformationResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for User service
 
 type UserHandler interface {
@@ -101,6 +112,7 @@ type UserHandler interface {
 	Login(context.Context, *LoginRequest, *NameIDResponse) error
 	GetUserIDFromEmail(context.Context, *UserIDRequest, *UserID) error
 	GetUserInformation(context.Context, *UserInformationRequest, *UserInformationResponse) error
+	GetUserProfileInformation(context.Context, *UserID, *UserProfileInformationResponse) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
@@ -109,6 +121,7 @@ func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.Handl
 		Login(ctx context.Context, in *LoginRequest, out *NameIDResponse) error
 		GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, out *UserID) error
 		GetUserInformation(ctx context.Context, in *UserInformationRequest, out *UserInformationResponse) error
+		GetUserProfileInformation(ctx context.Context, in *UserID, out *UserProfileInformationResponse) error
 	}
 	type User struct {
 		user
@@ -135,4 +148,8 @@ func (h *userHandler) GetUserIDFromEmail(ctx context.Context, in *UserIDRequest,
 
 func (h *userHandler) GetUserInformation(ctx context.Context, in *UserInformationRequest, out *UserInformationResponse) error {
 	return h.UserHandler.GetUserInformation(ctx, in, out)
+}
+
+func (h *userHandler) GetUserProfileInformation(ctx context.Context, in *UserID, out *UserProfileInformationResponse) error {
+	return h.UserHandler.GetUserProfileInformation(ctx, in, out)
 }

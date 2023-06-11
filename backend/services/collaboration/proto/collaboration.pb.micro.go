@@ -40,6 +40,7 @@ type CollaborationService interface {
 	ManageGroupInvitation(ctx context.Context, in *ManageGroupInvitationRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	GetUserGroups(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*UserGroupsResponse, error)
 	CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, opts ...client.CallOption) (*IDResponse, error)
+	GetGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*Group, error)
 	ModifyGroup(ctx context.Context, in *ModifyGroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	DeleteGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	GetGroupMembers(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupMembersResponse, error)
@@ -48,7 +49,7 @@ type CollaborationService interface {
 	RequestToJoinGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	InviteUserToGroup(ctx context.Context, in *GroupInvitationRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	GetGroupUserRole(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupRoleResponse, error)
-	FindGroupByID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupResponse, error)
+	FindGroupByID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*Group, error)
 }
 
 type collaborationService struct {
@@ -96,6 +97,16 @@ func (c *collaborationService) GetUserGroups(ctx context.Context, in *UserIDRequ
 func (c *collaborationService) CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, opts ...client.CallOption) (*IDResponse, error) {
 	req := c.c.NewRequest(c.name, "Collaboration.CreateNewGroupWithAdmin", in)
 	out := new(IDResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *collaborationService) GetGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*Group, error) {
+	req := c.c.NewRequest(c.name, "Collaboration.GetGroup", in)
+	out := new(Group)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -183,9 +194,9 @@ func (c *collaborationService) GetGroupUserRole(ctx context.Context, in *GroupRe
 	return out, nil
 }
 
-func (c *collaborationService) FindGroupByID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupResponse, error) {
+func (c *collaborationService) FindGroupByID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*Group, error) {
 	req := c.c.NewRequest(c.name, "Collaboration.FindGroupByID", in)
-	out := new(GroupResponse)
+	out := new(Group)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -200,6 +211,7 @@ type CollaborationHandler interface {
 	ManageGroupInvitation(context.Context, *ManageGroupInvitationRequest, *SuccessResponse) error
 	GetUserGroups(context.Context, *UserIDRequest, *UserGroupsResponse) error
 	CreateNewGroupWithAdmin(context.Context, *CreateGroupRequest, *IDResponse) error
+	GetGroup(context.Context, *GroupRequest, *Group) error
 	ModifyGroup(context.Context, *ModifyGroupRequest, *SuccessResponse) error
 	DeleteGroup(context.Context, *GroupRequest, *SuccessResponse) error
 	GetGroupMembers(context.Context, *GroupRequest, *GroupMembersResponse) error
@@ -208,7 +220,7 @@ type CollaborationHandler interface {
 	RequestToJoinGroup(context.Context, *GroupRequest, *SuccessResponse) error
 	InviteUserToGroup(context.Context, *GroupInvitationRequest, *SuccessResponse) error
 	GetGroupUserRole(context.Context, *GroupRequest, *GroupRoleResponse) error
-	FindGroupByID(context.Context, *GroupRequest, *GroupResponse) error
+	FindGroupByID(context.Context, *GroupRequest, *Group) error
 }
 
 func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, opts ...server.HandlerOption) error {
@@ -217,6 +229,7 @@ func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, op
 		ManageGroupInvitation(ctx context.Context, in *ManageGroupInvitationRequest, out *SuccessResponse) error
 		GetUserGroups(ctx context.Context, in *UserIDRequest, out *UserGroupsResponse) error
 		CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, out *IDResponse) error
+		GetGroup(ctx context.Context, in *GroupRequest, out *Group) error
 		ModifyGroup(ctx context.Context, in *ModifyGroupRequest, out *SuccessResponse) error
 		DeleteGroup(ctx context.Context, in *GroupRequest, out *SuccessResponse) error
 		GetGroupMembers(ctx context.Context, in *GroupRequest, out *GroupMembersResponse) error
@@ -225,7 +238,7 @@ func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, op
 		RequestToJoinGroup(ctx context.Context, in *GroupRequest, out *SuccessResponse) error
 		InviteUserToGroup(ctx context.Context, in *GroupInvitationRequest, out *SuccessResponse) error
 		GetGroupUserRole(ctx context.Context, in *GroupRequest, out *GroupRoleResponse) error
-		FindGroupByID(ctx context.Context, in *GroupRequest, out *GroupResponse) error
+		FindGroupByID(ctx context.Context, in *GroupRequest, out *Group) error
 	}
 	type Collaboration struct {
 		collaboration
@@ -252,6 +265,10 @@ func (h *collaborationHandler) GetUserGroups(ctx context.Context, in *UserIDRequ
 
 func (h *collaborationHandler) CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, out *IDResponse) error {
 	return h.CollaborationHandler.CreateNewGroupWithAdmin(ctx, in, out)
+}
+
+func (h *collaborationHandler) GetGroup(ctx context.Context, in *GroupRequest, out *Group) error {
+	return h.CollaborationHandler.GetGroup(ctx, in, out)
 }
 
 func (h *collaborationHandler) ModifyGroup(ctx context.Context, in *ModifyGroupRequest, out *SuccessResponse) error {
@@ -286,6 +303,6 @@ func (h *collaborationHandler) GetGroupUserRole(ctx context.Context, in *GroupRe
 	return h.CollaborationHandler.GetGroupUserRole(ctx, in, out)
 }
 
-func (h *collaborationHandler) FindGroupByID(ctx context.Context, in *GroupRequest, out *GroupResponse) error {
+func (h *collaborationHandler) FindGroupByID(ctx context.Context, in *GroupRequest, out *Group) error {
 	return h.CollaborationHandler.FindGroupByID(ctx, in, out)
 }

@@ -81,11 +81,13 @@ func main() {
 	////
 	// - add endpoints where authentication is needed below this block.
 	////
+	app.Get("/api/user", svc.GetUserHandler)
 	app.Get("/api/user/invitations", svc.GetGroupInvitationsHandler)
 	app.Put("/api/user/invitations/:invitationID", svc.ManageGroupInvitationHandler)
 
 	app.Get("/api/groups", svc.GetUserGroupsHandler)
 	app.Post("/api/groups", svc.CreateGroupHandler)
+	app.Get("/api/groups/:groupID", svc.GetGroupHandler)
 	app.Put("/api/groups/:groupID", svc.ModifyGroupHandler)
 	app.Delete("/api/groups/:groupID", svc.DeleteGroupHandler)
 
@@ -97,11 +99,13 @@ func main() {
 
 	app.Get("/api/groups/:groupID/decks", svc.GetGroupDecksHandler)
 	app.Post("/api/groups/:groupID/decks", svc.CreateDeckHandler)
+	app.Get("/api/decks/:deckID", svc.GetDeckHandler)
 	app.Put("/api/decks/:deckID", svc.ModifyDeckHandler)
 	app.Delete("/api/decks/:deckID", svc.DeleteDeckHandler)
 
 	app.Get("/api/decks/:deckID/cards", svc.GetDeckCardsHandler)
 	app.Post("/api/decks/:deckID/cards", svc.CreateCardHandler)
+	app.Get("/api/cards/:cardID", svc.GetCardHandler)
 	app.Put("/api/cards/:cardID", svc.ModifyCardHandler)
 	app.Delete("/api/cards/:cardID", svc.DeleteCardHandler)
 

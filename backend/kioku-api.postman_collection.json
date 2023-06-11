@@ -74,6 +74,28 @@
 			"response": []
 		},
 		{
+			"name": "Get User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/user",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get Group Invitations",
 			"request": {
 				"method": "GET",
@@ -113,6 +135,35 @@
 					"path": [
 						"api",
 						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Group",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/groups/:groupID",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"groups",
+						":groupID"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -210,6 +261,35 @@
 			"response": []
 		},
 		{
+			"name": "Get Deck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/decks/:deckID",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"decks",
+						":deckID"
+					],
+					"variable": [
+						{
+							"key": "deckID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get Cards",
 			"request": {
 				"method": "GET",
@@ -240,13 +320,42 @@
 			"response": []
 		},
 		{
+			"name": "Get Card",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/cards/:cardID",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"cards",
+						":cardID"
+					],
+					"variable": [
+						{
+							"key": "cardID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "New Group",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"groupName\": \"test group\"\n}",
+					"raw": "{\n    \"groupName\": \"test group\",\n    \"groupDescription\": \"test\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

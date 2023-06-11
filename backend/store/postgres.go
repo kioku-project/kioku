@@ -235,10 +235,11 @@ func (s *CollaborationStoreImpl) AddNewMemberToGroup(userID string, groupID stri
 
 func (s *CollaborationStoreImpl) ModifyGroup(group *model.Group) (err error) {
 	err = s.db.Save(&model.Group{
-		ID:        group.ID,
-		Name:      group.Name,
-		IsDefault: group.IsDefault,
-		GroupType: group.GroupType,
+		ID:          group.ID,
+		Name:        group.Name,
+		Description: group.Description,
+		IsDefault:   group.IsDefault,
+		GroupType:   group.GroupType,
 	}).Error
 	return
 }

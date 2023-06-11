@@ -147,6 +147,17 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+func (e *Frontend) GetUserHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGetUser, err := e.userService.GetUserProfileInformation(c.Context(), &pbUser.UserID{
+		UserID: userID,
+	})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspGetUser)
+}
+
 func (e *Frontend) GetGroupInvitationsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspGroupInvitations, err := e.collaborationService.GetGroupInvitations(c.Context(), &pbCollaboration.UserIDRequest{
@@ -204,15 +215,28 @@ func (e *Frontend) CreateGroupHandler(c *fiber.Ctx) error {
 	rspCreateGroup, err := e.collaborationService.CreateNewGroupWithAdmin(
 		c.Context(),
 		&pbCollaboration.CreateGroupRequest{
-			UserID:    userID,
-			GroupName: groupName,
-			IsDefault: false,
+			UserID:           userID,
+			GroupName:        groupName,
+			GroupDescription: data["groupDescription"],
+			IsDefault:        false,
 		},
 	)
 	if err != nil {
 		return err
 	}
 	return c.SendString(rspCreateGroup.ID)
+}
+
+func (e *Frontend) GetGroupHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGetGroup, err := e.collaborationService.GetGroup(c.Context(), &pbCollaboration.GroupRequest{
+		UserID:  userID,
+		GroupID: c.Params("groupID"),
+	})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspGetGroup)
 }
 
 func (e *Frontend) ModifyGroupHandler(c *fiber.Ctx) error {
@@ -372,6 +396,18 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 	return c.SendString(rspCreateDeck.ID)
 }
 
+func (e *Frontend) GetDeckHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGetDeck, err := e.cardDeckService.GetDeck(c.Context(), &pbCardDeck.IDRequest{
+		UserID:   userID,
+		EntityID: c.Params("deckID"),
+	})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspGetDeck)
+}
+
 func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
 	var data map[string]*string
 	if err := c.BodyParser(&data); err != nil {
@@ -393,7 +429,7 @@ func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeleteDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCardDeck.DeleteWithIDRequest{
+	rspDeleteDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCardDeck.IDRequest{
 		UserID:   userID,
 		EntityID: c.Params("deckID"),
 	})
@@ -407,9 +443,9 @@ func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeckCards, err := e.cardDeckService.GetDeckCards(c.Context(), &pbCardDeck.DeckRequest{
-		UserID: userID,
-		DeckID: c.Params("deckID"),
+	rspDeckCards, err := e.cardDeckService.GetDeckCards(c.Context(), &pbCardDeck.IDRequest{
+		UserID:   userID,
+		EntityID: c.Params("deckID"),
 	})
 	if err != nil {
 		return err
@@ -437,6 +473,18 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 	return c.SendString(rspCreateCard.ID)
 }
 
+func (e *Frontend) GetCardHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGetCard, err := e.cardDeckService.GetCard(c.Context(), &pbCardDeck.IDRequest{
+		UserID:   userID,
+		EntityID: c.Params("cardID"),
+	})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspGetCard)
+}
+
 func (e *Frontend) ModifyCardHandler(c *fiber.Ctx) error {
 	var data converter.FiberModifyCardRequestBody
 	if err := c.BodyParser(&data); err != nil {
@@ -461,7 +509,7 @@ func (e *Frontend) ModifyCardHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeleteCard, err := e.cardDeckService.DeleteCard(c.Context(), &pbCardDeck.DeleteWithIDRequest{
+	rspDeleteCard, err := e.cardDeckService.DeleteCard(c.Context(), &pbCardDeck.IDRequest{
 		UserID:   userID,
 		EntityID: c.Params("cardID"),
 	})
@@ -512,7 +560,7 @@ func (e *Frontend) ModifyCardSideHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) DeleteCardSideHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeleteCardSide, err := e.cardDeckService.DeleteCardSide(c.Context(), &pbCardDeck.DeleteWithIDRequest{
+	rspDeleteCardSide, err := e.cardDeckService.DeleteCardSide(c.Context(), &pbCardDeck.IDRequest{
 		UserID:   userID,
 		EntityID: c.Params("cardSideID"),
 	})

@@ -121,6 +121,20 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 	return nil
 }
 
+func (e *CardDeck) GetDeck(ctx context.Context, req *pb.IDRequest, rsp *pb.DeckResponse) error {
+	logger.Infof("Received CardDeck.GetDeck request: %v", req)
+	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.EntityID, helper.CardDeckServiceID)
+	if err != nil {
+		return err
+	}
+	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_READ); err != nil {
+		return err
+	}
+	*rsp = *converter.StoreDeckToProtoDeckResponseConverter(*deck)
+	logger.Infof("Successfully got information for deck %s", req.EntityID)
+	return nil
+}
+
 func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
 	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.DeckID, helper.CardDeckServiceID)
@@ -146,7 +160,7 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rs
 	return nil
 }
 
-func (e *CardDeck) DeleteDeck(ctx context.Context, req *pb.DeleteWithIDRequest, rsp *pb.SuccessResponse) error {
+func (e *CardDeck) DeleteDeck(ctx context.Context, req *pb.IDRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.DeleteDeck request: %v", req)
 	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.EntityID, helper.CardDeckServiceID)
 	if err != nil {
@@ -164,9 +178,9 @@ func (e *CardDeck) DeleteDeck(ctx context.Context, req *pb.DeleteWithIDRequest, 
 	return nil
 }
 
-func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.DeckRequest, rsp *pb.DeckCardsResponse) error {
+func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.IDRequest, rsp *pb.DeckCardsResponse) error {
 	logger.Infof("Received CardDeck.GetDeckCards request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.DeckID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.EntityID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -184,7 +198,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.DeckRequest, rsp *p
 			Sides:  converter.ConvertToTypeArray(cardSides, converter.StoreCardSideToProtoCardSideConverter),
 		}
 	}
-	logger.Infof("Found %d cards in deck with id %s", len(deck.Cards), req.DeckID)
+	logger.Infof("Found %d cards in deck with id %s", len(deck.Cards), req.EntityID)
 	return nil
 }
 
@@ -211,6 +225,25 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 	return nil
 }
 
+func (e *CardDeck) GetCard(ctx context.Context, req *pb.IDRequest, rsp *pb.Card) error {
+	logger.Infof("Received CardDeck.GetCard request: %v", req)
+	card, err := helper.FindStoreEntity(e.store.FindCardByID, req.EntityID, helper.CardDeckServiceID)
+	if err != nil {
+		return err
+	}
+	cardSides, err := helper.FindStoreEntity(e.store.FindCardSidesByCardID, req.EntityID, helper.CardDeckServiceID)
+	if err != nil {
+		return err
+	}
+	card.CardSides = cardSides
+	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCollaboration.GroupRole_READ); err != nil {
+		return err
+	}
+	*rsp = *converter.StoreCardToProtoCardConverter(*card)
+	logger.Infof("Successfully got information for card %s", req.EntityID)
+	return nil
+}
+
 func (e *CardDeck) ModifyCard(ctx context.Context, req *pb.ModifyCardRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
 	card, err := helper.FindStoreEntity(e.store.FindCardByID, req.CardID, helper.CardDeckServiceID)
@@ -231,7 +264,7 @@ func (e *CardDeck) ModifyCard(ctx context.Context, req *pb.ModifyCardRequest, rs
 	return nil
 }
 
-func (e *CardDeck) DeleteCard(ctx context.Context, req *pb.DeleteWithIDRequest, rsp *pb.SuccessResponse) error {
+func (e *CardDeck) DeleteCard(ctx context.Context, req *pb.IDRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.DeleteCard request: %v", req)
 	card, err := helper.FindStoreEntity(e.store.FindCardByID, req.EntityID, helper.CardDeckServiceID)
 	if err != nil {
@@ -338,7 +371,7 @@ func (e *CardDeck) ModifyCardSide(ctx context.Context, req *pb.ModifyCardSideReq
 	return nil
 }
 
-func (e *CardDeck) DeleteCardSide(ctx context.Context, req *pb.DeleteWithIDRequest, rsp *pb.SuccessResponse) error {
+func (e *CardDeck) DeleteCardSide(ctx context.Context, req *pb.IDRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.DeleteCardSide request: %v", req)
 	cardSideToDelete, err := e.getCardSideAndCheckForValidAccess(ctx, req.UserID, req.EntityID)
 	if err != nil {

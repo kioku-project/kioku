@@ -3,6 +3,7 @@ import { getCookie, hasCookie } from "cookies-next";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { reauth } from "../../util/reauth";
 import jwtDecode, { JwtPayload } from "jwt-decode";
+import LoadingSpinner from "../graphics/LoadingSpinner";
 
 export default function Authenticated({ children }: PropsWithChildren) {
 	const router = useRouter();
@@ -22,5 +23,15 @@ export default function Authenticated({ children }: PropsWithChildren) {
 			setAccessToken(cookie);
 		})();
 	}, [router]);
-	return <>{accessToken && children}</>;
+	return (
+		<>
+			{accessToken ? (
+				children
+			) : (
+				<div className="flex h-screen w-screen flex-col items-center justify-center">
+					<LoadingSpinner className="w-16" />
+				</div>
+			)}
+		</>
+	);
 }

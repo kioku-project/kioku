@@ -10,7 +10,7 @@ Welcome to the kioku-project!
 
 ### Installation
 
-It is generally recommended to install Kioku to a fresh Kubernetes cluster, because there are some dependent deployments, which are all being deployed using the `deploy.sh`:
+It is generally recommended to install Kioku to a fresh Kubernetes cluster, because there are some dependent deployments, which are all being deployed using the `deploy.sh` script:
 - [`postgres-operator`](https://github.com/zalando/postgres-operator)
 
 From the root-directory of the repository execute the following:

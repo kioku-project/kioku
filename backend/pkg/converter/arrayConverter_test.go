@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 func stringify(i int) string {
-	return string(i)
+	return string(rune(i))
 }
 func TestConverter(t *testing.T) {
 	testIntArray := []int{1,2,3,4,5,6}

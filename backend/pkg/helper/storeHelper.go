@@ -10,7 +10,6 @@ func FindStoreEntity[C any](
 	ID string,
 	callContext ClientID,
 ) (entity C, err error) {
-	entity, err = storeFunction(ID)
 	if entity, err = storeFunction(ID); errors.Is(err, ErrStoreNoEntryWithID) {
 		err = NewMicroNoEntryWithIDErr(callContext)
 	}

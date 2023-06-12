@@ -1,0 +1,16 @@
+name: Carddeck Service
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+    - 'backend/services/srs/**'
+    - 'backend/store/**'
+
+jobs:
+  build-srs:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_srs
+      path: ./backend/services/srs
+      context: ./backend

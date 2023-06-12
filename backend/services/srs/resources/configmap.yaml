@@ -1,9 +1,0 @@
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: srs-env
-data:
-  MICRO_REGISTRY: kubernetes
-

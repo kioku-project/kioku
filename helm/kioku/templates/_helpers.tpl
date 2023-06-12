@@ -68,6 +68,13 @@ app.kubernetes.io/name: {{ .Values.carddeck.name }}
 {{- end }}
 
 {{/*
+Srs labels
+*/}}
+{{- define "kioku.srs.labels" -}}
+app.kubernetes.io/name: {{ .Values.srs.name }}
+{{- end }}
+
+{{/*
 Register labels
 */}}
 {{- define "kioku.user.labels" -}}

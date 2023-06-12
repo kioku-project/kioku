@@ -55,6 +55,16 @@ carddeck:
     max: 10
     targetCPUUtilizationPercentage: 50
 
+srs:
+  name: kioku-srs
+  image: ghcr.io/kioku-project/kioku_srs
+  tag: prod
+
+  autoscaler:
+    min: 1
+    max: 10
+    targetCPUUtilizationPercentage: 50
+
 user:
   name: kioku-user
   image: ghcr.io/kioku-project/kioku_user

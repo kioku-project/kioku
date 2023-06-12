@@ -4,7 +4,6 @@ import { PropsWithChildren, useEffect, useState } from "react";
 import { reauth } from "../../util/reauth";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 import LoadingSpinner from "../graphics/LoadingSpinner";
-import { ToastContainer } from "react-toastify";
 
 export default function Authenticated({ children }: PropsWithChildren) {
 	const router = useRouter();
@@ -33,12 +32,6 @@ export default function Authenticated({ children }: PropsWithChildren) {
 					<LoadingSpinner className="w-16" />
 				</div>
 			)}
-			<ToastContainer
-				position="bottom-center"
-				autoClose={3000}
-				hideProgressBar
-				pauseOnFocusLoss
-			/>
 		</>
 	);
 }

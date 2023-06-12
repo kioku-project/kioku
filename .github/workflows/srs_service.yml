@@ -1,4 +1,4 @@
-name: Carddeck Service
+name: SRS Service
 
 on:
   pull_request:

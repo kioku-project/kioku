@@ -6,17 +6,22 @@ option go_package = "./proto;srs";
 
 service Srs {
 	rpc Push(SrsPushRequest) returns (SuccessResponse) {}
-	rpc Pull(SrsPullRequest) returns (SrsPullResponse) {}
+	rpc Pull(DeckPullRequest) returns (SrsPullResponse) {}
 	rpc AddUserCardBinding(BindingRequest) returns (SuccessResponse) {}
+	rpc GetDeckCardsDue(DeckPullRequest) returns (DueResponse) {}
 }
 
-message SrsPullRequest {
+message DeckPullRequest {
 	string userID = 1;
 	string deckID = 2;
 }
 
 message SrsPullResponse {
 	Card card = 1;
+}
+
+message DueResponse {
+	int64 due = 1;
 }
 
 message Card {

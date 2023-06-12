@@ -5,6 +5,8 @@ import (
 	"errors"
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
+	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
+	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 
 	"go-micro.dev/v4/logger"
 
@@ -15,12 +17,14 @@ import (
 )
 
 type Collaboration struct {
-	store       store.CollaborationStore
-	userService pbUser.UserService
+	store           store.CollaborationStore
+	userService     pbUser.UserService
+	srsService      pbSrs.SrsService
+	cardDeckService pbCardDeck.CardDeckService
 }
 
-func New(s store.CollaborationStore, uS pbUser.UserService) *Collaboration {
-	return &Collaboration{store: s, userService: uS}
+func New(s store.CollaborationStore, uS pbUser.UserService, srsS pbSrs.SrsService, cdS pbCardDeck.CardDeckService) *Collaboration {
+	return &Collaboration{store: s, userService: uS, srsService: srsS, cardDeckService: cdS}
 }
 
 func (e *Collaboration) checkForGroupAndAdmission(userID string, groupID string) error {
@@ -64,7 +68,7 @@ func (e *Collaboration) GetGroupInvitations(_ context.Context, req *pb.UserIDReq
 	return nil
 }
 
-func (e *Collaboration) ManageGroupInvitation(_ context.Context, req *pb.ManageGroupInvitationRequest, rsp *pb.SuccessResponse) error {
+func (e *Collaboration) ManageGroupInvitation(ctx context.Context, req *pb.ManageGroupInvitationRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.ManageGroupInvitation request: %v", req)
 	groupAdmission, err := e.store.FindGroupAdmissionByID(req.AdmissionID)
 	if err != nil {
@@ -86,6 +90,31 @@ func (e *Collaboration) ManageGroupInvitation(_ context.Context, req *pb.ManageG
 		return err
 	}
 	logger.Infof("Deleted group admission with id %s", groupAdmission.ID)
+
+	// add cardbindings for user
+	decks, err := e.cardDeckService.GetGroupDecks(ctx, &pbCardDeck.GroupDecksRequest{
+		UserID:  groupAdmission.UserID,
+		GroupID: groupAdmission.GroupID,
+	})
+	if err != nil {
+		return err
+	}
+	for _, deck := range decks.Decks {
+		cards, err := e.cardDeckService.GetDeckCards(ctx, &pbCardDeck.IDRequest{
+			UserID:   groupAdmission.UserID,
+			EntityID: deck.DeckID,
+		})
+		if err != nil {
+			return err
+		}
+		for _, card := range cards.Cards {
+			e.srsService.AddUserCardBinding(ctx, &pbSrs.BindingRequest{
+				UserID: groupAdmission.UserID,
+				CardID: card.CardID,
+				DeckID: deck.DeckID,
+			})
+		}
+	}
 	rsp.Success = true
 	logger.Infof("Successfully handled invitation for user %s to join group %s", groupAdmission.UserID, groupAdmission.GroupID)
 	return nil
@@ -280,6 +309,32 @@ func (e *Collaboration) ManageGroupMemberRequest(ctx context.Context, req *pb.Ma
 		return err
 	}
 	logger.Infof("Deleted group admission with id %s", groupAdmission.ID)
+
+	// add cardbindings for user
+	decks, err := e.cardDeckService.GetGroupDecks(ctx, &pbCardDeck.GroupDecksRequest{
+		UserID:  groupAdmission.UserID,
+		GroupID: groupAdmission.GroupID,
+	})
+	if err != nil {
+		return err
+	}
+	for _, deck := range decks.Decks {
+		cards, err := e.cardDeckService.GetDeckCards(ctx, &pbCardDeck.IDRequest{
+			UserID:   groupAdmission.UserID,
+			EntityID: deck.DeckID,
+		})
+		if err != nil {
+			return err
+		}
+		for _, card := range cards.Cards {
+			e.srsService.AddUserCardBinding(ctx, &pbSrs.BindingRequest{
+				UserID: groupAdmission.UserID,
+				CardID: card.CardID,
+				DeckID: deck.DeckID,
+			})
+		}
+	}
+
 	rsp.Success = true
 	logger.Infof("Successfully handled member request of user %s for group %s", groupAdmission.UserID, groupAdmission.GroupID)
 	return nil

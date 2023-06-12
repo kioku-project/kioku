@@ -599,7 +599,7 @@ func (e *Frontend) DeleteCardSideHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) SrsPullHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspSrsPull, err := e.srsService.Pull(c.Context(), &pbSrs.SrsPullRequest{UserID: userID, DeckID: c.Params("deckID")})
+	rspSrsPull, err := e.srsService.Pull(c.Context(), &pbSrs.DeckPullRequest{UserID: userID, DeckID: c.Params("deckID")})
 	if err != nil {
 		return err
 	}
@@ -622,4 +622,20 @@ func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
 		return err
 	}
 	return c.SendStatus(200)
+}
+
+func (e *Frontend) SrsDueHandler(c *fiber.Ctx) error {
+
+	userID := helper.GetUserIDFromContext(c)
+	rspSrsDue, err := e.srsService.GetDeckCardsDue(c.Context(), &pbSrs.DeckPullRequest{
+		UserID: userID,
+		DeckID: c.Params("deckID"),
+	})
+	if err != nil {
+		return err
+	}
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspSrsDue.Due)
 }

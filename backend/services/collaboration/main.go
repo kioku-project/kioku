@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
+	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	"os"
 
 	"github.com/kioku-project/kioku/services/collaboration/handler"
@@ -47,7 +49,7 @@ func main() {
 	)
 
 	// Create a new instance of the service handler with the initialized database connection
-	svc := handler.New(dbStore, pbUser.NewUserService("user", srv.Client()))
+	svc := handler.New(dbStore, pbUser.NewUserService("user", srv.Client()), pbSrs.NewSrsService("srs", srv.Client()), pbCardDeck.NewCardDeckService("cardDeck", srv.Client()))
 
 	// Register handler
 	if err := pb.RegisterCollaborationHandler(srv.Server(), svc); err != nil {

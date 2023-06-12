@@ -64,7 +64,7 @@ func (e *Srs) Push(ctx context.Context, req *pb.SrsPushRequest, rsp *pb.SuccessR
 	return nil
 }
 
-func (e *Srs) Pull(ctx context.Context, req *pb.SrsPullRequest, rsp *pb.SrsPullResponse) error {
+func (e *Srs) Pull(ctx context.Context, req *pb.DeckPullRequest, rsp *pb.SrsPullResponse) error {
 	logger.Infof("Received Srs.Pull request: %v", req)
 	cards, err := e.store.GetDeckCards(
 		req.UserID,
@@ -103,7 +103,7 @@ func (e *Srs) Pull(ctx context.Context, req *pb.SrsPullRequest, rsp *pb.SrsPullR
 	if err != nil {
 		return err
 	}
-	returnedCard = converter.CardDeckCardToSrsProtoCardConverter(cardWithContent)
+	returnedCard = converter.CardDeckProtoCardToSrsProtoCardConverter(cardWithContent)
 	rsp.Card = returnedCard
 	return nil
 }
@@ -123,5 +123,23 @@ func (e *Srs) AddUserCardBinding(ctx context.Context, req *pb.BindingRequest, rs
 		return err
 	}
 	rsp.Success = true
+	return nil
+}
+func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pb.DeckPullRequest, rsp *pb.DueResponse) error {
+	logger.Infof("Received Srs.GetDeckCardsDue request: %v", req)
+	cards, err := e.store.GetDeckCards(
+		req.UserID,
+		req.DeckID,
+	)
+	if err != nil {
+		return err
+	}
+	var dueCards []*model.UserCardBinding
+	for _, card := range cards {
+		if card.Due < time.Now().Unix() {
+			dueCards = append(dueCards, card)
+		}
+	}
+	rsp.Due = int64(len(dueCards))
 	return nil
 }

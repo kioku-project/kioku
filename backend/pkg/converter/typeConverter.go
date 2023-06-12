@@ -121,10 +121,10 @@ func StoreCardToProtoCardConverter(card model.Card) *pbCardDeck.Card {
 	}
 }
 
-func CardDeckCardToSrsProtoCardConverter(card *pbCardDeck.Card) *pbSrs.Card {
+func CardDeckProtoCardToSrsProtoCardConverter(card *pbCardDeck.Card) *pbSrs.Card {
 	return &pbSrs.Card{
 		CardID: card.CardID,
-		Sides:  ConvertToTypeArray(card.Sides, CardDeckCardSideToSrsProtoCardSideConverter),
+		Sides:  ConvertToTypeArray(card.Sides, CardDeckProtoCardSideToSrsProtoCardSideConverter),
 	}
 }
 
@@ -136,7 +136,7 @@ func StoreCardSideToProtoCardSideConverter(cardSide model.CardSide) *pbCardDeck.
 	}
 }
 
-func CardDeckCardSideToSrsProtoCardSideConverter(cardSide *pbCardDeck.CardSide) *pbSrs.Side {
+func CardDeckProtoCardSideToSrsProtoCardSideConverter(cardSide *pbCardDeck.CardSide) *pbSrs.Side {
 	return &pbSrs.Side{
 		Header:      cardSide.Header,
 		Description: cardSide.Description,

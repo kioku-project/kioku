@@ -37,8 +37,9 @@ func NewSrsEndpoints() []*api.Endpoint {
 
 type SrsService interface {
 	Push(ctx context.Context, in *SrsPushRequest, opts ...client.CallOption) (*SuccessResponse, error)
-	Pull(ctx context.Context, in *SrsPullRequest, opts ...client.CallOption) (*SrsPullResponse, error)
+	Pull(ctx context.Context, in *DeckPullRequest, opts ...client.CallOption) (*SrsPullResponse, error)
 	AddUserCardBinding(ctx context.Context, in *BindingRequest, opts ...client.CallOption) (*SuccessResponse, error)
+	GetDeckCardsDue(ctx context.Context, in *DeckPullRequest, opts ...client.CallOption) (*DueResponse, error)
 }
 
 type srsService struct {
@@ -63,7 +64,7 @@ func (c *srsService) Push(ctx context.Context, in *SrsPushRequest, opts ...clien
 	return out, nil
 }
 
-func (c *srsService) Pull(ctx context.Context, in *SrsPullRequest, opts ...client.CallOption) (*SrsPullResponse, error) {
+func (c *srsService) Pull(ctx context.Context, in *DeckPullRequest, opts ...client.CallOption) (*SrsPullResponse, error) {
 	req := c.c.NewRequest(c.name, "Srs.Pull", in)
 	out := new(SrsPullResponse)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -83,19 +84,31 @@ func (c *srsService) AddUserCardBinding(ctx context.Context, in *BindingRequest,
 	return out, nil
 }
 
+func (c *srsService) GetDeckCardsDue(ctx context.Context, in *DeckPullRequest, opts ...client.CallOption) (*DueResponse, error) {
+	req := c.c.NewRequest(c.name, "Srs.GetDeckCardsDue", in)
+	out := new(DueResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Srs service
 
 type SrsHandler interface {
 	Push(context.Context, *SrsPushRequest, *SuccessResponse) error
-	Pull(context.Context, *SrsPullRequest, *SrsPullResponse) error
+	Pull(context.Context, *DeckPullRequest, *SrsPullResponse) error
 	AddUserCardBinding(context.Context, *BindingRequest, *SuccessResponse) error
+	GetDeckCardsDue(context.Context, *DeckPullRequest, *DueResponse) error
 }
 
 func RegisterSrsHandler(s server.Server, hdlr SrsHandler, opts ...server.HandlerOption) error {
 	type srs interface {
 		Push(ctx context.Context, in *SrsPushRequest, out *SuccessResponse) error
-		Pull(ctx context.Context, in *SrsPullRequest, out *SrsPullResponse) error
+		Pull(ctx context.Context, in *DeckPullRequest, out *SrsPullResponse) error
 		AddUserCardBinding(ctx context.Context, in *BindingRequest, out *SuccessResponse) error
+		GetDeckCardsDue(ctx context.Context, in *DeckPullRequest, out *DueResponse) error
 	}
 	type Srs struct {
 		srs
@@ -112,10 +125,14 @@ func (h *srsHandler) Push(ctx context.Context, in *SrsPushRequest, out *SuccessR
 	return h.SrsHandler.Push(ctx, in, out)
 }
 
-func (h *srsHandler) Pull(ctx context.Context, in *SrsPullRequest, out *SrsPullResponse) error {
+func (h *srsHandler) Pull(ctx context.Context, in *DeckPullRequest, out *SrsPullResponse) error {
 	return h.SrsHandler.Pull(ctx, in, out)
 }
 
 func (h *srsHandler) AddUserCardBinding(ctx context.Context, in *BindingRequest, out *SuccessResponse) error {
 	return h.SrsHandler.AddUserCardBinding(ctx, in, out)
+}
+
+func (h *srsHandler) GetDeckCardsDue(ctx context.Context, in *DeckPullRequest, out *DueResponse) error {
+	return h.SrsHandler.GetDeckCardsDue(ctx, in, out)
 }

@@ -6,9 +6,9 @@ import (
 )
 
 type UserCardBinding struct {
-	ID           string `gorm:"not null"`
-	UserID       string `gorm:"primaryKey"`
-	CardID       string `gorm:"primaryKey"`
+	ID           string `gorm:"primaryKey"`
+	UserID       string `gorm:"not null"`
+	CardID       string `gorm:"not null"`
 	Card         Card
 	DeckID       string `gorm:"not null"`
 	Deck         Deck

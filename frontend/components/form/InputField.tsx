@@ -28,7 +28,7 @@ interface InputFieldProps {
 	/**
 	 * InputField styling
 	 */
-	style?: "primary" | "secondary";
+	style?: "primary" | "secondary" | "tertiary";
 	/**
 	 * Is the InputField required?
 	 */
@@ -51,6 +51,7 @@ function getLabelStyle(style: string): string {
 	const getStyle: { [style: string]: string } = {
 		primary: "text-kiokuDarkBlue",
 		secondary: "text-kiokuDarkBlue font-bold",
+		tertiary: "text-kiokuDarkBlue font-bold",
 	};
 	return getStyle[style] ?? "";
 }
@@ -59,7 +60,8 @@ function getInputStyle(style: string): string {
 	const getStyle: { [style: string]: string } = {
 		primary:
 			"border-2 border-eggshell bg-eggshell invalid:border-red px-1.5 py-1.5 font-medium text-kiokuDarkBlue focus:border-kiokuDarkBlue",
-		secondary: "text-kiokuLightBlue font-medium bg-transparent",
+		secondary: "text-kiokuDarkBlue font-medium bg-transparent",
+		tertiary: "text-kiokuLightBlue font-medium bg-transparent",
 	};
 	return getStyle[style] ?? "";
 }

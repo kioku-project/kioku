@@ -57,6 +57,14 @@ export const Secondary: Story = {
 	},
 };
 
+export const Tertiary: Story = {
+	args: {
+		label: "Tertiary",
+		value: "Test",
+		style: "tertiary",
+	},
+};
+
 export const Placeholder: Story = {
 	args: {
 		label: "Placeholder",

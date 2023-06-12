@@ -8,7 +8,6 @@ import (
 	"github.com/kioku-project/kioku/pkg/model"
 
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
-	// pbUser "github.com/kioku-project/kioku/services/user/proto"
 	"github.com/stretchr/testify/assert"
 )
 

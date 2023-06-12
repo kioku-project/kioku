@@ -7,52 +7,63 @@ import (
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/model"
 
+	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 const (
-	id = "id"
-	name = "name"
-	email = "email"
-	password = "password"
-	groupID = "groupID"
+	id        = "id"
+	name      = "name"
+	email     = "email"
+	password  = "password"
+	groupID   = "groupID"
 	groupName = "groupName"
-	desc = "desc"
+	desc      = "desc"
 	isDefault = true
-	header = "header"
+	header    = "header"
 )
 
 var (
 	timeConstant = time.Now()
 
 	deck = model.Deck{
-		ID: id,
-		Name: name,
+		ID:        id,
+		Name:      name,
 		CreatedAt: timeConstant,
-		GroupID: id,
+		GroupID:   id,
 	}
 
 	card = model.Card{
-		ID: id,
+		ID:        id,
 		CardSides: []model.CardSide{},
 	}
 
+	pbCard = pbCardDeck.Card{
+		CardID: id,
+		Sides:  []*pbCardDeck.CardSide{},
+	}
+
 	cardSide = model.CardSide{
-		ID: id,
-		Header: header,
+		ID:          id,
+		Header:      header,
+		Description: desc,
+	}
+
+	pbCardSide = pbCardDeck.CardSide{
+		Header:      header,
 		Description: desc,
 	}
 
 	cardSideFiber = converter.FiberCardSideContent{
-		Header: header,
+		Header:      header,
 		Description: desc,
 	}
 
 	groupMembers = pbCollaboration.UserWithRole{
 		User: &pbCollaboration.User{
 			UserID: id,
-			Name: name,
+			Name:   name,
 		},
 		GroupRole: pbCollaboration.GroupRole_READ,
 	}
@@ -116,9 +127,9 @@ func TestMigrateStringGroupTypeToProtoGroupType(t *testing.T) {
 
 func TestStoreUserToProtoUserProfileInformationResponseConverter(t *testing.T) {
 	user := model.User{
-		ID: id,
-		Name: name,
-		Email: email,
+		ID:       id,
+		Name:     name,
+		Email:    email,
 		Password: password,
 	}
 
@@ -148,7 +159,7 @@ func TestStoreGroupAdmissionToProtoUserIDConverter(t *testing.T) {
 
 func TestStoreGroupAdmissionToProtoGroupInvitationConverter(t *testing.T) {
 	admission := model.GroupAdmission{
-		ID: id,
+		ID:      id,
 		GroupID: groupID,
 		Group: model.Group{
 			Name: groupName,
@@ -166,7 +177,7 @@ func TestProtoGroupMemberRequestToFiberGroupMemberRequestConverter(t *testing.T)
 		AdmissionID: id,
 		User: &pbCollaboration.User{
 			UserID: id,
-			Name: name,
+			Name:   name,
 		},
 	}
 
@@ -179,11 +190,11 @@ func TestProtoGroupMemberRequestToFiberGroupMemberRequestConverter(t *testing.T)
 
 func TestStoreGroupToProtoGroupConverter(t *testing.T) {
 	group := model.Group{
-		ID: id,
-		Name: name,
+		ID:          id,
+		Name:        name,
 		Description: desc,
-		IsDefault: isDefault,
-		GroupType: model.Public,
+		IsDefault:   isDefault,
+		GroupType:   model.Public,
 	}
 
 	conv := converter.StoreGroupToProtoGroupConverter(group)
@@ -197,10 +208,10 @@ func TestStoreGroupToProtoGroupConverter(t *testing.T) {
 
 func TestProtoGroupToFiberGroupConverter(t *testing.T) {
 	group := pbCollaboration.Group{
-		GroupID: id,
-		GroupName: name,
+		GroupID:          id,
+		GroupName:        name,
 		GroupDescription: desc,
-		IsDefault: isDefault,
+		IsDefault:        isDefault,
 	}
 
 	conv := converter.ProtoGroupToFiberGroupConverter(&group)
@@ -208,7 +219,7 @@ func TestProtoGroupToFiberGroupConverter(t *testing.T) {
 	assert.Equal(t, id, conv.GroupID)
 	assert.Equal(t, name, conv.GroupName)
 	assert.Equal(t, desc, conv.GroupDescription)
-	assert.Equal(t, isDefault, conv.IsDefault)	
+	assert.Equal(t, isDefault, conv.IsDefault)
 }
 
 func TestStoreDeckToProtoDeckConverter(t *testing.T) {
@@ -220,7 +231,7 @@ func TestStoreDeckToProtoDeckConverter(t *testing.T) {
 }
 
 func TestStoreDeckToProtoDeckResponseConverter(t *testing.T) {
-	
+
 	conv := converter.StoreDeckToProtoDeckResponseConverter(deck)
 
 	assert.Equal(t, id, conv.DeckID)
@@ -230,8 +241,14 @@ func TestStoreDeckToProtoDeckResponseConverter(t *testing.T) {
 }
 
 func TestStoreCardToProtoCardConverter(t *testing.T) {
-	
+
 	conv := converter.StoreCardToProtoCardConverter(card)
+
+	assert.Equal(t, id, conv.CardID)
+}
+
+func TestCardDeckProtoCardToSrsProtoCardConverter(t *testing.T) {
+	conv := converter.CardDeckProtoCardToSrsProtoCardConverter(&pbCard)
 
 	assert.Equal(t, id, conv.CardID)
 }
@@ -240,6 +257,13 @@ func TestStoreCardSideToProtoCardSideConverter(t *testing.T) {
 	conv := converter.StoreCardSideToProtoCardSideConverter(cardSide)
 
 	assert.Equal(t, id, conv.CardSideID)
+	assert.Equal(t, header, conv.Header)
+	assert.Equal(t, desc, conv.Description)
+}
+
+func TestCardDeckProtoCardSideToSrsProtoCardSideConverter(t *testing.T) {
+	conv := converter.CardDeckProtoCardSideToSrsProtoCardSideConverter(&pbCardSide)
+
 	assert.Equal(t, header, conv.Header)
 	assert.Equal(t, desc, conv.Description)
 }

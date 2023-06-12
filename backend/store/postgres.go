@@ -32,7 +32,7 @@ func NewPostgresStore() (*gorm.DB, error) {
 	dbname := os.Getenv("POSTGRES_DB")
 	port := os.Getenv("POSTGRES_PORT")
 
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=require", username, password, host, port, dbname)
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=prefer", username, password, host, port, dbname)
 	return gorm.Open(postgres.Open(connStr), &gorm.Config{})
 }
 

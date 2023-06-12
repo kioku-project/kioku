@@ -21,6 +21,7 @@ RUN make init && go mod download
 COPY services/collaboration/ services/collaboration
 COPY services/user/proto/user.* services/user/proto/
 COPY services/carddeck/proto/carddeck.* services/carddeck/proto/
+COPY services/srs/proto/srs.* services/srs/proto/
 COPY store/ store/
 COPY pkg/ pkg/
 WORKDIR /go/src/kioku/services/collaboration

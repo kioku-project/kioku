@@ -9,8 +9,9 @@ type Card struct {
 	ID              string `gorm:"primaryKey"`
 	DeckID          string `gorm:"not null"`
 	Deck            Deck
-	FirstCardSideID string     `gorm:"not null"`
-	CardSides       []CardSide `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	FirstCardSideID string            `gorm:"not null"`
+	CardSides       []CardSide        `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	UserBindings    []UserCardBinding `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func (c *Card) BeforeCreate(db *gorm.DB) (err error) {

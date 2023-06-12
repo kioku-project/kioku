@@ -43,3 +43,11 @@ type CollaborationStore interface {
 	FindGroupAdmissionByID(admissionID string) (*model.GroupAdmission, error)
 	DeleteGroupAdmission(admission *model.GroupAdmission) error
 }
+
+type SrsStore interface {
+	CreateRevlog(newRev *model.Revlog) error
+	GetCardBinding(userID string, cardID string) (*model.UserCardBinding, error)
+	GetDeckCards(userID string, deckID string) ([]*model.UserCardBinding, error)
+	CreateUserCard(newCard *model.UserCardBinding) error
+	ModifyUserCard(card *model.UserCardBinding) error
+}

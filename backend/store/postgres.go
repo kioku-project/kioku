@@ -24,6 +24,8 @@ type CardDeckStoreImpl GormStore
 
 type CollaborationStoreImpl GormStore
 
+type SrsStoreImpl GormStore
+
 func NewPostgresStore() (*gorm.DB, error) {
 	_ = godotenv.Load("../.env", "../.env.example")
 	host := os.Getenv("POSTGRES_HOST")
@@ -70,6 +72,18 @@ func NewCollaborationStore() (CollaborationStore, error) {
 		return nil, err
 	}
 	return &CollaborationStoreImpl{db: db}, nil
+}
+
+func NewSrsStore() (SrsStore, error) {
+	db, err := NewPostgresStore()
+	if err != nil {
+		return nil, err
+	}
+	err = db.AutoMigrate(&model.Revlog{}, &model.UserCardBinding{})
+	if err != nil {
+		return nil, err
+	}
+	return &SrsStoreImpl{db: db}, nil
 }
 
 func (s *UserStoreImpl) RegisterNewUser(newUser *model.User) error {
@@ -299,4 +313,40 @@ func (s *CollaborationStoreImpl) FindGroupAdmissionByID(admissionID string) (gro
 
 func (s *CollaborationStoreImpl) DeleteGroupAdmission(admission *model.GroupAdmission) error {
 	return s.db.Delete(admission).Error
+}
+
+func (s *SrsStoreImpl) CreateRevlog(newRev *model.Revlog) error {
+	return s.db.Create(&newRev).Error
+}
+
+func (s *SrsStoreImpl) GetCardBinding(userID string, cardID string) (userCardBinding *model.UserCardBinding, err error) {
+	if err = s.db.Where(model.UserCardBinding{UserID: userID, CardID: cardID}).First(&userCardBinding).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *SrsStoreImpl) GetDeckCards(userID string, deckID string) (userCards []*model.UserCardBinding, err error) {
+	if err = s.db.Where(model.UserCardBinding{DeckID: deckID}).Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *SrsStoreImpl) CreateUserCard(newCard *model.UserCardBinding) error {
+	return s.db.Create(newCard).Error
+}
+
+func (s *SrsStoreImpl) ModifyUserCard(userCard *model.UserCardBinding) (err error) {
+	err = s.db.Save(&model.UserCardBinding{
+		ID:      userCard.ID,
+		UserID:  userCard.UserID,
+		CardID:  userCard.CardID,
+		DeckID:  userCard.DeckID,
+		Type:    userCard.Type,
+		Due:     userCard.Due,
+		LastIvl: userCard.LastIvl,
+		Factor:  userCard.Factor,
+	}).Error
+	return
 }

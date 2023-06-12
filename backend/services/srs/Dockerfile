@@ -16,15 +16,15 @@ wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-pro
 chmod +x /bin/grpc_health_probe
 
 # Build Go binary
-COPY services/carddeck/Makefile go.mod go.sum ./
+COPY services/srs/Makefile go.mod go.sum ./
 RUN make init && go mod download 
-COPY services/carddeck/ services/carddeck
+COPY services/srs/ services/srs
+COPY services/carddeck/proto/carddeck.* services/carddeck/proto/
 COPY services/user/proto/user.* services/user/proto/
 COPY services/collaboration/proto/collaboration.* services/collaboration/proto/
-COPY services/srs/proto/srs.* services/srs/proto/
 COPY store/ store/
 COPY pkg/ pkg/
-WORKDIR /go/src/kioku/services/carddeck
+WORKDIR /go/src/kioku/services/srs
 RUN make proto tidy build
 
 # Deployment container
@@ -34,6 +34,6 @@ USER kioku
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /bin/grpc_health_probe /bin/
-COPY --from=builder /go/src/kioku/services/carddeck/carddeck /carddeck
-ENTRYPOINT ["/carddeck"]
+COPY --from=builder /go/src/kioku/services/srs/srs /srs
+ENTRYPOINT ["/srs"]
 CMD []

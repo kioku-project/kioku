@@ -13,6 +13,7 @@ const (
 	CollaborationServiceID ClientID = "services.collaboration"
 	FrontendServiceID      ClientID = "services.frontend"
 	UserServiceID          ClientID = "services.user"
+	SrsServiceID           ClientID = "services.srs"
 )
 
 var (
@@ -67,6 +68,9 @@ func NewMicroInvalidEmailOrPasswordErr(id ClientID) error {
 
 func NewMicroNotSuccessfulResponseErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "operation not successful")
+}
+func NewMicroWrongRatingErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "invalid rating")
 }
 
 func NewFiberBadRequestErr(detail string) error {

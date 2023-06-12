@@ -2,26 +2,25 @@ package main
 
 import (
 	"fmt"
-	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
+	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
+	"go-micro.dev/v4/server"
 	"os"
 
-	"github.com/kioku-project/kioku/services/carddeck/handler"
-	pb "github.com/kioku-project/kioku/services/carddeck/proto"
-	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
+	"github.com/kioku-project/kioku/services/srs/handler"
+	pb "github.com/kioku-project/kioku/services/srs/proto"
 	"github.com/kioku-project/kioku/store"
 
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/logger"
-	"go-micro.dev/v4/server"
 
 	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
 
-	grpcClient "github.com/go-micro/plugins/v4/client/grpc"
-	grpcServer "github.com/go-micro/plugins/v4/server/grpc"
+	grpcc "github.com/go-micro/plugins/v4/client/grpc"
+	grpcs "github.com/go-micro/plugins/v4/server/grpc"
 )
 
 var (
-	service        = "cardDeck"
+	service        = "srs"
 	version        = "latest"
 	serviceAddress = fmt.Sprintf("%s%s", os.Getenv("HOSTNAME"), ":8080")
 )
@@ -29,7 +28,7 @@ var (
 func main() {
 
 	// Initialize the database connection
-	dbStore, err := store.NewCardDeckStore()
+	dbStore, err := store.NewSrsStore()
 	if err != nil {
 		logger.Fatal("Failed to initialize database:", err)
 	}
@@ -38,8 +37,8 @@ func main() {
 
 	// Create service
 	srv := micro.NewService(
-		micro.Server(grpcServer.NewServer(server.Address(serviceAddress), server.Wait(nil))),
-		micro.Client(grpcClient.NewClient()),
+		micro.Server(grpcs.NewServer(server.Address(serviceAddress))),
+		micro.Client(grpcc.NewClient()),
 	)
 	srv.Init(
 		micro.Name(service),
@@ -48,10 +47,10 @@ func main() {
 	)
 
 	// Create a new instance of the service handler with the initialized database connection
-	svc := handler.New(dbStore, pbCollaboration.NewCollaborationService("collaboration", srv.Client()), pbSrs.NewSrsService("srs", srv.Client()))
+	svc := handler.New(dbStore, pbCardDeck.NewCardDeckService("cardDeck", srv.Client()))
 
 	// Register handler
-	if err := pb.RegisterCardDeckHandler(srv.Server(), svc); err != nil {
+	if err := pb.RegisterSrsHandler(srv.Server(), svc); err != nil {
 		logger.Fatal(err)
 	}
 	if err := pb.RegisterHealthHandler(srv.Server(), new(handler.Health)); err != nil {

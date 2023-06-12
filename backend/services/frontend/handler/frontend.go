@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kioku-project/kioku/pkg/converter"
+	"strconv"
 	"strings"
 	"time"
 
@@ -11,6 +12,7 @@ import (
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
+	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	pbUser "github.com/kioku-project/kioku/services/user/proto"
 	"go-micro.dev/v4/logger"
 )
@@ -19,17 +21,20 @@ type Frontend struct {
 	userService          pbUser.UserService
 	cardDeckService      pbCardDeck.CardDeckService
 	collaborationService pbCollaboration.CollaborationService
+	srsService           pbSrs.SrsService
 }
 
 func New(
 	userService pbUser.UserService,
 	cardDeckService pbCardDeck.CardDeckService,
 	collaborationService pbCollaboration.CollaborationService,
+	srsService pbSrs.SrsService,
 ) *Frontend {
 	return &Frontend{
 		userService:          userService,
 		cardDeckService:      cardDeckService,
 		collaborationService: collaborationService,
+		srsService:           srsService,
 	}
 }
 
@@ -589,6 +594,40 @@ func (e *Frontend) DeleteCardSideHandler(c *fiber.Ctx) error {
 		return err
 	} else if !rspDeleteCardSide.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) SrsPullHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspSrsPull, err := e.srsService.Pull(c.Context(), &pbSrs.SrsPullRequest{UserID: userID, DeckID: c.Params("deckID")})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspSrsPull.Card)
+}
+func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if data["cardID"] == "" {
+		return helper.NewFiberBadRequestErr("no cardID given")
+	}
+	if data["rating"] == "" {
+		return helper.NewFiberBadRequestErr("no rating given")
+	}
+	rating, err := strconv.ParseInt(data["rating"], 10, 0)
+	if err != nil {
+		return err
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspSrsPush, err := e.srsService.Push(c.Context(), &pbSrs.SrsPushRequest{UserID: userID, CardID: data["cardID"], Rating: rating})
+	if err != nil {
+		return err
+	}
+	if err != nil || !rspSrsPush.Success {
+		return err
 	}
 	return c.SendStatus(200)
 }

@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"github.com/kioku-project/kioku/pkg/converter"
+	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	"go-micro.dev/v4/logger"
 	"time"
 
@@ -16,10 +17,11 @@ import (
 type CardDeck struct {
 	store                store.CardDeckStore
 	collaborationService pbCollaboration.CollaborationService
+	srsService           pbSrs.SrsService
 }
 
-func New(s store.CardDeckStore, cS pbCollaboration.CollaborationService) *CardDeck {
-	return &CardDeck{store: s, collaborationService: cS}
+func New(s store.CardDeckStore, cS pbCollaboration.CollaborationService, srsS pbSrs.SrsService) *CardDeck {
+	return &CardDeck{store: s, collaborationService: cS, srsService: srsS}
 }
 
 func (e *CardDeck) checkUserRoleAccess(ctx context.Context, userID string, groupID string, requiredRole pbCollaboration.GroupRole) error {
@@ -256,6 +258,22 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 	}
 	if err = e.generateCardSidesForCard(newCard, req.Sides); err != nil {
 		return err
+	}
+
+	///// add usercardbindings
+	membersResp, err := e.collaborationService.GetGroupMembers(ctx, &pbCollaboration.GroupRequest{
+		UserID:  req.UserID,
+		GroupID: deck.GroupID,
+	})
+	if err != nil {
+		return err
+	}
+	for _, user := range membersResp.Users {
+		e.srsService.AddUserCardBinding(ctx, &pbSrs.BindingRequest{
+			UserID: user.User.UserID,
+			CardID: newCard.ID,
+			DeckID: newCard.DeckID,
+		})
 	}
 	rsp.ID = newCard.ID
 	logger.Infof("Successfully created new card (%s) in deck (%s)", newCard.ID, req.DeckID)

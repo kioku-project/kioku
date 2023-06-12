@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	microErrors "go-micro.dev/v4/errors"
 	"os"
 
@@ -52,6 +53,7 @@ func main() {
 		pbUser.NewUserService("user", srv.Client()),
 		pbCardDeck.NewCardDeckService("cardDeck", srv.Client()),
 		pbCollaboration.NewCollaborationService("collaboration", srv.Client()),
+		pbSrs.NewSrsService("srs", srv.Client()),
 	)
 
 	fiberConfig := fiber.Config{
@@ -114,6 +116,9 @@ func main() {
 	app.Post("/api/cards/:cardID/cardSides", svc.CreateCardSideHandler)
 	app.Put("/api/cardSides/:cardSideID", svc.ModifyCardSideHandler)
 	app.Delete("/api/cardSides/:cardSideID", svc.DeleteCardSideHandler)
+
+	app.Get("/api/decks/:deckID/pull", svc.SrsPullHandler)
+	app.Post("/api/decks/:deckID/push", svc.SrsPushHandler)
 
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {

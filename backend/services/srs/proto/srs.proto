@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package srs;
+
+option go_package = "./proto;srs";
+
+service Srs {
+	rpc Push(SrsPushRequest) returns (SuccessResponse) {}
+	rpc Pull(SrsPullRequest) returns (SrsPullResponse) {}
+	rpc AddUserCardBinding(BindingRequest) returns (SuccessResponse) {}
+}
+
+message SrsPullRequest {
+	string userID = 1;
+	string deckID = 2;
+}
+
+message SrsPullResponse {
+	Card card = 1;
+}
+
+message Card {
+	string cardID = 1;
+	repeated Side sides = 2;
+}
+
+message Side {
+	string header = 1;
+	string description = 2;
+}
+
+message SrsPushRequest {
+	string userID = 1;
+	string cardID = 2;
+	int64 rating = 3;
+}
+
+message SuccessResponse {
+	bool success = 1;
+}
+
+message BindingRequest {
+	string userID = 1;
+	string cardID = 2;
+	string deckID = 3;
+}

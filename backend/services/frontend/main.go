@@ -119,7 +119,7 @@ func main() {
 
 	app.Get("/api/decks/:deckID/pull", svc.SrsPullHandler)
 	app.Post("/api/decks/:deckID/push", svc.SrsPushHandler)
-	app.Get("/api/decks/:deckID/due", svc.SrsDueHandler)
+	app.Get("/api/decks/:deckID/dueCards", svc.SrsDueHandler)
 
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {

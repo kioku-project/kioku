@@ -7,7 +7,6 @@ import (
 	"github.com/kioku-project/kioku/pkg/helper"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
-
 	"go-micro.dev/v4/logger"
 
 	"github.com/kioku-project/kioku/pkg/model"
@@ -92,31 +91,41 @@ func (e *Collaboration) ManageGroupInvitation(ctx context.Context, req *pb.Manag
 	logger.Infof("Deleted group admission with id %s", groupAdmission.ID)
 
 	// add cardbindings for user
+	if err := e.createUserCardBindingsForWholeGroup(ctx, groupAdmission.UserID, groupAdmission.GroupID); err != nil {
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully handled invitation for user %s to join group %s", groupAdmission.UserID, groupAdmission.GroupID)
+	return nil
+}
+func (e *Collaboration) createUserCardBindingsForWholeGroup(ctx context.Context, userID string, groupID string) error {
 	decks, err := e.cardDeckService.GetGroupDecks(ctx, &pbCardDeck.GroupDecksRequest{
-		UserID:  groupAdmission.UserID,
-		GroupID: groupAdmission.GroupID,
+		UserID:  userID,
+		GroupID: groupID,
 	})
 	if err != nil {
 		return err
 	}
 	for _, deck := range decks.Decks {
 		cards, err := e.cardDeckService.GetDeckCards(ctx, &pbCardDeck.IDRequest{
-			UserID:   groupAdmission.UserID,
+			UserID:   userID,
 			EntityID: deck.DeckID,
 		})
 		if err != nil {
 			return err
 		}
 		for _, card := range cards.Cards {
-			e.srsService.AddUserCardBinding(ctx, &pbSrs.BindingRequest{
-				UserID: groupAdmission.UserID,
+			_, err := e.srsService.AddUserCardBinding(ctx, &pbSrs.BindingRequest{
+				UserID: userID,
 				CardID: card.CardID,
 				DeckID: deck.DeckID,
 			})
+			if err != nil {
+				return err
+			}
 		}
 	}
-	rsp.Success = true
-	logger.Infof("Successfully handled invitation for user %s to join group %s", groupAdmission.UserID, groupAdmission.GroupID)
+
 	return nil
 }
 
@@ -311,28 +320,8 @@ func (e *Collaboration) ManageGroupMemberRequest(ctx context.Context, req *pb.Ma
 	logger.Infof("Deleted group admission with id %s", groupAdmission.ID)
 
 	// add cardbindings for user
-	decks, err := e.cardDeckService.GetGroupDecks(ctx, &pbCardDeck.GroupDecksRequest{
-		UserID:  groupAdmission.UserID,
-		GroupID: groupAdmission.GroupID,
-	})
-	if err != nil {
+	if err := e.createUserCardBindingsForWholeGroup(ctx, groupAdmission.UserID, groupAdmission.GroupID); err != nil {
 		return err
-	}
-	for _, deck := range decks.Decks {
-		cards, err := e.cardDeckService.GetDeckCards(ctx, &pbCardDeck.IDRequest{
-			UserID:   groupAdmission.UserID,
-			EntityID: deck.DeckID,
-		})
-		if err != nil {
-			return err
-		}
-		for _, card := range cards.Cards {
-			e.srsService.AddUserCardBinding(ctx, &pbSrs.BindingRequest{
-				UserID: groupAdmission.UserID,
-				CardID: card.CardID,
-				DeckID: deck.DeckID,
-			})
-		}
 	}
 
 	rsp.Success = true

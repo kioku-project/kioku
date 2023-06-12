@@ -56,6 +56,27 @@ func (e *Collaboration) checkUserRoleAccess(_ context.Context, userID string, gr
 	return nil
 }
 
+func (e *Collaboration) generateGroupMemberAdmissionResponse(ctx context.Context, groupAdmissions []model.GroupAdmission) (memberAdmissions []*pb.MemberAdmission, err error) {
+	userIDs := converter.ConvertToTypeArray(groupAdmissions, converter.StoreGroupAdmissionToProtoUserIDConverter)
+	logger.Infof("Requesting information of users in group from user service")
+	users, err := e.userService.GetUserInformation(ctx, &pbUser.UserInformationRequest{UserIDs: userIDs})
+	if err != nil {
+		return
+	}
+	memberAdmissions = make([]*pb.MemberAdmission, len(users.Users))
+	for i, user := range users.Users {
+		memberAdmissions[i] = &pb.MemberAdmission{
+			AdmissionID: groupAdmissions[i].ID,
+			User: &pb.User{
+				UserID: user.UserID,
+				Name:   user.UserName,
+			},
+		}
+	}
+	logger.Infof("Successfully received user information from %d users and added it to request information", len(users.Users))
+	return
+}
+
 func (e *Collaboration) GetGroupInvitations(_ context.Context, req *pb.UserIDRequest, rsp *pb.GroupInvitationsResponse) error {
 	logger.Infof("Received Collaboration.GetGroupInvitations request: %v", req)
 	groupInvitations, err := e.store.FindGroupInvitationsByUserID(req.UserID)
@@ -135,7 +156,23 @@ func (e *Collaboration) GetUserGroups(_ context.Context, req *pb.UserIDRequest, 
 	if err != nil {
 		return err
 	}
-	rsp.Groups = converter.ConvertToTypeArray(groups, converter.StoreGroupToProtoGroupConverter)
+	protoGroups := converter.ConvertToTypeArray(groups, converter.StoreGroupToProtoGroupConverter)
+	protoRoles := make([]pb.GroupRole, len(protoGroups))
+	for index, group := range protoGroups {
+		role, err := e.store.GetGroupUserRole(req.UserID, group.GroupID)
+		if err != nil {
+			return err
+		}
+		protoRoles[index] = converter.MigrateModelRoleToProtoRole(role)
+	}
+	protoGroupsWithUserRole := make([]*pb.GroupWithUserRole, len(protoGroups))
+	for index := range protoGroups {
+		protoGroupsWithUserRole[index] = &pb.GroupWithUserRole{
+			Group: protoGroups[index],
+			Role:  protoRoles[index],
+		}
+	}
+	rsp.Groups = protoGroupsWithUserRole
 	logger.Infof("Found %d groups for user with id %s", len(groups), req.UserID)
 	return nil
 }
@@ -161,7 +198,7 @@ func (e *Collaboration) CreateNewGroupWithAdmin(_ context.Context, req *pb.Creat
 	return nil
 }
 
-func (e *Collaboration) GetGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.Group) error {
+func (e *Collaboration) GetGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupWithUserRole) error {
 	logger.Infof("Received Collaboration.GetGroup request: %v", req)
 	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_READ); err != nil {
 		return err
@@ -170,8 +207,19 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pb.GroupRequest, rsp 
 	if err != nil {
 		return err
 	}
-	*rsp = *converter.StoreGroupToProtoGroupConverter(*group)
-	rsp.GroupType = converter.MigrateModelGroupTypeToProtoGroupType(group.GroupType)
+	role, err := e.store.GetGroupUserRole(req.UserID, req.GroupID)
+	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.NewMicroNoEntryWithIDErr(helper.CollaborationServiceID)
+		}
+		return err
+	}
+	protoGroup := converter.StoreGroupToProtoGroupConverter(*group)
+	protoRole := converter.MigrateModelRoleToProtoRole(role)
+	*rsp = pb.GroupWithUserRole{
+		Group: protoGroup,
+		Role:  protoRole,
+	}
 	logger.Infof("Successfully got information for group %s", req.GroupID)
 	return nil
 }
@@ -254,7 +302,7 @@ func (e *Collaboration) GetGroupMembers(ctx context.Context, req *pb.GroupReques
 		rsp.Users[i] = &pb.UserWithRole{
 			User: &pb.User{
 				UserID: user.UserID,
-				Name:   user.Name,
+				Name:   user.UserName,
 			},
 			GroupRole: converter.MigrateModelRoleToProtoRole(groupMembers[i].RoleType),
 		}
@@ -263,7 +311,7 @@ func (e *Collaboration) GetGroupMembers(ctx context.Context, req *pb.GroupReques
 	return nil
 }
 
-func (e *Collaboration) GetGroupMemberRequests(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupMemberRequestsResponse) error {
+func (e *Collaboration) GetGroupMemberRequests(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupMemberAdmissionResponse) error {
 	logger.Infof("Received Collaboration.GetGroupMemberRequests request: %v", req)
 	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
 		return err
@@ -273,23 +321,10 @@ func (e *Collaboration) GetGroupMemberRequests(ctx context.Context, req *pb.Grou
 		return err
 	}
 	logger.Infof("Found %d requests for group with id %s", len(groupRequests), req.GroupID)
-	userIDs := converter.ConvertToTypeArray(groupRequests, converter.StoreGroupAdmissionToProtoUserIDConverter)
-	logger.Infof("Requesting information of users in group from user service")
-	users, err := e.userService.GetUserInformation(ctx, &pbUser.UserInformationRequest{UserIDs: userIDs})
+	rsp.MemberAdmissions, err = e.generateGroupMemberAdmissionResponse(ctx, groupRequests)
 	if err != nil {
 		return err
 	}
-	rsp.MemberRequests = make([]*pb.MemberRequest, len(users.Users))
-	for i, user := range users.Users {
-		rsp.MemberRequests[i] = &pb.MemberRequest{
-			AdmissionID: groupRequests[i].ID,
-			User: &pb.User{
-				UserID: user.UserID,
-				Name:   user.Name,
-			},
-		}
-	}
-	logger.Infof("Successfully received user information from %d users and added it to request information", len(users.Users))
 	return nil
 }
 
@@ -359,13 +394,29 @@ func (e *Collaboration) RequestToJoinGroup(_ context.Context, req *pb.GroupReque
 	return nil
 }
 
+func (e *Collaboration) GetInvitationsForGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupMemberAdmissionResponse) error {
+	logger.Infof("Received Collaboration.GetInvitationsForGroup request: %v", req)
+	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
+		return err
+	}
+	memberInvitations, err := e.store.FindGroupInvitationsByGroupID(req.GroupID)
+	if err != nil {
+		return err
+	}
+	rsp.MemberAdmissions, err = e.generateGroupMemberAdmissionResponse(ctx, memberInvitations)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (e *Collaboration) InviteUserToGroup(ctx context.Context, req *pb.GroupInvitationRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.InviteUserToGroup request: %v", req)
 	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
 		return err
 	}
 	logger.Infof("Requesting user id from invited user from user service by email %s", req.InvitedUserEmail)
-	userRsp, err := e.userService.GetUserIDFromEmail(ctx, &pbUser.UserIDRequest{Email: req.InvitedUserEmail})
+	userRsp, err := e.userService.GetUserIDFromEmail(ctx, &pbUser.UserIDRequest{UserEmail: req.InvitedUserEmail})
 	if err != nil {
 		return err
 	}

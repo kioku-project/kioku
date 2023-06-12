@@ -17,6 +17,7 @@ type FiberGroup struct {
 	GroupDescription string `json:"groupDescription"`
 	IsDefault        bool   `json:"isDefault"`
 	GroupType        string `json:"groupType"`
+	GroupRole        string `json:"groupRole"`
 }
 
 type FiberGroupMemberRequest struct {

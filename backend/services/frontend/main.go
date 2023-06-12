@@ -99,7 +99,8 @@ func main() {
 	app.Get("/api/groups/:groupID/members/requests", svc.GetGroupMemberRequestsHandler)
 	app.Post("/api/groups/:groupID/members/requests", svc.RequestToJoinGroupHandler)
 	app.Put("/api/groups/:groupID/members/requests/:requestID", svc.ManageGroupMemberRequestHandler)
-	app.Post("/api/groups/:groupID/members/invite", svc.InviteUserToGroupHandler)
+	app.Get("/api/groups/:groupID/members/invitations", svc.GetInvitationsForGroupHandler)
+	app.Post("/api/groups/:groupID/members/invitations", svc.InviteUserToGroupHandler)
 
 	app.Get("/api/groups/:groupID/decks", svc.GetGroupDecksHandler)
 	app.Post("/api/groups/:groupID/decks", svc.CreateDeckHandler)

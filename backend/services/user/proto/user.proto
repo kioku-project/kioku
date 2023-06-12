@@ -13,23 +13,23 @@ service User {
 }
 
 message RegisterRequest {
-	string email = 1;
-	string name = 2;
-	string password = 3;
+	string userEmail = 1;
+	string userName = 2;
+	string userPassword = 3;
 }
 
 message NameIDResponse {
-	string ID = 1;
-	string name = 2;
+	string userID = 1;
+	string userName = 2;
 }
 
 message LoginRequest {
-	string email = 1;
-	string password = 2;
+	string userEmail = 1;
+	string userPassword = 2;
 }
 
 message UserIDRequest {
-	string email = 1;
+	string userEmail = 1;
 }
 
 message UserID {
@@ -46,12 +46,12 @@ message UserInformationResponse {
 
 message UserInformation {
 	string userID = 1;
-	string email = 2;
-	string name = 3;
+	string userEmail = 2;
+	string userName = 3;
 }
 
 message UserProfileInformationResponse {
 	string userID = 1;
-	string email = 2;
-	string name = 3;
+	string userEmail = 2;
+	string userName = 3;
 }

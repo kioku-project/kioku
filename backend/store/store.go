@@ -39,6 +39,7 @@ type CollaborationStore interface {
 	CreateNewGroupAdmission(newAdmission *model.GroupAdmission) error
 	FindGroupRequestsByGroupID(groupID string) ([]model.GroupAdmission, error)
 	FindGroupInvitationsByUserID(userID string) ([]model.GroupAdmission, error)
+	FindGroupInvitationsByGroupID(groupID string) ([]model.GroupAdmission, error)
 	FindGroupAdmissionByUserAndGroupID(userID string, groupID string) (*model.GroupAdmission, error)
 	FindGroupAdmissionByID(admissionID string) (*model.GroupAdmission, error)
 	DeleteGroupAdmission(admission *model.GroupAdmission) error

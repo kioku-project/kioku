@@ -42,23 +42,23 @@ func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	if strings.TrimSpace(data["email"]) == "" {
+	if data["userEmail"] == "" {
 		return helper.NewFiberBadRequestErr("no e-mail given")
 	}
-	if strings.TrimSpace(data["name"]) == "" {
+	if data["userName"] == "" {
 		return helper.NewFiberBadRequestErr("no name given")
 	}
-	if strings.TrimSpace(data["password"]) == "" {
+	if data["userPassword"] == "" {
 		return helper.NewFiberBadRequestErr("no password given")
 	}
 	rspRegister, err := e.userService.Register(c.Context(), &pbUser.RegisterRequest{
-		Email:    data["email"],
-		Name:     data["name"],
-		Password: data["password"]})
+		UserEmail:    data["userEmail"],
+		UserName:     data["userName"],
+		UserPassword: data["userPassword"]})
 	if err != nil {
 		return err
 	}
-	return c.SendString(rspRegister.Name)
+	return c.SendString(rspRegister.UserName)
 }
 
 func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
@@ -66,28 +66,28 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(&reqUser); err != nil {
 		return err
 	}
-	if strings.TrimSpace(reqUser.Email) == "" {
+	if reqUser.Email == "" {
 		return helper.NewFiberBadRequestErr("no e-mail given")
 	}
-	if strings.TrimSpace(reqUser.Password) == "" {
+	if reqUser.Password == "" {
 		return helper.NewFiberBadRequestErr("no password given")
 	}
 	rspLogin, err := e.userService.Login(c.Context(), &pbUser.LoginRequest{
-		Email:    reqUser.Email,
-		Password: reqUser.Password})
+		UserEmail:    reqUser.Email,
+		UserPassword: reqUser.Password})
 	if err != nil {
 		return err
 	}
 
 	// Generate encoded tokens and send them as response.
 	aTExp := time.Now().Add(time.Minute * 30)
-	aTString, err := helper.CreateJWTTokenString(aTExp, rspLogin.ID, reqUser.Email, rspLogin.Name)
+	aTString, err := helper.CreateJWTTokenString(aTExp, rspLogin.UserID, reqUser.Email, rspLogin.UserName)
 	if err != nil {
 		logger.Infof("%v", err)
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	rTExp := time.Now().Add(time.Hour * 24 * 7)
-	rTString, err := helper.CreateJWTTokenString(rTExp, rspLogin.ID, reqUser.Email, rspLogin.Name)
+	rTString, err := helper.CreateJWTTokenString(rTExp, rspLogin.UserID, reqUser.Email, rspLogin.UserName)
 	if err != nil {
 		logger.Infof("%v", err)
 		return c.SendStatus(fiber.StatusInternalServerError)
@@ -219,7 +219,7 @@ func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
 		return err
 	}
 	return c.JSON(converter.FiberGetUserGroupsResponseBody{
-		Groups: converter.ConvertToTypeArray(rspUserGroups.Groups, converter.ProtoGroupToFiberGroupConverter),
+		Groups: converter.ConvertToTypeArray(rspUserGroups.Groups, converter.ProtoGroupWithRoleToFiberGroupConverter),
 	})
 }
 
@@ -257,7 +257,7 @@ func (e *Frontend) GetGroupHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(rspGetGroup)
+	return c.JSON(converter.ProtoGroupWithRoleToFiberGroupConverter(rspGetGroup))
 }
 
 func (e *Frontend) ModifyGroupHandler(c *fiber.Ctx) error {
@@ -324,7 +324,7 @@ func (e *Frontend) GetGroupMemberRequestsHandler(c *fiber.Ctx) error {
 		return err
 	}
 	return c.JSON(converter.FiberGetGroupMemberRequestsResponseBody{
-		MemberRequests: converter.ConvertToTypeArray(rspMemberRequests.MemberRequests, converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter),
+		MemberRequests: converter.ConvertToTypeArray(rspMemberRequests.MemberAdmissions, converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter),
 	})
 }
 
@@ -363,6 +363,20 @@ func (e *Frontend) RequestToJoinGroupHandler(c *fiber.Ctx) error {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)
+}
+
+func (e *Frontend) GetInvitationsForGroupHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspInvitationsForGroup, err := e.collaborationService.GetInvitationsForGroup(c.Context(), &pbCollaboration.GroupRequest{
+		UserID:  userID,
+		GroupID: c.Params("groupID"),
+	})
+	if err != nil {
+		return err
+	}
+	return c.JSON(converter.FiberGetGroupMemberRequestsResponseBody{
+		MemberRequests: converter.ConvertToTypeArray(rspInvitationsForGroup.MemberAdmissions, converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter),
+	})
 }
 
 func (e *Frontend) InviteUserToGroupHandler(c *fiber.Ctx) error {

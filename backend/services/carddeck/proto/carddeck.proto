@@ -37,7 +37,7 @@ message Deck {
 message DeckResponse {
 	string deckID = 1;
 	string deckName = 2;
-	int64 createdAT = 3;
+	int64 createdAt = 3;
 	string groupID = 4;
 }
 

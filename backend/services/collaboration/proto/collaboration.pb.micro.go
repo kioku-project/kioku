@@ -37,14 +37,15 @@ func NewCollaborationEndpoints() []*api.Endpoint {
 
 type CollaborationService interface {
 	GetGroupInvitations(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*GroupInvitationsResponse, error)
+	GetInvitationsForGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupMemberAdmissionResponse, error)
 	ManageGroupInvitation(ctx context.Context, in *ManageGroupInvitationRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	GetUserGroups(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*UserGroupsResponse, error)
 	CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, opts ...client.CallOption) (*IDResponse, error)
-	GetGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*Group, error)
+	GetGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupWithUserRole, error)
 	ModifyGroup(ctx context.Context, in *ModifyGroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	DeleteGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	GetGroupMembers(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupMembersResponse, error)
-	GetGroupMemberRequests(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupMemberRequestsResponse, error)
+	GetGroupMemberRequests(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupMemberAdmissionResponse, error)
 	ManageGroupMemberRequest(ctx context.Context, in *ManageGroupMemberRequestRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	RequestToJoinGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	InviteUserToGroup(ctx context.Context, in *GroupInvitationRequest, opts ...client.CallOption) (*SuccessResponse, error)
@@ -67,6 +68,16 @@ func NewCollaborationService(name string, c client.Client) CollaborationService 
 func (c *collaborationService) GetGroupInvitations(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*GroupInvitationsResponse, error) {
 	req := c.c.NewRequest(c.name, "Collaboration.GetGroupInvitations", in)
 	out := new(GroupInvitationsResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *collaborationService) GetInvitationsForGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupMemberAdmissionResponse, error) {
+	req := c.c.NewRequest(c.name, "Collaboration.GetInvitationsForGroup", in)
+	out := new(GroupMemberAdmissionResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -104,9 +115,9 @@ func (c *collaborationService) CreateNewGroupWithAdmin(ctx context.Context, in *
 	return out, nil
 }
 
-func (c *collaborationService) GetGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*Group, error) {
+func (c *collaborationService) GetGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupWithUserRole, error) {
 	req := c.c.NewRequest(c.name, "Collaboration.GetGroup", in)
-	out := new(Group)
+	out := new(GroupWithUserRole)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -144,9 +155,9 @@ func (c *collaborationService) GetGroupMembers(ctx context.Context, in *GroupReq
 	return out, nil
 }
 
-func (c *collaborationService) GetGroupMemberRequests(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupMemberRequestsResponse, error) {
+func (c *collaborationService) GetGroupMemberRequests(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupMemberAdmissionResponse, error) {
 	req := c.c.NewRequest(c.name, "Collaboration.GetGroupMemberRequests", in)
-	out := new(GroupMemberRequestsResponse)
+	out := new(GroupMemberAdmissionResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -208,14 +219,15 @@ func (c *collaborationService) FindGroupByID(ctx context.Context, in *GroupReque
 
 type CollaborationHandler interface {
 	GetGroupInvitations(context.Context, *UserIDRequest, *GroupInvitationsResponse) error
+	GetInvitationsForGroup(context.Context, *GroupRequest, *GroupMemberAdmissionResponse) error
 	ManageGroupInvitation(context.Context, *ManageGroupInvitationRequest, *SuccessResponse) error
 	GetUserGroups(context.Context, *UserIDRequest, *UserGroupsResponse) error
 	CreateNewGroupWithAdmin(context.Context, *CreateGroupRequest, *IDResponse) error
-	GetGroup(context.Context, *GroupRequest, *Group) error
+	GetGroup(context.Context, *GroupRequest, *GroupWithUserRole) error
 	ModifyGroup(context.Context, *ModifyGroupRequest, *SuccessResponse) error
 	DeleteGroup(context.Context, *GroupRequest, *SuccessResponse) error
 	GetGroupMembers(context.Context, *GroupRequest, *GroupMembersResponse) error
-	GetGroupMemberRequests(context.Context, *GroupRequest, *GroupMemberRequestsResponse) error
+	GetGroupMemberRequests(context.Context, *GroupRequest, *GroupMemberAdmissionResponse) error
 	ManageGroupMemberRequest(context.Context, *ManageGroupMemberRequestRequest, *SuccessResponse) error
 	RequestToJoinGroup(context.Context, *GroupRequest, *SuccessResponse) error
 	InviteUserToGroup(context.Context, *GroupInvitationRequest, *SuccessResponse) error
@@ -226,14 +238,15 @@ type CollaborationHandler interface {
 func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, opts ...server.HandlerOption) error {
 	type collaboration interface {
 		GetGroupInvitations(ctx context.Context, in *UserIDRequest, out *GroupInvitationsResponse) error
+		GetInvitationsForGroup(ctx context.Context, in *GroupRequest, out *GroupMemberAdmissionResponse) error
 		ManageGroupInvitation(ctx context.Context, in *ManageGroupInvitationRequest, out *SuccessResponse) error
 		GetUserGroups(ctx context.Context, in *UserIDRequest, out *UserGroupsResponse) error
 		CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, out *IDResponse) error
-		GetGroup(ctx context.Context, in *GroupRequest, out *Group) error
+		GetGroup(ctx context.Context, in *GroupRequest, out *GroupWithUserRole) error
 		ModifyGroup(ctx context.Context, in *ModifyGroupRequest, out *SuccessResponse) error
 		DeleteGroup(ctx context.Context, in *GroupRequest, out *SuccessResponse) error
 		GetGroupMembers(ctx context.Context, in *GroupRequest, out *GroupMembersResponse) error
-		GetGroupMemberRequests(ctx context.Context, in *GroupRequest, out *GroupMemberRequestsResponse) error
+		GetGroupMemberRequests(ctx context.Context, in *GroupRequest, out *GroupMemberAdmissionResponse) error
 		ManageGroupMemberRequest(ctx context.Context, in *ManageGroupMemberRequestRequest, out *SuccessResponse) error
 		RequestToJoinGroup(ctx context.Context, in *GroupRequest, out *SuccessResponse) error
 		InviteUserToGroup(ctx context.Context, in *GroupInvitationRequest, out *SuccessResponse) error
@@ -255,6 +268,10 @@ func (h *collaborationHandler) GetGroupInvitations(ctx context.Context, in *User
 	return h.CollaborationHandler.GetGroupInvitations(ctx, in, out)
 }
 
+func (h *collaborationHandler) GetInvitationsForGroup(ctx context.Context, in *GroupRequest, out *GroupMemberAdmissionResponse) error {
+	return h.CollaborationHandler.GetInvitationsForGroup(ctx, in, out)
+}
+
 func (h *collaborationHandler) ManageGroupInvitation(ctx context.Context, in *ManageGroupInvitationRequest, out *SuccessResponse) error {
 	return h.CollaborationHandler.ManageGroupInvitation(ctx, in, out)
 }
@@ -267,7 +284,7 @@ func (h *collaborationHandler) CreateNewGroupWithAdmin(ctx context.Context, in *
 	return h.CollaborationHandler.CreateNewGroupWithAdmin(ctx, in, out)
 }
 
-func (h *collaborationHandler) GetGroup(ctx context.Context, in *GroupRequest, out *Group) error {
+func (h *collaborationHandler) GetGroup(ctx context.Context, in *GroupRequest, out *GroupWithUserRole) error {
 	return h.CollaborationHandler.GetGroup(ctx, in, out)
 }
 
@@ -283,7 +300,7 @@ func (h *collaborationHandler) GetGroupMembers(ctx context.Context, in *GroupReq
 	return h.CollaborationHandler.GetGroupMembers(ctx, in, out)
 }
 
-func (h *collaborationHandler) GetGroupMemberRequests(ctx context.Context, in *GroupRequest, out *GroupMemberRequestsResponse) error {
+func (h *collaborationHandler) GetGroupMemberRequests(ctx context.Context, in *GroupRequest, out *GroupMemberAdmissionResponse) error {
 	return h.CollaborationHandler.GetGroupMemberRequests(ctx, in, out)
 }
 

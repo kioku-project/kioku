@@ -297,6 +297,13 @@ func (s *CollaborationStoreImpl) FindGroupInvitationsByUserID(userID string) (gr
 	return
 }
 
+func (s *CollaborationStoreImpl) FindGroupInvitationsByGroupID(groupID string) (groupAdmissions []model.GroupAdmission, err error) {
+	if err = s.db.Where(model.GroupAdmission{GroupID: groupID, AdmissionStatus: model.Invited}).Preload("Group").Find(&groupAdmissions).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
 func (s *CollaborationStoreImpl) FindGroupAdmissionByUserAndGroupID(userID string, groupID string) (groupAdmission *model.GroupAdmission, err error) {
 	if err = s.db.Where(model.GroupAdmission{UserID: userID, GroupID: groupID}).First(&groupAdmission).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID

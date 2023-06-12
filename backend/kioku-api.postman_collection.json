@@ -15,7 +15,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test@test.de\",\n    \"name\": \"Test\",\n    \"password\": \"abcd\"\n}",
+					"raw": "{\n    \"userEmail\": \"test@test.de\",\n    \"userName\": \"test\",\n    \"userPassword\": \"test\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -49,7 +49,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test@test.de\",\n    \"password\": \"abcd\"\n}",
+					"raw": "{\n    \"userEmail\": \"test@test.de\",\n    \"userPassword\": \"test\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -241,6 +241,37 @@
 						":groupID",
 						"members",
 						"requests"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Invitations For Group",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/groups/:groupID/members/invitations",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"groups",
+						":groupID",
+						"members",
+						"invitations"
 					],
 					"variable": [
 						{
@@ -447,7 +478,7 @@
 					}
 				},
 				"url": {
-					"raw": "127.0.0.1:3000/api/groups/:groupID/members/invite",
+					"raw": "127.0.0.1:3000/api/groups/:groupID/members/invitations",
 					"host": [
 						"127",
 						"0",
@@ -460,7 +491,7 @@
 						"groups",
 						":groupID",
 						"members",
-						"invite"
+						"invitations"
 					],
 					"variable": [
 						{

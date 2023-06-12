@@ -25,19 +25,19 @@ func New(s store.UserStore, cS pbCollaboration.CollaborationService) *User {
 
 func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.NameIDResponse) error {
 	logger.Infof("Received User.Register request: %v", req)
-	if _, err := e.store.FindUserByEmail(req.Email); err == nil {
+	if _, err := e.store.FindUserByEmail(req.UserEmail); err == nil {
 		return helper.NewMicroUserAlreadyExistsErr(helper.UserServiceID)
 	} else if !errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
 		return err
 	}
-	if err := helper.CheckForValidName(req.Name, helper.UserNameRegex, helper.UserServiceID); err != nil {
+	if err := helper.CheckForValidName(req.UserName, helper.UserNameRegex, helper.UserServiceID); err != nil {
 		return err
 	}
 	newUser := model.User{
-		Email: req.Email,
-		Name:  req.Name,
+		Email: req.UserEmail,
+		Name:  req.UserName,
 	}
-	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.MinCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte(req.UserPassword), bcrypt.MinCost)
 	if err != nil {
 		return helper.NewMicroHashingFailedErr(helper.UserServiceID)
 	}
@@ -50,34 +50,34 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	if err != nil {
 		return err
 	}
-	rsp.Name = newUser.Name
-	rsp.ID = newUser.ID
+	rsp.UserName = newUser.Name
+	rsp.UserID = newUser.ID
 	logger.Infof("Successfully created new user with id %s", newUser.ID)
 	return nil
 }
 
 func (e *User) Login(_ context.Context, req *pb.LoginRequest, rsp *pb.NameIDResponse) error {
 	logger.Infof("Received User.Login request: %v", req)
-	user, err := e.store.FindUserByEmail(req.Email)
+	user, err := e.store.FindUserByEmail(req.UserEmail)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
 			return helper.NewMicroNoExistingUserWithEmailErr(helper.UserServiceID)
 		}
 		return err
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.UserPassword))
 	if err != nil {
 		return helper.NewMicroInvalidEmailOrPasswordErr(helper.UserServiceID)
 	}
-	rsp.Name = user.Name
-	rsp.ID = user.ID
+	rsp.UserName = user.Name
+	rsp.UserID = user.ID
 	logger.Infof("Successfully logged in user with id %s", user.ID)
 	return nil
 }
 
 func (e *User) GetUserIDFromEmail(_ context.Context, req *pb.UserIDRequest, rsp *pb.UserID) error {
 	logger.Infof("Received User.GetUserIDFromEmail request: %v", req)
-	user, err := e.store.FindUserByEmail(req.Email)
+	user, err := e.store.FindUserByEmail(req.UserEmail)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			return helper.NewMicroNoEntryWithIDErr(helper.UserServiceID)
@@ -98,9 +98,9 @@ func (e *User) GetUserInformation(_ context.Context, req *pb.UserInformationRequ
 			return err
 		}
 		rsp.Users[i] = &pb.UserInformation{
-			UserID: user.ID,
-			Name:   user.Name,
-			Email:  user.Email,
+			UserID:    user.ID,
+			UserName:  user.Name,
+			UserEmail: user.Email,
 		}
 	}
 	logger.Infof("Found %d users for given IDs", len(rsp.Users))

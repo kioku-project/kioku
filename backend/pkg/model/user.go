@@ -6,10 +6,10 @@ import (
 )
 
 type User struct {
-	ID       string `gorm:"primaryKey;" json:"id"`
-	Name     string `gorm:"not null;" json:"name"`
-	Email    string `gorm:"unique;not null;" json:"email"`
-	Password string `gorm:"not null;" json:"password"`
+	ID       string `gorm:"primaryKey;" json:"userID"`
+	Name     string `gorm:"not null;" json:"userName"`
+	Email    string `gorm:"unique;not null;" json:"userEmail"`
+	Password string `gorm:"not null;" json:"userPassword"`
 }
 
 func (u *User) BeforeCreate(db *gorm.DB) (err error) {

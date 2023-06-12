@@ -9,13 +9,14 @@ service Collaboration {
 	rpc ManageGroupInvitation(ManageGroupInvitationRequest) returns (SuccessResponse) {}
 	rpc GetUserGroups(UserIDRequest) returns (UserGroupsResponse) {}
 	rpc CreateNewGroupWithAdmin(CreateGroupRequest) returns (IDResponse) {}
-	rpc GetGroup(GroupRequest) returns (Group) {}
+	rpc GetGroup(GroupRequest) returns (GroupWithUserRole) {}
 	rpc ModifyGroup(ModifyGroupRequest) returns (SuccessResponse) {}
 	rpc DeleteGroup(GroupRequest) returns (SuccessResponse) {}
 	rpc GetGroupMembers(GroupRequest) returns (GroupMembersResponse) {}
-	rpc GetGroupMemberRequests(GroupRequest) returns (GroupMemberRequestsResponse) {}
+	rpc GetGroupMemberRequests(GroupRequest) returns (GroupMemberAdmissionResponse) {}
 	rpc ManageGroupMemberRequest(ManageGroupMemberRequestRequest) returns (SuccessResponse) {}
 	rpc RequestToJoinGroup(GroupRequest) returns (SuccessResponse) {}
+	rpc GetInvitationsForGroup(GroupRequest) returns (GroupMemberAdmissionResponse) {}
 	rpc InviteUserToGroup(GroupInvitationRequest) returns (SuccessResponse) {}
 	rpc GetGroupUserRole(GroupRequest) returns (GroupRoleResponse) {}
 	rpc FindGroupByID(GroupRequest) returns (Group) {}
@@ -42,7 +43,12 @@ message ManageGroupInvitationRequest {
 }
 
 message UserGroupsResponse {
-	repeated Group groups = 1;
+	repeated GroupWithUserRole groups = 1;
+}
+
+message GroupWithUserRole {
+	Group group = 1;
+	GroupRole role = 2;
 }
 
 message Group {
@@ -91,11 +97,11 @@ message GroupMembersResponse {
 	repeated UserWithRole users = 1;
 }
 
-message GroupMemberRequestsResponse {
-	repeated MemberRequest memberRequests = 1;
+message GroupMemberAdmissionResponse {
+	repeated MemberAdmission memberAdmissions = 1;
 }
 
-message MemberRequest {
+message MemberAdmission {
 	string admissionID = 1;
 	User user = 2;
 }

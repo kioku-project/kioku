@@ -48,9 +48,9 @@ func MigrateStringGroupTypeToProtoGroupType(stringType string) pbCollaboration.G
 
 func StoreUserToProtoUserProfileInformationResponseConverter(user model.User) *pbUser.UserProfileInformationResponse {
 	return &pbUser.UserProfileInformationResponse{
-		UserID: user.ID,
-		Email:  user.Email,
-		Name:   user.Name,
+		UserID:    user.ID,
+		UserEmail: user.Email,
+		UserName:  user.Name,
 	}
 }
 
@@ -70,7 +70,7 @@ func StoreGroupAdmissionToProtoGroupInvitationConverter(groupAdmission model.Gro
 	}
 }
 
-func ProtoGroupMemberRequestToFiberGroupMemberRequestConverter(groupMemberRequest *pbCollaboration.MemberRequest) FiberGroupMemberRequest {
+func ProtoGroupMemberRequestToFiberGroupMemberRequestConverter(groupMemberRequest *pbCollaboration.MemberAdmission) FiberGroupMemberRequest {
 	return FiberGroupMemberRequest{
 		AdmissionID: groupMemberRequest.AdmissionID,
 		UserID:      groupMemberRequest.User.UserID,
@@ -88,13 +88,14 @@ func StoreGroupToProtoGroupConverter(group model.Group) *pbCollaboration.Group {
 	}
 }
 
-func ProtoGroupToFiberGroupConverter(group *pbCollaboration.Group) FiberGroup {
+func ProtoGroupWithRoleToFiberGroupConverter(group *pbCollaboration.GroupWithUserRole) FiberGroup {
 	return FiberGroup{
-		GroupID:          group.GroupID,
-		GroupName:        group.GroupName,
-		GroupDescription: group.GroupDescription,
-		IsDefault:        group.IsDefault,
-		GroupType:        group.GroupType.String(),
+		GroupID:          group.Group.GroupID,
+		GroupName:        group.Group.GroupName,
+		GroupDescription: group.Group.GroupDescription,
+		IsDefault:        group.Group.IsDefault,
+		GroupType:        group.Group.GroupType.String(),
+		GroupRole:        group.Role.String(),
 	}
 }
 
@@ -109,7 +110,7 @@ func StoreDeckToProtoDeckResponseConverter(deck model.Deck) *pbCardDeck.DeckResp
 	return &pbCardDeck.DeckResponse{
 		DeckID:    deck.ID,
 		DeckName:  deck.Name,
-		CreatedAT: deck.CreatedAt.Unix(),
+		CreatedAt: deck.CreatedAt.Unix(),
 		GroupID:   deck.GroupID,
 	}
 }

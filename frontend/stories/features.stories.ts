@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import Page from "./home";
+import Page from "../pages/features";
 
 const meta: Meta<typeof Page> = {
-	title: "Pages/Home",
+	title: "Pages/Features",
 	component: Page,
 	parameters: {
 		layout: "fullscreen",

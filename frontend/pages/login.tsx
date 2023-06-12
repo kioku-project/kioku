@@ -66,12 +66,6 @@ export default function Page() {
 					</div>
 				</div>
 			</div>
-			<ToastContainer
-				position="bottom-center"
-				autoClose={3000}
-				hideProgressBar
-				pauseOnFocusLoss
-			/>
 		</div>
 	);
 

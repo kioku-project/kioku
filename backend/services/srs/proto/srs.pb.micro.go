@@ -40,6 +40,7 @@ type SrsService interface {
 	Pull(ctx context.Context, in *DeckPullRequest, opts ...client.CallOption) (*SrsPullResponse, error)
 	AddUserCardBinding(ctx context.Context, in *BindingRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	GetDeckCardsDue(ctx context.Context, in *DeckPullRequest, opts ...client.CallOption) (*DueResponse, error)
+	GetUserCardsDue(ctx context.Context, in *UserDueRequest, opts ...client.CallOption) (*UserDueResponse, error)
 }
 
 type srsService struct {
@@ -94,6 +95,16 @@ func (c *srsService) GetDeckCardsDue(ctx context.Context, in *DeckPullRequest, o
 	return out, nil
 }
 
+func (c *srsService) GetUserCardsDue(ctx context.Context, in *UserDueRequest, opts ...client.CallOption) (*UserDueResponse, error) {
+	req := c.c.NewRequest(c.name, "Srs.GetUserCardsDue", in)
+	out := new(UserDueResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Srs service
 
 type SrsHandler interface {
@@ -101,6 +112,7 @@ type SrsHandler interface {
 	Pull(context.Context, *DeckPullRequest, *SrsPullResponse) error
 	AddUserCardBinding(context.Context, *BindingRequest, *SuccessResponse) error
 	GetDeckCardsDue(context.Context, *DeckPullRequest, *DueResponse) error
+	GetUserCardsDue(context.Context, *UserDueRequest, *UserDueResponse) error
 }
 
 func RegisterSrsHandler(s server.Server, hdlr SrsHandler, opts ...server.HandlerOption) error {
@@ -109,6 +121,7 @@ func RegisterSrsHandler(s server.Server, hdlr SrsHandler, opts ...server.Handler
 		Pull(ctx context.Context, in *DeckPullRequest, out *SrsPullResponse) error
 		AddUserCardBinding(ctx context.Context, in *BindingRequest, out *SuccessResponse) error
 		GetDeckCardsDue(ctx context.Context, in *DeckPullRequest, out *DueResponse) error
+		GetUserCardsDue(ctx context.Context, in *UserDueRequest, out *UserDueResponse) error
 	}
 	type Srs struct {
 		srs
@@ -135,4 +148,8 @@ func (h *srsHandler) AddUserCardBinding(ctx context.Context, in *BindingRequest,
 
 func (h *srsHandler) GetDeckCardsDue(ctx context.Context, in *DeckPullRequest, out *DueResponse) error {
 	return h.SrsHandler.GetDeckCardsDue(ctx, in, out)
+}
+
+func (h *srsHandler) GetUserCardsDue(ctx context.Context, in *UserDueRequest, out *UserDueResponse) error {
+	return h.SrsHandler.GetUserCardsDue(ctx, in, out)
 }

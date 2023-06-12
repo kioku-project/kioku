@@ -52,6 +52,11 @@ type FiberGetGroupMembersResponseBody struct {
 	Members []FiberGroupMember `json:"users"`
 }
 
+type FiberGetUserDueCardsResponseBody struct {
+	DueCards int64 `json:"dueCards"`
+	DueDecks int64 `json:"dueDecks"`
+}
+
 type FiberGetUserGroupsResponseBody struct {
 	Groups []FiberGroup `json:"groups"`
 }

@@ -9,6 +9,7 @@ service Srs {
 	rpc Pull(DeckPullRequest) returns (SrsPullResponse) {}
 	rpc AddUserCardBinding(BindingRequest) returns (SuccessResponse) {}
 	rpc GetDeckCardsDue(DeckPullRequest) returns (DueResponse) {}
+	rpc GetUserCardsDue(UserDueRequest) returns (UserDueResponse) {}
 }
 
 message DeckPullRequest {
@@ -18,6 +19,15 @@ message DeckPullRequest {
 
 message SrsPullResponse {
 	Card card = 1;
+}
+
+message UserDueRequest {
+	string userID = 1;
+}
+
+message UserDueResponse {
+	int64 dueCards = 1;
+	int64 dueDecks = 2;
 }
 
 message DueResponse {

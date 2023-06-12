@@ -638,7 +638,7 @@ func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
-func (e *Frontend) SrsDueHandler(c *fiber.Ctx) error {
+func (e *Frontend) SrsDeckDueHandler(c *fiber.Ctx) error {
 
 	userID := helper.GetUserIDFromContext(c)
 	rspSrsDue, err := e.srsService.GetDeckCardsDue(c.Context(), &pbSrs.DeckPullRequest{
@@ -648,8 +648,23 @@ func (e *Frontend) SrsDueHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	if rspSrsDue.Due == 0 {
+		return c.JSON(0)
+	}
+	return c.JSON(rspSrsDue.Due)
+}
+
+func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
+
+	userID := helper.GetUserIDFromContext(c)
+	dueCards, err := e.srsService.GetUserCardsDue(c.Context(), &pbSrs.UserDueRequest{
+		UserID: userID,
+	})
 	if err != nil {
 		return err
 	}
-	return c.JSON(rspSrsDue.Due)
+	return c.JSON(converter.FiberGetUserDueCardsResponseBody{
+		DueCards: dueCards.DueCards,
+		DueDecks: dueCards.DueDecks,
+	})
 }

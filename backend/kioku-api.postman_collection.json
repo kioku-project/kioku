@@ -402,6 +402,128 @@
 			"response": []
 		},
 		{
+			"name": "Get Due Cards for User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/user/dueCards",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"dueCards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Due Cards for Deck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/decks/:deckID/dueCards",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"decks",
+						":deckID",
+						"dueCards"
+					],
+					"variable": [
+						{
+							"key": "deckID",
+							"value": "D-1FgG6Yvz"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pull Card to learn",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/decks/:deckID/pull",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"decks",
+						":deckID",
+						"pull"
+					],
+					"variable": [
+						{
+							"key": "deckID",
+							"value": "D-1FgG6Yvz"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Push learned Card",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cardID\": \"C-XkxZ1axJ\",\r\n    \"rating\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/api/decks/:deckID/push",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"decks",
+						":deckID",
+						"push"
+					],
+					"variable": [
+						{
+							"key": "deckID",
+							"value": "D-1FgG6Yvz"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "New Group",
 			"request": {
 				"method": "POST",

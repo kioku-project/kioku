@@ -86,6 +86,7 @@ func main() {
 	app.Post("/api/logout", svc.LogoutHandler)
 
 	app.Get("/api/user", svc.GetUserHandler)
+	app.Get("/api/user/dueCards", svc.SrsUserDueHandler)
 	app.Get("/api/user/invitations", svc.GetGroupInvitationsHandler)
 	app.Put("/api/user/invitations/:invitationID", svc.ManageGroupInvitationHandler)
 
@@ -120,7 +121,7 @@ func main() {
 
 	app.Get("/api/decks/:deckID/pull", svc.SrsPullHandler)
 	app.Post("/api/decks/:deckID/push", svc.SrsPushHandler)
-	app.Get("/api/decks/:deckID/dueCards", svc.SrsDueHandler)
+	app.Get("/api/decks/:deckID/dueCards", svc.SrsDeckDueHandler)
 
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {

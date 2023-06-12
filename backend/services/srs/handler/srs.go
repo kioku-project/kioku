@@ -143,3 +143,26 @@ func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pb.DeckPullRequest, rsp 
 	rsp.Due = int64(len(dueCards))
 	return nil
 }
+func (e *Srs) GetUserCardsDue(ctx context.Context, req *pb.UserDueRequest, rsp *pb.UserDueResponse) error {
+	logger.Infof("Received Srs.GetUserCardsDue request: %v", req)
+	cards, err := e.store.GetUserCards(req.UserID)
+	if err != nil {
+		return err
+	}
+	decksDueMap := map[string]int64{}
+	decksDueCount := 0
+	var dueCards []*model.UserCardBinding
+	for _, card := range cards {
+		if card.Due < time.Now().Unix() {
+			dueCards = append(dueCards, card)
+			if _, ok := decksDueMap[card.DeckID]; !ok {
+				decksDueMap[card.DeckID] = 0
+				decksDueCount++
+			}
+			decksDueMap[card.DeckID]++
+		}
+	}
+	rsp.DueCards = int64(len(dueCards))
+	rsp.DueDecks = int64(decksDueCount)
+	return nil
+}

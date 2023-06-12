@@ -334,7 +334,14 @@ func (s *SrsStoreImpl) GetCardBinding(userID string, cardID string) (userCardBin
 }
 
 func (s *SrsStoreImpl) GetDeckCards(userID string, deckID string) (userCards []*model.UserCardBinding, err error) {
-	if err = s.db.Where(model.UserCardBinding{DeckID: deckID}).Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(model.UserCardBinding{UserID: userID, DeckID: deckID}).Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *SrsStoreImpl) GetUserCards(userID string) (userCards []*model.UserCardBinding, err error) {
+	if err = s.db.Where(model.UserCardBinding{UserID: userID}).Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return

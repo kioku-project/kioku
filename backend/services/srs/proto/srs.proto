@@ -32,7 +32,8 @@ message Side {
 message SrsPushRequest {
 	string userID = 1;
 	string cardID = 2;
-	int64 rating = 3;
+	string deckID = 3;
+	int64 rating = 4;
 }
 
 message SuccessResponse {

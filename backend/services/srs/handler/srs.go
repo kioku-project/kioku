@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
@@ -29,21 +30,24 @@ func (e *Srs) Push(ctx context.Context, req *pb.SrsPushRequest, rsp *pb.SuccessR
 	if err != nil {
 		return err
 	}
+	if cardBinding.DeckID != req.DeckID {
+		return helper.NewMicroWrongDeckIDErr(helper.SrsServiceID)
+	}
 
 	// calculate new due date
 	switch req.Rating {
 	case 0: // Forgotten
-		newIvl := 0
-		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
-		cardBinding.LastIvl = uint32(newIvl)
+		newInterval := 0
+		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newInterval)).Unix()
+		cardBinding.LastInterval = uint32(newInterval)
 	case 1: // Hard
-		newIvl := math.Max(float64(cardBinding.LastIvl), 1)
+		newIvl := math.Max(float64(cardBinding.LastInterval), 1)
 		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
-		cardBinding.LastIvl = uint32(newIvl)
+		cardBinding.LastInterval = uint32(newIvl)
 	case 2: // Easy
-		newIvl := math.Max(float64(cardBinding.LastIvl*2), 1)
+		newIvl := math.Max(float64(cardBinding.LastInterval*2), 1)
 		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
-		cardBinding.LastIvl = uint32(newIvl)
+		cardBinding.LastInterval = uint32(newIvl)
 	default:
 		return helper.NewMicroWrongRatingErr(helper.SrsServiceID)
 	}
@@ -99,13 +103,7 @@ func (e *Srs) Pull(ctx context.Context, req *pb.SrsPullRequest, rsp *pb.SrsPullR
 	if err != nil {
 		return err
 	}
-	returnedCard.Sides = make([]*pb.Side, len(cardWithContent.Sides))
-	for i, card := range cardWithContent.Sides {
-		returnedCard.Sides[i] = &pb.Side{
-			Header:      card.Header,
-			Description: card.Description,
-		}
-	}
+	returnedCard = converter.CardDeckCardToSrsProtoCardConverter(cardWithContent)
 	rsp.Card = returnedCard
 	return nil
 }
@@ -113,13 +111,13 @@ func (e *Srs) Pull(ctx context.Context, req *pb.SrsPullRequest, rsp *pb.SrsPullR
 func (e *Srs) AddUserCardBinding(ctx context.Context, req *pb.BindingRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Srs.AddUserCardBinding request: %v", req)
 	err := e.store.CreateUserCard(&model.UserCardBinding{
-		UserID:  req.UserID,
-		CardID:  req.CardID,
-		DeckID:  req.DeckID,
-		Type:    0,
-		Due:     time.Now().Unix(),
-		LastIvl: 0,
-		Factor:  1,
+		UserID:       req.UserID,
+		CardID:       req.CardID,
+		DeckID:       req.DeckID,
+		Type:         0,
+		Due:          time.Now().Unix(),
+		LastInterval: 0,
+		Factor:       1,
 	})
 	if err != nil {
 		return err

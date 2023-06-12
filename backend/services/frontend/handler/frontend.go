@@ -3,7 +3,6 @@ package handler
 import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kioku-project/kioku/pkg/converter"
-	"strconv"
 	"strings"
 	"time"
 
@@ -607,22 +606,15 @@ func (e *Frontend) SrsPullHandler(c *fiber.Ctx) error {
 	return c.JSON(rspSrsPull.Card)
 }
 func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
-	var data map[string]string
+	var data converter.FiberPushCardRequestBody
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	if data["cardID"] == "" {
+	if data.CardID == "" {
 		return helper.NewFiberBadRequestErr("no cardID given")
 	}
-	if data["rating"] == "" {
-		return helper.NewFiberBadRequestErr("no rating given")
-	}
-	rating, err := strconv.ParseInt(data["rating"], 10, 0)
-	if err != nil {
-		return err
-	}
 	userID := helper.GetUserIDFromContext(c)
-	rspSrsPush, err := e.srsService.Push(c.Context(), &pbSrs.SrsPushRequest{UserID: userID, CardID: data["cardID"], Rating: rating})
+	rspSrsPush, err := e.srsService.Push(c.Context(), &pbSrs.SrsPushRequest{UserID: userID, CardID: data.CardID, DeckID: c.Params("deckID"), Rating: data.Rating})
 	if err != nil {
 		return err
 	}

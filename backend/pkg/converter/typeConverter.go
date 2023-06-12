@@ -4,6 +4,7 @@ import (
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
+	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	pbUser "github.com/kioku-project/kioku/services/user/proto"
 )
 
@@ -120,9 +121,23 @@ func StoreCardToProtoCardConverter(card model.Card) *pbCardDeck.Card {
 	}
 }
 
+func CardDeckCardToSrsProtoCardConverter(card *pbCardDeck.Card) *pbSrs.Card {
+	return &pbSrs.Card{
+		CardID: card.CardID,
+		Sides:  ConvertToTypeArray(card.Sides, CardDeckCardSideToSrsProtoCardSideConverter),
+	}
+}
+
 func StoreCardSideToProtoCardSideConverter(cardSide model.CardSide) *pbCardDeck.CardSide {
 	return &pbCardDeck.CardSide{
 		CardSideID:  cardSide.ID,
+		Header:      cardSide.Header,
+		Description: cardSide.Description,
+	}
+}
+
+func CardDeckCardSideToSrsProtoCardSideConverter(cardSide *pbCardDeck.CardSide) *pbSrs.Side {
+	return &pbSrs.Side{
 		Header:      cardSide.Header,
 		Description: cardSide.Description,
 	}

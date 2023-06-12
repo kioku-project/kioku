@@ -338,15 +338,14 @@ func (s *SrsStoreImpl) CreateUserCard(newCard *model.UserCardBinding) error {
 }
 
 func (s *SrsStoreImpl) ModifyUserCard(userCard *model.UserCardBinding) (err error) {
-	err = s.db.Save(&model.UserCardBinding{
-		ID:      userCard.ID,
-		UserID:  userCard.UserID,
-		CardID:  userCard.CardID,
-		DeckID:  userCard.DeckID,
-		Type:    userCard.Type,
-		Due:     userCard.Due,
-		LastIvl: userCard.LastIvl,
-		Factor:  userCard.Factor,
+	return s.db.Save(&model.UserCardBinding{
+		ID:           userCard.ID,
+		UserID:       userCard.UserID,
+		CardID:       userCard.CardID,
+		DeckID:       userCard.DeckID,
+		Type:         userCard.Type,
+		Due:          userCard.Due,
+		LastInterval: userCard.LastInterval,
+		Factor:       userCard.Factor,
 	}).Error
-	return
 }

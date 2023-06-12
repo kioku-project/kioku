@@ -38,6 +38,11 @@ type FiberCreateCardSideRequestBody struct {
 	FiberCardSideContent
 }
 
+type FiberPushCardRequestBody struct {
+	CardID string `json:"cardID"`
+	Rating int64  `json:"rating"`
+}
+
 type FiberModifyCardSideRequestBody struct {
 	FiberCardSideContent
 }

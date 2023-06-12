@@ -72,6 +72,9 @@ func NewMicroNotSuccessfulResponseErr(id ClientID) error {
 func NewMicroWrongRatingErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "invalid rating")
 }
+func NewMicroWrongDeckIDErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "wrong deck id")
+}
 
 func NewFiberBadRequestErr(detail string) error {
 	return fiber.NewError(fiber.StatusBadRequest, detail)

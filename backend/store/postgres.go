@@ -67,7 +67,7 @@ func NewCollaborationStore() (CollaborationStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = db.AutoMigrate(&model.Group{}, &model.GroupUserRole{}, &model.GroupAdmission{})
+	err = db.AutoMigrate(&model.Group{}, &model.GroupUserRole{})
 	if err != nil {
 		return nil, err
 	}
@@ -224,6 +224,8 @@ func (s *CardDeckStoreImpl) DeleteCardSidesOfCardByID(cardID string) error {
 func (s *CollaborationStoreImpl) FindGroupsByUserID(userID string) (groups []model.Group, err error) {
 	if err = s.db.Joins("Join group_user_roles on group_user_roles.group_id = groups.id").
 		Where("group_user_roles.user_id = ?", userID).
+		Not("group_user_roles.role_type = ?", "requested").
+		Not("group_user_roles.role_type = ?", "invited").
 		Find(&groups).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
@@ -252,17 +254,21 @@ func (s *CollaborationStoreImpl) AddInvitedUserToGroup(userID string, groupID st
 	return s.db.Create(&model.GroupUserRole{GroupID: groupID, UserID: userID, RoleType: model.RoleInvited}).Error
 }
 
-func (s *CollaborationStoreImpl) ChangeInvitedUserToFullGroupMember(userID string, groupID string) error {
+func (s *CollaborationStoreImpl) AddRequestingUserToGroup(userID string, groupID string) error {
+	return s.db.Create(&model.GroupUserRole{GroupID: groupID, UserID: userID, RoleType: model.RoleRequested}).Error
+}
+
+func (s *CollaborationStoreImpl) PromoteUserToFullGroupMember(userID string, groupID string) error {
 	var groupUserRole model.GroupUserRole
 	err := s.db.Where(&model.GroupUserRole{UserID: userID, GroupID: groupID}).First(&groupUserRole).Error
 	if err != nil {
 		return err
 	}
-	if groupUserRole.RoleType == model.RoleInvited {
-		groupUserRole.RoleType = model.RoleRead
-		err = s.db.Save(&groupUserRole).Error
+	groupUserRole.RoleType = model.RoleRead
+	if err = s.db.Save(&groupUserRole).Error; err != nil {
+		return helper.ErrStoreInvalidGroupRoleForChange
 	}
-	return helper.ErrStoreInvalidGroupRoleForChange
+	return nil
 }
 
 func (s *CollaborationStoreImpl) RemoveUserFromGroup(userID string, groupID string) error {
@@ -300,47 +306,25 @@ func (s *CollaborationStoreImpl) GetGroupMemberRoles(groupID string) (groupMembe
 	return
 }
 
-func (s *CollaborationStoreImpl) CreateNewGroupAdmission(newAdmission *model.GroupAdmission) error {
-	return s.db.Create(newAdmission).Error
-}
-
-func (s *CollaborationStoreImpl) FindGroupRequestsByGroupID(groupID string) (groupAdmissions []model.GroupAdmission, err error) {
-	if err = s.db.Where(&model.GroupAdmission{GroupID: groupID, AdmissionStatus: model.Requested}).Find(&groupAdmissions).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+func (s *CollaborationStoreImpl) FindGroupRequestsByGroupID(groupID string) (groupRequests []model.GroupUserRole, err error) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, RoleType: model.RoleRequested}).Find(&groupRequests).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
-func (s *CollaborationStoreImpl) FindGroupInvitationsByUserID(userID string) (groupAdmissions []model.GroupAdmission, err error) {
-	if err = s.db.Where(&model.GroupAdmission{UserID: userID, AdmissionStatus: model.Invited}).Preload("Group").Find(&groupAdmissions).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+func (s *CollaborationStoreImpl) FindGroupInvitationsByUserID(userID string) (groupInvites []model.GroupUserRole, err error) {
+	if err = s.db.Where(&model.GroupUserRole{UserID: userID, RoleType: model.RoleInvited}).Preload("Group").Find(&groupInvites).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
-func (s *CollaborationStoreImpl) FindGroupInvitationsByGroupID(groupID string) (groupAdmissions []model.GroupAdmission, err error) {
-	if err = s.db.Where(&model.GroupAdmission{GroupID: groupID, AdmissionStatus: model.Invited}).Preload("Group").Find(&groupAdmissions).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+func (s *CollaborationStoreImpl) FindGroupInvitationsByGroupID(groupID string) (groupInvites []model.GroupUserRole, err error) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, RoleType: model.RoleInvited}).Preload("Group").Find(&groupInvites).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
-}
-
-func (s *CollaborationStoreImpl) FindGroupAdmissionByUserAndGroupID(userID string, groupID string) (groupAdmission *model.GroupAdmission, err error) {
-	if err = s.db.Where(&model.GroupAdmission{UserID: userID, GroupID: groupID}).First(&groupAdmission).Error; errors.Is(err, gorm.ErrRecordNotFound) {
-		err = helper.ErrStoreNoEntryWithID
-	}
-	return
-}
-
-func (s *CollaborationStoreImpl) FindGroupAdmissionByID(admissionID string) (groupAdmission *model.GroupAdmission, err error) {
-	if err = s.db.Where(&model.GroupAdmission{ID: admissionID}).First(&groupAdmission).Error; errors.Is(err, gorm.ErrRecordNotFound) {
-		err = helper.ErrStoreNoEntryWithID
-	}
-	return
-}
-
-func (s *CollaborationStoreImpl) DeleteGroupAdmission(admission *model.GroupAdmission) error {
-	return s.db.Delete(&admission).Error
 }
 
 func (s *SrsStoreImpl) CreateRevlog(newRev *model.Revlog) error {

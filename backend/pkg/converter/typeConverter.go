@@ -9,7 +9,9 @@ import (
 )
 
 func MigrateModelRoleToProtoRole(modelRole model.RoleType) (protoRole pbCollaboration.GroupRole) {
-	if modelRole == model.RoleInvited {
+	if modelRole == model.RoleRequested {
+		protoRole = pbCollaboration.GroupRole_REQUESTED
+	} else if modelRole == model.RoleInvited {
 		protoRole = pbCollaboration.GroupRole_INVITED
 	} else if modelRole == model.RoleRead {
 		protoRole = pbCollaboration.GroupRole_READ
@@ -60,23 +62,21 @@ func StoreGroupUserRoleToProtoUserIDConverter(role model.GroupUserRole) *pbUser.
 	return &pbUser.UserID{UserID: role.UserID}
 }
 
-func StoreGroupAdmissionToProtoUserIDConverter(groupAdmission model.GroupAdmission) *pbUser.UserID {
-	return &pbUser.UserID{UserID: groupAdmission.UserID}
+func StoreGroupAdmissionToProtoUserIDConverter(groupRole model.GroupUserRole) *pbUser.UserID {
+	return &pbUser.UserID{UserID: groupRole.UserID}
 }
 
-func StoreGroupAdmissionToProtoGroupInvitationConverter(groupAdmission model.GroupAdmission) *pbCollaboration.GroupInvitation {
+func StoreGroupAdmissionToProtoGroupInvitationConverter(groupRole model.GroupUserRole) *pbCollaboration.GroupInvitation {
 	return &pbCollaboration.GroupInvitation{
-		AdmissionID: groupAdmission.ID,
-		GroupID:     groupAdmission.GroupID,
-		GroupName:   groupAdmission.Group.Name,
+		GroupID:   groupRole.GroupID,
+		GroupName: groupRole.Group.Name,
 	}
 }
 
 func ProtoGroupMemberRequestToFiberGroupMemberRequestConverter(groupMemberRequest *pbCollaboration.MemberAdmission) FiberGroupMemberAdmission {
 	return FiberGroupMemberAdmission{
-		AdmissionID: groupMemberRequest.AdmissionID,
-		UserID:      groupMemberRequest.User.UserID,
-		Name:        groupMemberRequest.User.Name,
+		UserID: groupMemberRequest.User.UserID,
+		Name:   groupMemberRequest.User.Name,
 	}
 }
 

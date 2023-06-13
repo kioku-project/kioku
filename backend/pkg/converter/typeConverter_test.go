@@ -149,7 +149,7 @@ func TestStoreGroupUserRoleToProtoUserIDConverter(t *testing.T) {
 }
 
 func TestStoreGroupAdmissionToProtoUserIDConverter(t *testing.T) {
-	role := model.GroupAdmission{
+	role := model.GroupUserRole{
 		UserID: id,
 	}
 
@@ -158,8 +158,7 @@ func TestStoreGroupAdmissionToProtoUserIDConverter(t *testing.T) {
 }
 
 func TestStoreGroupAdmissionToProtoGroupInvitationConverter(t *testing.T) {
-	admission := model.GroupAdmission{
-		ID:      id,
+	admission := model.GroupUserRole{
 		GroupID: groupID,
 		Group: model.Group{
 			Name: groupName,
@@ -167,14 +166,12 @@ func TestStoreGroupAdmissionToProtoGroupInvitationConverter(t *testing.T) {
 	}
 
 	conv := converter.StoreGroupAdmissionToProtoGroupInvitationConverter(admission)
-	assert.Equal(t, id, conv.AdmissionID)
 	assert.Equal(t, groupID, conv.GroupID)
 	assert.Equal(t, groupName, conv.GroupName)
 }
 
 func TestProtoGroupMemberRequestToFiberGroupMemberRequestConverter(t *testing.T) {
 	groupMemberRequest := pbCollaboration.MemberAdmission{
-		AdmissionID: id,
 		User: &pbCollaboration.User{
 			UserID: id,
 			Name:   name,
@@ -183,7 +180,6 @@ func TestProtoGroupMemberRequestToFiberGroupMemberRequestConverter(t *testing.T)
 
 	conv := converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter(&groupMemberRequest)
 
-	assert.Equal(t, id, conv.AdmissionID)
 	assert.Equal(t, id, conv.UserID)
 	assert.Equal(t, name, conv.Name)
 }

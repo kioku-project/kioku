@@ -3,10 +3,11 @@ package model
 type RoleType string
 
 const (
-	RoleAdmin   RoleType = "admin"
-	RoleWrite   RoleType = "write"
-	RoleRead    RoleType = "read"
-	RoleInvited RoleType = "invited"
+	RoleAdmin     RoleType = "admin"
+	RoleWrite     RoleType = "write"
+	RoleRead      RoleType = "read"
+	RoleInvited   RoleType = "invited"
+	RoleRequested RoleType = "requested"
 )
 
 type GroupUserRole struct {

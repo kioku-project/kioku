@@ -59,6 +59,14 @@ func NewMicroCardSideNotInGivenCardErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "card side not in given card")
 }
 
+func NewMicroAlreadyRequestedErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "user access already requested")
+}
+
+func NewMicroAlreadyInvitedErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "user already invited")
+}
+
 func NewMicroHashingFailedErr(id ClientID) error {
 	return microErrors.InternalServerError(string(id), "error while hashing password")
 }

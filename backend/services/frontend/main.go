@@ -88,7 +88,6 @@ func main() {
 	app.Get("/api/user", svc.GetUserHandler)
 	app.Get("/api/user/dueCards", svc.SrsUserDueHandler)
 	app.Get("/api/user/invitations", svc.GetGroupInvitationsHandler)
-	app.Put("/api/user/invitations/:invitationID", svc.ManageGroupInvitationHandler)
 
 	app.Get("/api/groups", svc.GetUserGroupsHandler)
 	app.Post("/api/groups", svc.CreateGroupHandler)
@@ -98,10 +97,12 @@ func main() {
 
 	app.Get("/api/groups/:groupID/members", svc.GetGroupMembersHandler)
 	app.Get("/api/groups/:groupID/members/requests", svc.GetGroupMemberRequestsHandler)
-	app.Post("/api/groups/:groupID/members/requests", svc.RequestToJoinGroupHandler)
-	app.Put("/api/groups/:groupID/members/requests/:requestID", svc.ManageGroupMemberRequestHandler)
 	app.Get("/api/groups/:groupID/members/invitations", svc.GetInvitationsForGroupHandler)
-	app.Post("/api/groups/:groupID/members/invitations", svc.InviteUserToGroupHandler)
+
+	app.Post("/api/groups/:groupID/members/invitation", svc.AddUserGroupInviteHandler)
+	app.Delete("/api/groups/:groupID/members/invitation", svc.RemoveUserGroupInviteHandler)
+	app.Post("/api/groups/:groupID/members/request", svc.AddUserGroupRequestHandler)
+	app.Delete("/api/groups/:groupID/members/request", svc.RemoveUserGroupRequestHandler)
 
 	app.Get("/api/groups/:groupID/decks", svc.GetGroupDecksHandler)
 	app.Post("/api/groups/:groupID/decks", svc.CreateDeckHandler)

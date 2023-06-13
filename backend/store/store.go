@@ -33,19 +33,16 @@ type CollaborationStore interface {
 	CreateNewGroupWithAdmin(adminUserID string, newGroup *model.Group) error
 	AddNewMemberToGroup(userID string, groupID string) error
 	AddInvitedUserToGroup(userID string, groupID string) error
-	ChangeInvitedUserToFullGroupMember(userID string, groupID string) error
+	AddRequestingUserToGroup(userID string, groupID string) error
+	PromoteUserToFullGroupMember(userID string, groupID string) error
 	RemoveUserFromGroup(userID string, groupID string) error
 	ModifyGroup(group *model.Group) error
 	DeleteGroup(group *model.Group) error
 	GetGroupUserRole(userID string, groupID string) (model.RoleType, error)
 	GetGroupMemberRoles(groupID string) ([]model.GroupUserRole, error)
-	CreateNewGroupAdmission(newAdmission *model.GroupAdmission) error
-	FindGroupRequestsByGroupID(groupID string) ([]model.GroupAdmission, error)
-	FindGroupInvitationsByUserID(userID string) ([]model.GroupAdmission, error)
-	FindGroupInvitationsByGroupID(groupID string) ([]model.GroupAdmission, error)
-	FindGroupAdmissionByUserAndGroupID(userID string, groupID string) (*model.GroupAdmission, error)
-	FindGroupAdmissionByID(admissionID string) (*model.GroupAdmission, error)
-	DeleteGroupAdmission(admission *model.GroupAdmission) error
+	FindGroupRequestsByGroupID(groupID string) ([]model.GroupUserRole, error)
+	FindGroupInvitationsByUserID(userID string) ([]model.GroupUserRole, error)
+	FindGroupInvitationsByGroupID(groupID string) ([]model.GroupUserRole, error)
 }
 
 type SrsStore interface {

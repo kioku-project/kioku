@@ -135,8 +135,8 @@ func TestStoreUserToProtoUserProfileInformationResponseConverter(t *testing.T) {
 
 	conv := converter.StoreUserToProtoUserProfileInformationResponseConverter(user)
 	assert.Equal(t, user.ID, conv.UserID)
-	assert.Equal(t, user.Email, conv.Email)
-	assert.Equal(t, user.Name, conv.Name)
+	assert.Equal(t, user.Email, conv.UserEmail)
+	assert.Equal(t, user.Name, conv.UserName)
 }
 
 func TestStoreGroupUserRoleToProtoUserIDConverter(t *testing.T) {
@@ -173,7 +173,7 @@ func TestStoreGroupAdmissionToProtoGroupInvitationConverter(t *testing.T) {
 }
 
 func TestProtoGroupMemberRequestToFiberGroupMemberRequestConverter(t *testing.T) {
-	groupMemberRequest := pbCollaboration.MemberRequest{
+	groupMemberRequest := pbCollaboration.MemberAdmission{
 		AdmissionID: id,
 		User: &pbCollaboration.User{
 			UserID: id,
@@ -207,19 +207,26 @@ func TestStoreGroupToProtoGroupConverter(t *testing.T) {
 }
 
 func TestProtoGroupToFiberGroupConverter(t *testing.T) {
-	group := pbCollaboration.Group{
-		GroupID:          id,
-		GroupName:        name,
-		GroupDescription: desc,
-		IsDefault:        isDefault,
+	group := pbCollaboration.GroupWithUserRole{
+		Group: &pbCollaboration.Group{
+			GroupID:          id,
+			GroupName:        name,
+			GroupDescription: desc,
+			IsDefault:        isDefault,
+			GroupType:        pbCollaboration.GroupType_PUBLIC,
+		},
+		Role: pbCollaboration.GroupRole_READ,
 	}
 
-	conv := converter.ProtoGroupToFiberGroupConverter(&group)
+	conv := converter.ProtoGroupWithRoleToFiberGroupConverter(&group)
 
 	assert.Equal(t, id, conv.GroupID)
 	assert.Equal(t, name, conv.GroupName)
 	assert.Equal(t, desc, conv.GroupDescription)
 	assert.Equal(t, isDefault, conv.IsDefault)
+	assert.Equal(t, pbCollaboration.GroupType_PUBLIC.String(), conv.GroupType)
+	assert.Equal(t, pbCollaboration.GroupRole_READ.String(), conv.GroupRole)
+
 }
 
 func TestStoreDeckToProtoDeckConverter(t *testing.T) {
@@ -236,7 +243,7 @@ func TestStoreDeckToProtoDeckResponseConverter(t *testing.T) {
 
 	assert.Equal(t, id, conv.DeckID)
 	assert.Equal(t, name, conv.DeckName)
-	assert.Equal(t, timeConstant.Unix(), conv.CreatedAT)
+	assert.Equal(t, timeConstant.Unix(), conv.CreatedAt)
 	assert.Equal(t, id, conv.GroupID)
 }
 

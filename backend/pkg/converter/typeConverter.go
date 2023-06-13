@@ -9,7 +9,9 @@ import (
 )
 
 func MigrateModelRoleToProtoRole(modelRole model.RoleType) (protoRole pbCollaboration.GroupRole) {
-	if modelRole == model.RoleRead {
+	if modelRole == model.RoleInvited {
+		protoRole = pbCollaboration.GroupRole_INVITED
+	} else if modelRole == model.RoleRead {
 		protoRole = pbCollaboration.GroupRole_READ
 	} else if modelRole == model.RoleWrite {
 		protoRole = pbCollaboration.GroupRole_WRITE

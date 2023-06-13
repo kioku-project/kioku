@@ -17,9 +17,10 @@ const (
 )
 
 var (
-	ErrStoreRetryCountExceeded      = errors.New("exceeded retry count")
-	ErrStoreNoEntryWithID           = errors.New("no entry with id")
-	ErrStoreNoExistingUserWithEmail = errors.New("no existing user with email")
+	ErrStoreRetryCountExceeded        = errors.New("exceeded retry count")
+	ErrStoreNoEntryWithID             = errors.New("no entry with id")
+	ErrStoreNoExistingUserWithEmail   = errors.New("no existing user with email")
+	ErrStoreInvalidGroupRoleForChange = errors.New("user has invalid role for change")
 )
 
 func NewMicroNotAuthorizedErr(id ClientID) error {

@@ -248,6 +248,27 @@ func (s *CollaborationStoreImpl) AddNewMemberToGroup(userID string, groupID stri
 	return s.db.Create(&model.GroupUserRole{GroupID: groupID, UserID: userID, RoleType: model.RoleRead}).Error
 }
 
+func (s *CollaborationStoreImpl) AddInvitedUserToGroup(userID string, groupID string) error {
+	return s.db.Create(&model.GroupUserRole{GroupID: groupID, UserID: userID, RoleType: model.RoleInvited}).Error
+}
+
+func (s *CollaborationStoreImpl) ChangeInvitedUserToFullGroupMember(userID string, groupID string) error {
+	var groupUserRole model.GroupUserRole
+	err := s.db.Where(&model.GroupUserRole{UserID: userID, GroupID: groupID}).First(&groupUserRole).Error
+	if err != nil {
+		return err
+	}
+	if groupUserRole.RoleType == model.RoleInvited {
+		groupUserRole.RoleType = model.RoleRead
+		err = s.db.Save(&groupUserRole).Error
+	}
+	return helper.ErrStoreInvalidGroupRoleForChange
+}
+
+func (s *CollaborationStoreImpl) RemoveUserFromGroup(userID string, groupID string) error {
+	return s.db.Where(&model.GroupUserRole{UserID: userID, GroupID: groupID}).Delete(&model.GroupUserRole{}).Error
+}
+
 func (s *CollaborationStoreImpl) ModifyGroup(group *model.Group) (err error) {
 	err = s.db.Save(&model.Group{
 		ID:          group.ID,
@@ -273,7 +294,7 @@ func (s *CollaborationStoreImpl) GetGroupUserRole(userID string, groupID string)
 }
 
 func (s *CollaborationStoreImpl) GetGroupMemberRoles(groupID string) (groupMembers []model.GroupUserRole, err error) {
-	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).Not(&model.GroupUserRole{RoleType: model.RoleInvited}).Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return

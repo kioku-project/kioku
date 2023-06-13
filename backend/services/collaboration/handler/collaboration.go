@@ -38,22 +38,28 @@ func (e *Collaboration) checkForGroupAndAdmission(userID string, groupID string)
 	return nil
 }
 
-func (e *Collaboration) checkUserRoleAccess(_ context.Context, userID string, groupID string, requiredRole pb.GroupRole) error {
+func (e *Collaboration) checkUserRoleAccessWithGroupAndRoleReturn(_ context.Context, userID string, groupID string, requiredRole pb.GroupRole) (group *model.Group, protoRole pb.GroupRole, err error) {
+	logger.Infof("Find group with id %s", groupID)
+	group, err = helper.FindStoreEntity(e.store.FindGroupByID, groupID, helper.CollaborationServiceID)
+	if err != nil {
+		return
+	}
 	logger.Infof("Requesting group role for user (%s)", userID)
 	role, err := e.store.GetGroupUserRole(userID, groupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.NewMicroNoEntryWithIDErr(helper.CollaborationServiceID)
+			err = helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 		}
-		return err
+		return
 	}
-	protoRole := converter.MigrateModelRoleToProtoRole(role)
+	protoRole = converter.MigrateModelRoleToProtoRole(role)
 	logger.Infof("Obtained group role (%s) for user (%s)", protoRole.String(), userID)
 	if !helper.IsAuthorized(protoRole, requiredRole) {
-		return helper.NewMicroNotAuthorizedErr(helper.CardDeckServiceID)
+		err = helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+		return
 	}
 	logger.Infof("Authenticated group role (%s) for user (%s)", protoRole.String(), userID)
-	return nil
+	return
 }
 
 func (e *Collaboration) generateGroupMemberAdmissionResponse(ctx context.Context, groupAdmissions []model.GroupAdmission) (memberAdmissions []*pb.MemberAdmission, err error) {
@@ -100,10 +106,14 @@ func (e *Collaboration) ManageGroupInvitation(ctx context.Context, req *pb.Manag
 	}
 	logPrefix := "rejected"
 	if req.RequestResponse {
-		if err = e.store.AddNewMemberToGroup(groupAdmission.UserID, groupAdmission.GroupID); err != nil {
+		if err = e.store.ChangeInvitedUserToFullGroupMember(groupAdmission.UserID, groupAdmission.GroupID); err != nil {
 			return err
 		}
 		logPrefix = "accepted"
+	} else {
+		if err = e.store.RemoveUserFromGroup(groupAdmission.UserID, groupAdmission.GroupID); err != nil {
+			return err
+		}
 	}
 	logger.Infof("User %s %s request to join group with id %s", groupAdmission.UserID, logPrefix, groupAdmission.GroupID)
 	if err = e.store.DeleteGroupAdmission(groupAdmission); err != nil {
@@ -119,6 +129,7 @@ func (e *Collaboration) ManageGroupInvitation(ctx context.Context, req *pb.Manag
 	logger.Infof("Successfully handled invitation for user %s to join group %s", groupAdmission.UserID, groupAdmission.GroupID)
 	return nil
 }
+
 func (e *Collaboration) createUserCardBindingsForWholeGroup(ctx context.Context, userID string, groupID string) error {
 	decks, err := e.cardDeckService.GetGroupDecks(ctx, &pbCardDeck.GroupDecksRequest{
 		UserID:  userID,
@@ -200,22 +211,11 @@ func (e *Collaboration) CreateNewGroupWithAdmin(_ context.Context, req *pb.Creat
 
 func (e *Collaboration) GetGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupWithUserRole) error {
 	logger.Infof("Received Collaboration.GetGroup request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_READ); err != nil {
-		return err
-	}
-	group, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
+	group, protoRole, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_INVITED)
 	if err != nil {
-		return err
-	}
-	role, err := e.store.GetGroupUserRole(req.UserID, req.GroupID)
-	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.NewMicroNoEntryWithIDErr(helper.CollaborationServiceID)
-		}
 		return err
 	}
 	protoGroup := converter.StoreGroupToProtoGroupConverter(*group)
-	protoRole := converter.MigrateModelRoleToProtoRole(role)
 	*rsp = pb.GroupWithUserRole{
 		Group: protoGroup,
 		Role:  protoRole,
@@ -226,10 +226,7 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pb.GroupRequest, rsp 
 
 func (e *Collaboration) ModifyGroup(ctx context.Context, req *pb.ModifyGroupRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.ModifyGroup request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
-		return err
-	}
-	group, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
+	group, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN)
 	if err != nil {
 		return err
 	}
@@ -261,10 +258,7 @@ func (e *Collaboration) ModifyGroup(ctx context.Context, req *pb.ModifyGroupRequ
 
 func (e *Collaboration) DeleteGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.DeleteGroup request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
-		return err
-	}
-	group, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
+	group, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN)
 	if err != nil {
 		return err
 	}
@@ -283,7 +277,7 @@ func (e *Collaboration) DeleteGroup(ctx context.Context, req *pb.GroupRequest, r
 
 func (e *Collaboration) GetGroupMembers(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupMembersResponse) error {
 	logger.Infof("Received Collaboration.GetGroupMembers request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_READ); err != nil {
+	if _, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_INVITED); err != nil {
 		return err
 	}
 	groupMembers, err := helper.FindStoreEntity(e.store.GetGroupMemberRoles, req.GroupID, helper.CollaborationServiceID)
@@ -313,7 +307,7 @@ func (e *Collaboration) GetGroupMembers(ctx context.Context, req *pb.GroupReques
 
 func (e *Collaboration) GetGroupMemberRequests(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupMemberAdmissionResponse) error {
 	logger.Infof("Received Collaboration.GetGroupMemberRequests request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
+	if _, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
 		return err
 	}
 	groupRequests, err := e.store.FindGroupRequestsByGroupID(req.GroupID)
@@ -330,7 +324,7 @@ func (e *Collaboration) GetGroupMemberRequests(ctx context.Context, req *pb.Grou
 
 func (e *Collaboration) ManageGroupMemberRequest(ctx context.Context, req *pb.ManageGroupMemberRequestRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.ManageGroupMemberRequest request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
+	if _, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
 		return err
 	}
 	groupAdmission, err := e.store.FindGroupAdmissionByID(req.AdmissionID)
@@ -396,7 +390,7 @@ func (e *Collaboration) RequestToJoinGroup(_ context.Context, req *pb.GroupReque
 
 func (e *Collaboration) GetInvitationsForGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupMemberAdmissionResponse) error {
 	logger.Infof("Received Collaboration.GetInvitationsForGroup request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
+	if _, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
 		return err
 	}
 	memberInvitations, err := e.store.FindGroupInvitationsByGroupID(req.GroupID)
@@ -412,7 +406,7 @@ func (e *Collaboration) GetInvitationsForGroup(ctx context.Context, req *pb.Grou
 
 func (e *Collaboration) InviteUserToGroup(ctx context.Context, req *pb.GroupInvitationRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.InviteUserToGroup request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
+	if _, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
 		return err
 	}
 	logger.Infof("Requesting user id from invited user from user service by email %s", req.InvitedUserEmail)
@@ -432,6 +426,9 @@ func (e *Collaboration) InviteUserToGroup(ctx context.Context, req *pb.GroupInvi
 	if err = e.store.CreateNewGroupAdmission(&newAdmission); err != nil {
 		return err
 	}
+	if err = e.store.AddInvitedUserToGroup(newAdmission.UserID, newAdmission.GroupID); err != nil {
+		return err
+	}
 	rsp.Success = true
 	logger.Infof("Successfully invited user %s to group %s", userRsp.UserID, req.GroupID)
 	return nil
@@ -439,6 +436,10 @@ func (e *Collaboration) InviteUserToGroup(ctx context.Context, req *pb.GroupInvi
 
 func (e *Collaboration) GetGroupUserRole(_ context.Context, req *pb.GroupRequest, rsp *pb.GroupRoleResponse) error {
 	logger.Infof("Received Collaboration.GetUserGroupRole request: %v", req)
+	_, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
+	if err != nil {
+		return err
+	}
 	role, err := e.store.GetGroupUserRole(req.UserID, req.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {

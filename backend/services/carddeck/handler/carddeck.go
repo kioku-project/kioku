@@ -127,7 +127,7 @@ func (e *CardDeck) updateCardReferences(cardSideToDelete *model.CardSide) (bool,
 
 func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest, rsp *pb.GroupDecksResponse) error {
 	logger.Infof("Received CardDeck.GetGroupDecks request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_READ); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
 		return err
 	}
 	decks, err := helper.FindStoreEntity(e.store.FindDecksByGroupID, req.GroupID, helper.CardDeckServiceID)
@@ -166,7 +166,7 @@ func (e *CardDeck) GetDeck(ctx context.Context, req *pb.IDRequest, rsp *pb.DeckR
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_READ); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
 		return err
 	}
 	*rsp = *converter.StoreDeckToProtoDeckResponseConverter(*deck)
@@ -223,7 +223,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.IDRequest, rsp *pb.
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_READ); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
 		return err
 	}
 	rsp.Cards = make([]*pb.Card, len(deck.Cards))
@@ -291,7 +291,7 @@ func (e *CardDeck) GetCard(ctx context.Context, req *pb.IDRequest, rsp *pb.Card)
 		return err
 	}
 	card.CardSides = cardSides
-	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCollaboration.GroupRole_READ); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
 		return err
 	}
 	*rsp = *converter.StoreCardToProtoCardConverter(*card)

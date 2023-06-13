@@ -32,6 +32,9 @@ type CollaborationStore interface {
 	FindGroupByID(groupID string) (*model.Group, error)
 	CreateNewGroupWithAdmin(adminUserID string, newGroup *model.Group) error
 	AddNewMemberToGroup(userID string, groupID string) error
+	AddInvitedUserToGroup(userID string, groupID string) error
+	ChangeInvitedUserToFullGroupMember(userID string, groupID string) error
+	RemoveUserFromGroup(userID string, groupID string) error
 	ModifyGroup(group *model.Group) error
 	DeleteGroup(group *model.Group) error
 	GetGroupUserRole(userID string, groupID string) (model.RoleType, error)

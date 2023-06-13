@@ -7,7 +7,7 @@ type FiberCardSideContent struct {
 
 type FiberGroupMember struct {
 	UserID    string `json:"userID"`
-	Name      string `json:"name"`
+	Name      string `json:"userName"`
 	GroupRole string `json:"groupRole"`
 }
 
@@ -20,10 +20,10 @@ type FiberGroup struct {
 	GroupRole        string `json:"groupRole"`
 }
 
-type FiberGroupMemberRequest struct {
+type FiberGroupMemberAdmission struct {
 	AdmissionID string `json:"admissionID"`
 	UserID      string `json:"userID"`
-	Name        string `json:"name"`
+	Name        string `json:"userName"`
 }
 
 type FiberCreateCardRequestBody struct {
@@ -62,5 +62,9 @@ type FiberGetUserGroupsResponseBody struct {
 }
 
 type FiberGetGroupMemberRequestsResponseBody struct {
-	MemberRequests []FiberGroupMemberRequest `json:"memberRequests"`
+	MemberRequests []FiberGroupMemberAdmission `json:"memberRequests"`
+}
+
+type FiberGetInvitationsForGroupResponseBody struct {
+	MemberRequests []FiberGroupMemberAdmission `json:"groupInvitations"`
 }

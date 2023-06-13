@@ -79,8 +79,8 @@ func (e *User) GetUserIDFromEmail(_ context.Context, req *pb.UserIDRequest, rsp 
 	logger.Infof("Received User.GetUserIDFromEmail request: %v", req)
 	user, err := e.store.FindUserByEmail(req.UserEmail)
 	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.NewMicroNoEntryWithIDErr(helper.UserServiceID)
+		if errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
+			return helper.NewMicroNoExistingUserWithEmailErr(helper.UserServiceID)
 		}
 		return err
 	}

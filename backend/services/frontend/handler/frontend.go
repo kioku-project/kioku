@@ -374,7 +374,7 @@ func (e *Frontend) GetInvitationsForGroupHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(converter.FiberGetGroupMemberRequestsResponseBody{
+	return c.JSON(converter.FiberGetInvitationsForGroupResponseBody{
 		MemberRequests: converter.ConvertToTypeArray(rspInvitationsForGroup.MemberAdmissions, converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter),
 	})
 }

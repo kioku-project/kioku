@@ -70,8 +70,8 @@ func StoreGroupAdmissionToProtoGroupInvitationConverter(groupAdmission model.Gro
 	}
 }
 
-func ProtoGroupMemberRequestToFiberGroupMemberRequestConverter(groupMemberRequest *pbCollaboration.MemberAdmission) FiberGroupMemberRequest {
-	return FiberGroupMemberRequest{
+func ProtoGroupMemberRequestToFiberGroupMemberRequestConverter(groupMemberRequest *pbCollaboration.MemberAdmission) FiberGroupMemberAdmission {
+	return FiberGroupMemberAdmission{
 		AdmissionID: groupMemberRequest.AdmissionID,
 		UserID:      groupMemberRequest.User.UserID,
 		Name:        groupMemberRequest.User.Name,

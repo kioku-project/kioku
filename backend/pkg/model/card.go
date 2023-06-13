@@ -12,6 +12,7 @@ type Card struct {
 	FirstCardSideID string            `gorm:"not null"`
 	CardSides       []CardSide        `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	UserBindings    []UserCardBinding `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Revlogs         []Revlog          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func (c *Card) BeforeCreate(db *gorm.DB) (err error) {

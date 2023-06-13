@@ -18,6 +18,7 @@ export default function LoadingSpinner({ className }: SpinnerProps) {
 			height={0}
 			alt="Loading spinner"
 			className={`animate-spin ${className ?? ""}`}
+			priority={true}
 		></Image>
 	);
 }

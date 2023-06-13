@@ -75,7 +75,7 @@ func (e *Srs) Pull(ctx context.Context, req *pb.DeckPullRequest, rsp *pb.SrsPull
 	}
 	var dueCards []*model.UserCardBinding
 	for _, card := range cards {
-		if card.Due < time.Now().Unix() {
+		if card.Due <= time.Now().Unix() {
 			dueCards = append(dueCards, card)
 		}
 	}
@@ -136,7 +136,7 @@ func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pb.DeckPullRequest, rsp 
 	}
 	var dueCards []*model.UserCardBinding
 	for _, card := range cards {
-		if card.Due < time.Now().Unix() {
+		if card.Due <= time.Now().Unix() {
 			dueCards = append(dueCards, card)
 		}
 	}
@@ -153,7 +153,7 @@ func (e *Srs) GetUserCardsDue(ctx context.Context, req *pb.UserDueRequest, rsp *
 	decksDueCount := 0
 	var dueCards []*model.UserCardBinding
 	for _, card := range cards {
-		if card.Due < time.Now().Unix() {
+		if card.Due <= time.Now().Unix() {
 			dueCards = append(dueCards, card)
 			if _, ok := decksDueMap[card.DeckID]; !ok {
 				decksDueMap[card.DeckID] = 0

@@ -40,8 +40,8 @@ export const DeckSettingsTab = ({
 		<div className="space-y-5">
 			<Section id="generalDeckSettingsId" header="General">
 				<InputAction
-					id="groupNameInputAction"
-					header="Group Name"
+					id="deckNameInputAction"
+					header="Deck Name"
 					value={deckState.deckName}
 					button="Rename"
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {

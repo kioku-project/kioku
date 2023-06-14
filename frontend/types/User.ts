@@ -1,7 +1,9 @@
 type User = {
 	userID: string;
 	userName: string;
-	groupRole?: "ADMIN" | "WRITE" | "READ";
-	status?: "requested" | "invited";
-	admissionID?: string;
+	userEmail?: string;
+	dueCards?: number;
+	dueDecks?: number;
+	groupID?: string;
+	groupRole?: "ADMIN" | "WRITE" | "READ" | "INVITED" | "REQUESTED";
 };

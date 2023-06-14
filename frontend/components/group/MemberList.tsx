@@ -25,11 +25,13 @@ export default function MemberList({ groupID, className }: MemberListProps) {
 	const { data: requestedUser } = useSWR(
 		`/api/groups/${groupID}/members/requests`,
 		fetcher
-	);
+	); //TODO: admissionID löschen
 	const { data: invitedUser } = useSWR(
 		`/api/groups/${groupID}/members/invitations`,
 		fetcher
 	);
+
+	console.log(requestedUser);
 
 	return (
 		<div id={groupID} className={`flex flex-col ${className ?? ""}`}>
@@ -45,7 +47,6 @@ export default function MemberList({ groupID, className }: MemberListProps) {
 				{requestedUser?.memberRequests &&
 					requestedUser.memberRequests.map(
 						(requestedUser: {
-							admissionID: string;
 							userID: string;
 							userName: string;
 						}) => (
@@ -54,8 +55,8 @@ export default function MemberList({ groupID, className }: MemberListProps) {
 								key={requestedUser.userID}
 								user={{
 									...requestedUser,
+									groupRole: "REQUESTED",
 									groupID: groupID,
-									status: "requested",
 								}}
 							/>
 						)
@@ -72,8 +73,8 @@ export default function MemberList({ groupID, className }: MemberListProps) {
 								key={invitedUser.userID}
 								user={{
 									...invitedUser,
+									groupRole: "INVITED",
 									groupID: groupID,
-									status: "invited",
 								}}
 							/>
 						)

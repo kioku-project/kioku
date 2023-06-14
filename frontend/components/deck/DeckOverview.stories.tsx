@@ -6,7 +6,7 @@ const meta: Meta<typeof DeckOverview> = {
 	component: DeckOverview,
 	tags: ["autodocs"],
 	args: {
-		id: "DeckGroupId",
+		group: { groupID: "G-12345678", groupName: "Example Group" },
 	},
 };
 
@@ -14,19 +14,9 @@ export default meta;
 type Story = StoryObj<typeof DeckOverview>;
 
 export const Default: Story = {
-	args: {
-		name: "Example",
-		decks: [
-			{ name: "Deck 0", count: 0 },
-			{ name: "Deck 1", count: 1 },
-			{ name: "Deck 2", count: 2 },
-		],
-	},
+	args: {},
 };
 
 export const NoDecks: Story = {
-	args: {
-		name: "Example Group",
-		decks: [],
-	},
+	args: {},
 };

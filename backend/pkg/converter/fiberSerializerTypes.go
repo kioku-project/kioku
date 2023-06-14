@@ -12,7 +12,7 @@ type FiberGroupMember struct {
 }
 
 type FiberGroup struct {
-	GroupID          string `json:"userID"`
+	GroupID          string `json:"groupID"`
 	GroupName        string `json:"groupName"`
 	GroupDescription string `json:"groupDescription"`
 	IsDefault        bool   `json:"isDefault"`
@@ -21,9 +21,9 @@ type FiberGroup struct {
 }
 
 type FiberGroupMemberAdmission struct {
-	AdmissionID string `json:"admissionID"`
-	UserID      string `json:"userID"`
-	Name        string `json:"userName"`
+	UserID string `json:"userID"`
+	Name   string `json:"userName"`
+	Email  string `json:"userEmail"`
 }
 
 type FiberCreateCardRequestBody struct {

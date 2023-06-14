@@ -300,7 +300,7 @@ func (s *CollaborationStoreImpl) GetGroupUserRole(userID string, groupID string)
 }
 
 func (s *CollaborationStoreImpl) GetGroupMemberRoles(groupID string) (groupMembers []model.GroupUserRole, err error) {
-	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).Not(&model.GroupUserRole{RoleType: model.RoleInvited}).Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).Not(&model.GroupUserRole{RoleType: model.RoleInvited}).Not(&model.GroupUserRole{RoleType: model.RoleRequested}).Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return

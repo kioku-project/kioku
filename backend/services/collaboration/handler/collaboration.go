@@ -62,6 +62,7 @@ func (e *Collaboration) generateGroupMemberAdmissionResponse(ctx context.Context
 			User: &pb.User{
 				UserID: user.UserID,
 				Name:   user.UserName,
+				Email:  &user.UserEmail,
 			},
 		}
 	}
@@ -332,10 +333,6 @@ func (e *Collaboration) RemoveGroupUserRequest(ctx context.Context, req *pb.Grou
 func (e *Collaboration) AddGroupUserInvite(ctx context.Context, req *pb.GroupUserInvite, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.AddGroupUserInvite request: %v", req)
 
-	return e.modifyInvite(ctx, req, rsp, e.store.PromoteUserToFullGroupMember)
-}
-
-func (e *Collaboration) modifyInvite(ctx context.Context, req *pb.GroupUserInvite, rsp *pb.SuccessResponse, fn func(userID string, groupID string) error) error {
 	requestingUserRole, err := e.store.GetGroupUserRole(req.UserID, req.GroupID)
 	if err != nil {
 		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
@@ -351,7 +348,7 @@ func (e *Collaboration) modifyInvite(ctx context.Context, req *pb.GroupUserInvit
 	invitedUserRole, err := e.store.GetGroupUserRole(userRsp.UserID, req.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			if err := fn(userRsp.UserID, req.GroupID); err != nil {
+			if err := e.store.AddInvitedUserToGroup(userRsp.UserID, req.GroupID); err != nil {
 				return err
 			}
 			rsp.Success = true
@@ -367,15 +364,41 @@ func (e *Collaboration) modifyInvite(ctx context.Context, req *pb.GroupUserInvit
 		}
 		rsp.Success = true
 		return nil
+	} else {
+		return helper.NewMicroUserAlreadyInGroupErr(helper.CollaborationServiceID)
 	}
-	return helper.NewMicroUserAlreadyInGroupErr(helper.CollaborationServiceID)
 }
 func (e *Collaboration) RemoveGroupUserInvite(ctx context.Context, req *pb.GroupUserInvite, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.RemoveGroupUserInvite request: %v", req)
 
-	return e.modifyInvite(ctx, req, rsp, e.store.RemoveUserFromGroup)
+	requestingUserRole, err := e.store.GetGroupUserRole(req.UserID, req.GroupID)
+	if err != nil {
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
+	if requestingUserRole != model.RoleAdmin {
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
+	userRsp, err := e.userService.GetUserIDFromEmail(ctx, &pbUser.UserIDRequest{UserEmail: req.InviteUserEmail})
+	if err != nil {
+		return err
+	}
+	invitedUserRole, err := e.store.GetGroupUserRole(userRsp.UserID, req.GroupID)
+	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return helper.NewMicroNoEntryWithIDErr(helper.CollaborationServiceID)
+		}
+		return err
+	}
+	if invitedUserRole == model.RoleInvited || invitedUserRole == model.RoleRequested {
+		if err := e.store.RemoveUserFromGroup(userRsp.UserID, req.GroupID); err != nil {
+			return err
+		}
+		rsp.Success = true
+		return nil
+	} else {
+		return helper.NewMicroUserAlreadyInGroupErr(helper.CollaborationServiceID)
+	}
 }
-
 func (e *Collaboration) GetInvitationsForGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupMemberAdmissionResponse) error {
 	logger.Infof("Received Collaboration.GetInvitationsForGroup request: %v", req)
 	if _, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {

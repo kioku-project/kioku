@@ -37,7 +37,6 @@ func NewCollaborationEndpoints() []*api.Endpoint {
 
 type CollaborationService interface {
 	GetGroupInvitations(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*GroupInvitationsResponse, error)
-	// rpc ManageGroupInvitation(ManageGroupInvitationRequest) returns (SuccessResponse) {}
 	GetUserGroups(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*UserGroupsResponse, error)
 	CreateNewGroupWithAdmin(ctx context.Context, in *CreateGroupRequest, opts ...client.CallOption) (*IDResponse, error)
 	GetGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupWithUserRole, error)
@@ -45,10 +44,7 @@ type CollaborationService interface {
 	DeleteGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	GetGroupMembers(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupMembersResponse, error)
 	GetGroupMemberRequests(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupMemberAdmissionResponse, error)
-	// rpc ManageGroupMemberRequest(ManageGroupMemberRequestRequest) returns (SuccessResponse) {}
-	// rpc RequestToJoinGroup(GroupRequest) returns (SuccessResponse) {}
 	GetInvitationsForGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupMemberAdmissionResponse, error)
-	// rpc InviteUserToGroup(GroupInvitationRequest) returns (SuccessResponse) {}
 	GetGroupUserRole(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*GroupRoleResponse, error)
 	FindGroupByID(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*Group, error)
 	AddGroupUserRequest(ctx context.Context, in *GroupUserRequest, opts ...client.CallOption) (*SuccessResponse, error)
@@ -223,7 +219,6 @@ func (c *collaborationService) RemoveGroupUserInvite(ctx context.Context, in *Gr
 
 type CollaborationHandler interface {
 	GetGroupInvitations(context.Context, *UserIDRequest, *GroupInvitationsResponse) error
-	// rpc ManageGroupInvitation(ManageGroupInvitationRequest) returns (SuccessResponse) {}
 	GetUserGroups(context.Context, *UserIDRequest, *UserGroupsResponse) error
 	CreateNewGroupWithAdmin(context.Context, *CreateGroupRequest, *IDResponse) error
 	GetGroup(context.Context, *GroupRequest, *GroupWithUserRole) error
@@ -231,10 +226,7 @@ type CollaborationHandler interface {
 	DeleteGroup(context.Context, *GroupRequest, *SuccessResponse) error
 	GetGroupMembers(context.Context, *GroupRequest, *GroupMembersResponse) error
 	GetGroupMemberRequests(context.Context, *GroupRequest, *GroupMemberAdmissionResponse) error
-	// rpc ManageGroupMemberRequest(ManageGroupMemberRequestRequest) returns (SuccessResponse) {}
-	// rpc RequestToJoinGroup(GroupRequest) returns (SuccessResponse) {}
 	GetInvitationsForGroup(context.Context, *GroupRequest, *GroupMemberAdmissionResponse) error
-	// rpc InviteUserToGroup(GroupInvitationRequest) returns (SuccessResponse) {}
 	GetGroupUserRole(context.Context, *GroupRequest, *GroupRoleResponse) error
 	FindGroupByID(context.Context, *GroupRequest, *Group) error
 	AddGroupUserRequest(context.Context, *GroupUserRequest, *SuccessResponse) error

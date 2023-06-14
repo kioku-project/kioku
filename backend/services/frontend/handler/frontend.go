@@ -251,10 +251,11 @@ func (e *Frontend) ModifyGroupHandler(c *fiber.Ctx) error {
 		}
 	}
 	rspModifyGroup, err := e.collaborationService.ModifyGroup(c.Context(), &pbCollaboration.ModifyGroupRequest{
-		UserID:    userID,
-		GroupID:   c.Params("groupID"),
-		GroupName: data["groupName"],
-		GroupType: &groupType,
+		UserID:           userID,
+		GroupID:          c.Params("groupID"),
+		GroupName:        data["groupName"],
+		GroupDescription: data["groupDescription"],
+		GroupType:        &groupType,
 	})
 	if err != nil {
 		return err

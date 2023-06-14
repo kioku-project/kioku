@@ -77,6 +77,7 @@ func ProtoGroupMemberRequestToFiberGroupMemberRequestConverter(groupMemberReques
 	return FiberGroupMemberAdmission{
 		UserID: groupMemberRequest.User.UserID,
 		Name:   groupMemberRequest.User.Name,
+		Email:  *groupMemberRequest.User.Email,
 	}
 }
 

@@ -108,6 +108,7 @@ message MemberAdmission {
 message User {
 	string userID = 1;
 	string name = 2;
+	optional string email = 3;
 }
 
 message ManageGroupMemberRequestRequest {

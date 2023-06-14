@@ -8,6 +8,9 @@ import { Badge } from "../graphics/Badge";
 import { authedFetch } from "../../util/reauth";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
+import { User } from "../../types/User";
+import { Group } from "../../types/Group";
+import { Deck } from "../../types/Deck";
 
 interface HeaderProps {
 	/**

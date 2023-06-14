@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import { authedFetch } from "../../util/reauth";
+import { Card as CardType } from "../../types/Card";
 import { Card } from "./Card";
 
 interface CardListProps {
@@ -14,7 +15,7 @@ interface CardListProps {
 	/**
 	 * click handler
 	 */
-	setCard: (card: Card) => void;
+	setCard: (card: CardType) => void;
 }
 
 /**
@@ -30,7 +31,7 @@ export const CardList = ({ deckID, setCard, className }: CardListProps) => {
 		<div id="cardListId" className={`flex flex-col ${className ?? ""}`}>
 			<div className="snap-y overflow-y-auto">
 				{cards?.cards &&
-					cards.cards.map((card: Card) => (
+					cards.cards.map((card: CardType) => (
 						<Card
 							className="snap-center"
 							key={card.cardID}

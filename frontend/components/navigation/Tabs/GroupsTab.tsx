@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { authedFetch } from "../../../util/reauth";
 import DeckOverview from "../../deck/DeckOverview";
+import { Group } from "../../../types/Group";
 
 interface GroupsTabProps {
 	/**

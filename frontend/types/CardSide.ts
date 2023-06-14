@@ -1,4 +1,4 @@
-type CardSide = {
+export type CardSide = {
 	cardSideID: string;
 	header: string;
 	description: string;

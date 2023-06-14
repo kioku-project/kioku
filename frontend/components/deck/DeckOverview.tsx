@@ -4,6 +4,7 @@ import { authedFetch } from "../../util/reauth";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { Section } from "../layout/Section";
+import { Group } from "../../types/Group";
 
 interface DeckOverviewProps {
 	/**

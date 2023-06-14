@@ -4,6 +4,8 @@ import "react-toastify/dist/ReactToastify.css";
 import useSWR, { useSWRConfig } from "swr";
 import { authedFetch } from "../../util/reauth";
 import { AlertTriangle } from "react-feather";
+import { Group } from "../../types/Group";
+import { Deck as DeckType } from "../../types/Deck";
 
 interface DeckProps {
 	/**
@@ -13,7 +15,7 @@ interface DeckProps {
 	/**
 	 * Deck to display. If deck is undefined, placeholder for creating decks will be displayed.
 	 */
-	deck?: Deck;
+	deck?: DeckType;
 	/**
 	 * Additional classes
 	 */

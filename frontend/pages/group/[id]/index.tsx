@@ -92,9 +92,7 @@ export default function Page() {
 								{{
 									decks: <DecksTab group={group}></DecksTab>,
 									user: (
-										<MembersTab
-											groupID={group.groupID}
-										></MembersTab>
+										<MembersTab group={group}></MembersTab>
 									),
 									settings: (
 										<GroupSettingsTab

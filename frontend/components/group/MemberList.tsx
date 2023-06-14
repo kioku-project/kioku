@@ -2,12 +2,13 @@ import Member from "./Member";
 import useSWR from "swr";
 import { authedFetch } from "../../util/reauth";
 import { User } from "../../types/User";
+import { Group } from "../../types/Group";
 
 interface MemberListProps {
 	/**
-	 * groupID
+	 * group entity
 	 */
-	groupID: string;
+	group: Group;
 	/**
 	 * Additional classes
 	 */
@@ -17,32 +18,35 @@ interface MemberListProps {
 /**
  * UI component for displaying a group of users
  */
-export default function MemberList({ groupID, className }: MemberListProps) {
+export default function MemberList({ group, className }: MemberListProps) {
 	const fetcher = (url: RequestInfo | URL) =>
 		authedFetch(url, {
 			method: "GET",
 		}).then((res) => res?.json());
-	const { data: user } = useSWR(`/api/groups/${groupID}/members`, fetcher);
+	const { data: user } = useSWR(
+		`/api/groups/${group.groupID}/members`,
+		fetcher
+	);
 	const { data: requestedUser } = useSWR(
-		`/api/groups/${groupID}/members/requests`,
+		`/api/groups/${group.groupID}/members/requests`,
 		fetcher
 	); //TODO: admissionID löschen
 	const { data: invitedUser } = useSWR(
-		`/api/groups/${groupID}/members/invitations`,
+		`/api/groups/${group.groupID}/members/invitations`,
 		fetcher
 	);
 
 	console.log(requestedUser);
 
 	return (
-		<div id={groupID} className={`flex flex-col ${className ?? ""}`}>
+		<div id={group.groupID} className={`flex flex-col ${className ?? ""}`}>
 			<div className="snap-y overflow-y-auto">
 				{user?.users &&
 					user.users.map((user: User) => (
 						<Member
 							className="snap-center"
 							key={user.userID}
-							user={{ ...user, groupID: groupID }}
+							user={{ ...user, groupID: group.groupID }}
 						/>
 					))}
 				{requestedUser?.memberRequests &&
@@ -57,7 +61,7 @@ export default function MemberList({ groupID, className }: MemberListProps) {
 								user={{
 									...requestedUser,
 									groupRole: "REQUESTED",
-									groupID: groupID,
+									groupID: group.groupID,
 								}}
 							/>
 						)
@@ -75,14 +79,20 @@ export default function MemberList({ groupID, className }: MemberListProps) {
 								user={{
 									...invitedUser,
 									groupRole: "INVITED",
-									groupID: groupID,
+									groupID: group.groupID,
 								}}
 							/>
 						)
 					)}
-				<Member
-					user={{ userID: "", userName: "", groupID: groupID }}
-				></Member>
+				{group.groupRole == "ADMIN" && (
+					<Member
+						user={{
+							userID: "",
+							userName: "",
+							groupID: group.groupID,
+						}}
+					></Member>
+				)}
 			</div>
 		</div>
 	);

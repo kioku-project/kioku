@@ -1,10 +1,11 @@
+import { Group } from "../../../types/Group";
 import MemberList from "../../group/MemberList";
 
 interface MembersTabProps {
 	/**
-	 * groupID
+	 * group entity
 	 */
-	groupID: string;
+	group: Group;
 	/**
 	 * Additional classes
 	 */
@@ -14,10 +15,10 @@ interface MembersTabProps {
 /**
  * UI component for the MembersTab
  */
-export const MembersTab = ({ groupID, className }: MembersTabProps) => {
+export const MembersTab = ({ group, className }: MembersTabProps) => {
 	return (
 		<div>
-			<MemberList groupID={groupID}></MemberList>
+			<MemberList group={group}></MemberList>
 		</div>
 	);
 };

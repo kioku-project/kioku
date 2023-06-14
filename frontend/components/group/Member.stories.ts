@@ -68,7 +68,7 @@ export const Requested: Story = {
 			userID: "U-12345678",
 			userName: "Test User",
 			groupID: "G-12345678",
-			status: "requested",
+			groupRole: "REQUESTED",
 		},
 	},
 };
@@ -79,7 +79,7 @@ export const Invited: Story = {
 			userID: "U-12345678",
 			userName: "Test User",
 			groupID: "G-12345678",
-			status: "invited",
+			groupRole: "INVITED",
 		},
 	},
 };

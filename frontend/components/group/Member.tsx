@@ -2,9 +2,10 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 import { authedFetch } from "../../util/reauth";
-import { Check, UserCheck, UserMinus, UserPlus, UserX, X } from "react-feather";
+import { Check, UserCheck, UserX, X } from "react-feather";
 import React, { useState } from "react";
 import { Text } from "../Text";
+import { User } from "../../types/User";
 
 interface MemberProps {
 	/**

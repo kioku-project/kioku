@@ -6,6 +6,7 @@ import { ChangeEvent, useState } from "react";
 import { DangerAction } from "../../input/DangerAction";
 import { authedFetch } from "../../../util/reauth";
 import { toast } from "react-toastify";
+import { User } from "../../../types/User";
 
 interface UserSettingsTabProps {
 	/**

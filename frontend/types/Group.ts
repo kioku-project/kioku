@@ -1,4 +1,4 @@
-type Group = {
+export type Group = {
 	groupID: string;
 	groupName: string;
 	groupDescription?: string;

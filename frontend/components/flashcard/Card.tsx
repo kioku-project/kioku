@@ -5,12 +5,13 @@ import { authedFetch } from "../../util/reauth";
 import { Check, Edit2, Trash, X } from "react-feather";
 import React, { useState } from "react";
 import { Text } from "../Text";
+import { Card as CardType } from "../../types/Card";
 
 interface CardProps {
 	/**
 	 * Card to display. If cardID is undefined, placeholder for creating cards will be displayed.
 	 */
-	card: Card;
+	card: CardType;
 	/**
 	 * Additional classes
 	 */
@@ -18,7 +19,7 @@ interface CardProps {
 	/**
 	 * click handler
 	 */
-	setCard?: (card: Card) => void;
+	setCard?: (card: CardType) => void;
 }
 
 /**

@@ -12,6 +12,7 @@ import { GroupsTab } from "../components/navigation/Tabs/GroupsTab";
 import { DecksTab } from "../components/navigation/Tabs/DecksTab";
 import { UserSettingsTab } from "../components/navigation/Tabs/UserSettingsTab";
 import { InvitationsTab } from "../components/navigation/Tabs/InvitationsTabs";
+import { Group } from "../types/Group";
 
 export default function Home() {
 	const fetcher = (url: RequestInfo | URL) =>

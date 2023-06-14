@@ -13,6 +13,7 @@ import { InputField } from "../form/InputField";
 import { authedFetch } from "../../util/reauth";
 import { useSWRConfig } from "swr";
 import { toast } from "react-toastify";
+import { Card } from "../../types/Card";
 
 interface FlashcardProps {
 	/**
@@ -72,7 +73,7 @@ export const Flashcard = ({
 	useEffect(() => {
 		setFlashCard(card);
 		setTempCard(card);
-	}, [card]);
+	}, [card, tempCard]);
 
 	return (
 		<div
@@ -238,6 +239,7 @@ export const Flashcard = ({
 										cardID: card.cardID,
 										rating: 0,
 									});
+									setSide(0);
 								}
 							}}
 						>
@@ -253,6 +255,7 @@ export const Flashcard = ({
 										cardID: card.cardID,
 										rating: 1,
 									});
+									setSide(0);
 								}
 							}}
 						>
@@ -268,6 +271,7 @@ export const Flashcard = ({
 										cardID: card.cardID,
 										rating: 2,
 									});
+									setSide(0);
 								}
 							}}
 						>
@@ -286,6 +290,7 @@ export const Flashcard = ({
 	}
 
 	async function modifyCard(card: Card) {
+		console.log(card);
 		const response = await authedFetch(`/api/cards/${card.cardID}`, {
 			method: "PUT",
 			headers: {

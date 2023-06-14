@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -10,6 +10,9 @@ import {
 } from "react-feather";
 import { Button } from "../input/Button";
 import { InputField } from "../form/InputField";
+import { authedFetch } from "../../util/reauth";
+import { useSWRConfig } from "swr";
+import { toast } from "react-toastify";
 
 interface FlashcardProps {
 	/**
@@ -17,9 +20,13 @@ interface FlashcardProps {
 	 */
 	id: string;
 	/**
-	 * Flashcard sides
+	 * Flashcard
 	 */
-	sides: { header: string; description: string }[];
+	card: Card;
+	/**
+	 * Cards left to learn
+	 */
+	dueCards?: number;
 	/**
 	 * Flashcard side to show
 	 */
@@ -36,6 +43,10 @@ interface FlashcardProps {
 	 * Additional classes
 	 */
 	className?: string;
+	/**
+	 * callback to push rating
+	 */
+	push?: (body: { cardID: string; rating: number }) => void;
 }
 
 /**
@@ -43,24 +54,25 @@ interface FlashcardProps {
  */
 export const Flashcard = ({
 	id,
-	sides,
+	card,
+	dueCards,
 	cardSide = 0,
 	isEdit = false,
 	fullSize = false,
 	className,
+	push,
 }: FlashcardProps) => {
-	const [flashCard, setFlashCard] = useState(sides);
-	const [tempCard, setTempCard] = useState(flashCard);
-	const [side, setSide] = useState(cardSide % tempCard.length);
-	const [edit, setEdit] = useState(isEdit);
+	const { mutate } = useSWRConfig();
 
-	const cardsleft = 16; // TODO: currently hardcoded, has to be implemented after SRS
+	const [flashCard, setFlashCard] = useState<Card>(card);
+	const [tempCard, setTempCard] = useState<Card>(card);
+	const [side, setSide] = useState<number>(cardSide % card.sides?.length);
+	const [edit, setEdit] = useState<boolean>(isEdit);
 
-	function editField(field: "header" | "description", value: string) {
-		const card = structuredClone(tempCard);
-		card[side][field] = value;
+	useEffect(() => {
+		setFlashCard(card);
 		setTempCard(card);
-	}
+	}, [card]);
 
 	return (
 		<div
@@ -80,17 +92,18 @@ export const Flashcard = ({
 							id="headerInputId"
 							type="text"
 							name="headerInput"
-							value={tempCard[side]?.header}
-							placeholder="Header"
+							value={tempCard.sides[side]?.header}
+							placeholder={edit ? "Header" : ""}
+							style="secondary"
 							readOnly={!edit}
 							className="text-lg sm:text-xl md:text-2xl lg:text-3xl"
-							onChange={(event) =>
-								editField("header", event.target.value)
-							}
+							onChange={(event) => {
+								editField("header", event.target.value);
+							}}
 						></InputField>
 						{edit ? (
 							<div className="flex flex-row items-center space-x-5">
-								{tempCard.length > 1 && (
+								{tempCard.sides.length > 1 && (
 									<FileMinus
 										id="deleteSideButtonId"
 										className="hover:cursor-pointer"
@@ -98,12 +111,12 @@ export const Flashcard = ({
 											setSide(
 												Math.min(
 													side,
-													tempCard.length - 2
+													tempCard.sides.length - 2
 												)
 											);
 											const card =
 												structuredClone(tempCard);
-											card.splice(side, 1);
+											card.sides.splice(side, 1);
 											setTempCard(card);
 										}}
 									></FileMinus>
@@ -112,14 +125,23 @@ export const Flashcard = ({
 									id="addSideButtonId"
 									className="hover:cursor-pointer"
 									onClick={() => {
-										setTempCard([
-											...tempCard.slice(0, side + 1),
-											{
-												header: "",
-												description: "",
-											},
-											...tempCard.slice(side + 1),
-										]);
+										setTempCard({
+											...tempCard,
+											sides: [
+												...tempCard.sides.slice(
+													0,
+													side + 1
+												),
+												{
+													cardSideID: "",
+													header: "",
+													description: "",
+												},
+												...tempCard.sides.slice(
+													side + 1
+												),
+											],
+										});
 										setSide(side + 1);
 										const headerInput =
 											document.querySelector(
@@ -135,6 +157,7 @@ export const Flashcard = ({
 										onClick={() => {
 											setFlashCard(tempCard);
 											setEdit(false);
+											modifyCard(flashCard);
 										}}
 									></Check>
 									<X
@@ -161,8 +184,9 @@ export const Flashcard = ({
 						id="descriptionInputId"
 						type="text"
 						name="descriptionInput"
-						value={tempCard[side]?.description}
-						placeholder="Description"
+						value={tempCard.sides[side]?.description}
+						placeholder={edit ? "Description" : ""}
+						style="tertiary"
 						readOnly={!edit}
 						className="text-base text-kiokuLightBlue sm:text-lg md:text-xl lg:text-2xl"
 						onChange={(event) =>
@@ -176,7 +200,13 @@ export const Flashcard = ({
 				{/* Show amount of cards left if on first side */}
 				{!side && (
 					<div className="flex h-8 w-full items-center text-xs font-semibold text-kiokuLightBlue sm:h-full md:text-sm">
-						{cardsleft} cards left
+						{`${
+							dueCards
+								? `${dueCards} card${
+										dueCards != 1 ? "s" : ""
+								  } left`
+								: ""
+						}`}
 					</div>
 				)}
 				{/* Show arrow left if not on first side */}
@@ -188,7 +218,7 @@ export const Flashcard = ({
 					></ArrowLeft>
 				)}
 				{/* Show arrow right if we're not on the last side */}
-				{side < tempCard.length - 1 && (
+				{side < tempCard.sides.length - 1 && (
 					<ArrowRight
 						id="arrowRightId"
 						className="h-8 hover:cursor-pointer md:h-10 lg:h-12"
@@ -196,12 +226,20 @@ export const Flashcard = ({
 					></ArrowRight>
 				)}
 				{/* Show rating buttons if on last side */}
-				{side >= tempCard.length - 1 && !edit && (
+				{side >= tempCard.sides.length - 1 && !edit && (
 					<div className="flex flex-row justify-end space-x-1">
 						<Button
 							id="buttonHardId"
 							size="small"
 							className="w-auto"
+							onClick={() => {
+								if (push) {
+									push({
+										cardID: card.cardID,
+										rating: 0,
+									});
+								}
+							}}
 						>
 							Hard
 						</Button>
@@ -209,6 +247,14 @@ export const Flashcard = ({
 							id="buttonMediumId"
 							size="small"
 							className="w-auto"
+							onClick={() => {
+								if (push) {
+									push({
+										cardID: card.cardID,
+										rating: 1,
+									});
+								}
+							}}
 						>
 							Medium
 						</Button>
@@ -216,6 +262,14 @@ export const Flashcard = ({
 							id="buttonEasyId"
 							size="small"
 							className="w-auto"
+							onClick={() => {
+								if (push) {
+									push({
+										cardID: card.cardID,
+										rating: 2,
+									});
+								}
+							}}
 						>
 							Easy
 						</Button>
@@ -224,4 +278,28 @@ export const Flashcard = ({
 			</div>
 		</div>
 	);
+
+	function editField(field: "header" | "description", value: string) {
+		const card = structuredClone(tempCard);
+		card.sides[side][field] = value;
+		setTempCard(card);
+	}
+
+	async function modifyCard(card: Card) {
+		const response = await authedFetch(`/api/cards/${card.cardID}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				sides: card.sides,
+			}),
+		});
+		if (response?.ok) {
+			toast.info("Card updated!", { toastId: "updatedCardToast" });
+		} else {
+			toast.error("Error!", { toastId: "updatedCardToast" });
+		}
+		mutate(`/api/decks/${card.deckID}/cards`);
+	}
 };

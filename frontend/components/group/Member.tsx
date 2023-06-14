@@ -38,41 +38,50 @@ export default function Member({ id, user, className }: MemberProps) {
 						{user?.userName}
 					</Text>
 					<div className="flex flex-row items-center space-x-5">
-						<div>{user.groupRole}</div>
-						{isDelete && (
-							<div className="flex flex-row space-x-3">
-								<Check
-									className="hover:cursor-pointer"
-									onClick={() => {
-										deleteMember()
-											.then((result) => {})
-											.catch((error) => {});
-									}}
-								></Check>
-								<X
-									className="hover:cursor-pointer"
-									onClick={() => setDelete(false)}
-								></X>
-							</div>
-						)}
-						{/* {!isDelete && !user.status && (
-							<UserMinus
-								data-testid={`deleteUserButtonId`}
-								id={`deleteUser${user.userID}ButtonId`}
-								className="hover:cursor-pointer"
-								onClick={() => setDelete(true)}
-							></UserMinus>
-						)} */}
-						{user.status == "requested" && (
+						{user.groupRole != "REQUESTED" &&
+							user.groupRole != "INVITED" && (
+								<>
+									<div>{user.groupRole}</div>
+									{isDelete && (
+										<div className="flex flex-row space-x-3">
+											<Check
+												className="hover:cursor-pointer"
+												onClick={() => {
+													deleteMember()
+														.then((result) => {})
+														.catch((error) => {});
+												}}
+											></Check>
+											<X
+												className="hover:cursor-pointer"
+												onClick={() => setDelete(false)}
+											></X>
+										</div>
+									)}
+									{/* {!isDelete && (
+										<UserMinus
+											data-testid={`deleteUserButtonId`}
+											id={`deleteUser${user.userID}ButtonId`}
+											className="hover:cursor-pointer"
+											onClick={() => setDelete(true)}
+										></UserMinus>
+									)} */}
+								</>
+							)}
+
+						{user.groupRole == "REQUESTED" && (
 							<div className="flex flex-row space-x-3">
 								{/* <div className="italic text-kiokuLightBlue">
-									requested
+									{user.groupRole.toLowerCase()}
 								</div> */}
 								<div className="flex flex-row space-x-3">
 									<UserCheck
 										className="hover:cursor-pointer"
 										onClick={() => {
-											acceptUser(true)
+											inviteUser(
+												user.userEmail ?? "",
+												true
+											)
 												.then((result) => {})
 												.catch((error) => {});
 										}}
@@ -80,7 +89,10 @@ export default function Member({ id, user, className }: MemberProps) {
 									<UserX
 										className="hover:cursor-pointer"
 										onClick={() => {
-											acceptUser(false)
+											inviteUser(
+												user.userEmail ?? "",
+												false
+											)
 												.then((result) => {})
 												.catch((error) => {});
 										}}
@@ -88,12 +100,17 @@ export default function Member({ id, user, className }: MemberProps) {
 								</div>
 							</div>
 						)}
-						{user.status == "invited" && (
+						{user.groupRole == "INVITED" && (
 							<div className="flex flex-row space-x-3">
 								<div className="italic text-kiokuLightBlue">
 									pending
 								</div>
-								{/* <X className="hover:cursor-pointer"></X> */}
+								<X
+									className="hover:cursor-pointer"
+									onClick={() => {
+										inviteUser(user.userEmail ?? "", false);
+									}}
+								></X>
 							</div>
 						)}
 					</div>
@@ -106,10 +123,14 @@ export default function Member({ id, user, className }: MemberProps) {
 						className="bg-transparent text-kiokuLightBlue outline-none"
 						placeholder="Invite user with email"
 						onKeyUp={(event) => {
+							const userInputField = document.querySelector(
+								"#userInputFieldId"
+							) as HTMLInputElement;
 							if (event.key === "Enter") {
-								inviteUser()
+								inviteUser(userInputField.value, true)
 									.then((result) => {})
 									.catch((error) => {});
+								userInputField.value = "";
 							}
 						}}
 					></input>
@@ -118,19 +139,16 @@ export default function Member({ id, user, className }: MemberProps) {
 		</div>
 	);
 
-	async function inviteUser() {
-		const userInputField = document.querySelector(
-			"#userInputFieldId"
-		) as HTMLInputElement;
+	async function inviteUser(userEmail: string, invite: boolean) {
 		const response = await authedFetch(
-			`/api/groups/${user.groupID}/members/invitations`,
+			`/api/groups/${user.groupID}/members/invitation`,
 			{
-				method: "POST",
+				method: `${invite ? "POST" : "DELETE"}`,
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					invitedUserEmail: userInputField.value,
+					invitedUserEmail: userEmail,
 				}),
 			}
 		);
@@ -138,32 +156,11 @@ export default function Member({ id, user, className }: MemberProps) {
 			toast.info("User invited", {
 				toastId: "invitedUserToast",
 			});
-			userInputField.value = "";
 		} else {
 			toast.error("Error!", { toastId: "invitedUserToast" });
 		}
-		mutate(`/api/group/${user.groupID}/members/invitations`);
-	}
-
-	async function acceptUser(accepted: boolean) {
-		const response = await authedFetch(
-			`/api/groups/${user.groupID}/members/requests/${user?.admissionID}`,
-			{
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ isAccepted: accepted }),
-			}
-		);
-		if (response?.ok) {
-			toast.info(`User ${accepted ? "accepted" : "rejected"}!`, {
-				toastId: "acceptedUserToast",
-			});
-		} else {
-			toast.error("Error!", { toastId: "acceptedUserToast" });
-		}
 		mutate(`/api/groups/${user.groupID}/members`);
+		mutate(`/api/groups/${user.groupID}/members/invitations`);
 		mutate(`/api/groups/${user.groupID}/members/requests`);
 	}
 

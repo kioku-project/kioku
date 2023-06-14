@@ -7,21 +7,26 @@ const meta: Meta<typeof Flashcard> = {
 	component: Flashcard,
 	tags: ["autodocs"],
 	args: {
-		id: "CardId",
-		sides: [
-			{
-				header: "Front Header",
-				description: "Front Description",
-			},
-			{
-				header: "Middle Header",
-				description: "Middle Description",
-			},
-			{
-				header: "Back Header",
-				description: "Back Description",
-			},
-		],
+		card: {
+			cardID: "C-12345678",
+			sides: [
+				{
+					cardSideID: "S-12345678",
+					header: "Front Header",
+					description: "Front Description",
+				},
+				{
+					cardSideID: "S-12345678",
+					header: "Middle Header",
+					description: "Middle Description",
+				},
+				{
+					cardSideID: "S-12345678",
+					header: "Back Header",
+					description: "Back Description",
+				},
+			],
+		},
 	},
 };
 

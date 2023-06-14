@@ -6,7 +6,7 @@ const meta: Meta<typeof Deck> = {
 	component: Deck,
 	tags: ["autodocs"],
 	args: {
-		id: "DeckId",
+		group: { groupID: "G-12345678", groupName: "Example Group" },
 	},
 };
 
@@ -15,19 +15,19 @@ type Story = StoryObj<typeof Deck>;
 
 export const NoCardsDue: Story = {
 	args: {
-		deck: { name: "Example Deck", count: 0 },
+		deck: { deckID: "D-12345678", deckName: "Example Deck", dueCards: 0 },
 	},
 };
 
 export const WithCardsDue: Story = {
 	args: {
-		deck: { name: "Example Deck", count: 1 },
+		deck: { deckID: "D-12345678", deckName: "Example Deck", dueCards: 1 },
 	},
 };
 
 export const ManyCardsDue: Story = {
 	args: {
-		deck: { name: "Example Deck", count: 100 },
+		deck: { deckID: "D-12345678", deckName: "Example Deck", dueCards: 100 },
 	},
 };
 

@@ -65,13 +65,11 @@ export const Flashcard = ({
 }: FlashcardProps) => {
 	const { mutate } = useSWRConfig();
 
-	const [flashCard, setFlashCard] = useState<Card>(card);
 	const [tempCard, setTempCard] = useState<Card>(card);
 	const [side, setSide] = useState<number>(cardSide % card.sides?.length);
 	const [edit, setEdit] = useState<boolean>(isEdit);
 
 	useEffect(() => {
-		setFlashCard(card);
 		setTempCard(card);
 	}, [card, tempCard]);
 
@@ -156,16 +154,17 @@ export const Flashcard = ({
 										id="saveButtonId"
 										className="hover:cursor-pointer"
 										onClick={() => {
-											setFlashCard(tempCard);
 											setEdit(false);
-											modifyCard(flashCard);
+											modifyCard(tempCard);
 										}}
 									></Check>
 									<X
 										id="cancelButtonId"
 										className="hover:cursor-pointer"
 										onClick={() => {
-											setTempCard(flashCard);
+											mutate(
+												`/api/decks/${card.deckID}/cards`
+											);
 											setEdit(false);
 										}}
 									></X>

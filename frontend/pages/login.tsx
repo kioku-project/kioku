@@ -149,8 +149,8 @@ export default function Page() {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				email: email?.value,
-				password: password?.value,
+				userEmail: email?.value,
+				userPassword: password?.value,
 			}),
 		});
 		if (response.ok) {
@@ -188,9 +188,9 @@ export default function Page() {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					email: email?.value,
-					name: name?.value,
-					password: password?.value,
+					userEmail: email?.value,
+					userName: name?.value,
+					userPassword: password?.value,
 				}),
 			});
 			if (response.ok) {

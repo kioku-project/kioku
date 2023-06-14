@@ -4,4 +4,6 @@ type Group = {
 	groupDescription?: string;
 	isDefault?: boolean;
 	groupType?: string;
+	groupRole?: "ADMIN" | "WRITE" | "READ" | "INVITED" | "REQUESTED";
+	isEmpty?: boolean;
 };

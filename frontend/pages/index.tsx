@@ -1,10 +1,67 @@
-import React from "react";
+import React, { ReactNode, useState } from "react";
 import Authenticated from "../components/accessControl/Authenticated";
-import DeckOverview from "../components/deck/DeckOverview";
 import { Navbar } from "../components/navigation/Navbar";
 import Head from "next/head";
+import useSWR from "swr";
+import { authedFetch } from "../util/reauth";
+import { Header } from "../components/layout/Header";
+import { TabBar } from "../components/navigation/Tabs/TabBar";
+import { TabHeader } from "../components/navigation/Tabs/TabHeader";
+import { StatisticsTab } from "../components/navigation/Tabs/StatisticsTab";
+import { GroupsTab } from "../components/navigation/Tabs/GroupsTab";
+import { DecksTab } from "../components/navigation/Tabs/DecksTab";
+import { UserSettingsTab } from "../components/navigation/Tabs/UserSettingsTab";
+import { InvitationsTab } from "../components/navigation/Tabs/InvitationsTabs";
 
 export default function Home() {
+	const fetcher = (url: RequestInfo | URL) =>
+		authedFetch(url, {
+			method: "GET",
+		}).then((res) => res?.json());
+	const { data: groups } = useSWR("/api/groups", fetcher);
+	const { data: user } = useSWR("/api/user", fetcher);
+	const { data: due } = useSWR("/api/user/dueCards", fetcher);
+
+	const tabs: { [tab: string]: ReactNode } = {
+		decks: (
+			<TabHeader
+				id="decksTabHeaderId"
+				name="Decks"
+				style="decks"
+			></TabHeader>
+		),
+		groups: (
+			<TabHeader
+				id="groupTabHeaderId"
+				name="Groups"
+				style="groups"
+			></TabHeader>
+		),
+		invitations: (
+			<TabHeader
+				id="invitationTabHeaderId"
+				name="Invitations"
+				style="invitations"
+			></TabHeader>
+		),
+		statistics: (
+			<TabHeader
+				id="StatisticsTabHeaderId"
+				name="Statistics"
+				style="statistics"
+			></TabHeader>
+		),
+		settings: (
+			<TabHeader
+				id="SettingsTabHeaderId"
+				name="Settings"
+				style="settings"
+			></TabHeader>
+		),
+	};
+
+	const [currentTab, setTab] = useState("decks");
+
 	return (
 		<div>
 			<Head>
@@ -15,35 +72,48 @@ export default function Home() {
 			<Authenticated>
 				<div className="min-w-screen flex h-screen select-none flex-col bg-eggshell">
 					<Navbar login={true}></Navbar>
-					<div className="space-y-10 p-10">
-						<DeckOverview
-							name="Your personal Decks"
-							id="personalDecks"
-							decks={[
-								{ name: "Japan", count: 0 },
-								{ name: "BWL Grundlagen", count: 1 },
-								{ name: "Marketing", count: 2 },
-								{ name: "Mathe", count: 3 },
-								{ name: "English", count: 4 },
-								{ name: "Deck 1", count: 5 },
-								{ name: "Deck 2", count: 6 },
-								{ name: "Deck 3", count: 7 },
-								{ name: "Deck 4", count: 8 },
-								{ name: "Deck 5", count: 9 },
-								{ name: "Deck 6", count: 10 },
-								{ name: "Deck 7", count: 11 },
-							]}
-						></DeckOverview>
-						<DeckOverview
-							name="Your Groups"
-							id="groupDecks"
-							decks={[
-								{ name: "Japan Class", count: 0 },
-								{ name: "DHBW", count: 1 },
-								{ name: "BWL", count: 2 },
-							]}
-						></DeckOverview>
-					</div>
+					{user && groups && (
+						<div className="flex flex-col space-y-3 p-5 md:space-y-5 md:p-10">
+							<Header
+								id="userPageHeaderId"
+								user={{ ...user, ...due }}
+							></Header>
+							<TabBar
+								id="deckTabBarId"
+								tabs={tabs}
+								currentTab={currentTab}
+								setTab={setTab}
+							></TabBar>
+							<div className="">
+								{{
+									decks: (
+										<DecksTab
+											group={
+												groups?.groups.filter(
+													(group: Group) =>
+														group.isDefault
+												)[0]
+											}
+										></DecksTab>
+									),
+									groups: (
+										<GroupsTab
+											groups={groups.groups}
+										></GroupsTab>
+									),
+									invitations: (
+										<InvitationsTab></InvitationsTab>
+									),
+									statistics: <StatisticsTab></StatisticsTab>,
+									settings: (
+										<UserSettingsTab
+											user={user}
+										></UserSettingsTab>
+									),
+								}[currentTab] || <div>Fehler</div>}
+							</div>
+						</div>
+					)}
 				</div>
 			</Authenticated>
 		</div>

@@ -133,7 +133,7 @@ func (e *Collaboration) GetUserGroups(_ context.Context, req *pb.UserIDRequest, 
 	for index := range protoGroups {
 		protoGroupsWithUserRole[index] = &pb.GroupWithUserRole{
 			Group: protoGroups[index],
-			Role:  protoRoles[index],
+			Role:  &protoRoles[index],
 		}
 	}
 	rsp.Groups = protoGroupsWithUserRole
@@ -164,14 +164,33 @@ func (e *Collaboration) CreateNewGroupWithAdmin(_ context.Context, req *pb.Creat
 
 func (e *Collaboration) GetGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupWithUserRole) error {
 	logger.Infof("Received Collaboration.GetGroup request: %v", req)
-	group, protoRole, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_INVITED)
+	group, err := e.store.FindGroupByID(req.GroupID)
 	if err != nil {
 		return err
 	}
 	protoGroup := converter.StoreGroupToProtoGroupConverter(*group)
+
+	_, err = e.store.GetGroupUserRole(req.UserID, req.GroupID)
+	if err != nil {
+		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			logger.Infof("User does not have a group role")
+			if group.GroupType == model.Public {
+				logger.Infof("Group is public, so still returning information")
+				*rsp = pb.GroupWithUserRole{Group: protoGroup}
+				return nil
+			}
+			logger.Infof("Group is private")
+			return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+		}
+		return err
+	}
+	group, protoRole, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_INVITED)
+	if err != nil {
+		return err
+	}
 	*rsp = pb.GroupWithUserRole{
 		Group: protoGroup,
-		Role:  protoRole,
+		Role:  &protoRole,
 	}
 	logger.Infof("Successfully got information for group %s", req.GroupID)
 	return nil

@@ -48,7 +48,7 @@ message UserGroupsResponse {
 
 message GroupWithUserRole {
 	Group group = 1;
-	GroupRole role = 2;
+	optional GroupRole role = 2;
 }
 
 message Group {

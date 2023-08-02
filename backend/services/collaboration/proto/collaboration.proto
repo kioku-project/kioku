@@ -48,7 +48,7 @@ message UserGroupsResponse {
 
 message GroupWithUserRole {
 	Group group = 1;
-	optional GroupRole role = 2;
+	GroupRole role = 2;
 }
 
 message Group {
@@ -145,9 +145,10 @@ message GroupRoleResponse {
 }
 
 enum GroupRole {
-	REQUESTED = 0;
-	INVITED = 1;
-	READ = 2;
-	WRITE = 3;
-	ADMIN = 4;
+	EXTERNAL = 0;
+	REQUESTED = 1;
+	INVITED = 2;
+	READ = 3;
+	WRITE = 4;
+	ADMIN = 5;
 }

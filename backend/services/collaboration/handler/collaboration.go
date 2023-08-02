@@ -133,7 +133,7 @@ func (e *Collaboration) GetUserGroups(_ context.Context, req *pb.UserIDRequest, 
 	for index := range protoGroups {
 		protoGroupsWithUserRole[index] = &pb.GroupWithUserRole{
 			Group: protoGroups[index],
-			Role:  &protoRoles[index],
+			Role:  protoRoles[index],
 		}
 	}
 	rsp.Groups = protoGroupsWithUserRole
@@ -176,7 +176,7 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pb.GroupRequest, rsp 
 			logger.Infof("User does not have a group role")
 			if group.GroupType == model.Public {
 				logger.Infof("Group is public, so still returning information")
-				*rsp = pb.GroupWithUserRole{Group: protoGroup}
+				*rsp = pb.GroupWithUserRole{Group: protoGroup, Role: pb.GroupRole_EXTERNAL}
 				return nil
 			}
 			logger.Infof("Group is private")
@@ -190,7 +190,7 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pb.GroupRequest, rsp 
 	}
 	*rsp = pb.GroupWithUserRole{
 		Group: protoGroup,
-		Role:  &protoRole,
+		Role:  protoRole,
 	}
 	logger.Infof("Successfully got information for group %s", req.GroupID)
 	return nil

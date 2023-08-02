@@ -92,17 +92,13 @@ func StoreGroupToProtoGroupConverter(group model.Group) *pbCollaboration.Group {
 }
 
 func ProtoGroupWithRoleToFiberGroupConverter(group *pbCollaboration.GroupWithUserRole) FiberGroup {
-	groupRole := "None"
-	if group.Role != nil {
-		groupRole = group.Role.String()
-	}
 	return FiberGroup{
 		GroupID:          group.Group.GroupID,
 		GroupName:        group.Group.GroupName,
 		GroupDescription: group.Group.GroupDescription,
 		IsDefault:        group.Group.IsDefault,
 		GroupType:        group.Group.GroupType.String(),
-		GroupRole:        groupRole,
+		GroupRole:        group.Role.String(),
 	}
 }
 

@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const (
+var (
 	id        = "id"
 	name      = "name"
 	email     = "email"
@@ -175,6 +175,7 @@ func TestProtoGroupMemberRequestToFiberGroupMemberRequestConverter(t *testing.T)
 		User: &pbCollaboration.User{
 			UserID: id,
 			Name:   name,
+			Email:  &email,
 		},
 	}
 

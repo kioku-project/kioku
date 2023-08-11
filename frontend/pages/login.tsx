@@ -3,10 +3,8 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { InputField } from "../components/form/InputField";
 import { FormButton } from "../components/form/FormButton";
 

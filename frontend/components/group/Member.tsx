@@ -72,9 +72,6 @@ export default function Member({ id, user, className }: MemberProps) {
 
 						{user.groupRole == "REQUESTED" && (
 							<div className="flex flex-row space-x-3">
-								{/* <div className="italic text-kiokuLightBlue">
-									{user.groupRole.toLowerCase()}
-								</div> */}
 								<div className="flex flex-row space-x-3">
 									<UserCheck
 										className="hover:cursor-pointer"
@@ -166,7 +163,6 @@ export default function Member({ id, user, className }: MemberProps) {
 	}
 
 	async function deleteMember() {
-		// TODO: backend
 		const response = await authedFetch(`/api/groups/${user.groupID}`, {
 			method: "DELETE",
 			headers: {

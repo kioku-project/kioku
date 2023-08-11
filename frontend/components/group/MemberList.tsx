@@ -30,7 +30,7 @@ export default function MemberList({ group, className }: MemberListProps) {
 	const { data: requestedUser } = useSWR(
 		`/api/groups/${group.groupID}/members/requests`,
 		fetcher
-	); //TODO: admissionID löschen
+	);
 	const { data: invitedUser } = useSWR(
 		`/api/groups/${group.groupID}/members/invitations`,
 		fetcher

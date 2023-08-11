@@ -202,11 +202,8 @@ export const Flashcard = ({
 				{!side && (
 					<div className="flex h-8 w-full items-center text-xs font-semibold text-kiokuLightBlue sm:h-full md:text-sm">
 						{`${
-							dueCards
-								? `${dueCards} card${
-										dueCards != 1 ? "s" : ""
-								  } left`
-								: ""
+							dueCards &&
+							`${dueCards} card${dueCards != 1 ? "s" : ""} left`
 						}`}
 					</div>
 				)}

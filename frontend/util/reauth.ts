@@ -28,10 +28,10 @@ export async function authedFetch(
 	}
 	const answ = await fetch(input, {
 		...init,
-		headers: Object.assign(
-			{ Authorization: "Bearer " + getCookie("access_token") },
-			init?.headers
-		),
+		headers: {
+			...init?.headers,
+			Authorization: "Bearer " + getCookie("access_token"),
+		},
 	});
 	return answ;
 }

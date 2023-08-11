@@ -62,7 +62,7 @@ export const Header = ({
 			<div className="flex flex-col font-black">
 				<div className="flex flex-row items-center space-x-3">
 					<Text style="primary" size="xl" className="">
-						{deck && deck.deckName}
+						{deck?.deckName}
 						{!deck && group && group.groupName}
 						{user && `Welcome ${user.userName}`}
 					</Text>

@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Authenticated from "../../../components/accessControl/Authenticated";
 import { Navbar } from "../../../components/navigation/Navbar";
 import { useRouter } from "next/router";
-import { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
 import { authedFetch } from "../../../util/reauth";
 import useSWR from "swr";
@@ -13,7 +13,6 @@ import { MembersTab } from "../../../components/navigation/Tabs/MembersTab";
 import { DecksTab } from "../../../components/navigation/Tabs/DecksTab";
 import { TabBar } from "../../../components/navigation/Tabs/TabBar";
 import { GroupSettingsTab } from "../../../components/navigation/Tabs/GroupSettingTab";
-import React from "react";
 
 export default function Page() {
 	const router = useRouter();

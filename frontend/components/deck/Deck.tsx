@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import useSWR, { useSWRConfig } from "swr";
 import { authedFetch } from "../../util/reauth";
 import { AlertTriangle } from "react-feather";
-import { Group } from "../../types/Group";
+import { Group, groupRole } from "../../types/Group";
 import { Deck as DeckType } from "../../types/Deck";
 
 interface DeckProps {
@@ -63,13 +63,22 @@ export default function Deck({ group, deck, className }: DeckProps) {
 						deck ? "" : "text-kiokuDarkBlue"
 					}`}
 				>
-					{deck ? (
-						deck.deckName.slice(0, 2).toUpperCase()
-					) : group.isEmpty ? (
-						<AlertTriangle className="" size={50}></AlertTriangle>
-					) : (
-						"+"
-					)}
+					{/* display first two characters of deckName */}
+					{deck?.deckName.slice(0, 2).toUpperCase()}
+					{/* if no deck provided, display placeholder for creating decks for user with write permission */}
+					{!deck &&
+						group.groupRole &&
+						groupRole[group.groupRole] >= groupRole.WRITE &&
+						"+"}
+					{/* if group is empty, display placeholder for user without write permission */}
+					{group.isEmpty &&
+						group.groupRole &&
+						groupRole[group.groupRole] < groupRole.WRITE && (
+							<AlertTriangle
+								className=""
+								size={50}
+							></AlertTriangle>
+						)}
 				</div>
 				{!!dueCards && dueCards > 0 && (
 					<div className="absolute right-[-0.3rem] top-[-0.5rem] flex h-5 w-5 rounded-sm bg-kiokuRed p-1">
@@ -80,24 +89,30 @@ export default function Deck({ group, deck, className }: DeckProps) {
 				)}
 			</div>
 			<div className="text-center font-semibold text-kiokuDarkBlue">
-				{deck ? (
-					deck.deckName
-				) : group.isEmpty ? (
-					"No decks in group"
-				) : (
-					<input
-						id={`deckNameInput${group.groupID}`}
-						className="w-40 bg-transparent text-center outline-none"
-						placeholder={"Create new Deck"}
-						onKeyUp={(event) => {
-							if (event.key === "Enter") {
-								createDeck()
-									.then((result) => {})
-									.catch((error) => {});
-							}
-						}}
-					></input>
-				)}
+				{/* display deckName */}
+				{deck?.deckName}
+				{/* if no deck provided, display placeholder for creating decks for user with write permission */}
+				{!deck &&
+					group.groupRole &&
+					groupRole[group.groupRole] >= groupRole.WRITE && (
+						<input
+							id={`deckNameInput${group.groupID}`}
+							className="w-40 bg-transparent text-center outline-none"
+							placeholder={"Create new Deck"}
+							onKeyUp={(event) => {
+								if (event.key === "Enter") {
+									createDeck()
+										.then((result) => {})
+										.catch((error) => {});
+								}
+							}}
+						></input>
+					)}
+				{/* if group is empty, display placeholder for user without write permission */}
+				{group.isEmpty &&
+					group.groupRole &&
+					groupRole[group.groupRole] < groupRole.WRITE &&
+					"No decks in group"}
 			</div>
 		</div>
 	);

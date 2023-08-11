@@ -4,7 +4,7 @@ import { authedFetch } from "../../util/reauth";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { Section } from "../layout/Section";
-import { Group } from "../../types/Group";
+import { Group, groupRole } from "../../types/Group";
 
 interface DeckOverviewProps {
 	/**
@@ -56,23 +56,20 @@ export default function DeckOverview({ group, className }: DeckOverviewProps) {
 										<Deck
 											key={deck.deckID}
 											group={group}
-											deck={{
-												...deck,
-												dueCards: 16,
-											}}
+											deck={deck}
 										/>
 									)
 								)}
-							{group.groupRole == "ADMIN" ||
-							group.groupRole == "WRITE" ? (
-								<Deck group={group} />
-							) : (
-								decks &&
-								!decks[0]?.deckID && (
-									<Deck
-										group={{ ...group, isEmpty: true }}
-									></Deck>
-								)
+							{((group.groupRole &&
+								groupRole[group.groupRole] >=
+									groupRole.WRITE) ||
+								!decks?.decks?.length) && (
+								<Deck
+									group={{
+										...group,
+										isEmpty: !decks?.decks?.length,
+									}}
+								/>
 							)}
 						</div>
 					</Section>

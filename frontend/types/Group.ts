@@ -7,3 +7,12 @@ export type Group = {
 	groupRole?: "ADMIN" | "WRITE" | "READ" | "INVITED" | "REQUESTED";
 	isEmpty?: boolean;
 };
+
+export enum groupRole {
+	EXTERNAL,
+	REQUESTED,
+	INVITED,
+	READ,
+	WRITE,
+	ADMIN,
+}

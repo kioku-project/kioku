@@ -3,7 +3,6 @@ import { CardList } from "../../flashcard/CardList";
 import { Flashcard } from "../../flashcard/Flashcard";
 import { useState } from "react";
 import { Card } from "../../../types/Card";
-
 interface CardsTabProps {
 	/**
 	 * deckID
@@ -25,7 +24,7 @@ export const CardsTab = ({ deckID, className }: CardsTabProps) => {
 		<div className={`flex flex-col md:flex-row ${className ?? ""}`}>
 			<CardList
 				deckID={deckID}
-				setCard={setCard}
+				setCard={setNewCard}
 				className={`w-full md:h-80 ${card ? "h-72 md:w-1/2" : "h-96"}`}
 			></CardList>
 			{card && (
@@ -45,6 +44,7 @@ export const CardsTab = ({ deckID, className }: CardsTabProps) => {
 							<Flashcard
 								id={"FlashcardId"}
 								card={card}
+								cardSide={0}
 								fullSize={true}
 							></Flashcard>
 						)}
@@ -53,4 +53,8 @@ export const CardsTab = ({ deckID, className }: CardsTabProps) => {
 			)}
 		</div>
 	);
+
+	function setNewCard(newCard: Card) {
+		card?.cardID == newCard.cardID ? setCard(undefined) : setCard(newCard);
+	}
 };

@@ -65,15 +65,15 @@ export const Flashcard = ({
 }: FlashcardProps) => {
 	const { mutate } = useSWRConfig();
 
-	const [flashCard, setFlashCard] = useState<Card>(card);
 	const [tempCard, setTempCard] = useState<Card>(card);
 	const [side, setSide] = useState<number>(cardSide % card.sides?.length);
 	const [edit, setEdit] = useState<boolean>(isEdit);
 
-	useEffect(() => {
-		setFlashCard(card);
-		setTempCard(card);
-	}, [card, tempCard]);
+	// useEffect(() => {
+	// 	setTempCard(card);
+	// }, [card, tempCard]);
+
+	console.log("got", card);
 
 	return (
 		<div
@@ -156,16 +156,15 @@ export const Flashcard = ({
 										id="saveButtonId"
 										className="hover:cursor-pointer"
 										onClick={() => {
-											setFlashCard(tempCard);
 											setEdit(false);
-											modifyCard(flashCard);
+											modifyCard(tempCard);
 										}}
 									></Check>
 									<X
 										id="cancelButtonId"
 										className="hover:cursor-pointer"
 										onClick={() => {
-											setTempCard(flashCard);
+											setTempCard(card);
 											setEdit(false);
 										}}
 									></X>
@@ -196,15 +195,16 @@ export const Flashcard = ({
 					></InputField>
 				</div>
 			</div>
-			<hr className="border-1 border-kiokuLightBlue" />
+			{(!fullSize || tempCard.sides.length > 1) && (
+				<hr className="border-1 border-kiokuLightBlue" />
+			)}
 			<div className="flex flex-row items-center justify-between">
 				{/* Show amount of cards left if on first side */}
 				{!side && (
 					<div className="flex h-8 w-full items-center text-xs font-semibold text-kiokuLightBlue sm:h-full md:text-sm">
-						{`${
+						{!fullSize &&
 							dueCards &&
-							`${dueCards} card${dueCards != 1 ? "s" : ""} left`
-						}`}
+							`${dueCards} card${dueCards != 1 ? "s" : ""} left`}
 					</div>
 				)}
 				{/* Show arrow left if not on first side */}
@@ -224,7 +224,7 @@ export const Flashcard = ({
 					></ArrowRight>
 				)}
 				{/* Show rating buttons if on last side */}
-				{side >= tempCard.sides.length - 1 && !edit && (
+				{!fullSize && side >= tempCard.sides.length - 1 && !edit && (
 					<div className="flex flex-row justify-end space-x-1">
 						<Button
 							id="buttonHardId"
@@ -287,7 +287,6 @@ export const Flashcard = ({
 	}
 
 	async function modifyCard(card: Card) {
-		console.log(card);
 		const response = await authedFetch(`/api/cards/${card.cardID}`, {
 			method: "PUT",
 			headers: {

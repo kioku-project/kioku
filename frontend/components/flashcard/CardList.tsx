@@ -40,7 +40,7 @@ export const CardList = ({ deckID, setCard, className }: CardListProps) => {
 						/>
 					))}
 			</div>
-			<Card card={{ cardID: "", sides: [], deckID: deckID }}></Card>
+			{<Card card={{ cardID: "", sides: [], deckID: deckID }}></Card>}
 		</div>
 	);
 };

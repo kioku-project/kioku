@@ -70,10 +70,15 @@ export const Card = ({ card, setCard, className }: CardProps) => {
 								onClick={() => setDelete(true)}
 							></Trash>
 						)}
-						<Edit2
+						{/* <Edit2
 							className="hover:cursor-pointer"
 							size={20}
-						></Edit2>
+							onClick={() => {
+								if (setCard) {
+									setCard(card);
+								}
+							}}
+						></Edit2> */}
 					</div>
 				</div>
 			) : (

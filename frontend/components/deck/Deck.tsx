@@ -25,7 +25,7 @@ interface DeckProps {
 /**
  * UI component for dislpaying a deck
  */
-export default function Deck({ group, deck, className }: DeckProps) {
+export default function Deck({ group, deck, className = "" }: DeckProps) {
 	const { mutate } = useSWRConfig();
 
 	const fetcher = (url: RequestInfo | URL) =>
@@ -42,7 +42,7 @@ export default function Deck({ group, deck, className }: DeckProps) {
 			id={deck ? deck.deckID : "createDeckId"}
 			className={`mb-3 mr-3 flex w-fit flex-col items-center rounded-md border-2 border-kiokuDarkBlue p-3 hover:cursor-pointer ${
 				deck ? "" : "border-dashed"
-			} ${className ?? ""}`}
+			} ${className}`}
 		>
 			<div
 				className={`relative flex h-40 w-40 items-center space-y-1 rounded-md  ${
@@ -74,10 +74,7 @@ export default function Deck({ group, deck, className }: DeckProps) {
 					{group.isEmpty &&
 						group.groupRole &&
 						groupRole[group.groupRole] < groupRole.WRITE && (
-							<AlertTriangle
-								className=""
-								size={50}
-							></AlertTriangle>
+							<AlertTriangle size={50}></AlertTriangle>
 						)}
 				</div>
 				{!!dueCards && dueCards > 0 && (

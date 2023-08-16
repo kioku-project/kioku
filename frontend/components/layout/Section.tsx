@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-interface ButtonProps {
+interface SectionProps {
 	/**
 	 * unique identifier
 	 */
@@ -27,7 +27,9 @@ interface ButtonProps {
 	onClick?: () => void;
 }
 
-function getStyle(style: string): string {
+function getStyle(
+	style: "primary" | "secondary" | "error" | "noBorder"
+): string {
 	const getStyle: { [style: string]: string } = {
 		primary: "border-kiokuDarkBlue",
 		secondary: "border-kiokuLightBlue",
@@ -44,12 +46,12 @@ export const Section = ({
 	header,
 	style = "primary",
 	children,
-	className,
+	className = "",
 	onClick,
 	...props
-}: ButtonProps) => {
+}: SectionProps) => {
 	return (
-		<div className={`space-y-1 ${className ?? ""}`} {...props}>
+		<div className={`space-y-1 ${className}`} {...props}>
 			<div
 				className={`text-lg font-extrabold text-kiokuDarkBlue ${
 					onClick ? "hover:cursor-pointer" : ""

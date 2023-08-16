@@ -24,7 +24,7 @@ interface GroupSettingsTabProps {
  */
 export const GroupSettingsTab = ({
 	group,
-	className,
+	className = "",
 }: GroupSettingsTabProps) => {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
@@ -37,7 +37,7 @@ export const GroupSettingsTab = ({
 	const [isDelete, setDelete] = useState(false);
 
 	return (
-		<div className={`space-y-5 ${className ?? ""}`}>
+		<div className={`space-y-5 ${className}`}>
 			<Section id="generalGroupSettingsId" header="General">
 				<InputAction
 					id="GroupNameInputAction"

@@ -20,7 +20,10 @@ interface DeckOverviewProps {
 /**
  * UI component for displaying a group of decks
  */
-export default function DeckOverview({ group, className }: DeckOverviewProps) {
+export default function DeckOverview({
+	group,
+	className = "",
+}: DeckOverviewProps) {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 	const fetcher = (url: RequestInfo | URL) =>
@@ -28,20 +31,20 @@ export default function DeckOverview({ group, className }: DeckOverviewProps) {
 			method: "GET",
 		}).then((res) => res?.json());
 	const { data: decks } = useSWR(
-		group ? `/api/groups/${group?.groupID}/decks` : null,
+		group ? `/api/groups/${group.groupID}/decks` : null,
 		fetcher
 	);
 
 	return (
 		<div
 			id={group?.groupID}
-			className={`flex flex-col space-y-2 rounded-md ${className ?? ""}`}
+			className={`flex flex-col space-y-2 rounded-md ${className}`}
 		>
 			{group ? (
 				<>
 					<Section
 						id={`group${group.groupID}SectionId`}
-						header={group?.groupName}
+						header={group.groupName}
 						style="noBorder"
 						onClick={() => router.push(`/group/${group.groupID}`)}
 					>

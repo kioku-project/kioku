@@ -25,13 +25,13 @@ interface CardProps {
 /**
  * UI component for dislpaying a card
  */
-export const Card = ({ card, setCard, className }: CardProps) => {
+export const Card = ({ card, setCard, className = "" }: CardProps) => {
 	const { mutate } = useSWRConfig();
 
 	const [isDelete, setDelete] = useState(false);
 
 	return (
-		<div className={`font-semibold text-kiokuDarkBlue ${className ?? ""}`}>
+		<div className={`font-semibold text-kiokuDarkBlue ${className}`}>
 			{card.cardID ? (
 				<div className="flex w-full flex-row items-center border-b-2 border-kiokuLightBlue p-2 md:p-3">
 					<Text

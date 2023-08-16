@@ -18,7 +18,7 @@ interface MemberListProps {
 /**
  * UI component for displaying a group of users
  */
-export default function MemberList({ group, className }: MemberListProps) {
+export default function MemberList({ group, className = "" }: MemberListProps) {
 	const fetcher = (url: RequestInfo | URL) =>
 		authedFetch(url, {
 			method: "GET",
@@ -36,10 +36,8 @@ export default function MemberList({ group, className }: MemberListProps) {
 		fetcher
 	);
 
-	console.log(requestedUser);
-
 	return (
-		<div id={group.groupID} className={`flex flex-col ${className ?? ""}`}>
+		<div id={group.groupID} className={`flex flex-col ${className}`}>
 			<div className="snap-y overflow-y-auto">
 				{user?.users &&
 					user.users.map((user: User) => (

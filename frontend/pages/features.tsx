@@ -114,13 +114,11 @@ const FeatureCard = ({
 	header,
 	description,
 	icon,
-	className,
+	className = "",
 }: FeatureCardProps) => {
 	return (
 		<div
-			className={`flex w-full flex-row space-x-3 py-5 leading-7 md:w-1/2 ${
-				className ?? ""
-			}`}
+			className={`flex w-full flex-row space-x-3 py-5 leading-7 md:w-1/2 ${className}`}
 		>
 			{icon}
 			<div className="flex w-full flex-col">

@@ -12,7 +12,7 @@ interface FormButtonProps {
 	/**
 	 * Button styling
 	 */
-	style?: string;
+	style?: "primary";
 	/**
 	 * Button size
 	 */
@@ -27,7 +27,7 @@ interface FormButtonProps {
 	onClick?: () => void;
 }
 
-function getStyle(style: string): string {
+function getStyle(style: "primary"): string {
 	const getStyle: { [style: string]: string } = {
 		primary:
 			"border-2 border-kiokuDarkBlue bg-kiokuDarkBlue font-semibold text-eggshell",
@@ -35,7 +35,7 @@ function getStyle(style: string): string {
 	return getStyle[style] ?? getStyle.primary;
 }
 
-function getSize(size: string): string {
+function getSize(size: "small" | "medium" | "large"): string {
 	const getSize: { [size: string]: string } = {
 		small: "px-3 py-1.5 text-xs sm:text-xs md:text-sm lg:px-3 lg:py-1.5 lg:text-base xl:text-lg",
 		medium: "px-3 py-1.5 text-xs sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl",
@@ -48,17 +48,17 @@ function getSize(size: string): string {
  * UI component for submitting forms
  */
 export const FormButton = ({
-	className,
-	style,
-	size,
+	className = "",
+	style = "primary",
+	size = "medium",
 	...props
 }: FormButtonProps) => {
 	return (
 		<input
 			type="submit"
 			className={`flex justify-center rounded-md  text-center  shadow-sm outline-none transition hover:scale-105 hover:cursor-pointer ${getStyle(
-				style ?? ""
-			)} ${className ?? ""} ${getSize(size ?? "")}`}
+				style
+			)} ${className} ${getSize(size)}`}
 			{...props}
 		/>
 	);

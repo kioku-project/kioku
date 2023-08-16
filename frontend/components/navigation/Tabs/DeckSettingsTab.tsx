@@ -28,7 +28,7 @@ interface DeckSettingsTabProps {
 export const DeckSettingsTab = ({
 	groupID,
 	deck,
-	className,
+	className = "",
 }: DeckSettingsTabProps) => {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
@@ -37,7 +37,7 @@ export const DeckSettingsTab = ({
 	const [isDelete, setDelete] = useState(false);
 
 	return (
-		<div className="space-y-5">
+		<div className={`space-y-5 ${className}`}>
 			<Section id="generalDeckSettingsId" header="General">
 				<InputAction
 					id="deckNameInputAction"

@@ -21,14 +21,18 @@ interface CardListProps {
 /**
  * UI component for displaying a list of cards
  */
-export const CardList = ({ deckID, setCard, className }: CardListProps) => {
+export const CardList = ({
+	deckID,
+	setCard,
+	className = "",
+}: CardListProps) => {
 	const fetcher = (url: RequestInfo | URL) =>
 		authedFetch(url, {
 			method: "GET",
 		}).then((res) => res?.json());
 	const { data: cards } = useSWR(`/api/decks/${deckID}/cards`, fetcher);
 	return (
-		<div id="cardListId" className={`flex flex-col ${className ?? ""}`}>
+		<div id="cardListId" className={`flex flex-col ${className}`}>
 			<div className="snap-y overflow-y-auto">
 				{cards?.cards &&
 					cards.cards.map((card: CardType) => (

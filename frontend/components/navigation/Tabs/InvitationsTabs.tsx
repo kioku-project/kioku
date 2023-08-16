@@ -12,7 +12,7 @@ interface InvitationsTabProps {
 /**
  * UI component for the InvitationsTab
  */
-export const InvitationsTab = ({ className }: InvitationsTabProps) => {
+export const InvitationsTab = ({ className = "" }: InvitationsTabProps) => {
 	const fetcher = (url: RequestInfo | URL) =>
 		authedFetch(url, {
 			method: "GET",
@@ -20,7 +20,7 @@ export const InvitationsTab = ({ className }: InvitationsTabProps) => {
 	const { data: invitations } = useSWR(`/api/user/invitations`, fetcher);
 
 	return (
-		<div>
+		<div className={`${className}`}>
 			{invitations?.groupInvitation && (
 				<DeckOverview
 					group={{

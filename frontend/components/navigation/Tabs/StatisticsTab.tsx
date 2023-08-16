@@ -11,9 +11,9 @@ interface StatisticsTabProps {
 /**
  * UI component for the StatisticsTab
  */
-export const StatisticsTab = ({ className }: StatisticsTabProps) => {
+export const StatisticsTab = ({ className = "" }: StatisticsTabProps) => {
 	return (
-		<div className="space-y-5">
+		<div className={`space-y-5 ${className}`}>
 			<Section
 				id="personalStatisticsSectionId"
 				header="Personal Statistics"

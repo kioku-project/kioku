@@ -22,7 +22,10 @@ interface UserSettingsTabProps {
 /**
  * UI component the UserSettingsTab
  */
-export const UserSettingsTab = ({ user, className }: UserSettingsTabProps) => {
+export const UserSettingsTab = ({
+	user,
+	className = "",
+}: UserSettingsTabProps) => {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 
@@ -31,7 +34,7 @@ export const UserSettingsTab = ({ user, className }: UserSettingsTabProps) => {
 	const [isDelete, setDelete] = useState(false);
 
 	return (
-		<div className="space-y-5">
+		<div className={`space-y-5 ${className}`}>
 			<Section id="generalUserSettingsSectionId" header="General">
 				<InputAction
 					id="userNameInputAction"
@@ -59,7 +62,7 @@ export const UserSettingsTab = ({ user, className }: UserSettingsTabProps) => {
 					button="Delete Account"
 					onClick={() => {
 						if (isDelete) {
-							deleteGroup()
+							deleteUser()
 								.then((result) => {})
 								.catch((error) => {});
 						} else {
@@ -87,7 +90,7 @@ export const UserSettingsTab = ({ user, className }: UserSettingsTabProps) => {
 		mutate(`/api/user/${user.userID}`);
 	}
 
-	async function deleteGroup() {
+	async function deleteUser() {
 		const response = await authedFetch(`/api/user/${user.userID}`, {
 			method: "DELETE",
 			headers: {

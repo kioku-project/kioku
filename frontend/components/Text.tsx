@@ -27,15 +27,15 @@ interface TextProps {
 	onClick?: () => void;
 }
 
-function getStyle(style: string): string {
+function getStyle(style: "primary" | "secondary"): string {
 	const getStyle: { [style: string]: string } = {
 		primary: "text-kiokuDarkBlue",
 		secondary: "text-kiokuLightBlue",
 	};
-	return getStyle[style] ?? "";
+	return getStyle[style] ?? getStyle.primary;
 }
 
-function getSize(size: string): string {
+function getSize(size: "xs" | "sm" | "md" | "lg" | "xl"): string {
 	const getSize: { [size: string]: string } = {
 		xs: "text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl",
 		sm: "text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl",
@@ -50,17 +50,15 @@ function getSize(size: string): string {
  * UI component for text
  */
 export const Text = ({
-	style,
-	size,
-	className,
+	style = "primary",
+	size = "md",
+	className = "",
 	children,
 	...props
 }: TextProps) => {
 	return (
 		<div
-			className={`${getSize(size ?? "")} ${getStyle(style ?? "")} ${
-				className ?? ""
-			}`}
+			className={`${getSize(size)} ${getStyle(style)} ${className}`}
 			{...props}
 		>
 			{children}

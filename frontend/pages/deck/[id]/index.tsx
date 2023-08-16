@@ -81,7 +81,7 @@ export default function Page() {
 								currentTab={currentTab}
 								setTab={setTab}
 							></TabBar>
-							<div className="">
+							<div>
 								{{
 									cards: (
 										<CardsTab
@@ -95,7 +95,7 @@ export default function Page() {
 										></DeckSettingsTab>
 									),
 									statistics: <StatisticsTab></StatisticsTab>,
-								}[currentTab] || <div>Fehler</div>}
+								}[currentTab] || <div>Error</div>}
 							</div>
 						</div>
 					)}

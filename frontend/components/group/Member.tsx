@@ -13,7 +13,7 @@ interface MemberProps {
 	 */
 	id?: string;
 	/**
-	 *  User to display. If userID is undefined, placeholder for inviting users will be displayed.
+	 *  User to display. If user is undefined, placeholder for inviting users will be displayed.
 	 */
 	user: User;
 	/**
@@ -25,18 +25,18 @@ interface MemberProps {
 /**
  * UI component for dislpaying a user
  */
-export default function Member({ id, user, className }: MemberProps) {
+export default function Member({ id, user, className = "" }: MemberProps) {
 	const { mutate } = useSWRConfig();
 	const [isDelete, setDelete] = useState(false);
 	return (
 		<div
 			id={id ?? `user${user?.userID}`}
-			className={`font-semibold text-kiokuDarkBlue ${className ?? ""}`}
+			className={`font-semibold text-kiokuDarkBlue ${className}`}
 		>
 			{user?.userID ? (
 				<div className="flex w-full flex-row items-center border-b-2 border-kiokuLightBlue p-2 md:p-3">
 					<Text className="w-full" size="xs">
-						{user?.userName}
+						{user.userName}
 					</Text>
 					<div className="flex flex-row items-center space-x-5">
 						{user.groupRole != "REQUESTED" &&

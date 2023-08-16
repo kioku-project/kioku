@@ -47,7 +47,7 @@ interface InputFieldProps {
 	onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-function getLabelStyle(style: string): string {
+function getLabelStyle(style: "primary" | "secondary" | "tertiary"): string {
 	const getStyle: { [style: string]: string } = {
 		primary: "text-kiokuDarkBlue",
 		secondary: "text-kiokuDarkBlue font-bold",
@@ -56,7 +56,7 @@ function getLabelStyle(style: string): string {
 	return getStyle[style] ?? "";
 }
 
-function getInputStyle(style: string): string {
+function getInputStyle(style: "primary" | "secondary" | "tertiary"): string {
 	const getStyle: { [style: string]: string } = {
 		primary:
 			"border-2 border-eggshell bg-eggshell invalid:border-red px-1.5 py-1.5 font-medium text-kiokuDarkBlue focus:border-kiokuDarkBlue",
@@ -74,11 +74,11 @@ export const InputField = ({
 	label,
 	required = true,
 	style,
-	className,
+	className = "",
 	...props
 }: InputFieldProps) => {
 	return (
-		<div className={`flex w-full flex-col ${className ?? ""}`}>
+		<div className={`flex w-full flex-col ${className}`}>
 			<label htmlFor={name} className={`${getLabelStyle(style!)}`}>
 				{label}
 			</label>

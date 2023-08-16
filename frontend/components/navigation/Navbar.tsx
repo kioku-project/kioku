@@ -29,12 +29,10 @@ interface NavbarProps {
 /**
  * UI component for diplaying the NavBar
  */
-export const Navbar = ({ login, className, onClick }: NavbarProps) => {
+export const Navbar = ({ login, className = "", onClick }: NavbarProps) => {
 	return (
 		<div
-			className={`flex items-center justify-between p-5 md:p-10 ${
-				className ?? ""
-			}`}
+			className={`flex items-center justify-between p-5 md:p-10 ${className}`}
 		>
 			<Logo onClick={onClick}></Logo>
 			{login ? (

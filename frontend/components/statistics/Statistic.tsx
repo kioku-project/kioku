@@ -73,13 +73,10 @@ export const Statistic = ({
 	seperator,
 	reference,
 	change,
-	className,
+	className = "",
 }: StatisticProps) => {
 	return (
-		<div
-			id={id}
-			className={`flex w-full flex-col px-5 py-3 ${className ?? ""}`}
-		>
+		<div id={id} className={`flex w-full flex-col px-5 py-3 ${className}`}>
 			<div className="font-bold text-kiokuLightBlue">{header}</div>
 			<div className="flex flex-row items-end justify-between space-x-5">
 				<div className="flex flex-row space-x-1">

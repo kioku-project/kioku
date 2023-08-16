@@ -31,12 +31,12 @@ export const TabBar = ({
 	tabs,
 	currentTab,
 	setTab,
-	className,
+	className = "",
 	...props
 }: TabBarProps) => {
 	return (
 		<div
-			className={`flex flex-row justify-between ${className ?? ""}`}
+			className={`flex flex-row justify-between ${className}`}
 			{...props}
 		>
 			<div className="flex flex-row">

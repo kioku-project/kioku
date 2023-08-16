@@ -15,9 +15,9 @@ interface MembersTabProps {
 /**
  * UI component for the MembersTab
  */
-export const MembersTab = ({ group, className }: MembersTabProps) => {
+export const MembersTab = ({ group, className = "" }: MembersTabProps) => {
 	return (
-		<div className={`${className ?? ""}`}>
+		<div className={`${className}`}>
 			<MemberList group={group}></MemberList>
 		</div>
 	);

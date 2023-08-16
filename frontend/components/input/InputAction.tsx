@@ -42,7 +42,7 @@ export const InputAction = ({
 	header,
 	value,
 	button,
-	className,
+	className = "",
 	onChange,
 	onClick,
 	...props
@@ -51,9 +51,7 @@ export const InputAction = ({
 		<form
 			id={id}
 			onSubmit={(e) => e.preventDefault()}
-			className={`flex flex-col justify-between space-y-1 p-3 sm:flex-row sm:items-center sm:space-x-3 ${
-				className ?? ""
-			}`}
+			className={`flex flex-col justify-between space-y-1 p-3 sm:flex-row sm:items-center sm:space-x-3 ${className}`}
 			{...props}
 		>
 			<Action

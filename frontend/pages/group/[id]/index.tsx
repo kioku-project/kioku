@@ -87,7 +87,7 @@ export default function Page() {
 								currentTab={currentTab}
 								setTab={setTab}
 							></TabBar>
-							<div className="">
+							<div>
 								{{
 									decks: <DecksTab group={group}></DecksTab>,
 									user: (
@@ -99,7 +99,7 @@ export default function Page() {
 										></GroupSettingsTab>
 									),
 									statistics: <StatisticsTab></StatisticsTab>,
-								}[currentTab] || <div>Fehler</div>}
+								}[currentTab] || <div>Error</div>}
 							</div>
 						</div>
 					)}

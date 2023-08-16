@@ -36,16 +36,14 @@ export const DangerAction = ({
 	header,
 	description,
 	button,
-	className,
+	className = "",
 	onClick,
 	...props
 }: DangerActionProps) => {
 	return (
 		<div
 			id={id}
-			className={`flex flex-col justify-between space-y-1 p-3 sm:flex-row sm:items-center sm:space-x-3 ${
-				className ?? ""
-			}`}
+			className={`flex flex-col justify-between space-y-1 p-3 sm:flex-row sm:items-center sm:space-x-3 ${className}`}
 			{...props}
 		>
 			<Action

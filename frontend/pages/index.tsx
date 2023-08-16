@@ -85,12 +85,12 @@ export default function Home() {
 								currentTab={currentTab}
 								setTab={setTab}
 							></TabBar>
-							<div className="">
+							<div>
 								{{
 									decks: (
 										<DecksTab
 											group={
-												groups?.groups.filter(
+												groups.groups.filter(
 													(group: Group) =>
 														group.isDefault
 												)[0]
@@ -111,7 +111,7 @@ export default function Home() {
 											user={user}
 										></UserSettingsTab>
 									),
-								}[currentTab] || <div>Fehler</div>}
+								}[currentTab] || <div>Error</div>}
 							</div>
 						</div>
 					)}

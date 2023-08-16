@@ -21,15 +21,13 @@ interface ActionProps {
 export const Action = ({
 	description,
 	button,
-	className,
+	className = "",
 	...props
 }: ActionProps) => {
 	return (
 		<>
 			<div
-				className={`flex w-full flex-col sm:w-2/3 md:w-3/4 lg:w-4/5 xl:w-5/6 ${
-					className ?? ""
-				}`}
+				className={`flex w-full flex-col sm:w-2/3 md:w-3/4 lg:w-4/5 xl:w-5/6 ${className}`}
 				{...props}
 			>
 				{description}

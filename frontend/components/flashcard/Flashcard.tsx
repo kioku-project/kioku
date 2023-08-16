@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -60,7 +60,7 @@ export const Flashcard = ({
 	cardSide = 0,
 	isEdit = false,
 	fullSize = false,
-	className,
+	className = "",
 	push,
 }: FlashcardProps) => {
 	const { mutate } = useSWRConfig();
@@ -69,18 +69,10 @@ export const Flashcard = ({
 	const [side, setSide] = useState<number>(cardSide % card.sides?.length);
 	const [edit, setEdit] = useState<boolean>(isEdit);
 
-	// useEffect(() => {
-	// 	setTempCard(card);
-	// }, [card, tempCard]);
-
-	console.log("got", card);
-
 	return (
 		<div
 			id={id}
-			className={`mx-auto my-auto flex flex-col space-y-1 rounded-xl border-2 border-kiokuDarkBlue bg-eggshell p-3 font-semibold text-kiokuDarkBlue shadow-lg md:space-y-3 md:p-5 lg:p-10 ${
-				className ?? ""
-			} ${
+			className={`mx-auto my-auto flex flex-col space-y-1 rounded-xl border-2 border-kiokuDarkBlue bg-eggshell p-3 font-semibold text-kiokuDarkBlue shadow-lg md:space-y-3 md:p-5 lg:p-10 ${className} ${
 				fullSize
 					? "h-full w-full"
 					: "h-5/6 w-5/6 sm:h-4/5 sm:w-4/5 md:h-3/4 md:w-3/4 lg:h-2/3 lg:w-2/3"

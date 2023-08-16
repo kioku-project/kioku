@@ -15,9 +15,9 @@ interface DecksTabProps {
 /**
  * UI component for the DecksTab
  */
-export const DecksTab = ({ group, className }: DecksTabProps) => {
+export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 	return (
-		<div className={`${className ?? ""}`}>
+		<div className={`${className}`}>
 			<DeckOverview group={{ ...group, groupName: "" }}></DeckOverview>
 		</div>
 	);

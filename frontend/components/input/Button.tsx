@@ -27,7 +27,9 @@ interface ButtonProps {
 	onClick?: () => void;
 }
 
-function getStyle(style: string): string {
+function getStyle(
+	style: "primary" | "secondary" | "error" | "warning"
+): string {
 	const getStyle: { [style: string]: string } = {
 		primary:
 			"bg-kiokuDarkBlue border-kiokuDarkBlue text-eggshell shadow-sm",
@@ -38,7 +40,7 @@ function getStyle(style: string): string {
 	return getStyle[style] ?? getStyle.primary;
 }
 
-function getSize(size: string): string {
+function getSize(size: "small" | "medium" | "large"): string {
 	const getSize: { [size: string]: string } = {
 		small: "px-3 py-1.5 text-xs sm:text-xs md:text-sm lg:px-3 lg:py-1.5 lg:text-base xl:text-lg",
 		medium: "px-3 py-1.5 text-xs sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl",
@@ -52,16 +54,16 @@ function getSize(size: string): string {
  */
 export const Button = ({
 	className,
-	style,
-	size,
-	children,
+	style = "primary",
+	size = "medium",
+	children = "",
 	...props
 }: ButtonProps) => {
 	return (
 		<button
 			className={`flex items-center justify-center rounded-md border-2 text-center font-semibold outline-none transition hover:scale-105 hover:cursor-pointer ${getStyle(
-				style ?? ""
-			)} ${getSize(size ?? "")} ${className ?? ""}`}
+				style
+			)} ${getSize(size)} ${className}`}
 			{...props}
 		>
 			{children}

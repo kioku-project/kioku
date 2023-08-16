@@ -27,7 +27,16 @@ interface TabHeaderProps {
 	className?: string;
 }
 
-function getIcon(style: string): ReactNode {
+function getIcon(
+	style:
+		| "cards"
+		| "decks"
+		| "groups"
+		| "invitations"
+		| "settings"
+		| "statistics"
+		| "user"
+): ReactNode {
 	const getIcon: { [style: string]: ReactNode } = {
 		cards: <Copy size={20}></Copy>,
 		decks: <Layers size={20}></Layers>,
@@ -46,14 +55,12 @@ function getIcon(style: string): ReactNode {
 export const TabHeader = ({
 	name,
 	style,
-	className,
+	className = "",
 	...props
 }: TabHeaderProps) => {
 	return (
 		<div
-			className={`flex flex-row items-center space-x-1 ${
-				className ?? ""
-			}`}
+			className={`flex flex-row items-center space-x-1 ${className}`}
 			{...props}
 		>
 			{getIcon(style)}

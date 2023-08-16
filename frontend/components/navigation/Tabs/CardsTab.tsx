@@ -17,11 +17,11 @@ interface CardsTabProps {
 /**
  * UI component for the CardsTab
  */
-export const CardsTab = ({ deckID, className }: CardsTabProps) => {
+export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
 	const [card, setCard] = useState<Card>();
 
 	return (
-		<div className={`flex flex-col md:flex-row ${className ?? ""}`}>
+		<div className={`flex flex-col md:flex-row ${className}`}>
 			<CardList
 				deckID={deckID}
 				setCard={setNewCard}

@@ -46,7 +46,7 @@ export const Header = ({
 	user,
 	deck,
 	group,
-	className,
+	className = "",
 	onClick,
 	...props
 }: HeaderProps) => {
@@ -54,14 +54,12 @@ export const Header = ({
 	const { mutate } = useSWRConfig();
 	return (
 		<div
-			className={`flex flex-row items-center justify-between ${
-				className ?? ""
-			}`}
+			className={`flex flex-row items-center justify-between ${className}`}
 			{...props}
 		>
 			<div className="flex flex-col font-black">
 				<div className="flex flex-row items-center space-x-3">
-					<Text style="primary" size="xl" className="">
+					<Text style="primary" size="xl">
 						{deck?.deckName}
 						{!deck && group && group.groupName}
 						{user && `Welcome ${user.userName}`}

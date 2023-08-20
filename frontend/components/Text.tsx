@@ -1,4 +1,6 @@
 import React, { ReactNode } from "react";
+import { Size } from "../types/Size";
+import { Style } from "../types/Style";
 
 interface TextProps {
 	/**
@@ -12,11 +14,11 @@ interface TextProps {
 	/**
 	 * Text styling
 	 */
-	style?: "primary" | "secondary";
+	style?: Style;
 	/**
 	 * Text size
 	 */
-	size?: "xs" | "sm" | "md" | "lg" | "xl";
+	size?: Size;
 	/**
 	 * Additional classes
 	 */
@@ -27,7 +29,7 @@ interface TextProps {
 	onClick?: () => void;
 }
 
-function getStyle(style: "primary" | "secondary"): string {
+function getStyle(style: Style): string {
 	const getStyle: { [style: string]: string } = {
 		primary: "text-kiokuDarkBlue",
 		secondary: "text-kiokuLightBlue",
@@ -35,7 +37,7 @@ function getStyle(style: "primary" | "secondary"): string {
 	return getStyle[style] ?? getStyle.primary;
 }
 
-function getSize(size: "xs" | "sm" | "md" | "lg" | "xl"): string {
+function getSize(size: Size): string {
 	const getSize: { [size: string]: string } = {
 		xs: "text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl",
 		sm: "text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl",
@@ -43,7 +45,7 @@ function getSize(size: "xs" | "sm" | "md" | "lg" | "xl"): string {
 		lg: "text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl",
 		xl: "text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl",
 	};
-	return getSize[size] ?? getSize.medium;
+	return getSize[size] ?? getSize.md;
 }
 
 /**

@@ -45,20 +45,20 @@ export const Warning: Story = {
 export const Small: Story = {
 	args: {
 		children: "Small",
-		size: "small",
+		size: "sm",
 	},
 };
 
 export const Medium: Story = {
 	args: {
 		children: "Medium",
-		size: "medium",
+		size: "md",
 	},
 };
 
 export const Large: Story = {
 	args: {
 		children: "Large",
-		size: "large",
+		size: "lg",
 	},
 };

@@ -21,3 +21,17 @@ export const Default: Story = {
 		button: "Action",
 	},
 };
+
+export const Header: Story = {
+	args: {
+		header: "DangerAction",
+		button: "Action",
+	},
+};
+
+export const Description: Story = {
+	args: {
+		description: "Danger",
+		button: "Action",
+	},
+};

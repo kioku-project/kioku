@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { Section } from "../layout/Section";
 import { Group, groupRole } from "../../types/Group";
+import { Deck as DeckType } from "../../types/Deck";
 
 interface DeckOverviewProps {
 	/**
@@ -37,7 +38,7 @@ export default function DeckOverview({
 
 	return (
 		<div
-			id={group?.groupID}
+			id={group?.groupID ?? "createGroupId"}
 			className={`flex flex-col space-y-2 rounded-md ${className}`}
 		>
 			{group ? (
@@ -49,20 +50,13 @@ export default function DeckOverview({
 						onClick={() => router.push(`/group/${group.groupID}`)}
 					>
 						<div className="flex flex-row flex-wrap">
-							{decks?.decks &&
-								decks.decks.map(
-									(deck: {
-										deckID: string;
-										deckName: string;
-										due: number;
-									}) => (
-										<Deck
-											key={deck.deckID}
-											group={group}
-											deck={deck}
-										/>
-									)
-								)}
+							{decks?.decks?.map((deck: DeckType) => (
+								<Deck
+									key={deck.deckID}
+									group={group}
+									deck={deck}
+								/>
+							))}
 							{((group.groupRole &&
 								groupRole[group.groupRole] >=
 									groupRole.WRITE) ||

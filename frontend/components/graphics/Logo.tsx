@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import router from "next/router";
+import kiokuLogo from "../../public/kioku-logo.svg";
 
 const inter = Inter({
 	weight: ["200", "400"],
@@ -39,7 +40,7 @@ export const Logo = ({ className = "", text = true, onClick }: LogoProps) => {
 			}}
 		>
 			<Image
-				src="/kioku-logo.svg"
+				src={kiokuLogo}
 				alt="Kioku"
 				height={0}
 				width={0}

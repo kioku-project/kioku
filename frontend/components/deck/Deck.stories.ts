@@ -13,21 +13,9 @@ const meta: Meta<typeof Deck> = {
 export default meta;
 type Story = StoryObj<typeof Deck>;
 
-export const NoCardsDue: Story = {
+export const Default: Story = {
 	args: {
-		deck: { deckID: "D-12345678", deckName: "Example Deck", dueCards: 0 },
-	},
-};
-
-export const WithCardsDue: Story = {
-	args: {
-		deck: { deckID: "D-12345678", deckName: "Example Deck", dueCards: 1 },
-	},
-};
-
-export const ManyCardsDue: Story = {
-	args: {
-		deck: { deckID: "D-12345678", deckName: "Example Deck", dueCards: 100 },
+		deck: { deckID: "D-12345678", deckName: "Example Deck" },
 	},
 };
 

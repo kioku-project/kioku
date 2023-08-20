@@ -1,4 +1,5 @@
 import React, { ChangeEventHandler } from "react";
+import { Style } from "../../types/Style";
 
 interface InputFieldProps {
 	/**
@@ -28,7 +29,7 @@ interface InputFieldProps {
 	/**
 	 * InputField styling
 	 */
-	style?: "primary" | "secondary" | "tertiary";
+	style?: Style;
 	/**
 	 * Is the InputField required?
 	 */
@@ -47,7 +48,7 @@ interface InputFieldProps {
 	onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-function getLabelStyle(style: "primary" | "secondary" | "tertiary"): string {
+function getLabelStyle(style: Style): string {
 	const getStyle: { [style: string]: string } = {
 		primary: "text-kiokuDarkBlue",
 		secondary: "text-kiokuDarkBlue font-bold",
@@ -56,7 +57,7 @@ function getLabelStyle(style: "primary" | "secondary" | "tertiary"): string {
 	return getStyle[style] ?? "";
 }
 
-function getInputStyle(style: "primary" | "secondary" | "tertiary"): string {
+function getInputStyle(style: Style): string {
 	const getStyle: { [style: string]: string } = {
 		primary:
 			"border-2 border-eggshell bg-eggshell invalid:border-red px-1.5 py-1.5 font-medium text-kiokuDarkBlue focus:border-kiokuDarkBlue",
@@ -73,19 +74,19 @@ export const InputField = ({
 	name,
 	label,
 	required = true,
-	style,
+	style = "primary",
 	className = "",
 	...props
 }: InputFieldProps) => {
 	return (
 		<div className={`flex w-full flex-col ${className}`}>
-			<label htmlFor={name} className={`${getLabelStyle(style!)}`}>
+			<label htmlFor={name} className={`${getLabelStyle(style)}`}>
 				{label}
 			</label>
 			<input
 				name={name}
 				className={`w-full rounded-md outline-none ${getInputStyle(
-					style!
+					style
 				)}`}
 				{...props}
 			/>

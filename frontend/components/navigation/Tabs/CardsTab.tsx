@@ -55,6 +55,6 @@ export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
 	);
 
 	function setNewCard(newCard: Card) {
-		card?.cardID == newCard.cardID ? setCard(undefined) : setCard(newCard);
+		card?.cardID === newCard.cardID ? setCard(undefined) : setCard(newCard);
 	}
 };

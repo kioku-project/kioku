@@ -21,3 +21,10 @@ export const Default: Story = {
 		button: "Action",
 	},
 };
+
+export const WithoutValue: Story = {
+	args: {
+		header: "InputAction",
+		button: "Action",
+	},
+};

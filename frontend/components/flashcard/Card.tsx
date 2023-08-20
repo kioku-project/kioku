@@ -37,11 +37,7 @@ export const Card = ({ card, setCard, className = "" }: CardProps) => {
 					<Text
 						className="w-full hover:cursor-pointer"
 						size="xs"
-						onClick={() => {
-							if (setCard) {
-								setCard(card);
-							}
-						}}
+						onClick={() => setCard && setCard(card)}
 					>
 						{card.sides[0].header}
 					</Text>

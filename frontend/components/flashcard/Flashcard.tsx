@@ -66,7 +66,9 @@ export const Flashcard = ({
 	const { mutate } = useSWRConfig();
 
 	const [tempCard, setTempCard] = useState<Card>(card);
-	const [side, setSide] = useState<number>(cardSide % card.sides?.length);
+	const [side, setSide] = useState<number>(
+		cardSide % (card.sides?.length || 1)
+	);
 	const [edit, setEdit] = useState<boolean>(isEdit);
 
 	return (
@@ -101,9 +103,9 @@ export const Flashcard = ({
 										id="deleteSideButtonId"
 										className="hover:cursor-pointer"
 										onClick={() => {
-											setSide(
+											setSide((oldSide) =>
 												Math.min(
-													side,
+													oldSide,
 													tempCard.sides.length - 2
 												)
 											);
@@ -196,7 +198,7 @@ export const Flashcard = ({
 					<div className="flex h-8 w-full items-center text-xs font-semibold text-kiokuLightBlue sm:h-full md:text-sm">
 						{!fullSize &&
 							dueCards &&
-							`${dueCards} card${dueCards != 1 ? "s" : ""} left`}
+							`${dueCards} card${dueCards !== 1 ? "s" : ""} left`}
 					</div>
 				)}
 				{/* Show arrow left if not on first side */}
@@ -220,49 +222,25 @@ export const Flashcard = ({
 					<div className="flex flex-row justify-end space-x-1">
 						<Button
 							id="buttonHardId"
-							size="small"
+							size="sm"
 							className="w-auto"
-							onClick={() => {
-								if (push) {
-									push({
-										cardID: card.cardID,
-										rating: 0,
-									});
-									setSide(0);
-								}
-							}}
+							onClick={() => pushCard(0)}
 						>
 							Hard
 						</Button>
 						<Button
 							id="buttonMediumId"
-							size="small"
+							size="sm"
 							className="w-auto"
-							onClick={() => {
-								if (push) {
-									push({
-										cardID: card.cardID,
-										rating: 1,
-									});
-									setSide(0);
-								}
-							}}
+							onClick={() => pushCard(1)}
 						>
 							Medium
 						</Button>
 						<Button
 							id="buttonEasyId"
-							size="small"
+							size="sm"
 							className="w-auto"
-							onClick={() => {
-								if (push) {
-									push({
-										cardID: card.cardID,
-										rating: 2,
-									});
-									setSide(0);
-								}
-							}}
+							onClick={() => pushCard(2)}
 						>
 							Easy
 						</Button>
@@ -294,5 +272,14 @@ export const Flashcard = ({
 			toast.error("Error!", { toastId: "updatedCardToast" });
 		}
 		mutate(`/api/decks/${card.deckID}/cards`);
+	}
+
+	function pushCard(rating: number) {
+		push &&
+			push({
+				cardID: card.cardID,
+				rating: rating,
+			});
+		setSide(0);
 	}
 };

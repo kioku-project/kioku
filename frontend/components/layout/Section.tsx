@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { Style } from "../../types/Style";
 
 interface SectionProps {
 	/**
@@ -12,7 +13,7 @@ interface SectionProps {
 	/**
 	 * Section style
 	 */
-	style?: "primary" | "secondary" | "error" | "noBorder";
+	style?: Style | "error" | "noBorder";
 	/**
 	 * Section contents
 	 */
@@ -27,9 +28,7 @@ interface SectionProps {
 	onClick?: () => void;
 }
 
-function getStyle(
-	style: "primary" | "secondary" | "error" | "noBorder"
-): string {
+function getStyle(style: Style | "error" | "noBorder"): string {
 	const getStyle: { [style: string]: string } = {
 		primary: "border-kiokuDarkBlue",
 		secondary: "border-kiokuLightBlue",

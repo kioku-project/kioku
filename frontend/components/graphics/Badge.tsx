@@ -1,4 +1,5 @@
 import React from "react";
+import { Style } from "../../types/Style";
 
 interface BadgeProps {
 	/**
@@ -12,7 +13,7 @@ interface BadgeProps {
 	/**
 	 * Badge styling
 	 */
-	style?: "primary" | "secondary" | "tertiary";
+	style?: Style;
 	/**
 	 * Additional classes
 	 */
@@ -23,7 +24,7 @@ interface BadgeProps {
 	onClick?: () => void;
 }
 
-function getStyle(style: "primary" | "secondary" | "tertiary"): string {
+function getStyle(style: Style): string {
 	const getStyle: { [style: string]: string } = {
 		primary: "border-kiokuDarkBlue bg-kiokuDarkBlue text-eggshell",
 		secondary: "border-kiokuDarkBlue text-kiokuLightBlue",

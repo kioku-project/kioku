@@ -85,10 +85,10 @@ export const Header = ({
 						</div>
 					)}
 					{!deck && group && <div>{group.groupDescription}</div>}
-					{!!user?.dueCards && (
-						<div>{`You have ${user.dueCards ?? "?"} card${
+					{!!user?.dueCards && !!user.dueDecks && (
+						<div>{`You have ${user.dueCards} card${
 							user.dueCards != 1 ? "s" : ""
-						} in ${user.dueDecks ?? ""} deck${
+						} in ${user.dueDecks} deck${
 							user.dueDecks != 1 ? "s" : ""
 						} to learn`}</div>
 					)}
@@ -98,7 +98,7 @@ export const Header = ({
 			{/* {user && (
 				<Button
 					id="learnButtonId"
-					size="small"
+					size="sm"
 					onClick={() => router.push("/user/learn")}
 				>
 					Start learning
@@ -108,7 +108,7 @@ export const Header = ({
 			{deck && (
 				<Button
 					id="learnDeckButtonId"
-					size="small"
+					size="sm"
 					onClick={() => router.push(`/deck/${deck.deckID}/learn`)}
 				>
 					Learn Deck
@@ -120,7 +120,7 @@ export const Header = ({
 				(group.groupRole == "INVITED" || !group?.groupRole) && (
 					<Button
 						id="joinGroupButtonId"
-						size="small"
+						size="sm"
 						onClick={() => {
 							joinGroup();
 						}}

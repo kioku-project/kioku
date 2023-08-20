@@ -39,7 +39,7 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 
 	return (
 		<div
-			id={deck ? deck.deckID : "createDeckId"}
+			id={deck?.deckID ?? "createDeckId"}
 			className={`mb-3 mr-3 flex w-fit flex-col items-center rounded-md border-2 border-kiokuDarkBlue p-3 hover:cursor-pointer ${
 				deck ? "" : "border-dashed"
 			} ${className}`}
@@ -77,10 +77,10 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 							<AlertTriangle size={50}></AlertTriangle>
 						)}
 				</div>
-				{!!dueCards && dueCards > 0 && (
+				{dueCards > 0 && (
 					<div className="absolute right-[-0.3rem] top-[-0.5rem] flex h-5 w-5 rounded-sm bg-kiokuRed p-1">
 						<div className="flex h-full w-full items-center justify-center text-xs font-bold text-white">
-							{dueCards < 100 ? dueCards : "99"}
+							{Math.min(99, dueCards)}
 						</div>
 					</div>
 				)}

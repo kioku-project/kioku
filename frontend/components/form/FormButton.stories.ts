@@ -24,20 +24,20 @@ export const Primary: Story = {
 export const Small: Story = {
 	args: {
 		value: "Small",
-		size: "small",
+		size: "sm",
 	},
 };
 
 export const Medium: Story = {
 	args: {
 		value: "Medium",
-		size: "medium",
+		size: "md",
 	},
 };
 
 export const Large: Story = {
 	args: {
 		value: "Large",
-		size: "large",
+		size: "lg",
 	},
 };

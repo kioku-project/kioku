@@ -1,4 +1,6 @@
 import React, { ReactNode } from "react";
+import { Size } from "../../types/Size";
+import { Style } from "../../types/Style";
 
 interface ButtonProps {
 	/**
@@ -12,11 +14,11 @@ interface ButtonProps {
 	/**
 	 * Button styling
 	 */
-	style?: "primary" | "secondary" | "error" | "warning";
+	style?: Style | "error" | "warning";
 	/**
 	 * Button size
 	 */
-	size?: "small" | "medium" | "large";
+	size?: Size;
 	/**
 	 * Additional classes
 	 */
@@ -27,9 +29,7 @@ interface ButtonProps {
 	onClick?: () => void;
 }
 
-function getStyle(
-	style: "primary" | "secondary" | "error" | "warning"
-): string {
+function getStyle(style: Style | "error" | "warning"): string {
 	const getStyle: { [style: string]: string } = {
 		primary:
 			"bg-kiokuDarkBlue border-kiokuDarkBlue text-eggshell shadow-sm",
@@ -40,13 +40,13 @@ function getStyle(
 	return getStyle[style] ?? getStyle.primary;
 }
 
-function getSize(size: "small" | "medium" | "large"): string {
+function getSize(size: Size): string {
 	const getSize: { [size: string]: string } = {
-		small: "px-3 py-1.5 text-xs sm:text-xs md:text-sm lg:px-3 lg:py-1.5 lg:text-base xl:text-lg",
-		medium: "px-3 py-1.5 text-xs sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl",
-		large: "px-5 py-3 text-sm sm:text-base md:text-lg lg:px-5 lg:py-3 lg:text-xl xl:text-2xl",
+		sm: "px-3 py-1.5 text-xs sm:text-xs md:text-sm lg:px-3 lg:py-1.5 lg:text-base xl:text-lg",
+		md: "px-3 py-1.5 text-xs sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl",
+		lg: "px-5 py-3 text-sm sm:text-base md:text-lg lg:px-5 lg:py-3 lg:text-xl xl:text-2xl",
 	};
-	return getSize[size] ?? getSize.medium;
+	return getSize[size] ?? getSize.md;
 }
 
 /**
@@ -55,7 +55,7 @@ function getSize(size: "small" | "medium" | "large"): string {
 export const Button = ({
 	className,
 	style = "primary",
-	size = "medium",
+	size = "md",
 	children = "",
 	...props
 }: ButtonProps) => {

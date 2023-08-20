@@ -27,7 +27,7 @@ interface NavbarProps {
 }
 
 /**
- * UI component for diplaying the NavBar
+ * UI component for diplaying the Navbar
  */
 export const Navbar = ({ login, className = "", onClick }: NavbarProps) => {
 	return (

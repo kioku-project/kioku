@@ -1,4 +1,5 @@
 import React from "react";
+import { Size } from "../../types/Size";
 
 interface FormButtonProps {
 	/**
@@ -16,7 +17,7 @@ interface FormButtonProps {
 	/**
 	 * Button size
 	 */
-	size?: "small" | "medium" | "large";
+	size?: Size;
 	/**
 	 * Additional classes
 	 */
@@ -35,13 +36,13 @@ function getStyle(style: "primary"): string {
 	return getStyle[style] ?? getStyle.primary;
 }
 
-function getSize(size: "small" | "medium" | "large"): string {
+function getSize(size: Size): string {
 	const getSize: { [size: string]: string } = {
-		small: "px-3 py-1.5 text-xs sm:text-xs md:text-sm lg:px-3 lg:py-1.5 lg:text-base xl:text-lg",
-		medium: "px-3 py-1.5 text-xs sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl",
-		large: "px-5 py-3 text-sm sm:text-base md:text-lg lg:px-5 lg:py-3 lg:text-xl xl:text-2xl",
+		sm: "px-3 py-1.5 text-xs sm:text-xs md:text-sm lg:px-3 lg:py-1.5 lg:text-base xl:text-lg",
+		md: "px-3 py-1.5 text-xs sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl",
+		lg: "px-5 py-3 text-sm sm:text-base md:text-lg lg:px-5 lg:py-3 lg:text-xl xl:text-2xl",
 	};
-	return getSize[size] ?? getSize.medium;
+	return getSize[size] ?? getSize.md;
 }
 
 /**
@@ -50,7 +51,7 @@ function getSize(size: "small" | "medium" | "large"): string {
 export const FormButton = ({
 	className = "",
 	style = "primary",
-	size = "medium",
+	size = "md",
 	...props
 }: FormButtonProps) => {
 	return (

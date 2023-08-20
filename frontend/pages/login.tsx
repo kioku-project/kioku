@@ -114,7 +114,7 @@ export default function Page() {
 					id={login ? "login" : "register"}
 					value={login ? "Login" : "Register"}
 					style="primary"
-					size="small"
+					size="sm"
 					className="w-full"
 					onClick={() => {
 						if (login) {

@@ -1,6 +1,4 @@
 import React, { ReactNode } from "react";
-import { Size } from "../../types/Size";
-import { Style } from "../../types/Style";
 
 interface ButtonProps {
 	/**

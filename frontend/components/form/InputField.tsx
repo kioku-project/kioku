@@ -1,5 +1,4 @@
 import React, { ChangeEventHandler } from "react";
-import { Style } from "../../types/Style";
 
 interface InputFieldProps {
 	/**

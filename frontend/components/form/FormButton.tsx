@@ -1,5 +1,4 @@
 import React from "react";
-import { Size } from "../../types/Size";
 
 interface FormButtonProps {
 	/**

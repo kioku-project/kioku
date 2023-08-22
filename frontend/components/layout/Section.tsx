@@ -13,7 +13,7 @@ interface SectionProps {
 	/**
 	 * Section style
 	 */
-	style?: Style | "error" | "noBorder";
+	style?: keyof typeof getStyle;
 	/**
 	 * Section contents
 	 */
@@ -28,15 +28,12 @@ interface SectionProps {
 	onClick?: () => void;
 }
 
-function getStyle(style: Style | "error" | "noBorder"): string {
-	const getStyle: { [style: string]: string } = {
-		primary: "border-kiokuDarkBlue",
-		secondary: "border-kiokuLightBlue",
-		error: "border-kiokuRed",
-		noBorder: "border-transparent",
-	};
-	return getStyle[style] ?? getStyle.primary;
-}
+const getStyle: { [style: string]: string } = {
+	primary: "border-kiokuDarkBlue",
+	secondary: "border-kiokuLightBlue",
+	error: "border-kiokuRed",
+	noBorder: "border-transparent",
+} as const;
 
 /**
  * UI component for displaying a section
@@ -60,9 +57,7 @@ export const Section = ({
 				{header}
 			</div>
 			<div
-				className={`flex flex-col rounded-lg border-2 ${getStyle(
-					style
-				)}`}
+				className={`flex flex-col rounded-lg border-2 ${getStyle[style]}`}
 			>
 				{children}
 			</div>

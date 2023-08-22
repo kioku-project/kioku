@@ -28,7 +28,7 @@ export const InvitationsTab = ({ className = "" }: InvitationsTabProps) => {
 						groupName: invitations.groupInvitation[0].groupName,
 						groupRole: "INVITED",
 					}}
-				></DeckOverview>
+				/>
 			)}
 		</div>
 	);

@@ -34,7 +34,7 @@ export const CardList = ({
 	return (
 		<div id="cardListId" className={`flex flex-col ${className}`}>
 			<div className="snap-y overflow-y-auto">
-				{cards?.cards.map((card: CardType) => (
+				{cards?.cards?.map((card: CardType) => (
 					<Card
 						className="snap-center"
 						key={card.cardID}

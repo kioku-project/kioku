@@ -34,7 +34,7 @@ export const GroupSettingsTab = ({
 	);
 	const [groupName, setGroupName] = useState(group.groupName);
 
-	const [isDelete, setDelete] = useState(false);
+	const [isConfirmDeletion, setConfirmDelete] = useState(false);
 
 	return (
 		<div className={`space-y-5 ${className}`}>
@@ -78,7 +78,7 @@ export const GroupSettingsTab = ({
 					onClick={() => {
 						modifyGroup({
 							groupType:
-								group.groupType == "PRIVATE"
+								group.groupType === "PRIVATE"
 									? "PUBLIC"
 									: "PRIVATE",
 						});
@@ -90,14 +90,14 @@ export const GroupSettingsTab = ({
 					header="Delete this group"
 					description="Once you delete a group, there is no going back. Please be
 					certain."
-					button={isDelete ? "Click again" : "Delete Group"}
+					button={isConfirmDeletion ? "Click again" : "Delete Group"}
 					onClick={() => {
-						if (isDelete) {
+						if (isConfirmDeletion) {
 							deleteGroup()
 								.then((result) => {})
 								.catch((error) => {});
 						} else {
-							setDelete(true);
+							setConfirmDelete(true);
 						}
 					}}
 				></DangerAction>

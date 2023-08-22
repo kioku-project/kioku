@@ -117,7 +117,7 @@ export const Header = ({
 			{/* if on group page and user is not in group, display join group button */}
 			{!deck &&
 				group &&
-				(group.groupRole == "INVITED" || !group?.groupRole) && (
+				(group.groupRole == "INVITED" || !group.groupRole) && (
 					<Button
 						id="joinGroupButtonId"
 						size="sm"
@@ -129,7 +129,7 @@ export const Header = ({
 					</Button>
 				)}
 			{/* if on group page and user already requested, display info text */}
-			{!deck && group && group.groupRole == "REQUESTED" && (
+			{!deck && group?.groupRole == "REQUESTED" && (
 				<Text className="italic" style="primary">
 					Request pending
 				</Text>

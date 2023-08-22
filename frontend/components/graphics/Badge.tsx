@@ -13,7 +13,7 @@ interface BadgeProps {
 	/**
 	 * Badge styling
 	 */
-	style?: Style;
+	style?: keyof typeof getStyle;
 	/**
 	 * Additional classes
 	 */
@@ -24,14 +24,11 @@ interface BadgeProps {
 	onClick?: () => void;
 }
 
-function getStyle(style: Style): string {
-	const getStyle: { [style: string]: string } = {
-		primary: "border-kiokuDarkBlue bg-kiokuDarkBlue text-eggshell",
-		secondary: "border-kiokuDarkBlue text-kiokuLightBlue",
-		tertiary: "border-kiokuLightBlue text-kiokuLightBlue",
-	};
-	return getStyle[style] ?? "";
-}
+const getStyle = {
+	primary: "border-kiokuDarkBlue bg-kiokuDarkBlue text-eggshell",
+	secondary: "border-kiokuDarkBlue text-kiokuLightBlue",
+	tertiary: "border-kiokuLightBlue text-kiokuLightBlue",
+} as const;
 
 /**
  * UI component for displaying a badge
@@ -44,9 +41,7 @@ export const Badge = ({
 }: BadgeProps) => {
 	return (
 		<div
-			className={`w-fit rounded-xl border-2 px-1 text-center text-xs font-bold md:px-1.5 md:py-0.5 ${getStyle(
-				style
-			)} ${className}`}
+			className={`w-fit rounded-xl border-2 px-1 text-center text-xs font-bold md:px-1.5 md:py-0.5 ${getStyle[style]} ${className}`}
 			{...props}
 		>
 			{label}

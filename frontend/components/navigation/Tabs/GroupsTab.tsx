@@ -28,7 +28,7 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 						></DeckOverview>
 					);
 				})}
-			<DeckOverview></DeckOverview>
+			<DeckOverview />
 		</div>
 	);
 };

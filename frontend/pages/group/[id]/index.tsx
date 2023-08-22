@@ -62,7 +62,7 @@ export default function Page() {
 		),
 	};
 
-	const [currentTab, setTab] = useState("decks");
+	const [currentTab, setCurrentTab] = useState("decks");
 
 	return (
 		<div>
@@ -85,7 +85,7 @@ export default function Page() {
 								id="groupTabBarId"
 								tabs={tabs}
 								currentTab={currentTab}
-								setTab={setTab}
+								setTab={setCurrentTab}
 							></TabBar>
 							<div>
 								{{
@@ -99,7 +99,7 @@ export default function Page() {
 										></GroupSettingsTab>
 									),
 									statistics: <StatisticsTab></StatisticsTab>,
-								}[currentTab] || <div>Error</div>}
+								}[currentTab] ?? <div>Error</div>}
 							</div>
 						</div>
 					)}

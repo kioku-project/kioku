@@ -1,6 +1,4 @@
 import React, { ReactNode } from "react";
-import { Size } from "../types/Size";
-import { Style } from "../types/Style";
 
 interface TextProps {
 	/**
@@ -14,11 +12,11 @@ interface TextProps {
 	/**
 	 * Text styling
 	 */
-	style?: Style;
+	style?: keyof typeof getStyle;
 	/**
 	 * Text size
 	 */
-	size?: Size;
+	size?: keyof typeof getSize;
 	/**
 	 * Additional classes
 	 */
@@ -29,24 +27,18 @@ interface TextProps {
 	onClick?: () => void;
 }
 
-function getStyle(style: Style): string {
-	const getStyle: { [style: string]: string } = {
-		primary: "text-kiokuDarkBlue",
-		secondary: "text-kiokuLightBlue",
-	};
-	return getStyle[style] ?? getStyle.primary;
-}
+const getSize = {
+	xs: "text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl",
+	sm: "text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl",
+	md: "text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl",
+	lg: "text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl",
+	xl: "text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl",
+} as const;
 
-function getSize(size: Size): string {
-	const getSize: { [size: string]: string } = {
-		xs: "text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl",
-		sm: "text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl",
-		md: "text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl",
-		lg: "text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl",
-		xl: "text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl",
-	};
-	return getSize[size] ?? getSize.md;
-}
+const getStyle = {
+	primary: "text-kiokuDarkBlue",
+	secondary: "text-kiokuLightBlue",
+} as const;
 
 /**
  * UI component for text
@@ -60,7 +52,7 @@ export const Text = ({
 }: TextProps) => {
 	return (
 		<div
-			className={`${getSize(size)} ${getStyle(style)} ${className}`}
+			className={`${getSize[size]} ${getStyle[style]} ${className}`}
 			{...props}
 		>
 			{children}

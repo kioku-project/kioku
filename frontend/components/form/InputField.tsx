@@ -29,7 +29,7 @@ interface InputFieldProps {
 	/**
 	 * InputField styling
 	 */
-	style?: Style;
+	style?: keyof typeof getLabelStyle | keyof typeof getInputStyle;
 	/**
 	 * Is the InputField required?
 	 */
@@ -48,24 +48,18 @@ interface InputFieldProps {
 	onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-function getLabelStyle(style: Style): string {
-	const getStyle: { [style: string]: string } = {
-		primary: "text-kiokuDarkBlue",
-		secondary: "text-kiokuDarkBlue font-bold",
-		tertiary: "text-kiokuDarkBlue font-bold",
-	};
-	return getStyle[style] ?? "";
-}
+const getLabelStyle = {
+	primary: "text-kiokuDarkBlue",
+	secondary: "text-kiokuDarkBlue font-bold",
+	tertiary: "text-kiokuDarkBlue font-bold",
+} as const;
 
-function getInputStyle(style: Style): string {
-	const getStyle: { [style: string]: string } = {
-		primary:
-			"border-2 border-eggshell bg-eggshell invalid:border-red px-1.5 py-1.5 font-medium text-kiokuDarkBlue focus:border-kiokuDarkBlue",
-		secondary: "text-kiokuDarkBlue font-medium bg-transparent",
-		tertiary: "text-kiokuLightBlue font-medium bg-transparent",
-	};
-	return getStyle[style] ?? "";
-}
+const getInputStyle = {
+	primary:
+		"border-2 border-eggshell bg-eggshell invalid:border-red px-1.5 py-1.5 font-medium text-kiokuDarkBlue focus:border-kiokuDarkBlue",
+	secondary: "text-kiokuDarkBlue font-medium bg-transparent",
+	tertiary: "text-kiokuLightBlue font-medium bg-transparent",
+};
 
 /**
  * UI component for text inputs
@@ -80,14 +74,12 @@ export const InputField = ({
 }: InputFieldProps) => {
 	return (
 		<div className={`flex w-full flex-col ${className}`}>
-			<label htmlFor={name} className={`${getLabelStyle(style)}`}>
+			<label htmlFor={name} className={`${getLabelStyle[style]}`}>
 				{label}
 			</label>
 			<input
 				name={name}
-				className={`w-full rounded-md outline-none ${getInputStyle(
-					style
-				)}`}
+				className={`w-full rounded-md outline-none ${getInputStyle[style]}`}
 				{...props}
 			/>
 		</div>

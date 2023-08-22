@@ -48,7 +48,7 @@ export const TabBar = ({
 						}}
 						key={tab}
 						className={`border-kiokuDarkBlue p-3 font-bold transition hover:cursor-pointer ${
-							currentTab == tab
+							currentTab === tab
 								? "border-b-2 text-kiokuDarkBlue"
 								: "border-none text-kiokuLightBlue"
 						}`}

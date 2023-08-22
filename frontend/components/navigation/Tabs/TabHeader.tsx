@@ -13,41 +13,22 @@ interface TabHeaderProps {
 	/**
 	 * style
 	 */
-	style:
-		| "cards"
-		| "decks"
-		| "groups"
-		| "invitations"
-		| "settings"
-		| "statistics"
-		| "user";
+	style: keyof typeof getIcon;
 	/**
 	 * Additional classes
 	 */
 	className?: string;
 }
 
-function getIcon(
-	style:
-		| "cards"
-		| "decks"
-		| "groups"
-		| "invitations"
-		| "settings"
-		| "statistics"
-		| "user"
-): ReactNode {
-	const getIcon: { [style: string]: ReactNode } = {
-		cards: <Copy size={20}></Copy>,
-		decks: <Layers size={20}></Layers>,
-		groups: <Users size={20}></Users>,
-		invitations: <Mail size={20}></Mail>,
-		settings: <Settings size={20}></Settings>,
-		statistics: <BarChart2 size={20}></BarChart2>,
-		user: <Users size={20}></Users>,
-	};
-	return getIcon[style] ?? "";
-}
+const getIcon = {
+	cards: <Copy size={20}></Copy>,
+	decks: <Layers size={20}></Layers>,
+	groups: <Users size={20}></Users>,
+	invitations: <Mail size={20}></Mail>,
+	settings: <Settings size={20}></Settings>,
+	statistics: <BarChart2 size={20}></BarChart2>,
+	user: <Users size={20}></Users>,
+} as const;
 
 /**
  * UI component for a TabHeader
@@ -63,7 +44,7 @@ export const TabHeader = ({
 			className={`flex flex-row items-center space-x-1 ${className}`}
 			{...props}
 		>
-			{getIcon(style)}
+			{getIcon[style]}
 			<div>{name}</div>
 		</div>
 	);

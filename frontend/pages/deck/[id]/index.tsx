@@ -95,7 +95,7 @@ export default function Page() {
 										></DeckSettingsTab>
 									),
 									statistics: <StatisticsTab></StatisticsTab>,
-								}[currentTab] || <div>Error</div>}
+								}[currentTab] ?? <div>Error</div>}
 							</div>
 						</div>
 					)}

@@ -31,7 +31,7 @@ export const UserSettingsTab = ({
 
 	const [userName, setUserName] = useState(user.userName);
 
-	const [isDelete, setDelete] = useState(false);
+	const [isConfirmDeletion, setConfirmDeletion] = useState(false);
 
 	return (
 		<div className={`space-y-5 ${className}`}>
@@ -61,12 +61,12 @@ export const UserSettingsTab = ({
 					certain.`}
 					button="Delete Account"
 					onClick={() => {
-						if (isDelete) {
+						if (isConfirmDeletion) {
 							deleteUser()
 								.then((result) => {})
 								.catch((error) => {});
 						} else {
-							setDelete(true);
+							setConfirmDeletion(true);
 						}
 					}}
 				></DangerAction>

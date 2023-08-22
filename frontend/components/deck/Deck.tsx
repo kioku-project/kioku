@@ -4,7 +4,8 @@ import "react-toastify/dist/ReactToastify.css";
 import useSWR, { useSWRConfig } from "swr";
 import { authedFetch } from "../../util/reauth";
 import { AlertTriangle } from "react-feather";
-import { Group, groupRole } from "../../types/Group";
+import { Group } from "../../types/Group";
+import { groupRole } from "../../types/GroupRole";
 import { Deck as DeckType } from "../../types/Deck";
 
 interface DeckProps {

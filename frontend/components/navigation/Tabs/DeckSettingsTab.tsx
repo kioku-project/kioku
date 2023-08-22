@@ -34,7 +34,7 @@ export const DeckSettingsTab = ({
 	const { mutate } = useSWRConfig();
 
 	const [deckState, setDeck] = useState(deck);
-	const [isDelete, setDelete] = useState(false);
+	const [isConfirmDeletion, setConfirmDelete] = useState(false);
 
 	return (
 		<div className={`space-y-5 ${className}`}>
@@ -78,14 +78,14 @@ export const DeckSettingsTab = ({
 					header="Delete this deck"
 					description="Once you delete a deck, there is no going back. Please be
 					certain."
-					button={isDelete ? "Click Again" : "Delete Deck"}
+					button={isConfirmDeletion ? "Click Again" : "Delete Deck"}
 					onClick={() => {
-						if (isDelete) {
+						if (isConfirmDeletion) {
 							deleteDeck()
 								.then((result) => {})
 								.catch((error) => {});
 						} else {
-							setDelete(true);
+							setConfirmDelete(true);
 						}
 					}}
 				></DangerAction>

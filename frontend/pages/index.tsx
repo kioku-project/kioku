@@ -61,7 +61,7 @@ export default function Home() {
 		),
 	};
 
-	const [currentTab, setTab] = useState("decks");
+	const [currentTab, setCurrentTab] = useState("decks");
 
 	return (
 		<div>
@@ -83,7 +83,7 @@ export default function Home() {
 								id="deckTabBarId"
 								tabs={tabs}
 								currentTab={currentTab}
-								setTab={setTab}
+								setTab={setCurrentTab}
 							></TabBar>
 							<div>
 								{{
@@ -111,7 +111,7 @@ export default function Home() {
 											user={user}
 										></UserSettingsTab>
 									),
-								}[currentTab] || <div>Error</div>}
+								}[currentTab] ?? <div>Error</div>}
 							</div>
 						</div>
 					)}

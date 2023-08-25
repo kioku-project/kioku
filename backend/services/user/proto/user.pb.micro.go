@@ -37,6 +37,7 @@ func NewUserEndpoints() []*api.Endpoint {
 
 type UserService interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...client.CallOption) (*NameIDResponse, error)
+	DeleteUser(ctx context.Context, in *UserID, opts ...client.CallOption) (*SuccessResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*NameIDResponse, error)
 	GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*UserID, error)
 	GetUserInformation(ctx context.Context, in *UserInformationRequest, opts ...client.CallOption) (*UserInformationResponse, error)
@@ -58,6 +59,16 @@ func NewUserService(name string, c client.Client) UserService {
 func (c *userService) Register(ctx context.Context, in *RegisterRequest, opts ...client.CallOption) (*NameIDResponse, error) {
 	req := c.c.NewRequest(c.name, "User.Register", in)
 	out := new(NameIDResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userService) DeleteUser(ctx context.Context, in *UserID, opts ...client.CallOption) (*SuccessResponse, error) {
+	req := c.c.NewRequest(c.name, "User.DeleteUser", in)
+	out := new(SuccessResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -109,6 +120,7 @@ func (c *userService) GetUserProfileInformation(ctx context.Context, in *UserID,
 
 type UserHandler interface {
 	Register(context.Context, *RegisterRequest, *NameIDResponse) error
+	DeleteUser(context.Context, *UserID, *SuccessResponse) error
 	Login(context.Context, *LoginRequest, *NameIDResponse) error
 	GetUserIDFromEmail(context.Context, *UserIDRequest, *UserID) error
 	GetUserInformation(context.Context, *UserInformationRequest, *UserInformationResponse) error
@@ -118,6 +130,7 @@ type UserHandler interface {
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
 	type user interface {
 		Register(ctx context.Context, in *RegisterRequest, out *NameIDResponse) error
+		DeleteUser(ctx context.Context, in *UserID, out *SuccessResponse) error
 		Login(ctx context.Context, in *LoginRequest, out *NameIDResponse) error
 		GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, out *UserID) error
 		GetUserInformation(ctx context.Context, in *UserInformationRequest, out *UserInformationResponse) error
@@ -136,6 +149,10 @@ type userHandler struct {
 
 func (h *userHandler) Register(ctx context.Context, in *RegisterRequest, out *NameIDResponse) error {
 	return h.UserHandler.Register(ctx, in, out)
+}
+
+func (h *userHandler) DeleteUser(ctx context.Context, in *UserID, out *SuccessResponse) error {
+	return h.UserHandler.DeleteUser(ctx, in, out)
 }
 
 func (h *userHandler) Login(ctx context.Context, in *LoginRequest, out *NameIDResponse) error {

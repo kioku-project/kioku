@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	microErrors "go-micro.dev/v4/errors"
-	"os"
 
 	"github.com/gofiber/fiber/v2"
 	jwtWare "github.com/gofiber/jwt/v3"
@@ -86,6 +87,7 @@ func main() {
 	app.Post("/api/logout", svc.LogoutHandler)
 
 	app.Get("/api/user", svc.GetUserHandler)
+	app.Delete("/api/user", svc.DeleteUserHandler)
 	app.Get("/api/user/dueCards", svc.SrsUserDueHandler)
 	app.Get("/api/user/invitations", svc.GetGroupInvitationsHandler)
 

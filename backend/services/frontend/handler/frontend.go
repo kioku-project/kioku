@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"github.com/golang-jwt/jwt/v4"
-	"github.com/kioku-project/kioku/pkg/converter"
 	"strings"
 	"time"
+
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/kioku-project/kioku/pkg/converter"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/kioku-project/kioku/pkg/helper"
@@ -175,6 +176,17 @@ func (e *Frontend) GetUserHandler(c *fiber.Ctx) error {
 		return err
 	}
 	return c.JSON(rspGetUser)
+}
+
+func (e *Frontend) DeleteUserHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspDeleteUser, err := e.userService.DeleteUser(c.Context(), &pbUser.UserID{
+		UserID: userID,
+	})
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspDeleteUser)
 }
 
 func (e *Frontend) GetGroupInvitationsHandler(c *fiber.Ctx) error {

@@ -57,6 +57,22 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	return nil
 }
 
+func (e *User) DeleteUser(ctx context.Context, req *pb.UserID, rsp *pb.SuccessResponse) error {
+	logger.Infof("Received User.Delete request: %v", req)
+        user, err := e.store.FindUserByID(req.UserID)
+        if err != nil {
+            logger.Errorf("Could not find user with userid: %s: %s", user.ID, err)
+            return err
+        }
+        err = e.store.DeleteUser(user)
+        if err != nil {
+            logger.Errorf("An error occured while trying to delete user with ID '%s': %s", user.ID, err)
+            return err
+        }
+	logger.Infof("Successfully deleted user with id %s", user.ID)
+	return nil
+}
+
 func (e *User) Login(_ context.Context, req *pb.LoginRequest, rsp *pb.NameIDResponse) error {
 	logger.Infof("Received User.Login request: email: %v", req.UserEmail)
 	user, err := e.store.FindUserByEmail(req.UserEmail)

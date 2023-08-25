@@ -91,6 +91,10 @@ func (s *UserStoreImpl) RegisterNewUser(newUser *model.User) error {
 	return s.db.Create(newUser).Error
 }
 
+func (s *UserStoreImpl) DeleteUser(user *model.User) error {
+    return s.db.Delete(user).Error
+}
+
 func (s *UserStoreImpl) FindUserByEmail(email string) (user *model.User, err error) {
 	email = strings.ToLower(email)
 	if err = s.db.Where(&model.User{Email: email}).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {

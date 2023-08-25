@@ -6,6 +6,7 @@ option go_package = "./proto;user";
 
 service User {
 	rpc Register(RegisterRequest) returns (NameIDResponse) {}
+	rpc DeleteUser(UserID) returns (SuccessResponse) {}
 	rpc Login(LoginRequest) returns (NameIDResponse) {}
 	rpc GetUserIDFromEmail(UserIDRequest) returns (UserID) {}
 	rpc GetUserInformation(UserInformationRequest) returns (UserInformationResponse) {}
@@ -34,6 +35,9 @@ message UserIDRequest {
 
 message UserID {
 	string userID = 1;
+}
+message SuccessResponse {
+        bool success = 1;
 }
 
 message UserInformationRequest {

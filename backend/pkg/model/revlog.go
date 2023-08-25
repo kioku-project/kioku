@@ -10,7 +10,7 @@ type Revlog struct {
 	CardID string `gorm:"not null"`
 	Card   Card
 	UserID string `gorm:"not null"`
-	User   User
+        User   User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Date   int64 `gorm:"not null"`
 	Rating int64 `gorm:"not null"`
 }

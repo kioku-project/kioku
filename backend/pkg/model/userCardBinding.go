@@ -8,7 +8,7 @@ import (
 type UserCardBinding struct {
 	ID           string `gorm:"primaryKey"`
 	UserID       string `gorm:"not null"`
-        User        User    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	User         User   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CardID       string `gorm:"not null"`
 	Card         Card
 	DeckID       string `gorm:"not null"`

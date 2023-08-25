@@ -92,7 +92,7 @@ func (s *UserStoreImpl) RegisterNewUser(newUser *model.User) error {
 }
 
 func (s *UserStoreImpl) DeleteUser(user *model.User) error {
-    return s.db.Delete(user).Error
+	return s.db.Delete(user).Error
 }
 
 func (s *UserStoreImpl) FindUserByEmail(email string) (user *model.User, err error) {

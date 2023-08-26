@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -64,12 +64,13 @@ export const Flashcard = ({
 	push,
 }: FlashcardProps) => {
 	const { mutate } = useSWRConfig();
-
 	const [tempCard, setTempCard] = useState<Card>(card);
 	const [side, setSide] = useState<number>(
 		cardSide % (card.sides?.length || 1)
 	);
 	const [edit, setEdit] = useState<boolean>(isEdit);
+	const headerInput = useRef<HTMLInputElement>(null);
+	const descriptionInput = useRef<HTMLInputElement>(null);
 
 	return (
 		<div
@@ -92,6 +93,7 @@ export const Flashcard = ({
 							style="secondary"
 							readOnly={!edit}
 							className="text-lg sm:text-xl md:text-2xl lg:text-3xl"
+							ref={headerInput}
 							onChange={(event) => {
 								editField("header", event.target.value);
 							}}
@@ -138,11 +140,7 @@ export const Flashcard = ({
 											],
 										});
 										setSide(side + 1);
-										const headerInput =
-											document.querySelector(
-												"#headerInputId"
-											) as HTMLElement;
-										headerInput?.focus();
+										headerInput.current?.focus();
 									}}
 								></FilePlus>
 								<div className="flex flex-row items-center space-x-3">
@@ -183,6 +181,7 @@ export const Flashcard = ({
 						style="tertiary"
 						readOnly={!edit}
 						className="text-base text-kiokuLightBlue sm:text-lg md:text-xl lg:text-2xl"
+						ref={descriptionInput}
 						onChange={(event) =>
 							editField("description", event.target.value)
 						}

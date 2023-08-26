@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 import { authedFetch } from "../../util/reauth";
 import { Check, Edit2, Trash, X } from "react-feather";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Text } from "../Text";
 import { Card as CardType } from "../../types/Card";
 
@@ -27,8 +27,8 @@ interface CardProps {
  */
 export const Card = ({ card, setCard, className = "" }: CardProps) => {
 	const { mutate } = useSWRConfig();
-
 	const [isDelete, setDelete] = useState(false);
+	const cardNameInput = useRef<HTMLInputElement>(null);
 
 	return (
 		<div className={`font-semibold text-kiokuDarkBlue ${className}`}>
@@ -84,6 +84,7 @@ export const Card = ({ card, setCard, className = "" }: CardProps) => {
 						className="w-full bg-transparent text-xs outline-none sm:text-sm md:text-base lg:text-lg xl:text-xl"
 						type="text"
 						placeholder="Create Card"
+						ref={cardNameInput}
 						onKeyUp={(event) => {
 							if (event.key === "Enter") {
 								createCard()
@@ -98,11 +99,8 @@ export const Card = ({ card, setCard, className = "" }: CardProps) => {
 	);
 
 	async function createCard() {
-		const input = document.querySelector(
-			"#cardNameInput"
-		) as HTMLInputElement;
-		if (!input.value) {
-			input.focus();
+		if (!cardNameInput.current?.value) {
+			cardNameInput.current?.focus();
 			return;
 		}
 		const response = await authedFetch(`/api/decks/${card.deckID}/cards`, {
@@ -113,13 +111,13 @@ export const Card = ({ card, setCard, className = "" }: CardProps) => {
 			body: JSON.stringify({
 				sides: [
 					{
-						header: input.value,
+						header: cardNameInput.current.value,
 					},
 				],
 			}),
 		});
 		if (response?.ok) {
-			input.value = "";
+			cardNameInput.current.value = "";
 			toast.info("Card created!", { toastId: "newCardToast" });
 			mutate(`/api/decks/${card.deckID}/cards`);
 			mutate(`/api/decks/${card.deckID}/pull`);

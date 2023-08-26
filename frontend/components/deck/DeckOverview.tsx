@@ -7,6 +7,7 @@ import { Section } from "../layout/Section";
 import { Group } from "../../types/Group";
 import { groupRole } from "../../types/GroupRole";
 import { Deck as DeckType } from "../../types/Deck";
+import { useRef } from "react";
 
 interface DeckOverviewProps {
 	/**
@@ -36,6 +37,8 @@ export default function DeckOverview({
 		group ? `/api/groups/${group.groupID}/decks` : null,
 		fetcher
 	);
+
+	const groupNameInput = useRef<HTMLInputElement>(null);
 
 	return (
 		<div
@@ -79,6 +82,7 @@ export default function DeckOverview({
 						type="text"
 						placeholder="Create Group"
 						className="bg-transparent outline-none"
+						ref={groupNameInput}
 						onKeyUp={(event) => {
 							if (event.key === "Enter") {
 								createGroup()
@@ -93,11 +97,8 @@ export default function DeckOverview({
 	);
 
 	async function createGroup() {
-		const input = document.querySelector(
-			"#groupNameInput"
-		) as HTMLInputElement;
-		if (!input.value) {
-			input.focus();
+		if (!groupNameInput.current?.value) {
+			groupNameInput.current?.focus();
 			return;
 		}
 		const response = await authedFetch(`/api/groups`, {
@@ -105,10 +106,10 @@ export default function DeckOverview({
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ groupName: input.value }),
+			body: JSON.stringify({ groupName: groupNameInput.current.value }),
 		});
 		if (response?.ok) {
-			input.value = "";
+			groupNameInput.current.value = "";
 			toast.info("Group created!", { toastId: "newGroupToast" });
 		} else {
 			toast.error("Error!", { toastId: "newGroupToast" });

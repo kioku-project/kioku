@@ -7,6 +7,7 @@ import { AlertTriangle } from "react-feather";
 import { Group } from "../../types/Group";
 import { groupRole } from "../../types/GroupRole";
 import { Deck as DeckType } from "../../types/Deck";
+import { useRef } from "react";
 
 interface DeckProps {
 	/**
@@ -37,6 +38,8 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 		deck ? `/api/decks/${deck?.deckID}/dueCards` : null,
 		fetcher
 	);
+
+	const deckNameInput = useRef<HTMLInputElement>(null);
 
 	return (
 		<div
@@ -97,6 +100,7 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 							id={`deckNameInput${group.groupID}`}
 							className="w-40 bg-transparent text-center outline-none"
 							placeholder={"Create new Deck"}
+							ref={deckNameInput}
 							onKeyUp={(event) => {
 								if (event.key === "Enter") {
 									createDeck()
@@ -116,11 +120,8 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 	);
 
 	async function createDeck() {
-		const input = document.querySelector(
-			`#deckNameInput${group.groupID}`
-		) as HTMLInputElement;
-		if (!input.value) {
-			input.focus();
+		if (!deckNameInput.current?.value) {
+			deckNameInput.current?.focus();
 			return;
 		}
 		const response = await authedFetch(
@@ -130,11 +131,11 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ deckName: input.value }),
+				body: JSON.stringify({ deckName: deckNameInput.current.value }),
 			}
 		);
 		if (response?.ok) {
-			input.value = "";
+			deckNameInput.current.value = "";
 			toast.info("Deck created!", { toastId: "newDeckToast" });
 		} else {
 			toast.error("Error!", { toastId: "newDeckToast" });

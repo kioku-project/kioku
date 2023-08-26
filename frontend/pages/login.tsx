@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { Inter } from "next/font/google";
@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputField } from "../components/form/InputField";
 import { FormButton } from "../components/form/FormButton";
+import { PasswordInput } from "../components/form/InputField.stories";
 
 const inter = Inter({
 	weight: ["200", "400"],
@@ -14,8 +15,13 @@ const inter = Inter({
 });
 
 export default function Page() {
-	const [login, setLogin] = useState(true); // true = login, false = register
 	const router = useRouter();
+	const [login, setLogin] = useState(true); // true = login, false = register
+	const emailInput = useRef<HTMLInputElement>(null);
+	const nameInput = useRef<HTMLInputElement>(null);
+	const passwordInput = useRef<HTMLInputElement>(null);
+	const repeatPasswordInput = useRef<HTMLInputElement>(null);
+
 	return (
 		<div>
 			<Head>
@@ -80,6 +86,7 @@ export default function Page() {
 					label="Email"
 					style="primary"
 					className="sm:text-sm"
+					ref={emailInput}
 				/>
 				{!login && (
 					<InputField
@@ -89,6 +96,7 @@ export default function Page() {
 						label="Name"
 						style="primary"
 						className="sm:text-sm"
+						ref={nameInput}
 					/>
 				)}
 				<InputField
@@ -98,6 +106,7 @@ export default function Page() {
 					label="Password"
 					style="primary"
 					className="sm:text-sm"
+					ref={passwordInput}
 				/>
 				{!login && (
 					<InputField
@@ -107,6 +116,7 @@ export default function Page() {
 						label="Repeat Password"
 						style="primary"
 						className="sm:text-sm"
+						ref={repeatPasswordInput}
 					/>
 				)}
 
@@ -133,11 +143,10 @@ export default function Page() {
 	}
 
 	async function loginLogic() {
-		const email = document.querySelector("#email") as HTMLInputElement;
-		const password = document.querySelector(
-			"#password"
-		) as HTMLInputElement;
-		if (email?.value === "" || password?.value === "") {
+		if (
+			emailInput.current?.value === "" ||
+			passwordInput.current?.value === ""
+		) {
 			return;
 		}
 		let url = "/api/login";
@@ -147,8 +156,8 @@ export default function Page() {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				userEmail: email?.value,
-				userPassword: password?.value,
+				userEmail: emailInput.current?.value,
+				userPassword: passwordInput.current?.value,
 			}),
 		});
 		if (response.ok) {
@@ -162,23 +171,17 @@ export default function Page() {
 	}
 
 	async function registerLogic() {
-		const email = document.querySelector("#email") as HTMLInputElement;
-		const name = document.querySelector("#name") as HTMLInputElement;
-		const password = document.querySelector(
-			"#password"
-		) as HTMLInputElement;
-		let passwordRepeat = document.querySelector(
-			"#passwordRepeat"
-		) as HTMLInputElement;
 		if (
-			email?.value === "" ||
-			name?.value === "" ||
-			password?.value === "" ||
-			passwordRepeat?.value === ""
+			emailInput.current?.value === "" ||
+			nameInput.current?.value === "" ||
+			passwordInput.current?.value === "" ||
+			repeatPasswordInput.current?.value === ""
 		) {
 			return;
 		}
-		if (password?.value === passwordRepeat?.value) {
+		if (
+			passwordInput.current?.value === repeatPasswordInput.current?.value
+		) {
 			let url = "/api/register";
 			const response = await fetch(url, {
 				method: "POST",
@@ -186,9 +189,9 @@ export default function Page() {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					userEmail: email?.value,
-					userName: name?.value,
-					userPassword: password?.value,
+					userEmail: emailInput.current?.value,
+					userName: nameInput.current?.value,
+					userPassword: passwordInput.current?.value,
 				}),
 			});
 			if (response.ok) {

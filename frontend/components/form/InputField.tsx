@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler } from "react";
+import React, { ChangeEventHandler, forwardRef } from "react";
 
 interface InputFieldProps {
 	/**
@@ -63,15 +63,18 @@ const getInputStyle = {
 /**
  * UI component for text inputs
  */
-export const InputField = ({
-	name,
-	label,
-	required = true,
-	style = "primary",
-	className = "",
-	...props
-}: InputFieldProps) => {
-	return (
+export const InputField = React.forwardRef(
+	(
+		{
+			name,
+			label,
+			required = true,
+			style = "primary",
+			className = "",
+			...props
+		}: InputFieldProps,
+		ref: React.Ref<HTMLInputElement>
+	) => (
 		<div className={`flex w-full flex-col ${className}`}>
 			<label htmlFor={name} className={`${getLabelStyle[style]}`}>
 				{label}
@@ -79,8 +82,10 @@ export const InputField = ({
 			<input
 				name={name}
 				className={`w-full rounded-md outline-none ${getInputStyle[style]}`}
+				ref={ref}
 				{...props}
 			/>
 		</div>
-	);
-};
+	)
+);
+InputField.displayName = "InputField";

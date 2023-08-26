@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 import { authedFetch } from "../../util/reauth";
 import { Check, UserCheck, UserX, X } from "react-feather";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Text } from "../Text";
 import { User } from "../../types/User";
 
@@ -28,6 +28,7 @@ interface MemberProps {
 export default function Member({ id, user, className = "" }: MemberProps) {
 	const { mutate } = useSWRConfig();
 	const [isDelete, setDelete] = useState(false);
+	const userInputField = useRef<HTMLInputElement>(null);
 	return (
 		<div
 			id={id ?? `user${user?.userID}`}
@@ -120,15 +121,16 @@ export default function Member({ id, user, className = "" }: MemberProps) {
 						type="email"
 						className="bg-transparent text-kiokuLightBlue outline-none"
 						placeholder="Invite user with email"
+						ref={userInputField}
 						onKeyUp={(event) => {
-							const userInputField = document.querySelector(
-								"#userInputFieldId"
-							) as HTMLInputElement;
-							if (event.key === "Enter") {
-								inviteUser(userInputField.value, true)
+							if (
+								userInputField.current &&
+								event.key === "Enter"
+							) {
+								inviteUser(userInputField.current?.value, true)
 									.then((result) => {})
 									.catch((error) => {});
-								userInputField.value = "";
+								userInputField.current.value = "";
 							}
 						}}
 					></input>

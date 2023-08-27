@@ -274,11 +274,10 @@ export const Flashcard = ({
 	}
 
 	function pushCard(rating: number) {
-		push &&
-			push({
-				cardID: card.cardID,
-				rating: rating,
-			});
+		push?.({
+			cardID: card.cardID,
+			rating: rating,
+		});
 		setSide(0);
 	}
 };

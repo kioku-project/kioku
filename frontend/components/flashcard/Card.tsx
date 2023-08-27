@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 import { authedFetch } from "../../util/reauth";
-import { Check, Edit2, Trash, X } from "react-feather";
+import { Check, Trash, X } from "react-feather";
 import React, { useRef, useState } from "react";
 import { Text } from "../Text";
 import { Card as CardType } from "../../types/Card";

@@ -33,10 +33,9 @@ export default function DeckOverview({
 		authedFetch(url, {
 			method: "GET",
 		}).then((res) => res?.json());
-	const { data: decks } = useSWR(
-		group ? `/api/groups/${group.groupID}/decks` : null,
-		fetcher
-	);
+	const { data: decks } = useSWR<{
+		decks: Pick<DeckType, "deckID" | "deckName">[];
+	}>(group ? `/api/groups/${group.groupID}/decks` : null, fetcher);
 
 	const groupNameInput = useRef<HTMLInputElement>(null);
 
@@ -54,7 +53,7 @@ export default function DeckOverview({
 						onClick={() => router.push(`/group/${group.groupID}`)}
 					>
 						<div className="flex flex-row flex-wrap">
-							{decks?.decks?.map((deck: DeckType) => (
+							{decks?.decks?.map((deck) => (
 								<Deck
 									key={deck.deckID}
 									group={group}

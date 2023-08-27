@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputField } from "../components/form/InputField";
 import { FormButton } from "../components/form/FormButton";
-import { PasswordInput } from "../components/form/InputField.stories";
 
 const inter = Inter({
 	weight: ["200", "400"],

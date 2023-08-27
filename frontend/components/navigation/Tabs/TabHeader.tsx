@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { BarChart2, Copy, Layers, Mail, Settings, Users } from "react-feather";
 
 interface TabHeaderProps {

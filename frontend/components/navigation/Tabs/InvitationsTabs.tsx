@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { authedFetch } from "../../../util/reauth";
 import DeckOverview from "../../deck/DeckOverview";
+import { Group } from "../../../types/Group";
 
 interface InvitationsTabProps {
 	/**
@@ -17,19 +18,21 @@ export const InvitationsTab = ({ className = "" }: InvitationsTabProps) => {
 		authedFetch(url, {
 			method: "GET",
 		}).then((res) => res?.json());
-	const { data: invitations } = useSWR(`/api/user/invitations`, fetcher);
+	const { data: invitations } = useSWR<{
+		groupInvitation: Pick<Group, "groupID" | "groupName">[];
+	}>(`/api/user/invitations`, fetcher);
 
 	return (
 		<div className={`${className}`}>
-			{invitations?.groupInvitation && (
+			{invitations?.groupInvitation?.map((invitation) => (
 				<DeckOverview
+					key={invitation.groupID}
 					group={{
-						groupID: invitations.groupInvitation[0].groupID,
-						groupName: invitations.groupInvitation[0].groupName,
+						...invitation,
 						groupRole: "INVITED",
 					}}
 				/>
-			)}
+			))}
 		</div>
 	);
 };

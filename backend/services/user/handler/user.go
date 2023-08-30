@@ -64,11 +64,23 @@ func (e *User) DeleteUser(ctx context.Context, req *pb.UserID, rsp *pb.SuccessRe
 		logger.Errorf("Could not find user with userid: %s: %s", user.ID, err)
 		return err
 	}
+	// Handle groups that the user is part of
+	groupRes, err := e.collaborationService.GetUserGroups(ctx, &pbCollaboration.UserIDRequest{UserID: user.ID})
+	if err != nil {
+		return err
+	}
+	for _, group := range groupRes.Groups {
+		_, err := e.collaborationService.LeaveGroup(ctx, &pbCollaboration.GroupRequest{UserID: req.UserID, GroupID: group.Group.GroupID})
+		if err != nil {
+			return err
+		}
+	}
 	err = e.store.DeleteUser(user)
 	if err != nil {
 		logger.Errorf("An error occured while trying to delete user with ID '%s': %s", user.ID, err)
 		return err
 	}
+	rsp.Success = true
 	logger.Infof("Successfully deleted user with id %s", user.ID)
 	return nil
 }

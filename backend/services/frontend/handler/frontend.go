@@ -55,7 +55,8 @@ func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
 	rspRegister, err := e.userService.Register(c.Context(), &pbUser.RegisterRequest{
 		UserEmail:    data["userEmail"],
 		UserName:     data["userName"],
-		UserPassword: data["userPassword"]})
+		UserPassword: data["userPassword"],
+	})
 	if err != nil {
 		return err
 	}
@@ -75,7 +76,8 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	}
 	rspLogin, err := e.userService.Login(c.Context(), &pbUser.LoginRequest{
 		UserEmail:    reqUser.Email,
-		UserPassword: reqUser.Password})
+		UserPassword: reqUser.Password,
+	})
 	if err != nil {
 		return err
 	}
@@ -236,6 +238,22 @@ func (e *Frontend) CreateGroupHandler(c *fiber.Ctx) error {
 		return err
 	}
 	return c.SendString(rspCreateGroup.ID)
+}
+
+func (e *Frontend) LeaveGroupHandler(c *fiber.Ctx) error {
+	groupID := c.Params("groupID")
+	userID := helper.GetUserIDFromContext(c)
+	rspLeaveGroup, err := e.collaborationService.LeaveGroupSafe(
+		c.Context(),
+		&pbCollaboration.GroupRequest{
+			UserID:  userID,
+			GroupID: groupID,
+		},
+	)
+	if err != nil {
+		return err
+	}
+	return c.JSON(rspLeaveGroup)
 }
 
 func (e *Frontend) GetGroupHandler(c *fiber.Ctx) error {
@@ -624,6 +642,7 @@ func (e *Frontend) SrsPullHandler(c *fiber.Ctx) error {
 	}
 	return c.JSON(rspSrsPull.Card)
 }
+
 func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
 	var data converter.FiberPushCardRequestBody
 	if err := c.BodyParser(&data); err != nil {
@@ -644,7 +663,6 @@ func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) SrsDeckDueHandler(c *fiber.Ctx) error {
-
 	userID := helper.GetUserIDFromContext(c)
 	rspSrsDue, err := e.srsService.GetDeckCardsDue(c.Context(), &pbSrs.DeckPullRequest{
 		UserID: userID,
@@ -660,7 +678,6 @@ func (e *Frontend) SrsDeckDueHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
-
 	userID := helper.GetUserIDFromContext(c)
 	dueCards, err := e.srsService.GetUserCardsDue(c.Context(), &pbSrs.UserDueRequest{
 		UserID: userID,

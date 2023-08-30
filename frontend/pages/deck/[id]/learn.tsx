@@ -34,6 +34,7 @@ export default function Page() {
 					{card?.cardID ? (
 						<Flashcard
 							id="flashcardId"
+							key={card.cardID}
 							card={card}
 							dueCards={dueCards}
 							push={push}

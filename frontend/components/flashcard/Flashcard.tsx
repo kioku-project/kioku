@@ -278,6 +278,5 @@ export const Flashcard = ({
 			cardID: card.cardID,
 			rating: rating,
 		});
-		setSide(0);
 	}
 };

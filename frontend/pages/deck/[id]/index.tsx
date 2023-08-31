@@ -69,7 +69,7 @@ export default function Page() {
 				<div className="min-w-screen flex h-screen flex-col bg-eggshell">
 					<Navbar login={true}></Navbar>
 					{group && deck && (
-						<div className="flex flex-col space-y-3 p-5 md:space-y-5 md:p-10">
+						<div className="flex h-full flex-col space-y-3 overflow-y-auto p-5 md:space-y-5 md:p-10">
 							<Header
 								id={"deckPageHeaderId"}
 								group={group}
@@ -81,7 +81,7 @@ export default function Page() {
 								currentTab={currentTab}
 								setTab={setTab}
 							></TabBar>
-							<div>
+							<div className="h-full overflow-y-auto">
 								{{
 									cards: (
 										<CardsTab

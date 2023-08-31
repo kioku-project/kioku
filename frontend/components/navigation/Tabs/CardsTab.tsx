@@ -21,11 +21,13 @@ export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
 	const [card, setCard] = useState<Card>();
 
 	return (
-		<div className={`flex flex-col md:flex-row ${className}`}>
+		<div
+			className={`flex h-full max-h-full flex-col md:flex-row ${className}`}
+		>
 			<CardList
 				deckID={deckID}
 				setCard={setNewCard}
-				className={`w-full md:h-80 ${card ? "h-72 md:w-1/2" : "h-96"}`}
+				className={`${card ? "md:w-1/2" : "w-full"}`}
 			></CardList>
 			{card && (
 				<>
@@ -39,7 +41,7 @@ export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
 							onClick={() => setCard(undefined)}
 						></ChevronDown>
 					</div>
-					<div className="flex flex-row items-center md:w-1/2">
+					<div className="flex h-full flex-row items-center md:w-1/2">
 						{card && (
 							<Flashcard
 								id={"FlashcardId"}

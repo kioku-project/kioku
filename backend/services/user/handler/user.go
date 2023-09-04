@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"go-micro.dev/v4/logger"
@@ -24,7 +25,7 @@ func New(s store.UserStore, cS pbCollaboration.CollaborationService) *User {
 }
 
 func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.NameIDResponse) error {
-	logger.Infof("Received User.Register request: %v", req)
+	logger.Infof("Received User.Register request: email: %v", req.UserEmail)
 	if _, err := e.store.FindUserByEmail(req.UserEmail); err == nil {
 		return helper.NewMicroUserAlreadyExistsErr(helper.UserServiceID)
 	} else if !errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
@@ -57,7 +58,7 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 }
 
 func (e *User) Login(_ context.Context, req *pb.LoginRequest, rsp *pb.NameIDResponse) error {
-	logger.Infof("Received User.Login request: %v", req)
+	logger.Infof("Received User.Login request: email: %v", req.UserEmail)
 	user, err := e.store.FindUserByEmail(req.UserEmail)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {

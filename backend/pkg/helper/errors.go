@@ -56,6 +56,10 @@ func NewMicroCantLeaveDefaultGroupErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "You can't leave your default group")
 }
 
+func NewMicroCantLeaveAsLastAdminErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "You can't leave when you are the last admin")
+}
+
 func NewMicroUserAdmissionInProgressErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "user already invited")
 }

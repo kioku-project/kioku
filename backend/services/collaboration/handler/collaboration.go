@@ -478,6 +478,13 @@ func (e *Collaboration) LeaveGroupSafe(ctx context.Context, req *pb.GroupRequest
 	if group.IsDefault {
 		return helper.NewMicroCantLeaveDefaultGroupErr(helper.CollaborationServiceID)
 	}
+	remainingAdmins, err := e.store.GetGroupAdmins(req.GroupID)
+	if err != nil {
+		return err
+	}
+	if len(remainingAdmins) == 1 && remainingAdmins[0].UserID == req.UserID {
+		return helper.NewMicroCantLeaveAsLastAdminErr(helper.CollaborationServiceID)
+	}
 	return e.LeaveGroup(ctx, req, rsp)
 }
 
@@ -487,21 +494,27 @@ func (e *Collaboration) LeaveGroup(ctx context.Context, req *pb.GroupRequest, rs
 	if err != nil {
 		return err
 	}
+	groupAdmins, err := e.store.GetGroupAdmins(req.GroupID)
+	if err != nil {
+		return err
+	}
 	groupUsers, err := helper.FindStoreEntity(e.store.GetGroupMemberRoles, req.GroupID, helper.CollaborationServiceID)
-	if len(groupUsers) == 1 && groupUsers[0].UserID == req.UserID {
+	if err != nil {
+		return err
+	}
+	if len(groupAdmins) == 1 && groupAdmins[0].UserID == req.UserID && group.GroupType == model.Private {
 		if err := e.store.DeleteGroup(group); err != nil {
 			return err
 		}
-	}
-	groupAdmins := []model.GroupUserRole{}
-	for _, gU := range groupUsers {
-		if gU.RoleType == model.RoleAdmin {
-			groupAdmins = append(groupAdmins, gU)
-		}
-	}
-	if len(groupAdmins) == 1 && groupAdmins[0].UserID == req.UserID {
-		if err := e.store.DeleteGroup(group); err != nil {
+	} else if len(groupUsers) == 1 {
+		decksRsp, err := e.cardDeckService.GetGroupDecks(ctx, &pbCardDeck.GroupDecksRequest{UserID: req.UserID, GroupID: req.GroupID})
+		if err != nil {
 			return err
+		}
+		if len(decksRsp.Decks) == 0 {
+			if err := e.store.DeleteGroup(group); err != nil {
+				return err
+			}
 		}
 	}
 	rsp.Success = true

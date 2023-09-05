@@ -310,6 +310,13 @@ func (s *CollaborationStoreImpl) GetGroupMemberRoles(groupID string) (groupMembe
 	return
 }
 
+func (s *CollaborationStoreImpl) GetGroupAdmins(groupID string) (groupMembers []model.GroupUserRole, err error) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, RoleType: model.RoleAdmin}).Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
 func (s *CollaborationStoreImpl) FindGroupRequestsByGroupID(groupID string) (groupRequests []model.GroupUserRole, err error) {
 	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, RoleType: model.RoleRequested}).Find(&groupRequests).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID

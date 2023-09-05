@@ -41,6 +41,7 @@ type CollaborationStore interface {
 	DeleteGroup(group *model.Group) error
 	GetGroupUserRole(userID string, groupID string) (model.RoleType, error)
 	GetGroupMemberRoles(groupID string) ([]model.GroupUserRole, error)
+	GetGroupAdmins(groupID string) ([]model.GroupUserRole, error)
 	FindGroupRequestsByGroupID(groupID string) ([]model.GroupUserRole, error)
 	FindGroupInvitationsByUserID(userID string) ([]model.GroupUserRole, error)
 	FindGroupInvitationsByGroupID(groupID string) ([]model.GroupUserRole, error)

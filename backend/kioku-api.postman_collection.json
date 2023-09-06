@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "143cccbc-538e-4c43-a28c-70149a610600",
+		"_postman_id": "19d46698-5933-41d0-af39-a920df2156d2",
 		"name": "Kioku",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28711895"
 	},
 	"item": [
 		{
@@ -99,6 +100,28 @@
 			"name": "Get User",
 			"request": {
 				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/user",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"method": "DELETE",
 				"header": [],
 				"url": {
 					"raw": "127.0.0.1:3000/api/user",
@@ -996,6 +1019,37 @@
 						"api",
 						"groups",
 						":groupID"
+					],
+					"variable": [
+						{
+							"key": "groupID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Leave Group",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/groups/:groupID/members/leave",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"groups",
+						":groupID",
+						"members",
+						"leave"
 					],
 					"variable": [
 						{

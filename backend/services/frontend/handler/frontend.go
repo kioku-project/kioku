@@ -252,8 +252,10 @@ func (e *Frontend) LeaveGroupHandler(c *fiber.Ctx) error {
 	)
 	if err != nil {
 		return err
+	} else if !rspLeaveGroup.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
-	return c.JSON(rspLeaveGroup)
+	return c.SendStatus(200)
 }
 
 func (e *Frontend) GetGroupHandler(c *fiber.Ctx) error {

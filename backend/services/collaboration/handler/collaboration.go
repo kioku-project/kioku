@@ -516,6 +516,8 @@ func (e *Collaboration) LeaveGroup(ctx context.Context, req *pb.GroupRequest, rs
 				return err
 			}
 		}
+	} else {
+		e.store.RemoveUserFromGroup(req.UserID, req.GroupID)
 	}
 	rsp.Success = true
 	logger.Infof("User %s left group %s. (%s admins remaining)", req.UserID, req.GroupID, len(groupAdmins)-1)

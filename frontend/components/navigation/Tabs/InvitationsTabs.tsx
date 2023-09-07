@@ -5,6 +5,10 @@ import { Group } from "../../../types/Group";
 
 interface InvitationsTabProps {
 	/**
+	 * List of all invitations
+	 */
+	invitations: Pick<Group, "groupID" | "groupName">[];
+	/**
 	 * Additional classes
 	 */
 	className?: string;
@@ -13,18 +17,13 @@ interface InvitationsTabProps {
 /**
  * UI component for the InvitationsTab
  */
-export const InvitationsTab = ({ className = "" }: InvitationsTabProps) => {
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
-	const { data: invitations } = useSWR<{
-		groupInvitation: Pick<Group, "groupID" | "groupName">[];
-	}>(`/api/user/invitations`, fetcher);
-
+export const InvitationsTab = ({
+	invitations,
+	className = "",
+}: InvitationsTabProps) => {
 	return (
 		<div className={`${className}`}>
-			{invitations?.groupInvitation?.map((invitation) => (
+			{invitations?.map((invitation) => (
 				<DeckOverview
 					key={invitation.groupID}
 					group={{

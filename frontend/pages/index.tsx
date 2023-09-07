@@ -22,6 +22,9 @@ export default function Home() {
 	const { data: groups } = useSWR("/api/groups", fetcher);
 	const { data: user } = useSWR("/api/user", fetcher);
 	const { data: due } = useSWR("/api/user/dueCards", fetcher);
+	const { data: invitations } = useSWR<{
+		groupInvitation: Pick<Group, "groupID" | "groupName">[];
+	}>(`/api/user/invitations`, fetcher);
 
 	const tabs: { [tab: string]: ReactNode } = {
 		decks: (
@@ -43,6 +46,7 @@ export default function Home() {
 				id="invitationTabHeaderId"
 				name="Invitations"
 				style="invitations"
+				notification={`${invitations?.groupInvitation?.length ?? ""}`}
 			></TabHeader>
 		),
 		statistics: (
@@ -102,8 +106,12 @@ export default function Home() {
 											groups={groups.groups}
 										></GroupsTab>
 									),
-									invitations: (
-										<InvitationsTab></InvitationsTab>
+									invitations: invitations && (
+										<InvitationsTab
+											invitations={
+												invitations.groupInvitation
+											}
+										></InvitationsTab>
 									),
 									statistics: <StatisticsTab></StatisticsTab>,
 									settings: (

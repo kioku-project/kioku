@@ -14,6 +14,10 @@ interface TabHeaderProps {
 	 */
 	style: keyof typeof getIcon;
 	/**
+	 * Text that should be displayed as notification
+	 */
+	notification?: string;
+	/**
 	 * Additional classes
 	 */
 	className?: string;
@@ -35,16 +39,25 @@ const getIcon = {
 export const TabHeader = ({
 	name,
 	style,
+	notification = "",
 	className = "",
 	...props
 }: TabHeaderProps) => {
 	return (
 		<div
-			className={`flex flex-row items-center space-x-1 ${className}`}
+			className={`flex flex-row items-center space-x-2 ${className}`}
 			{...props}
 		>
 			{getIcon[style]}
 			<div>{name}</div>
+			{notification && (
+				<div className="relative flex h-full text-sm text-eggshell">
+					<div className="absolute inline-flex h-full w-full animate-ping rounded-full bg-kiokuRed opacity-75"></div>
+					<div className="relative flex h-full w-full justify-center rounded-full bg-kiokuRed px-2">
+						{notification}
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };

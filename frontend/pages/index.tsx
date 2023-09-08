@@ -13,6 +13,7 @@ import { DecksTab } from "../components/navigation/Tabs/DecksTab";
 import { UserSettingsTab } from "../components/navigation/Tabs/UserSettingsTab";
 import { InvitationsTab } from "../components/navigation/Tabs/InvitationsTabs";
 import { Group } from "../types/Group";
+import { Invitation } from "../types/Invitation";
 
 export default function Home() {
 	const fetcher = (url: RequestInfo | URL) =>
@@ -23,7 +24,7 @@ export default function Home() {
 	const { data: user } = useSWR("/api/user", fetcher);
 	const { data: due } = useSWR("/api/user/dueCards", fetcher);
 	const { data: invitations } = useSWR<{
-		groupInvitation: Pick<Group, "groupID" | "groupName">[];
+		groupInvitation: Invitation[];
 	}>(`/api/user/invitations`, fetcher);
 
 	const tabs: { [tab: string]: ReactNode } = {
@@ -46,7 +47,9 @@ export default function Home() {
 				id="invitationTabHeaderId"
 				name="Invitations"
 				style="invitations"
-				notification={`${invitations?.groupInvitation?.length ?? ""}`}
+				notificationBadgeContent={`${
+					invitations?.groupInvitation?.length || ""
+				}`}
 			></TabHeader>
 		),
 		statistics: (

@@ -1,13 +1,11 @@
-import useSWR from "swr";
-import { authedFetch } from "../../../util/reauth";
 import DeckOverview from "../../deck/DeckOverview";
-import { Group } from "../../../types/Group";
+import { Invitation } from "../../../types/Invitation";
 
 interface InvitationsTabProps {
 	/**
 	 * List of all invitations
 	 */
-	invitations: Pick<Group, "groupID" | "groupName">[];
+	invitations: Invitation[];
 	/**
 	 * Additional classes
 	 */

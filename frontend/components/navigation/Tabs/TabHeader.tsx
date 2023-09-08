@@ -16,7 +16,7 @@ interface TabHeaderProps {
 	/**
 	 * Text that should be displayed as notification
 	 */
-	notification?: string;
+	notificationBadgeContent?: string;
 	/**
 	 * Additional classes
 	 */
@@ -39,7 +39,7 @@ const getIcon = {
 export const TabHeader = ({
 	name,
 	style,
-	notification = "",
+	notificationBadgeContent = "",
 	className = "",
 	...props
 }: TabHeaderProps) => {
@@ -50,11 +50,11 @@ export const TabHeader = ({
 		>
 			{getIcon[style]}
 			<div>{name}</div>
-			{notification && (
+			{notificationBadgeContent && (
 				<div className="relative flex h-full text-sm text-eggshell">
 					<div className="absolute inline-flex h-full w-full animate-ping rounded-full bg-kiokuRed opacity-75"></div>
 					<div className="relative flex h-full w-full justify-center rounded-full bg-kiokuRed px-2">
-						{notification}
+						{notificationBadgeContent}
 					</div>
 				</div>
 			)}

@@ -52,7 +52,7 @@ export const TabHeader = ({
 			<div>{name}</div>
 			{notificationBadgeContent && (
 				<div className="relative flex h-full text-sm text-eggshell">
-					<div className="absolute inline-flex h-full w-full animate-ping rounded-full bg-kiokuRed opacity-75"></div>
+					<div className="absolute inline-flex h-full w-full animate-[ping_1s_ease-out_3] rounded-full bg-kiokuRed opacity-75"></div>
 					<div className="relative flex h-full w-full justify-center rounded-full bg-kiokuRed px-2">
 						{notificationBadgeContent}
 					</div>

@@ -35,6 +35,13 @@ export const Error: Story = {
 	},
 };
 
+export const Disabled: Story = {
+	args: {
+		header: "Primary",
+		style: "disabled",
+	},
+};
+
 export const NoBorder: Story = {
 	args: {
 		header: "No Border",

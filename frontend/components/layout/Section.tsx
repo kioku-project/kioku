@@ -31,6 +31,7 @@ const getStyle: { [style: string]: string } = {
 	primary: "border-kiokuDarkBlue",
 	secondary: "border-kiokuLightBlue",
 	error: "border-kiokuRed",
+	disabled: "border-gray-500",
 	noBorder: "border-transparent",
 } as const;
 

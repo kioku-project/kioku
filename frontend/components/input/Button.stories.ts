@@ -42,6 +42,13 @@ export const Warning: Story = {
 	},
 };
 
+export const Disabled: Story = {
+	args: {
+		children: "Disabled",
+		style: "disabled",
+	},
+};
+
 export const Small: Story = {
 	args: {
 		children: "Small",

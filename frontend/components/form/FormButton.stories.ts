@@ -21,6 +21,13 @@ export const Primary: Story = {
 	},
 };
 
+export const Disabled: Story = {
+	args: {
+		value: "Disabled",
+		style: "disabled",
+	},
+};
+
 export const Small: Story = {
 	args: {
 		value: "Small",

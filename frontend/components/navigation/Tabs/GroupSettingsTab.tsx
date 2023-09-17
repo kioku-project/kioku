@@ -7,6 +7,7 @@ import { DangerAction } from "../../input/DangerAction";
 import { authedFetch } from "../../../util/reauth";
 import { toast } from "react-toastify";
 import { Group } from "../../../types/Group";
+import { groupRole } from "../../../types/GroupRole";
 
 interface GroupSettingsTabProps {
 	/**
@@ -28,22 +29,26 @@ export const GroupSettingsTab = ({
 }: GroupSettingsTabProps) => {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
-
 	const [groupDescription, setGroupDescription] = useState(
 		group.groupDescription
 	);
 	const [groupName, setGroupName] = useState(group.groupName);
-
 	const [isConfirmDeletion, setConfirmDelete] = useState(false);
+
+	const admin = group.groupRole
+		? groupRole[group.groupRole] >= groupRole.ADMIN
+		: false;
 
 	return (
 		<div className={`space-y-5 ${className}`}>
+			{/* Settings for group admins */}
 			<Section id="generalGroupSettingsId" header="General">
 				<InputAction
 					id="GroupNameInputAction"
 					header="Group Name"
 					value={groupName}
 					button="Rename"
+					disabled={!admin}
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {
 						setGroupName(event.target.value);
 					}}
@@ -57,11 +62,14 @@ export const GroupSettingsTab = ({
 					header="Group Description"
 					value={groupDescription}
 					button="Save"
+					disabled={!admin}
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {
 						setGroupDescription(event.target.value);
 					}}
 					onClick={() => {
-						modifyGroup({ groupDescription: groupDescription });
+						modifyGroup({
+							groupDescription: groupDescription,
+						});
 					}}
 				></InputAction>
 			</Section>
@@ -70,11 +78,24 @@ export const GroupSettingsTab = ({
 				header="Danger Zone"
 				style="error"
 			>
+				{/* Settings for all group members */}
+				<DangerAction
+					id={"leaveGroupDangerAction"}
+					header="Leave Group"
+					description="You have to be invited or request to join the group again."
+					button="Leave Group"
+					onClick={() => {
+						leaveGroup();
+					}}
+				></DangerAction>
+				<hr className="border-kiokuLightBlue" />
+				{/* Settings for group admins */}
 				<DangerAction
 					id="visibilityGroupDangerAction"
 					header="Change group visibility"
 					description={`This group is currently ${group.groupType?.toLowerCase()}.`}
 					button="Change Visibility"
+					disabled={!admin}
 					onClick={() => {
 						modifyGroup({
 							groupType:
@@ -88,9 +109,9 @@ export const GroupSettingsTab = ({
 				<DangerAction
 					id="deleteGroupDangerAction"
 					header="Delete this group"
-					description="Once you delete a group, there is no going back. Please be
-					certain."
+					description="Once you delete a group, there is no going back. Please be certain."
 					button={isConfirmDeletion ? "Click again" : "Delete Group"}
+					disabled={!admin}
 					onClick={() => {
 						if (isConfirmDeletion) {
 							deleteGroup()
@@ -125,6 +146,25 @@ export const GroupSettingsTab = ({
 		mutate(`/api/groups/${group.groupID}`);
 	}
 
+	async function leaveGroup() {
+		const response = await authedFetch(
+			`/api/groups/${group.groupID}/members/leave`,
+			{
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		);
+		if (response?.ok) {
+			toast.info("Left group!", { toastId: "leftGroupToast" });
+			router.push(`/`);
+		} else {
+			toast.error("Error!", { toastId: "leftGroupToast" });
+		}
+		mutate(`/api/groups`);
+	}
+
 	async function deleteGroup() {
 		const response = await authedFetch(`/api/groups/${group.groupID}`, {
 			method: "DELETE",
@@ -134,10 +174,10 @@ export const GroupSettingsTab = ({
 		});
 		if (response?.ok) {
 			toast.info("Group deleted!", { toastId: "deletedGroupToast" });
+			router.push(`/`);
 		} else {
 			toast.error("Error!", { toastId: "deletedGroupToast" });
 		}
 		mutate(`/api/groups`);
-		router.push(`/`);
 	}
 };

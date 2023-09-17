@@ -12,7 +12,7 @@ import { Header } from "../../../components/layout/Header";
 import { MembersTab } from "../../../components/navigation/Tabs/MembersTab";
 import { DecksTab } from "../../../components/navigation/Tabs/DecksTab";
 import { TabBar } from "../../../components/navigation/Tabs/TabBar";
-import { GroupSettingsTab } from "../../../components/navigation/Tabs/GroupSettingTab";
+import { GroupSettingsTab } from "../../../components/navigation/Tabs/GroupSettingsTab";
 
 export default function Page() {
 	const router = useRouter();

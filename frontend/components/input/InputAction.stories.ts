@@ -22,6 +22,15 @@ export const Default: Story = {
 	},
 };
 
+export const Disabled: Story = {
+	args: {
+		header: "InputAction",
+		value: "Input",
+		button: "Action",
+		disabled: true,
+	},
+};
+
 export const WithoutValue: Story = {
 	args: {
 		header: "InputAction",

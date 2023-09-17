@@ -21,6 +21,10 @@ interface InputActionProps {
 	 */
 	button: string;
 	/**
+	 * Is the InputAction disabled?
+	 */
+	disabled?: boolean;
+	/**
 	 * Additional classes
 	 */
 	className?: string;
@@ -42,6 +46,7 @@ export const InputAction = ({
 	header,
 	value,
 	button,
+	disabled = false,
 	className = "",
 	onChange,
 	onClick,
@@ -63,6 +68,7 @@ export const InputAction = ({
 						label={header}
 						value={value}
 						style="tertiary"
+						readOnly={disabled}
 						onChange={onChange}
 					></InputField>
 				}
@@ -70,7 +76,7 @@ export const InputAction = ({
 					<FormButton
 						id={`${id}ButtonId`}
 						value={button}
-						style="primary"
+						style={disabled ? "disabled" : "primary"}
 						size="sm"
 						className="h-fit w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6"
 						onClick={onClick}

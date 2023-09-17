@@ -19,11 +19,15 @@ interface DangerActionProps {
 	 */
 	button?: string;
 	/**
+	 * Is the DangerAction disabled?
+	 */
+	disabled?: boolean;
+	/**
 	 * Additional classes
 	 */
 	className?: string;
 	/**
-	 * Additional classes
+	 * click handler
 	 */
 	onClick?: () => void;
 }
@@ -36,6 +40,7 @@ export const DangerAction = ({
 	header,
 	description,
 	button,
+	disabled,
 	className = "",
 	onClick,
 	...props
@@ -60,7 +65,7 @@ export const DangerAction = ({
 				button={
 					<Button
 						id={`${id}ButtonId`}
-						style="error"
+						style={disabled ? "disabled" : "error"}
 						size="sm"
 						className="h-fit w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6"
 						onClick={onClick}

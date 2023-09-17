@@ -22,6 +22,15 @@ export const Default: Story = {
 	},
 };
 
+export const Disabled: Story = {
+	args: {
+		header: "DangerAction",
+		description: "Danger",
+		button: "Action",
+		disabled: true,
+	},
+};
+
 export const Header: Story = {
 	args: {
 		header: "DangerAction",

@@ -90,7 +90,7 @@ export default function Page() {
 									),
 									settings: (
 										<DeckSettingsTab
-											groupID={deck.groupID}
+											group={group}
 											deck={deck}
 										></DeckSettingsTab>
 									),

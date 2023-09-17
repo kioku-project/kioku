@@ -6,12 +6,14 @@ import { ChangeEvent, useState } from "react";
 import { DangerAction } from "../../input/DangerAction";
 import { authedFetch } from "../../../util/reauth";
 import { toast } from "react-toastify";
+import { Group } from "../../../types/Group";
+import { groupRole } from "../../../types/GroupRole";
 
 interface DeckSettingsTabProps {
 	/**
 	 * groupID
 	 */
-	groupID: string;
+	group: Group;
 	/**
 	 * deck
 	 */
@@ -26,7 +28,7 @@ interface DeckSettingsTabProps {
  * UI component for the DeckSettingsTab
  */
 export const DeckSettingsTab = ({
-	groupID,
+	group,
 	deck,
 	className = "",
 }: DeckSettingsTabProps) => {
@@ -36,14 +38,20 @@ export const DeckSettingsTab = ({
 	const [deckState, setDeck] = useState(deck);
 	const [isConfirmDeletion, setConfirmDelete] = useState(false);
 
+	const admin = group.groupRole
+		? groupRole[group.groupRole] >= groupRole.ADMIN
+		: false;
+
 	return (
 		<div className={`space-y-5 ${className}`}>
+			{/* Settings for group admins */}
 			<Section id="generalDeckSettingsId" header="General">
 				<InputAction
 					id="deckNameInputAction"
 					header="Deck Name"
 					value={deckState.deckName}
 					button="Rename"
+					disabled={!admin}
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {
 						setDeck({
 							...deckState,
@@ -61,24 +69,23 @@ export const DeckSettingsTab = ({
 				style="error"
 			>
 				{/* <DangerAction
-					header="Change deck visibility"
-					description="This deck is currently private."
-					button="Change Visibility"
-				></DangerAction>
-				<hr className="border-kiokuLightBlue" />
-				<DangerAction
-					header="Transfer ownership"
-					description="Transfer this deck to another group where you have
-					the ability to create decks."
-					button="Transfer Deck"
-				></DangerAction>
-				<hr className="border-kiokuLightBlue" /> */}
+								header="Change deck visibility"
+								description="This deck is currently private."
+								button="Change Visibility"
+							></DangerAction>
+							<hr className="border-kiokuLightBlue" />
+							<DangerAction
+								header="Transfer ownership"
+								description="Transfer this deck to another group where you have	the ability to create decks."
+								button="Transfer Deck"
+							></DangerAction>
+							<hr className="border-kiokuLightBlue" /> */}
 				<DangerAction
 					id="deleteDeckDangerAction"
 					header="Delete this deck"
-					description="Once you delete a deck, there is no going back. Please be
-					certain."
+					description="Once you delete a deck, there is no going back. Please be certain."
 					button={isConfirmDeletion ? "Click Again" : "Delete Deck"}
+					disabled={!admin}
 					onClick={() => {
 						if (isConfirmDeletion) {
 							deleteDeck()
@@ -127,7 +134,7 @@ export const DeckSettingsTab = ({
 		} else {
 			toast.error("Error!", { toastId: "deletedDeckToast" });
 		}
-		mutate(`/api/groups/${groupID}/decks`);
-		router.push(`/group/${groupID}`);
+		mutate(`/api/groups/${group.groupID}/decks`);
+		router.push(`/group/${group.groupID}`);
 	}
 };

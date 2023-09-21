@@ -35,9 +35,7 @@ export const GroupSettingsTab = ({
 	const [groupName, setGroupName] = useState(group.groupName);
 	const [isConfirmDeletion, setConfirmDelete] = useState(false);
 
-	const admin = group.groupRole
-		? groupRole[group.groupRole] >= groupRole.ADMIN
-		: false;
+	const isAdmin = groupRole[group.groupRole!] >= groupRole.ADMIN;
 
 	return (
 		<div className={`space-y-5 ${className}`}>
@@ -48,7 +46,7 @@ export const GroupSettingsTab = ({
 					header="Group Name"
 					value={groupName}
 					button="Rename"
-					disabled={!admin}
+					disabled={!isAdmin}
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {
 						setGroupName(event.target.value);
 					}}
@@ -62,14 +60,12 @@ export const GroupSettingsTab = ({
 					header="Group Description"
 					value={groupDescription}
 					button="Save"
-					disabled={!admin}
+					disabled={!isAdmin}
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {
 						setGroupDescription(event.target.value);
 					}}
 					onClick={() => {
-						modifyGroup({
-							groupDescription: groupDescription,
-						});
+						modifyGroup({ groupDescription: groupDescription });
 					}}
 				></InputAction>
 			</Section>
@@ -82,7 +78,7 @@ export const GroupSettingsTab = ({
 				<DangerAction
 					id={"leaveGroupDangerAction"}
 					header="Leave Group"
-					description="You have to be invited or request to join the group again."
+					description="You must either be invited or request to join the group again."
 					button="Leave Group"
 					onClick={() => {
 						leaveGroup();
@@ -95,7 +91,7 @@ export const GroupSettingsTab = ({
 					header="Change group visibility"
 					description={`This group is currently ${group.groupType?.toLowerCase()}.`}
 					button="Change Visibility"
-					disabled={!admin}
+					disabled={!isAdmin}
 					onClick={() => {
 						modifyGroup({
 							groupType:
@@ -109,9 +105,9 @@ export const GroupSettingsTab = ({
 				<DangerAction
 					id="deleteGroupDangerAction"
 					header="Delete this group"
-					description="Once you delete a group, there is no going back. Please be certain."
+					description="Please be certain before deleting a group, as there is no way to undo this action."
 					button={isConfirmDeletion ? "Click again" : "Delete Group"}
-					disabled={!admin}
+					disabled={!isAdmin}
 					onClick={() => {
 						if (isConfirmDeletion) {
 							deleteGroup()

@@ -38,9 +38,7 @@ export const DeckSettingsTab = ({
 	const [deckState, setDeck] = useState(deck);
 	const [isConfirmDeletion, setConfirmDelete] = useState(false);
 
-	const admin = group.groupRole
-		? groupRole[group.groupRole] >= groupRole.ADMIN
-		: false;
+	const isAdmin = groupRole[group.groupRole!] >= groupRole.ADMIN;
 
 	return (
 		<div className={`space-y-5 ${className}`}>
@@ -51,7 +49,7 @@ export const DeckSettingsTab = ({
 					header="Deck Name"
 					value={deckState.deckName}
 					button="Rename"
-					disabled={!admin}
+					disabled={!isAdmin}
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {
 						setDeck({
 							...deckState,
@@ -83,9 +81,9 @@ export const DeckSettingsTab = ({
 				<DangerAction
 					id="deleteDeckDangerAction"
 					header="Delete this deck"
-					description="Once you delete a deck, there is no going back. Please be certain."
+					description="Please be certain when deleting a deck, as there is no way to undo this action."
 					button={isConfirmDeletion ? "Click Again" : "Delete Deck"}
-					disabled={!admin}
+					disabled={!isAdmin}
 					onClick={() => {
 						if (isConfirmDeletion) {
 							deleteDeck()

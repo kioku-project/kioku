@@ -28,15 +28,13 @@ interface ButtonProps {
 }
 
 const getStyle = {
-	primary:
-		"bg-kiokuDarkBlue border-kiokuDarkBlue text-eggshell shadow-sm hover:scale-105 hover:cursor-pointer",
+	primary: "bg-kiokuDarkBlue text-eggshell shadow-sm hover:scale-105",
 	secondary:
-		"bg-transparent border-transparent text-kiokuDarkBlue hover:scale-105 hover:cursor-pointer",
-	error: "bg-kiokuRed border-kiokuRed text-white hover:scale-105 hover:cursor-pointer",
-	warning:
-		"bg-kiokuYellow border-kiokuYellow text-white hover:scale-105 hover:cursor-pointer",
+		"bg-transparent text-kiokuDarkBlue hover:bg-gray-100 hover:scale-105",
+	error: "bg-kiokuRed text-white hover:scale-105",
+	warning: "bg-kiokuYellow text-white hover:scale-105",
 	disabled:
-		"bg-gray-500 border-gray-500 text-eggshell hover:cursor-not-allowed",
+		"bg-gray-200 text-gray-400 text-eggshell hover:cursor-not-allowed",
 } as const;
 
 const getSize = {
@@ -57,7 +55,7 @@ export const Button = ({
 }: ButtonProps) => {
 	return (
 		<button
-			className={`flex items-center justify-center rounded-md border-2 text-center font-semibold outline-none transition ${getStyle[style]} ${getSize[size]} ${className}`}
+			className={`flex items-center justify-center rounded-md text-center font-semibold outline-none transition ${getStyle[style]} ${getSize[size]} ${className}`}
 			{...props}
 		>
 			{children}

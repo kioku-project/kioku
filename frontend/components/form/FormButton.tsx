@@ -28,10 +28,9 @@ interface FormButtonProps {
 }
 
 const getStyle = {
-	primary:
-		"bg-kiokuDarkBlue border-kiokuDarkBlue text-eggshell hover:scale-105 hover:cursor-pointer",
+	primary: "bg-kiokuDarkBlue text-eggshell hover:scale-105",
 	disabled:
-		"bg-gray-500 border-gray-500 text-eggshell hover:cursor-not-allowed",
+		"bg-gray-200 text-gray-400 text-eggshell hover:cursor-not-allowed",
 } as const;
 
 const getSize = {
@@ -52,7 +51,7 @@ export const FormButton = ({
 	return (
 		<input
 			type="submit"
-			className={`flex justify-center rounded-md border-2 text-center font-semibold shadow-sm outline-none transition ${getStyle[style]} ${className} ${getSize[size]}`}
+			className={`flex justify-center rounded-md text-center font-semibold shadow-sm outline-none transition ${getStyle[style]} ${className} ${getSize[size]}`}
 			{...props}
 		/>
 	);

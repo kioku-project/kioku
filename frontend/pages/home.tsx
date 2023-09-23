@@ -1,9 +1,10 @@
-import { useRouter } from "next/router";
-import { Button } from "../components/input/Button";
-import Cards from "../components/graphics/Cards";
-import { Navbar } from "../components/navigation/Navbar";
-import { ArrowRight } from "react-feather";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { ArrowRight } from "react-feather";
+
+import Cards from "../components/graphics/Cards";
+import { Button } from "../components/input/Button";
+import { Navbar } from "../components/navigation/Navbar";
 
 export default function Page() {
 	const router = useRouter();

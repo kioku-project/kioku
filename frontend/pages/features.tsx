@@ -1,8 +1,9 @@
-import { ReactElement } from "react";
-import { useRouter } from "next/router";
-import { Navbar } from "../components/navigation/Navbar";
-import { Users, BarChart2, Cloud, Code, Compass, Award } from "react-feather";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { ReactElement } from "react";
+import { Award, BarChart2, Cloud, Code, Compass, Users } from "react-feather";
+
+import { Navbar } from "../components/navigation/Navbar";
 
 export default function Page() {
 	const router = useRouter();

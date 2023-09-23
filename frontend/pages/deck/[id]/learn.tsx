@@ -1,14 +1,15 @@
-import { Navbar } from "../../../components/navigation/Navbar";
-import { Flashcard } from "../../../components/flashcard/Flashcard";
 import Head from "next/head";
-import Authenticated from "../../../components/accessControl/Authenticated";
-import { authedFetch } from "../../../util/reauth";
-import useSWR, { useSWRConfig } from "swr";
 import { useRouter } from "next/router";
-import { toast } from "react-toastify";
 import React from "react";
-import { Button } from "../../../components/input/Button";
+import { toast } from "react-toastify";
+import useSWR, { useSWRConfig } from "swr";
+
+import Authenticated from "../../../components/accessControl/Authenticated";
+import { Flashcard } from "../../../components/flashcard/Flashcard";
 import KiokuAward from "../../../components/graphics/KiokuAward";
+import { Button } from "../../../components/input/Button";
+import { Navbar } from "../../../components/navigation/Navbar";
+import { authedFetch } from "../../../util/reauth";
 
 export default function Page() {
 	const router = useRouter();

@@ -1,17 +1,18 @@
 import Head from "next/head";
-import "react-toastify/dist/ReactToastify.css";
-import Authenticated from "../../../components/accessControl/Authenticated";
-import { Navbar } from "../../../components/navigation/Navbar";
 import { useRouter } from "next/router";
 import React, { ReactNode, useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
 import useSWR from "swr";
-import { authedFetch } from "../../../util/reauth";
-import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
-import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
+
+import Authenticated from "../../../components/accessControl/Authenticated";
 import { Header } from "../../../components/layout/Header";
+import { Navbar } from "../../../components/navigation/Navbar";
 import { CardsTab } from "../../../components/navigation/Tabs/CardsTab";
-import { TabBar } from "../../../components/navigation/Tabs/TabBar";
 import { DeckSettingsTab } from "../../../components/navigation/Tabs/DeckSettingsTab";
+import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
+import { TabBar } from "../../../components/navigation/Tabs/TabBar";
+import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
+import { authedFetch } from "../../../util/reauth";
 
 export default function Page() {
 	const router = useRouter();

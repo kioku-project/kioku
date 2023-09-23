@@ -1,19 +1,20 @@
-import React, { ReactNode, useState } from "react";
-import Authenticated from "../components/accessControl/Authenticated";
-import { Navbar } from "../components/navigation/Navbar";
 import Head from "next/head";
+import React, { ReactNode, useState } from "react";
 import useSWR from "swr";
-import { authedFetch } from "../util/reauth";
+
+import Authenticated from "../components/accessControl/Authenticated";
 import { Header } from "../components/layout/Header";
+import { Navbar } from "../components/navigation/Navbar";
+import { DecksTab } from "../components/navigation/Tabs/DecksTab";
+import { GroupsTab } from "../components/navigation/Tabs/GroupsTab";
+import { InvitationsTab } from "../components/navigation/Tabs/InvitationsTabs";
+import { StatisticsTab } from "../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../components/navigation/Tabs/TabHeader";
-import { StatisticsTab } from "../components/navigation/Tabs/StatisticsTab";
-import { GroupsTab } from "../components/navigation/Tabs/GroupsTab";
-import { DecksTab } from "../components/navigation/Tabs/DecksTab";
 import { UserSettingsTab } from "../components/navigation/Tabs/UserSettingsTab";
-import { InvitationsTab } from "../components/navigation/Tabs/InvitationsTabs";
 import { Group } from "../types/Group";
 import { Invitation } from "../types/Invitation";
+import { authedFetch } from "../util/reauth";
 
 export default function Home() {
 	const fetcher = (url: RequestInfo | URL) =>

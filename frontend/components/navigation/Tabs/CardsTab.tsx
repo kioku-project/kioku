@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { ChevronDown, ChevronRight } from "react-feather";
+
+import { Card } from "../../../types/Card";
 import { CardList } from "../../flashcard/CardList";
 import { Flashcard } from "../../flashcard/Flashcard";
-import { useState } from "react";
-import { Card } from "../../../types/Card";
+
 interface CardsTabProps {
 	/**
 	 * deckID

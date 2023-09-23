@@ -1,10 +1,11 @@
-import React from "react";
-import { Logo } from "../graphics/Logo";
 import { Inter } from "next/font/google";
-import { Button } from "../input/Button";
 import router from "next/router";
+import React from "react";
 import { ArrowRight, LogOut } from "react-feather";
+
 import { authedFetch } from "../../util/reauth";
+import { Logo } from "../graphics/Logo";
+import { Button } from "../input/Button";
 
 const inter = Inter({
 	weight: ["200", "400"],

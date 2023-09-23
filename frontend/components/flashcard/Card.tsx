@@ -1,11 +1,12 @@
+import React, { useRef, useState } from "react";
+import { Check, Trash, X } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
-import { authedFetch } from "../../util/reauth";
-import { Check, Trash, X } from "react-feather";
-import React, { useRef, useState } from "react";
-import { Text } from "../Text";
+
 import { Card as CardType } from "../../types/Card";
+import { authedFetch } from "../../util/reauth";
+import { Text } from "../Text";
 
 interface CardProps {
 	/**

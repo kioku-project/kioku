@@ -1,13 +1,14 @@
 import { useRouter } from "next/router";
-import { useSWRConfig } from "swr";
-import { Section } from "../../layout/Section";
-import { InputAction } from "../../input/InputAction";
 import { ChangeEvent, useState } from "react";
-import { DangerAction } from "../../input/DangerAction";
-import { authedFetch } from "../../../util/reauth";
 import { toast } from "react-toastify";
+import { useSWRConfig } from "swr";
+
 import { Group } from "../../../types/Group";
 import { groupRole } from "../../../types/GroupRole";
+import { authedFetch } from "../../../util/reauth";
+import { DangerAction } from "../../input/DangerAction";
+import { InputAction } from "../../input/InputAction";
+import { Section } from "../../layout/Section";
 
 interface DeckSettingsTabProps {
 	/**

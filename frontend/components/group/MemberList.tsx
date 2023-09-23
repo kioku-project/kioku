@@ -1,8 +1,9 @@
-import Member from "./Member";
 import useSWR from "swr";
-import { authedFetch } from "../../util/reauth";
-import { User } from "../../types/User";
+
 import { Group } from "../../types/Group";
+import { User } from "../../types/User";
+import { authedFetch } from "../../util/reauth";
+import Member from "./Member";
 
 interface MemberListProps {
 	/**

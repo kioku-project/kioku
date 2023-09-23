@@ -1,8 +1,9 @@
-import { useRouter } from "next/router";
 import { getCookie, hasCookie } from "cookies-next";
-import { PropsWithChildren, useEffect, useState } from "react";
-import { reauth } from "../../util/reauth";
 import jwtDecode, { JwtPayload } from "jwt-decode";
+import { useRouter } from "next/router";
+import { PropsWithChildren, useEffect, useState } from "react";
+
+import { reauth } from "../../util/reauth";
 import LoadingSpinner from "../graphics/LoadingSpinner";
 
 export default function Authenticated({ children }: PropsWithChildren) {

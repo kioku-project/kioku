@@ -1,5 +1,5 @@
-import DeckOverview from "../../deck/DeckOverview";
 import { Invitation } from "../../../types/Invitation";
+import DeckOverview from "../../deck/DeckOverview";
 
 interface InvitationsTabProps {
 	/**

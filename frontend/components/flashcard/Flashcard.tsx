@@ -2,18 +2,19 @@ import React, { useRef, useState } from "react";
 import {
 	ArrowLeft,
 	ArrowRight,
-	X,
-	Edit2,
 	Check,
-	FilePlus,
+	Edit2,
 	FileMinus,
+	FilePlus,
+	X,
 } from "react-feather";
-import { Button } from "../input/Button";
-import { InputField } from "../form/InputField";
-import { authedFetch } from "../../util/reauth";
-import { useSWRConfig } from "swr";
 import { toast } from "react-toastify";
+import { useSWRConfig } from "swr";
+
 import { Card } from "../../types/Card";
+import { authedFetch } from "../../util/reauth";
+import { InputField } from "../form/InputField";
+import { Button } from "../input/Button";
 
 interface FlashcardProps {
 	/**

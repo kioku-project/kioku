@@ -1,6 +1,7 @@
 import { ChangeEventHandler } from "react";
-import { InputField } from "../form/InputField";
+
 import { FormButton } from "../form/FormButton";
+import { InputField } from "../form/InputField";
 import { Action } from "./Action";
 
 interface InputActionProps {

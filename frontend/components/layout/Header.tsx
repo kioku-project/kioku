@@ -1,16 +1,15 @@
-import React from "react";
-
 import { useRouter } from "next/router";
-
-import { Text } from "../Text";
-import { Button } from "../input/Button";
-import { Badge } from "../graphics/Badge";
-import { authedFetch } from "../../util/reauth";
+import React from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
-import { User } from "../../types/User";
-import { Group } from "../../types/Group";
+
 import { Deck } from "../../types/Deck";
+import { Group } from "../../types/Group";
+import { User } from "../../types/User";
+import { authedFetch } from "../../util/reauth";
+import { Text } from "../Text";
+import { Badge } from "../graphics/Badge";
+import { Button } from "../input/Button";
 
 interface HeaderProps {
 	/**

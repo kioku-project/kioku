@@ -1,13 +1,14 @@
 import router from "next/router";
+import { useRef } from "react";
+import { AlertTriangle } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useSWR, { useSWRConfig } from "swr";
-import { authedFetch } from "../../util/reauth";
-import { AlertTriangle } from "react-feather";
+
+import { Deck as DeckType } from "../../types/Deck";
 import { Group } from "../../types/Group";
 import { groupRole } from "../../types/GroupRole";
-import { Deck as DeckType } from "../../types/Deck";
-import { useRef } from "react";
+import { authedFetch } from "../../util/reauth";
 
 interface DeckProps {
 	/**

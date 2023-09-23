@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+
 import Deck from "./Deck";
 
 const meta: Meta<typeof Deck> = {

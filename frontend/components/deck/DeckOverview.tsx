@@ -1,13 +1,14 @@
-import Deck from "./Deck";
-import useSWR, { useSWRConfig } from "swr";
-import { authedFetch } from "../../util/reauth";
-import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { Section } from "../layout/Section";
+import { useRef } from "react";
+import { toast } from "react-toastify";
+import useSWR, { useSWRConfig } from "swr";
+
+import { Deck as DeckType } from "../../types/Deck";
 import { Group } from "../../types/Group";
 import { groupRole } from "../../types/GroupRole";
-import { Deck as DeckType } from "../../types/Deck";
-import { useRef } from "react";
+import { authedFetch } from "../../util/reauth";
+import { Section } from "../layout/Section";
+import Deck from "./Deck";
 
 interface DeckOverviewProps {
 	/**

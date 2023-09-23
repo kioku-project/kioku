@@ -1,5 +1,5 @@
-import DeckOverview from "../../deck/DeckOverview";
 import { Group } from "../../../types/Group";
+import DeckOverview from "../../deck/DeckOverview";
 
 interface GroupsTabProps {
 	/**

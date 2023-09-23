@@ -1,4 +1,4 @@
-export enum groupRole {
+export enum GroupRole {
 	EXTERNAL,
 	REQUESTED,
 	INVITED,

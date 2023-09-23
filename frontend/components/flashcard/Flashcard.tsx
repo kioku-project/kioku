@@ -11,7 +11,7 @@ import {
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
-import { Card } from "../../types/Card";
+import { Card as CardType } from "../../types/Card";
 import { authedFetch } from "../../util/reauth";
 import { InputField } from "../form/InputField";
 import { Button } from "../input/Button";
@@ -24,7 +24,7 @@ interface FlashcardProps {
 	/**
 	 * Flashcard
 	 */
-	card: Card;
+	card: CardType;
 	/**
 	 * Cards left to learn
 	 */
@@ -65,7 +65,7 @@ export const Flashcard = ({
 	push,
 }: FlashcardProps) => {
 	const { mutate } = useSWRConfig();
-	const [tempCard, setTempCard] = useState<Card>(card);
+	const [tempCard, setTempCard] = useState<CardType>(card);
 	const [side, setSide] = useState<number>(
 		cardSide % (card.sides?.length || 1)
 	);
@@ -256,7 +256,7 @@ export const Flashcard = ({
 		setTempCard(card);
 	}
 
-	async function modifyCard(card: Card) {
+	async function modifyCard(card: CardType) {
 		const response = await authedFetch(`/api/cards/${card.cardID}`, {
 			method: "PUT",
 			headers: {

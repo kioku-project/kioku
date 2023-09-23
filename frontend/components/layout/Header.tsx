@@ -3,8 +3,8 @@ import React from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
-import { Deck } from "../../types/Deck";
-import { Group } from "../../types/Group";
+import { Deck as DeckType } from "../../types/Deck";
+import { Group as GroupType } from "../../types/Group";
 import { User } from "../../types/User";
 import { authedFetch } from "../../util/reauth";
 import { Text } from "../Text";
@@ -23,11 +23,11 @@ interface HeaderProps {
 	/**
 	 * group entity
 	 */
-	group?: Group;
+	group?: GroupType;
 	/**
 	 * deck entity
 	 */
-	deck?: Deck;
+	deck?: DeckType;
 	/**
 	 * Additional classes
 	 */

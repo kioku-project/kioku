@@ -1,11 +1,11 @@
-import { Group } from "../../../types/Group";
+import { Group as GroupType } from "../../../types/Group";
 import MemberList from "../../group/MemberList";
 
 interface MembersTabProps {
 	/**
 	 * group entity
 	 */
-	group: Group;
+	group: GroupType;
 	/**
 	 * Additional classes
 	 */

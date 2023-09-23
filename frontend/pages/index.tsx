@@ -12,7 +12,7 @@ import { StatisticsTab } from "../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../components/navigation/Tabs/TabHeader";
 import { UserSettingsTab } from "../components/navigation/Tabs/UserSettingsTab";
-import { Group } from "../types/Group";
+import { Group as GroupType } from "../types/Group";
 import { Invitation } from "../types/Invitation";
 import { authedFetch } from "../util/reauth";
 
@@ -99,7 +99,7 @@ export default function Home() {
 										<DecksTab
 											group={
 												groups.groups.filter(
-													(group: Group) =>
+													(group: GroupType) =>
 														group.isDefault
 												)[0]
 											}

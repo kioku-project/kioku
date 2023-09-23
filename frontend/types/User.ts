@@ -1,4 +1,4 @@
-import { groupRole } from "./GroupRole";
+import { GroupRole } from "./GroupRole";
 
 export type User = {
 	userID: string;
@@ -7,5 +7,5 @@ export type User = {
 	dueCards?: number;
 	dueDecks?: number;
 	groupID?: string;
-	groupRole?: keyof typeof groupRole;
+	groupRole?: keyof typeof GroupRole;
 };

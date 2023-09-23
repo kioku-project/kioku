@@ -1,6 +1,6 @@
 import useSWR from "swr";
 
-import { Group } from "../../types/Group";
+import { Group as GroupType } from "../../types/Group";
 import { User } from "../../types/User";
 import { authedFetch } from "../../util/reauth";
 import Member from "./Member";
@@ -9,7 +9,7 @@ interface MemberListProps {
 	/**
 	 * group entity
 	 */
-	group: Group;
+	group: GroupType;
 	/**
 	 * Additional classes
 	 */

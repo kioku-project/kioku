@@ -1,11 +1,11 @@
-import { Group } from "../../../types/Group";
+import { Group as GroupType } from "../../../types/Group";
 import DeckOverview from "../../deck/DeckOverview";
 
 interface GroupsTabProps {
 	/**
 	 * groups
 	 */
-	groups: Group[];
+	groups: GroupType[];
 	/**
 	 * Additional classes
 	 */
@@ -19,8 +19,8 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 	return (
 		<div className={`${className}`}>
 			{groups
-				?.filter((group: Group) => !group.isDefault)
-				.map((group: Group) => {
+				?.filter((group: GroupType) => !group.isDefault)
+				.map((group: GroupType) => {
 					return (
 						<DeckOverview
 							key={group.groupID}

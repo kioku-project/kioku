@@ -6,15 +6,15 @@ import "react-toastify/dist/ReactToastify.css";
 import useSWR, { useSWRConfig } from "swr";
 
 import { Deck as DeckType } from "../../types/Deck";
-import { Group } from "../../types/Group";
-import { groupRole } from "../../types/GroupRole";
+import { Group as GroupType } from "../../types/Group";
+import { GroupRole } from "../../types/GroupRole";
 import { authedFetch } from "../../util/reauth";
 
 interface DeckProps {
 	/**
 	 * group
 	 */
-	group: Group;
+	group: GroupType;
 	/**
 	 * Deck to display. If deck is undefined, placeholder for creating decks will be displayed.
 	 */
@@ -73,12 +73,12 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 					{/* if no deck provided, display placeholder for creating decks for user with write permission */}
 					{!deck &&
 						group.groupRole &&
-						groupRole[group.groupRole] >= groupRole.WRITE &&
+						GroupRole[group.groupRole] >= GroupRole.WRITE &&
 						"+"}
 					{/* if group is empty, display placeholder for user without write permission */}
 					{group.isEmpty &&
 						group.groupRole &&
-						groupRole[group.groupRole] < groupRole.WRITE && (
+						GroupRole[group.groupRole] < GroupRole.WRITE && (
 							<AlertTriangle size={50}></AlertTriangle>
 						)}
 				</div>
@@ -96,7 +96,7 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 				{/* if no deck provided, display placeholder for creating decks for user with write permission */}
 				{!deck &&
 					group.groupRole &&
-					groupRole[group.groupRole] >= groupRole.WRITE && (
+					GroupRole[group.groupRole] >= GroupRole.WRITE && (
 						<input
 							id={`deckNameInput${group.groupID}`}
 							className="w-40 bg-transparent text-center outline-none"
@@ -114,7 +114,7 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 				{/* if group is empty, display placeholder for user without write permission */}
 				{group.isEmpty &&
 					group.groupRole &&
-					groupRole[group.groupRole] < groupRole.WRITE &&
+					GroupRole[group.groupRole] < GroupRole.WRITE &&
 					"No decks in group"}
 			</div>
 		</div>

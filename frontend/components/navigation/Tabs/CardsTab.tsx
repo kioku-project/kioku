@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronRight } from "react-feather";
 
-import { Card } from "../../../types/Card";
+import { Card as CardType } from "../../../types/Card";
 import { CardList } from "../../flashcard/CardList";
 import { Flashcard } from "../../flashcard/Flashcard";
 
@@ -20,7 +20,7 @@ interface CardsTabProps {
  * UI component for the CardsTab
  */
 export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
-	const [card, setCard] = useState<Card>();
+	const [card, setCard] = useState<CardType>();
 
 	return (
 		<div
@@ -59,7 +59,7 @@ export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
 		</div>
 	);
 
-	function setNewCard(newCard: Card) {
+	function setNewCard(newCard: CardType) {
 		setCard(card?.cardID !== newCard.cardID ? newCard : undefined);
 	}
 };

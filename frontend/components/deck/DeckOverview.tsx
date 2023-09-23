@@ -4,8 +4,8 @@ import { toast } from "react-toastify";
 import useSWR, { useSWRConfig } from "swr";
 
 import { Deck as DeckType } from "../../types/Deck";
-import { Group } from "../../types/Group";
-import { groupRole } from "../../types/GroupRole";
+import { Group as GroupType } from "../../types/Group";
+import { GroupRole } from "../../types/GroupRole";
 import { authedFetch } from "../../util/reauth";
 import { Section } from "../layout/Section";
 import Deck from "./Deck";
@@ -14,7 +14,7 @@ interface DeckOverviewProps {
 	/**
 	 * Group to display. If group is undefined, placeholder for creating groups will be displayed.
 	 */
-	group?: Group;
+	group?: GroupType;
 	/**
 	 * Additional classes
 	 */
@@ -62,8 +62,8 @@ export default function DeckOverview({
 								/>
 							))}
 							{((group.groupRole &&
-								groupRole[group.groupRole] >=
-									groupRole.WRITE) ||
+								GroupRole[group.groupRole] >=
+									GroupRole.WRITE) ||
 								!decks?.decks?.length) && (
 								<Deck
 									group={{

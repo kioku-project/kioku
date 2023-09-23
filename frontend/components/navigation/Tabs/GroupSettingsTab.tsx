@@ -3,8 +3,8 @@ import { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
-import { Group } from "../../../types/Group";
-import { groupRole } from "../../../types/GroupRole";
+import { Group as GroupType } from "../../../types/Group";
+import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
 import { DangerAction } from "../../input/DangerAction";
 import { InputAction } from "../../input/InputAction";
@@ -14,7 +14,7 @@ interface GroupSettingsTabProps {
 	/**
 	 * group
 	 */
-	group: Group;
+	group: GroupType;
 	/**
 	 * Additional classes
 	 */
@@ -36,7 +36,7 @@ export const GroupSettingsTab = ({
 	const [groupName, setGroupName] = useState(group.groupName);
 	const [isConfirmDeletion, setConfirmDelete] = useState(false);
 
-	const isAdmin = groupRole[group.groupRole!] >= groupRole.ADMIN;
+	const isAdmin = GroupRole[group.groupRole!] >= GroupRole.ADMIN;
 
 	return (
 		<div className={`space-y-5 ${className}`}>

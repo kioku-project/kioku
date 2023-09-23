@@ -1,4 +1,4 @@
-import { groupRole } from "./GroupRole";
+import { GroupRole } from "./GroupRole";
 
 export type Group = {
 	groupID: string;
@@ -6,6 +6,6 @@ export type Group = {
 	groupDescription?: string;
 	isDefault?: boolean;
 	groupType?: string;
-	groupRole?: keyof typeof groupRole;
+	groupRole?: keyof typeof GroupRole;
 	isEmpty?: boolean;
 };

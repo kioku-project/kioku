@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	microErrors "go-micro.dev/v4/errors"
-	"os"
 
 	"github.com/gofiber/fiber/v2"
 	jwtWare "github.com/gofiber/jwt/v3"
@@ -21,6 +22,7 @@ import (
 	"go-micro.dev/v4/server"
 
 	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
+	"github.com/go-micro/plugins/v4/wrapper/trace/opentelemetry"
 
 	grpcClient "github.com/go-micro/plugins/v4/client/grpc"
 	grpcServer "github.com/go-micro/plugins/v4/server/grpc"
@@ -41,6 +43,9 @@ func main() {
 	srv := micro.NewService(
 		micro.Server(grpcServer.NewServer(server.Address(serviceAddress), server.Wait(nil))),
 		micro.Client(grpcClient.NewClient()),
+		micro.WrapClient(opentelemetry.NewClientWrapper()),
+		micro.WrapHandler(opentelemetry.NewHandlerWrapper()),
+		micro.WrapSubscriber(opentelemetry.NewSubscriberWrapper()),
 	)
 	srv.Init(
 		micro.Name(service),

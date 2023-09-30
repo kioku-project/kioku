@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	"go-micro.dev/v4/server"
-	"os"
 
 	"github.com/kioku-project/kioku/services/srs/handler"
 	pb "github.com/kioku-project/kioku/services/srs/proto"
@@ -14,6 +15,7 @@ import (
 	"go-micro.dev/v4/logger"
 
 	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
+	"github.com/go-micro/plugins/v4/wrapper/trace/opentelemetry"
 
 	grpcc "github.com/go-micro/plugins/v4/client/grpc"
 	grpcs "github.com/go-micro/plugins/v4/server/grpc"
@@ -39,6 +41,9 @@ func main() {
 	srv := micro.NewService(
 		micro.Server(grpcs.NewServer(server.Address(serviceAddress))),
 		micro.Client(grpcc.NewClient()),
+		micro.WrapClient(opentelemetry.NewClientWrapper()),
+		micro.WrapHandler(opentelemetry.NewHandlerWrapper()),
+		micro.WrapSubscriber(opentelemetry.NewSubscriberWrapper()),
 	)
 	srv.Init(
 		micro.Name(service),

@@ -43,3 +43,10 @@ jobs:
       image-tag: prod
       path: ./backend/services/collaboration
       context: ./backend
+  build-srs:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_srs
+      image-tag: prod
+      path: ./backend/services/srs
+      context: ./backend

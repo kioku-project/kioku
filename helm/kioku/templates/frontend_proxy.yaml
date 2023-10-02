@@ -40,7 +40,7 @@ spec:
         envFrom:
           - configMapRef:
               name: service-env
-          -configMapRef:
+          - configMapRef:
               name: tracing-config
           - secretRef:
               name: {{ .Values.frontend_proxy.keySecret }}

@@ -196,11 +196,11 @@ func (e *Frontend) DeleteUserHandler(c *fiber.Ctx) error {
 	})
 	if err != nil {
 		return err
-	} else if !rspDeleteUser.Success {
-		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
-	} else {
-		return c.SendStatus(200)
 	}
+	if !rspDeleteUser.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
 }
 
 func (e *Frontend) GetGroupInvitationsHandler(c *fiber.Ctx) error {
@@ -264,7 +264,8 @@ func (e *Frontend) LeaveGroupHandler(c *fiber.Ctx) error {
 	)
 	if err != nil {
 		return err
-	} else if !rspLeaveGroup.Success {
+	}
+	if !rspLeaveGroup.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)

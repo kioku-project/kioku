@@ -470,20 +470,19 @@ func (e *Collaboration) FindGroupByID(_ context.Context, req *pb.GroupRequest, r
 }
 
 func (e *Collaboration) LeaveGroupSafe(ctx context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
-	logger.Infof("Received Collaboration.LeaveGroupSafe request: %v", req)
+	logger.Infof("Received Collaboration.LeaveGroupSafe request: %+v", req)
 	remainingAdmins, err := e.store.GetGroupAdmins(req.GroupID)
 	if err != nil {
 		return err
 	}
 	if len(remainingAdmins) == 1 && remainingAdmins[0].UserID == req.UserID {
 		return helper.NewMicroCantLeaveAsLastAdminErr(helper.CollaborationServiceID)
-	} else {
-		return e.LeaveGroup(ctx, req, rsp)
 	}
+	return e.LeaveGroup(ctx, req, rsp)
 }
 
 func (e *Collaboration) LeaveGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
-	logger.Infof("Received Collaboration.LeaveGroup request: %v", req)
+	logger.Infof("Received Collaboration.LeaveGroup request: %+v", req)
 	group, err := e.store.FindGroupByID(req.GroupID)
 	if err != nil {
 		return err
@@ -493,11 +492,15 @@ func (e *Collaboration) LeaveGroup(ctx context.Context, req *pb.GroupRequest, rs
 		return err
 	}
 	if len(groupUsers) > 1 || group.GroupType == model.Public {
-		e.store.RemoveUserFromGroup(req.UserID, req.GroupID)
+		if err = e.store.RemoveUserFromGroup(req.UserID, req.GroupID); err != nil {
+			return err
+		}
 	} else if group.GroupType == model.Public {
-		e.store.DeleteGroup(group)
+		if err = e.store.DeleteGroup(group); err != nil {
+			return err
+		}
 	}
 	rsp.Success = true
-	logger.Infof("User %s left group %s. ", req.UserID, req.GroupID)
+	logger.Infof("User %s left group %s.", req.UserID, req.GroupID)
 	return nil
 }

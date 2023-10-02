@@ -88,7 +88,7 @@ func (e *User) DeleteUser(ctx context.Context, req *pb.UserID, rsp *pb.SuccessRe
 	}
 	err = e.store.DeleteUser(user)
 	if err != nil {
-		logger.Errorf("An error occured while trying to delete user with ID '%s': %s", user.ID, err)
+		logger.Errorf("An error occurred while trying to delete user with ID '%s': %s", user.ID, err)
 		return err
 	}
 	rsp.Success = true

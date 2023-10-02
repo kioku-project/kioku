@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	microErrors "go-micro.dev/v4/errors"
 
+	"github.com/gofiber/contrib/otelfiber"
 	"github.com/gofiber/fiber/v2"
 	jwtWare "github.com/gofiber/jwt/v3"
 	"github.com/joho/godotenv"
@@ -37,6 +39,13 @@ var (
 func main() {
 	logger.Info("Trying to listen on: ", serviceAddress)
 	_ = godotenv.Load("../.env", "../.env.example")
+
+	tp, _ := helper.SetupTracing(context.TODO(), "frontend")
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			logger.Error("Error shutting down tracer provider: %v", err)
+		}
+	}()
 
 	// Create service
 	srv := micro.NewService(
@@ -73,6 +82,7 @@ func main() {
 	}
 
 	app := fiber.New(fiberConfig)
+	app.Use(otelfiber.Middleware())
 	app.Post("/api/register", svc.RegisterHandler)
 	app.Post("/api/login", svc.LoginHandler)
 	app.Get("/api/reauth", svc.ReauthHandler)

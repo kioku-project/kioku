@@ -42,6 +42,7 @@ type UserService interface {
 	GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*UserID, error)
 	GetUserInformation(ctx context.Context, in *UserInformationRequest, opts ...client.CallOption) (*UserInformationResponse, error)
 	GetUserProfileInformation(ctx context.Context, in *UserID, opts ...client.CallOption) (*UserProfileInformationResponse, error)
+	VerifyUserExists(ctx context.Context, in *VerificationRequest, opts ...client.CallOption) (*SuccessResponse, error)
 }
 
 type userService struct {
@@ -116,6 +117,16 @@ func (c *userService) GetUserProfileInformation(ctx context.Context, in *UserID,
 	return out, nil
 }
 
+func (c *userService) VerifyUserExists(ctx context.Context, in *VerificationRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+	req := c.c.NewRequest(c.name, "User.VerifyUserExists", in)
+	out := new(SuccessResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for User service
 
 type UserHandler interface {
@@ -125,6 +136,7 @@ type UserHandler interface {
 	GetUserIDFromEmail(context.Context, *UserIDRequest, *UserID) error
 	GetUserInformation(context.Context, *UserInformationRequest, *UserInformationResponse) error
 	GetUserProfileInformation(context.Context, *UserID, *UserProfileInformationResponse) error
+	VerifyUserExists(context.Context, *VerificationRequest, *SuccessResponse) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
@@ -135,6 +147,7 @@ func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.Handl
 		GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, out *UserID) error
 		GetUserInformation(ctx context.Context, in *UserInformationRequest, out *UserInformationResponse) error
 		GetUserProfileInformation(ctx context.Context, in *UserID, out *UserProfileInformationResponse) error
+		VerifyUserExists(ctx context.Context, in *VerificationRequest, out *SuccessResponse) error
 	}
 	type User struct {
 		user
@@ -169,4 +182,8 @@ func (h *userHandler) GetUserInformation(ctx context.Context, in *UserInformatio
 
 func (h *userHandler) GetUserProfileInformation(ctx context.Context, in *UserID, out *UserProfileInformationResponse) error {
 	return h.UserHandler.GetUserProfileInformation(ctx, in, out)
+}
+
+func (h *userHandler) VerifyUserExists(ctx context.Context, in *VerificationRequest, out *SuccessResponse) error {
+	return h.UserHandler.VerifyUserExists(ctx, in, out)
 }

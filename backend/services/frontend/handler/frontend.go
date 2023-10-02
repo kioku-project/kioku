@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -122,6 +123,14 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 	claims, ok := refreshToken.Claims.(jwt.MapClaims)
 	if !ok || !refreshToken.Valid {
 		return helper.NewFiberUnauthorizedErr("Please re-authenticate")
+	}
+
+	rsp, err := e.userService.VerifyUserExists(c.Context(), &pbUser.VerificationRequest{UserID: fmt.Sprint(claims["sub"]), UserEmail: fmt.Sprint(claims["email"])})
+	if err != nil {
+		return err
+	}
+	if !rsp.Success {
+		return helper.NewFiberUnauthorizedErr("User does not exist")
 	}
 
 	// Generate encoded tokens and send them as response.

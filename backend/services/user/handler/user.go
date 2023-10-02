@@ -57,6 +57,17 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	return nil
 }
 
+func (e *User) VerifyUserExists(ctx context.Context, req *pb.VerificationRequest, rsp *pb.SuccessResponse) error {
+	usr, err := e.store.FindUserByEmail(req.UserEmail)
+	if err != nil {
+		return err
+	}
+	if usr.ID == req.UserID {
+		rsp.Success = true
+	}
+	return nil
+}
+
 func (e *User) DeleteUser(ctx context.Context, req *pb.UserID, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received User.Delete request: %v", req)
 	user, err := e.store.FindUserByID(req.UserID)

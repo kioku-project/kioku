@@ -11,6 +11,7 @@ service User {
 	rpc GetUserIDFromEmail(UserIDRequest) returns (UserID) {}
 	rpc GetUserInformation(UserInformationRequest) returns (UserInformationResponse) {}
 	rpc GetUserProfileInformation(UserID) returns (UserProfileInformationResponse) {}
+        rpc VerifyUserExists(VerificationRequest) returns (SuccessResponse) {}
 }
 
 message RegisterRequest {
@@ -31,6 +32,10 @@ message LoginRequest {
 
 message UserIDRequest {
 	string userEmail = 1;
+}
+message VerificationRequest {
+	string userID = 1;
+	string userEmail = 2;
 }
 
 message UserID {

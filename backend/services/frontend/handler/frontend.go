@@ -187,8 +187,11 @@ func (e *Frontend) DeleteUserHandler(c *fiber.Ctx) error {
 	})
 	if err != nil {
 		return err
+	} else if !rspDeleteUser.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	} else {
+		return c.SendStatus(200)
 	}
-	return c.JSON(rspDeleteUser)
 }
 
 func (e *Frontend) GetGroupInvitationsHandler(c *fiber.Ctx) error {

@@ -97,7 +97,7 @@ func main() {
 	app.Delete("/api/groups/:groupID", svc.DeleteGroupHandler)
 
 	app.Get("/api/groups/:groupID/members", svc.GetGroupMembersHandler)
-	app.Delete("/api/groups/:groupID/members/leave", svc.LeaveGroupHandler)
+	app.Delete("/api/groups/:groupID/members", svc.LeaveGroupHandler)
 	app.Get("/api/groups/:groupID/members/requests", svc.GetGroupMemberRequestsHandler)
 	app.Get("/api/groups/:groupID/members/invitations", svc.GetInvitationsForGroupHandler)
 

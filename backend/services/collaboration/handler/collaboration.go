@@ -471,21 +471,15 @@ func (e *Collaboration) FindGroupByID(_ context.Context, req *pb.GroupRequest, r
 
 func (e *Collaboration) LeaveGroupSafe(ctx context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.LeaveGroupSafe request: %v", req)
-	group, err := e.store.FindGroupByID(req.GroupID)
-	if err != nil {
-		return err
-	}
-	if group.IsDefault {
-		return helper.NewMicroCantLeaveDefaultGroupErr(helper.CollaborationServiceID)
-	}
 	remainingAdmins, err := e.store.GetGroupAdmins(req.GroupID)
 	if err != nil {
 		return err
 	}
 	if len(remainingAdmins) == 1 && remainingAdmins[0].UserID == req.UserID {
 		return helper.NewMicroCantLeaveAsLastAdminErr(helper.CollaborationServiceID)
+	} else {
+		return e.LeaveGroup(ctx, req, rsp)
 	}
-	return e.LeaveGroup(ctx, req, rsp)
 }
 
 func (e *Collaboration) LeaveGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
@@ -494,32 +488,16 @@ func (e *Collaboration) LeaveGroup(ctx context.Context, req *pb.GroupRequest, rs
 	if err != nil {
 		return err
 	}
-	groupAdmins, err := e.store.GetGroupAdmins(req.GroupID)
-	if err != nil {
-		return err
-	}
 	groupUsers, err := helper.FindStoreEntity(e.store.GetGroupMemberRoles, req.GroupID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}
-	if len(groupAdmins) == 1 && groupAdmins[0].UserID == req.UserID && group.GroupType == model.Private {
-		if err := e.store.DeleteGroup(group); err != nil {
-			return err
-		}
-	} else if len(groupUsers) == 1 {
-		decksRsp, err := e.cardDeckService.GetGroupDecks(ctx, &pbCardDeck.GroupDecksRequest{UserID: req.UserID, GroupID: req.GroupID})
-		if err != nil {
-			return err
-		}
-		if len(decksRsp.Decks) == 0 {
-			if err := e.store.DeleteGroup(group); err != nil {
-				return err
-			}
-		}
-	} else {
+	if len(groupUsers) > 1 || group.GroupType == model.Public {
 		e.store.RemoveUserFromGroup(req.UserID, req.GroupID)
+	} else if group.GroupType == model.Public {
+		e.store.DeleteGroup(group)
 	}
 	rsp.Success = true
-	logger.Infof("User %s left group %s. (%s admins remaining)", req.UserID, req.GroupID, len(groupAdmins)-1)
+	logger.Infof("User %s left group %s. ", req.UserID, req.GroupID)
 	return nil
 }

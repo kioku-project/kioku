@@ -7,6 +7,9 @@ metadata:
 spec:
   strategy: production
   collector:
+    grpc:
+      tls:
+        enabled: false
     maxReplicas: 5
     resources:
       limits:

@@ -20,6 +20,7 @@ func SetupTracing(ctx context.Context, serviceName string) (*trace.TracerProvide
     exporter, err := otlptracegrpc.New(
         ctx,
         otlptracegrpc.WithEndpoint(tracingUrl),
+        otlptracegrpc.WithInsecure(),
     )
     if err != nil {
         return nil, err

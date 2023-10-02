@@ -1,3 +1,4 @@
+---
 apiVersion: jaegertracing.io/v1
 kind: Jaeger
 metadata:
@@ -13,3 +14,11 @@ spec:
         memory: 128Mi
   ingress:
     enabled: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tracing-config
+  namespace: observability
+data:
+  TRACING_COLLECTOR: "simple-prod-collector.observability.svc.cluster.local:4318"

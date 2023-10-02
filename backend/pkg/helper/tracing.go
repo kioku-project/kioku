@@ -2,6 +2,7 @@ package helper
 
 import (
 	"context"
+	"os"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
@@ -12,9 +13,13 @@ import (
 )
 
 func SetupTracing(ctx context.Context, serviceName string) (*trace.TracerProvider, error) {
+	tracingUrl := os.Getenv("TRACING_COLLECTOR")
+	if tracingUrl == "" {
+		tracingUrl = "simple-prod-collector.observability.svc.cluster.local:4318"
+	}
     exporter, err := otlptracehttp.New(
         ctx,
-        otlptracehttp.WithEndpoint("simple-prod-collector:4318"),
+        otlptracehttp.WithEndpoint(tracingUrl),
     )
     if err != nil {
         return nil, err

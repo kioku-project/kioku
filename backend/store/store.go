@@ -36,6 +36,7 @@ type CollaborationStore interface {
 	AddInvitedUserToGroup(userID string, groupID string) error
 	AddRequestingUserToGroup(userID string, groupID string) error
 	PromoteUserToFullGroupMember(userID string, groupID string) error
+	ModifyUserRole(userID string, groupID string, role model.RoleType) error
 	RemoveUserFromGroup(userID string, groupID string) error
 	ModifyGroup(group *model.Group) error
 	DeleteGroup(group *model.Group) error

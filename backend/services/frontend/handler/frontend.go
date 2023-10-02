@@ -338,6 +338,32 @@ func (e *Frontend) GetGroupMembersHandler(c *fiber.Ctx) error {
 	})
 }
 
+func (e *Frontend) ModifyGroupMemberHandler(c *fiber.Ctx) error {
+	var data map[string]*string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userID := helper.GetUserIDFromContext(c)
+	var groupRole pbCollaboration.GroupRole
+	if data["groupRole"] != nil {
+		if gr := strings.TrimSpace(*data["groupRole"]); gr != "" {
+			groupRole = converter.MigrateStringRoleToProtoRole(gr)
+		}
+	}
+	rspModifyGroupUser, err := e.collaborationService.ModifyGroupUserRequest(c.Context(), &pbCollaboration.GroupModUserRequest{
+		UserID:    userID,
+		GroupID:   c.Params("groupID"),
+		ModUserID: c.Params("userID"),
+		NewRole:   groupRole,
+	})
+	if err != nil {
+		return err
+	} else if !rspModifyGroupUser.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
 func (e *Frontend) GetGroupMemberRequestsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspMemberRequests, err := e.collaborationService.GetGroupMemberRequests(c.Context(), &pbCollaboration.GroupRequest{

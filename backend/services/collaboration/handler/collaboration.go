@@ -335,7 +335,7 @@ func (e *Collaboration) RemoveGroupUserRequest(ctx context.Context, req *pb.Grou
 	groupRole, err := e.store.GetGroupUserRole(req.UserID, req.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.NewMicroNoEntryWithIDErr(helper.CardDeckServiceID)
+			return helper.NewMicroNoEntryWithIDErr(helper.CollaborationServiceID)
 		}
 		return err
 	}

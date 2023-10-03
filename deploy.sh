@@ -22,7 +22,7 @@ helm install \
   --version v1.13.1 \
   --set installCRDs=true
 
-helm install jaeger-operator jaegertracing/jaeger-operator -n observability --create-namespace
+helm install jaeger-operator jaegertracing/jaeger-operator -n observability --create-namespace --set collector.grpc.tls.enabled=false
 
 # Install Kioku
 helm install kioku helm/kioku

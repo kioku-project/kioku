@@ -6,7 +6,7 @@ import (
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.12.0"
@@ -17,10 +17,10 @@ func SetupTracing(ctx context.Context, serviceName string) (*trace.TracerProvide
 	if tracingUrl == "" {
 		tracingUrl = "simple-prod-collector.observability.svc.cluster.local:4317"
 	}
-    exporter, err := otlptracegrpc.New(
+    exporter, err := otlptracehttp.New(
         ctx,
-        otlptracegrpc.WithEndpoint(tracingUrl),
-        otlptracegrpc.WithInsecure(),
+        otlptracehttp.WithEndpoint(tracingUrl),
+        otlptracehttp.WithInsecure(),
     )
     if err != nil {
         return nil, err

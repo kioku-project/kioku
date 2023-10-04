@@ -364,6 +364,9 @@ func (e *Collaboration) ModifyGroupUserRequest(ctx context.Context, req *pb.Grou
 func (e *Collaboration) KickGroupUser(ctx context.Context, req *pb.GroupKickUserRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.KickGroupUserRequest request: %v", req)
 
+	if req.UserID == req.DelUserID {
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
 	role, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
 	if err != nil {
 		return err

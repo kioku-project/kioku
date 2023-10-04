@@ -471,7 +471,7 @@ func (e *Collaboration) FindGroupByID(_ context.Context, req *pb.GroupRequest, r
 
 func (e *Collaboration) LeaveGroupSafe(ctx context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.LeaveGroupSafe request: %+v", req)
-	remainingAdmins, err := e.store.GetGroupAdmins(req.GroupID)
+	remainingAdmins, err := e.store.FindGroupAdmins(req.GroupID)
 	if err != nil {
 		return err
 	}
@@ -487,7 +487,7 @@ func (e *Collaboration) LeaveGroup(ctx context.Context, req *pb.GroupRequest, rs
 	if err != nil {
 		return err
 	}
-	groupUsers, err := helper.FindStoreEntity(e.store.GetGroupMemberRoles, req.GroupID, helper.CollaborationServiceID)
+	groupUsers, err := helper.FindStoreEntity(e.store.FindGroupMemberRoles, req.GroupID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}

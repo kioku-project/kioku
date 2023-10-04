@@ -843,6 +843,50 @@
             "response": []
         },
         {
+            "name": "Modify Group members",
+            "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n    \"groupRole\": \"write\"\r\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "127.0.0.1:3000/api/groups/:groupID/members/:userID",
+                    "host": [
+                        "127",
+                        "0",
+                        "0",
+                        "1"
+                    ],
+                    "port": "3000",
+                    "path": [
+                        "api",
+                        "groups",
+                        ":groupID",
+                        "members",
+                        ":userID"
+                    ],
+                    "variable": [
+                        {
+                            "key": "groupID",
+                            "value": ""
+                        },
+                        {
+                            "key": "userID",
+                            "value": ""
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
             "name": "Manage Group Member Request",
             "request": {
                 "method": "PUT",

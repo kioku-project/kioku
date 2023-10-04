@@ -263,13 +263,16 @@ func (s *CollaborationStoreImpl) AddRequestingUserToGroup(userID string, groupID
 }
 
 func (s *CollaborationStoreImpl) PromoteUserToFullGroupMember(userID string, groupID string) error {
+	return s.ModifyUserRole(userID, groupID, model.RoleRead)
+}
+
+func (s *CollaborationStoreImpl) ModifyUserRole(userID string, groupID string, role model.RoleType) error {
 	var groupUserRole model.GroupUserRole
-	err := s.db.Where(&model.GroupUserRole{UserID: userID, GroupID: groupID}).First(&groupUserRole).Error
-	if err != nil {
+	if err := s.db.Where(&model.GroupUserRole{UserID: userID, GroupID: groupID}).First(&groupUserRole).Error; err != nil {
 		return err
 	}
-	groupUserRole.RoleType = model.RoleRead
-	if err = s.db.Save(&groupUserRole).Error; err != nil {
+	groupUserRole.RoleType = role
+	if err := s.db.Save(&groupUserRole).Error; err != nil {
 		return helper.ErrStoreInvalidGroupRoleForChange
 	}
 	return nil

@@ -324,9 +324,41 @@ func (e *Collaboration) AddGroupUserRequest(ctx context.Context, req *pb.GroupUs
 		}
 		rsp.Success = true
 		return nil
-	} else {
-		return helper.NewMicroUserAlreadyInGroupErr(helper.CollaborationServiceID)
 	}
+	return helper.NewMicroUserAlreadyInGroupErr(helper.CollaborationServiceID)
+}
+
+func (e *Collaboration) ModifyGroupUserRequest(ctx context.Context, req *pb.GroupModUserRequest, rsp *pb.SuccessResponse) error {
+	logger.Infof("Received Collaboration.ModifyGroupUserRequest request: %v", req)
+
+	role, err := e.store.GetGroupUserRole(req.UserID, req.GroupID)
+	if err != nil {
+		return err
+	}
+	if role != model.RoleAdmin {
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
+	modUserCurrRole, err := e.store.GetGroupUserRole(req.ModUserID, req.GroupID)
+	if err != nil {
+		return err
+	}
+	if modUserCurrRole == model.RoleRequested || modUserCurrRole == model.RoleInvited {
+		return helper.NewMicroUserAdmissionInProgressErr(helper.CollaborationServiceID)
+	}
+	if modUserCurrRole == model.RoleAdmin {
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
+	newModelRole := converter.MigrateProtoRoleToModelRole(req.NewRole)
+	switch newModelRole {
+	case model.RoleAdmin, model.RoleWrite, model.RoleRead:
+		if err := e.store.ModifyUserRole(req.ModUserID, req.GroupID, newModelRole); err != nil {
+			return err
+		}
+	default:
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
+	rsp.Success = true
+	return nil
 }
 
 func (e *Collaboration) RemoveGroupUserRequest(ctx context.Context, req *pb.GroupUserRequest, rsp *pb.SuccessResponse) error {
@@ -335,7 +367,7 @@ func (e *Collaboration) RemoveGroupUserRequest(ctx context.Context, req *pb.Grou
 	groupRole, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			return helper.NewMicroNoEntryWithIDErr(helper.CardDeckServiceID)
+			return helper.NewMicroNoEntryWithIDErr(helper.CollaborationServiceID)
 		}
 		return err
 	}

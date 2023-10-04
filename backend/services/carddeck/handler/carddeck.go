@@ -3,16 +3,14 @@ package handler
 import (
 	"context"
 	"github.com/kioku-project/kioku/pkg/converter"
-	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
-	"go-micro.dev/v4/logger"
-	"golang.org/x/exp/slices"
-	"time"
-
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pb "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
+	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	"github.com/kioku-project/kioku/store"
+	"go-micro.dev/v4/logger"
+	"golang.org/x/exp/slices"
 )
 
 type CardDeck struct {
@@ -126,7 +124,7 @@ func (e *CardDeck) updateCardReferences(cardSideToDelete *model.CardSide) (bool,
 	return isLastCardSide, nil
 }
 
-func (e *CardDeck) cardModelDateComparator(a, b model.Card) int {
+func cardModelDateComparator(a, b model.Card) int {
 	return a.CreatedAt.Compare(b.CreatedAt)
 }
 
@@ -153,9 +151,8 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 		return err
 	}
 	newDeck := model.Deck{
-		Name:      req.DeckName,
-		CreatedAt: time.Now(),
-		GroupID:   req.GroupID,
+		Name:    req.DeckName,
+		GroupID: req.GroupID,
 	}
 	if err := e.store.CreateDeck(&newDeck); err != nil {
 		return err
@@ -231,7 +228,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.IDRequest, rsp *pb.
 	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
 		return err
 	}
-	slices.SortFunc(deck.Cards, e.cardModelDateComparator)
+	slices.SortFunc(deck.Cards, cardModelDateComparator)
 	rsp.Cards = make([]*pb.Card, len(deck.Cards))
 	for i, card := range deck.Cards {
 		cardSides, err := e.store.FindCardSidesByCardID(card.ID)
@@ -257,8 +254,7 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 		return err
 	}
 	newCard := model.Card{
-		DeckID:    deck.ID,
-		CreatedAt: time.Now(),
+		DeckID: deck.ID,
 	}
 	if err = e.store.CreateCard(&newCard); err != nil {
 		return err

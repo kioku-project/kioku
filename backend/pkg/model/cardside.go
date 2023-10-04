@@ -8,7 +8,7 @@ import (
 type CardSide struct {
 	ID                 string `gorm:"primaryKey"`
 	CardID             string `gorm:"not null"`
-	Card               Card
+	Card               Card   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Header             string `gorm:"not null"`
 	Description        string `gorm:"not null"`
 	PreviousCardSideID string

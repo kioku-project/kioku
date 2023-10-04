@@ -51,6 +51,8 @@ type CollaborationService interface {
 	RemoveGroupUserRequest(ctx context.Context, in *GroupUserRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	AddGroupUserInvite(ctx context.Context, in *GroupUserInvite, opts ...client.CallOption) (*SuccessResponse, error)
 	RemoveGroupUserInvite(ctx context.Context, in *GroupUserInvite, opts ...client.CallOption) (*SuccessResponse, error)
+	LeaveGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
+	LeaveGroupSafe(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
 }
 
 type collaborationService struct {
@@ -215,6 +217,26 @@ func (c *collaborationService) RemoveGroupUserInvite(ctx context.Context, in *Gr
 	return out, nil
 }
 
+func (c *collaborationService) LeaveGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+	req := c.c.NewRequest(c.name, "Collaboration.LeaveGroup", in)
+	out := new(SuccessResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *collaborationService) LeaveGroupSafe(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+	req := c.c.NewRequest(c.name, "Collaboration.LeaveGroupSafe", in)
+	out := new(SuccessResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Collaboration service
 
 type CollaborationHandler interface {
@@ -233,6 +255,8 @@ type CollaborationHandler interface {
 	RemoveGroupUserRequest(context.Context, *GroupUserRequest, *SuccessResponse) error
 	AddGroupUserInvite(context.Context, *GroupUserInvite, *SuccessResponse) error
 	RemoveGroupUserInvite(context.Context, *GroupUserInvite, *SuccessResponse) error
+	LeaveGroup(context.Context, *GroupRequest, *SuccessResponse) error
+	LeaveGroupSafe(context.Context, *GroupRequest, *SuccessResponse) error
 }
 
 func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, opts ...server.HandlerOption) error {
@@ -252,6 +276,8 @@ func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, op
 		RemoveGroupUserRequest(ctx context.Context, in *GroupUserRequest, out *SuccessResponse) error
 		AddGroupUserInvite(ctx context.Context, in *GroupUserInvite, out *SuccessResponse) error
 		RemoveGroupUserInvite(ctx context.Context, in *GroupUserInvite, out *SuccessResponse) error
+		LeaveGroup(ctx context.Context, in *GroupRequest, out *SuccessResponse) error
+		LeaveGroupSafe(ctx context.Context, in *GroupRequest, out *SuccessResponse) error
 	}
 	type Collaboration struct {
 		collaboration
@@ -322,4 +348,12 @@ func (h *collaborationHandler) AddGroupUserInvite(ctx context.Context, in *Group
 
 func (h *collaborationHandler) RemoveGroupUserInvite(ctx context.Context, in *GroupUserInvite, out *SuccessResponse) error {
 	return h.CollaborationHandler.RemoveGroupUserInvite(ctx, in, out)
+}
+
+func (h *collaborationHandler) LeaveGroup(ctx context.Context, in *GroupRequest, out *SuccessResponse) error {
+	return h.CollaborationHandler.LeaveGroup(ctx, in, out)
+}
+
+func (h *collaborationHandler) LeaveGroupSafe(ctx context.Context, in *GroupRequest, out *SuccessResponse) error {
+	return h.CollaborationHandler.LeaveGroupSafe(ctx, in, out)
 }

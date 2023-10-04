@@ -21,6 +21,8 @@ service Collaboration {
 	rpc RemoveGroupUserRequest(GroupUserRequest) returns (SuccessResponse) {}
 	rpc AddGroupUserInvite(GroupUserInvite) returns (SuccessResponse) {}
 	rpc RemoveGroupUserInvite(GroupUserInvite) returns (SuccessResponse) {}
+	rpc LeaveGroup(GroupRequest) returns (SuccessResponse) {}
+	rpc LeaveGroupSafe(GroupRequest) returns (SuccessResponse) {}
 }
 
 message UserIDRequest {

@@ -60,7 +60,9 @@ export const UserSettingsTab = ({
 					header="Delete your Account"
 					description={`Once you delete your user, there is no going back. Please be
 					certain.`}
-					button="Delete Account"
+					button={
+						isConfirmDeletion ? "Click Again" : "Delete Account"
+					}
 					onClick={() => {
 						if (isConfirmDeletion) {
 							deleteUser()
@@ -92,7 +94,7 @@ export const UserSettingsTab = ({
 	}
 
 	async function deleteUser() {
-		const response = await authedFetch(`/api/user/${user.userID}`, {
+		const response = await authedFetch(`/api/user`, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",

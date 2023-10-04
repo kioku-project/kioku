@@ -1,10 +1,12 @@
 package handler
 
 import (
-	"github.com/golang-jwt/jwt/v4"
-	"github.com/kioku-project/kioku/pkg/converter"
+	"fmt"
 	"strings"
 	"time"
+
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/kioku-project/kioku/pkg/converter"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/kioku-project/kioku/pkg/helper"
@@ -54,7 +56,8 @@ func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
 	rspRegister, err := e.userService.Register(c.Context(), &pbUser.RegisterRequest{
 		UserEmail:    data["userEmail"],
 		UserName:     data["userName"],
-		UserPassword: data["userPassword"]})
+		UserPassword: data["userPassword"],
+	})
 	if err != nil {
 		return err
 	}
@@ -74,7 +77,8 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	}
 	rspLogin, err := e.userService.Login(c.Context(), &pbUser.LoginRequest{
 		UserEmail:    reqUser.Email,
-		UserPassword: reqUser.Password})
+		UserPassword: reqUser.Password,
+	})
 	if err != nil {
 		return err
 	}
@@ -119,6 +123,14 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 	claims, ok := refreshToken.Claims.(jwt.MapClaims)
 	if !ok || !refreshToken.Valid {
 		return helper.NewFiberUnauthorizedErr("Please re-authenticate")
+	}
+
+	rsp, err := e.userService.VerifyUserExists(c.Context(), &pbUser.VerificationRequest{UserID: fmt.Sprint(claims["sub"]), UserEmail: fmt.Sprint(claims["email"])})
+	if err != nil {
+		return err
+	}
+	if !rsp.Success {
+		return helper.NewFiberUnauthorizedErr("User does not exist")
 	}
 
 	// Generate encoded tokens and send them as response.
@@ -177,6 +189,20 @@ func (e *Frontend) GetUserHandler(c *fiber.Ctx) error {
 	return c.JSON(rspGetUser)
 }
 
+func (e *Frontend) DeleteUserHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspDeleteUser, err := e.userService.DeleteUser(c.Context(), &pbUser.UserID{
+		UserID: userID,
+	})
+	if err != nil {
+		return err
+	}
+	if !rspDeleteUser.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
 func (e *Frontend) GetGroupInvitationsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspGroupInvitations, err := e.collaborationService.GetGroupInvitations(c.Context(), &pbCollaboration.UserIDRequest{
@@ -224,6 +250,25 @@ func (e *Frontend) CreateGroupHandler(c *fiber.Ctx) error {
 		return err
 	}
 	return c.SendString(rspCreateGroup.ID)
+}
+
+func (e *Frontend) LeaveGroupHandler(c *fiber.Ctx) error {
+	groupID := c.Params("groupID")
+	userID := helper.GetUserIDFromContext(c)
+	rspLeaveGroup, err := e.collaborationService.LeaveGroupSafe(
+		c.Context(),
+		&pbCollaboration.GroupRequest{
+			UserID:  userID,
+			GroupID: groupID,
+		},
+	)
+	if err != nil {
+		return err
+	}
+	if !rspLeaveGroup.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
 }
 
 func (e *Frontend) GetGroupHandler(c *fiber.Ctx) error {
@@ -612,6 +657,7 @@ func (e *Frontend) SrsPullHandler(c *fiber.Ctx) error {
 	}
 	return c.JSON(rspSrsPull.Card)
 }
+
 func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
 	var data converter.FiberPushCardRequestBody
 	if err := c.BodyParser(&data); err != nil {
@@ -632,7 +678,6 @@ func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) SrsDeckDueHandler(c *fiber.Ctx) error {
-
 	userID := helper.GetUserIDFromContext(c)
 	rspSrsDue, err := e.srsService.GetDeckCardsDue(c.Context(), &pbSrs.DeckPullRequest{
 		UserID: userID,
@@ -648,7 +693,6 @@ func (e *Frontend) SrsDeckDueHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
-
 	userID := helper.GetUserIDFromContext(c)
 	dueCards, err := e.srsService.GetUserCardsDue(c.Context(), &pbSrs.UserDueRequest{
 		UserID: userID,

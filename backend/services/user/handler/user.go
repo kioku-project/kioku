@@ -57,6 +57,45 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	return nil
 }
 
+func (e *User) VerifyUserExists(ctx context.Context, req *pb.VerificationRequest, rsp *pb.SuccessResponse) error {
+	user, err := e.store.FindUserByEmail(req.UserEmail)
+	if err != nil {
+		return err
+	}
+	if user.ID == req.UserID {
+		rsp.Success = true
+	}
+	return nil
+}
+
+func (e *User) DeleteUser(ctx context.Context, req *pb.UserID, rsp *pb.SuccessResponse) error {
+	logger.Infof("Received User.Delete request: %v", req)
+	user, err := e.store.FindUserByID(req.UserID)
+	if err != nil {
+		logger.Errorf("Could not find user with userid: %s: %s", user.ID, err)
+		return err
+	}
+	// Handle groups that the user is part of
+	groupRes, err := e.collaborationService.GetUserGroups(ctx, &pbCollaboration.UserIDRequest{UserID: user.ID})
+	if err != nil {
+		return err
+	}
+	for _, group := range groupRes.Groups {
+		_, err := e.collaborationService.LeaveGroup(ctx, &pbCollaboration.GroupRequest{UserID: req.UserID, GroupID: group.Group.GroupID})
+		if err != nil {
+			return err
+		}
+	}
+	err = e.store.DeleteUser(user)
+	if err != nil {
+		logger.Errorf("An error occurred while trying to delete user with ID '%s': %s", user.ID, err)
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully deleted user with id %s", user.ID)
+	return nil
+}
+
 func (e *User) Login(_ context.Context, req *pb.LoginRequest, rsp *pb.NameIDResponse) error {
 	logger.Infof("Received User.Login request: email: %v", req.UserEmail)
 	user, err := e.store.FindUserByEmail(req.UserEmail)

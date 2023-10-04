@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	microErrors "go-micro.dev/v4/errors"
-	"os"
 
 	"github.com/gofiber/fiber/v2"
 	jwtWare "github.com/gofiber/jwt/v3"
@@ -33,7 +34,6 @@ var (
 )
 
 func main() {
-
 	logger.Info("Trying to listen on: ", serviceAddress)
 	_ = godotenv.Load("../.env", "../.env.example")
 
@@ -86,6 +86,7 @@ func main() {
 	app.Post("/api/logout", svc.LogoutHandler)
 
 	app.Get("/api/user", svc.GetUserHandler)
+	app.Delete("/api/user", svc.DeleteUserHandler)
 	app.Get("/api/user/dueCards", svc.SrsUserDueHandler)
 	app.Get("/api/user/invitations", svc.GetGroupInvitationsHandler)
 
@@ -96,6 +97,7 @@ func main() {
 	app.Delete("/api/groups/:groupID", svc.DeleteGroupHandler)
 
 	app.Get("/api/groups/:groupID/members", svc.GetGroupMembersHandler)
+	app.Delete("/api/groups/:groupID/members", svc.LeaveGroupHandler)
 	app.Get("/api/groups/:groupID/members/requests", svc.GetGroupMemberRequestsHandler)
 	app.Get("/api/groups/:groupID/members/invitations", svc.GetInvitationsForGroupHandler)
 

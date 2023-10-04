@@ -18,7 +18,7 @@ interface StatisticOverviewProps {
  */
 export const StatisticOverview = ({ className }: StatisticOverviewProps) => {
 	return (
-		<div className="flex flex-row justify-between rounded-lg bg-gray-200">
+		<div className="flex flex-row justify-between rounded-lg">
 			<Statistic
 				id={"statisticId"}
 				header="Cards learned"

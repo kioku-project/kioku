@@ -331,14 +331,14 @@ func (e *Collaboration) AddGroupUserRequest(ctx context.Context, req *pb.GroupUs
 func (e *Collaboration) ModifyGroupUserRequest(ctx context.Context, req *pb.GroupModUserRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.ModifyGroupUserRequest request: %v", req)
 
-	role, err := e.store.GetGroupUserRole(req.UserID, req.GroupID)
+	role, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
 	if err != nil {
 		return err
 	}
 	if role != model.RoleAdmin {
 		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 	}
-	modUserCurrRole, err := e.store.GetGroupUserRole(req.ModUserID, req.GroupID)
+	modUserCurrRole, err := e.store.FindGroupUserRole(req.ModUserID, req.GroupID)
 	if err != nil {
 		return err
 	}

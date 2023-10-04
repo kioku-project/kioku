@@ -20,6 +20,7 @@ service Collaboration {
 	rpc AddGroupUserRequest(GroupUserRequest) returns (SuccessResponse) {}
 	rpc RemoveGroupUserRequest(GroupUserRequest) returns (SuccessResponse) {}
 	rpc ModifyGroupUserRequest(GroupModUserRequest) returns (SuccessResponse) {}
+	rpc KickGroupUser(GroupKickUserRequest) returns (SuccessResponse) {}
 	rpc AddGroupUserInvite(GroupUserInvite) returns (SuccessResponse) {}
 	rpc RemoveGroupUserInvite(GroupUserInvite) returns (SuccessResponse) {}
 	rpc LeaveGroup(GroupRequest) returns (SuccessResponse) {}
@@ -130,6 +131,12 @@ message GroupModUserRequest {
 	string groupID = 2;
         string modUserID = 3;
         GroupRole newRole = 4;
+}
+
+message GroupKickUserRequest {
+	string userID = 1;
+	string groupID = 2;
+        string delUserID = 3;
 }
 
 message GroupUserInvite {

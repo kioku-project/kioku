@@ -50,6 +50,7 @@ type CollaborationService interface {
 	AddGroupUserRequest(ctx context.Context, in *GroupUserRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	RemoveGroupUserRequest(ctx context.Context, in *GroupUserRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	ModifyGroupUserRequest(ctx context.Context, in *GroupModUserRequest, opts ...client.CallOption) (*SuccessResponse, error)
+	KickGroupUser(ctx context.Context, in *GroupKickUserRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	AddGroupUserInvite(ctx context.Context, in *GroupUserInvite, opts ...client.CallOption) (*SuccessResponse, error)
 	RemoveGroupUserInvite(ctx context.Context, in *GroupUserInvite, opts ...client.CallOption) (*SuccessResponse, error)
 	LeaveGroup(ctx context.Context, in *GroupRequest, opts ...client.CallOption) (*SuccessResponse, error)
@@ -208,6 +209,16 @@ func (c *collaborationService) ModifyGroupUserRequest(ctx context.Context, in *G
 	return out, nil
 }
 
+func (c *collaborationService) KickGroupUser(ctx context.Context, in *GroupKickUserRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+	req := c.c.NewRequest(c.name, "Collaboration.KickGroupUser", in)
+	out := new(SuccessResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *collaborationService) AddGroupUserInvite(ctx context.Context, in *GroupUserInvite, opts ...client.CallOption) (*SuccessResponse, error) {
 	req := c.c.NewRequest(c.name, "Collaboration.AddGroupUserInvite", in)
 	out := new(SuccessResponse)
@@ -265,6 +276,7 @@ type CollaborationHandler interface {
 	AddGroupUserRequest(context.Context, *GroupUserRequest, *SuccessResponse) error
 	RemoveGroupUserRequest(context.Context, *GroupUserRequest, *SuccessResponse) error
 	ModifyGroupUserRequest(context.Context, *GroupModUserRequest, *SuccessResponse) error
+	KickGroupUser(context.Context, *GroupKickUserRequest, *SuccessResponse) error
 	AddGroupUserInvite(context.Context, *GroupUserInvite, *SuccessResponse) error
 	RemoveGroupUserInvite(context.Context, *GroupUserInvite, *SuccessResponse) error
 	LeaveGroup(context.Context, *GroupRequest, *SuccessResponse) error
@@ -287,6 +299,7 @@ func RegisterCollaborationHandler(s server.Server, hdlr CollaborationHandler, op
 		AddGroupUserRequest(ctx context.Context, in *GroupUserRequest, out *SuccessResponse) error
 		RemoveGroupUserRequest(ctx context.Context, in *GroupUserRequest, out *SuccessResponse) error
 		ModifyGroupUserRequest(ctx context.Context, in *GroupModUserRequest, out *SuccessResponse) error
+		KickGroupUser(ctx context.Context, in *GroupKickUserRequest, out *SuccessResponse) error
 		AddGroupUserInvite(ctx context.Context, in *GroupUserInvite, out *SuccessResponse) error
 		RemoveGroupUserInvite(ctx context.Context, in *GroupUserInvite, out *SuccessResponse) error
 		LeaveGroup(ctx context.Context, in *GroupRequest, out *SuccessResponse) error
@@ -357,6 +370,10 @@ func (h *collaborationHandler) RemoveGroupUserRequest(ctx context.Context, in *G
 
 func (h *collaborationHandler) ModifyGroupUserRequest(ctx context.Context, in *GroupModUserRequest, out *SuccessResponse) error {
 	return h.CollaborationHandler.ModifyGroupUserRequest(ctx, in, out)
+}
+
+func (h *collaborationHandler) KickGroupUser(ctx context.Context, in *GroupKickUserRequest, out *SuccessResponse) error {
+	return h.CollaborationHandler.KickGroupUser(ctx, in, out)
 }
 
 func (h *collaborationHandler) AddGroupUserInvite(ctx context.Context, in *GroupUserInvite, out *SuccessResponse) error {

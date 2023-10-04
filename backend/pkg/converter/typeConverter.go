@@ -23,6 +23,38 @@ func MigrateModelRoleToProtoRole(modelRole model.RoleType) (protoRole pbCollabor
 	return
 }
 
+func MigrateProtoRoleToModelRole(protoRole pbCollaboration.GroupRole) (modelRole model.RoleType) {
+	switch protoRole {
+	case pbCollaboration.GroupRole_REQUESTED:
+		modelRole = model.RoleRequested
+	case pbCollaboration.GroupRole_INVITED:
+		modelRole = model.RoleInvited
+	case pbCollaboration.GroupRole_READ:
+		modelRole = model.RoleRead
+	case pbCollaboration.GroupRole_WRITE:
+		modelRole = model.RoleWrite
+	case pbCollaboration.GroupRole_ADMIN:
+		modelRole = model.RoleAdmin
+	}
+	return
+}
+
+func MigrateStringRoleToProtoRole(stringRole string) (protoRole pbCollaboration.GroupRole) {
+	switch stringRole {
+	case "requested":
+		protoRole = pbCollaboration.GroupRole_REQUESTED
+	case "invited":
+		protoRole = pbCollaboration.GroupRole_INVITED
+	case "read":
+		protoRole = pbCollaboration.GroupRole_READ
+	case "write":
+		protoRole = pbCollaboration.GroupRole_WRITE
+	case "admin":
+		protoRole = pbCollaboration.GroupRole_ADMIN
+	}
+	return
+}
+
 func MigrateModelGroupTypeToProtoGroupType(modelType model.GroupType) (protoType pbCollaboration.GroupType) {
 	if modelType == model.Public {
 		protoType = pbCollaboration.GroupType_PUBLIC

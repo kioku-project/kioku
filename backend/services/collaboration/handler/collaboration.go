@@ -324,9 +324,8 @@ func (e *Collaboration) AddGroupUserRequest(ctx context.Context, req *pb.GroupUs
 		}
 		rsp.Success = true
 		return nil
-	} else {
-		return helper.NewMicroUserAlreadyInGroupErr(helper.CollaborationServiceID)
 	}
+	return helper.NewMicroUserAlreadyInGroupErr(helper.CollaborationServiceID)
 }
 
 func (e *Collaboration) ModifyGroupUserRequest(ctx context.Context, req *pb.GroupModUserRequest, rsp *pb.SuccessResponse) error {

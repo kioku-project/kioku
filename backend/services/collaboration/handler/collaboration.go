@@ -364,14 +364,14 @@ func (e *Collaboration) ModifyGroupUserRequest(ctx context.Context, req *pb.Grou
 func (e *Collaboration) KickGroupUser(ctx context.Context, req *pb.GroupKickUserRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.KickGroupUserRequest request: %v", req)
 
-	role, err := e.store.GetGroupUserRole(req.UserID, req.GroupID)
+	role, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
 	if err != nil {
 		return err
 	}
 	if role != model.RoleAdmin {
 		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 	}
-	delUserCurrRole, err := e.store.GetGroupUserRole(req.DelUserID, req.GroupID)
+	delUserCurrRole, err := e.store.FindGroupUserRole(req.DelUserID, req.GroupID)
 	if err != nil {
 		return err
 	}

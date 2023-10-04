@@ -9,7 +9,6 @@ import (
 	"github.com/kioku-project/kioku/pkg/converter"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/utils"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
@@ -353,8 +352,8 @@ func (e *Frontend) ModifyGroupMemberHandler(c *fiber.Ctx) error {
 	}
 	rspModifyGroupUser, err := e.collaborationService.ModifyGroupUserRequest(c.Context(), &pbCollaboration.GroupModUserRequest{
 		UserID:    userID,
-		GroupID:   utils.CopyString(c.Params("groupID")),
-		ModUserID: utils.CopyString(c.Params("userID")),
+		GroupID:   c.Params("groupID"),
+		ModUserID: c.Params("userID"),
 		NewRole:   groupRole,
 	})
 	if err != nil {

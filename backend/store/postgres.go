@@ -263,8 +263,7 @@ func (s *CollaborationStoreImpl) AddRequestingUserToGroup(userID string, groupID
 }
 
 func (s *CollaborationStoreImpl) PromoteUserToFullGroupMember(userID string, groupID string) error {
-	err := s.ModifyUserRole(userID, groupID, model.RoleRead)
-	return err
+	return s.ModifyUserRole(userID, groupID, model.RoleRead)
 }
 
 func (s *CollaborationStoreImpl) ModifyUserRole(userID string, groupID string, role model.RoleType) error {

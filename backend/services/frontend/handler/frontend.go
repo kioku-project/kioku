@@ -9,6 +9,7 @@ import (
 	"github.com/kioku-project/kioku/pkg/converter"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/utils"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
@@ -339,26 +340,27 @@ func (e *Frontend) GetGroupMembersHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) ModifyGroupMemberHandler(c *fiber.Ctx) error {
-	var data map[string]*string
+	var data map[string]string
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
 	userID := helper.GetUserIDFromContext(c)
 	var groupRole pbCollaboration.GroupRole
-	if data["groupRole"] != nil {
-		if gr := strings.TrimSpace(*data["groupRole"]); gr != "" {
+	if dataGroupRole, ok := data["groupRole"]; ok {
+		if gr := strings.TrimSpace(dataGroupRole); gr != "" {
 			groupRole = converter.MigrateStringRoleToProtoRole(gr)
 		}
 	}
 	rspModifyGroupUser, err := e.collaborationService.ModifyGroupUserRequest(c.Context(), &pbCollaboration.GroupModUserRequest{
 		UserID:    userID,
-		GroupID:   c.Params("groupID"),
-		ModUserID: c.Params("userID"),
+		GroupID:   utils.CopyString(c.Params("groupID")),
+		ModUserID: utils.CopyString(c.Params("userID")),
 		NewRole:   groupRole,
 	})
 	if err != nil {
 		return err
-	} else if !rspModifyGroupUser.Success {
+	}
+	if !rspModifyGroupUser.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)

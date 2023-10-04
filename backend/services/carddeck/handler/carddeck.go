@@ -5,6 +5,7 @@ import (
 	"github.com/kioku-project/kioku/pkg/converter"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	"go-micro.dev/v4/logger"
+	"golang.org/x/exp/slices"
 	"time"
 
 	"github.com/kioku-project/kioku/pkg/helper"
@@ -125,6 +126,10 @@ func (e *CardDeck) updateCardReferences(cardSideToDelete *model.CardSide) (bool,
 	return isLastCardSide, nil
 }
 
+func (e *CardDeck) cardModelDateComparator(a, b model.Card) int {
+	return a.CreatedAt.Compare(b.CreatedAt)
+}
+
 func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest, rsp *pb.GroupDecksResponse) error {
 	logger.Infof("Received CardDeck.GetGroupDecks request: %v", req)
 	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
@@ -226,6 +231,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.IDRequest, rsp *pb.
 	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
 		return err
 	}
+	slices.SortFunc(deck.Cards, e.cardModelDateComparator)
 	rsp.Cards = make([]*pb.Card, len(deck.Cards))
 	for i, card := range deck.Cards {
 		cardSides, err := e.store.FindCardSidesByCardID(card.ID)
@@ -251,7 +257,8 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 		return err
 	}
 	newCard := model.Card{
-		DeckID: deck.ID,
+		DeckID:    deck.ID,
+		CreatedAt: time.Now(),
 	}
 	if err = e.store.CreateCard(&newCard); err != nil {
 		return err

@@ -491,11 +491,15 @@ func (e *Collaboration) LeaveGroup(ctx context.Context, req *pb.GroupRequest, rs
 	if err != nil {
 		return err
 	}
-	if len(groupUsers) > 1 || group.GroupType == model.Public {
+	if len(groupUsers) > 1 {
 		if err = e.store.RemoveUserFromGroup(req.UserID, req.GroupID); err != nil {
 			return err
 		}
 	} else if group.GroupType == model.Public {
+		if err = e.store.RemoveUserFromGroup(req.UserID, req.GroupID); err != nil {
+			return err
+		}
+	} else {
 		if err = e.store.DeleteGroup(group); err != nil {
 			return err
 		}

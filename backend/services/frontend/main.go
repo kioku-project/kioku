@@ -40,13 +40,20 @@ func main() {
 	logger.Info("Trying to listen on: ", serviceAddress)
 	_ = godotenv.Load("../.env", "../.env.example")
 
+	tp, _ := helper.SetupTracing(context.TODO(), service)
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			logger.Error("Error shutting down tracer provider: %v", err)
+		}
+	}()
+
 	// Create service
 	srv := micro.NewService(
 		micro.Server(grpcServer.NewServer(server.Address(serviceAddress), server.Wait(nil))),
 		micro.Client(grpcClient.NewClient()),
-		micro.WrapClient(opentelemetry.NewClientWrapper()),
-		micro.WrapHandler(opentelemetry.NewHandlerWrapper()),
-		micro.WrapSubscriber(opentelemetry.NewSubscriberWrapper()),
+		micro.WrapClient(opentelemetry.NewClientWrapper(opentelemetry.WithTraceProvider(tp))),
+		micro.WrapHandler(opentelemetry.NewHandlerWrapper(opentelemetry.WithTraceProvider(tp))),
+		micro.WrapSubscriber(opentelemetry.NewSubscriberWrapper(opentelemetry.WithTraceProvider(tp))),
 	)
 	srv.Init(
 		micro.Name(service),
@@ -73,13 +80,6 @@ func main() {
 			return ctx.Status(int(parsedError.Code)).SendString(parsedError.Detail)
 		},
 	}
-
-	tp, _ := helper.SetupTracing(context.TODO(), service)
-	defer func() {
-		if err := tp.Shutdown(context.Background()); err != nil {
-			logger.Error("Error shutting down tracer provider: %v", err)
-		}
-	}()
 
 	app := fiber.New(fiberConfig)
 	app.Post("/api/register", svc.RegisterHandler)

@@ -50,6 +50,8 @@ spec:
               name: {{ .Values.database.secret.name }}
           - configMapRef:
               name: service-env
+          - configMapRef:
+              name: tracing-config
 ---
 apiVersion: v1
 kind: Service

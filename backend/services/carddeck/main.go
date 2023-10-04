@@ -41,6 +41,11 @@ func main() {
 	logger.Info("Trying to listen on: ", serviceAddress)
 
 	tp, _ := helper.SetupTracing(context.TODO(), service)
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			logger.Error("Error shutting down tracer provider: %v", err)
+		}
+	}()
 
 	// Create service
 	srv := micro.NewService(

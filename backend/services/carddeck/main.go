@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
+	"github.com/kioku-project/kioku/pkg/helper"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 
 	"github.com/kioku-project/kioku/services/carddeck/handler"
@@ -37,6 +39,8 @@ func main() {
 	}
 
 	logger.Info("Trying to listen on: ", serviceAddress)
+
+	helper.SetupTracing(context.TODO(), service)
 
 	// Create service
 	srv := micro.NewService(

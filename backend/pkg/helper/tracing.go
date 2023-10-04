@@ -11,7 +11,6 @@ import (
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.12.0"
 )
-
 func SetupTracing(ctx context.Context, serviceName string) (*trace.TracerProvider, error) {
 	tracingUrl := os.Getenv("TRACING_COLLECTOR")
 	if tracingUrl == "" {

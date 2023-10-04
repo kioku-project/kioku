@@ -40,13 +40,6 @@ func main() {
 	logger.Info("Trying to listen on: ", serviceAddress)
 	_ = godotenv.Load("../.env", "../.env.example")
 
-	tp, _ := helper.SetupTracing(context.TODO(), "frontend")
-	defer func() {
-		if err := tp.Shutdown(context.Background()); err != nil {
-			logger.Error("Error shutting down tracer provider: %v", err)
-		}
-	}()
-
 	// Create service
 	srv := micro.NewService(
 		micro.Server(grpcServer.NewServer(server.Address(serviceAddress), server.Wait(nil))),
@@ -81,8 +74,14 @@ func main() {
 		},
 	}
 
+	tp, _ := helper.SetupTracing(context.TODO(), service)
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			logger.Error("Error shutting down tracer provider: %v", err)
+		}
+	}()
+
 	app := fiber.New(fiberConfig)
-	app.Use(otelfiber.Middleware())
 	app.Post("/api/register", svc.RegisterHandler)
 	app.Post("/api/login", svc.LoginHandler)
 	app.Get("/api/reauth", svc.ReauthHandler)
@@ -91,6 +90,9 @@ func main() {
 	if err != nil {
 		panic("Could not parse JWT public / private keypair")
 	}
+	app.Use(otelfiber.Middleware(
+		otelfiber.WithTracerProvider(tp),
+	))
 	app.Use(jwtWare.New(jwtWare.Config{
 		SigningMethod: "ES512",
 		SigningKey:    pub,

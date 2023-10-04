@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
@@ -326,8 +327,8 @@ func (e *Collaboration) AddGroupUserRequest(ctx context.Context, req *pb.GroupUs
 	} else {
 		return helper.NewMicroUserAlreadyInGroupErr(helper.CollaborationServiceID)
 	}
-
 }
+
 func (e *Collaboration) RemoveGroupUserRequest(ctx context.Context, req *pb.GroupUserRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.RemoveGroupUserRequest request: %v", req)
 
@@ -387,6 +388,7 @@ func (e *Collaboration) AddGroupUserInvite(ctx context.Context, req *pb.GroupUse
 		return helper.NewMicroUserAlreadyInGroupErr(helper.CollaborationServiceID)
 	}
 }
+
 func (e *Collaboration) RemoveGroupUserInvite(ctx context.Context, req *pb.GroupUserInvite, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.RemoveGroupUserInvite request: %v", req)
 
@@ -418,6 +420,7 @@ func (e *Collaboration) RemoveGroupUserInvite(ctx context.Context, req *pb.Group
 		return helper.NewMicroUserAlreadyInGroupErr(helper.CollaborationServiceID)
 	}
 }
+
 func (e *Collaboration) GetInvitationsForGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupMemberAdmissionResponse) error {
 	logger.Infof("Received Collaboration.GetInvitationsForGroup request: %v", req)
 	if _, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.GroupID, pb.GroupRole_ADMIN); err != nil {
@@ -463,5 +466,41 @@ func (e *Collaboration) FindGroupByID(_ context.Context, req *pb.GroupRequest, r
 	}
 	*rsp = *converter.StoreGroupToProtoGroupConverter(*group)
 	logger.Infof("Successfully found group with id %s", req.GroupID)
+	return nil
+}
+
+func (e *Collaboration) LeaveGroupSafe(ctx context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
+	logger.Infof("Received Collaboration.LeaveGroupSafe request: %+v", req)
+	remainingAdmins, err := e.store.GetGroupAdmins(req.GroupID)
+	if err != nil {
+		return err
+	}
+	if len(remainingAdmins) == 1 && remainingAdmins[0].UserID == req.UserID {
+		return helper.NewMicroCantLeaveAsLastAdminErr(helper.CollaborationServiceID)
+	}
+	return e.LeaveGroup(ctx, req, rsp)
+}
+
+func (e *Collaboration) LeaveGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
+	logger.Infof("Received Collaboration.LeaveGroup request: %+v", req)
+	group, err := e.store.FindGroupByID(req.GroupID)
+	if err != nil {
+		return err
+	}
+	groupUsers, err := helper.FindStoreEntity(e.store.GetGroupMemberRoles, req.GroupID, helper.CollaborationServiceID)
+	if err != nil {
+		return err
+	}
+	if len(groupUsers) > 1 || group.GroupType == model.Public {
+		if err = e.store.RemoveUserFromGroup(req.UserID, req.GroupID); err != nil {
+			return err
+		}
+	} else {
+		if err = e.store.DeleteGroup(group); err != nil {
+			return err
+		}
+	}
+	rsp.Success = true
+	logger.Infof("User %s left group %s.", req.UserID, req.GroupID)
 	return nil
 }

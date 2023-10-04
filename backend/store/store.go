@@ -4,6 +4,7 @@ import "github.com/kioku-project/kioku/pkg/model"
 
 type UserStore interface {
 	RegisterNewUser(newUser *model.User) error
+	DeleteUser(user *model.User) error
 	FindUserByEmail(email string) (*model.User, error)
 	FindUserByID(userID string) (*model.User, error)
 }
@@ -40,6 +41,7 @@ type CollaborationStore interface {
 	DeleteGroup(group *model.Group) error
 	FindGroupUserRole(userID string, groupID string) (model.RoleType, error)
 	FindGroupMemberRoles(groupID string) ([]model.GroupUserRole, error)
+	GetGroupAdmins(groupID string) ([]model.GroupUserRole, error)
 	FindGroupRequestsByGroupID(groupID string) ([]model.GroupUserRole, error)
 	FindGroupInvitationsByUserID(userID string) ([]model.GroupUserRole, error)
 	FindGroupInvitationsByGroupID(groupID string) ([]model.GroupUserRole, error)

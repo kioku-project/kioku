@@ -145,7 +145,7 @@ export const GroupSettingsTab = ({
 
 	async function leaveGroup() {
 		const response = await authedFetch(
-			`/api/groups/${group.groupID}/members/leave`,
+			`/api/groups/${group.groupID}/members`,
 			{
 				method: "DELETE",
 				headers: {

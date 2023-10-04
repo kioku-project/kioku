@@ -2,6 +2,7 @@ package helper
 
 import (
 	"errors"
+
 	"github.com/gofiber/fiber/v2"
 	microErrors "go-micro.dev/v4/errors"
 )
@@ -51,6 +52,14 @@ func NewMicroUserAlreadyInGroupErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "user already in group")
 }
 
+func NewMicroCantLeaveDefaultGroupErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "You can't leave your default group")
+}
+
+func NewMicroCantLeaveAsLastAdminErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "You can't leave when you are the last admin")
+}
+
 func NewMicroUserAdmissionInProgressErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "user already invited")
 }
@@ -78,9 +87,11 @@ func NewMicroInvalidEmailOrPasswordErr(id ClientID) error {
 func NewMicroNotSuccessfulResponseErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "operation not successful")
 }
+
 func NewMicroWrongRatingErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "invalid rating")
 }
+
 func NewMicroWrongDeckIDErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "wrong deck id")
 }

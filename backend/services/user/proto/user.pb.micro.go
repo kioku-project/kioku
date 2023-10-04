@@ -37,10 +37,12 @@ func NewUserEndpoints() []*api.Endpoint {
 
 type UserService interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...client.CallOption) (*NameIDResponse, error)
+	DeleteUser(ctx context.Context, in *UserID, opts ...client.CallOption) (*SuccessResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*NameIDResponse, error)
 	GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*UserID, error)
 	GetUserInformation(ctx context.Context, in *UserInformationRequest, opts ...client.CallOption) (*UserInformationResponse, error)
 	GetUserProfileInformation(ctx context.Context, in *UserID, opts ...client.CallOption) (*UserProfileInformationResponse, error)
+	VerifyUserExists(ctx context.Context, in *VerificationRequest, opts ...client.CallOption) (*SuccessResponse, error)
 }
 
 type userService struct {
@@ -58,6 +60,16 @@ func NewUserService(name string, c client.Client) UserService {
 func (c *userService) Register(ctx context.Context, in *RegisterRequest, opts ...client.CallOption) (*NameIDResponse, error) {
 	req := c.c.NewRequest(c.name, "User.Register", in)
 	out := new(NameIDResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userService) DeleteUser(ctx context.Context, in *UserID, opts ...client.CallOption) (*SuccessResponse, error) {
+	req := c.c.NewRequest(c.name, "User.DeleteUser", in)
+	out := new(SuccessResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -105,23 +117,37 @@ func (c *userService) GetUserProfileInformation(ctx context.Context, in *UserID,
 	return out, nil
 }
 
+func (c *userService) VerifyUserExists(ctx context.Context, in *VerificationRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+	req := c.c.NewRequest(c.name, "User.VerifyUserExists", in)
+	out := new(SuccessResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for User service
 
 type UserHandler interface {
 	Register(context.Context, *RegisterRequest, *NameIDResponse) error
+	DeleteUser(context.Context, *UserID, *SuccessResponse) error
 	Login(context.Context, *LoginRequest, *NameIDResponse) error
 	GetUserIDFromEmail(context.Context, *UserIDRequest, *UserID) error
 	GetUserInformation(context.Context, *UserInformationRequest, *UserInformationResponse) error
 	GetUserProfileInformation(context.Context, *UserID, *UserProfileInformationResponse) error
+	VerifyUserExists(context.Context, *VerificationRequest, *SuccessResponse) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
 	type user interface {
 		Register(ctx context.Context, in *RegisterRequest, out *NameIDResponse) error
+		DeleteUser(ctx context.Context, in *UserID, out *SuccessResponse) error
 		Login(ctx context.Context, in *LoginRequest, out *NameIDResponse) error
 		GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, out *UserID) error
 		GetUserInformation(ctx context.Context, in *UserInformationRequest, out *UserInformationResponse) error
 		GetUserProfileInformation(ctx context.Context, in *UserID, out *UserProfileInformationResponse) error
+		VerifyUserExists(ctx context.Context, in *VerificationRequest, out *SuccessResponse) error
 	}
 	type User struct {
 		user
@@ -138,6 +164,10 @@ func (h *userHandler) Register(ctx context.Context, in *RegisterRequest, out *Na
 	return h.UserHandler.Register(ctx, in, out)
 }
 
+func (h *userHandler) DeleteUser(ctx context.Context, in *UserID, out *SuccessResponse) error {
+	return h.UserHandler.DeleteUser(ctx, in, out)
+}
+
 func (h *userHandler) Login(ctx context.Context, in *LoginRequest, out *NameIDResponse) error {
 	return h.UserHandler.Login(ctx, in, out)
 }
@@ -152,4 +182,8 @@ func (h *userHandler) GetUserInformation(ctx context.Context, in *UserInformatio
 
 func (h *userHandler) GetUserProfileInformation(ctx context.Context, in *UserID, out *UserProfileInformationResponse) error {
 	return h.UserHandler.GetUserProfileInformation(ctx, in, out)
+}
+
+func (h *userHandler) VerifyUserExists(ctx context.Context, in *VerificationRequest, out *SuccessResponse) error {
+	return h.UserHandler.VerifyUserExists(ctx, in, out)
 }

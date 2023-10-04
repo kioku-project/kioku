@@ -58,11 +58,11 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 }
 
 func (e *User) VerifyUserExists(ctx context.Context, req *pb.VerificationRequest, rsp *pb.SuccessResponse) error {
-	usr, err := e.store.FindUserByEmail(req.UserEmail)
+	user, err := e.store.FindUserByEmail(req.UserEmail)
 	if err != nil {
 		return err
 	}
-	if usr.ID == req.UserID {
+	if user.ID == req.UserID {
 		rsp.Success = true
 	}
 	return nil

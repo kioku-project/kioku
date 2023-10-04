@@ -297,7 +297,7 @@ func (s *CollaborationStoreImpl) DeleteGroup(group *model.Group) error {
 	return s.db.Delete(group).Error
 }
 
-func (s *CollaborationStoreImpl) GetGroupUserRole(userID string, groupID string) (groupRole model.RoleType, err error) {
+func (s *CollaborationStoreImpl) FindGroupUserRole(userID string, groupID string) (groupRole model.RoleType, err error) {
 	var groupUser model.GroupUserRole
 	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, UserID: userID}).First(&groupUser).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
@@ -306,14 +306,14 @@ func (s *CollaborationStoreImpl) GetGroupUserRole(userID string, groupID string)
 	return
 }
 
-func (s *CollaborationStoreImpl) GetGroupMemberRoles(groupID string) (groupMembers []model.GroupUserRole, err error) {
+func (s *CollaborationStoreImpl) FindGroupMemberRoles(groupID string) (groupMembers []model.GroupUserRole, err error) {
 	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).Not(&model.GroupUserRole{RoleType: model.RoleInvited}).Not(&model.GroupUserRole{RoleType: model.RoleRequested}).Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
-func (s *CollaborationStoreImpl) GetGroupAdmins(groupID string) (groupMembers []model.GroupUserRole, err error) {
+func (s *CollaborationStoreImpl) FindGroupAdmins(groupID string) (groupMembers []model.GroupUserRole, err error) {
 	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, RoleType: model.RoleAdmin}).Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
@@ -345,21 +345,21 @@ func (s *SrsStoreImpl) CreateRevlog(newRev *model.Revlog) error {
 	return s.db.Create(&newRev).Error
 }
 
-func (s *SrsStoreImpl) GetCardBinding(userID string, cardID string) (userCardBinding *model.UserCardBinding, err error) {
+func (s *SrsStoreImpl) FindCardBinding(userID string, cardID string) (userCardBinding *model.UserCardBinding, err error) {
 	if err = s.db.Where(model.UserCardBinding{UserID: userID, CardID: cardID}).First(&userCardBinding).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
-func (s *SrsStoreImpl) GetDeckCards(userID string, deckID string) (userCards []*model.UserCardBinding, err error) {
+func (s *SrsStoreImpl) FindDeckCards(userID string, deckID string) (userCards []*model.UserCardBinding, err error) {
 	if err = s.db.Where(model.UserCardBinding{UserID: userID, DeckID: deckID}).Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
-func (s *SrsStoreImpl) GetUserCards(userID string) (userCards []*model.UserCardBinding, err error) {
+func (s *SrsStoreImpl) FindUserCards(userID string) (userCards []*model.UserCardBinding, err error) {
 	if err = s.db.Where(model.UserCardBinding{UserID: userID}).Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}

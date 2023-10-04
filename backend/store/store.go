@@ -40,9 +40,9 @@ type CollaborationStore interface {
 	RemoveUserFromGroup(userID string, groupID string) error
 	ModifyGroup(group *model.Group) error
 	DeleteGroup(group *model.Group) error
-	GetGroupUserRole(userID string, groupID string) (model.RoleType, error)
-	GetGroupMemberRoles(groupID string) ([]model.GroupUserRole, error)
-	GetGroupAdmins(groupID string) ([]model.GroupUserRole, error)
+	FindGroupUserRole(userID string, groupID string) (model.RoleType, error)
+	FindGroupMemberRoles(groupID string) ([]model.GroupUserRole, error)
+	FindGroupAdmins(groupID string) ([]model.GroupUserRole, error)
 	FindGroupRequestsByGroupID(groupID string) ([]model.GroupUserRole, error)
 	FindGroupInvitationsByUserID(userID string) ([]model.GroupUserRole, error)
 	FindGroupInvitationsByGroupID(groupID string) ([]model.GroupUserRole, error)
@@ -50,9 +50,9 @@ type CollaborationStore interface {
 
 type SrsStore interface {
 	CreateRevlog(newRev *model.Revlog) error
-	GetCardBinding(userID string, cardID string) (*model.UserCardBinding, error)
-	GetDeckCards(userID string, deckID string) ([]*model.UserCardBinding, error)
-	GetUserCards(userID string) ([]*model.UserCardBinding, error)
+	FindCardBinding(userID string, cardID string) (*model.UserCardBinding, error)
+	FindDeckCards(userID string, deckID string) ([]*model.UserCardBinding, error)
+	FindUserCards(userID string) ([]*model.UserCardBinding, error)
 	CreateUserCard(newCard *model.UserCardBinding) error
 	ModifyUserCard(card *model.UserCardBinding) error
 }

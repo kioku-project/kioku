@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
+	"github.com/kioku-project/kioku/pkg/helper"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
 	"github.com/kioku-project/kioku/services/user/handler"
 	pb "github.com/kioku-project/kioku/services/user/proto"
@@ -36,13 +38,15 @@ func main() {
 
 	logger.Info("Trying to listen on: ", serviceAddress)
 
+	tp, _ := helper.SetupTracing(context.TODO(), service)
+
 	// Create service
 	srv := micro.NewService(
 		micro.Server(grpcServer.NewServer(server.Address(serviceAddress), server.Wait(nil))),
 		micro.Client(grpcClient.NewClient()),
-		micro.WrapClient(opentelemetry.NewClientWrapper()),
-		micro.WrapHandler(opentelemetry.NewHandlerWrapper()),
-		micro.WrapSubscriber(opentelemetry.NewSubscriberWrapper()),
+		micro.WrapClient(opentelemetry.NewClientWrapper(opentelemetry.WithTraceProvider(tp))),
+		micro.WrapHandler(opentelemetry.NewHandlerWrapper(opentelemetry.WithTraceProvider(tp))),
+		micro.WrapSubscriber(opentelemetry.NewSubscriberWrapper(opentelemetry.WithTraceProvider(tp))),
 	)
 	srv.Init(
 		micro.Name(service),

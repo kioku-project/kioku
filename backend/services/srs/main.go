@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
+	"github.com/kioku-project/kioku/pkg/helper"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	"go-micro.dev/v4/server"
 
@@ -37,13 +39,15 @@ func main() {
 
 	logger.Info("Trying to listen on: ", serviceAddress)
 
+	tp, _ := helper.SetupTracing(context.TODO(), service)
+
 	// Create service
 	srv := micro.NewService(
 		micro.Server(grpcs.NewServer(server.Address(serviceAddress))),
 		micro.Client(grpcc.NewClient()),
-		micro.WrapClient(opentelemetry.NewClientWrapper()),
-		micro.WrapHandler(opentelemetry.NewHandlerWrapper()),
-		micro.WrapSubscriber(opentelemetry.NewSubscriberWrapper()),
+		micro.WrapClient(opentelemetry.NewClientWrapper(opentelemetry.WithTraceProvider(tp))),
+		micro.WrapHandler(opentelemetry.NewHandlerWrapper(opentelemetry.WithTraceProvider(tp))),
+		micro.WrapSubscriber(opentelemetry.NewSubscriberWrapper(opentelemetry.WithTraceProvider(tp))),
 	)
 	srv.Init(
 		micro.Name(service),

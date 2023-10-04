@@ -365,6 +365,22 @@ func (e *Frontend) ModifyGroupMemberHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+func (e *Frontend) KickGroupMemberHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspKickGroupUser, err := e.collaborationService.KickGroupUser(c.Context(), &pbCollaboration.GroupKickUserRequest{
+		UserID:    userID,
+		GroupID:   c.Params("groupID"),
+		DelUserID: c.Params("userID"),
+	})
+	if err != nil {
+		return err
+	}
+	if !rspKickGroupUser.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
 func (e *Frontend) GetGroupMemberRequestsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspMemberRequests, err := e.collaborationService.GetGroupMemberRequests(c.Context(), &pbCollaboration.GroupRequest{

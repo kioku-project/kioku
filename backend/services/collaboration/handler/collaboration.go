@@ -361,6 +361,37 @@ func (e *Collaboration) ModifyGroupUserRequest(ctx context.Context, req *pb.Grou
 	return nil
 }
 
+func (e *Collaboration) KickGroupUser(ctx context.Context, req *pb.GroupKickUserRequest, rsp *pb.SuccessResponse) error {
+	logger.Infof("Received Collaboration.KickGroupUserRequest request: %v", req)
+
+	if req.UserID == req.DelUserID {
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
+	role, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
+	if err != nil {
+		return err
+	}
+	if role != model.RoleAdmin {
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
+	delUserCurrRole, err := e.store.FindGroupUserRole(req.DelUserID, req.GroupID)
+	if err != nil {
+		return err
+	}
+	if delUserCurrRole == model.RoleRequested || delUserCurrRole == model.RoleInvited {
+		return helper.NewMicroUserAdmissionInProgressErr(helper.CollaborationServiceID)
+	}
+	if delUserCurrRole == model.RoleAdmin {
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
+	if err := e.store.RemoveUserFromGroup(req.DelUserID, req.GroupID); err != nil {
+		return err
+	}
+
+	rsp.Success = true
+	return nil
+}
+
 func (e *Collaboration) RemoveGroupUserRequest(ctx context.Context, req *pb.GroupUserRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.RemoveGroupUserRequest request: %v", req)
 

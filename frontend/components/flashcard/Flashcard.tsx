@@ -15,6 +15,7 @@ import { Card as CardType } from "../../types/Card";
 import { authedFetch } from "../../util/reauth";
 import { InputField } from "../form/InputField";
 import { Button } from "../input/Button";
+import { GroupRole } from "@/types/GroupRole";
 
 interface FlashcardProps {
 	/**
@@ -49,6 +50,10 @@ interface FlashcardProps {
 	 * callback to push rating
 	 */
 	push?: (body: { cardID: string; rating: number }) => void;
+	/**
+	 * callback to push rating
+	 */
+	role?: keyof typeof GroupRole
 }
 
 /**
@@ -63,6 +68,7 @@ export const Flashcard = ({
 	fullSize = false,
 	className = "",
 	push,
+	role,
 }: FlashcardProps) => {
 	const { mutate } = useSWRConfig();
 	const [tempCard, setTempCard] = useState<CardType>(card);
@@ -168,6 +174,7 @@ export const Flashcard = ({
 								<Edit2
 									id="editButtonId"
 									className="hover:cursor-pointer"
+									visibility={isAuthorized() ? "visible" : "hidden"}
 									onClick={() => setEdit(true)}
 								></Edit2>
 							</div>
@@ -279,5 +286,12 @@ export const Flashcard = ({
 			cardID: card.cardID,
 			rating: rating,
 		});
+	}
+
+	function isAuthorized(){
+		if(role && GroupRole[role] >= GroupRole.WRITE){
+			return true;
+		}
+		return false;
 	}
 };

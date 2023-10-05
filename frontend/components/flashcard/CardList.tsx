@@ -3,12 +3,14 @@ import useSWR from "swr";
 import { Card as CardType } from "../../types/Card";
 import { authedFetch } from "../../util/reauth";
 import { Card } from "./Card";
+import { GroupRole } from "@/types/GroupRole";
+import { Deck } from "@/types/Deck";
 
 interface CardListProps {
 	/**
-	 * deckID
+	 * deck
 	 */
-	deckID: string;
+	deck: Deck;
 	/**
 	 * Additional classes
 	 */
@@ -23,7 +25,7 @@ interface CardListProps {
  * UI component for displaying a list of cards
  */
 export const CardList = ({
-	deckID,
+	deck,
 	setCard,
 	className = "",
 }: CardListProps) => {
@@ -31,7 +33,7 @@ export const CardList = ({
 		authedFetch(url, {
 			method: "GET",
 		}).then((res) => res?.json());
-	const { data: cards } = useSWR(`/api/decks/${deckID}/cards`, fetcher);
+	const { data: cards } = useSWR(`/api/decks/${deck.deckID}/cards`, fetcher);
 	return (
 		<div id="cardListId" className={`flex flex-col ${className}`}>
 			<div className="snap-y overflow-y-auto">
@@ -40,11 +42,18 @@ export const CardList = ({
 						className="snap-center"
 						key={card.cardID}
 						setCard={setCard}
-						card={{ ...card, deckID: deckID }}
+						card={{ ...card, deckID: deck.deckID }}
 					/>
 				))}
 			</div>
-			<Card card={{ cardID: "", sides: [], deckID: deckID }} />
+			{isAuthorized()?(<Card card={{ cardID: "", sides: [], deckID: deck.deckID }}/>):(<></>)}
 		</div>
 	);
+
+	function isAuthorized(){
+		if(deck.groupRole && GroupRole[deck.groupRole] >= GroupRole.WRITE){
+			return true;
+		}
+		return false;
+	}
 };

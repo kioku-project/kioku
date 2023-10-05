@@ -4,22 +4,24 @@ import { ChevronDown, ChevronRight } from "react-feather";
 import { Card as CardType } from "../../../types/Card";
 import { CardList } from "../../flashcard/CardList";
 import { Flashcard } from "../../flashcard/Flashcard";
+import { Deck } from "@/types/Deck";
 
 interface CardsTabProps {
 	/**
-	 * deckID
+	 * deck
 	 */
-	deckID: string;
+	deck: Deck;
 	/**
 	 * Additional classes
 	 */
 	className?: string;
+
 }
 
 /**
  * UI component for the CardsTab
  */
-export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
+export const CardsTab = ({ deck, className = "" }: CardsTabProps) => {
 	const [card, setCard] = useState<CardType>();
 
 	return (
@@ -27,7 +29,7 @@ export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
 			className={`flex h-full max-h-full flex-col md:flex-row ${className}`}
 		>
 			<CardList
-				deckID={deckID}
+				deck={deck}
 				setCard={setNewCard}
 				className={`${card ? "md:w-1/2" : "w-full"}`}
 			></CardList>
@@ -51,6 +53,7 @@ export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
 								card={card}
 								cardSide={0}
 								fullSize={true}
+								role={deck.groupRole}
 							></Flashcard>
 						)}
 					</div>

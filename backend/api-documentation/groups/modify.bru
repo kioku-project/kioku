@@ -1,0 +1,22 @@
+meta {
+  name: modify
+  type: http
+  seq: 10
+}
+
+put {
+  url: {{baseUrl}}/api/groups/{{groupID}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "groupName": "test group 2",
+      "groupType": "PRIVATE"
+  }
+}

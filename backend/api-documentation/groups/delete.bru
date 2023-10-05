@@ -1,0 +1,15 @@
+meta {
+  name: delete
+  type: http
+  seq: 13
+}
+
+delete {
+  url: {{baseUrl}}/api/groups/{{groupID}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

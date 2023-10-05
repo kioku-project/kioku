@@ -1,0 +1,22 @@
+meta {
+  name: modify card side
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{baseUrl}}/api/cardSides/{{cardSideID}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "header": "side 3",
+      "description": "description"
+  }
+}

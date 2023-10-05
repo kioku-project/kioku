@@ -1,0 +1,21 @@
+meta {
+  name: invite user
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/groups/{{groupID}}/members/invitations
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "invitedUserEmail": "test@test.de"
+  }
+}

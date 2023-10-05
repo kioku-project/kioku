@@ -1,0 +1,15 @@
+meta {
+  name: pull learning
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/decks/{{deckID}}/pull
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

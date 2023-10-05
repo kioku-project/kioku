@@ -1,0 +1,15 @@
+meta {
+  name: get dueCards
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/decks/{{deckID}}/dueCards
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

@@ -79,7 +79,7 @@ export default function Home() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Authenticated>
-				<div className="min-w-screen flex h-screen select-none flex-col bg-eggshell">
+				<div className="min-w-screen flex h-screen flex-col bg-eggshell">
 					<Navbar login={true}></Navbar>
 					{user && groups && (
 						<div className="flex flex-col space-y-3 p-5 md:space-y-5 md:p-10">

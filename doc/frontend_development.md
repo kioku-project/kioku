@@ -46,6 +46,10 @@ async rewrites() {
 > [!IMPORTANT]  
 > Please remember to exclude these changes from your pull request as they should only be used locally!
 
+Furthermore, configure the frontend `.env` file
+```
+cp .env.example .env
+```
 Finally, you can start all of the backend services:
 ```
 docker compose up -d

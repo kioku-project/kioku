@@ -4,12 +4,13 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/kioku-project/kioku)
 [![Backend Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services)
 [![Frontend Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend)
+[![Backend Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services)
 [![Frontend Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend)
 [![Storybook link](https://github.com/storybookjs/brand/blob/master/badge/badge-storybook.svg)](https://main--63e354941aa15501d3467f88.chromatic.com)
 
 
 # Welcome to Kioku!
-The cloud native flashcard application that focusses on collaborative content creation.
+The cloud native flashcard application that focuses on collaborative content creation.
 
 ## Features
 
@@ -101,7 +102,7 @@ cp .env.example .env
 > [!WARNING]
 > The example environment file is populated with default values, be sure to change all values before using the application in production!
 
-finally, start frontend and backend using docker compose
+Finally, start frontend and backend using docker compose
 ```
 docker compose up
 ```

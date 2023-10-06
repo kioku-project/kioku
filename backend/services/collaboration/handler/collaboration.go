@@ -348,26 +348,27 @@ func (e *Collaboration) AddGroupUserRequest(
 
 	groupRole, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
 	if err != nil {
-		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			group, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
-			if err != nil {
-				return err
-			}
-			if group.GroupType == model.Private {
-				return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
-			}
-			if err := e.store.AddRequestingUserToGroup(req.UserID, req.GroupID); err != nil {
-				return err
-			}
-			rsp.Success = true
-			return nil
+		if !errors.Is(err, helper.ErrStoreNoEntryWithID) {
+			return err
 		}
-		return err
+		group, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
+		if err != nil {
+			return err
+		}
+		if group.GroupType == model.Private {
+			return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+		}
+		if err = e.store.AddRequestingUserToGroup(req.UserID, req.GroupID); err != nil {
+			return err
+		}
+		rsp.Success = true
+		return nil
 	}
 	if groupRole == model.RoleRequested {
 		return helper.NewMicroAlreadyRequestedErr(helper.CollaborationServiceID)
-	} else if groupRole == model.RoleInvited {
-		if err := e.store.PromoteUserToFullGroupMember(req.UserID, req.GroupID); err != nil {
+	}
+	if groupRole == model.RoleInvited {
+		if err = e.store.PromoteUserToFullGroupMember(req.UserID, req.GroupID); err != nil {
 			return err
 		}
 		rsp.Success = true

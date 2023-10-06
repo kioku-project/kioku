@@ -62,18 +62,18 @@ services:
     depends_on:
       - db
 
-  # frontend:
-  #   build:
-  #     context: frontend
-  #   container_name: kioku-frontend
-  #   restart: always
-  #   ports:
-  #     - "127.0.0.1:3000:3000"
-  #   depends_on:
-  #     - frontend_proxy
-  #     - user_service
-  #     - carddeck_service
-  #     - collaboration_service
+  frontend:
+    build:
+      context: frontend
+    container_name: kioku-frontend
+    restart: always
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - frontend_proxy
+      - user_service
+      - carddeck_service
+      - collaboration_service
   
   go-micro-dashboard:
     image: xpunch/go-micro-dashboard:latest

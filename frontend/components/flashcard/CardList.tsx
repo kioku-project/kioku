@@ -43,10 +43,8 @@ export const CardList = ({ deck, setCard, className = "" }: CardListProps) => {
 					/>
 				))}
 			</div>
-			{deck.groupRole && GroupRole[deck.groupRole] >= GroupRole.WRITE ? (
+			{deck.groupRole && GroupRole[deck.groupRole] >= GroupRole.WRITE && (
 				<Card card={{ cardID: "", sides: [], deckID: deck.deckID }} />
-			) : (
-				<></>
 			)}
 		</div>
 	);

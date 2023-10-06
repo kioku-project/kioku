@@ -50,7 +50,7 @@ interface FlashcardProps {
 	 */
 	push?: (body: { cardID: string; rating: number }) => void;
 	/**
-	 * editable
+	 * permissions to edit
 	 */
 	editable?: boolean;
 }

@@ -17,8 +17,6 @@ services:
       - ./backend/.env
     depends_on:
       - db
-    ports: 
-      - 80:80
 
   user_service:
     build:

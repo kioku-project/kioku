@@ -1,10 +1,11 @@
 import useSWR from "swr";
 
+import { Deck as DeckType } from "@/types/Deck";
+import { GroupRole } from "@/types/GroupRole";
+
 import { Card as CardType } from "../../types/Card";
 import { authedFetch } from "../../util/reauth";
 import { Card } from "./Card";
-import { GroupRole } from "@/types/GroupRole";
-import { Deck as DeckType } from "@/types/Deck";
 
 interface CardListProps {
 	/**
@@ -24,11 +25,7 @@ interface CardListProps {
 /**
  * UI component for displaying a list of cards
  */
-export const CardList = ({
-	deck,
-	setCard,
-	className = "",
-}: CardListProps) => {
+export const CardList = ({ deck, setCard, className = "" }: CardListProps) => {
 	const fetcher = (url: RequestInfo | URL) =>
 		authedFetch(url, {
 			method: "GET",
@@ -46,8 +43,11 @@ export const CardList = ({
 					/>
 				))}
 			</div>
-			{(deck.groupRole && GroupRole[deck.groupRole] >= GroupRole.WRITE)?(<Card card={{ cardID: "", sides: [], deckID: deck.deckID }}/>):(<></>)}
+			{deck.groupRole && GroupRole[deck.groupRole] >= GroupRole.WRITE ? (
+				<Card card={{ cardID: "", sides: [], deckID: deck.deckID }} />
+			) : (
+				<></>
+			)}
 		</div>
 	);
-
 };

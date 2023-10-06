@@ -15,7 +15,6 @@ import { Card as CardType } from "../../types/Card";
 import { authedFetch } from "../../util/reauth";
 import { InputField } from "../form/InputField";
 import { Button } from "../input/Button";
-import { GroupRole } from "@/types/GroupRole";
 
 interface FlashcardProps {
 	/**
@@ -53,7 +52,7 @@ interface FlashcardProps {
 	/**
 	 * editable
 	 */
-	editable?: boolean
+	editable?: boolean;
 }
 
 /**
@@ -68,7 +67,7 @@ export const Flashcard = ({
 	fullSize = false,
 	className = "",
 	push,
-	editable
+	editable,
 }: FlashcardProps) => {
 	const { mutate } = useSWRConfig();
 	const [tempCard, setTempCard] = useState<CardType>(card);
@@ -175,8 +174,10 @@ export const Flashcard = ({
 									id="editButtonId"
 									className="hover:cursor-pointer"
 									// change non-editable button
-									color={editable ? "" : ""}
-									onClick={() => setEdit(editable?true:false)}
+									// color={editable ? "" : ""}
+									onClick={() =>
+										setEdit(editable ? true : false)
+									}
 								></Edit2>
 							</div>
 						)}
@@ -288,5 +289,4 @@ export const Flashcard = ({
 			rating: rating,
 		});
 	}
-
 };

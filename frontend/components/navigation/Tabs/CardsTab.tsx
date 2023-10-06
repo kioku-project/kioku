@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { ChevronDown, ChevronRight } from "react-feather";
 
+import { Deck as DeckType } from "@/types/Deck";
+import { GroupRole } from "@/types/GroupRole";
+
 import { Card as CardType } from "../../../types/Card";
 import { CardList } from "../../flashcard/CardList";
 import { Flashcard } from "../../flashcard/Flashcard";
-import { Deck as DeckType} from "@/types/Deck";
-import { GroupRole } from "@/types/GroupRole";
 
 interface CardsTabProps {
 	/**
@@ -16,7 +17,6 @@ interface CardsTabProps {
 	 * Additional classes
 	 */
 	className?: string;
-
 }
 
 /**
@@ -54,7 +54,10 @@ export const CardsTab = ({ deck, className = "" }: CardsTabProps) => {
 								card={card}
 								cardSide={0}
 								fullSize={true}
-								editable={deck.groupRole && GroupRole[deck.groupRole] >= GroupRole.WRITE}
+								editable={
+									deck.groupRole &&
+									GroupRole[deck.groupRole] >= GroupRole.WRITE
+								}
 							></Flashcard>
 						)}
 					</div>

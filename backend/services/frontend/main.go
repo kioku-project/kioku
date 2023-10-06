@@ -62,7 +62,8 @@ func main() {
 			if parsedError.Code == 0 {
 				parsedError.Code = fiber.StatusInternalServerError
 			}
-			logger.Infof("Error from %s containing code (%d) and error detail (%s)", parsedError.Id, parsedError.Code, parsedError.Detail)
+			logger.Infof("Error from %s containing code (%d) and error detail (%s)",
+				parsedError.Id, parsedError.Code, parsedError.Detail)
 			return ctx.Status(int(parsedError.Code)).SendString(parsedError.Detail)
 		},
 	}

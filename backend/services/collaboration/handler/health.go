@@ -11,11 +11,11 @@ import (
 
 type Health struct{}
 
-func (h *Health) Check(ctx context.Context, req *pb.HealthCheckRequest, rsp *pb.HealthCheckResponse) error {
+func (h *Health) Check(_ context.Context, _ *pb.HealthCheckRequest, rsp *pb.HealthCheckResponse) error {
 	rsp.Status = pb.HealthCheckResponse_SERVING
 	return nil
 }
 
-func (h *Health) Watch(ctx context.Context, req *pb.HealthCheckRequest, stream pb.Health_WatchStream) error {
+func (h *Health) Watch(_ context.Context, _ *pb.HealthCheckRequest, _ pb.Health_WatchStream) error {
 	return status.Errorf(codes.Unimplemented, "health check via Watch not implemented")
 }

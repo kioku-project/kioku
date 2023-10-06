@@ -4,13 +4,14 @@ import { ChevronDown, ChevronRight } from "react-feather";
 import { Card as CardType } from "../../../types/Card";
 import { CardList } from "../../flashcard/CardList";
 import { Flashcard } from "../../flashcard/Flashcard";
-import { Deck } from "@/types/Deck";
+import { Deck as DeckType} from "@/types/Deck";
+import { GroupRole } from "@/types/GroupRole";
 
 interface CardsTabProps {
 	/**
 	 * deck
 	 */
-	deck: Deck;
+	deck: DeckType;
 	/**
 	 * Additional classes
 	 */
@@ -53,7 +54,7 @@ export const CardsTab = ({ deck, className = "" }: CardsTabProps) => {
 								card={card}
 								cardSide={0}
 								fullSize={true}
-								role={deck.groupRole}
+								editable={deck.groupRole && GroupRole[deck.groupRole] >= GroupRole.WRITE}
 							></Flashcard>
 						)}
 					</div>

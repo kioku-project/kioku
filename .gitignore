@@ -4,5 +4,3 @@
 private_key.yaml
 .DS_STORE
 frontend/build-storybook.log
-docker-compose.yml
-frontend/next.config.js

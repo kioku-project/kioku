@@ -86,7 +86,7 @@ export default function Page() {
 								{{
 									cards: (
 										<CardsTab
-											deck={{ ...deck, deckID: deck.deckID, groupRole: group.groupRole }}
+											deck={{ ...deck, groupRole: group.groupRole }}
 										></CardsTab>
 									),
 									settings: (

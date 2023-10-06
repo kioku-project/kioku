@@ -4,13 +4,13 @@ import { Card as CardType } from "../../types/Card";
 import { authedFetch } from "../../util/reauth";
 import { Card } from "./Card";
 import { GroupRole } from "@/types/GroupRole";
-import { Deck } from "@/types/Deck";
+import { Deck as DeckType } from "@/types/Deck";
 
 interface CardListProps {
 	/**
 	 * deck
 	 */
-	deck: Deck;
+	deck: DeckType;
 	/**
 	 * Additional classes
 	 */
@@ -46,14 +46,8 @@ export const CardList = ({
 					/>
 				))}
 			</div>
-			{isAuthorized()?(<Card card={{ cardID: "", sides: [], deckID: deck.deckID }}/>):(<></>)}
+			{(deck.groupRole && GroupRole[deck.groupRole] >= GroupRole.WRITE)?(<Card card={{ cardID: "", sides: [], deckID: deck.deckID }}/>):(<></>)}
 		</div>
 	);
 
-	function isAuthorized(){
-		if(deck.groupRole && GroupRole[deck.groupRole] >= GroupRole.WRITE){
-			return true;
-		}
-		return false;
-	}
 };

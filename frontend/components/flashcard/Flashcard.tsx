@@ -51,9 +51,9 @@ interface FlashcardProps {
 	 */
 	push?: (body: { cardID: string; rating: number }) => void;
 	/**
-	 * callback to push rating
+	 * editable
 	 */
-	role?: keyof typeof GroupRole
+	editable?: boolean
 }
 
 /**
@@ -68,7 +68,7 @@ export const Flashcard = ({
 	fullSize = false,
 	className = "",
 	push,
-	role,
+	editable
 }: FlashcardProps) => {
 	const { mutate } = useSWRConfig();
 	const [tempCard, setTempCard] = useState<CardType>(card);
@@ -174,8 +174,9 @@ export const Flashcard = ({
 								<Edit2
 									id="editButtonId"
 									className="hover:cursor-pointer"
-									visibility={isAuthorized() ? "visible" : "hidden"}
-									onClick={() => setEdit(true)}
+									// change non-editable button
+									color={editable ? "" : ""}
+									onClick={() => setEdit(editable?true:false)}
 								></Edit2>
 							</div>
 						)}
@@ -288,10 +289,4 @@ export const Flashcard = ({
 		});
 	}
 
-	function isAuthorized(){
-		if(role && GroupRole[role] >= GroupRole.WRITE){
-			return true;
-		}
-		return false;
-	}
 };

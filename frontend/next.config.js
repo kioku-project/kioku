@@ -11,7 +11,7 @@ const nextConfig = {
 		return [
 			{
 				source: "/api/:path*",
-				destination: "http://localhost:80/api/:path*",
+				destination: "http://frontend_proxy:80/api/:path*",
 			},
 		];
 	},

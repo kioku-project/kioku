@@ -1,9 +1,11 @@
 # Backend development
 
 ## Index
-1. [Infrastructure overview](#infrastructure-overview)
-2. [Getting started](#getting-started-with-backend-development)
-3. [Create a new service](#create-a-new-service)
+- [Backend development](#backend-development)
+  - [Index](#index)
+  - [Infrastructure overview](#infrastructure-overview)
+  - [Getting started with backend development](#getting-started-with-backend-development)
+  - [Create a new service](#create-a-new-service)
 
 ## Infrastructure overview
 ![Architecture-Design](https://github.com/kioku-project/kioku/assets/60541979/4aedb2be-f1ff-41bc-ac7f-a45662bd819a)
@@ -37,19 +39,142 @@ And finally, you need to install `make` on your system. Mac users can install it
     
     Add a new service in `docker-compose.yml` for the created service.
     ```yaml
-<name>_service:
-  build:
-    context: backend
-    dockerfile: services/<name>/Dockerfile
-  container_name: kioku-<name>_service
-  restart: always
-  env_file:
-    - ./backend/.env
-  depends_on:
-    - db
+    <name>_service:
+      build:
+        context: backend
+        dockerfile: services/<name>/Dockerfile
+      container_name: kioku-<name>_service
+      restart: always
+      env_file:
+        - ./backend/.env
+      depends_on:
+        - db
     ```
 
-4. Adjust the proxy rules in the frontend service to be able to serve the new service if needed
+4. Add Service to GitHub Workflows in `.github/workflows/<name>_service.yaml`
+```yaml
+name: <name> Service
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+    - 'backend/services/<name>/**'
+    - 'backend/store/**'
+
+jobs:
+  build-carddeck:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_<name>
+      path: ./backend/services/<name>
+      context: ./backend
+```
+
+5. Add the service to the Kubernetes deployment
+   1. Add the Kubernetes template in `helm/kioku/templates/<name>.yaml`
+    ```yaml
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: "{{ .Values.<name>.name }}-deployment"
+      labels:
+        {{- include "kioku.<name>.labels" . | nindent 4 }}
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          {{- include "kioku.<name>.labels" . | nindent 6 }}
+      template:
+        metadata:
+          labels:
+            {{- include "kioku.<name>.labels" . | nindent 8 }}
+        spec:
+          serviceAccountName: go-micro
+          containers:
+          - name: {{ .Values.<name>.name }}
+            image: "{{ .Values.<name>.image }}:{{ .Values.<name>.tag }}"
+          {{ if eq .Values.mode "production" }}
+            imagePullPolicy: Always
+          {{ else }}
+            imagePullPolicy: Never
+          {{ end }}
+            ports:
+              - containerPort: 8080
+            resources:
+              limits:
+                cpu: 500m
+                memory: 500M
+              requests:
+                cpu: 200m
+                memory: 200M
+            env:
+              - name: HOSTNAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+              - name: PORT
+                value: "8080"
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ print "postgres." .Values.database.databaseName ".credentials.postgresql.acid.zalan.do" }}
+                    key: password
+
+            envFrom:
+              - secretRef:
+                  name: {{ .Values.database.secret.name }}
+              - configMapRef:
+                  name: service-env
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: "{{ .Values.<name>.name }}-service"
+    spec:
+      selector:
+        {{- include "kioku.<name>.labels" . | nindent 4 }}
+      ports:
+        - port: 8080
+          targetPort: 8080
+    ---
+    apiVersion: autoscaling/v1
+    kind: HorizontalPodAutoscaler
+    metadata:
+    name: "hpa-{{ .Values.<name>.name }}-deployment"
+    spec:
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: "{{ .Values.<name>.name }}-deployment"
+    minReplicas: {{ .Values.<name>.autoscaler.min }}
+    maxReplicas: {{ .Values.<name>.autoscaler.max }}
+    targetCPUUtilizationPercentage: {{ .Values.<name>.autoscaler.targetCPUUtilizationPercentage }}
+    ```
+   2. Add configuration values in `helm/kioku/values.yaml`
+    ```yaml
+    carddeck:
+    name: kioku-<name>
+    image: ghcr.io/kioku-project/kioku_<name>
+    tag: prod
+
+    autoscaler:
+      min: 1
+      max: 10
+      targetCPUUtilizationPercentage: 50
+    ```
+   3. Add labels `helm/kioku/templates/_helpers.tpl`
+    ```yaml
+    {{/*
+    <name> labels
+    */}}
+    {{- define "kioku.<name>.labels" -}}
+    app.kubernetes.io/name: {{ .Values.<name>.name }}
+    {{- end }}
+    ```
+
+5. Adjust the proxy rules in the frontend service to be able to serve the new service if needed
     1. Create a new handler in `backend/services/frontend/handler/frontend.go` for a new api endpoint
     2. In `backend/services/frontend/main.go`, add the new handler with the desired route
     3. Adjust all the relevant Dockerfiles to integrate the new proto files of the new service

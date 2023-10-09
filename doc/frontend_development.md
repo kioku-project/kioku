@@ -4,11 +4,12 @@ This documents outlines all the important information to understand how to run a
 ## Index
 - [Introduction](#introduction)
 - [Local development](#local-development)
-- [Create a component](#create-a-component)
+  - [VSCode Extensions](#visual-studio-code-extensions)
   - [Storybook](#storybook)
+    - [Setup Storybook](#setup-storybook)
   - [Chromatic](#chromatic)
-  - [Setup Storybook](#setup-storybook)
-  - [Setup Chromatic](#setup-chromatic)
+    - [Setup Chromatic](#setup-chromatic)
+- [Create a component](#create-a-component)
 
 
 ## Introduction
@@ -62,25 +63,27 @@ npm install
 npm run dev
 ```
 
-# Create a component
-If you want to create a new component, add it to a suitable category folder inside of the `components` folder.
-A component should always have an implementation in Typescript and a story with the same name ending with `.stories.ts`
-- Components should not handle business logic themselves, they should solely display given data.
-- Business logic should be inside of a page or generalized in functions outside of the component itself
-- A component should have stories for all different versions. For example: if a button can be toggled between a primary and secondary style, both cases should be covered by stories.
+### Visual Studio Code Extensions
+We recommend to install the [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode), the [SonarLint](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode) and the [TailwindCSS](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extensions inside of Visual Studio Code for an improved development experience.
+The Prettier extension formats the code according to our guidelines.
 
+> [!IMPORTANT]
+> Please remember to format your code before committing it!
+
+The SonarLint extension adds linting for SonarCloud errors.
+The TailwindCSS extension adds documentation windows to tailwind classes inside of HTML that explains which styles get applied.
 
 ## Storybook
 Storybook is an open-source tool for developing and testing UI components in isolation. It enables developers to create components independently and showcase components interactively in an isolated development environment. The main benefit of Storybook is that it aids in building a component library, offers a playground for components, and serves as fantastic documentation for teams to understand how to use the components. It makes UI development faster and easier, while improving component reuse and consistency.
 ![chrome_SXJWCN6Yuo](https://github.com/kioku-project/kioku/assets/60541979/9cb21aa9-8c1b-4582-83d6-a95d770fbebf)
 
-## Chromatic
-Chromatic is a development tool created by developers of Storybook. It's used for testing, and documenting UI components and maintaining UI libraries. Chromatic simplifies the process of collaborating and maintaining UI components by providing features for visual testing, component documentation, and publishing. It also integrates with GitHub and offers automated Continuous Integration and Deployment processes, making it easier for teams to review and merge code changes.
-
-## Setup Storybook
+### Setup Storybook
 To use [Storybook](https://storybook.js.org/) locally, run `npm run storybook` inside of the `frontend` folder and open [localhost:6006](http://localhost:6006) if it does not open automatically.
  
 New to Storybook? Learn how to write stories [here](https://storybook.js.org/docs/react/writing-stories/introduction).
+
+## Chromatic
+Chromatic is a development tool created by developers of Storybook. It's used for testing, and documenting UI components and maintaining UI libraries. Chromatic simplifies the process of collaborating and maintaining UI components by providing features for visual testing, component documentation, and publishing. It also integrates with GitHub and offers automated Continuous Integration and Deployment processes, making it easier for teams to review and merge code changes.
 
 ## Setup Chromatic
 Chromatic should be run on every pull request that introduces changes to the frontend to ensure that components don't change unexpectedly.
@@ -91,3 +94,10 @@ To use [Chromatic](https://www.chromatic.com/) you have to add the [chromatic-pr
  ```
  
 To publish storybook to Chromatic run `npm run chromatic`.
+
+# Create a component
+If you want to create a new component, add it to a suitable category folder inside of the `components` folder.
+A component should always have an implementation in Typescript and a story with the same name ending with `.stories.ts`
+- Components should not handle business logic themselves, they should solely display given data.
+- Business logic should be inside of a page or generalized in functions outside of the component itself
+- A component should have stories for all different versions. For example: if a button can be toggled between a primary and secondary style, both cases should be covered by stories.

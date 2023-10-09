@@ -47,7 +47,12 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	if err != nil {
 		return err
 	}
-	_, err = e.collaborationService.CreateNewGroupWithAdmin(ctx, &pbCollaboration.CreateGroupRequest{UserID: newUser.ID, GroupName: "Home Group", GroupDescription: "Your personal deck space", IsDefault: true})
+	_, err = e.collaborationService.CreateNewGroupWithAdmin(ctx, &pbCollaboration.CreateGroupRequest{
+		UserID:           newUser.ID,
+		GroupName:        "Home Group",
+		GroupDescription: "Your personal deck space",
+		IsDefault:        true,
+	})
 	if err != nil {
 		return err
 	}
@@ -57,7 +62,7 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	return nil
 }
 
-func (e *User) VerifyUserExists(ctx context.Context, req *pb.VerificationRequest, rsp *pb.SuccessResponse) error {
+func (e *User) VerifyUserExists(_ context.Context, req *pb.VerificationRequest, rsp *pb.SuccessResponse) error {
 	user, err := e.store.FindUserByEmail(req.UserEmail)
 	if err != nil {
 		return err
@@ -81,7 +86,10 @@ func (e *User) DeleteUser(ctx context.Context, req *pb.UserID, rsp *pb.SuccessRe
 		return err
 	}
 	for _, group := range groupRes.Groups {
-		_, err := e.collaborationService.LeaveGroup(ctx, &pbCollaboration.GroupRequest{UserID: req.UserID, GroupID: group.Group.GroupID})
+		_, err := e.collaborationService.LeaveGroup(ctx, &pbCollaboration.GroupRequest{
+			UserID:  req.UserID,
+			GroupID: group.Group.GroupID,
+		})
 		if err != nil {
 			return err
 		}
@@ -129,7 +137,11 @@ func (e *User) GetUserIDFromEmail(_ context.Context, req *pb.UserIDRequest, rsp 
 	return nil
 }
 
-func (e *User) GetUserInformation(_ context.Context, req *pb.UserInformationRequest, rsp *pb.UserInformationResponse) error {
+func (e *User) GetUserInformation(
+	_ context.Context,
+	req *pb.UserInformationRequest,
+	rsp *pb.UserInformationResponse,
+) error {
 	logger.Infof("Received User.GetUserInformation request: %v", req)
 	rsp.Users = make([]*pb.UserInformation, len(req.UserIDs))
 	for i, user := range req.UserIDs {
@@ -147,7 +159,11 @@ func (e *User) GetUserInformation(_ context.Context, req *pb.UserInformationRequ
 	return nil
 }
 
-func (e *User) GetUserProfileInformation(_ context.Context, req *pb.UserID, rsp *pb.UserProfileInformationResponse) error {
+func (e *User) GetUserProfileInformation(
+	_ context.Context,
+	req *pb.UserID,
+	rsp *pb.UserProfileInformationResponse,
+) error {
 	logger.Infof("Received User.GetUserProfileInformation request: %v", req)
 	user, err := e.store.FindUserByID(req.UserID)
 	if err != nil {

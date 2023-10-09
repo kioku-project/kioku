@@ -12,11 +12,9 @@ func FindStoreEntity[C any](
 ) (entity C, err error) {
 	if entity, err = storeFunction(ID); errors.Is(err, ErrStoreNoEntryWithID) {
 		err = NewMicroNoEntryWithIDErr(callContext)
-	}
-	if err == nil {
-		logger.Infof("Found entity/-ies with/by id %s", ID)
+		logger.Infof("Throwing error (%v) for query for id %s", err, ID)
 	} else {
-		logger.Infof("Throwing error (%s) for query for id %s", err.Error(), ID)
+		logger.Infof("Found entity/-ies with/by id %s", ID)
 	}
 	return
 }

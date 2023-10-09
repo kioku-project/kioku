@@ -125,7 +125,10 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 		return helper.NewFiberUnauthorizedErr("Please re-authenticate")
 	}
 
-	rsp, err := e.userService.VerifyUserExists(c.Context(), &pbUser.VerificationRequest{UserID: fmt.Sprint(claims["sub"]), UserEmail: fmt.Sprint(claims["email"])})
+	rsp, err := e.userService.VerifyUserExists(c.Context(), &pbUser.VerificationRequest{
+		UserID:    fmt.Sprint(claims["sub"]),
+		UserEmail: fmt.Sprint(claims["email"]),
+	})
 	if err != nil {
 		return err
 	}
@@ -350,12 +353,15 @@ func (e *Frontend) ModifyGroupMemberHandler(c *fiber.Ctx) error {
 			groupRole = converter.MigrateStringRoleToProtoRole(gr)
 		}
 	}
-	rspModifyGroupUser, err := e.collaborationService.ModifyGroupUserRequest(c.Context(), &pbCollaboration.GroupModUserRequest{
-		UserID:    userID,
-		GroupID:   c.Params("groupID"),
-		ModUserID: c.Params("userID"),
-		NewRole:   groupRole,
-	})
+	rspModifyGroupUser, err := e.collaborationService.ModifyGroupUserRequest(
+		c.Context(),
+		&pbCollaboration.GroupModUserRequest{
+			UserID:    userID,
+			GroupID:   c.Params("groupID"),
+			ModUserID: c.Params("userID"),
+			NewRole:   groupRole,
+		},
+	)
 	if err != nil {
 		return err
 	}
@@ -391,16 +397,22 @@ func (e *Frontend) GetGroupMemberRequestsHandler(c *fiber.Ctx) error {
 		return err
 	}
 	return c.JSON(converter.FiberGetGroupMemberRequestsResponseBody{
-		MemberRequests: converter.ConvertToTypeArray(rspMemberRequests.MemberAdmissions, converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter),
+		MemberRequests: converter.ConvertToTypeArray(
+			rspMemberRequests.MemberAdmissions,
+			converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter,
+		),
 	})
 }
 
 func (e *Frontend) AddUserGroupRequestHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspJoinGroupRequest, err := e.collaborationService.AddGroupUserRequest(c.Context(), &pbCollaboration.GroupUserRequest{
-		UserID:  userID,
-		GroupID: c.Params("groupID"),
-	})
+	rspJoinGroupRequest, err := e.collaborationService.AddGroupUserRequest(
+		c.Context(),
+		&pbCollaboration.GroupUserRequest{
+			UserID:  userID,
+			GroupID: c.Params("groupID"),
+		},
+	)
 	if err != nil {
 		return err
 	} else if !rspJoinGroupRequest.Success {
@@ -411,10 +423,13 @@ func (e *Frontend) AddUserGroupRequestHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) RemoveUserGroupRequestHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspJoinGroupRequest, err := e.collaborationService.RemoveGroupUserRequest(c.Context(), &pbCollaboration.GroupUserRequest{
-		UserID:  userID,
-		GroupID: c.Params("groupID"),
-	})
+	rspJoinGroupRequest, err := e.collaborationService.RemoveGroupUserRequest(
+		c.Context(),
+		&pbCollaboration.GroupUserRequest{
+			UserID:  userID,
+			GroupID: c.Params("groupID"),
+		},
+	)
 	if err != nil {
 		return err
 	} else if !rspJoinGroupRequest.Success {
@@ -425,15 +440,21 @@ func (e *Frontend) RemoveUserGroupRequestHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetInvitationsForGroupHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspInvitationsForGroup, err := e.collaborationService.GetInvitationsForGroup(c.Context(), &pbCollaboration.GroupRequest{
-		UserID:  userID,
-		GroupID: c.Params("groupID"),
-	})
+	rspInvitationsForGroup, err := e.collaborationService.GetInvitationsForGroup(
+		c.Context(),
+		&pbCollaboration.GroupRequest{
+			UserID:  userID,
+			GroupID: c.Params("groupID"),
+		},
+	)
 	if err != nil {
 		return err
 	}
 	return c.JSON(converter.FiberGetInvitationsForGroupResponseBody{
-		MemberRequests: converter.ConvertToTypeArray(rspInvitationsForGroup.MemberAdmissions, converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter),
+		MemberRequests: converter.ConvertToTypeArray(
+			rspInvitationsForGroup.MemberAdmissions,
+			converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter,
+		),
 	})
 }
 
@@ -694,7 +715,10 @@ func (e *Frontend) DeleteCardSideHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) SrsPullHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspSrsPull, err := e.srsService.Pull(c.Context(), &pbSrs.DeckPullRequest{UserID: userID, DeckID: c.Params("deckID")})
+	rspSrsPull, err := e.srsService.Pull(c.Context(), &pbSrs.DeckPullRequest{
+		UserID: userID,
+		DeckID: c.Params("deckID"),
+	})
 	if err != nil {
 		return err
 	}
@@ -710,7 +734,12 @@ func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("no cardID given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspSrsPush, err := e.srsService.Push(c.Context(), &pbSrs.SrsPushRequest{UserID: userID, CardID: data.CardID, DeckID: c.Params("deckID"), Rating: data.Rating})
+	rspSrsPush, err := e.srsService.Push(c.Context(), &pbSrs.SrsPushRequest{
+		UserID: userID,
+		CardID: data.CardID,
+		DeckID: c.Params("deckID"),
+		Rating: data.Rating,
+	})
 	if err != nil {
 		return err
 	}

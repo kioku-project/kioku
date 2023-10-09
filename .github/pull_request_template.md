@@ -1,6 +1,6 @@
 # Description
 
-Please enter a detailed description of the contents of the pull request here.
+Please provide a comprehensive description of the pull request's contents here.
 
 ## Resolved Issues
 

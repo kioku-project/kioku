@@ -45,7 +45,7 @@ Create and customize your own flashcards tailored to your needs and preferences.
 </picture>
   <b>Compatible</b>
 
-Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!
+Kioku is compatible with [Anki](https://apps.ankiweb.net/index.html), allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!
 
 </td>
 <td><picture>
@@ -109,12 +109,14 @@ cp .env.example .env
 > [!WARNING]
 > The example environment file is populated with default values, be sure to change all values before using the application in production!
 
-Finally, start frontend and backend using docker compose
+Finally, start the frontend and backend using [Docker Compose](https://docs.docker.com/compose/).
 
 ```
 docker compose up
 ```
 
-after that, the frontend is reachable at `http://localhost:3000`  
-to reach pgAdmin, open `http://localhost:3002`  
-the micro dashboard is reachable at `http://localhost:3001`
+|Service|URL|
+|---|---|
+| **Frontend** | [`http://localhost:3000`](http://localhost:3000) |
+| **pgAdmin** | [`http://localhost:3002`](http://localhost:3002) |
+| **micro dashboard** | [`http://localhost:3001`](http://localhost:3001) |

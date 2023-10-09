@@ -19,13 +19,14 @@ body:
   - type: dropdown
     id: browsers
     attributes:
-      label: What browsers are you seeing the problem on?
+      label: On which browsers are you encountering the issue?
       multiple: true
       options:
         - Firefox
         - Chrome
         - Safari
         - Microsoft Edge
+        - Other
   - type: textarea
     id: logs
     attributes:

@@ -16,7 +16,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to let us know your ideas for an awesome new feature of Kioku!
+        Thanks for taking the time to let us know your ideas for an awesome new feature for Kioku!
   - type: textarea
     id: feature-description
     attributes:

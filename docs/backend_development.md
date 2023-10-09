@@ -189,6 +189,6 @@ jobs:
    ```
 
 6. Adjust the proxy rules in the frontend service to be able to serve the new service if needed
-   1. Create a new handler in `backend/services/frontend/handler/frontend.go` for a new api endpoint
+   1. Create a new handler in `backend/services/frontend/handler/frontend.go` for a new API endpoint
    2. In `backend/services/frontend/main.go`, add the new handler with the desired route
    3. Adjust all the relevant Dockerfiles to integrate the new proto files of the new service

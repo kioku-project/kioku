@@ -18,7 +18,7 @@ The frontend of Kioku is written in [React](https://react.dev/), using the [Next
 ## Local development
 
 NextJS offers a development mode with live reload that can speed up the development of the frontend significantly. In order to use this mode, the `frontend` container should be commented out of the `docker-compose.yml` file.
-Additionally, the `frontend_proxy` has to be exposed on port `80`
+Additionally, the `frontend_proxy` has to be exposed on port `80`.
 
 ```yaml
 frontend_proxy:

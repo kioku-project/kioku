@@ -1,12 +1,10 @@
 # Backend development
 
-## Index
+## Table of Contents
 
-- [Backend development](#backend-development)
-  - [Index](#index)
-  - [Infrastructure overview](#infrastructure-overview)
-  - [Getting started with backend development](#getting-started-with-backend-development)
-  - [Create a new service](#create-a-new-service)
+- [Infrastructure overview](#infrastructure-overview)
+- [Getting started with backend development](#getting-started-with-backend-development)
+- [Create a new service](#create-a-new-service)
 
 ## Infrastructure overview
 
@@ -31,10 +29,18 @@ And finally, you need to install `make` on your system. Mac users can install it
 
 1.  Set up a new service
 
+```
         cd backend/services/
+```
+```
         go-micro new service --health --kubernetes github.com/kioku-project/kioku/services/<name-of-new-service>
+```
+```
         cd <name-of-new-service>
+```
+```
         make init proto update tidy
+```
 
 2.  Make adjustments
 

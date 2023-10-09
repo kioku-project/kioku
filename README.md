@@ -1,4 +1,9 @@
-![kioku](https://github.com/kioku-project/kioku/assets/60541979/1f827df3-5882-4285-913f-47f04b26196b)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/kioku-project/kioku/assets/71837281/62942574-34ef-4e75-9b17-9721444f9d74
+">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/kioku-project/kioku/assets/60541979/1f827df3-5882-4285-913f-47f04b26196b">
+  <img alt="Kioku banner" src="">
+</picture>
 
 ![GitHub contributors](https://img.shields.io/github/contributors/kioku-project/kioku)
 [![Backend Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services)

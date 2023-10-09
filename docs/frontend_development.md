@@ -2,7 +2,7 @@
 
 This documents outlines all the important information to understand how to run and develop the frontend of Kioku.
 
-## Index
+## Table of Contents
 
 - [Introduction](#introduction)
 - [Local development](#local-development)

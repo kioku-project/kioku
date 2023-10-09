@@ -34,7 +34,7 @@ interface FlashcardProps {
 	 */
 	cardSide?: number;
 	/**
-	 * permissions to edit
+	 * Permissions to edit
 	 */
 	editable?: boolean;
 	/**
@@ -173,9 +173,9 @@ export const Flashcard = ({
 								<Edit2
 									id="editButtonId"
 									className={`${
-										!editable
-											? "hover:no text-gray-200 hover:cursor-not-allowed"
-											: "hover:cursor-pointer"
+										editable
+											? "hover:cursor-pointer"
+											: "text-gray-200 hover:cursor-not-allowed"
 									}`}
 									onClick={() => setEdit(editable)}
 								></Edit2>

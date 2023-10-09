@@ -1,0 +1,34 @@
+name: Feature Request
+description: Create a feature request
+title: "[✨]: "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: 
+    attributes:
+      label: What part of the project does your feature concern?
+      multiple: true
+      options:
+        - Frontend
+        - Backend
+        - Infrastructure
+        - Documentation
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to let us know your ideas for an awesome new feature for Kioku!
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature description
+      description: Please describe your desired feature in a few short sentences.
+      placeholder: Tell us what you would like to see!
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: What alternatives have you considered?
+    validations:
+      required: true

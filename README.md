@@ -1,4 +1,3 @@
-
 ![kioku](https://github.com/kioku-project/kioku/assets/60541979/1f827df3-5882-4285-913f-47f04b26196b)
 
 ![GitHub contributors](https://img.shields.io/github/contributors/kioku-project/kioku)
@@ -8,8 +7,8 @@
 [![Frontend Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend)
 [![Storybook link](https://github.com/storybookjs/brand/blob/master/badge/badge-storybook.svg)](https://main--63e354941aa15501d3467f88.chromatic.com)
 
-
 # Welcome to Kioku!
+
 The cloud native flashcard application that focuses on collaborative content creation.
 
 ## Features
@@ -36,7 +35,6 @@ Collaborate with your friends and fellow students in groups and work on shared d
 
 Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!
 
-
 </td>
 </tr>
 <tr>
@@ -48,6 +46,7 @@ Create and customize your own flashcards tailored to your needs and preferences.
   <b>Compatible</b>
 
 Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!
+
 </td>
 <td><picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/kioku-project/kioku/assets/60541979/5c31d81d-dedd-4abf-8012-6b5b5ca430f4">
@@ -57,6 +56,7 @@ Kioku is compatible with Anki, allowing you to import and export your existing d
   <b>Informative</b>
 
 We provide you with detailed statistics and insights into your study progress. Identify areas of improvement to optimize your strategy for maximum effectiveness!
+
 </td>
 </tr>
 <tr>
@@ -68,6 +68,7 @@ We provide you with detailed statistics and insights into your study progress. I
   <b>Available</b>
 
 Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!
+
 </td>
 <td>
     <picture>
@@ -78,23 +79,29 @@ Access your flashcards everywhere and at any time. Switch seamlessly between mul
   <b vertical-align="center">Entertaining</b>
 
 Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!
+
 </td>
 </tr>
 </tbody>
 </table>
 
 # Index
+
 1. [Getting started](#getting-started)
 2. [Frontend development](./doc/frontend_development.md)
 3. [Backend development](./doc/backend_development.md)
 4. [Deployment](./doc/deployment.md)
 
 # Getting started
+
 In order to run Kioku locally, first clone the repository
+
 ```
 git clone https://github.com/kioku-project/kioku
 ```
+
 and configure the `.env` file in the `backend` folder
+
 ```
 cp .env.example .env
 ```
@@ -103,9 +110,11 @@ cp .env.example .env
 > The example environment file is populated with default values, be sure to change all values before using the application in production!
 
 Finally, start frontend and backend using docker compose
+
 ```
 docker compose up
 ```
+
 after that, the frontend is reachable at `http://localhost:3000`  
 to reach pgAdmin, open `http://localhost:3002`  
 the micro dashboard is reachable at `http://localhost:3001`

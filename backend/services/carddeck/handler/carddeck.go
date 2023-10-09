@@ -272,11 +272,14 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 		return err
 	}
 	for _, user := range membersResp.Users {
-		e.srsService.AddUserCardBinding(ctx, &pbSrs.BindingRequest{
+		_, err = e.srsService.AddUserCardBinding(ctx, &pbSrs.BindingRequest{
 			UserID: user.User.UserID,
 			CardID: newCard.ID,
 			DeckID: newCard.DeckID,
 		})
+		if err != nil {
+			return err
+		}
 	}
 	rsp.ID = newCard.ID
 	logger.Infof("Successfully created new card (%s) in deck (%s)", newCard.ID, req.DeckID)

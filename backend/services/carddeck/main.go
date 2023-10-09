@@ -48,7 +48,11 @@ func main() {
 	)
 
 	// Create a new instance of the service handler with the initialized database connection
-	svc := handler.New(dbStore, pbCollaboration.NewCollaborationService("collaboration", srv.Client()), pbSrs.NewSrsService("srs", srv.Client()))
+	svc := handler.New(
+		dbStore,
+		pbCollaboration.NewCollaborationService("collaboration", srv.Client()),
+		pbSrs.NewSrsService("srs", srv.Client()),
+	)
 
 	// Register handler
 	if err := pb.RegisterCardDeckHandler(srv.Server(), svc); err != nil {

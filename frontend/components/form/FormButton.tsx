@@ -51,7 +51,7 @@ export const FormButton = ({
 	return (
 		<input
 			type="submit"
-			className={`flex justify-center rounded-md text-center font-semibold shadow-sm outline-none transition ${getStyle[style]} ${className} ${getSize[size]}`}
+			className={`flex justify-center rounded-md text-center font-semibold shadow-sm outline-none transition hover:cursor-pointer ${getStyle[style]} ${className} ${getSize[size]}`}
 			{...props}
 		/>
 	);

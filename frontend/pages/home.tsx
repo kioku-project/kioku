@@ -16,7 +16,7 @@ export default function Page() {
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<div className="min-w-screen flex h-screen select-none flex-col bg-eggshell">
+			<div className="min-w-screen flex h-screen flex-col bg-eggshell">
 				<Navbar
 					login={false}
 					onClick={() => router.push("/home")}

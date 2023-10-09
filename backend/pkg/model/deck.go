@@ -8,10 +8,10 @@ import (
 )
 
 type Deck struct {
-	ID           string    `gorm:"primaryKey"`
-	Name         string    `gorm:"not null"`
-	CreatedAt    time.Time `gorm:"not null"`
-	GroupID      string    `gorm:"not null"`
+	ID           string `gorm:"primaryKey"`
+	Name         string `gorm:"not null"`
+	CreatedAt    time.Time
+	GroupID      string `gorm:"not null"`
 	Group        Group
 	Cards        []Card            `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	UserBindings []UserCardBinding `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`

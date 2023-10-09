@@ -3,13 +3,15 @@ package model
 import (
 	"github.com/kioku-project/kioku/pkg/helper"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Card struct {
 	ID              string `gorm:"primaryKey"`
 	DeckID          string `gorm:"not null"`
 	Deck            Deck
-	FirstCardSideID string            `gorm:"not null"`
+	FirstCardSideID string `gorm:"not null"`
+	CreatedAt       time.Time
 	CardSides       []CardSide        `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	UserBindings    []UserCardBinding `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Revlogs         []Revlog          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`

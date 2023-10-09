@@ -30,7 +30,7 @@ export default function Page() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<div className="min-w-screen flex min-h-screen select-none items-center justify-center sm:p-5 md:p-10">
+			<div className="min-w-screen flex min-h-screen items-center justify-center sm:p-5 md:p-10">
 				<div className="flex min-h-screen w-full flex-col items-center justify-evenly bg-blue-100 p-10 align-middle sm:min-h-fit sm:rounded-3xl md:flex-row xl:w-5/6">
 					<div className="m-5 flex w-2/3 flex-col items-center md:m-10 md:w-1/2 md:justify-center">
 						<div className="relative mb-5 h-[120px] w-full">

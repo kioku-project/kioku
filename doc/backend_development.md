@@ -8,7 +8,7 @@
 ## Infrastructure overview
 ![Architecture-Design](https://github.com/kioku-project/kioku/assets/60541979/4aedb2be-f1ff-41bc-ac7f-a45662bd819a)
 
-The backend is designed with modern microservice philosophy in mind. The communication between the microservices themselves is done using gRPC which allows for fast and streamlined communication. All services can only be accessed from outside through the `frontend_proxy` service which translates REST API calls to the corresponding gRPC methods. The `frontend_proxy` is also responsible for the authentication of the user, allowing the services to assume the provided userID as safe to use. The services are written in the [go](https://go.dev/) programming language and use [go-micro](https://github.com/go-micro/go-micro)https://github.com/go-micro/go-micro as a framework.
+The backend is designed with modern microservice philosophy in mind. The communication between the microservices themselves is done using gRPC which allows for fast and streamlined communication. All services can only be accessed from outside through the `frontend_proxy` service which translates REST API calls to the corresponding gRPC methods. The `frontend_proxy` is also responsible for the authentication of the user, allowing the services to assume the provided userID as safe to use. The services are written in the [go](https://go.dev/) programming language and use [go-micro](https://github.com/go-micro/go-micro) as a framework.
 
 ## Getting started with backend development
 Before getting started, ensure that you have a recent version of [Go](https://golang.org) installed. Version 1.16 or higher is required.

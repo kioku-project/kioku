@@ -94,7 +94,7 @@ In order to run Kioku locally, first clone the repository
 ```
 git clone https://github.com/kioku-project/kioku
 ```
-move into the `backend` folder and configure the .env file
+and configure the `.env` file in the `backend` folder
 ```
 cp .env.example .env
 ```

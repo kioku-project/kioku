@@ -31,14 +31,8 @@ And finally, you need to install `make` on your system. Mac users can install it
 
 ```
         cd backend/services/
-```
-```
         go-micro new service --health --kubernetes github.com/kioku-project/kioku/services/<name-of-new-service>
-```
-```
         cd <name-of-new-service>
-```
-```
         make init proto update tidy
 ```
 

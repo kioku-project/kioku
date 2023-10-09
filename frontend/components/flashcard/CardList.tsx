@@ -39,12 +39,12 @@ export const CardList = ({ deck, setCard, className = "" }: CardListProps) => {
 						className="snap-center"
 						key={card.cardID}
 						setCard={setCard}
-						card={{ ...card, deckID: deck.deckID }}
+						card={{ ...card }}
 					/>
 				))}
 			</div>
 			{deck.groupRole && GroupRole[deck.groupRole] >= GroupRole.WRITE && (
-				<Card card={{ cardID: "", sides: [], deckID: deck.deckID }} />
+				<Card card={{ cardID: "", sides: [] }} />
 			)}
 		</div>
 	);

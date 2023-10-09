@@ -8,9 +8,7 @@ This documents outlines all the important information to understand how to run a
 - [Local development](#local-development)
   - [VSCode Extensions](#visual-studio-code-extensions)
   - [Storybook](#storybook)
-    - [Setup Storybook](#setup-storybook)
   - [Chromatic](#chromatic)
-    - [Setup Chromatic](#setup-chromatic)
 - [Create a component](#create-a-component)
 
 ## Introduction

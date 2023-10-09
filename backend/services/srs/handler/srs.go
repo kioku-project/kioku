@@ -51,15 +51,21 @@ func (e *Srs) Push(ctx context.Context, req *pb.SrsPushRequest, rsp *pb.SuccessR
 	default:
 		return helper.NewMicroWrongRatingErr(helper.SrsServiceID)
 	}
-	e.store.ModifyUserCard(cardBinding)
+	err = e.store.ModifyUserCard(cardBinding)
+	if err != nil {
+		return err
+	}
 
 	// Add revlog entry
-	e.store.CreateRevlog(&model.Revlog{
+	err = e.store.CreateRevlog(&model.Revlog{
 		CardID: req.CardID,
 		UserID: req.UserID,
 		Date:   time.Now().Unix(),
 		Rating: req.Rating,
 	})
+	if err != nil {
+		return err
+	}
 	rsp.Success = true
 	return nil
 }

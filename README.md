@@ -109,6 +109,10 @@ and configure the `.env` file in the `backend` folder
 ```
 cp .env.example .env
 ```
+You can generate the JWT_PRIVATE_KEY with the following command
+```
+openssl ecparam -name secp521r1 -genkey -noout -out my.key.pem
+```
 
 > [!WARNING]
 > The example environment file is populated with default values, be sure to change all values before using the application in production!

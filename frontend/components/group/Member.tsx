@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Check, UserCheck, UserX, X } from "react-feather";
+import { Check, UserCheck, UserMinus, UserX, X } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
@@ -50,7 +50,7 @@ export default function Member({ id, user, className = "" }: MemberProps) {
 											<Check
 												className="hover:cursor-pointer"
 												onClick={() => {
-													deleteMember()
+													deleteMember(user)
 														.then((result) => {})
 														.catch((error) => {});
 												}}
@@ -61,14 +61,14 @@ export default function Member({ id, user, className = "" }: MemberProps) {
 											></X>
 										</div>
 									)}
-									{/* {!isDelete && (
+									{!isDelete && (
 										<UserMinus
 											data-testid={`deleteUserButtonId`}
 											id={`deleteUser${user.userID}ButtonId`}
 											className="hover:cursor-pointer"
 											onClick={() => setDelete(true)}
 										></UserMinus>
-									)} */}
+									)}
 								</>
 							)}
 
@@ -165,18 +165,21 @@ export default function Member({ id, user, className = "" }: MemberProps) {
 		mutate(`/api/groups/${user.groupID}/members/requests`);
 	}
 
-	async function deleteMember() {
-		const response = await authedFetch(`/api/groups/${user.groupID}`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+	async function deleteMember(user: User) {
+		const response = await authedFetch(
+			`/api/groups/${user.groupID}/members/${user.userID}`,
+			{
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		);
 		if (response?.ok) {
 			toast.info("User removed!", { toastId: "removedUserToast" });
+			mutate(`/api/groups/${user.groupID}/members`);
 		} else {
 			toast.error("Error!", { toastId: "removedUserToast" });
 		}
-		mutate(`/api/group/${user.groupID}/members`);
 	}
 }

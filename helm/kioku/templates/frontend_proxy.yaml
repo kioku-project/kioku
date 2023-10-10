@@ -35,8 +35,8 @@ spec:
             cpu: 500m
             memory: 500M
           requests:
-            cpu: 200m
-            memory: 200M
+            cpu: 50m
+            memory: 50M
         envFrom:
           - configMapRef:
               name: service-env

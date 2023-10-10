@@ -6,23 +6,17 @@
 
 # Get dependent repositories
 helm repo add postgres-operator-charts https://opensource.zalando.com/postgres-operator/charts/postgres-operator
-helm repo add jaegertracing https://jaegertracing.github.io/helm-charts
-helm repo add jetstack https://charts.jetstack.io
 
 # Update local Helm chart repository cache
 helm repo update
 
 # Install dependent Charts
 helm install postgres-operator postgres-operator-charts/postgres-operator
-
-helm install \
-  cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --create-namespace \
-  --version v1.13.1 \
-  --set installCRDs=true
-
-helm install jaeger-operator jaegertracing/jaeger-operator -n observability --create-namespace --set collector.grpc.tls.enabled=false
+# TODO: When migrating to Jaeger production environment, Cassandra should be used to persist span traces
+# helm install cassandra oci://registry-1.docker.io/bitnamicharts/cassandra \
+#   -f helm/kioku/cassandra_values.yaml \
+#   -n monitoring \
+#   --create-namespace
 
 # Install Kioku
 helm install kioku helm/kioku

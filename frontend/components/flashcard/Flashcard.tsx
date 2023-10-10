@@ -34,6 +34,10 @@ interface FlashcardProps {
 	 */
 	cardSide?: number;
 	/**
+	 * Permissions to edit
+	 */
+	editable?: boolean;
+	/**
 	 * Enables edit mode
 	 */
 	isEdit?: boolean;
@@ -63,6 +67,7 @@ export const Flashcard = ({
 	fullSize = false,
 	className = "",
 	push,
+	editable = false,
 }: FlashcardProps) => {
 	const { mutate } = useSWRConfig();
 	const [tempCard, setTempCard] = useState<CardType>(card);
@@ -167,8 +172,12 @@ export const Flashcard = ({
 							<div className="flex flex-row space-x-5">
 								<Edit2
 									id="editButtonId"
-									className="hover:cursor-pointer"
-									onClick={() => setEdit(true)}
+									className={`${
+										editable
+											? "hover:cursor-pointer"
+											: "text-gray-200 hover:cursor-not-allowed"
+									}`}
+									onClick={() => setEdit(editable)}
 								></Edit2>
 							</div>
 						)}

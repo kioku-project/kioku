@@ -92,9 +92,9 @@ Achievements and leaderboards make learning more engaging and motivating. Kioku 
 # Index
 
 1. [Getting started](#getting-started)
-2. [Frontend development](./doc/frontend_development.md)
-3. [Backend development](./doc/backend_development.md)
-4. [Deployment](./doc/deployment.md)
+2. [Frontend development](./docs/frontend_development.md)
+3. [Backend development](./docs/backend_development.md)
+4. [Deployment](./docs/deployment.md)
 
 # Getting started
 

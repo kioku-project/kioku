@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { ChevronDown, ChevronRight } from "react-feather";
 
+import { Deck as DeckType } from "@/types/Deck";
+import { GroupRole } from "@/types/GroupRole";
+
 import { Card as CardType } from "../../../types/Card";
 import { CardList } from "../../flashcard/CardList";
 import { Flashcard } from "../../flashcard/Flashcard";
 
 interface CardsTabProps {
 	/**
-	 * deckID
+	 * deck
 	 */
-	deckID: string;
+	deck: DeckType;
 	/**
 	 * Additional classes
 	 */
@@ -19,7 +22,7 @@ interface CardsTabProps {
 /**
  * UI component for the CardsTab
  */
-export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
+export const CardsTab = ({ deck, className = "" }: CardsTabProps) => {
 	const [card, setCard] = useState<CardType>();
 
 	return (
@@ -27,7 +30,7 @@ export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
 			className={`flex h-full max-h-full flex-col md:flex-row ${className}`}
 		>
 			<CardList
-				deckID={deckID}
+				deck={deck}
 				setCard={setNewCard}
 				className={`${card ? "md:w-1/2" : "w-full"}`}
 			></CardList>
@@ -51,6 +54,10 @@ export const CardsTab = ({ deckID, className = "" }: CardsTabProps) => {
 								card={card}
 								cardSide={0}
 								fullSize={true}
+								editable={
+									deck.groupRole &&
+									GroupRole[deck.groupRole] >= GroupRole.WRITE
+								}
 							></Flashcard>
 						)}
 					</div>

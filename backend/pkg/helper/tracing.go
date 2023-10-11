@@ -2,6 +2,7 @@ package helper
 
 import (
 	"context"
+	"io"
 	"os"
 
 	"go.opentelemetry.io/otel"
@@ -15,7 +16,7 @@ import (
 
 func getExporter(ctx context.Context) (trace.SpanExporter, error){
     if os.Getenv("TRACING_ENABLED") != "true" {
-        exporter, err := stdouttrace.New(stdouttrace.WithPrettyPrint())
+        exporter, err := stdouttrace.New(stdouttrace.WithWriter(io.Discard))
         if err != nil {
             return nil, err
         }

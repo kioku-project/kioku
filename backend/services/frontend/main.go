@@ -40,7 +40,10 @@ func main() {
 	logger.Info("Trying to listen on: ", serviceAddress)
 	_ = godotenv.Load("../.env", "../.env.example")
 
-	tp, _ := helper.SetupTracing(context.TODO(), service)
+	tp, err := helper.SetupTracing(context.TODO(), service)
+	if err != nil {
+		logger.Error("Error setting up tracer: %v", err)
+	}
 	defer func() {
 		if err := tp.Shutdown(context.Background()); err != nil {
 			logger.Error("Error shutting down tracer provider: %v", err)

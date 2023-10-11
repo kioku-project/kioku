@@ -8,7 +8,7 @@ import LoadingSpinner from "../graphics/LoadingSpinner";
 
 export default function Authenticated({ children }: PropsWithChildren) {
 	const router = useRouter();
-	const [accessTokenValid, setAccessTokenValid] = useState<boolean>(true);
+	const [accessTokenValid, setAccessTokenValid] = useState(true);
 	useEffect(() => {
 		(async () => {
 			if (!hasCookie("access_token")) {

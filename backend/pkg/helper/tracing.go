@@ -21,22 +21,22 @@ func getExporter(ctx context.Context) (trace.SpanExporter, error){
             return nil, err
         }
         return exporter, nil
-    } else {
-        tracingUrl := os.Getenv("TRACING_COLLECTOR")
-        if tracingUrl == "" {
-            tracingUrl = "simple-prod-collector.observability.svc.cluster.local:4318"
-        }
-        exporter, err := otlptracehttp.New(
-            ctx,
-            otlptracehttp.WithEndpoint(tracingUrl),
-            otlptracehttp.WithInsecure(),
-        )
-        if err != nil {
-            return nil, err
-        }
-
-        return exporter, nil
     }
+    
+    tracingUrl := os.Getenv("TRACING_COLLECTOR")
+    if tracingUrl == "" {
+        tracingUrl = "simple-prod-collector.observability.svc.cluster.local:4318"
+    }
+    exporter, err := otlptracehttp.New(
+        ctx,
+        otlptracehttp.WithEndpoint(tracingUrl),
+        otlptracehttp.WithInsecure(),
+    )
+    if err != nil {
+        return nil, err
+    }
+
+    return exporter, nil
 
 }
 

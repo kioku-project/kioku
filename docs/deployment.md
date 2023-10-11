@@ -20,4 +20,4 @@ From the root-directory of the repository execute the following:
 ```
 
 ## Tracing
-With the deployment, tracing capabilities will be deployed that can be accessed, when you forward the `ui` (`16686`) port of the `jaeger-service`.
+The performance and metrics of the deployment such as dependencies between services can be viewed using [`jaeger`](https://www.jaegertracing.io/). In order to access the jaeger frontend, you will have to expose the port `16686` of the `jaeger-service` in the `monitoring` namespace.

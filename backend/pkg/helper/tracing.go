@@ -14,7 +14,7 @@ import (
 func SetupTracing(ctx context.Context, serviceName string) (*trace.TracerProvider, error) {
 	tracingUrl := os.Getenv("TRACING_COLLECTOR")
 	if tracingUrl == "" {
-		tracingUrl = "simple-prod-collector.observability.svc.cluster.local:4318"
+        tracingUrl = "simple-prod-collector.observability.svc.cluster.local:4318"
 	}
     exporter, err := otlptracehttp.New(
         ctx,

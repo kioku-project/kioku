@@ -87,7 +87,7 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 							<AlertTriangle size={50}></AlertTriangle>
 						)}
 				</div>
-				{!!deck?.dueCards && deck.dueCards > 0 && (
+				{!!deck?.dueCards && (
 					<div className="absolute right-[-0.3rem] top-[-0.5rem] flex h-5 w-5 rounded-sm bg-kiokuRed p-1">
 						<div className="flex h-full w-full items-center justify-center text-xs font-bold text-white">
 							{Math.min(99, deck.dueCards)}

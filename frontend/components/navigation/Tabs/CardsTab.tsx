@@ -33,18 +33,18 @@ export const CardsTab = ({ deck, className = "" }: CardsTabProps) => {
 				deck={deck}
 				setCard={setNewCard}
 				className={`${card ? "md:w-1/2" : "w-full"}`}
-			></FetchCardList>
+			/>
 			{card && (
 				<>
 					<div className="flex flex-row items-center justify-center p-1 sm:p-3 md:p-5">
 						<ChevronRight
 							className="hidden text-kiokuLightBlue hover:cursor-pointer md:block "
 							onClick={() => setCard(undefined)}
-						></ChevronRight>
+						/>
 						<ChevronDown
 							className="text-kiokuLightBlue hover:cursor-pointer md:hidden "
 							onClick={() => setCard(undefined)}
-						></ChevronDown>
+						/>
 					</div>
 					<div className="flex h-full flex-row items-center md:w-1/2">
 						{card && (
@@ -58,7 +58,7 @@ export const CardsTab = ({ deck, className = "" }: CardsTabProps) => {
 									deck.groupRole &&
 									GroupRole[deck.groupRole] >= GroupRole.WRITE
 								}
-							></Flashcard>
+							/>
 						)}
 					</div>
 				</>

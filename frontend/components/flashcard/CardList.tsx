@@ -32,7 +32,7 @@ export const FetchCardList = ({ deck, ...props }: CardListProps) => {
 			method: "GET",
 		}).then((res) => res?.json());
 	const { data: cards } = useSWR(`/api/decks/${deck.deckID}/cards`, fetcher);
-	return <CardList deck={deck} cards={cards?.cards} {...props}></CardList>;
+	return <CardList deck={deck} cards={cards?.cards} {...props} />;
 };
 
 /**

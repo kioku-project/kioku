@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { AlertTriangle } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR, { preload, useSWRConfig } from "swr";
 
 import { Deck as DeckType } from "../../types/Deck";
 import { Group as GroupType } from "../../types/Group";
@@ -45,6 +45,7 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 	useEffect(() => {
 		if (deck) {
 			router.prefetch(`/deck/${deck.deckID}`);
+			preload(`/api/decks/${deck.deckID}`, fetcher);
 		}
 	}, [deck]);
 

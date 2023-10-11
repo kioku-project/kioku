@@ -25,7 +25,7 @@ export default function LoadingSpinner({
 		return () => clearTimeout(timeout);
 	}, [delay]);
 	return delayed ? (
-		<div></div>
+		<></>
 	) : (
 		<Image
 			src="/loading_spinner.svg"

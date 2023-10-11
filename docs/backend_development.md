@@ -3,10 +3,10 @@
 ## Table of Contents
 
 - [Backend development](#backend-development)
-  - [Table of Contents](#table-of-contents)
-  - [Infrastructure overview](#infrastructure-overview)
-  - [Getting started with backend development](#getting-started-with-backend-development)
-  - [Create a new service](#create-a-new-service)
+- [Table of Contents](#table-of-contents)
+- [Infrastructure overview](#infrastructure-overview)
+- [Getting started with backend development](#getting-started-with-backend-development)
+- [Create a new service](#create-a-new-service)
 
 ## Infrastructure overview
 
@@ -43,7 +43,7 @@ make init proto update tidy
     1. Update the service definitions in `proto/<name-of-new-service>.proto`
     2. Generate proto files by running `make proto`
     3. Update handler in `handler/<name-of-new-service>.go`
-    4. Instrument the service
+    4. Instrument the service in `services/<name-of-new-service>/main.go`
     ```go
     tp, err := helper.SetupTracing(context.TODO(), service)
     if err != nil {

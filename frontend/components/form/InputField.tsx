@@ -34,6 +34,10 @@ interface InputFieldProps {
 	 */
 	required?: boolean;
 	/**
+	 * Minimal input length
+	 */
+	minLength?: number;
+	/**
 	 * Is the InputField read only?
 	 */
 	readOnly?: boolean;
@@ -68,7 +72,6 @@ export const InputField = forwardRef(
 		{
 			name,
 			label,
-			required = true,
 			style = "primary",
 			className = "",
 			...props

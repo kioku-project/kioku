@@ -5,26 +5,47 @@ import (
 	"os"
 
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.12.0"
 )
+
+func getExporter(ctx context.Context) (trace.SpanExporter, error){
+    if os.Getenv("TRACING_ENABLED") != "true" {
+        exporter, err := stdouttrace.New(stdouttrace.WithPrettyPrint())
+        if err != nil {
+            return nil, err
+        }
+        return exporter, nil
+    } else {
+        tracingUrl := os.Getenv("TRACING_COLLECTOR")
+        if tracingUrl == "" {
+            tracingUrl = "simple-prod-collector.observability.svc.cluster.local:4318"
+        }
+        exporter, err := otlptracehttp.New(
+            ctx,
+            otlptracehttp.WithEndpoint(tracingUrl),
+            otlptracehttp.WithInsecure(),
+        )
+        if err != nil {
+            return nil, err
+        }
+
+        return exporter, nil
+    }
+
+}
+
 func SetupTracing(ctx context.Context, serviceName string) (*trace.TracerProvider, error) {
-	tracingUrl := os.Getenv("TRACING_COLLECTOR")
-	if tracingUrl == "" {
-        tracingUrl = "simple-prod-collector.observability.svc.cluster.local:4318"
-	}
-    exporter, err := otlptracehttp.New(
-        ctx,
-        otlptracehttp.WithEndpoint(tracingUrl),
-        otlptracehttp.WithInsecure(),
-    )
+
+    exporter, err := getExporter(ctx)
     if err != nil {
         return nil, err
     }
-
+    
     // labels/tags/resources that are common to all traces.
     resource := resource.NewWithAttributes(
         semconv.SchemaURL,

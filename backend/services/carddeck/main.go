@@ -39,10 +39,10 @@ func main() {
 	}
 
 	logger.Info("Trying to listen on: ", serviceAddress)
-
+	
 	tp, err := helper.SetupTracing(context.TODO(), service)
 	if err != nil {
-		logger.Error("Error setting up tracer: %v", err)
+		logger.Fatal("Error setting up tracer: %v", err)
 	}
 	defer func() {
 		if err := tp.Shutdown(context.Background()); err != nil {

@@ -190,4 +190,5 @@ kind: ConfigMap
 metadata:
   name: tracing-config
 data:
+  TRACING_ENABLED: "true"
   TRACING_COLLECTOR: "otelcol-service.monitoring.svc.cluster.local:4318"

@@ -18,3 +18,6 @@ From the root-directory of the repository execute the following:
 ```bash
 ./deploy.sh
 ```
+
+## Tracing
+With the deployment, tracing capabilities will be deployed that can be accessed, when you forward the `ui` (`16686`) port of the `jaeger-service`.

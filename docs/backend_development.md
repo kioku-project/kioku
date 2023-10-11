@@ -2,9 +2,11 @@
 
 ## Table of Contents
 
-- [Infrastructure overview](#infrastructure-overview)
-- [Getting started with backend development](#getting-started-with-backend-development)
-- [Create a new service](#create-a-new-service)
+- [Backend development](#backend-development)
+  - [Table of Contents](#table-of-contents)
+  - [Infrastructure overview](#infrastructure-overview)
+  - [Getting started with backend development](#getting-started-with-backend-development)
+  - [Create a new service](#create-a-new-service)
 
 ## Infrastructure overview
 
@@ -41,6 +43,18 @@ make init proto update tidy
     1. Update the service definitions in `proto/<name-of-new-service>.proto`
     2. Generate proto files by running `make proto`
     3. Update handler in `handler/<name-of-new-service>.go`
+    4. Instrument the service
+    ```go
+    tp, err := helper.SetupTracing(context.TODO(), service)
+    if err != nil {
+      logger.Error("Error setting up tracer: %v", err)
+    }
+    defer func() {
+      if err := tp.Shutdown(context.Background()); err != nil {
+        logger.Error("Error shutting down tracer provider: %v", err)
+      }
+    }()
+    ```
 
 3.  Update docker-compose
     Add a new service in `docker-compose.yml` for the created service.

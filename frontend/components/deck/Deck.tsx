@@ -25,12 +25,7 @@ interface DeckProps {
 	className?: string;
 }
 
-/**
- * UI component for dislpaying a deck
- */
-export default function Deck({ group, deck, className = "" }: DeckProps) {
-	const { mutate } = useSWRConfig();
-
+export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 	const fetcher = (url: RequestInfo | URL) =>
 		authedFetch(url, {
 			method: "GET",
@@ -39,6 +34,16 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 		deck ? `/api/decks/${deck?.deckID}/dueCards` : null,
 		fetcher
 	);
+	return (
+		<Deck deck={deck && { ...deck, dueCards: dueCards }} {...props}></Deck>
+	);
+};
+
+/**
+ * UI component for dislpaying a deck
+ */
+export const Deck = ({ group, deck, className = "" }: DeckProps) => {
+	const { mutate } = useSWRConfig();
 
 	const deckNameInput = useRef<HTMLInputElement>(null);
 
@@ -82,10 +87,10 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 							<AlertTriangle size={50}></AlertTriangle>
 						)}
 				</div>
-				{dueCards > 0 && (
+				{!!deck?.dueCards && deck.dueCards > 0 && (
 					<div className="absolute right-[-0.3rem] top-[-0.5rem] flex h-5 w-5 rounded-sm bg-kiokuRed p-1">
 						<div className="flex h-full w-full items-center justify-center text-xs font-bold text-white">
-							{Math.min(99, dueCards)}
+							{Math.min(99, deck.dueCards)}
 						</div>
 					</div>
 				)}
@@ -143,4 +148,4 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 		}
 		mutate(`/api/groups/${group.groupID}/decks`);
 	}
-}
+};

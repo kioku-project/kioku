@@ -16,27 +16,18 @@ import (
 
 func getExporter(ctx context.Context) (trace.SpanExporter, error){
     if os.Getenv("TRACING_ENABLED") != "true" {
-        exporter, err := stdouttrace.New(stdouttrace.WithWriter(io.Discard))
-        if err != nil {
-            return nil, err
-        }
-        return exporter, nil
+        return stdouttrace.New(stdouttrace.WithWriter(io.Discard))
     }
     
     tracingUrl := os.Getenv("TRACING_COLLECTOR")
     if tracingUrl == "" {
         tracingUrl = "simple-prod-collector.observability.svc.cluster.local:4318"
     }
-    exporter, err := otlptracehttp.New(
+    return otlptracehttp.New(
         ctx,
         otlptracehttp.WithEndpoint(tracingUrl),
         otlptracehttp.WithInsecure(),
     )
-    if err != nil {
-        return nil, err
-    }
-
-    return exporter, nil
 
 }
 

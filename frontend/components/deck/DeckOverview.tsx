@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -39,6 +39,12 @@ export default function DeckOverview({
 	}>(group ? `/api/groups/${group.groupID}/decks` : null, fetcher);
 
 	const groupNameInput = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (group) {
+			router.prefetch(`/group/${group.groupID}`);
+		}
+	}, [group]);
 
 	return (
 		<div

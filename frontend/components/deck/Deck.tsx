@@ -1,5 +1,5 @@
 import router from "next/router";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { AlertTriangle } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -41,6 +41,12 @@ export default function Deck({ group, deck, className = "" }: DeckProps) {
 	);
 
 	const deckNameInput = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (deck) {
+			router.prefetch(`/deck/${deck.deckID}`);
+		}
+	}, [deck]);
 
 	return (
 		<div

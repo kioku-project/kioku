@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
@@ -51,6 +51,18 @@ export const Header = ({
 }: HeaderProps) => {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
+
+	useEffect(() => {
+		if (group) {
+			router.prefetch(`/group/${group.groupID}`);
+		}
+	}, [group]);
+	useEffect(() => {
+		if (deck) {
+			router.prefetch(`/deck/${deck.deckID}/learn`);
+		}
+	}, [deck]);
+
 	return (
 		<div
 			className={`flex flex-row items-center justify-between ${className}`}

@@ -1,5 +1,9 @@
 mode: production
 
+cassandra:
+  username: cassandra
+  password: cassandra
+
 database:
   name: kioku-database
 

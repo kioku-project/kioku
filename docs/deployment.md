@@ -18,3 +18,6 @@ From the root-directory of the repository execute the following:
 ```bash
 ./deploy.sh
 ```
+
+## Tracing
+The performance and metrics of the deployment such as dependencies between services can be viewed using [`jaeger`](https://www.jaegertracing.io/). In order to access the jaeger frontend, you will have to expose the port `16686` of the `jaeger-service` in the `monitoring` namespace.

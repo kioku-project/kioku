@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
+	"github.com/kioku-project/kioku/pkg/helper"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
 	"github.com/kioku-project/kioku/services/user/handler"
 	pb "github.com/kioku-project/kioku/services/user/proto"
@@ -14,6 +16,7 @@ import (
 	"go-micro.dev/v4/server"
 
 	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
+	"github.com/go-micro/plugins/v4/wrapper/trace/opentelemetry"
 
 	grpcClient "github.com/go-micro/plugins/v4/client/grpc"
 	grpcServer "github.com/go-micro/plugins/v4/server/grpc"
@@ -35,10 +38,23 @@ func main() {
 
 	logger.Info("Trying to listen on: ", serviceAddress)
 
+	tp, err := helper.SetupTracing(context.TODO(), service)
+	if err != nil {
+		logger.Fatal("Error setting up tracer: %v", err)
+	}
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			logger.Error("Error shutting down tracer provider: %v", err)
+		}
+	}()
+
 	// Create service
 	srv := micro.NewService(
 		micro.Server(grpcServer.NewServer(server.Address(serviceAddress), server.Wait(nil))),
 		micro.Client(grpcClient.NewClient()),
+		micro.WrapClient(opentelemetry.NewClientWrapper(opentelemetry.WithTraceProvider(tp))),
+		micro.WrapHandler(opentelemetry.NewHandlerWrapper(opentelemetry.WithTraceProvider(tp))),
+		micro.WrapSubscriber(opentelemetry.NewSubscriberWrapper(opentelemetry.WithTraceProvider(tp))),
 	)
 	srv.Init(
 		micro.Name(service),

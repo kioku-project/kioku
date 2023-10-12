@@ -1,0 +1,194 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jaeger-deployment
+  namespace: monitoring
+  labels:
+    app: jaeger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jaeger
+  template:
+    metadata:
+      labels:
+        app: jaeger
+    spec:
+      containers:
+      - name: jaeger
+        image: jaegertracing/all-in-one:latest
+        args:
+        - "--query.ui-config" 
+        - "/etc/jaeger/jaeger-ui.json"
+
+        - "--prometheus.query.support-spanmetrics-connector=true"
+        - "--prometheus.query.normalize-calls=true"
+        - "--prometheus.query.normalize-duration=true"
+        ports:
+        - containerPort: 16686
+          name: ui
+        - containerPort: 4318
+          name: traces
+        envFrom:
+          - configMapRef:
+              name: jaeger-configmap
+        volumeMounts:
+        - name: config
+          mountPath: "/etc/jaeger"
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: jaeger-configmap-files
+        
+        
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jaeger-configmap
+  namespace: monitoring
+data:
+  METRICS_STORAGE_TYPE: prometheus
+  PROMETHEUS_SERVER_URL: http://prometheus-service.monitoring.svc.cluster.local:9090
+  PROMETHEUS_QUERY_SUPPORT_SPANMETRICS_CONNECTOR: "true"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jaeger-configmap-files
+  namespace: monitoring
+data:
+  jaeger-ui.json: |-
+    {
+      "monitor": {
+          "menuEnabled": true
+      },
+      "dependencies": {
+          "menuEnabled": true
+      }
+    }
+  sampling_strategies.json: |-
+    {
+      "service_strategies": [],
+      "default_strategy": {
+        "type": "probabilistic",
+        "param": 0.9
+      }
+    }
+  otel-collector-config.yml: |-
+    receivers:
+      otlp:
+        protocols:
+          http: 
+            endpoint: "0.0.0.0:4318"
+
+    exporters:
+      prometheus:
+        endpoint: "0.0.0.0:8889"
+
+      otlphttp:
+        endpoint: "http://jaeger-service.monitoring.svc.cluster.local:4318"
+        tls:
+          insecure: true
+
+    connectors:
+      spanmetrics:
+
+    processors:
+      batch:
+
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [spanmetrics, otlphttp]
+        # The exporter name in this pipeline must match the spanmetrics.metrics_exporter name.
+        # The receiver is just a dummy and never used; added to pass validation requiring at least one receiver in a pipeline.
+        metrics/spanmetrics:
+          receivers: [spanmetrics]
+          exporters: [prometheus]
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otelcol-deployment
+  namespace: monitoring
+  labels:
+    app: otelcol
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otelcol
+  template:
+    metadata:
+      labels:
+        app: otelcol
+    spec:
+      containers:
+      - name: otelcol
+        image: otel/opentelemetry-collector-contrib:latest
+        args: [ "--config", "/etc/otelcol/otel-collector-config.yml" ]
+        ports:
+        - containerPort: 14278
+          name: main
+        - containerPort: 4318
+          name: traces
+        - containerPort: 8889
+          name: metrics
+        volumeMounts:
+        - name: config
+          mountPath: "/etc/otelcol"
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: jaeger-configmap-files
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otelcol-service
+  namespace: monitoring
+spec:
+  selector: 
+    app: otelcol
+  ports:
+    - port: 14278
+      targetPort: 14278
+      name: main
+    - port: 4318
+      targetPort: 4318
+      name: traces
+    - port: 8889
+      targetPort: 8889
+      name: metrics
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger-service
+  namespace: monitoring
+spec:
+  selector: 
+    app: jaeger
+  ports:
+    - port: 16686
+      targetPort: 16686
+      name: ui
+    - port: 4318
+      targetPort: 4318
+      name: traces
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tracing-config
+data:
+  TRACING_ENABLED: "true"
+  TRACING_COLLECTOR: "otelcol-service.monitoring.svc.cluster.local:4318"

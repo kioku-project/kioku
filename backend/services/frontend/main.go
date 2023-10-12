@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	microErrors "go-micro.dev/v4/errors"
 
+	"github.com/gofiber/contrib/otelfiber"
 	"github.com/gofiber/fiber/v2"
 	jwtWare "github.com/gofiber/jwt/v3"
 	"github.com/joho/godotenv"
@@ -22,6 +24,7 @@ import (
 	"go-micro.dev/v4/server"
 
 	_ "github.com/go-micro/plugins/v4/registry/kubernetes"
+	"github.com/go-micro/plugins/v4/wrapper/trace/opentelemetry"
 
 	grpcClient "github.com/go-micro/plugins/v4/client/grpc"
 	grpcServer "github.com/go-micro/plugins/v4/server/grpc"
@@ -37,10 +40,23 @@ func main() {
 	logger.Info("Trying to listen on: ", serviceAddress)
 	_ = godotenv.Load("../.env", "../.env.example")
 
+	tp, err := helper.SetupTracing(context.TODO(), service)
+	if err != nil {
+		logger.Fatal("Error setting up tracer: %v", err)
+	}
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			logger.Error("Error shutting down tracer provider: %v", err)
+		}
+	}()
+
 	// Create service
 	srv := micro.NewService(
 		micro.Server(grpcServer.NewServer(server.Address(serviceAddress), server.Wait(nil))),
 		micro.Client(grpcClient.NewClient()),
+		micro.WrapClient(opentelemetry.NewClientWrapper(opentelemetry.WithTraceProvider(tp))),
+		micro.WrapHandler(opentelemetry.NewHandlerWrapper(opentelemetry.WithTraceProvider(tp))),
+		micro.WrapSubscriber(opentelemetry.NewSubscriberWrapper(opentelemetry.WithTraceProvider(tp))),
 	)
 	srv.Init(
 		micro.Name(service),
@@ -77,6 +93,9 @@ func main() {
 	if err != nil {
 		panic("Could not parse JWT public / private keypair")
 	}
+	app.Use(otelfiber.Middleware(
+		otelfiber.WithTracerProvider(tp),
+	))
 	app.Use(jwtWare.New(jwtWare.Config{
 		SigningMethod: "ES512",
 		SigningKey:    pub,

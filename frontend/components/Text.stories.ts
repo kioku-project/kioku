@@ -25,7 +25,30 @@ export const Secondary: Story = {
 		style: "secondary",
 	},
 };
-
+export const XXXXXS: Story = {
+	args: {
+		children: "extra extreme extreme small",
+		size: "5xs",
+	},
+};
+export const XXXXS: Story = {
+	args: {
+		children: "extreme extreme small",
+		size: "4xs",
+	},
+};
+export const XXXS: Story = {
+	args: {
+		children: "extra extreme small",
+		size: "3xs",
+	},
+};
+export const XXS: Story = {
+	args: {
+		children: "extreme small",
+		size: "2xs",
+	},
+};
 export const XS: Story = {
 	args: {
 		children: "extra small",
@@ -54,5 +77,29 @@ export const XL: Story = {
 	args: {
 		children: "extra large",
 		size: "xl",
+	},
+};
+export const XXL: Story = {
+	args: {
+		children: "extreme large",
+		size: "2xl",
+	},
+};
+export const XXXL: Story = {
+	args: {
+		children: "extra extreme large",
+		size: "3xl",
+	},
+};
+export const XXXXL: Story = {
+	args: {
+		children: "extreme extreme large",
+		size: "4xl",
+	},
+};
+export const XXXXXL: Story = {
+	args: {
+		children: "extra extreme extreme large",
+		size: "5xl",
 	},
 };

@@ -40,7 +40,7 @@
 		"@storybook/react": "^7.4.6",
 		"@storybook/testing-library": "^0.2.2",
 		"@storybook/theming": "^7.4.6",
-		"@trivago/prettier-plugin-sort-imports": "^4.2.0",
+		"@trivago/prettier-plugin-sort-imports": "^1.4.4",
 		"@types/jwt-decode": "^3.1.0",
 		"@types/react-calendar-heatmap": "^1.6.3",
 		"autoprefixer": "^10.4.14",

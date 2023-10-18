@@ -180,6 +180,14 @@ func ProtoDeckToFiberDeckConverter(deck *pbCardDeck.Deck) FiberDeck {
 	}
 }
 
+func ProtoDeckRespToFiberDeckConverter(deck *pbCardDeck.DeckResponse) FiberDeck {
+	return FiberDeck{
+		DeckID:   deck.DeckID,
+		DeckName: deck.DeckName,
+		DeckType: deck.DeckType.String(),
+	}
+}
+
 func StoreDeckToProtoDeckConverter(deck model.Deck) *pbCardDeck.Deck {
 	dt, _ := MigrateModelDeckTypeToProtoDeckType(deck.DeckType)
 	return &pbCardDeck.Deck{

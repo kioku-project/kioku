@@ -153,23 +153,20 @@ func cardModelDateComparator(a, b model.Card) int {
 func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest, rsp *pb.GroupDecksResponse) error {
 	logger.Infof("Received CardDeck.GetGroupDecks request: %v", req)
 
-	decks, err := helper.FindStoreEntity(e.store.FindDecksByGroupID, req.GroupID, helper.CardDeckServiceID)
+	var decks []model.Deck
+	err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_INVITED)
 	if err != nil {
-		return err
+		decks, err = helper.FindStoreEntity(e.store.FindPublicDecksByGroupID, req.GroupID, helper.CardDeckServiceID)
+		if err != nil {
+			return err
+		}
+	} else {
+		decks, err = helper.FindStoreEntity(e.store.FindDecksByGroupID, req.GroupID, helper.CardDeckServiceID)
+		if err != nil {
+			return err
+		}
 	}
 
-	err = e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_INVITED)
-	if err != nil {
-		var filteredDecks []model.Deck
-		for _, d := range decks {
-			if d.DeckType == model.Public {
-				filteredDecks = append(filteredDecks, d)
-			}
-		}
-		rsp.Decks = converter.ConvertToTypeArray(filteredDecks, converter.StoreDeckToProtoDeckConverter)
-		logger.Infof("Found %d (public) decks in group with id %s", len(filteredDecks), req.GroupID)
-		return nil
-	}
 	rsp.Decks = converter.ConvertToTypeArray(decks, converter.StoreDeckToProtoDeckConverter)
 	logger.Infof("Found %d decks in group with id %s", len(decks), req.GroupID)
 	return nil
@@ -231,12 +228,10 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rs
 		deck.Name = *req.DeckName
 	}
 	if req.DeckType != nil {
-		logger.Info(req.DeckType.String())
 		err, dt := converter.MigrateProtoDeckTypeToModelDeckType(*req.DeckType)
 		if err != nil {
 			return err
 		}
-		logger.Info(dt)
 		deck.DeckType = dt
 	}
 	err = e.store.ModifyDeck(deck)

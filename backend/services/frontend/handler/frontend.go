@@ -553,12 +553,7 @@ func (e *Frontend) GetDeckHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	deck := &pbCardDeck.Deck{
-		DeckID:   rspGetDeck.DeckID,
-		DeckName: rspGetDeck.DeckName,
-		DeckType: rspGetDeck.DeckType,
-	}
-	return c.JSON(converter.ProtoDeckToFiberDeckConverter(deck))
+	return c.JSON(converter.ProtoDeckRespToFiberDeckConverter(rspGetDeck))
 }
 
 func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {

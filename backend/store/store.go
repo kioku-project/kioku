@@ -11,6 +11,7 @@ type UserStore interface {
 
 type CardDeckStore interface {
 	FindDecksByGroupID(groupID string) ([]model.Deck, error)
+	FindPublicDecksByGroupID(groupID string) ([]model.Deck, error)
 	FindDeckByID(deckID string) (*model.Deck, error)
 	CreateDeck(newDeck *model.Deck) error
 	ModifyDeck(deck *model.Deck) error

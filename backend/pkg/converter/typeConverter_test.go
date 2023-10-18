@@ -119,6 +119,7 @@ func TestMigrateStringGroupTypeToProtoGroupType(t *testing.T) {
 	protoTypes := []pbCollaboration.GroupType{
 		pbCollaboration.GroupType_OPEN,
 		pbCollaboration.GroupType_REQUEST,
+		pbCollaboration.GroupType_CLOSED,
 		pbCollaboration.GroupType_INVALID,
 	}
 

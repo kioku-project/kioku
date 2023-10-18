@@ -32,7 +32,6 @@ var (
 )
 
 func main() {
-
 	// Initialize the database connection
 	dbStore, err := store.NewCollaborationStore()
 	if err != nil {
@@ -75,9 +74,6 @@ func main() {
 
 	// Register handler
 	if err := pb.RegisterCollaborationHandler(srv.Server(), svc); err != nil {
-		logger.Fatal(err)
-	}
-	if err := pb.RegisterHealthHandler(srv.Server(), new(handler.Health)); err != nil {
 		logger.Fatal(err)
 	}
 

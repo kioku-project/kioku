@@ -40,6 +40,10 @@ export const CardList = ({ deck, setCard, className = "" }: CardListProps) => {
 						key={card.cardID}
 						setCard={setCard}
 						card={{ ...card, deckID: deck.deckID }}
+						editable={
+							deck.groupRole &&
+							GroupRole[deck.groupRole] >= GroupRole.WRITE
+						}
 					/>
 				))}
 			</div>

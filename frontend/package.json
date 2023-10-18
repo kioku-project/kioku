@@ -24,7 +24,7 @@
 		"react-dom": "^18.2.0",
 		"react-feather": "^2.0.10",
 		"react-toastify": "^9.1.2",
-		"react-tooltip": "^5.10.5",
+		"react-tooltip": "^5.21.5",
 		"sharp": "^0.32.0",
 		"storybook": "^7.4.6",
 		"swr": "^2.1.5",

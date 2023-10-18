@@ -68,6 +68,10 @@ func NewMicroCardSideNotInGivenCardErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "card side not in given card")
 }
 
+func NewMicroDeckTypeNotValidErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "invalid deck type")
+}
+
 func NewMicroAlreadyRequestedErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "user access already requested")
 }

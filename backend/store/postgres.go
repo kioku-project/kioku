@@ -137,6 +137,7 @@ func (s *CardDeckStoreImpl) ModifyDeck(deck *model.Deck) (err error) {
 		Name:      deck.Name,
 		GroupID:   deck.GroupID,
 		CreatedAt: deck.CreatedAt,
+		DeckType:  deck.DeckType,
 	}).Error
 	return
 }

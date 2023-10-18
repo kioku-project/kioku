@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
@@ -151,12 +152,23 @@ func cardModelDateComparator(a, b model.Card) int {
 
 func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest, rsp *pb.GroupDecksResponse) error {
 	logger.Infof("Received CardDeck.GetGroupDecks request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
-		return err
-	}
+
 	decks, err := helper.FindStoreEntity(e.store.FindDecksByGroupID, req.GroupID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
+	}
+
+	err = e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_INVITED)
+	if err != nil {
+		var filteredDecks []model.Deck
+		for _, d := range decks {
+			if d.DeckType == model.Public {
+				filteredDecks = append(filteredDecks, d)
+			}
+		}
+		rsp.Decks = converter.ConvertToTypeArray(filteredDecks, converter.StoreDeckToProtoDeckConverter)
+		logger.Infof("Found %d (public) decks in group with id %s", len(filteredDecks), req.GroupID)
+		return nil
 	}
 	rsp.Decks = converter.ConvertToTypeArray(decks, converter.StoreDeckToProtoDeckConverter)
 	logger.Infof("Found %d decks in group with id %s", len(decks), req.GroupID)
@@ -171,9 +183,14 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 	if err := helper.CheckForValidName(req.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID); err != nil {
 		return err
 	}
+	err, dt := converter.MigrateProtoDeckTypeToModelDeckType(req.DeckType)
+	if err != nil {
+		return err
+	}
 	newDeck := model.Deck{
-		Name:    req.DeckName,
-		GroupID: req.GroupID,
+		Name:     req.DeckName,
+		GroupID:  req.GroupID,
+		DeckType: dt,
 	}
 	if err := e.store.CreateDeck(&newDeck); err != nil {
 		return err
@@ -212,6 +229,15 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rs
 			return err
 		}
 		deck.Name = *req.DeckName
+	}
+	if req.DeckType != nil {
+		logger.Info(req.DeckType.String())
+		err, dt := converter.MigrateProtoDeckTypeToModelDeckType(*req.DeckType)
+		if err != nil {
+			return err
+		}
+		logger.Info(dt)
+		deck.DeckType = dt
 	}
 	err = e.store.ModifyDeck(deck)
 	if err != nil {

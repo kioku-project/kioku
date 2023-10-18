@@ -20,6 +20,12 @@ service CardDeck {
 	rpc DeleteCardSide(IDRequest) returns (SuccessResponse) {}
 }
 
+enum DeckType {
+	PUBLIC = 0;
+	PRIVATE = 1;
+	INVALID = 2;
+}
+
 message GroupDecksRequest {
 	string userID = 1;
 	string groupID = 2;
@@ -32,6 +38,7 @@ message GroupDecksResponse {
 message Deck {
 	string deckID = 1;
 	string deckName = 2;
+	DeckType deckType = 3;
 }
 
 message DeckResponse {
@@ -39,12 +46,14 @@ message DeckResponse {
 	string deckName = 2;
 	int64 createdAt = 3;
 	string groupID = 4;
+	DeckType deckType = 5;
 }
 
 message CreateDeckRequest {
 	string userID = 1;
 	string groupID = 2;
 	string deckName = 3;
+	DeckType deckType = 4;
 }
 
 message IDResponse {
@@ -55,6 +64,7 @@ message ModifyDeckRequest {
 	string userID = 1;
 	string deckID = 2;
 	optional string deckName = 3;
+	optional DeckType deckType = 4;
 }
 
 message SuccessResponse {

@@ -1,6 +1,7 @@
 package converter
 
 import (
+	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
@@ -56,30 +57,67 @@ func MigrateStringRoleToProtoRole(stringRole string) (protoRole pbCollaboration.
 }
 
 func MigrateModelGroupTypeToProtoGroupType(modelType model.GroupType) (protoType pbCollaboration.GroupType) {
-	if modelType == model.Public {
-		protoType = pbCollaboration.GroupType_PUBLIC
-	} else if modelType == model.Private {
-		protoType = pbCollaboration.GroupType_PRIVATE
+	if modelType == model.Open {
+		protoType = pbCollaboration.GroupType_OPEN
+	} else if modelType == model.Request {
+		protoType = pbCollaboration.GroupType_REQUEST
+	} else if modelType == model.Closed {
+		protoType = pbCollaboration.GroupType_CLOSED
 	}
 	return
 }
 
 func MigrateProtoGroupTypeToModelGroupType(protoType pbCollaboration.GroupType) (modelType model.GroupType) {
-	if protoType == pbCollaboration.GroupType_PUBLIC {
-		modelType = model.Public
-	} else if protoType == pbCollaboration.GroupType_PRIVATE {
-		modelType = model.Private
+	if protoType == pbCollaboration.GroupType_OPEN {
+		modelType = model.Open
+	} else if protoType == pbCollaboration.GroupType_REQUEST {
+		modelType = model.Request
+	} else if protoType == pbCollaboration.GroupType_CLOSED {
+		modelType = model.Closed
 	}
 	return
 }
 
 func MigrateStringGroupTypeToProtoGroupType(stringType string) pbCollaboration.GroupType {
-	if stringType == pbCollaboration.GroupType_PUBLIC.String() {
-		return pbCollaboration.GroupType_PUBLIC
-	} else if stringType == pbCollaboration.GroupType_PRIVATE.String() {
-		return pbCollaboration.GroupType_PRIVATE
+	if stringType == pbCollaboration.GroupType_OPEN.String() {
+		return pbCollaboration.GroupType_OPEN
+	} else if stringType == pbCollaboration.GroupType_REQUEST.String() {
+		return pbCollaboration.GroupType_REQUEST
+	} else if stringType == pbCollaboration.GroupType_CLOSED.String() {
+		return pbCollaboration.GroupType_CLOSED
 	}
 	return pbCollaboration.GroupType_INVALID
+}
+
+func MigrateModelDeckTypeToProtoDeckType(modelType model.DeckType) (protoType pbCardDeck.DeckType, err error) {
+	if modelType == model.Public {
+		protoType = pbCardDeck.DeckType_PUBLIC
+	} else if modelType == model.Private {
+		protoType = pbCardDeck.DeckType_PRIVATE
+	} else {
+		err = helper.NewMicroDeckTypeNotValidErr(helper.CardDeckServiceID)
+	}
+	return
+}
+
+func MigrateProtoDeckTypeToModelDeckType(protoType pbCardDeck.DeckType) (err error, modelType model.DeckType) {
+	if protoType == pbCardDeck.DeckType_PUBLIC {
+		modelType = model.Public
+	} else if protoType == pbCardDeck.DeckType_PRIVATE {
+		modelType = model.Private
+	} else {
+		err = helper.NewMicroDeckTypeNotValidErr(helper.CardDeckServiceID)
+	}
+	return
+}
+
+func MigrateStringDeckTypeToProtoDeckType(stringType string) pbCardDeck.DeckType {
+	if stringType == pbCardDeck.DeckType_PUBLIC.String() {
+		return pbCardDeck.DeckType_PUBLIC
+	} else if stringType == pbCardDeck.DeckType_PRIVATE.String() {
+		return pbCardDeck.DeckType_PRIVATE
+	}
+	return pbCardDeck.DeckType_INVALID
 }
 
 func StoreUserToProtoUserProfileInformationResponseConverter(user model.User) *pbUser.UserProfileInformationResponse {
@@ -134,18 +172,30 @@ func ProtoGroupWithRoleToFiberGroupConverter(group *pbCollaboration.GroupWithUse
 	}
 }
 
+func ProtoDeckToFiberDeckConverter(deck *pbCardDeck.Deck) FiberDeck {
+	return FiberDeck{
+		DeckID:   deck.DeckID,
+		DeckName: deck.DeckName,
+		DeckType: deck.DeckType.String(),
+	}
+}
+
 func StoreDeckToProtoDeckConverter(deck model.Deck) *pbCardDeck.Deck {
+	dt, _ := MigrateModelDeckTypeToProtoDeckType(deck.DeckType)
 	return &pbCardDeck.Deck{
 		DeckID:   deck.ID,
 		DeckName: deck.Name,
+		DeckType: dt,
 	}
 }
 
 func StoreDeckToProtoDeckResponseConverter(deck model.Deck) *pbCardDeck.DeckResponse {
+	dt, _ := MigrateModelDeckTypeToProtoDeckType(deck.DeckType)
 	return &pbCardDeck.DeckResponse{
 		DeckID:    deck.ID,
 		DeckName:  deck.Name,
 		CreatedAt: deck.CreatedAt.Unix(),
+		DeckType:  dt,
 		GroupID:   deck.GroupID,
 	}
 }

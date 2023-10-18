@@ -7,9 +7,17 @@ import (
 	"gorm.io/gorm"
 )
 
+type DeckType string
+
+const (
+	Public  DeckType = "public"
+	Private DeckType = "private"
+)
+
 type Deck struct {
-	ID           string `gorm:"primaryKey"`
-	Name         string `gorm:"not null"`
+	ID           string   `gorm:"primaryKey"`
+	Name         string   `gorm:"not null"`
+	DeckType     DeckType `gorm:"not null"`
 	CreatedAt    time.Time
 	GroupID      string `gorm:"not null"`
 	Group        Group

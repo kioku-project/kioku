@@ -1,7 +1,6 @@
 import React, {
 	ChangeEventHandler,
 	FocusEventHandler,
-	FormEventHandler,
 	ReactNode,
 	Ref,
 	forwardRef,
@@ -158,13 +157,13 @@ export const InputField = forwardRef(
 		const [init, setInit] = useState(false);
 		const [icon, setIcon] = useState(statusIcon);
 		const [tooltip, setTooltip] = useState("");
-		const [inputPattern, setPattern] = useState(pattern);
+		const [inputPattern, setInputPattern] = useState(pattern);
 
 		const isValid =
 			typeof ref !== "function" && !ref?.current?.validity.valid;
 
 		useEffect(() => {
-			setPattern(pattern);
+			setInputPattern(pattern);
 			if (typeof ref !== "function" && init && ref?.current) {
 				checkValidity(ref.current);
 			}

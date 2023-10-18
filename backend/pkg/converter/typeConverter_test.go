@@ -90,13 +90,15 @@ func TestMigrateModelRoleToProtoRole(t *testing.T) {
 
 func TestMigrateModelGroupTypeToProtoGroupType(t *testing.T) {
 	modelTypes := []model.GroupType{
-		model.Public,
-		model.Private,
+		model.Open,
+		model.Request,
+		model.Closed,
 	}
 
 	protoTypes := []pbCollaboration.GroupType{
-		pbCollaboration.GroupType_PUBLIC,
-		pbCollaboration.GroupType_PRIVATE,
+		pbCollaboration.GroupType_OPEN,
+		pbCollaboration.GroupType_REQUEST,
+		pbCollaboration.GroupType_CLOSED,
 	}
 
 	for idx, modelType := range modelTypes {
@@ -107,15 +109,16 @@ func TestMigrateModelGroupTypeToProtoGroupType(t *testing.T) {
 
 func TestMigrateStringGroupTypeToProtoGroupType(t *testing.T) {
 	stringTypes := []string{
-		pbCollaboration.GroupType_PUBLIC.String(),
-		pbCollaboration.GroupType_PRIVATE.String(),
+		pbCollaboration.GroupType_OPEN.String(),
+		pbCollaboration.GroupType_REQUEST.String(),
+		pbCollaboration.GroupType_CLOSED.String(),
 		// InvalidStringGroupType
 		"",
 	}
 
 	protoTypes := []pbCollaboration.GroupType{
-		pbCollaboration.GroupType_PUBLIC,
-		pbCollaboration.GroupType_PRIVATE,
+		pbCollaboration.GroupType_OPEN,
+		pbCollaboration.GroupType_REQUEST,
 		pbCollaboration.GroupType_INVALID,
 	}
 
@@ -191,7 +194,7 @@ func TestStoreGroupToProtoGroupConverter(t *testing.T) {
 		Name:        name,
 		Description: desc,
 		IsDefault:   isDefault,
-		GroupType:   model.Public,
+		GroupType:   model.Open,
 	}
 
 	conv := converter.StoreGroupToProtoGroupConverter(group)
@@ -200,7 +203,7 @@ func TestStoreGroupToProtoGroupConverter(t *testing.T) {
 	assert.Equal(t, name, conv.GroupName)
 	assert.Equal(t, desc, conv.GroupDescription)
 	assert.Equal(t, isDefault, conv.IsDefault)
-	assert.Equal(t, converter.MigrateModelGroupTypeToProtoGroupType(model.Public), conv.GroupType)
+	assert.Equal(t, converter.MigrateModelGroupTypeToProtoGroupType(model.Open), conv.GroupType)
 }
 
 func TestProtoGroupToFiberGroupConverter(t *testing.T) {
@@ -210,7 +213,7 @@ func TestProtoGroupToFiberGroupConverter(t *testing.T) {
 			GroupName:        name,
 			GroupDescription: desc,
 			IsDefault:        isDefault,
-			GroupType:        pbCollaboration.GroupType_PUBLIC,
+			GroupType:        pbCollaboration.GroupType_OPEN,
 		},
 		Role: pbCollaboration.GroupRole_READ,
 	}
@@ -221,13 +224,11 @@ func TestProtoGroupToFiberGroupConverter(t *testing.T) {
 	assert.Equal(t, name, conv.GroupName)
 	assert.Equal(t, desc, conv.GroupDescription)
 	assert.Equal(t, isDefault, conv.IsDefault)
-	assert.Equal(t, pbCollaboration.GroupType_PUBLIC.String(), conv.GroupType)
+	assert.Equal(t, pbCollaboration.GroupType_OPEN.String(), conv.GroupType)
 	assert.Equal(t, pbCollaboration.GroupRole_READ.String(), conv.GroupRole)
-
 }
 
 func TestStoreDeckToProtoDeckConverter(t *testing.T) {
-
 	conv := converter.StoreDeckToProtoDeckConverter(deck)
 
 	assert.Equal(t, id, conv.DeckID)
@@ -235,7 +236,6 @@ func TestStoreDeckToProtoDeckConverter(t *testing.T) {
 }
 
 func TestStoreDeckToProtoDeckResponseConverter(t *testing.T) {
-
 	conv := converter.StoreDeckToProtoDeckResponseConverter(deck)
 
 	assert.Equal(t, id, conv.DeckID)
@@ -245,7 +245,6 @@ func TestStoreDeckToProtoDeckResponseConverter(t *testing.T) {
 }
 
 func TestStoreCardToProtoCardConverter(t *testing.T) {
-
 	conv := converter.StoreCardToProtoCardConverter(card)
 
 	assert.Equal(t, id, conv.CardID)

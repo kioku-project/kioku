@@ -29,6 +29,23 @@ export const Default: Story = {
 	},
 };
 
+export const Editable: Story = {
+	args: {
+		card: {
+			cardID: "C-12345678",
+			sides: [
+				{
+					cardSideID: "S-12345678",
+					header: "Header",
+					description: "Description",
+				},
+			],
+			deckID: "D-1234567",
+		},
+		editable: true
+	},
+};
+
 export const Delete: Story = {
 	args: {
 		card: {
@@ -42,6 +59,7 @@ export const Delete: Story = {
 			],
 			deckID: "D-1234567",
 		},
+		editable: true
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);

@@ -45,7 +45,7 @@ export default function DeckOverview({
 			router.prefetch(`/group/${group.groupID}`);
 			preload(`/api/groups/${group.groupID}`, fetcher);
 		}
-	}, [group]);
+	}, [router, group]);
 
 	return (
 		<div

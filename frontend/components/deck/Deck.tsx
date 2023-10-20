@@ -34,6 +34,14 @@ export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 		deck ? `/api/decks/${deck?.deckID}/dueCards` : null,
 		fetcher
 	);
+
+	useEffect(() => {
+		if (deck) {
+			router.prefetch(`/deck/${deck.deckID}`);
+			preload(`/api/decks/${deck.deckID}`, fetcher);
+		}
+	}, [deck]);
+
 	return (
 		<Deck deck={deck && { ...deck, dueCards: dueCards }} {...props}></Deck>
 	);
@@ -46,13 +54,6 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 	const { mutate } = useSWRConfig();
 
 	const deckNameInput = useRef<HTMLInputElement>(null);
-
-	useEffect(() => {
-		if (deck) {
-			router.prefetch(`/deck/${deck.deckID}`);
-			preload(`/api/decks/${deck.deckID}`, fetcher);
-		}
-	}, [deck]);
 
 	return (
 		<div

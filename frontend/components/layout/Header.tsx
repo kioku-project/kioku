@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { toast } from "react-toastify";
-import { useSWRConfig } from "swr";
+import { preload, useSWRConfig } from "swr";
 
 import { Deck as DeckType } from "../../types/Deck";
 import { Group as GroupType } from "../../types/Group";
@@ -51,6 +51,24 @@ export const Header = ({
 }: HeaderProps) => {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
+	const fetcher = (url: RequestInfo | URL) =>
+		authedFetch(url, {
+			method: "GET",
+		}).then((res) => res?.json());
+
+	useEffect(() => {
+		if (group) {
+			router.prefetch(`/group/${group.groupID}`);
+			preload(`/api/groups/${group.groupID}`, fetcher);
+		}
+	}, [group, router]);
+	useEffect(() => {
+		if (deck) {
+			router.prefetch(`/deck/${deck.deckID}/learn`);
+			preload(`/api/decks/${deck.deckID}`, fetcher);
+		}
+	}, [deck, router]);
+
 	return (
 		<div
 			className={`flex flex-row items-center justify-between ${className}`}

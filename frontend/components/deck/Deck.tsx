@@ -1,9 +1,9 @@
 import router from "next/router";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { AlertTriangle } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR, { preload, useSWRConfig } from "swr";
 
 import { Deck as DeckType } from "../../types/Deck";
 import { Group as GroupType } from "../../types/Group";
@@ -46,6 +46,13 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 	const { mutate } = useSWRConfig();
 
 	const deckNameInput = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (deck) {
+			router.prefetch(`/deck/${deck.deckID}`);
+			preload(`/api/decks/${deck.deckID}`, fetcher);
+		}
+	}, [deck]);
 
 	return (
 		<div

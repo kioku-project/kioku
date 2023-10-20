@@ -31,8 +31,8 @@ spec:
             cpu: 500m
             memory: 500M
           requests:
-            cpu: 200m
-            memory: 200M
+            cpu: 50m
+            memory: 50M
         env:
           - name: HOSTNAME
             valueFrom:
@@ -51,6 +51,8 @@ spec:
               name: {{ .Values.database.secret.name }}
           - configMapRef:
               name: service-env
+          - configMapRef:
+              name: tracing-config
 ---
 apiVersion: v1
 kind: Service

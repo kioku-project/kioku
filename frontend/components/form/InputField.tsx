@@ -40,7 +40,7 @@ interface InputFieldProps {
 	/**
 	 * Icon that will be displayed on the right side of the InputField. If Icon is undefined, it will be set dynamically according to InputField validity.
 	 */
-	statusIcon?: "none" | "success" | "error" | "warning" | "info";
+	statusIcon?: keyof typeof statusIcon;
 	/**
 	 * Message that will be displayed as tooltip on the icon
 	 */
@@ -101,34 +101,15 @@ const getSize = {
 	xl: "text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl",
 } as const;
 
-function getIcon(status: string, id: string): ReactNode {
-	return {
-		none: <></>,
-		success: (
-			<Check
-				className="text-kiokuDarkBlue outline-none"
-				data-tooltip-id={`tooltip-${id}`}
-			></Check>
-		),
-		error: (
-			<AlertCircle
-				className="text-kiokuRed outline-none"
-				data-tooltip-id={`tooltip-${id}`}
-			></AlertCircle>
-		),
-		warning: (
-			<AlertTriangle
-				className="text-kiokuYellow outline-none"
-				data-tooltip-id={`tooltip-${id}`}
-			></AlertTriangle>
-		),
-		info: (
-			<Info
-				className="text-kiokuDarkBlue outline-none"
-				data-tooltip-id={`tooltip-${id}`}
-			></Info>
-		),
-	}[status];
+const statusIcon = {
+	none: <></>,
+	success: <Check className="text-kiokuDarkBlue outline-none" />,
+	error: <AlertCircle className="text-kiokuRed outline-none" />,
+	warning: <AlertTriangle className="text-kiokuYellow outline-none" />,
+	info: <Info className="text-kiokuDarkBlue outline-none" />,
+};
+function getIcon(status: keyof typeof statusIcon, id: string): ReactNode {
+	return <span data-tooltip-id={`tooltip-${id}`}>{statusIcon[status]}</span>;
 }
 
 /**
@@ -196,7 +177,7 @@ export const InputField = forwardRef(
 						type={type}
 						name={name}
 						className={`w-full border-none bg-transparent font-medium outline-none ${
-							size ?? getSize[size]
+							size && getSize[size]
 						}`}
 						ref={ref}
 						onChange={(event) => {

@@ -71,7 +71,7 @@ export default function Page() {
 								className="whitespace-nowrap font-semibold text-kiokuDarkBlue transition hover:cursor-pointer hover:text-eggshell"
 								onClick={() => {
 									emailInput.current?.focus();
-									setLogin(!login);
+									setLogin((prev) => !prev);
 								}}
 							>
 								{login ? "Create an account" : "Sign in"}
@@ -163,8 +163,7 @@ export default function Page() {
 		if (!form.current?.checkValidity()) {
 			return;
 		}
-		let url = "/api/login";
-		const response = await fetch(url, {
+		const response = await fetch("/api/login", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -191,8 +190,7 @@ export default function Page() {
 		) {
 			return;
 		}
-		let url = "/api/register";
-		const response = await fetch(url, {
+		const response = await fetch("/api/register", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

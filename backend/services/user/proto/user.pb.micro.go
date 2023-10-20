@@ -42,6 +42,7 @@ type UserService interface {
 	GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, opts ...client.CallOption) (*UserID, error)
 	GetUserInformation(ctx context.Context, in *UserInformationRequest, opts ...client.CallOption) (*UserInformationResponse, error)
 	GetUserProfileInformation(ctx context.Context, in *UserID, opts ...client.CallOption) (*UserProfileInformationResponse, error)
+	ModifyUserProfileInformation(ctx context.Context, in *ModifyRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	VerifyUserExists(ctx context.Context, in *VerificationRequest, opts ...client.CallOption) (*SuccessResponse, error)
 }
 
@@ -117,6 +118,16 @@ func (c *userService) GetUserProfileInformation(ctx context.Context, in *UserID,
 	return out, nil
 }
 
+func (c *userService) ModifyUserProfileInformation(ctx context.Context, in *ModifyRequest, opts ...client.CallOption) (*SuccessResponse, error) {
+	req := c.c.NewRequest(c.name, "User.ModifyUserProfileInformation", in)
+	out := new(SuccessResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userService) VerifyUserExists(ctx context.Context, in *VerificationRequest, opts ...client.CallOption) (*SuccessResponse, error) {
 	req := c.c.NewRequest(c.name, "User.VerifyUserExists", in)
 	out := new(SuccessResponse)
@@ -136,6 +147,7 @@ type UserHandler interface {
 	GetUserIDFromEmail(context.Context, *UserIDRequest, *UserID) error
 	GetUserInformation(context.Context, *UserInformationRequest, *UserInformationResponse) error
 	GetUserProfileInformation(context.Context, *UserID, *UserProfileInformationResponse) error
+	ModifyUserProfileInformation(context.Context, *ModifyRequest, *SuccessResponse) error
 	VerifyUserExists(context.Context, *VerificationRequest, *SuccessResponse) error
 }
 
@@ -147,6 +159,7 @@ func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.Handl
 		GetUserIDFromEmail(ctx context.Context, in *UserIDRequest, out *UserID) error
 		GetUserInformation(ctx context.Context, in *UserInformationRequest, out *UserInformationResponse) error
 		GetUserProfileInformation(ctx context.Context, in *UserID, out *UserProfileInformationResponse) error
+		ModifyUserProfileInformation(ctx context.Context, in *ModifyRequest, out *SuccessResponse) error
 		VerifyUserExists(ctx context.Context, in *VerificationRequest, out *SuccessResponse) error
 	}
 	type User struct {
@@ -182,6 +195,10 @@ func (h *userHandler) GetUserInformation(ctx context.Context, in *UserInformatio
 
 func (h *userHandler) GetUserProfileInformation(ctx context.Context, in *UserID, out *UserProfileInformationResponse) error {
 	return h.UserHandler.GetUserProfileInformation(ctx, in, out)
+}
+
+func (h *userHandler) ModifyUserProfileInformation(ctx context.Context, in *ModifyRequest, out *SuccessResponse) error {
+	return h.UserHandler.ModifyUserProfileInformation(ctx, in, out)
 }
 
 func (h *userHandler) VerifyUserExists(ctx context.Context, in *VerificationRequest, out *SuccessResponse) error {

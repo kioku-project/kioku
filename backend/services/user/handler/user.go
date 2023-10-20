@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+	"net/mail"
 
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
@@ -34,9 +35,16 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	if err := helper.CheckForValidName(req.UserName, helper.UserNameRegex, helper.UserServiceID); err != nil {
 		return err
 	}
+	addr, err := mail.ParseAddress(req.UserEmail)
+	if err != nil {
+		return err
+	}
 	newUser := model.User{
-		Email: req.UserEmail,
+		Email: addr.Address,
 		Name:  req.UserName,
+	}
+	if req.UserPassword == "" {
+		return helper.NewMicroInvalidEmailOrPasswordErr(helper.UserServiceID)
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.UserPassword), bcrypt.MinCost)
 	if err != nil {
@@ -171,5 +179,42 @@ func (e *User) GetUserProfileInformation(
 	}
 	*rsp = *converter.StoreUserToProtoUserProfileInformationResponseConverter(*user)
 	logger.Infof("Found profile information for user with id %s", req.UserID)
+	return nil
+}
+
+func (e *User) ModifyUserProfileInformation(
+	_ context.Context,
+	req *pb.ModifyRequest,
+	rsp *pb.SuccessResponse,
+) error {
+	logger.Infof("Received User.ModifyUserProfileInformation request: %v", req)
+	user, err := e.store.FindUserByID(req.UserID)
+	if err != nil {
+		return err
+	}
+	if req.UserName != nil {
+		err = helper.CheckForValidName(*req.UserName, helper.UserNameRegex, helper.UserServiceID)
+		if err != nil {
+			return err
+		}
+		user.Name = *req.UserName
+	}
+	if req.UserEmail != nil {
+		addr, err := mail.ParseAddress(*req.UserEmail)
+		if err != nil {
+			return err
+		}
+		user.Email = addr.Address
+	}
+	if req.UserPassword != nil {
+		hash, err := bcrypt.GenerateFromPassword([]byte(*req.UserPassword), bcrypt.MinCost)
+		if err != nil {
+			return helper.NewMicroHashingFailedErr(helper.UserServiceID)
+		}
+		user.Password = string(hash)
+	}
+	err = e.store.ModifyUser(user)
+	logger.Infof("Modified profile information for user with id %s", req.UserID)
+	rsp.Success = true
 	return nil
 }

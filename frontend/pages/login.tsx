@@ -17,6 +17,7 @@ const inter = Inter({
 export default function Page() {
 	const router = useRouter();
 	const [login, setLogin] = useState(true); // true = login, false = register
+	const form = useRef<HTMLFormElement>(null);
 	const emailInput = useRef<HTMLInputElement>(null);
 	const nameInput = useRef<HTMLInputElement>(null);
 	const passwordInput = useRef<HTMLInputElement>(null);
@@ -78,12 +79,14 @@ export default function Page() {
 			<form
 				onSubmit={(e) => e.preventDefault()}
 				className="my-5 flex w-5/6 flex-col items-center space-y-4"
+				ref={form}
 			>
 				<InputField
 					id="email"
 					type="email"
 					name="email"
 					label="Email"
+					required={true}
 					style="primary"
 					className="sm:text-sm"
 					ref={emailInput}
@@ -94,6 +97,7 @@ export default function Page() {
 						type="text"
 						name="name"
 						label="Name"
+						required={true}
 						style="primary"
 						className="sm:text-sm"
 						ref={nameInput}
@@ -104,6 +108,7 @@ export default function Page() {
 					type="password"
 					name="password"
 					label="Password"
+					required={true}
 					style="primary"
 					className="sm:text-sm"
 					ref={passwordInput}
@@ -114,6 +119,7 @@ export default function Page() {
 						type="password"
 						name="passwordRepeat"
 						label="Repeat Password"
+						required={true}
 						style="primary"
 						className="sm:text-sm"
 						ref={repeatPasswordInput}
@@ -143,10 +149,7 @@ export default function Page() {
 	}
 
 	async function loginLogic() {
-		if (
-			emailInput.current?.value === "" ||
-			passwordInput.current?.value === ""
-		) {
+		if (!form.current?.checkValidity()) {
 			return;
 		}
 		let url = "/api/login";
@@ -171,12 +174,7 @@ export default function Page() {
 	}
 
 	async function registerLogic() {
-		if (
-			emailInput.current?.value === "" ||
-			nameInput.current?.value === "" ||
-			passwordInput.current?.value === "" ||
-			repeatPasswordInput.current?.value === ""
-		) {
+		if (!form.current?.checkValidity()) {
 			return;
 		}
 		if (

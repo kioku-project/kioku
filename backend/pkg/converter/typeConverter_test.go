@@ -90,9 +90,9 @@ func TestMigrateModelRoleToProtoRole(t *testing.T) {
 
 func TestMigrateModelGroupTypeToProtoGroupType(t *testing.T) {
 	modelTypes := []model.GroupType{
-		model.Open,
-		model.Request,
-		model.Closed,
+		model.OpenGroupType,
+		model.RequestGroupType,
+		model.ClosedGroupType,
 	}
 
 	protoTypes := []pbCollaboration.GroupType{
@@ -195,7 +195,7 @@ func TestStoreGroupToProtoGroupConverter(t *testing.T) {
 		Name:        name,
 		Description: desc,
 		IsDefault:   isDefault,
-		GroupType:   model.Open,
+		GroupType:   model.OpenGroupType,
 	}
 
 	conv := converter.StoreGroupToProtoGroupConverter(group)
@@ -204,7 +204,7 @@ func TestStoreGroupToProtoGroupConverter(t *testing.T) {
 	assert.Equal(t, name, conv.GroupName)
 	assert.Equal(t, desc, conv.GroupDescription)
 	assert.Equal(t, isDefault, conv.IsDefault)
-	assert.Equal(t, converter.MigrateModelGroupTypeToProtoGroupType(model.Open), conv.GroupType)
+	assert.Equal(t, converter.MigrateModelGroupTypeToProtoGroupType(model.OpenGroupType), conv.GroupType)
 }
 
 func TestProtoGroupToFiberGroupConverter(t *testing.T) {

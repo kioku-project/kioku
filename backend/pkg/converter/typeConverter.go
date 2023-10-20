@@ -57,11 +57,11 @@ func MigrateStringRoleToProtoRole(stringRole string) (protoRole pbCollaboration.
 }
 
 func MigrateModelGroupTypeToProtoGroupType(modelType model.GroupType) (protoType pbCollaboration.GroupType) {
-	if modelType == model.Open {
+	if modelType == model.OpenGroupType {
 		protoType = pbCollaboration.GroupType_OPEN
-	} else if modelType == model.Request {
+	} else if modelType == model.RequestGroupType {
 		protoType = pbCollaboration.GroupType_REQUEST
-	} else if modelType == model.Closed {
+	} else if modelType == model.ClosedGroupType {
 		protoType = pbCollaboration.GroupType_CLOSED
 	}
 	return
@@ -69,11 +69,11 @@ func MigrateModelGroupTypeToProtoGroupType(modelType model.GroupType) (protoType
 
 func MigrateProtoGroupTypeToModelGroupType(protoType pbCollaboration.GroupType) (modelType model.GroupType) {
 	if protoType == pbCollaboration.GroupType_OPEN {
-		modelType = model.Open
+		modelType = model.OpenGroupType
 	} else if protoType == pbCollaboration.GroupType_REQUEST {
-		modelType = model.Request
+		modelType = model.RequestGroupType
 	} else if protoType == pbCollaboration.GroupType_CLOSED {
-		modelType = model.Closed
+		modelType = model.ClosedGroupType
 	}
 	return
 }
@@ -92,9 +92,9 @@ func MigrateStringGroupTypeToProtoGroupType(stringType string) pbCollaboration.G
 }
 
 func MigrateModelDeckTypeToProtoDeckType(modelType model.DeckType) (protoType pbCardDeck.DeckType, err error) {
-	if modelType == model.Public {
+	if modelType == model.PublicDeckType {
 		protoType = pbCardDeck.DeckType_PUBLIC
-	} else if modelType == model.Private {
+	} else if modelType == model.PrivateDeckType {
 		protoType = pbCardDeck.DeckType_PRIVATE
 	} else {
 		err = helper.NewMicroDeckTypeNotValidErr(helper.CardDeckServiceID)
@@ -104,9 +104,9 @@ func MigrateModelDeckTypeToProtoDeckType(modelType model.DeckType) (protoType pb
 
 func MigrateProtoDeckTypeToModelDeckType(protoType pbCardDeck.DeckType) (err error, modelType model.DeckType) {
 	if protoType == pbCardDeck.DeckType_PUBLIC {
-		modelType = model.Public
+		modelType = model.PublicDeckType
 	} else if protoType == pbCardDeck.DeckType_PRIVATE {
-		modelType = model.Private
+		modelType = model.PrivateDeckType
 	} else {
 		err = helper.NewMicroDeckTypeNotValidErr(helper.CardDeckServiceID)
 	}

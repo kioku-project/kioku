@@ -177,7 +177,7 @@ func (e *Collaboration) CreateNewGroupWithAdmin(
 		Name:        req.GroupName,
 		Description: req.GroupDescription,
 		IsDefault:   req.IsDefault,
-		GroupType:   model.Request,
+		GroupType:   model.RequestGroupType,
 	}
 	err = e.store.CreateNewGroupWithAdmin(req.UserID, &newGroup)
 	if err != nil {
@@ -350,10 +350,10 @@ func (e *Collaboration) AddGroupUserRequest(
 		if err != nil {
 			return err
 		}
-		if group.GroupType == model.Closed {
+		if group.GroupType == model.ClosedGroupType {
 			return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 		}
-		if group.GroupType == model.Open {
+		if group.GroupType == model.OpenGroupType {
 			err := e.store.AddNewMemberToGroup(req.UserID, req.GroupID)
 			rsp.Success = true
 			return err
@@ -629,7 +629,7 @@ func (e *Collaboration) LeaveGroup(_ context.Context, req *pb.GroupRequest, rsp 
 	if err != nil {
 		return err
 	}
-	if len(groupUsers) > 1 || group.GroupType == model.Open {
+	if len(groupUsers) > 1 || group.GroupType == model.OpenGroupType {
 		if err = e.store.RemoveUserFromGroup(req.UserID, req.GroupID); err != nil {
 			return err
 		}

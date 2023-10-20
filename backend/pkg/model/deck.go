@@ -10,8 +10,8 @@ import (
 type DeckType string
 
 const (
-	Public  DeckType = "public"
-	Private DeckType = "private"
+	PublicDeckType  DeckType = "public"
+	PrivateDeckType DeckType = "private"
 )
 
 type Deck struct {

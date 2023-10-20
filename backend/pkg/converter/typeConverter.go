@@ -81,9 +81,11 @@ func MigrateProtoGroupTypeToModelGroupType(protoType pbCollaboration.GroupType) 
 func MigrateStringGroupTypeToProtoGroupType(stringType string) pbCollaboration.GroupType {
 	if stringType == pbCollaboration.GroupType_OPEN.String() {
 		return pbCollaboration.GroupType_OPEN
-	} else if stringType == pbCollaboration.GroupType_REQUEST.String() {
+	}
+	if stringType == pbCollaboration.GroupType_REQUEST.String() {
 		return pbCollaboration.GroupType_REQUEST
-	} else if stringType == pbCollaboration.GroupType_CLOSED.String() {
+	}
+	if stringType == pbCollaboration.GroupType_CLOSED.String() {
 		return pbCollaboration.GroupType_CLOSED
 	}
 	return pbCollaboration.GroupType_INVALID
@@ -114,7 +116,8 @@ func MigrateProtoDeckTypeToModelDeckType(protoType pbCardDeck.DeckType) (err err
 func MigrateStringDeckTypeToProtoDeckType(stringType string) pbCardDeck.DeckType {
 	if stringType == pbCardDeck.DeckType_PUBLIC.String() {
 		return pbCardDeck.DeckType_PUBLIC
-	} else if stringType == pbCardDeck.DeckType_PRIVATE.String() {
+	}
+	if stringType == pbCardDeck.DeckType_PRIVATE.String() {
 		return pbCardDeck.DeckType_PRIVATE
 	}
 	return pbCardDeck.DeckType_INVALID

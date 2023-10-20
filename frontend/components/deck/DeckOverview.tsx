@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR, { preload, useSWRConfig } from "swr";
 
 import { Deck as DeckType } from "../../types/Deck";
 import { Group as GroupType } from "../../types/Group";
@@ -39,6 +39,13 @@ export default function DeckOverview({
 	}>(group ? `/api/groups/${group.groupID}/decks` : null, fetcher);
 
 	const groupNameInput = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (group) {
+			router.prefetch(`/group/${group.groupID}`);
+			preload(`/api/groups/${group.groupID}`, fetcher);
+		}
+	}, [group]);
 
 	return (
 		<div

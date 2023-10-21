@@ -3,7 +3,7 @@ import React, { ReactNode, useState } from "react";
 import useSWR from "swr";
 
 import Authenticated from "../components/accessControl/Authenticated";
-import { Header } from "../components/layout/Header";
+import { FetchHeader } from "../components/layout/Header";
 import { Navbar } from "../components/navigation/Navbar";
 import { DecksTab } from "../components/navigation/Tabs/DecksTab";
 import { GroupsTab } from "../components/navigation/Tabs/GroupsTab";
@@ -83,10 +83,10 @@ export default function Home() {
 					<Navbar login={true}></Navbar>
 					{user && groups && (
 						<div className="flex flex-col space-y-3 p-5 md:space-y-5 md:p-10">
-							<Header
+							<FetchHeader
 								id="userPageHeaderId"
 								user={{ ...user, ...due }}
-							></Header>
+							/>
 							<TabBar
 								id="deckTabBarId"
 								tabs={tabs}

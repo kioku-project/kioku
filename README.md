@@ -5,10 +5,6 @@
 </picture>
 
 ![GitHub contributors](https://img.shields.io/github/contributors/kioku-project/kioku)
-[![Backend Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services)
-[![Frontend Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend)
-[![Backend Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services)
-[![Frontend Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend)
 [![Storybook link](https://github.com/storybookjs/brand/blob/master/badge/badge-storybook.svg)](https://main--63e354941aa15501d3467f88.chromatic.com)
 
 # Welcome to Kioku!
@@ -88,6 +84,16 @@ Achievements and leaderboards make learning more engaging and motivating. Kioku 
 </tr>
 </tbody>
 </table>
+
+## Sonarcloud status
+
+| Frontend | Backend |
+|:--------:|:-------:|
+| [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend) [![Frontend Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend) | [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services) [![Backend Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services) |
+| [![Frontend Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=bugs)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend) | [![Backend Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=bugs)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services) |
+| [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_frontend&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_frontend) | [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=kioku-project_kioku_services&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=kioku-project_kioku_services) |
+
+
 
 # Index
 

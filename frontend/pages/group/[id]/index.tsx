@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import useSWR from "swr";
 
 import Authenticated from "../../../components/accessControl/Authenticated";
-import { Header } from "../../../components/layout/Header";
+import { FetchHeader } from "../../../components/layout/Header";
 import { Navbar } from "../../../components/navigation/Navbar";
 import { DecksTab } from "../../../components/navigation/Tabs/DecksTab";
 import { GroupSettingsTab } from "../../../components/navigation/Tabs/GroupSettingsTab";
@@ -78,10 +78,7 @@ export default function Page() {
 					<Navbar login={true}></Navbar>
 					{group && (
 						<div className="space-y-5 p-10">
-							<Header
-								id="groupPageHeaderId"
-								group={group}
-							></Header>
+							<FetchHeader id="groupPageHeaderId" group={group} />
 							<TabBar
 								id="groupTabBarId"
 								tabs={tabs}

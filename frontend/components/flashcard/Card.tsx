@@ -24,7 +24,7 @@ interface CardProps {
 }
 
 /**
- * UI component for dislpaying a card
+ * UI component for displaying a card
  */
 export const Card = ({ card, setCard, className = "" }: CardProps) => {
 	const { mutate } = useSWRConfig();

@@ -42,7 +42,7 @@ export const TextArea = forwardRef(
 		<div className={`flex h-full w-full flex-col ${className}`}>
 			<textarea
 				name={name}
-				className={` h-full w-full resize-none rounded-md bg-transparent font-medium text-kiokuLightBlue outline-none`}
+				className="h-full w-full resize-none rounded-md bg-transparent font-medium text-kiokuLightBlue outline-none"
 				ref={ref}
 				{...props}
 			/>

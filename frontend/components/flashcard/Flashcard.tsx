@@ -14,6 +14,7 @@ import { useSWRConfig } from "swr";
 import { Card as CardType } from "../../types/Card";
 import { authedFetch } from "../../util/reauth";
 import { InputField } from "../form/InputField";
+import { TextArea } from "../form/TextArea";
 import { Button } from "../input/Button";
 
 interface FlashcardProps {
@@ -76,7 +77,7 @@ export const Flashcard = ({
 	);
 	const [edit, setEdit] = useState<boolean>(isEdit);
 	const headerInput = useRef<HTMLInputElement>(null);
-	const descriptionInput = useRef<HTMLInputElement>(null);
+	const descriptionInput = useRef<HTMLTextAreaElement>(null);
 
 	return (
 		<div
@@ -182,20 +183,18 @@ export const Flashcard = ({
 							</div>
 						)}
 					</div>
-					<InputField
+					<TextArea
 						id="descriptionInputId"
-						type="text"
 						name="descriptionInput"
 						value={tempCard.sides[side]?.description}
 						placeholder={edit ? "Description" : ""}
-						style="tertiary"
 						readOnly={!edit}
 						className="text-base text-kiokuLightBlue sm:text-lg md:text-xl lg:text-2xl"
 						ref={descriptionInput}
 						onChange={(event) =>
 							editField("description", event.target.value)
 						}
-					></InputField>
+					></TextArea>
 				</div>
 			</div>
 			{(!fullSize || tempCard.sides.length > 1) && (
@@ -218,7 +217,7 @@ export const Flashcard = ({
 						onClick={() => setSide(side - 1)}
 					></ArrowLeft>
 				)}
-				{/* Show arrow right if we're not on the last side */}
+				{/* Show arrow right if not on the last side */}
 				{side < tempCard.sides.length - 1 && (
 					<ArrowRight
 						id="arrowRightId"

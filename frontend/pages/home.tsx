@@ -4,24 +4,19 @@ import { ArrowRight } from "react-feather";
 
 import Cards from "../components/graphics/Cards";
 import { Button } from "../components/input/Button";
-import { Navbar } from "../components/navigation/Navbar";
 
 export default function Page() {
 	const router = useRouter();
 
 	return (
-		<div>
+		<div className="flex flex-1 justify-center scroll-auto">
 			<Head>
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<div className="min-w-screen flex h-screen flex-col bg-eggshell">
-				<Navbar
-					login={false}
-					onClick={() => router.push("/home")}
-				></Navbar>
-				<div className="flex grow flex-row overflow-hidden">
+			<div className="flex min-w-full flex-col bg-eggshell">
+				<div className="flex grow flex-row justify-start overflow-hidden">
 					<div className="flex w-full flex-col justify-center space-y-3 p-5 md:w-2/3 md:space-y-5 md:p-10">
 						<p className="text-2xl font-bold text-kiokuDarkBlue sm:text-3xl md:text-4xl lg:text-5xl">
 							We&apos;re changing the way people learn.
@@ -52,7 +47,7 @@ export default function Page() {
 							</Button>
 						</div>
 					</div>
-					<div className="my-auto hidden md:block md:w-1/3">
+					<div className="my-auto hidden md:block md:w-1/4">
 						<Cards />
 					</div>
 				</div>

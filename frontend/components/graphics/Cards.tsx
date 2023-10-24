@@ -1,7 +1,6 @@
 export default function Cards() {
 	return (
 		<svg
-			width="40vw"
 			viewBox="0 0 514 680"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

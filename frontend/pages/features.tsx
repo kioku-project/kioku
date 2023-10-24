@@ -3,23 +3,17 @@ import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { Award, BarChart2, Cloud, Code, Compass, Users } from "react-feather";
 
-import { Navbar } from "../components/navigation/Navbar";
-
 export default function Page() {
 	const router = useRouter();
 
 	return (
-		<div>
+		<div className="flex flex-1">
 			<Head>
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<div className="min-w-screen flex h-screen flex-col bg-eggshell">
-				<Navbar
-					login={false}
-					onClick={() => router.push("/home")}
-				></Navbar>
+			<div className="min-w-screen flex flex-col bg-eggshell">
 				<div className="mx-auto flex flex-col justify-center p-5 text-base leading-7 md:w-2/3 md:p-10 md:text-center">
 					<a
 						className="text-lg font-semibold text-kiokuLightBlue hover:cursor-pointer"

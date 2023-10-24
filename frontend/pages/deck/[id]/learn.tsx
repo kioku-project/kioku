@@ -8,7 +8,6 @@ import Authenticated from "../../../components/accessControl/Authenticated";
 import { Flashcard } from "../../../components/flashcard/Flashcard";
 import KiokuAward from "../../../components/graphics/KiokuAward";
 import { Button } from "../../../components/input/Button";
-import { Navbar } from "../../../components/navigation/Navbar";
 import { authedFetch } from "../../../util/reauth";
 
 export default function Page() {
@@ -30,8 +29,7 @@ export default function Page() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Authenticated>
-				<div className="min-w-screen flex h-screen flex-col bg-eggshell">
-					<Navbar login={true}></Navbar>
+				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 					{card?.cardID ? (
 						<Flashcard
 							id="flashcardId"

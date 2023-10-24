@@ -1,0 +1,15 @@
+meta {
+  name: get groups
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/groups
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

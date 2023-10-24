@@ -1,0 +1,21 @@
+meta {
+  name: modify deck
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{baseUrl}}/api/decks/{{deckID}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "deckName": "test deck"
+  }
+}

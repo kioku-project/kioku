@@ -1,0 +1,15 @@
+meta {
+  name: get decks
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/groups/{{groupID}}/decks
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

@@ -97,6 +97,7 @@ export const Flashcard = ({
 							name="headerInput"
 							value={tempCard.sides[side]?.header}
 							placeholder={edit ? "Header" : ""}
+							statusIcon="none"
 							style="secondary"
 							readOnly={!edit}
 							className="text-lg sm:text-xl md:text-2xl lg:text-3xl"

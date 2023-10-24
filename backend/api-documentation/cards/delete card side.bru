@@ -1,0 +1,15 @@
+meta {
+  name: delete card side
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{baseUrl}}/api/cardSides/{{cardSideID}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

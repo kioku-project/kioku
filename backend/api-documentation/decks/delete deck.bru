@@ -1,0 +1,15 @@
+meta {
+  name: delete deck
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{baseUrl}}/api/decks/:{{deckID}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

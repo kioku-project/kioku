@@ -1,0 +1,19 @@
+meta {
+  name: request join
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/groups/{{groupID}}/members/request
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {}
+}

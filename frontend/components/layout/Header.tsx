@@ -38,6 +38,27 @@ interface HeaderProps {
 	onClick?: () => void;
 }
 
+export const FetchHeader = ({ deck, group, ...props }: HeaderProps) => {
+	const router = useRouter();
+	const fetcher = (url: RequestInfo | URL) =>
+		authedFetch(url, {
+			method: "GET",
+		}).then((res) => res?.json());
+	useEffect(() => {
+		if (group) {
+			router.prefetch(`/group/${group.groupID}`);
+			preload(`/api/groups/${group.groupID}`, fetcher);
+		}
+	}, [group, router]);
+	useEffect(() => {
+		if (deck) {
+			router.prefetch(`/deck/${deck.deckID}/learn`);
+			preload(`/api/decks/${deck.deckID}`, fetcher);
+		}
+	}, [deck, router]);
+	return <Header deck={deck} group={group} {...props}></Header>;
+};
+
 /**
  * UI component for displaying a header on the user, group and deck page
  */
@@ -51,23 +72,6 @@ export const Header = ({
 }: HeaderProps) => {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
-
-	useEffect(() => {
-		if (group) {
-			router.prefetch(`/group/${group.groupID}`);
-			preload(`/api/groups/${group.groupID}`, fetcher);
-		}
-	}, [group, router]);
-	useEffect(() => {
-		if (deck) {
-			router.prefetch(`/deck/${deck.deckID}/learn`);
-			preload(`/api/decks/${deck.deckID}`, fetcher);
-		}
-	}, [deck, router]);
 
 	return (
 		<div

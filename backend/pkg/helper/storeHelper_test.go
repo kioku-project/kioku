@@ -1,23 +1,25 @@
 package helper_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/stretchr/testify/assert"
 )
 
-func noErrorStoreFunc(string) (string, error) {
+func noErrorStoreFunc(context.Context, string) (string, error) {
 	return "", nil
 }
 
-func errorStoreFunc(string) (string, error) {
+func errorStoreFunc(context.Context, string) (string, error) {
 	return "", helper.ErrStoreNoEntryWithID
 }
 
 func TestStoreHelper(t *testing.T) {
 	// NoError
 	entity, err := helper.FindStoreEntity[string](
+		context.TODO(),
 		noErrorStoreFunc,
 		id,
 		id,
@@ -27,6 +29,7 @@ func TestStoreHelper(t *testing.T) {
 
 	// Error
 	entity, err = helper.FindStoreEntity[string](
+		context.TODO(),
 		errorStoreFunc,
 		id,
 		id,

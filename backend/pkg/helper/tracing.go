@@ -56,6 +56,7 @@ func SetupTracing(ctx context.Context, serviceName string) (*trace.TracerProvide
     otel.SetTextMapPropagator(
         propagation.NewCompositeTextMapPropagator(
             propagation.TraceContext{}, // W3C Trace Context format; https://www.w3.org/TR/trace-context/
+            propagation.Baggage{},
         ),
     )
 

@@ -188,6 +188,7 @@ func ProtoDeckRespToFiberDeckConverter(deck *pbCardDeck.DeckResponse) FiberDeck 
 		DeckID:   deck.DeckID,
 		DeckName: deck.DeckName,
 		DeckType: deck.DeckType.String(),
+		GroupID:  deck.GroupID,
 	}
 }
 

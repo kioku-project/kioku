@@ -24,6 +24,7 @@ type FiberDeck struct {
 	DeckID   string `json:"deckID"`
 	DeckName string `json:"deckName"`
 	DeckType string `json:"deckType"`
+	GroupID  string `json:"groupID"`
 }
 
 type FiberGroupMemberAdmission struct {

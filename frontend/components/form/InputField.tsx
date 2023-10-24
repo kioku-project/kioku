@@ -135,17 +135,17 @@ export const InputField = forwardRef(
 		}: InputFieldProps,
 		ref: Ref<HTMLInputElement>
 	) => {
-		const [init, setInit] = useState(false);
+		const [initialised, setInit] = useState(false);
 		const [icon, setIcon] = useState(statusIcon);
 		const [tooltip, setTooltip] = useState("");
 		const [inputPattern, setInputPattern] = useState(pattern);
 
 		const isValid =
-			typeof ref !== "function" && !ref?.current?.validity.valid;
+			typeof ref !== "function" && ref?.current?.validity.valid;
 
 		useEffect(() => {
 			setInputPattern(pattern);
-			if (typeof ref !== "function" && init && ref?.current) {
+			if (typeof ref !== "function" && initialised && ref?.current) {
 				checkValidity(ref.current);
 			}
 		});
@@ -154,7 +154,7 @@ export const InputField = forwardRef(
 			<div
 				className={`flex w-full flex-col text-kiokuDarkBlue ${className}`}
 			>
-				<label htmlFor={name}>
+				<label htmlFor={id}>
 					<Text
 						className="font-bold"
 						size={size}
@@ -167,7 +167,7 @@ export const InputField = forwardRef(
 					className={`flex flex-row items-center rounded-md bg-eggshell ${
 						getStyle[style]
 					} ${
-						init && isValid
+						initialised && !isValid
 							? "border-kiokuRed"
 							: "border-transparent focus-within:border-kiokuDarkBlue"
 					}`}
@@ -182,7 +182,7 @@ export const InputField = forwardRef(
 						ref={ref}
 						onChange={(event) => {
 							onChange(event);
-							if (init) {
+							if (initialised) {
 								checkValidity(event.target);
 							}
 						}}

@@ -38,7 +38,7 @@ export const DeckSettingsTab = ({
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 
-	const [deckState, setDeck] = useState<Deck>(deck);
+	const [deckState, setDeckState] = useState<Deck>(deck);
 	const [isConfirmDeletion, setConfirmDeletion] = useState(false);
 
 	const isAdmin = GroupRole[group.groupRole!] >= GroupRole.ADMIN;
@@ -54,7 +54,7 @@ export const DeckSettingsTab = ({
 					button="Rename"
 					disabled={!isAdmin}
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {
-						setDeck({
+						setDeckState({
 							...deckState,
 							deckName: event.target.value,
 						});

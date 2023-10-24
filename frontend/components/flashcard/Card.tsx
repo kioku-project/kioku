@@ -14,7 +14,7 @@ interface CardProps {
 	 */
 	card: CardType;
 	/**
-	 * Permissions to edit
+	 * Permission to edit
 	 */
 	editable?: boolean;
 	/**

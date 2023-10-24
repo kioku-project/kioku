@@ -37,7 +37,7 @@ export const DeckSettingsTab = ({
 	const { mutate } = useSWRConfig();
 
 	const [deckState, setDeck] = useState(deck);
-	const [isConfirmDeletion, setConfirmDelete] = useState(false);
+	const [isConfirmDeletion, setConfirmDeletion] = useState(false);
 
 	const isAdmin = GroupRole[group.groupRole!] >= GroupRole.ADMIN;
 
@@ -91,7 +91,7 @@ export const DeckSettingsTab = ({
 								.then((result) => {})
 								.catch((error) => {});
 						} else {
-							setConfirmDelete(true);
+							setConfirmDeletion(true);
 						}
 					}}
 				></DangerAction>

@@ -27,7 +27,7 @@ interface DeckOverviewProps {
 export default function DeckOverview({
 	group,
 	className = "",
-}: DeckOverviewProps) {
+}: Readonly<DeckOverviewProps>) {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 	const fetcher = (url: RequestInfo | URL) =>
@@ -53,35 +53,32 @@ export default function DeckOverview({
 			className={`flex flex-col space-y-2 rounded-md ${className}`}
 		>
 			{group ? (
-				<>
-					<Section
-						id={`group${group.groupID}SectionId`}
-						header={group.groupName}
-						style="noBorder"
-						onClick={() => router.push(`/group/${group.groupID}`)}
-					>
-						<div className="flex flex-row flex-wrap">
-							{decks?.decks?.map((deck) => (
-								<FetchDeck
-									key={deck.deckID}
-									group={group}
-									deck={deck}
-								/>
-							))}
-							{((group.groupRole &&
-								GroupRole[group.groupRole] >=
-									GroupRole.WRITE) ||
-								!decks?.decks?.length) && (
-								<Deck
-									group={{
-										...group,
-										isEmpty: !decks?.decks?.length,
-									}}
-								/>
-							)}
-						</div>
-					</Section>
-				</>
+				<Section
+					id={`group${group.groupID}SectionId`}
+					header={group.groupName}
+					style="noBorder"
+					onClick={() => router.push(`/group/${group.groupID}`)}
+				>
+					<div className="flex flex-row flex-wrap">
+						{decks?.decks?.map((deck) => (
+							<FetchDeck
+								key={deck.deckID}
+								group={group}
+								deck={deck}
+							/>
+						))}
+						{((group.groupRole &&
+							GroupRole[group.groupRole] >= GroupRole.WRITE) ||
+							!decks?.decks?.length) && (
+							<Deck
+								group={{
+									...group,
+									isEmpty: !decks?.decks?.length,
+								}}
+							/>
+						)}
+					</div>
+				</Section>
 			) : (
 				<div className="text-lg font-bold text-kiokuDarkBlue">
 					<input

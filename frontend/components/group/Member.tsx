@@ -26,7 +26,11 @@ interface MemberProps {
 /**
  * UI component for dislpaying a user
  */
-export default function Member({ id, user, className = "" }: MemberProps) {
+export default function Member({
+	id,
+	user,
+	className = "",
+}: Readonly<MemberProps>) {
 	const { mutate } = useSWRConfig();
 	const [isDelete, setDelete] = useState(false);
 	const userInputField = useRef<HTMLInputElement>(null);

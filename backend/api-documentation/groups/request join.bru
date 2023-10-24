@@ -5,11 +5,15 @@ meta {
 }
 
 post {
-  url: {{baseUrl}}/api/groups/{{groupID}}/members/requests
+  url: {{baseUrl}}/api/groups/{{groupID}}/members/request
   body: none
   auth: bearer
 }
 
 auth:bearer {
   token: {{accessToken}}
+}
+
+body:json {
+  {}
 }

@@ -22,6 +22,10 @@ interface TextAreaProps {
 	 */
 	readOnly?: boolean;
 	/**
+	 * Function to execute on Shift Enter
+	 */
+	save: () => void;
+	/**
 	 * Additional classes
 	 */
 	className?: string;
@@ -36,7 +40,7 @@ interface TextAreaProps {
  */
 export const TextArea = forwardRef(
 	(
-		{ name, className = "", ...props }: TextAreaProps,
+		{ name, className = "", save, ...props }: TextAreaProps,
 		ref: Ref<HTMLTextAreaElement>
 	) => (
 		<div className={`flex h-full w-full flex-col ${className}`}>
@@ -45,6 +49,12 @@ export const TextArea = forwardRef(
 				className="h-full w-full resize-none rounded-md bg-transparent font-medium text-kiokuLightBlue outline-none"
 				ref={ref}
 				{...props}
+				onKeyDown={(event) => {
+					if (event.key === "Enter" && !event.shiftKey) {
+						save();
+						event.preventDefault();
+					}
+				}}
 			/>
 		</div>
 	)

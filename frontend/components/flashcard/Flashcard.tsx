@@ -192,6 +192,10 @@ export const Flashcard = ({
 						readOnly={!edit}
 						className="text-base text-kiokuLightBlue sm:text-lg md:text-xl lg:text-2xl"
 						ref={descriptionInput}
+						save={() => {
+							setEdit(false);
+							modifyCard(tempCard);
+						}}
 						onChange={(event) =>
 							editField("description", event.target.value)
 						}

@@ -9,6 +9,7 @@ import { Flashcard } from "../../../components/flashcard/Flashcard";
 import KiokuAward from "../../../components/graphics/KiokuAward";
 import { Button } from "../../../components/input/Button";
 import { Navbar } from "../../../components/navigation/Navbar";
+import { Group } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
 
@@ -26,7 +27,7 @@ export default function Page() {
 		deckID ? `/api/decks/${deckID}` : null,
 		fetcher
 	);
-	const { data: group } = useSWR(
+	const { data: group } = useSWR<Group>(
 		deck?.groupID ? `/api/groups/${deck.groupID}` : null,
 		fetcher
 	);
@@ -48,10 +49,8 @@ export default function Page() {
 							dueCards={dueCards}
 							push={push}
 							editable={
-								group.groupRole &&
-								Object.values(GroupRole).indexOf(
-									group.groupRole
-								) >= GroupRole.WRITE
+								group?.groupRole &&
+								GroupRole[group.groupRole] >= GroupRole.WRITE
 							}
 						></Flashcard>
 					) : (

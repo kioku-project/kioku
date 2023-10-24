@@ -32,9 +32,9 @@ interface CardProps {
  */
 export const Card = ({
 	card,
-	setCard,
-	className = "",
 	editable = false,
+	className = "",
+	setCard,
 }: CardProps) => {
 	const { mutate } = useSWRConfig();
 	const [isDelete, setDelete] = useState(false);

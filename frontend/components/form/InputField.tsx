@@ -14,7 +14,7 @@ import { Text } from "../Text";
 
 interface InputFieldProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -66,7 +66,7 @@ interface InputFieldProps {
 	 */
 	minLength?: number;
 	/**
-	 * pattern the value has to match to be valid
+	 * Pattern the value has to match to be valid
 	 */
 	pattern?: string;
 	/**
@@ -78,11 +78,11 @@ interface InputFieldProps {
 	 */
 	className?: string;
 	/**
-	 * optional change handler
+	 * Change handler
 	 */
 	onChange?: ChangeEventHandler<HTMLInputElement>;
 	/**
-	 * optional onBlur handler
+	 * Blur handler
 	 */
 	onBlur?: FocusEventHandler<HTMLInputElement>;
 }

@@ -2,7 +2,7 @@ import React from "react";
 
 interface FormButtonProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -22,7 +22,7 @@ interface FormButtonProps {
 	 */
 	className?: string;
 	/**
-	 * optional click handler
+	 * Click handler
 	 */
 	onClick?: () => void;
 }

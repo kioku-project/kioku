@@ -7,7 +7,7 @@ import Member from "./Member";
 
 interface MemberListProps {
 	/**
-	 * group entity
+	 * Group entity
 	 */
 	group: GroupType;
 	/**

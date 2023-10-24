@@ -9,7 +9,7 @@ import {
 
 interface StatisticProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -17,15 +17,15 @@ interface StatisticProps {
 	 */
 	header: string;
 	/**
-	 * current Value
+	 * Current Value
 	 */
 	value: string;
 	/**
-	 * seperator displayed between value and reference
+	 * Seperator displayed between value and reference
 	 */
 	seperator?: string;
 	/**
-	 * reference Value
+	 * Reference Value
 	 */
 	reference?: string;
 	/**

@@ -10,7 +10,7 @@ import { Text } from "../Text";
 
 interface MemberProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id?: string;
 	/**

@@ -4,19 +4,19 @@ import { Text } from "../../Text";
 
 interface TabBarProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
-	 * tabs to display
+	 * Tabs to display
 	 */
 	tabs: { [tab: string]: ReactNode };
 	/**
-	 * currentTab
+	 * CurrentTab
 	 */
 	currentTab: string;
 	/**
-	 * setTab
+	 * SetTab
 	 */
 	setTab: (tab: string) => void;
 	/**

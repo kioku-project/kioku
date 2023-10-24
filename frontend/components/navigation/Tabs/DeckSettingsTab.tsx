@@ -3,6 +3,8 @@ import { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
+import { Deck } from "@/types/Deck";
+
 import { Group as GroupType } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
@@ -12,13 +14,13 @@ import { Section } from "../../layout/Section";
 
 interface DeckSettingsTabProps {
 	/**
-	 * groupID
+	 * Group entity
 	 */
 	group: GroupType;
 	/**
-	 * deck
+	 * Deck entity
 	 */
-	deck: { deckID: string; deckName: string; due: number };
+	deck: Deck;
 	/**
 	 * Additional classes
 	 */
@@ -36,7 +38,7 @@ export const DeckSettingsTab = ({
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 
-	const [deckState, setDeck] = useState(deck);
+	const [deckState, setDeck] = useState<Deck>(deck);
 	const [isConfirmDeletion, setConfirmDeletion] = useState(false);
 
 	const isAdmin = GroupRole[group.groupRole!] >= GroupRole.ADMIN;
@@ -99,11 +101,7 @@ export const DeckSettingsTab = ({
 		</div>
 	);
 
-	async function modifyDeck(deck: {
-		deckID: string;
-		deckName: string;
-		due: number;
-	}) {
+	async function modifyDeck(deck: Deck) {
 		const response = await authedFetch(`/api/decks/${deck.deckID}`, {
 			method: "PUT",
 			headers: {

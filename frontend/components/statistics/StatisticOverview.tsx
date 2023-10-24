@@ -4,7 +4,7 @@ import { Statistic } from "./Statistic";
 
 interface StatisticOverviewProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**

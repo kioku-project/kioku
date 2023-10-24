@@ -1,0 +1,3 @@
+dbUser:
+  existingSecret: cassandra-secret
+persistence.size: 1Gi

@@ -111,14 +111,17 @@ func (s *UserStoreImpl) FindUserByID(userID string) (user *model.User, err error
 }
 
 func (s *CardDeckStoreImpl) FindDecksByGroupID(groupID string) (decks []model.Deck, err error) {
-	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).Find(&decks).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).
+		Find(&decks).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
 func (s *CardDeckStoreImpl) FindDeckByID(deckID string) (deck *model.Deck, err error) {
-	if err = s.db.Where(&model.Deck{ID: deckID}).Preload("Cards").First(&deck).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(&model.Deck{ID: deckID}).
+		Preload("Cards").
+		First(&deck).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
@@ -143,7 +146,9 @@ func (s *CardDeckStoreImpl) DeleteDeck(deck *model.Deck) error {
 }
 
 func (s *CardDeckStoreImpl) FindCardByID(cardID string) (card *model.Card, err error) {
-	if err = s.db.Where(&model.Card{ID: cardID}).Preload("Deck").First(&card).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(&model.Card{ID: cardID}).
+		Preload("Deck").
+		First(&card).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
@@ -190,14 +195,18 @@ func (s *CardDeckStoreImpl) FindCardSidesByCardID(cardID string) ([]model.CardSi
 }
 
 func (s *CardDeckStoreImpl) FindCardSideByID(cardSideID string) (cardSide *model.CardSide, err error) {
-	if err = s.db.Where(&model.CardSide{ID: cardSideID}).Preload("Card").First(&cardSide).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(&model.CardSide{ID: cardSideID}).
+		Preload("Card").
+		First(&cardSide).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
 func (s *CardDeckStoreImpl) FindLastCardSideOfCardByID(cardID string) (cardSide *model.CardSide, err error) {
-	if err = s.db.Where(&model.CardSide{CardID: cardID, NextCardSideID: ""}).Preload("Card").First(&cardSide).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(&model.CardSide{CardID: cardID, NextCardSideID: ""}).
+		Preload("Card").
+		First(&cardSide).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
@@ -269,7 +278,8 @@ func (s *CollaborationStoreImpl) PromoteUserToFullGroupMember(userID string, gro
 
 func (s *CollaborationStoreImpl) ModifyUserRole(userID string, groupID string, role model.RoleType) error {
 	var groupUserRole model.GroupUserRole
-	if err := s.db.Where(&model.GroupUserRole{UserID: userID, GroupID: groupID}).First(&groupUserRole).Error; err != nil {
+	if err := s.db.Where(&model.GroupUserRole{UserID: userID, GroupID: groupID}).
+		First(&groupUserRole).Error; err != nil {
 		return err
 	}
 	groupUserRole.RoleType = role
@@ -300,7 +310,8 @@ func (s *CollaborationStoreImpl) DeleteGroup(group *model.Group) error {
 
 func (s *CollaborationStoreImpl) FindGroupUserRole(userID string, groupID string) (groupRole model.RoleType, err error) {
 	var groupUser model.GroupUserRole
-	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, UserID: userID}).First(&groupUser).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, UserID: userID}).
+		First(&groupUser).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	groupRole = groupUser.RoleType
@@ -308,35 +319,44 @@ func (s *CollaborationStoreImpl) FindGroupUserRole(userID string, groupID string
 }
 
 func (s *CollaborationStoreImpl) FindGroupMemberRoles(groupID string) (groupMembers []model.GroupUserRole, err error) {
-	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).Not(&model.GroupUserRole{RoleType: model.RoleInvited}).Not(&model.GroupUserRole{RoleType: model.RoleRequested}).Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).
+		Not(&model.GroupUserRole{RoleType: model.RoleInvited}).
+		Not(&model.GroupUserRole{RoleType: model.RoleRequested}).
+		Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
 func (s *CollaborationStoreImpl) FindGroupAdmins(groupID string) (groupMembers []model.GroupUserRole, err error) {
-	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, RoleType: model.RoleAdmin}).Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, RoleType: model.RoleAdmin}).
+		Find(&groupMembers).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
-func (s *CollaborationStoreImpl) FindGroupRequestsByGroupID(groupID string) (groupRequests []model.GroupUserRole, err error) {
-	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, RoleType: model.RoleRequested}).Find(&groupRequests).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+func (s *CollaborationStoreImpl) FindGroupRequestsByGroupID(groupID string) (requests []model.GroupUserRole, err error) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, RoleType: model.RoleRequested}).
+		Find(&requests).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
-func (s *CollaborationStoreImpl) FindGroupInvitationsByUserID(userID string) (groupInvites []model.GroupUserRole, err error) {
-	if err = s.db.Where(&model.GroupUserRole{UserID: userID, RoleType: model.RoleInvited}).Preload("Group").Find(&groupInvites).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+func (s *CollaborationStoreImpl) FindGroupInvitationsByUserID(userID string) (invites []model.GroupUserRole, err error) {
+	if err = s.db.Where(&model.GroupUserRole{UserID: userID, RoleType: model.RoleInvited}).
+		Preload("Group").
+		Find(&invites).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
 func (s *CollaborationStoreImpl) FindGroupInvitationsByGroupID(groupID string) (groupInvites []model.GroupUserRole, err error) {
-	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, RoleType: model.RoleInvited}).Preload("Group").Find(&groupInvites).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID, RoleType: model.RoleInvited}).
+		Preload("Group").
+		Find(&groupInvites).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
@@ -347,21 +367,24 @@ func (s *SrsStoreImpl) CreateRevlog(newRev *model.Revlog) error {
 }
 
 func (s *SrsStoreImpl) FindCardBinding(userID string, cardID string) (userCardBinding *model.UserCardBinding, err error) {
-	if err = s.db.Where(model.UserCardBinding{UserID: userID, CardID: cardID}).First(&userCardBinding).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(model.UserCardBinding{UserID: userID, CardID: cardID}).
+		First(&userCardBinding).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
 func (s *SrsStoreImpl) FindDeckCards(userID string, deckID string) (userCards []*model.UserCardBinding, err error) {
-	if err = s.db.Where(model.UserCardBinding{UserID: userID, DeckID: deckID}).Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(model.UserCardBinding{UserID: userID, DeckID: deckID}).
+		Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
 }
 
 func (s *SrsStoreImpl) FindUserCards(userID string) (userCards []*model.UserCardBinding, err error) {
-	if err = s.db.Where(model.UserCardBinding{UserID: userID}).Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err = s.db.Where(model.UserCardBinding{UserID: userID}).
+		Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return

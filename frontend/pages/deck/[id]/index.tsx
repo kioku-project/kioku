@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import useSWR from "swr";
 
 import Authenticated from "../../../components/accessControl/Authenticated";
-import { Header } from "../../../components/layout/Header";
+import { FetchHeader } from "../../../components/layout/Header";
 import { Navbar } from "../../../components/navigation/Navbar";
 import { CardsTab } from "../../../components/navigation/Tabs/CardsTab";
 import { DeckSettingsTab } from "../../../components/navigation/Tabs/DeckSettingsTab";
@@ -71,11 +71,11 @@ export default function Page() {
 					<Navbar login={true}></Navbar>
 					{group && deck && (
 						<div className="flex h-full flex-col space-y-3 overflow-y-auto p-5 md:space-y-5 md:p-10">
-							<Header
+							<FetchHeader
 								id={"deckPageHeaderId"}
 								group={group}
 								deck={{ ...deck, deckID: deck.deckID }}
-							></Header>
+							/>
 							<TabBar
 								id="deckTabBarId"
 								tabs={tabs}
@@ -86,7 +86,10 @@ export default function Page() {
 								{{
 									cards: (
 										<CardsTab
-											deckID={deck.deckID}
+											deck={{
+												...deck,
+												groupRole: group.groupRole,
+											}}
 										></CardsTab>
 									),
 									settings: (

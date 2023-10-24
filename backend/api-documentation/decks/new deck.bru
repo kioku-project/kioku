@@ -1,0 +1,25 @@
+meta {
+  name: new deck
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/groups/{{groupID}}/decks
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "deckName": "test group"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("deckID", res.body)
+}

@@ -17,3 +17,10 @@ export const Default: Story = {
 		className: "w-16",
 	},
 };
+
+export const NoDelay: Story = {
+	args: {
+		className: "w-16",
+		delay: 0,
+	},
+};

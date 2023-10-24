@@ -1,0 +1,26 @@
+meta {
+  name: new group
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/groups
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "groupName": "test group",
+      "groupDescription": "test"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("groupID", res.body)
+}

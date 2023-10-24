@@ -1,0 +1,34 @@
+meta {
+  name: new card
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/decks/{{deckID}}/cards
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "sides": [
+          {
+              "header": "side 1",
+              "description": "front"
+          },
+          {
+              "header": "side 2",
+              "description": "back"
+          }
+      ]
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("cardID", res.body)
+}

@@ -1,0 +1,22 @@
+meta {
+  name: login
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "userEmail": "test@test.test",
+      "userPassword": "test"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("accessToken", res.getHeader("set-cookie")[0].replace("access_token=", "").split(";")[0])
+}

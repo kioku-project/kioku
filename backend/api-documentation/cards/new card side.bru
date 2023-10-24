@@ -1,0 +1,27 @@
+meta {
+  name: new card side
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/cards/{{cardID}}/cardSides
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "placeBeforeCardSideID": "",
+      "header": "side 3",
+      "description": "back"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("cardSideID", res.body)
+}

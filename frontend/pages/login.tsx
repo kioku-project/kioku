@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { Text } from "../components/Text";
 import { FormButton } from "../components/form/FormButton";
 import { InputField } from "../components/form/InputField";
 
@@ -22,6 +23,7 @@ export default function Page() {
 	const nameInput = useRef<HTMLInputElement>(null);
 	const passwordInput = useRef<HTMLInputElement>(null);
 	const repeatPasswordInput = useRef<HTMLInputElement>(null);
+	const [password, setPassword] = useState("");
 
 	return (
 		<div>
@@ -32,7 +34,7 @@ export default function Page() {
 			</Head>
 
 			<div className="min-w-screen flex min-h-screen items-center justify-center sm:p-5 md:p-10">
-				<div className="flex min-h-screen w-full flex-col items-center justify-evenly bg-blue-100 p-10 align-middle sm:min-h-fit sm:rounded-3xl md:flex-row xl:w-5/6">
+				<div className="flex min-h-screen w-full flex-col items-center justify-evenly bg-blue-100 p-5 align-middle sm:min-h-fit sm:rounded-3xl sm:p-10 md:flex-row xl:w-5/6">
 					<div className="m-5 flex w-2/3 flex-col items-center md:m-10 md:w-1/2 md:justify-center">
 						<div className="relative mb-5 h-[120px] w-full">
 							<Image
@@ -49,25 +51,32 @@ export default function Page() {
 						</p>
 					</div>
 					<div
-						className={`flex w-full flex-col items-center rounded-2xl bg-kiokuLightBlue p-5 sm:w-5/6 md:w-1/2 lg:w-1/3 ${inter.className}`}
+						className={`flex w-full flex-col items-center rounded-2xl bg-kiokuLightBlue p-3 sm:w-5/6 sm:p-5 md:w-1/2 lg:w-1/3 ${inter.className}`}
 					>
-						<h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-kiokuDarkBlue">
+						<Text
+							size="md"
+							className="text-center font-bold leading-9 tracking-tight text-kiokuDarkBlue"
+						>
 							{login
 								? "Sign in to your account"
 								: "Create an account"}
-						</h2>
+						</Text>
 						{forms()}
-						<p className="text-center text-sm text-gray-500">
+
+						<Text size="3xs" className="text-center text-gray-500">
 							{login
 								? "Not registered? "
 								: "Already registered? "}
 							<a
 								className="whitespace-nowrap font-semibold text-kiokuDarkBlue transition hover:cursor-pointer hover:text-eggshell"
-								onClick={() => setLogin(!login)}
+								onClick={() => {
+									emailInput.current?.focus();
+									setLogin((prev) => !prev);
+								}}
 							>
 								{login ? "Create an account" : "Sign in"}
 							</a>
-						</p>
+						</Text>
 					</div>
 				</div>
 			</div>
@@ -78,7 +87,7 @@ export default function Page() {
 		return (
 			<form
 				onSubmit={(e) => e.preventDefault()}
-				className="my-5 flex w-5/6 flex-col items-center space-y-4"
+				className="my-3 flex w-5/6 flex-col items-center space-y-4 sm:my-5"
 				ref={form}
 			>
 				<InputField
@@ -87,8 +96,7 @@ export default function Page() {
 					name="email"
 					label="Email"
 					required={true}
-					style="primary"
-					className="sm:text-sm"
+					size="xs"
 					ref={emailInput}
 				/>
 				{!login && (
@@ -98,8 +106,7 @@ export default function Page() {
 						name="name"
 						label="Name"
 						required={true}
-						style="primary"
-						className="sm:text-sm"
+						size="xs"
 						ref={nameInput}
 					/>
 				)}
@@ -109,8 +116,11 @@ export default function Page() {
 					name="password"
 					label="Password"
 					required={true}
-					style="primary"
-					className="sm:text-sm"
+					minLength={3}
+					size="xs"
+					onChange={(event) => {
+						setPassword(event.target.value);
+					}}
 					ref={passwordInput}
 				/>
 				{!login && (
@@ -119,9 +129,11 @@ export default function Page() {
 						type="password"
 						name="passwordRepeat"
 						label="Repeat Password"
+						tooltipMessage="Passwords have to match."
 						required={true}
-						style="primary"
-						className="sm:text-sm"
+						minLength={3}
+						pattern={password}
+						size="xs"
 						ref={repeatPasswordInput}
 					/>
 				)}
@@ -129,7 +141,6 @@ export default function Page() {
 				<FormButton
 					id={login ? "login" : "register"}
 					value={login ? "Login" : "Register"}
-					style="primary"
 					size="sm"
 					className="w-full"
 					onClick={() => {
@@ -152,8 +163,7 @@ export default function Page() {
 		if (!form.current?.checkValidity()) {
 			return;
 		}
-		let url = "/api/login";
-		const response = await fetch(url, {
+		const response = await fetch("/api/login", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -174,35 +184,30 @@ export default function Page() {
 	}
 
 	async function registerLogic() {
-		if (!form.current?.checkValidity()) {
+		if (
+			!form.current?.checkValidity() ||
+			passwordInput.current?.value !== repeatPasswordInput.current?.value
+		) {
 			return;
 		}
-		if (
-			passwordInput.current?.value === repeatPasswordInput.current?.value
-		) {
-			let url = "/api/register";
-			const response = await fetch(url, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					userEmail: emailInput.current?.value,
-					userName: nameInput.current?.value,
-					userPassword: passwordInput.current?.value,
-				}),
-			});
-			if (response.ok) {
-				toast.info("Account created!", { toastId: "accountToast" });
-				setLogin(true);
-			} else {
-				toast.error("Account already exists!", {
-					toastId: "accountToast",
-				});
-			}
+		const response = await fetch("/api/register", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				userEmail: emailInput.current?.value,
+				userName: nameInput.current?.value,
+				userPassword: passwordInput.current?.value,
+			}),
+		});
+		if (response.ok) {
+			toast.info("Account created!", { toastId: "accountToast" });
+			setLogin(true);
+			emailInput.current?.focus();
 		} else {
-			toast.error("The passwords do not match!", {
-				toastId: "passwordToast",
+			toast.error("Account already exists!", {
+				toastId: "accountToast",
 			});
 		}
 	}

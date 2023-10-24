@@ -1,0 +1,22 @@
+meta {
+  name: push learning
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/decks{{deckID}}/push
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "cardID": "C-XkxZ1axJ",
+      "rating": 2
+  }
+}

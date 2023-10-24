@@ -1,0 +1,15 @@
+meta {
+  name: get card
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/cards/{{cardID}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

@@ -35,7 +35,7 @@ interface FlashcardProps {
 	 */
 	cardSide?: number;
 	/**
-	 * Permissions to edit
+	 * Permission to edit
 	 */
 	editable?: boolean;
 	/**

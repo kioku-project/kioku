@@ -7,7 +7,8 @@ const meta: Meta<typeof Card> = {
 	title: "Components/Card",
 	component: Card,
 	tags: ["autodocs"],
-	args: {card: {
+	args: {
+		card: {
 			cardID: "C-12345678",
 			sides: [
 				{
@@ -17,7 +18,8 @@ const meta: Meta<typeof Card> = {
 				},
 			],
 			deckID: "D-1234567",
-		},},
+		},
+	},
 };
 
 export default meta;
@@ -27,13 +29,13 @@ export const Default: Story = {};
 
 export const Editable: Story = {
 	args: {
-		editable: true
+		editable: true,
 	},
 };
 
 export const Delete: Story = {
 	args: {
-		editable: true
+		editable: true,
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);

@@ -12,11 +12,11 @@ interface TabBarProps {
 	 */
 	tabs: { [tab: string]: ReactNode };
 	/**
-	 * CurrentTab
+	 * Current tab
 	 */
 	currentTab: string;
 	/**
-	 * SetTab
+	 * Set tab
 	 */
 	setTab: (tab: string) => void;
 	/**

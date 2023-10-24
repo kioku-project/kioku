@@ -24,7 +24,7 @@ interface MemberProps {
 }
 
 /**
- * UI component for dislpaying a user
+ * UI component for displaying a user
  */
 export default function Member({
 	id,

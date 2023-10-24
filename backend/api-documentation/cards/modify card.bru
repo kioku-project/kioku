@@ -1,0 +1,30 @@
+meta {
+  name: modify card
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/api/cards/{{cardID}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "sides": [
+          {
+              "header": "front new",
+              "description": "front new"
+          },
+          {
+              "header": "back new",
+              "description": "back new"
+          }
+      ]
+  }
+}

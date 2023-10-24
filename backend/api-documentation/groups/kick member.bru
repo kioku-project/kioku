@@ -1,0 +1,15 @@
+meta {
+  name: kick member
+  type: http
+  seq: 15
+}
+
+delete {
+  url: {{baseUrl}}/api/groups/{{groupID}}/members/{{userID}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

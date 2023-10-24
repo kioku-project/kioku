@@ -25,7 +25,7 @@ export const Deck: Story = {
 	},
 };
 
-export const MyGroup: Story = {
+export const Group: Story = {
 	args: {
 		group: {
 			groupID: "G-12345678",
@@ -34,7 +34,7 @@ export const MyGroup: Story = {
 	},
 };
 
-export const MyGroupWithDescription: Story = {
+export const GroupWithDescription: Story = {
 	args: {
 		group: {
 			groupID: "G-12345678",
@@ -59,7 +59,7 @@ export const PublicGroup: Story = {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
-			groupType: "PRIVATE",
+			groupType: "PUBLIC",
 		},
 	},
 };

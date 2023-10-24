@@ -18,7 +18,7 @@ export const Up: Story = {
 	args: {
 		header: "Cards learned",
 		value: "176",
-		seperator: "from",
+		separator: "from",
 		reference: "200",
 		change: 12,
 	},
@@ -28,7 +28,7 @@ export const UpRight: Story = {
 	args: {
 		header: "Cards learned",
 		value: "176",
-		seperator: "from",
+		separator: "from",
 		reference: "200",
 		change: 7,
 	},
@@ -38,7 +38,7 @@ export const Neutral: Story = {
 	args: {
 		header: "Cards learned",
 		value: "176",
-		seperator: "from",
+		separator: "from",
 		reference: "200",
 		change: 0,
 	},
@@ -48,7 +48,7 @@ export const DownRight: Story = {
 	args: {
 		header: "Cards learned",
 		value: "176",
-		seperator: "from",
+		separator: "from",
 		reference: "200",
 		change: -3,
 	},
@@ -58,7 +58,7 @@ export const Down: Story = {
 	args: {
 		header: "Cards learned",
 		value: "176",
-		seperator: "from",
+		separator: "from",
 		reference: "200",
 		change: -17,
 	},

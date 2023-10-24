@@ -135,7 +135,7 @@ export const InputField = forwardRef(
 		}: InputFieldProps,
 		ref: Ref<HTMLInputElement>
 	) => {
-		const [initialised, setInit] = useState(false);
+		const [initialised, setInitialised] = useState(false);
 		const [icon, setIcon] = useState(statusIcon);
 		const [tooltip, setTooltip] = useState("");
 		const [inputPattern, setInputPattern] = useState(pattern);
@@ -188,13 +188,13 @@ export const InputField = forwardRef(
 						}}
 						onKeyDown={(event) => {
 							if (event.key === "Enter") {
-								setInit(true);
+								setInitialised(true);
 								checkValidity(event?.currentTarget);
 							}
 						}}
 						onBlur={(event) => {
 							onBlur(event);
-							setInit(true);
+							setInitialised(true);
 							checkValidity(event.target);
 						}}
 						pattern={inputPattern}

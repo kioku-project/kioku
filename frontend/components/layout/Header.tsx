@@ -13,19 +13,19 @@ import { Button } from "../input/Button";
 
 interface HeaderProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
-	 * user entity
+	 * User entity
 	 */
 	user?: User;
 	/**
-	 * group entity
+	 * Group entity
 	 */
 	group?: GroupType;
 	/**
-	 * deck entity
+	 * Deck entity
 	 */
 	deck?: DeckType;
 	/**
@@ -33,7 +33,7 @@ interface HeaderProps {
 	 */
 	className?: string;
 	/**
-	 * optional click handler for button
+	 * Click handler for button
 	 */
 	onClick?: () => void;
 }

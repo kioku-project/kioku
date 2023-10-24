@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 
 interface ButtonProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -22,7 +22,7 @@ interface ButtonProps {
 	 */
 	className?: string;
 	/**
-	 * optional click handler
+	 * Click handler
 	 */
 	onClick?: () => void;
 }

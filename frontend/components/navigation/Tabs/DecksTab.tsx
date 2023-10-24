@@ -3,7 +3,7 @@ import DeckOverview from "../../deck/DeckOverview";
 
 interface DecksTabProps {
 	/**
-	 * group entity
+	 * Group entity
 	 */
 	group: GroupType;
 	/**

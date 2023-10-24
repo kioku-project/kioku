@@ -8,11 +8,68 @@ const meta: Meta<typeof InputField> = {
 	tags: ["autodocs"],
 	args: {
 		id: "InputFieldId",
+		tooltipMessage: "This is a tooltip!",
 	},
 };
 
 export default meta;
 type Story = StoryObj<typeof InputField>;
+
+export const Primary: Story = {
+	args: {
+		label: "Primary",
+		value: "Test",
+		style: "primary",
+	},
+};
+
+export const Secondary: Story = {
+	args: {
+		label: "Secondary",
+		value: "Test",
+		style: "secondary",
+	},
+};
+
+export const XS: Story = {
+	args: {
+		label: "extra small",
+		value: "Test",
+		size: "xs",
+	},
+};
+
+export const SM: Story = {
+	args: {
+		label: "small",
+		value: "Test",
+		size: "sm",
+	},
+};
+
+export const MD: Story = {
+	args: {
+		label: "medium",
+		value: "Test",
+		size: "md",
+	},
+};
+
+export const LG: Story = {
+	args: {
+		label: "large",
+		value: "Test",
+		size: "lg",
+	},
+};
+
+export const XL: Story = {
+	args: {
+		label: "extra large",
+		value: "Test",
+		size: "xl",
+	},
+};
 
 export const TextInput: Story = {
 	args: {
@@ -41,27 +98,35 @@ export const PasswordInput: Story = {
 	},
 };
 
-export const Primary: Story = {
+export const Success: Story = {
 	args: {
-		label: "Primary",
+		label: "Success",
 		value: "Test",
-		style: "primary",
+		statusIcon: "success",
 	},
 };
 
-export const Secondary: Story = {
+export const Error: Story = {
 	args: {
-		label: "Secondary",
+		label: "Error",
 		value: "Test",
-		style: "secondary",
+		statusIcon: "error",
 	},
 };
 
-export const Tertiary: Story = {
+export const Warning: Story = {
 	args: {
-		label: "Tertiary",
+		label: "Warning",
 		value: "Test",
-		style: "tertiary",
+		statusIcon: "warning",
+	},
+};
+
+export const Info: Story = {
+	args: {
+		label: "Info",
+		value: "Test",
+		statusIcon: "info",
 	},
 };
 

@@ -12,7 +12,7 @@ import { Section } from "../../layout/Section";
 
 interface GroupSettingsTabProps {
 	/**
-	 * group
+	 * Group entity
 	 */
 	group: GroupType;
 	/**

@@ -9,7 +9,7 @@ import {
 
 interface StatisticProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -17,15 +17,15 @@ interface StatisticProps {
 	 */
 	header: string;
 	/**
-	 * current Value
+	 * Current value
 	 */
 	value: string;
 	/**
-	 * seperator displayed between value and reference
+	 * Separator displayed between value and reference
 	 */
-	seperator?: string;
+	separator?: string;
 	/**
-	 * reference Value
+	 * Reference value
 	 */
 	reference?: string;
 	/**
@@ -70,7 +70,7 @@ export const Statistic = ({
 	id,
 	header,
 	value,
-	seperator,
+	separator,
 	reference,
 	change,
 	className = "",
@@ -84,7 +84,7 @@ export const Statistic = ({
 						{value}
 					</div>
 					<div className="flex items-end text-kiokuLightBlue">
-						{`${seperator ?? ""} ${reference ?? ""}`}
+						{`${separator ?? ""} ${reference ?? ""}`}
 					</div>
 				</div>
 				<div

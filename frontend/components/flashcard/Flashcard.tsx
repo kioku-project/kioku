@@ -19,7 +19,7 @@ import { Button } from "../input/Button";
 
 interface FlashcardProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -51,7 +51,7 @@ interface FlashcardProps {
 	 */
 	className?: string;
 	/**
-	 * callback to push rating
+	 * Callback to push rating
 	 */
 	push?: (body: { cardID: string; rating: number }) => void;
 }
@@ -97,6 +97,7 @@ export const Flashcard = ({
 							name="headerInput"
 							value={tempCard.sides[side]?.header}
 							placeholder={edit ? "Header" : ""}
+							statusIcon="none"
 							style="secondary"
 							readOnly={!edit}
 							className="text-lg sm:text-xl md:text-2xl lg:text-3xl"

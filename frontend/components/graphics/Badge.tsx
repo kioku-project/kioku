@@ -2,7 +2,7 @@ import React from "react";
 
 interface BadgeProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -18,7 +18,7 @@ interface BadgeProps {
 	 */
 	className?: string;
 	/**
-	 * optional click handler
+	 * Click handler
 	 */
 	onClick?: () => void;
 }

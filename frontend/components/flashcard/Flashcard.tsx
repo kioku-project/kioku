@@ -19,7 +19,7 @@ import { Button } from "../input/Button";
 
 interface FlashcardProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -51,7 +51,7 @@ interface FlashcardProps {
 	 */
 	className?: string;
 	/**
-	 * callback to push rating
+	 * Callback to push rating
 	 */
 	push?: (body: { cardID: string; rating: number }) => void;
 }

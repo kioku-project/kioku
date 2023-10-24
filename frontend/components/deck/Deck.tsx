@@ -12,7 +12,7 @@ import { authedFetch } from "../../util/reauth";
 
 interface DeckProps {
 	/**
-	 * group
+	 * Group entity
 	 */
 	group: GroupType;
 	/**

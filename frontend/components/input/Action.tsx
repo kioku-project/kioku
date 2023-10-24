@@ -2,11 +2,11 @@ import { ReactNode } from "react";
 
 interface ActionProps {
 	/**
-	 * description
+	 * Description
 	 */
 	description?: ReactNode;
 	/**
-	 * button
+	 * Button
 	 */
 	button?: ReactNode;
 	/**

@@ -3,7 +3,7 @@ import MemberList from "../../group/MemberList";
 
 interface MembersTabProps {
 	/**
-	 * group entity
+	 * Group entity
 	 */
 	group: GroupType;
 	/**

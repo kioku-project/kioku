@@ -2,15 +2,15 @@ import { BarChart2, Copy, Layers, Mail, Settings, Users } from "react-feather";
 
 interface TabHeaderProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
-	 * name
+	 * Name
 	 */
 	name: string;
 	/**
-	 * style
+	 * Style
 	 */
 	style: keyof typeof getIcon;
 	/**

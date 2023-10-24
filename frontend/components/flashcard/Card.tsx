@@ -18,7 +18,7 @@ interface CardProps {
 	 */
 	className?: string;
 	/**
-	 * click handler
+	 * Click handler
 	 */
 	setCard?: (card: CardType) => void;
 }

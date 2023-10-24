@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR, { preload, useSWRConfig } from "swr";
 
 import { Deck as DeckType } from "../../types/Deck";
 import { Group as GroupType } from "../../types/Group";
 import { GroupRole } from "../../types/GroupRole";
 import { authedFetch } from "../../util/reauth";
 import { Section } from "../layout/Section";
-import Deck from "./Deck";
+import { Deck, FetchDeck } from "./Deck";
 
 interface DeckOverviewProps {
 	/**
@@ -40,6 +40,13 @@ export default function DeckOverview({
 
 	const groupNameInput = useRef<HTMLInputElement>(null);
 
+	useEffect(() => {
+		if (group) {
+			router.prefetch(`/group/${group.groupID}`);
+			preload(`/api/groups/${group.groupID}`, fetcher);
+		}
+	}, [router, group]);
+
 	return (
 		<div
 			id={group?.groupID ?? "createGroupId"}
@@ -55,7 +62,7 @@ export default function DeckOverview({
 					>
 						<div className="flex flex-row flex-wrap">
 							{decks?.decks?.map((deck) => (
-								<Deck
+								<FetchDeck
 									key={deck.deckID}
 									group={group}
 									deck={deck}

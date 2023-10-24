@@ -13,6 +13,10 @@ interface CardListProps {
 	 */
 	deck: DeckType;
 	/**
+	 * cards
+	 */
+	cards?: CardType[];
+	/**
 	 * Additional classes
 	 */
 	className?: string;
@@ -22,19 +26,28 @@ interface CardListProps {
 	setCard: (card: CardType) => void;
 }
 
-/**
- * UI component for displaying a list of cards
- */
-export const CardList = ({ deck, setCard, className = "" }: CardListProps) => {
+export const FetchCardList = ({ deck, ...props }: CardListProps) => {
 	const fetcher = (url: RequestInfo | URL) =>
 		authedFetch(url, {
 			method: "GET",
 		}).then((res) => res?.json());
 	const { data: cards } = useSWR(`/api/decks/${deck.deckID}/cards`, fetcher);
+	return <CardList deck={deck} cards={cards?.cards} {...props} />;
+};
+
+/**
+ * UI component for displaying a list of cards
+ */
+export const CardList = ({
+	deck,
+	cards,
+	className = "",
+	setCard,
+}: CardListProps) => {
 	return (
 		<div id="cardListId" className={`flex flex-col ${className}`}>
 			<div className="snap-y overflow-y-auto">
-				{cards?.cards?.map((card: CardType) => (
+				{cards?.map((card: CardType) => (
 					<Card
 						className="snap-center"
 						key={card.cardID}

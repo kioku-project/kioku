@@ -46,6 +46,26 @@ func (e *CardDeck) checkUserRoleAccess(
 	return nil
 }
 
+func (e *CardDeck) checkUserDeckAccess(
+	ctx context.Context,
+	userID string,
+	deckID string,
+) error {
+	e.store.FindDeckByID(deckID)
+	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, deckID, helper.CardDeckServiceID)
+	if err != nil {
+		return err
+	}
+	if deck.DeckType == model.PrivateDeckType {
+		logger.Infof("Requesting group role for user (%s)", userID)
+		if err = e.checkUserRoleAccess(ctx, userID, deck.GroupID, pbCollaboration.GroupRole_READ); err != nil {
+			return err
+		}
+	}
+	logger.Infof("Authenticated user (%s) for deck (%s)", userID, deckID)
+	return nil
+}
+
 func (e *CardDeck) getCardSideAndCheckForValidAccess(
 	ctx context.Context,
 	userID string,
@@ -203,7 +223,7 @@ func (e *CardDeck) GetDeck(ctx context.Context, req *pb.IDRequest, rsp *pb.DeckR
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
+	if err := e.checkUserDeckAccess(ctx, req.UserID, deck.ID); err != nil {
 		return err
 	}
 	*rsp = *converter.StoreDeckToProtoDeckResponseConverter(*deck)

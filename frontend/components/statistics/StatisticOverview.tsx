@@ -4,7 +4,7 @@ import { Statistic } from "./Statistic";
 
 interface StatisticOverviewProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -23,7 +23,7 @@ export const StatisticOverview = ({ className }: StatisticOverviewProps) => {
 				id={"statisticId"}
 				header="Cards learned"
 				value={"176"}
-				seperator="from"
+				separator="from"
 				reference={"200"}
 				change={12}
 				className="border-r-2 border-kiokuLightBlue"
@@ -38,7 +38,7 @@ export const StatisticOverview = ({ className }: StatisticOverviewProps) => {
 				id={"statisticId"}
 				header="Test"
 				value={"0"}
-				seperator="from"
+				separator="from"
 				reference={"100"}
 				change={-3}
 				className="border-l-2 border-kiokuLightBlue"

@@ -56,7 +56,7 @@ export default function Page() {
 		),
 	};
 
-	const [currentTab, setTab] = useState("cards");
+	const [currentTab, setCurrentTab] = useState("cards");
 
 	return (
 		<div>
@@ -80,7 +80,7 @@ export default function Page() {
 								id="deckTabBarId"
 								tabs={tabs}
 								currentTab={currentTab}
-								setTab={setTab}
+								setTab={setCurrentTab}
 							></TabBar>
 							<div className="h-full overflow-y-auto">
 								{{

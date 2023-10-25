@@ -6,7 +6,7 @@ import { Action } from "./Action";
 
 interface InputActionProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -30,11 +30,11 @@ interface InputActionProps {
 	 */
 	className?: string;
 	/**
-	 * change handler
+	 * Change handler
 	 */
 	onChange: ChangeEventHandler<HTMLInputElement>;
 	/**
-	 * click handler
+	 * Click handler
 	 */
 	onClick?: () => void;
 }

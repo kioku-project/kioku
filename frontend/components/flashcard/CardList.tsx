@@ -9,11 +9,11 @@ import { Card } from "./Card";
 
 interface CardListProps {
 	/**
-	 * deck
+	 * Deck entity
 	 */
 	deck: DeckType;
 	/**
-	 * cards
+	 * Cards
 	 */
 	cards?: CardType[];
 	/**
@@ -21,7 +21,7 @@ interface CardListProps {
 	 */
 	className?: string;
 	/**
-	 * click handler
+	 * Click handler
 	 */
 	setCard: (card: CardType) => void;
 }

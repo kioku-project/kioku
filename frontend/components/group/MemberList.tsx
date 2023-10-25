@@ -7,7 +7,7 @@ import Member from "./Member";
 
 interface MemberListProps {
 	/**
-	 * group entity
+	 * Group entity
 	 */
 	group: GroupType;
 	/**
@@ -19,7 +19,10 @@ interface MemberListProps {
 /**
  * UI component for displaying a group of users
  */
-export default function MemberList({ group, className = "" }: MemberListProps) {
+export default function MemberList({
+	group,
+	className = "",
+}: Readonly<MemberListProps>) {
 	const fetcher = (url: RequestInfo | URL) =>
 		authedFetch(url, {
 			method: "GET",

@@ -10,7 +10,7 @@ import { Flashcard } from "../../flashcard/Flashcard";
 
 interface CardsTabProps {
 	/**
-	 * deck
+	 * Deck entity
 	 */
 	deck: DeckType;
 	/**

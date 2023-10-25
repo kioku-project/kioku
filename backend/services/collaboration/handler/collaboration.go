@@ -177,7 +177,7 @@ func (e *Collaboration) CreateNewGroupWithAdmin(
 		Name:        req.GroupName,
 		Description: req.GroupDescription,
 		IsDefault:   req.IsDefault,
-		GroupType:   model.RequestGroupType,
+		GroupType:   model.ClosedGroupType,
 	}
 	err = e.store.CreateNewGroupWithAdmin(req.UserID, &newGroup)
 	if err != nil {

@@ -42,15 +42,15 @@ func MigrateProtoRoleToModelRole(protoRole pbCollaboration.GroupRole) (modelRole
 
 func MigrateStringRoleToProtoRole(stringRole string) (protoRole pbCollaboration.GroupRole) {
 	switch stringRole {
-	case "requested":
+	case pbCollaboration.GroupRole_REQUESTED.String():
 		protoRole = pbCollaboration.GroupRole_REQUESTED
-	case "invited":
+	case pbCollaboration.GroupRole_INVITED.String():
 		protoRole = pbCollaboration.GroupRole_INVITED
-	case "read":
+	case pbCollaboration.GroupRole_READ.String():
 		protoRole = pbCollaboration.GroupRole_READ
-	case "write":
+	case pbCollaboration.GroupRole_WRITE.String():
 		protoRole = pbCollaboration.GroupRole_WRITE
-	case "admin":
+	case pbCollaboration.GroupRole_ADMIN.String():
 		protoRole = pbCollaboration.GroupRole_ADMIN
 	}
 	return

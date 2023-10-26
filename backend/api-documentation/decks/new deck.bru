@@ -16,8 +16,12 @@ auth:bearer {
 
 body:json {
   {
-      "deckName": "test group"
+    "deckName": "test deck"
   }
+}
+
+assert {
+  res.body: matches ^D-[a-zA-Z0-9]{8}$
 }
 
 script:post-response {

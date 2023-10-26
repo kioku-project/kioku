@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{baseUrl}}/api/decks{{deckID}}/push
+  url: {{baseUrl}}/api/decks/{{deckID}}/push
   body: json
   auth: bearer
 }
@@ -16,7 +16,7 @@ auth:bearer {
 
 body:json {
   {
-      "cardID": "C-XkxZ1axJ",
-      "rating": 2
+    "cardID": "C-12345678",
+    "rating": 2
   }
 }

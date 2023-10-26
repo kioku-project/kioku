@@ -13,3 +13,12 @@ get {
 auth:bearer {
   token: {{accessToken}}
 }
+
+assert {
+  res.body.groupID: matches ^G-[a-zA-Z0-9]{8}$
+  res.body.groupName: isString
+  res.body.groupDescription: isString
+  res.body.isDefault: isBoolean
+  res.body.groupType: in REQUEST,OPEN,CLOSED
+  res.body.groupRole: in ADMIN, WRITE, READ, INVITED, REQUESTED
+}

@@ -13,3 +13,11 @@ get {
 auth:bearer {
   token: {{accessToken}}
 }
+
+assert {
+  res.body.cardID: matches ^C-[a-zA-Z0-9]{8}$
+  res.body.sides: isDefined
+  res.body.sides[0].cardSideID: matches ^S-[a-zA-Z0-9]{8}$
+  res.body.sides[0].header: isString 
+  res.body.sides[0].description: isString 
+}

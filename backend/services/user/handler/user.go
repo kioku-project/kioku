@@ -213,7 +213,9 @@ func (e *User) ModifyUserProfileInformation(
 		}
 		user.Password = string(hash)
 	}
-	err = e.store.ModifyUser(user)
+	if err = e.store.ModifyUser(user); err != nil {
+		return err
+	}
 	logger.Infof("Modified profile information for user with id %s", req.UserID)
 	rsp.Success = true
 	return nil

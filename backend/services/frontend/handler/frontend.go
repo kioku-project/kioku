@@ -143,17 +143,23 @@ func (e *Frontend) GetUserHandler(c *fiber.Ctx) error {
 	return c.JSON(rspGetUser)
 }
 
+type modifyUserPayload struct {
+	UserEmail    *string `json:"userEmail"`
+	UserName     *string `json:"userName"`
+	UserPassword *string `json:"userPassword"`
+}
+
 func (e *Frontend) ModifyUserHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	var data map[string]*string
+	var data modifyUserPayload
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
 	rspModUser, err := e.userService.ModifyUserProfileInformation(c.Context(), &pbUser.ModifyRequest{
 		UserID:       userID,
-		UserEmail:    data["userEmail"],
-		UserName:     data["userName"],
-		UserPassword: data["userPassword"],
+		UserName:     data.UserName,
+		UserEmail:    data.UserEmail,
+		UserPassword: data.UserPassword,
 	})
 	if err != nil {
 		return err

@@ -8,6 +8,7 @@ service CardDeck {
 	rpc GetGroupDecks(GroupDecksRequest) returns (GroupDecksResponse) {}
 	rpc CreateDeck(CreateDeckRequest) returns (IDResponse) {}
 	rpc GetDeck(IDRequest) returns (DeckResponse) {}
+	rpc CopyDeck(CopyDeckRequest) returns (DeckResponse) {}
 	rpc ModifyDeck(ModifyDeckRequest) returns (SuccessResponse) {}
 	rpc DeleteDeck(IDRequest) returns (SuccessResponse) {}
 	rpc GetDeckCards(IDRequest) returns (DeckCardsResponse) {}
@@ -54,6 +55,14 @@ message CreateDeckRequest {
 	string groupID = 2;
 	string deckName = 3;
 	DeckType deckType = 4;
+}
+
+message CopyDeckRequest {
+	string userID = 1;
+        string deckID = 2;
+	string targetGroupID = 3;
+	string deckName = 4;
+	optional DeckType deckType = 5;
 }
 
 message IDResponse {

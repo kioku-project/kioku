@@ -217,13 +217,68 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 	return nil
 }
 
+func (e *CardDeck) CopyDeck(ctx context.Context, req *pb.CopyDeckRequest, rsp *pb.DeckResponse) error {
+	logger.Infof("Received CardDeck.CopyDeck request: %v", req)
+	if err := e.checkUserDeckAccess(ctx, req.UserID, req.DeckID); err != nil {
+		return err
+	}
+	if err := e.checkUserRoleAccess(ctx, req.UserID, req.TargetGroupID, pbCollaboration.GroupRole_WRITE); err != nil {
+		return err
+	}
+	var (
+		deckType model.DeckType
+		err      error
+	)
+	if req.DeckType == nil {
+		deckType = model.PrivateDeckType
+	} else {
+		err, deckType = converter.MigrateProtoDeckTypeToModelDeckType(*req.DeckType)
+		if err != nil {
+			return err
+		}
+	}
+	newDeck := &model.Deck{
+		GroupID:  req.TargetGroupID,
+		Name:     req.DeckName,
+		DeckType: deckType,
+	}
+	e.store.CreateDeck(newDeck)
+	cards, err := e.store.FindDeckCards(req.DeckID)
+	if err != nil {
+		return err
+	}
+	for _, card := range cards {
+		newCard := &model.Card{
+			DeckID: newDeck.ID,
+		}
+		if err := e.store.CreateCard(newCard); err != nil {
+			return err
+		}
+		cardSides, err := e.store.FindCardSidesByCardID(card.ID)
+		if err != nil {
+			return err
+		}
+		pbCardSides := make([]*pb.CardSideContent, 0, len(cardSides))
+		for _, cardSide := range cardSides {
+			pbCardSides = append(pbCardSides, &pb.CardSideContent{
+				Header:      cardSide.Header,
+				Description: cardSide.Description,
+			})
+		}
+		if err := e.generateCardSidesForCard(*newCard, pbCardSides); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (e *CardDeck) GetDeck(ctx context.Context, req *pb.IDRequest, rsp *pb.DeckResponse) error {
 	logger.Infof("Received CardDeck.GetDeck request: %v", req)
 	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.EntityID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserDeckAccess(ctx, req.UserID, deck.ID); err != nil {
+	if err = e.checkUserDeckAccess(ctx, req.UserID, deck.ID); err != nil {
 		return err
 	}
 	*rsp = *converter.StoreDeckToProtoDeckResponseConverter(*deck)

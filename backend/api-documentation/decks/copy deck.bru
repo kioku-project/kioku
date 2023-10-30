@@ -1,0 +1,22 @@
+meta {
+  name: copy deck
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/api/decks/{{deckID}}/copy
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "targetGroupID": "G-h8kKwPMg",
+      "deckName": "test group"
+  }
+}

@@ -576,6 +576,30 @@ func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+func (e *Frontend) CopyDeckHandler(c *fiber.Ctx) error {
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if deckName := data["deckName"]; deckName == "" {
+		return helper.NewFiberBadRequestErr("no deck name given")
+	}
+	if targetGroupID := data["targetGroupID"]; targetGroupID == "" {
+		return helper.NewFiberBadRequestErr("no targetGroupID given")
+	}
+	userID := helper.GetUserIDFromContext(c)
+	_, err := e.cardDeckService.CopyDeck(c.Context(), &pbCardDeck.CopyDeckRequest{
+		UserID:        userID,
+		DeckID:        c.Params("deckID"),
+		TargetGroupID: data["targetGroupID"],
+		DeckName:      data["deckName"],
+	})
+	if err != nil {
+		return err
+	}
+	return c.SendStatus(200)
+}
+
 func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspDeleteDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCardDeck.IDRequest{

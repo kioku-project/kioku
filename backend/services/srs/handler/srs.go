@@ -2,14 +2,15 @@ package handler
 
 import (
 	"context"
+	"math"
+	"sort"
+	"time"
+
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	"go-micro.dev/v4/logger"
-	"math"
-	"sort"
-	"time"
 
 	pb "github.com/kioku-project/kioku/services/srs/proto"
 	"github.com/kioku-project/kioku/store"
@@ -70,7 +71,7 @@ func (e *Srs) Push(_ context.Context, req *pb.SrsPushRequest, rsp *pb.SuccessRes
 
 func (e *Srs) Pull(ctx context.Context, req *pb.DeckPullRequest, rsp *pb.SrsPullResponse) error {
 	logger.Infof("Received Srs.Pull request: %v", req)
-	cards, err := e.store.FindDeckCards(
+	cards, err := e.store.FindUserDeckCards(
 		req.UserID,
 		req.DeckID,
 	)
@@ -129,9 +130,10 @@ func (e *Srs) AddUserCardBinding(_ context.Context, req *pb.BindingRequest, rsp 
 	rsp.Success = true
 	return nil
 }
+
 func (e *Srs) GetDeckCardsDue(_ context.Context, req *pb.DeckPullRequest, rsp *pb.DueResponse) error {
 	logger.Infof("Received Srs.GetDeckCardsDue request: %v", req)
-	cards, err := e.store.FindDeckCards(
+	cards, err := e.store.FindUserDeckCards(
 		req.UserID,
 		req.DeckID,
 	)
@@ -147,6 +149,7 @@ func (e *Srs) GetDeckCardsDue(_ context.Context, req *pb.DeckPullRequest, rsp *p
 	rsp.Due = int64(len(dueCards))
 	return nil
 }
+
 func (e *Srs) GetUserCardsDue(_ context.Context, req *pb.UserDueRequest, rsp *pb.UserDueResponse) error {
 	logger.Infof("Received Srs.GetUserCardsDue request: %v", req)
 	cards, err := e.store.FindUserCards(req.UserID)

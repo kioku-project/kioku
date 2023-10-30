@@ -513,8 +513,12 @@ func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	decks := converter.ConvertToTypeArray(rspGroupDecks.Decks, converter.ProtoDeckToFiberDeckConverter)
+	for _, deck := range decks {
+		deck.GroupID = c.Params("groupID")
+	}
 	return c.JSON(converter.FiberGetGroupDecksResponseBody{
-		Decks: converter.ConvertToTypeArray(rspGroupDecks.Decks, converter.ProtoDeckToFiberDeckConverter),
+		Decks: decks,
 	})
 }
 

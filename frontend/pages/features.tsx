@@ -7,7 +7,7 @@ export default function Page() {
 	const router = useRouter();
 
 	return (
-		<div className="flex flex-1">
+		<main className="flex flex-1">
 			<Head>
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
@@ -82,7 +82,7 @@ export default function Page() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</main>
 	);
 }
 

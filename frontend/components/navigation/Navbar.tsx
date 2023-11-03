@@ -29,13 +29,13 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 		setLoggedIn(hasCookie("access_token"));
 	}, []);
 	return (
-		<div
+		<nav
 			className={`flex items-center justify-between p-5 md:p-10 ${className}`}
 		>
 			{loggedIn ? (
 				<>
 					<Logo onClick={() => router.push("/")}></Logo>
-					<div className="flex flex-row">
+					<div className="flex">
 						<LogOut
 							className="text-kiokuDarkBlue hover:cursor-pointer"
 							onClick={async () => {
@@ -65,6 +65,6 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 					</Button>
 				</>
 			)}
-		</div>
+		</nav>
 	);
 };

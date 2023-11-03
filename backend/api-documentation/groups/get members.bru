@@ -13,3 +13,10 @@ get {
 auth:bearer {
   token: {{accessToken}}
 }
+
+assert {
+  res.body.users: isDefined
+  res.body.users[0].userID: matches ^U-[a-zA-Z0-9]{8}$
+  res.body.users[0].userName: isString
+  res.body.users[0].groupRole: in ADMIN, WRITE, READ, INVITED, REQUESTED
+}

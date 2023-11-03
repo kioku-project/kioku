@@ -16,17 +16,21 @@ auth:bearer {
 
 body:json {
   {
-      "sides": [
-          {
-              "header": "side 1",
-              "description": "front"
-          },
-          {
-              "header": "side 2",
-              "description": "back"
-          }
-      ]
+    "sides": [
+      {
+        "header": "side 1",
+        "description": "front"
+      },
+      {
+        "header": "side 2",
+        "description": "back"
+      }
+    ]
   }
+}
+
+assert {
+  res.body: matches ^C-[a-zA-Z0-9]{8}$
 }
 
 script:post-response {

@@ -49,9 +49,16 @@ export const Back: Story = {
 	},
 };
 
+export const Editable: Story = {
+	args: {
+		editable: true,
+	},
+};
+
 export const EditFront: Story = {
 	args: {
 		isEdit: true,
+		editable: true,
 	},
 };
 
@@ -59,6 +66,7 @@ export const EditMiddle: Story = {
 	args: {
 		cardSide: 1,
 		isEdit: true,
+		editable: true,
 	},
 };
 
@@ -66,6 +74,7 @@ export const EditBack: Story = {
 	args: {
 		cardSide: 2,
 		isEdit: true,
+		editable: true,
 	},
 };
 

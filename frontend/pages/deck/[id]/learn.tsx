@@ -9,6 +9,8 @@ import { Flashcard } from "../../../components/flashcard/Flashcard";
 import KiokuAward from "../../../components/graphics/KiokuAward";
 import { Button } from "../../../components/input/Button";
 import { Navbar } from "../../../components/navigation/Navbar";
+import { Group } from "../../../types/Group";
+import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
 
 export default function Page() {
@@ -21,7 +23,14 @@ export default function Page() {
 		}).then((res) => res?.json());
 	const { data: card } = useSWR(`/api/decks/${deckID}/pull`, fetcher);
 	const { data: dueCards } = useSWR(`/api/decks/${deckID}/dueCards`, fetcher);
-
+	const { data: deck } = useSWR(
+		deckID ? `/api/decks/${deckID}` : null,
+		fetcher
+	);
+	const { data: group } = useSWR<Group>(
+		deck?.groupID ? `/api/groups/${deck.groupID}` : null,
+		fetcher
+	);
 	return (
 		<div>
 			<Head>
@@ -39,6 +48,10 @@ export default function Page() {
 							card={card}
 							dueCards={dueCards}
 							push={push}
+							editable={
+								group?.groupRole &&
+								GroupRole[group.groupRole] >= GroupRole.WRITE
+							}
 						></Flashcard>
 					) : (
 						<div className="mx-auto my-auto flex flex-col items-center space-y-5">

@@ -1,4 +1,3 @@
-import Head from "next/head";
 import React, { ReactNode, useState } from "react";
 import useSWR from "swr";
 
@@ -73,11 +72,6 @@ export default function Home() {
 
 	return (
 		<div>
-			<Head>
-				<title>Kioku</title>
-				<meta name="description" content="Kioku" />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
 			<Authenticated>
 				<div className="min-w-screen flex h-screen flex-col bg-eggshell">
 					<Navbar login={true}></Navbar>

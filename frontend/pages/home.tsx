@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { ArrowRight } from "react-feather";
 
@@ -11,11 +10,6 @@ export default function Page() {
 
 	return (
 		<div>
-			<Head>
-				<title>Kioku</title>
-				<meta name="description" content="Kioku" />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
 			<div className="min-w-screen flex h-screen flex-col bg-eggshell">
 				<Navbar
 					login={false}

@@ -101,6 +101,16 @@ export const Header = ({
 								onClick={() =>
 									router.push(`/group/${group.groupID}`)
 								}
+								onKeyUp={(event) => {
+									if (event.key == "Enter") {
+										event.target.dispatchEvent(
+											new Event("click", {
+												bubbles: true,
+											})
+										);
+									}
+								}}
+								tabIndex={0}
 							>{`${group.groupName}`}</div>
 							<div>&nbsp;{`/ ${deck.deckName}`}</div>
 						</div>

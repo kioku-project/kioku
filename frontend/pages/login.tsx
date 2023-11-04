@@ -26,7 +26,7 @@ export default function Page() {
 	const [password, setPassword] = useState("");
 
 	return (
-		<div>
+		<>
 			<Head>
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
@@ -80,7 +80,7 @@ export default function Page() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 
 	function forms() {

@@ -6,7 +6,7 @@ import "../styles/globals.css";
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (
-		<div className="flex h-screen flex-col overflow-scroll">
+		<div className="flex h-screen flex-col scroll-auto">
 			<Navbar />
 			<Component {...pageProps} />
 			<ToastContainer

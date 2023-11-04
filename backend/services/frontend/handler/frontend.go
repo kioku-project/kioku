@@ -155,6 +155,15 @@ func (e *Frontend) ModifyUserHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
+	if data.UserEmail == nil {
+		return helper.NewFiberBadRequestErr("no e-mail given")
+	}
+	if data.UserName == nil {
+		return helper.NewFiberBadRequestErr("no name given")
+	}
+	if data.UserPassword == nil {
+		return helper.NewFiberBadRequestErr("no password given")
+	}
 	rspModUser, err := e.userService.ModifyUserProfileInformation(c.Context(), &pbUser.ModifyRequest{
 		UserID:       userID,
 		UserName:     data.UserName,

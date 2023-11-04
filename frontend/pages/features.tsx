@@ -1,3 +1,4 @@
+import { hasCookie } from "cookies-next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
@@ -17,7 +18,7 @@ export default function Page() {
 				<div className="mx-auto flex flex-col justify-center p-5 text-base leading-7 md:w-2/3 md:p-10 md:text-center">
 					<a
 						className="text-lg font-semibold text-kiokuLightBlue hover:cursor-pointer"
-						onClick={() => router.push("/login")}
+						onClick={() => hasCookie("access-token") ? router.push("/") : router.push("/login")}
 					>
 						Get started
 					</a>

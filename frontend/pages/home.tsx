@@ -4,6 +4,7 @@ import { ArrowRight } from "react-feather";
 
 import Cards from "../components/graphics/Cards";
 import { Button } from "../components/input/Button";
+import { hasCookie } from "cookies-next";
 
 export default function Page() {
 	const router = useRouter();
@@ -29,9 +30,7 @@ export default function Page() {
 						<div className="flex flex-row space-x-3 md:space-x-5">
 							<Button
 								id="getstartedButton"
-								onClick={() => {
-									router.push("/");
-								}}
+								onClick={() => hasCookie("access-token") ? router.push("/") : router.push("/login")}
 							>
 								Get started
 							</Button>

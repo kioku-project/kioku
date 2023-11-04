@@ -58,7 +58,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 					id="loginButton"
 					style="secondary"
 					className="invisible h-full justify-end sm:visible"
-					onClick={() => router.push("/")}
+					onClick={() => router.push("/login")}
 				>
 					Login <ArrowRight className="ml-1 h-2/3"></ArrowRight>
 				</Button>

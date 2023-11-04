@@ -1,4 +1,6 @@
+import { NextSeo } from "next-seo";
 import { Inter } from "next/font/google";
+import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
@@ -26,6 +28,21 @@ export default function Page() {
 
 	return (
 		<div>
+			<Head>
+				<title>Kioku | Login</title>
+				<meta name="description" content="Kioku | Login or Register" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
+			<NextSeo
+				noindex={false}
+				nofollow={false}
+				canonical="https://app.kioku.dev/login"
+				openGraph={{
+					title: "Kioku | Login",
+					description: "Kioku | Login or Register",
+					url: "https://app.kioku.dev/login",
+				}}
+			/>
 			<div className="min-w-screen flex min-h-screen items-center justify-center sm:p-5 md:p-10">
 				<div className="flex min-h-screen w-full flex-col items-center justify-evenly bg-blue-100 p-5 align-middle sm:min-h-fit sm:rounded-3xl sm:p-10 md:flex-row xl:w-5/6">
 					<div className="m-5 flex w-2/3 flex-col items-center md:m-10 md:w-1/2 md:justify-center">
@@ -46,21 +63,18 @@ export default function Page() {
 					<div
 						className={`flex w-full flex-col items-center rounded-2xl bg-kiokuLightBlue p-3 sm:w-5/6 sm:p-5 md:w-1/2 lg:w-1/3 ${inter.className}`}
 					>
-						<Text
-							size="md"
-							className="text-center font-bold leading-9 tracking-tight text-kiokuDarkBlue"
-						>
+						<h1 className="text-center font-bold leading-9 tracking-tight text-kiokuDarkBlue sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
 							{login
 								? "Sign in to your account"
 								: "Create an account"}
-						</Text>
+						</h1>
 						{forms()}
 
 						<Text size="3xs" className="text-center text-gray-500">
 							{login
 								? "Not registered? "
 								: "Already registered? "}
-							<a
+							<span
 								className="whitespace-nowrap font-semibold text-kiokuDarkBlue transition hover:cursor-pointer hover:text-eggshell"
 								onClick={() => {
 									emailInput.current?.focus();
@@ -68,7 +82,7 @@ export default function Page() {
 								}}
 							>
 								{login ? "Create an account" : "Sign in"}
-							</a>
+							</span>
 						</Text>
 					</div>
 				</div>

@@ -1,3 +1,4 @@
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { ArrowRight } from "react-feather";
 
@@ -10,6 +11,7 @@ export default function Page() {
 
 	return (
 		<div>
+			<NextSeo noindex={false} nofollow={false} />
 			<div className="min-w-screen flex h-screen flex-col bg-eggshell">
 				<Navbar
 					login={false}
@@ -17,9 +19,9 @@ export default function Page() {
 				></Navbar>
 				<div className="flex grow flex-row overflow-hidden">
 					<div className="flex w-full flex-col justify-center space-y-3 p-5 md:w-2/3 md:space-y-5 md:p-10">
-						<p className="text-2xl font-bold text-kiokuDarkBlue sm:text-3xl md:text-4xl lg:text-5xl">
+						<h1 className="text-2xl font-bold text-kiokuDarkBlue sm:text-3xl md:text-4xl lg:text-5xl">
 							We&apos;re changing the way people learn.
-						</p>
+						</h1>
 						<p className="text-sm font-semibold text-gray-400 sm:text-base">
 							Start your learning journey today with Kioku - the
 							cloud native flashcard application that focusses on

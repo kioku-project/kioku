@@ -1,3 +1,6 @@
+import { NextSeo } from "next-seo";
+import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { Award, BarChart2, Cloud, Code, Compass, Users } from "react-feather";
@@ -9,21 +12,39 @@ export default function Page() {
 
 	return (
 		<div>
+			<Head>
+				<title>Kioku | Features</title>
+				<meta
+					name="description"
+					content="Kioku | Features of the Kioku Platform!"
+				/>
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
+			<NextSeo
+				noindex={false}
+				nofollow={false}
+				canonical="https://app.kioku.dev/features"
+				openGraph={{
+					title: "Kioku | Features",
+					description: "Kioku | Features of the Kioku Platform!",
+					url: "https://app.kioku.dev/features",
+				}}
+			/>
 			<div className="min-w-screen flex h-screen flex-col bg-eggshell">
 				<Navbar
 					login={false}
 					onClick={() => router.push("/home")}
 				></Navbar>
 				<div className="mx-auto flex flex-col justify-center p-5 text-base leading-7 md:w-2/3 md:p-10 md:text-center">
-					<a
+					<Link
+						href="/login"
 						className="text-lg font-semibold text-kiokuLightBlue hover:cursor-pointer"
-						onClick={() => router.push("/login")}
 					>
 						Get started
-					</a>
-					<div className="mb-7 mt-1 text-3xl font-semibold leading-7 text-kiokuDarkBlue sm:text-4xl">
+					</Link>
+					<h2 className="mb-7 mt-1 text-3xl font-semibold leading-7 text-kiokuDarkBlue sm:text-4xl">
 						Discover Kioku&apos;s awesome Features
-					</div>
+					</h2>
 					<div className="text-lg leading-8 text-gray-600">
 						Welcome to Kioku - the cloud native flashcard
 						application that focuses on collaborative content
@@ -117,7 +138,7 @@ const FeatureCard = ({
 		>
 			{icon}
 			<div className="flex w-full flex-col">
-				<p className="font-semibold text-kiokuDarkBlue">{header}</p>
+				<h3 className="font-semibold text-kiokuDarkBlue">{header}</h3>
 				<p className="text-gray-400">{description}</p>
 			</div>
 		</div>

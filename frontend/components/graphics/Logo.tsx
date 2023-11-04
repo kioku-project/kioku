@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
 import Image from "next/image";
-import router from "next/router";
 import React from "react";
 
 import kiokuLogo from "../../public/kioku-logo.svg";

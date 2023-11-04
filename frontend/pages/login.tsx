@@ -76,6 +76,12 @@ export default function Page() {
 								: "Already registered? "}
 							<span
 								className="whitespace-nowrap font-semibold text-kiokuDarkBlue transition hover:cursor-pointer hover:text-eggshell"
+								tabIndex={0}
+								onKeyUp={(event) => {
+									if (event.key === "Enter") {
+										event.target.dispatchEvent(new Event("click", {bubbles: true}))
+									}
+								}}
 								onClick={() => {
 									emailInput.current?.focus();
 									setLogin((prev) => !prev);

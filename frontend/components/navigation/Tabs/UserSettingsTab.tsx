@@ -11,7 +11,7 @@ import { Section } from "../../layout/Section";
 
 interface UserSettingsTabProps {
 	/**
-	 * user
+	 * User entity
 	 */
 	user: User;
 	/**

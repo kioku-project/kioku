@@ -1,7 +1,7 @@
 meta {
   name: get decks
   type: http
-  seq: 2
+  seq: 1
 }
 
 get {
@@ -12,4 +12,8 @@ get {
 
 auth:bearer {
   token: {{accessToken}}
+}
+
+assert {
+  res.body.decks: isDefined 
 }

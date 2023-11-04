@@ -9,11 +9,11 @@ import { Card } from "./Card";
 
 interface CardListProps {
 	/**
-	 * deck
+	 * Deck entity
 	 */
 	deck: DeckType;
 	/**
-	 * cards
+	 * Cards
 	 */
 	cards?: CardType[];
 	/**
@@ -21,7 +21,7 @@ interface CardListProps {
 	 */
 	className?: string;
 	/**
-	 * click handler
+	 * Click handler
 	 */
 	setCard: (card: CardType) => void;
 }
@@ -53,6 +53,10 @@ export const CardList = ({
 						key={card.cardID}
 						setCard={setCard}
 						card={{ ...card, deckID: deck.deckID }}
+						editable={
+							deck.groupRole &&
+							GroupRole[deck.groupRole] >= GroupRole.WRITE
+						}
 					/>
 				))}
 			</div>

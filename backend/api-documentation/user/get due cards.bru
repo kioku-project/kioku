@@ -1,7 +1,7 @@
 meta {
-  name: get dueCards
+  name: get due cards
   type: http
-  seq: 6
+  seq: 3
 }
 
 get {
@@ -12,4 +12,9 @@ get {
 
 auth:bearer {
   token: {{accessToken}}
+}
+
+assert {
+  res.body.dueCards: isNumber
+  res.body.dueDecks: isNumber
 }

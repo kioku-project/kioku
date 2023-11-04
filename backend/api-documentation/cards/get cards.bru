@@ -13,3 +13,7 @@ get {
 auth:bearer {
   token: {{accessToken}}
 }
+
+assert {
+  res.body.cards: isDefined
+}

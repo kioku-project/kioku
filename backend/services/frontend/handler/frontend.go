@@ -44,13 +44,13 @@ func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
 		return err
 	}
 	if data["userEmail"] == "" {
-		return helper.NewFiberBadRequestErr("no e-mail given")
+		return helper.NewFiberMissingEmailErr()
 	}
 	if data["userName"] == "" {
-		return helper.NewFiberBadRequestErr("no name given")
+		return helper.NewFiberMissingNameErr()
 	}
 	if data["userPassword"] == "" {
-		return helper.NewFiberBadRequestErr("no password given")
+		return helper.NewFiberMissingPasswordErr()
 	}
 	rspRegister, err := e.userService.Register(c.Context(), &pbUser.RegisterRequest{
 		UserEmail:    data["userEmail"],
@@ -68,11 +68,11 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(&reqUser); err != nil {
 		return err
 	}
-	if reqUser.Email == "" {
-		return helper.NewFiberBadRequestErr("no e-mail given")
+	if data["userEmail"] == "" {
+		return helper.NewFiberMissingEmailErr()
 	}
-	if reqUser.Password == "" {
-		return helper.NewFiberBadRequestErr("no password given")
+	if data["userPassword"] == "" {
+		return helper.NewFiberMissingPasswordErr()
 	}
 	_, err := e.userService.Login(c.Context(), &pbUser.LoginRequest{
 		UserEmail:    reqUser.Email,
@@ -154,15 +154,6 @@ func (e *Frontend) ModifyUserHandler(c *fiber.Ctx) error {
 	var data modifyUserPayload
 	if err := c.BodyParser(&data); err != nil {
 		return err
-	}
-	if data.UserEmail == nil {
-		return helper.NewFiberBadRequestErr("no e-mail given")
-	}
-	if data.UserName == nil {
-		return helper.NewFiberBadRequestErr("no name given")
-	}
-	if data.UserPassword == nil {
-		return helper.NewFiberBadRequestErr("no password given")
 	}
 	rspModUser, err := e.userService.ModifyUserProfileInformation(c.Context(), &pbUser.ModifyRequest{
 		UserID:       userID,

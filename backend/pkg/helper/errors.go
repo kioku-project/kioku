@@ -100,6 +100,18 @@ func NewFiberBadRequestErr(detail string) error {
 	return fiber.NewError(fiber.StatusBadRequest, detail)
 }
 
+func NewFiberMissingEmailErr() error {
+	return fiber.NewError(fiber.StatusBadRequest, "no Email provided")
+}
+
+func NewFiberMissingNameErr() error {
+	return fiber.NewError(fiber.StatusBadRequest, "no Name provided")
+}
+
+func NewFiberMissingPasswordErr() error {
+	return fiber.NewError(fiber.StatusBadRequest, "no Password provided")
+}
+
 func NewFiberUnauthorizedErr(detail string) error {
 	return fiber.NewError(fiber.StatusUnauthorized, detail)
 }

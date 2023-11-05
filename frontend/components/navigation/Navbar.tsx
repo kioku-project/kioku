@@ -1,17 +1,11 @@
 import { hasCookie } from "cookies-next";
-import { Inter } from "next/font/google";
-import router, { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { ArrowRight, LogOut } from "react-feather";
 
 import { authedFetch } from "../../util/reauth";
 import { Logo } from "../graphics/Logo";
 import { Button } from "../input/Button";
-
-const inter = Inter({
-	weight: ["200", "400"],
-	subsets: ["latin"],
-});
 
 interface NavbarProps {
 	/**
@@ -59,7 +53,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 				<Button
 					id="loginButton"
 					style="secondary"
-					className="invisible h-full justify-end sm:visible"
+					className="invisible h-7 md:h-10 justify-end sm:visible"
 					onClick={() => router.push("/login")}
 				>
 					Login <ArrowRight className="ml-1 h-2/3"></ArrowRight>

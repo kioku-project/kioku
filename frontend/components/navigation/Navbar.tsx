@@ -27,7 +27,9 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 	const router = useRouter();
 	const [loggedIn, setLoggedIn] = useState<boolean>();
 	useEffect(() => {
-		if (router.pathname != "/login") {
+		if (router.pathname == "/login") {
+			setLoggedIn(undefined);
+		} else {
 			setLoggedIn(hasCookie("access_token"));
 		}
 	});

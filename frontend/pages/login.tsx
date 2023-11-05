@@ -1,8 +1,9 @@
+import { hasCookie } from "cookies-next";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -24,6 +25,12 @@ export default function Page() {
 	const passwordInput = useRef<HTMLInputElement>(null);
 	const repeatPasswordInput = useRef<HTMLInputElement>(null);
 	const [password, setPassword] = useState("");
+
+	useEffect(() => {
+		if (hasCookie("access_token")) {
+			router.push("/");
+		}
+	}, []);
 
 	return (
 		<>

@@ -68,10 +68,10 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(&reqUser); err != nil {
 		return err
 	}
-	if data["userEmail"] == "" {
+	if reqUser.Email == "" {
 		return helper.NewFiberMissingEmailErr()
 	}
-	if data["userPassword"] == "" {
+	if reqUser.Password == "" {
 		return helper.NewFiberMissingPasswordErr()
 	}
 	_, err := e.userService.Login(c.Context(), &pbUser.LoginRequest{

@@ -74,7 +74,7 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	if reqUser.Password == "" {
 		return helper.NewFiberMissingPasswordErr()
 	}
-	_, err := e.userService.Login(c.Context(), &pbUser.LoginRequest{
+	rspLogin, err := e.userService.Login(c.Context(), &pbUser.LoginRequest{
 		UserEmail:    reqUser.Email,
 		UserPassword: reqUser.Password,
 	})
@@ -83,8 +83,12 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	}
 
 	// Generate encoded tokens and send them as response.
-	helper.GenerateAccessToken(c, reqUser.ID, reqUser.Email, reqUser.Name)
-	helper.GenerateRefreshToken(c, reqUser.ID, reqUser.Email, reqUser.Name)
+	if err := helper.GenerateAccessToken(c, rspLogin.UserID, reqUser.Email, rspLogin.UserName); err != nil {
+		return err
+	}
+	if err := helper.GenerateRefreshToken(c, rspLogin.UserID, reqUser.Email, rspLogin.UserName); err != nil {
+		return err
+	}
 
 	return c.SendStatus(200)
 }

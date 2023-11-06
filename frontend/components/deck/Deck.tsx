@@ -61,20 +61,28 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 			className={`mb-3 mr-3 flex w-fit flex-col items-center rounded-md border-2 border-kiokuDarkBlue p-3 hover:cursor-pointer ${
 				deck ? "" : "border-dashed"
 			} ${className}`}
+			onClick={() => {
+				if (deck) {
+					router.push(`/deck/${deck.deckID}`);
+				} else {
+					createDeck()
+						.then((result) => {})
+						.catch((error) => {});
+				}
+			}}
+			onKeyUp={(event) => {
+				if (event.key == "Enter") {
+					event.target.dispatchEvent(
+						new Event("click", { bubbles: true })
+					);
+				}
+			}}
+			tabIndex={deck ? 0 : -1}
 		>
 			<div
 				className={`relative flex h-40 w-40 items-center space-y-1 rounded-md  ${
 					deck ? "bg-kiokuLightBlue" : ""
 				} `}
-				onClick={() => {
-					if (deck) {
-						router.push(`/deck/${deck.deckID}`);
-					} else {
-						createDeck()
-							.then((result) => {})
-							.catch((error) => {});
-					}
-				}}
 			>
 				<div
 					className={`flex w-full justify-center text-6xl font-black ${
@@ -121,6 +129,9 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 										.then((result) => {})
 										.catch((error) => {});
 								}
+							}}
+							onClick={(event) => {
+								event.stopPropagation();
 							}}
 						></input>
 					)}

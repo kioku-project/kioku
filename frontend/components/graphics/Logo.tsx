@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
 import Image from "next/image";
-import router from "next/router";
 import React from "react";
 
 import kiokuLogo from "../../public/kioku-logo.svg";
@@ -33,13 +32,13 @@ export const Logo = ({ className = "", text = true, onClick }: LogoProps) => {
 	return (
 		<div
 			className={`flex flex-row items-center hover:cursor-pointer ${className}`}
-			onClick={() => {
-				if (onClick) {
-					onClick();
-				} else {
-					router.push("/");
+			onClick={onClick}
+			onKeyUp={(event) => {
+				if (event.key == "Enter") {
+					onClick?.();
 				}
 			}}
+			tabIndex={0}
 		>
 			<Image
 				src={kiokuLogo}

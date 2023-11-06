@@ -16,9 +16,12 @@ interface StatisticOverviewProps {
 /**
  * UI component for grouping statistics
  */
-export const StatisticOverview = ({ className }: StatisticOverviewProps) => {
+export const StatisticOverview = ({
+	id,
+	className,
+}: StatisticOverviewProps) => {
 	return (
-		<div className="flex flex-row justify-between rounded-lg">
+		<div id={id} className="flex flex-row justify-between rounded-lg">
 			<Statistic
 				id={"statisticId"}
 				header="Cards learned"

@@ -19,6 +19,14 @@ export default function Page() {
 					<a
 						className="text-lg font-semibold text-kiokuLightBlue hover:cursor-pointer"
 						onClick={() => hasCookie("access_token") ? router.push("/") : router.push("/login")}
+						onKeyUp={(event) => {
+							if (event.key == "Enter") {
+								event.target.dispatchEvent(
+									new Event("click", { bubbles: true })
+								);
+							}
+						}}
+						tabIndex={0}
 					>
 						Get started
 					</a>

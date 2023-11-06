@@ -169,6 +169,32 @@ func cardModelDateComparator(a, b model.Card) int {
 	return a.CreatedAt.Compare(b.CreatedAt)
 }
 
+func (e *CardDeck) copyCards(cards []*model.Card, deckID string) error {
+	for _, card := range cards {
+		newCard := &model.Card{
+			DeckID: deckID,
+		}
+		if err := e.store.CreateCard(newCard); err != nil {
+			return err
+		}
+		cardSides, err := e.store.FindCardSidesByCardID(card.ID)
+		if err != nil {
+			return err
+		}
+		pbCardSides := make([]*pb.CardSideContent, 0, len(cardSides))
+		for _, cardSide := range cardSides {
+			pbCardSides = append(pbCardSides, &pb.CardSideContent{
+				Header:      cardSide.Header,
+				Description: cardSide.Description,
+			})
+		}
+		if err := e.generateCardSidesForCard(*newCard, pbCardSides); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest, rsp *pb.GroupDecksResponse) error {
 	logger.Infof("Received CardDeck.GetGroupDecks request: %v", req)
 
@@ -253,32 +279,6 @@ func (e *CardDeck) CopyDeck(ctx context.Context, req *pb.CopyDeckRequest, rsp *p
 		return err
 	}
 	rsp.ID = newDeck.ID
-	return nil
-}
-
-func (e *CardDeck) copyCards(cards []*model.Card, deckID string) error {
-	for _, card := range cards {
-		newCard := &model.Card{
-			DeckID: deckID,
-		}
-		if err := e.store.CreateCard(newCard); err != nil {
-			return err
-		}
-		cardSides, err := e.store.FindCardSidesByCardID(card.ID)
-		if err != nil {
-			return err
-		}
-		pbCardSides := make([]*pb.CardSideContent, 0, len(cardSides))
-		for _, cardSide := range cardSides {
-			pbCardSides = append(pbCardSides, &pb.CardSideContent{
-				Header:      cardSide.Header,
-				Description: cardSide.Description,
-			})
-		}
-		if err := e.generateCardSidesForCard(*newCard, pbCardSides); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 

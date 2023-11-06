@@ -1,17 +1,17 @@
 meta {
-  name: register
+  name: modify user
   type: http
-  seq: 4
+  seq: 6
 }
 
-post {
-  url: {{baseUrl}}/api/register
+put {
+  url: {{baseUrl}}/api/user
   body: json
-  auth: none
+  auth: bearer
 }
 
 auth:bearer {
-  token: {{baseUrl}}
+  token: {{accessToken}}
 }
 
 body:json {

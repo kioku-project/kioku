@@ -3,19 +3,19 @@ import { Button } from "./Button";
 
 interface DangerActionProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
-	 * header
+	 * Header
 	 */
 	header?: string;
 	/**
-	 * description
+	 * Description
 	 */
 	description?: string;
 	/**
-	 * button
+	 * Button
 	 */
 	button?: string;
 	/**
@@ -27,7 +27,7 @@ interface DangerActionProps {
 	 */
 	className?: string;
 	/**
-	 * click handler
+	 * Click handler
 	 */
 	onClick?: () => void;
 }

@@ -4,6 +4,7 @@ import "github.com/kioku-project/kioku/pkg/model"
 
 type UserStore interface {
 	RegisterNewUser(newUser *model.User) error
+	ModifyUser(user *model.User) error
 	DeleteUser(user *model.User) error
 	FindUserByEmail(email string) (*model.User, error)
 	FindUserByID(userID string) (*model.User, error)

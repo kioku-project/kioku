@@ -17,17 +17,17 @@ import { authedFetch } from "../../../util/reauth";
 export default function Page() {
 	const router = useRouter();
 
-	const [groupID, setGroupId] = useState<string>();
+	const [groupId, setGroupId] = useState<string>();
 	useEffect(() => {
 		setGroupId(router.query.id as string);
-	}, [groupID, router]);
+	}, [groupId, router]);
 
 	const fetcher = (url: RequestInfo | URL) =>
 		authedFetch(url, {
 			method: "GET",
 		}).then((res) => res?.json());
 	const { data: group } = useSWR(
-		groupID ? `/api/groups/${groupID}` : null,
+		groupId ? `/api/groups/${groupId}` : null,
 		fetcher
 	);
 

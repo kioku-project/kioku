@@ -4,11 +4,11 @@ import { Size } from "../types/Size";
 
 interface TextProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id?: string;
 	/**
-	 * content
+	 * Content
 	 */
 	children: ReactNode;
 	/**
@@ -28,7 +28,7 @@ interface TextProps {
 	 */
 	className?: string;
 	/**
-	 * optional click handler
+	 * Click handler
 	 */
 	onClick?: () => void;
 }

@@ -208,7 +208,7 @@ func (e *User) ModifyUserProfileInformation(
 	}
 	if req.UserPassword != nil {
 		if *req.UserPassword == "" {
-			return helper.NewMicroInvalidEmailOrPasswordErr(helper.UserServiceID)
+			return helper.NewMicroInvalidPasswordErr(helper.UserServiceID)
 		}
 		hash, err := bcrypt.GenerateFromPassword([]byte(*req.UserPassword), bcrypt.MinCost)
 		if err != nil {

@@ -84,6 +84,10 @@ func NewMicroInvalidEmailOrPasswordErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "invalid email or password")
 }
 
+func NewMicroInvalidPasswordErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "invalid password")
+}
+
 func NewMicroNotSuccessfulResponseErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "operation not successful")
 }

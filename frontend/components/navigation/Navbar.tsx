@@ -53,7 +53,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 				<Button
 					id="loginButton"
 					style="secondary"
-					className="invisible h-7 md:h-10 justify-end sm:visible"
+					className="invisible sm:visible"
 					onClick={() => router.push("/login")}
 				>
 					Login <ArrowRight className="ml-1 h-2/3"></ArrowRight>

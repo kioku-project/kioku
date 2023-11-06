@@ -52,7 +52,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 			{loggedIn == false && (
 				<Button
 					id="loginButton"
-					style="secondary"
+					buttonStyle="secondary"
 					className="invisible sm:visible"
 					onClick={() => router.push("/login")}
 				>

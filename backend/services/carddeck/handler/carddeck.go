@@ -230,6 +230,9 @@ func (e *CardDeck) CopyDeck(ctx context.Context, req *pb.CopyDeckRequest, rsp *p
 	)
 	if req.DeckType != nil {
 		deckType, err = converter.MigrateProtoDeckTypeToModelDeckType(*req.DeckType)
+		if err != nil {
+			return err
+		}
 	} else {
 		deckType = model.PrivateDeckType
 	}

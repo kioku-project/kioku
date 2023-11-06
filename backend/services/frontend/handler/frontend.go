@@ -602,7 +602,7 @@ func (e *Frontend) CopyDeckHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.SendString(rsp.DeckID)
+	return c.SendString(rsp.ID)
 }
 
 func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {

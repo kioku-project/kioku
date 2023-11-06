@@ -30,7 +30,6 @@ var (
 )
 
 func main() {
-
 	// Initialize the database connection
 	dbStore, err := store.NewSrsStore()
 	if err != nil {
@@ -68,9 +67,6 @@ func main() {
 
 	// Register handler
 	if err := pb.RegisterSrsHandler(srv.Server(), svc); err != nil {
-		logger.Fatal(err)
-	}
-	if err := pb.RegisterHealthHandler(srv.Server(), new(handler.Health)); err != nil {
 		logger.Fatal(err)
 	}
 

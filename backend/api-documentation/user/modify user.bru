@@ -1,0 +1,23 @@
+meta {
+  name: modify user
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{baseUrl}}/api/user
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "userEmail": "test@test.test",
+    "userName": "test",
+    "userPassword": "test"
+  }
+}

@@ -4,6 +4,7 @@ import router from "next/router";
 import React from "react";
 
 import kiokuLogo from "../../public/kioku-logo.svg";
+import { Text } from "../Text";
 
 const inter = Inter({
 	weight: ["200", "400"],
@@ -45,14 +46,15 @@ export const Logo = ({ className = "", text = true, onClick }: LogoProps) => {
 				alt="Kioku"
 				height={0}
 				width={0}
-				className="w-16 hover:cursor-pointer md:w-20 lg:w-24"
+				className="w-16 hover:cursor-pointer md:w-20 lg:w-28"
 			/>
 			{text && (
-				<p
-					className={`ml-3 text-lg font-extralight tracking-[0.5em] sm:text-xl md:text-2xl lg:ml-5 lg:text-3xl ${inter.className} `}
+				<Text
+					size="lg"
+					className={`ml-3 font-extralight tracking-[0.5em] ${inter.className}`}
 				>
 					Kioku
-				</p>
+				</Text>
 			)}
 		</div>
 	);

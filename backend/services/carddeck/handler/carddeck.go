@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
@@ -42,6 +43,26 @@ func (e *CardDeck) checkUserRoleAccess(
 		return helper.NewMicroNotAuthorizedErr(helper.CardDeckServiceID)
 	}
 	logger.Infof("Authenticated group role (%s) for user (%s)", roleRsp.GroupRole.String(), userID)
+	return nil
+}
+
+func (e *CardDeck) checkUserDeckAccess(
+	ctx context.Context,
+	userID string,
+	deckID string,
+) error {
+	e.store.FindDeckByID(deckID)
+	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, deckID, helper.CardDeckServiceID)
+	if err != nil {
+		return err
+	}
+	if deck.DeckType == model.PrivateDeckType {
+		logger.Infof("Requesting group role for user (%s)", userID)
+		if err = e.checkUserRoleAccess(ctx, userID, deck.GroupID, pbCollaboration.GroupRole_READ); err != nil {
+			return err
+		}
+	}
+	logger.Infof("Authenticated user (%s) for deck (%s)", userID, deckID)
 	return nil
 }
 
@@ -151,13 +172,21 @@ func cardModelDateComparator(a, b model.Card) int {
 
 func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest, rsp *pb.GroupDecksResponse) error {
 	logger.Infof("Received CardDeck.GetGroupDecks request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
-		return err
-	}
-	decks, err := helper.FindStoreEntity(e.store.FindDecksByGroupID, req.GroupID, helper.CardDeckServiceID)
+
+	var decks []model.Deck
+	err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_INVITED)
 	if err != nil {
-		return err
+		decks, err = helper.FindStoreEntity(e.store.FindPublicDecksByGroupID, req.GroupID, helper.CardDeckServiceID)
+		if err != nil {
+			return err
+		}
+	} else {
+		decks, err = helper.FindStoreEntity(e.store.FindDecksByGroupID, req.GroupID, helper.CardDeckServiceID)
+		if err != nil {
+			return err
+		}
 	}
+
 	rsp.Decks = converter.ConvertToTypeArray(decks, converter.StoreDeckToProtoDeckConverter)
 	logger.Infof("Found %d decks in group with id %s", len(decks), req.GroupID)
 	return nil
@@ -171,9 +200,14 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 	if err := helper.CheckForValidName(req.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID); err != nil {
 		return err
 	}
+	err, dt := converter.MigrateProtoDeckTypeToModelDeckType(req.DeckType)
+	if err != nil {
+		return err
+	}
 	newDeck := model.Deck{
-		Name:    req.DeckName,
-		GroupID: req.GroupID,
+		Name:     req.DeckName,
+		GroupID:  req.GroupID,
+		DeckType: dt,
 	}
 	if err := e.store.CreateDeck(&newDeck); err != nil {
 		return err
@@ -189,7 +223,7 @@ func (e *CardDeck) GetDeck(ctx context.Context, req *pb.IDRequest, rsp *pb.DeckR
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
+	if err := e.checkUserDeckAccess(ctx, req.UserID, deck.ID); err != nil {
 		return err
 	}
 	*rsp = *converter.StoreDeckToProtoDeckResponseConverter(*deck)
@@ -212,6 +246,13 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rs
 			return err
 		}
 		deck.Name = *req.DeckName
+	}
+	if req.DeckType != nil {
+		err, dt := converter.MigrateProtoDeckTypeToModelDeckType(*req.DeckType)
+		if err != nil {
+			return err
+		}
+		deck.DeckType = dt
 	}
 	err = e.store.ModifyDeck(deck)
 	if err != nil {
@@ -246,7 +287,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.IDRequest, rsp *pb.
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_INVITED); err != nil {
+	if err := e.checkUserDeckAccess(ctx, req.UserID, deck.ID); err != nil {
 		return err
 	}
 	slices.SortFunc(deck.Cards, cardModelDateComparator)

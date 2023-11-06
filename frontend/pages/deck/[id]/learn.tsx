@@ -39,8 +39,7 @@ export default function Page() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Authenticated>
-				<div className="min-w-screen flex h-screen flex-col bg-eggshell">
-					<Navbar login={true}></Navbar>
+				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 					{card?.cardID ? (
 						<Flashcard
 							id="flashcardId"

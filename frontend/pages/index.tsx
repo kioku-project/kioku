@@ -4,7 +4,6 @@ import useSWR from "swr";
 
 import Authenticated from "../components/accessControl/Authenticated";
 import { FetchHeader } from "../components/layout/Header";
-import { Navbar } from "../components/navigation/Navbar";
 import { DecksTab } from "../components/navigation/Tabs/DecksTab";
 import { GroupsTab } from "../components/navigation/Tabs/GroupsTab";
 import { InvitationsTab } from "../components/navigation/Tabs/InvitationsTabs";
@@ -79,8 +78,7 @@ export default function Home() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Authenticated>
-				<div className="min-w-screen flex h-screen flex-col bg-eggshell">
-					<Navbar login={true}></Navbar>
+				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 					{user && groups && (
 						<div className="flex flex-col space-y-3 p-5 md:space-y-5 md:p-10">
 							<FetchHeader

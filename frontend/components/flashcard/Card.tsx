@@ -14,6 +14,10 @@ interface CardProps {
 	 */
 	card: CardType;
 	/**
+	 * Permission to edit
+	 */
+	editable?: boolean;
+	/**
 	 * Additional classes
 	 */
 	className?: string;
@@ -26,7 +30,12 @@ interface CardProps {
 /**
  * UI component for displaying a card
  */
-export const Card = ({ card, setCard, className = "" }: CardProps) => {
+export const Card = ({
+	card,
+	editable = false,
+	className = "",
+	setCard,
+}: CardProps) => {
 	const { mutate } = useSWRConfig();
 	const [isDelete, setDelete] = useState(false);
 	const cardNameInput = useRef<HTMLInputElement>(null);
@@ -62,9 +71,13 @@ export const Card = ({ card, setCard, className = "" }: CardProps) => {
 							<Trash
 								id={`delete${card.cardID}ButtonId`}
 								data-testid={`deleteCardButtonId`}
-								className="hover:cursor-pointer"
+								className={`${
+									editable
+										? "hover:cursor-pointer"
+										: "text-gray-200 hover:cursor-not-allowed"
+								}`}
 								size={20}
-								onClick={() => setDelete(true)}
+								onClick={() => setDelete(editable)}
 							></Trash>
 						)}
 						{/* <Edit2

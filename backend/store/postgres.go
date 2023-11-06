@@ -91,6 +91,16 @@ func (s *UserStoreImpl) RegisterNewUser(newUser *model.User) error {
 	return s.db.Create(newUser).Error
 }
 
+func (s *UserStoreImpl) ModifyUser(user *model.User) error {
+	user.Email = strings.ToLower(user.Email)
+	return s.db.Save(&model.User{
+		ID:       user.ID,
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: user.Password,
+	}).Error
+}
+
 func (s *UserStoreImpl) DeleteUser(user *model.User) error {
 	return s.db.Delete(user).Error
 }

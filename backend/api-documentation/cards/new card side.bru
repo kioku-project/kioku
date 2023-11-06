@@ -16,10 +16,14 @@ auth:bearer {
 
 body:json {
   {
-      "placeBeforeCardSideID": "",
-      "header": "side 3",
-      "description": "back"
+    "placeBeforeCardSideID": "",
+    "header": "side 3",
+    "description": "back"
   }
+}
+
+assert {
+  res.body: matches ^S-[a-zA-Z0-9]{8}$
 }
 
 script:post-response {

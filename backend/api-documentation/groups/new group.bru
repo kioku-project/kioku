@@ -16,9 +16,14 @@ auth:bearer {
 
 body:json {
   {
-      "groupName": "test group",
-      "groupDescription": "test"
+    "groupName": "test group",
+    "groupDescription": "test",
+    "groupType": "CLOSED"
   }
+}
+
+assert {
+  res.body: matches ^G-[a-zA-Z0-9]{8}$
 }
 
 script:post-response {

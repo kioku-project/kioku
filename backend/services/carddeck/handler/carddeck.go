@@ -249,9 +249,17 @@ func (e *CardDeck) CopyDeck(ctx context.Context, req *pb.CopyDeckRequest, rsp *p
 	if err != nil {
 		return err
 	}
+	if err := e.copyCards(cards, newDeck.ID); err != nil {
+		return err
+	}
+	rsp.ID = newDeck.ID
+	return nil
+}
+
+func (e *CardDeck) copyCards(cards []*model.Card, deckID string) error {
 	for _, card := range cards {
 		newCard := &model.Card{
-			DeckID: newDeck.ID,
+			DeckID: deckID,
 		}
 		if err := e.store.CreateCard(newCard); err != nil {
 			return err
@@ -271,7 +279,6 @@ func (e *CardDeck) CopyDeck(ctx context.Context, req *pb.CopyDeckRequest, rsp *p
 			return err
 		}
 	}
-	rsp.ID = newDeck.ID
 	return nil
 }
 

@@ -72,7 +72,7 @@ export default function Page() {
 							<FetchHeader
 								id={"deckPageHeaderId"}
 								group={group}
-								deck={{ ...deck, deckID: deck.deckID }}
+								deck={deck}
 							/>
 							<TabBar
 								id="deckTabBarId"

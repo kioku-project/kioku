@@ -69,18 +69,23 @@ export const DeckSettingsTab = ({
 				header="Danger Zone"
 				style="error"
 			>
-				{/* <DangerAction
-								header="Change deck visibility"
-								description="This deck is currently private."
-								button="Change Visibility"
-							></DangerAction>
-							<hr className="border-kiokuLightBlue" />
-							<DangerAction
-								header="Transfer ownership"
-								description="Transfer this deck to another group where you have	the ability to create decks."
-								button="Transfer Deck"
-							></DangerAction>
-							<hr className="border-kiokuLightBlue" /> */}
+				{/* Settings for group admins */}
+				<DangerAction
+					id="visibilityDeckDangerAction"
+					header="Change deck visibility"
+					description={`This deck is currently ${deck.deckType?.toLowerCase()}.`}
+					button="Change Visibility"
+					disabled={!isAdmin}
+					onClick={() => {
+						modifyDeck({
+							deckType:
+								deck.deckType === "PRIVATE"
+									? "PUBLIC"
+									: "PRIVATE",
+						});
+					}}
+				></DangerAction>
+				<hr className="border-kiokuLightBlue" />
 				<DangerAction
 					id="deleteDeckDangerAction"
 					header="Delete this deck"
@@ -101,15 +106,16 @@ export const DeckSettingsTab = ({
 		</div>
 	);
 
-	async function modifyDeck(deck: Deck) {
+	async function modifyDeck(body: {
+		deckName?: string;
+		deckType?: "PUBLIC" | "PRIVATE";
+	}) {
 		const response = await authedFetch(`/api/decks/${deck.deckID}`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({
-				deckName: deck.deckName,
-			}),
+			body: JSON.stringify(body),
 		});
 		if (response?.ok) {
 			toast.info("Deck updated!", { toastId: "updatedDeckToast" });

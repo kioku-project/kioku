@@ -51,7 +51,6 @@ func (e *CardDeck) checkUserDeckAccess(
 	userID string,
 	deckID string,
 ) error {
-	e.store.FindDeckByID(deckID)
 	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, deckID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
@@ -200,7 +199,7 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 	if err := helper.CheckForValidName(req.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID); err != nil {
 		return err
 	}
-	err, dt := converter.MigrateProtoDeckTypeToModelDeckType(req.DeckType)
+	dt, err := converter.MigrateProtoDeckTypeToModelDeckType(req.DeckType)
 	if err != nil {
 		return err
 	}
@@ -217,7 +216,7 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 	return nil
 }
 
-func (e *CardDeck) CopyDeck(ctx context.Context, req *pb.CopyDeckRequest, rsp *pb.DeckResponse) error {
+func (e *CardDeck) CopyDeck(ctx context.Context, req *pb.CopyDeckRequest, rsp *pb.IDResponse) error {
 	logger.Infof("Received CardDeck.CopyDeck request: %v", req)
 	if err := e.checkUserDeckAccess(ctx, req.UserID, req.DeckID); err != nil {
 		return err
@@ -229,20 +228,20 @@ func (e *CardDeck) CopyDeck(ctx context.Context, req *pb.CopyDeckRequest, rsp *p
 		deckType model.DeckType
 		err      error
 	)
-	if req.DeckType == nil {
-		deckType = model.PrivateDeckType
+	if req.DeckType != nil {
+		deckType, err = converter.MigrateProtoDeckTypeToModelDeckType(*req.DeckType)
 	} else {
-		err, deckType = converter.MigrateProtoDeckTypeToModelDeckType(*req.DeckType)
-		if err != nil {
-			return err
-		}
+		deckType = model.PrivateDeckType
 	}
+
 	newDeck := &model.Deck{
 		GroupID:  req.TargetGroupID,
 		Name:     req.DeckName,
 		DeckType: deckType,
 	}
-	e.store.CreateDeck(newDeck)
+	if err := e.store.CreateDeck(newDeck); err != nil {
+		return err
+	}
 	cards, err := e.store.FindDeckCards(req.DeckID)
 	if err != nil {
 		return err
@@ -269,6 +268,7 @@ func (e *CardDeck) CopyDeck(ctx context.Context, req *pb.CopyDeckRequest, rsp *p
 			return err
 		}
 	}
+	rsp.ID = newDeck.ID
 	return nil
 }
 
@@ -303,7 +303,7 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rs
 		deck.Name = *req.DeckName
 	}
 	if req.DeckType != nil {
-		err, dt := converter.MigrateProtoDeckTypeToModelDeckType(*req.DeckType)
+		dt, err := converter.MigrateProtoDeckTypeToModelDeckType(*req.DeckType)
 		if err != nil {
 			return err
 		}

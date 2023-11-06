@@ -8,7 +8,7 @@ service CardDeck {
 	rpc GetGroupDecks(GroupDecksRequest) returns (GroupDecksResponse) {}
 	rpc CreateDeck(CreateDeckRequest) returns (IDResponse) {}
 	rpc GetDeck(IDRequest) returns (DeckResponse) {}
-	rpc CopyDeck(CopyDeckRequest) returns (DeckResponse) {}
+	rpc CopyDeck(CopyDeckRequest) returns (IDResponse) {}
 	rpc ModifyDeck(ModifyDeckRequest) returns (SuccessResponse) {}
 	rpc DeleteDeck(IDRequest) returns (SuccessResponse) {}
 	rpc GetDeckCards(IDRequest) returns (DeckCardsResponse) {}

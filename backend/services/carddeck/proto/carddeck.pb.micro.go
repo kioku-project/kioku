@@ -39,7 +39,7 @@ type CardDeckService interface {
 	GetGroupDecks(ctx context.Context, in *GroupDecksRequest, opts ...client.CallOption) (*GroupDecksResponse, error)
 	CreateDeck(ctx context.Context, in *CreateDeckRequest, opts ...client.CallOption) (*IDResponse, error)
 	GetDeck(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*DeckResponse, error)
-	CopyDeck(ctx context.Context, in *CopyDeckRequest, opts ...client.CallOption) (*DeckResponse, error)
+	CopyDeck(ctx context.Context, in *CopyDeckRequest, opts ...client.CallOption) (*IDResponse, error)
 	ModifyDeck(ctx context.Context, in *ModifyDeckRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	DeleteDeck(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*SuccessResponse, error)
 	GetDeckCards(ctx context.Context, in *IDRequest, opts ...client.CallOption) (*DeckCardsResponse, error)
@@ -94,9 +94,9 @@ func (c *cardDeckService) GetDeck(ctx context.Context, in *IDRequest, opts ...cl
 	return out, nil
 }
 
-func (c *cardDeckService) CopyDeck(ctx context.Context, in *CopyDeckRequest, opts ...client.CallOption) (*DeckResponse, error) {
+func (c *cardDeckService) CopyDeck(ctx context.Context, in *CopyDeckRequest, opts ...client.CallOption) (*IDResponse, error) {
 	req := c.c.NewRequest(c.name, "CardDeck.CopyDeck", in)
-	out := new(DeckResponse)
+	out := new(IDResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -210,7 +210,7 @@ type CardDeckHandler interface {
 	GetGroupDecks(context.Context, *GroupDecksRequest, *GroupDecksResponse) error
 	CreateDeck(context.Context, *CreateDeckRequest, *IDResponse) error
 	GetDeck(context.Context, *IDRequest, *DeckResponse) error
-	CopyDeck(context.Context, *CopyDeckRequest, *DeckResponse) error
+	CopyDeck(context.Context, *CopyDeckRequest, *IDResponse) error
 	ModifyDeck(context.Context, *ModifyDeckRequest, *SuccessResponse) error
 	DeleteDeck(context.Context, *IDRequest, *SuccessResponse) error
 	GetDeckCards(context.Context, *IDRequest, *DeckCardsResponse) error
@@ -228,7 +228,7 @@ func RegisterCardDeckHandler(s server.Server, hdlr CardDeckHandler, opts ...serv
 		GetGroupDecks(ctx context.Context, in *GroupDecksRequest, out *GroupDecksResponse) error
 		CreateDeck(ctx context.Context, in *CreateDeckRequest, out *IDResponse) error
 		GetDeck(ctx context.Context, in *IDRequest, out *DeckResponse) error
-		CopyDeck(ctx context.Context, in *CopyDeckRequest, out *DeckResponse) error
+		CopyDeck(ctx context.Context, in *CopyDeckRequest, out *IDResponse) error
 		ModifyDeck(ctx context.Context, in *ModifyDeckRequest, out *SuccessResponse) error
 		DeleteDeck(ctx context.Context, in *IDRequest, out *SuccessResponse) error
 		GetDeckCards(ctx context.Context, in *IDRequest, out *DeckCardsResponse) error
@@ -263,7 +263,7 @@ func (h *cardDeckHandler) GetDeck(ctx context.Context, in *IDRequest, out *DeckR
 	return h.CardDeckHandler.GetDeck(ctx, in, out)
 }
 
-func (h *cardDeckHandler) CopyDeck(ctx context.Context, in *CopyDeckRequest, out *DeckResponse) error {
+func (h *cardDeckHandler) CopyDeck(ctx context.Context, in *CopyDeckRequest, out *IDResponse) error {
 	return h.CardDeckHandler.CopyDeck(ctx, in, out)
 }
 

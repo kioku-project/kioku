@@ -576,28 +576,33 @@ func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+type copyDeckBody struct {
+	DeckName      string `json:"deckName"`
+	TargetGroupID string `json:"targetGroupID"`
+}
+
 func (e *Frontend) CopyDeckHandler(c *fiber.Ctx) error {
-	var data map[string]string
+	var data copyDeckBody
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	if deckName := data["deckName"]; deckName == "" {
+	if data.DeckName == "" {
 		return helper.NewFiberBadRequestErr("no deck name given")
 	}
-	if targetGroupID := data["targetGroupID"]; targetGroupID == "" {
+	if data.TargetGroupID == "" {
 		return helper.NewFiberBadRequestErr("no targetGroupID given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	_, err := e.cardDeckService.CopyDeck(c.Context(), &pbCardDeck.CopyDeckRequest{
+	rsp, err := e.cardDeckService.CopyDeck(c.Context(), &pbCardDeck.CopyDeckRequest{
 		UserID:        userID,
 		DeckID:        c.Params("deckID"),
-		TargetGroupID: data["targetGroupID"],
-		DeckName:      data["deckName"],
+		TargetGroupID: data.TargetGroupID,
+		DeckName:      data.DeckName,
 	})
 	if err != nil {
 		return err
 	}
-	return c.SendStatus(200)
+	return c.SendString(rsp.DeckID)
 }
 
 func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {

@@ -16,7 +16,6 @@ import (
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
 	"github.com/kioku-project/kioku/services/frontend/handler"
-	pb "github.com/kioku-project/kioku/services/frontend/proto"
 	pbUser "github.com/kioku-project/kioku/services/user/proto"
 
 	"go-micro.dev/v4"
@@ -155,9 +154,6 @@ func main() {
 	// }
 
 	// Register handler
-	if err := pb.RegisterHealthHandler(srv.Server(), new(handler.Health)); err != nil {
-		logger.Fatal(err)
-	}
 
 	go func() {
 		if err := app.Listen(":80"); err != nil {

@@ -503,7 +503,13 @@ func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(rspGroupDecks)
+	decks := converter.ConvertToTypeArray(rspGroupDecks.Decks, converter.ProtoDeckToFiberDeckConverter)
+	for _, deck := range decks {
+		deck.GroupID = c.Params("groupID")
+	}
+	return c.JSON(converter.FiberGetGroupDecksResponseBody{
+		Decks: decks,
+	})
 }
 
 func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
@@ -516,10 +522,15 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("no deck name given")
 	}
 	userID := helper.GetUserIDFromContext(c)
+	deckType := pbCardDeck.DeckType_PRIVATE
+	if dt := strings.TrimSpace(data["deckType"]); dt != "" {
+		deckType = converter.MigrateStringDeckTypeToProtoDeckType(dt)
+	}
 	rspCreateDeck, err := e.cardDeckService.CreateDeck(c.Context(), &pbCardDeck.CreateDeckRequest{
 		UserID:   userID,
 		GroupID:  c.Params("groupID"),
 		DeckName: data["deckName"],
+		DeckType: deckType,
 	})
 	if err != nil {
 		return err
@@ -536,7 +547,7 @@ func (e *Frontend) GetDeckHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(rspGetDeck)
+	return c.JSON(converter.ProtoDeckRespToFiberDeckConverter(rspGetDeck))
 }
 
 func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
@@ -544,11 +555,18 @@ func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
+	var deckType pbCardDeck.DeckType
+	if data["deckType"] != nil {
+		if dt := strings.TrimSpace(*data["deckType"]); dt != "" {
+			deckType = converter.MigrateStringDeckTypeToProtoDeckType(dt)
+		}
+	}
 	userID := helper.GetUserIDFromContext(c)
 	rspModifyDeck, err := e.cardDeckService.ModifyDeck(c.Context(), &pbCardDeck.ModifyDeckRequest{
 		UserID:   userID,
 		DeckID:   c.Params("deckID"),
 		DeckName: data["deckName"],
+		DeckType: &deckType,
 	})
 	if err != nil {
 		return err

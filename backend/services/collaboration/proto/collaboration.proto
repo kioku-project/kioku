@@ -79,9 +79,10 @@ message ModifyGroupRequest {
 }
 
 enum GroupType {
-	INVALID = 0;
-	PUBLIC = 1;
-	PRIVATE = 2;
+	REQUEST = 0;
+	OPEN = 1;
+	CLOSED = 2;
+	INVALID = 3;
 }
 
 message IDResponse {

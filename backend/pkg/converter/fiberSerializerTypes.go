@@ -20,6 +20,13 @@ type FiberGroup struct {
 	GroupRole        string `json:"groupRole"`
 }
 
+type FiberDeck struct {
+	DeckID   string `json:"deckID"`
+	DeckName string `json:"deckName"`
+	DeckType string `json:"deckType"`
+	GroupID  string `json:"groupID"`
+}
+
 type FiberGroupMemberAdmission struct {
 	UserID string `json:"userID"`
 	Name   string `json:"userName"`
@@ -50,6 +57,10 @@ type FiberModifyCardSideRequestBody struct {
 
 type FiberGetGroupMembersResponseBody struct {
 	Members []FiberGroupMember `json:"users"`
+}
+
+type FiberGetGroupDecksResponseBody struct {
+	Decks []FiberDeck `json:"decks"`
 }
 
 type FiberGetUserDueCardsResponseBody struct {

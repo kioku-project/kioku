@@ -9,7 +9,6 @@ init:
 .PHONY: proto
 proto:
 	@protoc --proto_path=. --micro_out=. --go_out=:. proto/carddeck.proto
-	@protoc --proto_path=. --micro_out=. --go_out=:. proto/health.proto
 	
 
 .PHONY: update

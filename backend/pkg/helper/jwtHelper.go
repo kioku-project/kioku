@@ -16,7 +16,6 @@ import (
 )
 
 func getJWTPrivateKey() (*ecdsa.PrivateKey, error) {
-
 	pem, _ := pem2.Decode([]byte(os.Getenv("JWT_PRIVATE_KEY")))
 	if pem == nil {
 		panic("JWT Private Key not given")
@@ -30,7 +29,6 @@ func getJWTPrivateKey() (*ecdsa.PrivateKey, error) {
 }
 
 func GetJWTPublicKey() (crypto.PublicKey, error) {
-
 	priv, err := getJWTPrivateKey()
 	if err != nil {
 		return nil, err
@@ -39,7 +37,6 @@ func GetJWTPublicKey() (crypto.PublicKey, error) {
 }
 
 func ParseJWTToken(tokenString string) (*jwt.Token, error) {
-
 	if tokenString == "" {
 		return nil, errors.New("please re-authenticate")
 	}
@@ -61,7 +58,6 @@ func ParseJWTToken(tokenString string) (*jwt.Token, error) {
 }
 
 func CreateJWTTokenString(exp time.Time, id interface{}, email interface{}, name interface{}) (string, error) {
-
 	priv, err := getJWTPrivateKey()
 	if err != nil {
 		return "", err
@@ -79,6 +75,41 @@ func CreateJWTTokenString(exp time.Time, id interface{}, email interface{}, name
 		return "", err
 	}
 	return tokenString, nil
+}
+
+func GenerateAccessToken(c *fiber.Ctx, userID string, email string, username string) error {
+	// Generate encoded tokens and send them as response.
+	aTExp := time.Now().Add(time.Minute * 30)
+	aTString, err := CreateJWTTokenString(aTExp, userID, email, username)
+	if err != nil {
+		logger.Infof("%v", err)
+		return err
+	}
+	c.Cookie(&fiber.Cookie{
+		Name:    "access_token",
+		Value:   aTString,
+		Path:    "/",
+		Expires: aTExp,
+	})
+	return nil
+}
+
+func GenerateRefreshToken(c *fiber.Ctx, userID string, email string, username string) error {
+	// Generate encoded tokens and send them as response.
+	rTExp := time.Now().Add(time.Hour * 24 * 7)
+	rTString, err := CreateJWTTokenString(rTExp, userID, email, username)
+	if err != nil {
+		logger.Infof("%v", err)
+		return err
+	}
+	c.Cookie(&fiber.Cookie{
+		Name:     "refresh_token",
+		Value:    rTString,
+		Path:     "/",
+		Expires:  rTExp,
+		HTTPOnly: true,
+	})
+	return nil
 }
 
 func GetUserIDFromContext(c *fiber.Ctx) string {

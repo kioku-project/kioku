@@ -6,7 +6,6 @@ import useSWR from "swr";
 
 import Authenticated from "../../../components/accessControl/Authenticated";
 import { FetchHeader } from "../../../components/layout/Header";
-import { Navbar } from "../../../components/navigation/Navbar";
 import { CardsTab } from "../../../components/navigation/Tabs/CardsTab";
 import { DeckSettingsTab } from "../../../components/navigation/Tabs/DeckSettingsTab";
 import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
@@ -67,8 +66,7 @@ export default function Page() {
 			</Head>
 
 			<Authenticated>
-				<div className="min-w-screen flex h-screen flex-col bg-eggshell">
-					<Navbar login={true}></Navbar>
+				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 					{group && deck && (
 						<div className="flex h-full flex-col space-y-3 overflow-y-auto p-5 md:space-y-5 md:p-10">
 							<FetchHeader

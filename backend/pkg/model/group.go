@@ -8,8 +8,9 @@ import (
 type GroupType string
 
 const (
-	Public  GroupType = "public"
-	Private GroupType = "private"
+	OpenGroupType    GroupType = "open"
+	RequestGroupType GroupType = "request"
+	ClosedGroupType  GroupType = "closed"
 )
 
 type Group struct {

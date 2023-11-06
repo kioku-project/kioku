@@ -15,7 +15,6 @@ import (
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	pbUser "github.com/kioku-project/kioku/services/user/proto"
-	"go-micro.dev/v4/logger"
 )
 
 type Frontend struct {
@@ -45,13 +44,13 @@ func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
 		return err
 	}
 	if data["userEmail"] == "" {
-		return helper.NewFiberBadRequestErr("no e-mail given")
+		return helper.NewFiberMissingEmailErr()
 	}
 	if data["userName"] == "" {
-		return helper.NewFiberBadRequestErr("no name given")
+		return helper.NewFiberMissingNameErr()
 	}
 	if data["userPassword"] == "" {
-		return helper.NewFiberBadRequestErr("no password given")
+		return helper.NewFiberMissingPasswordErr()
 	}
 	rspRegister, err := e.userService.Register(c.Context(), &pbUser.RegisterRequest{
 		UserEmail:    data["userEmail"],
@@ -70,10 +69,10 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 		return err
 	}
 	if reqUser.Email == "" {
-		return helper.NewFiberBadRequestErr("no e-mail given")
+		return helper.NewFiberMissingEmailErr()
 	}
 	if reqUser.Password == "" {
-		return helper.NewFiberBadRequestErr("no password given")
+		return helper.NewFiberMissingPasswordErr()
 	}
 	rspLogin, err := e.userService.Login(c.Context(), &pbUser.LoginRequest{
 		UserEmail:    reqUser.Email,
@@ -84,32 +83,12 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	}
 
 	// Generate encoded tokens and send them as response.
-	aTExp := time.Now().Add(time.Minute * 30)
-	aTString, err := helper.CreateJWTTokenString(aTExp, rspLogin.UserID, reqUser.Email, rspLogin.UserName)
-	if err != nil {
-		logger.Infof("%v", err)
-		return c.SendStatus(fiber.StatusInternalServerError)
+	if err := helper.GenerateAccessToken(c, rspLogin.UserID, reqUser.Email, rspLogin.UserName); err != nil {
+		return err
 	}
-	rTExp := time.Now().Add(time.Hour * 24 * 7)
-	rTString, err := helper.CreateJWTTokenString(rTExp, rspLogin.UserID, reqUser.Email, rspLogin.UserName)
-	if err != nil {
-		logger.Infof("%v", err)
-		return c.SendStatus(fiber.StatusInternalServerError)
+	if err := helper.GenerateRefreshToken(c, rspLogin.UserID, reqUser.Email, rspLogin.UserName); err != nil {
+		return err
 	}
-
-	c.Cookie(&fiber.Cookie{
-		Name:    "access_token",
-		Value:   aTString,
-		Path:    "/",
-		Expires: aTExp,
-	})
-	c.Cookie(&fiber.Cookie{
-		Name:     "refresh_token",
-		Value:    rTString,
-		Path:     "/",
-		Expires:  rTExp,
-		HTTPOnly: true,
-	})
 
 	return c.SendStatus(200)
 }
@@ -137,32 +116,8 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 	}
 
 	// Generate encoded tokens and send them as response.
-	aTExp := time.Now().Add(time.Minute * 30)
-	aTString, err := helper.CreateJWTTokenString(aTExp, claims["sub"], claims["email"], claims["name"])
-	if err != nil {
-		logger.Infof("%v", err)
-		return c.SendStatus(fiber.StatusInternalServerError)
-	}
-	rTExp := time.Now().Add(time.Hour * 24 * 7)
-	rTString, err := helper.CreateJWTTokenString(rTExp, claims["sub"], claims["email"], claims["name"])
-	if err != nil {
-		logger.Infof("%v", err)
-		return c.SendStatus(fiber.StatusInternalServerError)
-	}
-
-	c.Cookie(&fiber.Cookie{
-		Name:    "access_token",
-		Value:   aTString,
-		Path:    "/",
-		Expires: aTExp,
-	})
-	c.Cookie(&fiber.Cookie{
-		Name:     "refresh_token",
-		Value:    rTString,
-		Path:     "/",
-		Expires:  rTExp,
-		HTTPOnly: true,
-	})
+	helper.GenerateAccessToken(c, claims["sub"].(string), claims["email"].(string), claims["name"].(string))
+	helper.GenerateRefreshToken(c, claims["sub"].(string), claims["email"].(string), claims["name"].(string))
 	return c.SendStatus(200)
 }
 
@@ -190,6 +145,41 @@ func (e *Frontend) GetUserHandler(c *fiber.Ctx) error {
 		return err
 	}
 	return c.JSON(rspGetUser)
+}
+
+type modifyUserPayload struct {
+	UserEmail    *string `json:"userEmail"`
+	UserName     *string `json:"userName"`
+	UserPassword *string `json:"userPassword"`
+}
+
+func (e *Frontend) ModifyUserHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	var data modifyUserPayload
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	rspModUser, err := e.userService.ModifyUserProfileInformation(c.Context(), &pbUser.ModifyRequest{
+		UserID:       userID,
+		UserName:     data.UserName,
+		UserEmail:    data.UserEmail,
+		UserPassword: data.UserPassword,
+	})
+	if err != nil {
+		return err
+	}
+	if !rspModUser.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	rspGetUser, err := e.userService.GetUserProfileInformation(c.Context(), &pbUser.UserID{
+		UserID: userID,
+	})
+	if err != nil {
+		return err
+	}
+	helper.GenerateAccessToken(c, userID, rspGetUser.UserEmail, rspGetUser.UserName)
+	helper.GenerateRefreshToken(c, userID, rspGetUser.UserEmail, rspGetUser.UserName)
+	return c.SendStatus(200)
 }
 
 func (e *Frontend) DeleteUserHandler(c *fiber.Ctx) error {

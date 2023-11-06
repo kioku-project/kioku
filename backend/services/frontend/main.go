@@ -106,6 +106,7 @@ func main() {
 	app.Post("/api/logout", svc.LogoutHandler)
 
 	app.Get("/api/user", svc.GetUserHandler)
+	app.Put("/api/user", svc.ModifyUserHandler)
 	app.Delete("/api/user", svc.DeleteUserHandler)
 	app.Get("/api/user/dueCards", svc.SrsUserDueHandler)
 	app.Get("/api/user/invitations", svc.GetGroupInvitationsHandler)

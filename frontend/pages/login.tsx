@@ -80,6 +80,16 @@ export default function Page() {
 									emailInput.current?.focus();
 									setLogin((prev) => !prev);
 								}}
+								onKeyUp={(event) => {
+									if (event.key == "Enter") {
+										event.target.dispatchEvent(
+											new Event("click", {
+												bubbles: true,
+											})
+										);
+									}
+								}}
+								tabIndex={0}
 							>
 								{login ? "Create an account" : "Sign in"}
 							</a>

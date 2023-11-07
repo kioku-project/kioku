@@ -85,12 +85,19 @@ export const Header = ({
 						{!deck && group && group.groupName}
 						{user && `Welcome ${user.userName}`}
 					</Text>
-					{deck && deck?.deckType && (
+					{deck?.deckType && (
 						<Badge
-							id="visibilityBadgeId"
+							id="deckTypeBadgeId"
 							label={deck.deckType}
 							style="tertiary"
-						></Badge>
+						/>
+					)}
+					{group?.groupType && (
+						<Badge
+							id="groupTypeBadgeId"
+							label={group.groupType}
+							style="tertiary"
+						/>
 					)}
 				</div>
 				<Text style="secondary" size="xs">

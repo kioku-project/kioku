@@ -3,6 +3,8 @@ import { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
+import { ToggleAction } from "@/components/input/ToggleAction";
+
 import { Group as GroupType } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
@@ -87,21 +89,23 @@ export const GroupSettingsTab = ({
 				></DangerAction>
 				<hr className="border-kiokuLightBlue" />
 				{/* Settings for group admins */}
-				<DangerAction
-					id="visibilityGroupDangerAction"
-					header="Change group visibility"
-					description={`This group is currently ${group.groupType?.toLowerCase()}.`}
-					button="Change Visibility"
+				<ToggleAction
+					id="groupTypeDangerAction"
+					header="Change who can join this group"
+					description={
+						group.groupType === "OPEN"
+							? "Everyone can join this group"
+							: group.groupType === "REQUEST"
+							? "Everyone can request to join this group"
+							: "Nobody can request to join this group"
+					}
+					choices={["OPEN", "REQUEST", "CLOSED"]}
+					activeButton={group.groupType}
 					disabled={!isAdmin}
-					onClick={() => {
-						modifyGroup({
-							groupType:
-								group.groupType === "PRIVATE"
-									? "PUBLIC"
-									: "PRIVATE",
-						});
+					onChange={(event) => {
+						modifyGroup({ groupType: event.currentTarget.value });
 					}}
-				></DangerAction>
+				></ToggleAction>
 				<hr className="border-kiokuLightBlue" />
 				<DangerAction
 					id="deleteGroupDangerAction"

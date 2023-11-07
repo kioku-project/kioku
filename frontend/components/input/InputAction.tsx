@@ -69,8 +69,8 @@ export const InputAction = ({
 						label={header}
 						value={value}
 						statusIcon="none"
-						style="tertiary"
-						responsive={false}
+						inputFieldStyle="tertiary"
+						inputFieldSize="3xs"
 						readOnly={disabled}
 						onChange={onChange}
 					></InputField>

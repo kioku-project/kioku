@@ -103,7 +103,7 @@ export default function Page() {
 					name="email"
 					label="Email"
 					required={true}
-					size="xs"
+					inputFieldSize="xs"
 					ref={emailInput}
 				/>
 				{!login && (
@@ -113,7 +113,7 @@ export default function Page() {
 						name="name"
 						label="Name"
 						required={true}
-						size="xs"
+						inputFieldSize="xs"
 						ref={nameInput}
 					/>
 				)}
@@ -124,7 +124,7 @@ export default function Page() {
 					label="Password"
 					required={true}
 					minLength={3}
-					size="xs"
+					inputFieldSize="xs"
 					onChange={(event) => {
 						setPassword(event.target.value);
 					}}
@@ -140,7 +140,7 @@ export default function Page() {
 						required={true}
 						minLength={3}
 						pattern={password}
-						size="xs"
+						inputFieldSize="xs"
 						ref={repeatPasswordInput}
 					/>
 				)}

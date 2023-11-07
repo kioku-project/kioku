@@ -1,3 +1,4 @@
+import { Text } from "../Text";
 import { Action } from "./Action";
 import { Button } from "./Button";
 
@@ -54,12 +55,18 @@ export const DangerAction = ({
 			<Action
 				description={
 					<>
-						<div className="font-bold text-kiokuDarkBlue">
+						<Text
+							size="3xs"
+							className="font-bold text-kiokuDarkBlue"
+						>
 							{header}
-						</div>
-						<div className="font-medium text-kiokuLightBlue">
+						</Text>
+						<Text
+							size="3xs"
+							className="font-medium text-kiokuLightBlue"
+						>
 							{description}
-						</div>
+						</Text>
 					</>
 				}
 				button={
@@ -67,7 +74,7 @@ export const DangerAction = ({
 						id={`${id}ButtonId`}
 						buttonStyle={disabled ? "disabled" : "error"}
 						buttonSize="sm"
-						className="h-fit w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6"
+						className="w-full"
 						onClick={() => !disabled && onClick?.()}
 					>
 						{button}

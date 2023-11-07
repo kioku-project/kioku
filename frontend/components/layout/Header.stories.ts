@@ -12,11 +12,59 @@ const meta: Meta<typeof Header> = {
 export default meta;
 type Story = StoryObj<typeof Header>;
 
+export const User: Story = {
+	args: {
+		user: {
+			userID: "U-12345678",
+			userName: "Test User",
+		},
+	},
+};
+
+export const UserWithDescription: Story = {
+	args: {
+		user: {
+			userID: "U-12345678",
+			userName: "Test User",
+			dueCards: 7,
+			dueDecks: 2
+		},
+	},
+};
+
 export const Deck: Story = {
 	args: {
 		deck: {
 			deckID: "D-12345678",
 			deckName: "Test Deck",
+		},
+		group: {
+			groupID: "G-12345678",
+			groupName: "Test Group",
+		},
+	},
+};
+
+export const PublicDeck: Story = {
+	args: {
+		deck: {
+			deckID: "D-12345678",
+			deckName: "Test Deck",
+			deckType: "PUBLIC"
+		},
+		group: {
+			groupID: "G-12345678",
+			groupName: "Test Group",
+		},
+	},
+};
+
+export const PrivateDeck: Story = {
+	args: {
+		deck: {
+			deckID: "D-12345678",
+			deckName: "Test Deck",
+			deckType: "PRIVATE"
 		},
 		group: {
 			groupID: "G-12345678",
@@ -44,22 +92,32 @@ export const GroupWithDescription: Story = {
 	},
 };
 
-export const PrivateGroup: Story = {
+export const OpenGroup: Story = {
 	args: {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
-			groupType: "PRIVATE",
+			groupType: "OPEN",
 		},
 	},
 };
 
-export const PublicGroup: Story = {
+export const RequestGroup: Story = {
 	args: {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
-			groupType: "PUBLIC",
+			groupType: "REQUEST",
+		},
+	},
+};
+
+export const ClosedGroup: Story = {
+	args: {
+		group: {
+			groupID: "G-12345678",
+			groupName: "Test Group",
+			groupType: "CLOSED",
 		},
 	},
 };
@@ -80,15 +138,6 @@ export const InvitedGroup: Story = {
 			groupID: "G-12345678",
 			groupName: "Test Group",
 			groupRole: "INVITED",
-		},
-	},
-};
-
-export const User: Story = {
-	args: {
-		user: {
-			userID: "U-12345678",
-			userName: "Test User",
 		},
 	},
 };

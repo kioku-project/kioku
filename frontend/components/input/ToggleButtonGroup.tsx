@@ -65,13 +65,13 @@ export const ToggleButtonGroup = ({
 			id={id}
 			className={`flex w-fit flex-row overflow-hidden rounded-md bg-gray-100 ${className}`}
 		>
-			{choices.map((choice, index) => (
+			{choices.map((choice) => (
 				<Button
 					id={`${choice}ButtonId`}
 					value={choice}
 					buttonStyle={disabled ? "disabled" : "none"}
 					buttonSize={buttonSize}
-					key={index}
+					key={choice}
 					className={`flex flex-1 rounded-none ${
 						choice == active
 							? getStyle[activeButtonStyle]

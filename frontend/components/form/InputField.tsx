@@ -85,7 +85,7 @@ export const InputField = forwardRef(
 			onChange = () => {},
 			onBlur = () => {},
 			...props
-		}: InputFieldProps & InputHTMLAttributes<HTMLInputElement>, //ButtonHTMLAttributes<HTMLButtonElement>,
+		}: InputFieldProps & InputHTMLAttributes<HTMLInputElement>,
 		ref: Ref<HTMLInputElement>
 	) => {
 		const [initialised, setInitialised] = useState(false);

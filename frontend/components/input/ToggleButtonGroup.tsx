@@ -12,7 +12,7 @@ export interface ToggleButtonGroupProps {
 	 */
 	choices: string[];
 	/**
-	 *	Initially active button
+	 * Initially active button
 	 */
 	activeButton?: string;
 	/**

@@ -92,13 +92,18 @@ export const GroupSettingsTab = ({
 				<ToggleAction
 					id="groupTypeDangerAction"
 					header="Change how others join this group"
-					description={
-						group.groupType === "OPEN"
-							? "Everyone can join this group"
-							: group.groupType === "REQUEST"
-							? "Everyone can request to join this group"
-							: "Everyone has to be invited to join this group"
-					}
+					description={(() => {
+						switch (group.groupType) {
+							case "OPEN":
+								return "Everyone can join this group";
+							case "REQUEST":
+								return "Everyone can request to join this group";
+							case "CLOSED":
+								return "Everyone has to be invited to join this group";
+							default:
+								return "Unexpected group type";
+						}
+					})()}
 					choices={["OPEN", "REQUEST", "CLOSED"]}
 					activeButton={group.groupType}
 					disabled={!isAdmin}

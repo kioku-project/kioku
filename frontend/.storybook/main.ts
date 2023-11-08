@@ -11,6 +11,18 @@ const config: StorybookConfig = {
 		"@storybook/addon-links",
 		"@storybook/addon-essentials",
 		"@storybook/addon-interactions",
+		{
+			name: 'storybook-addon-swc',
+			options: {
+        		swcLoaderOptions: {
+          			jsc: {
+            			experimental: {
+              				plugins: [['@lingui/swc-plugin', {}]],
+            			},
+          			},
+        		},
+			},
+		},
 	],
 	framework: {
 		name: "@storybook/nextjs",

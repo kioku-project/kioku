@@ -1,3 +1,4 @@
+import { Trans, t } from "@lingui/macro";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
@@ -56,18 +57,20 @@ export default function Page() {
 							<KiokuAward></KiokuAward>
 							<div className="flex flex-col items-center space-y-1">
 								<div className="text-4xl font-bold text-kiokuDarkBlue">
-									Congratulations!
+									<Trans>Congratulations!</Trans>
 								</div>
 								<div className="text-lg font-semibold text-kiokuLightBlue">
-									You did it! There are no cards left in this
-									deck to learn today.
+									<Trans>
+										You did it! There are no cards left in
+										this deck to learn today.
+									</Trans>
 								</div>
 							</div>
 							<Button
 								id="goBackButtonId"
 								onClick={() => router.push(`/deck/${deckID}`)}
 							>
-								Back to Deck!
+								<Trans>Back to Deck!</Trans>
 							</Button>
 						</div>
 					)}
@@ -85,7 +88,7 @@ export default function Page() {
 			body: JSON.stringify(body),
 		});
 		if (response?.ok) {
-			toast.info("Card updated!", { toastId: "updatedCardToast" });
+			toast.info(t`Card updated!`, { toastId: "updatedCardToast" });
 			mutate(`/api/decks/${deckID}/pull`);
 			mutate(`/api/decks/${deckID}/dueCards`);
 		} else {

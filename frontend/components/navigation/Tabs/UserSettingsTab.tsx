@@ -1,3 +1,5 @@
+import { msg, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
@@ -34,14 +36,16 @@ export const UserSettingsTab = ({
 
 	const [isConfirmDeletion, setConfirmDeletion] = useState(false);
 
+	const { _ } = useLingui();
+
 	return (
 		<div className={`space-y-5 ${className}`}>
 			<Section id="generalUserSettingsSectionId" header="General">
 				<InputAction
 					id="userNameInputAction"
-					header="Username"
+					header={_(msg`Username`)}
 					value={userName}
-					button="Rename"
+					button={_(msg`Rename`)}
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {
 						setUserName(event.target.value);
 					}}
@@ -52,16 +56,19 @@ export const UserSettingsTab = ({
 			</Section>
 			<Section
 				id="userSettingsDangerZoneSectionId"
-				header="Danger Zone"
+				header={_(msg`Danger Zone`)}
 				style="error"
 			>
 				<DangerAction
 					id="deleteAccountDangerAction"
-					header="Delete your Account"
-					description={`Once you delete your user, there is no going back. Please be
-					certain.`}
+					header={_(msg`Delete your Account`)}
+					description={_(
+						msg`Once you delete your user, there is no going back. Please be certain.`
+					)}
 					button={
-						isConfirmDeletion ? "Click Again" : "Delete Account"
+						isConfirmDeletion
+							? _(msg`Click Again`)
+							: _(msg`Delete Account`)
 					}
 					onClick={() => {
 						if (isConfirmDeletion) {
@@ -86,7 +93,7 @@ export const UserSettingsTab = ({
 			body: JSON.stringify(body),
 		});
 		if (response?.ok) {
-			toast.info("User updated!", { toastId: "updatedUserToast" });
+			toast.info(t`User updated!`, { toastId: "updatedUserToast" });
 		} else {
 			toast.error("Error!", { toastId: "updatedGroupToast" });
 		}
@@ -101,7 +108,7 @@ export const UserSettingsTab = ({
 			},
 		});
 		if (response?.ok) {
-			toast.info("User deleted!", { toastId: "deletedUserToast" });
+			toast.info(t`User deleted!`, { toastId: "deletedUserToast" });
 		} else {
 			toast.error("Error!", { toastId: "deletedUserToast" });
 		}

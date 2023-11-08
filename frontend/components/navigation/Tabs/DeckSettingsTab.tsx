@@ -1,3 +1,5 @@
+import { msg, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
@@ -43,15 +45,17 @@ export const DeckSettingsTab = ({
 
 	const isAdmin = GroupRole[group.groupRole!] >= GroupRole.ADMIN;
 
+	const { _ } = useLingui();
+
 	return (
 		<div className={`space-y-5 ${className}`}>
 			{/* Settings for group admins */}
 			<Section id="generalDeckSettingsId" header="General">
 				<InputAction
 					id="deckNameInputAction"
-					header="Deck Name"
+					header={_(msg`Deck Name`)}
 					value={deckState.deckName}
-					button="Rename"
+					button={_(msg`Rename`)}
 					disabled={!isAdmin}
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {
 						setDeckState({
@@ -66,7 +70,7 @@ export const DeckSettingsTab = ({
 			</Section>
 			<Section
 				id={"deckSettingsDangerZoneSectionId"}
-				header="Danger Zone"
+				header={_(msg`Danger Zone`)}
 				style="error"
 			>
 				{/* Settings for group admins */}
@@ -88,9 +92,15 @@ export const DeckSettingsTab = ({
 				<hr className="border-kiokuLightBlue" />
 				<DangerAction
 					id="deleteDeckDangerAction"
-					header="Delete this deck"
-					description="Please be certain when deleting a deck, as there is no way to undo this action."
-					button={isConfirmDeletion ? "Click Again" : "Delete Deck"}
+					header={_(msg`Delete this deck`)}
+					description={_(
+						msg`Please be certain when deleting a deck, as there is no way to undo this action.`
+					)}
+					button={
+						isConfirmDeletion
+							? _(msg`Click Again`)
+							: _(msg`Delete Deck`)
+					}
 					disabled={!isAdmin}
 					onClick={() => {
 						if (isConfirmDeletion) {
@@ -118,7 +128,7 @@ export const DeckSettingsTab = ({
 			body: JSON.stringify(body),
 		});
 		if (response?.ok) {
-			toast.info("Deck updated!", { toastId: "updatedDeckToast" });
+			toast.info(t`Deck updated!`, { toastId: "updatedDeckToast" });
 		} else {
 			toast.error("Error!", { toastId: "updatedDeckToast" });
 		}
@@ -133,7 +143,7 @@ export const DeckSettingsTab = ({
 			},
 		});
 		if (response?.ok) {
-			toast.info("Deck deleted!", { toastId: "deletedDeckToast" });
+			toast.info(t`Deck deleted!`, { toastId: "deletedDeckToast" });
 		} else {
 			toast.error("Error!", { toastId: "deletedDeckToast" });
 		}

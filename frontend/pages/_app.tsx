@@ -2,12 +2,10 @@ import { Messages, i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 
 import { Navbar } from "../components/navigation/Navbar";
-import { messages as deMessages } from "../locales/de/messages";
-import { messages as enMessages } from "../locales/en/messages";
 import "../styles/globals.css";
 
 export async function loadCatalog(locale: string) {

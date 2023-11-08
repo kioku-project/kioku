@@ -153,7 +153,6 @@ export const GroupSettingsTab = ({
 		groupDescription?: string;
 		groupType?: string;
 	}) {
-		const groupTypes = ["OPEN", "REQUEST", "CLOSED"];
 		const response = await authedFetch(`/api/groups/${group.groupID}`, {
 			method: "PUT",
 			headers: {

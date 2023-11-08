@@ -34,7 +34,7 @@ export const Logo = ({ className = "", text = true, onClick }: LogoProps) => {
 			className={`flex flex-row items-center hover:cursor-pointer ${className}`}
 			onClick={onClick}
 			onKeyUp={(event) => {
-				if (event.key == "Enter") {
+				if (event.key === "Enter") {
 					onClick?.();
 				}
 			}}

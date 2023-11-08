@@ -54,7 +54,7 @@ export const Section = ({
 				}`}
 				onClick={onClick}
 				onKeyUp={(event) => {
-					if (event.key == "Enter") {
+					if (event.key === "Enter") {
 						event.target.dispatchEvent(
 							new Event("click", { bubbles: true })
 						);

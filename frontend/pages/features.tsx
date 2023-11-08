@@ -18,9 +18,13 @@ export default function Page() {
 				<div className="mx-auto flex flex-col justify-center p-5 text-base leading-7 md:w-2/3 md:p-10 md:text-center">
 					<a
 						className="text-lg font-semibold text-kiokuLightBlue hover:cursor-pointer"
-						onClick={() => hasCookie("access_token") ? router.push("/") : router.push("/login")}
+						onClick={() =>
+							hasCookie("access_token")
+								? router.push("/")
+								: router.push("/login")
+						}
 						onKeyUp={(event) => {
-							if (event.key == "Enter") {
+							if (event.key === "Enter") {
 								event.target.dispatchEvent(
 									new Event("click", { bubbles: true })
 								);

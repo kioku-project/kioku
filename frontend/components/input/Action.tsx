@@ -24,15 +24,18 @@ export const Action = ({
 	className = "",
 	...props
 }: ActionProps) => {
+	// 1/6 1/5 1/4 1/3 2/5 1/2 3/5 2/3 3/4 4/5 5/6
 	return (
 		<>
 			<div
-				className={`flex w-full flex-col sm:w-2/3 md:w-3/4 lg:w-4/5 xl:w-5/6 ${className}`}
+				className={`flex w-full flex-col sm:w-3/5 md:w-3/5 lg:w-2/3 xl:w-3/4 ${className}`}
 				{...props}
 			>
 				{description}
 			</div>
-			{button}
+			<div className="w-full sm:w-2/5 md:w-2/5 lg:w-1/3 xl:w-1/4">
+				{button}
+			</div>
 		</>
 	);
 };

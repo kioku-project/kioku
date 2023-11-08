@@ -1,40 +1,24 @@
-import React, { ReactNode } from "react";
+import React, { ButtonHTMLAttributes } from "react";
 
-interface ButtonProps {
-	/**
-	 * Unique identifier
-	 */
-	id: string;
-	/**
-	 * Button contents
-	 */
-	children: ReactNode;
+export interface ButtonProps {
 	/**
 	 * Button styling
 	 */
-	style?: keyof typeof getStyle;
+	buttonStyle?: keyof typeof getStyle;
 	/**
 	 * Button size
 	 */
-	size?: keyof typeof getSize;
-	/**
-	 * Additional classes
-	 */
-	className?: string;
-	/**
-	 * Click handler
-	 */
-	onClick?: () => void;
+	buttonSize?: keyof typeof getSize;
 }
 
 const getStyle = {
+	none: "",
 	primary: "bg-kiokuDarkBlue text-eggshell shadow-sm hover:scale-105",
 	secondary:
 		"bg-transparent text-kiokuDarkBlue hover:bg-gray-100 hover:scale-105",
 	error: "bg-kiokuRed text-white hover:scale-105",
 	warning: "bg-kiokuYellow text-white hover:scale-105",
-	disabled:
-		"bg-gray-200 text-gray-400 text-eggshell hover:cursor-not-allowed",
+	disabled: "bg-gray-200 text-gray-400 hover:cursor-not-allowed",
 } as const;
 
 const getSize = {
@@ -47,18 +31,15 @@ const getSize = {
  * UI component for user interactions
  */
 export const Button = ({
-	className,
-	style = "primary",
-	size = "md",
-	children = "",
+	className = "",
+	buttonStyle = "primary",
+	buttonSize = "md",
 	...props
-}: ButtonProps) => {
+}: ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>) => {
 	return (
 		<button
-			className={`flex items-center justify-center rounded-md text-center font-semibold outline-none transition ${getStyle[style]} ${getSize[size]} ${className}`}
+			className={`flex items-center justify-center rounded-md text-center font-semibold outline-none transition ${getStyle[buttonStyle]} ${getSize[buttonSize]} ${className}`}
 			{...props}
-		>
-			{children}
-		</button>
+		></button>
 	);
 };

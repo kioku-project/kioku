@@ -98,7 +98,7 @@ export const Flashcard = ({
 							value={tempCard.sides[side]?.header}
 							placeholder={edit ? "Header" : ""}
 							statusIcon="none"
-							style="secondary"
+							inputFieldStyle="secondary"
 							readOnly={!edit}
 							className="text-lg sm:text-xl md:text-2xl lg:text-3xl"
 							ref={headerInput}
@@ -231,7 +231,7 @@ export const Flashcard = ({
 					<div className="flex flex-row justify-end space-x-1">
 						<Button
 							id="buttonHardId"
-							size="sm"
+							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(0)}
 						>
@@ -239,7 +239,7 @@ export const Flashcard = ({
 						</Button>
 						<Button
 							id="buttonMediumId"
-							size="sm"
+							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(1)}
 						>
@@ -247,7 +247,7 @@ export const Flashcard = ({
 						</Button>
 						<Button
 							id="buttonEasyId"
-							size="sm"
+							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(2)}
 						>

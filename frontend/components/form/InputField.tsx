@@ -1,6 +1,5 @@
 import React, {
-	ChangeEventHandler,
-	FocusEventHandler,
+	InputHTMLAttributes,
 	ReactNode,
 	Ref,
 	forwardRef,
@@ -14,29 +13,9 @@ import { Text } from "../Text";
 
 interface InputFieldProps {
 	/**
-	 * Unique identifier
-	 */
-	id: string;
-	/**
-	 * InputField type
-	 */
-	type: string;
-	/**
-	 * InputField name
-	 */
-	name: string;
-	/**
 	 * InputField label that will be displayed above the InputField
 	 */
 	label?: string;
-	/**
-	 * InputField value
-	 */
-	value?: string;
-	/**
-	 * InputField placeholder that will be displayed when the value is empty
-	 */
-	placeholder?: string;
 	/**
 	 * Icon that will be displayed on the right side of the InputField. If Icon is undefined, it will be set dynamically according to InputField validity.
 	 */
@@ -48,43 +27,11 @@ interface InputFieldProps {
 	/**
 	 * InputField styling
 	 */
-	style?: keyof typeof getStyle;
+	inputFieldStyle?: keyof typeof getStyle;
 	/**
 	 * InputField size
 	 */
-	size?: keyof typeof getSize;
-	/**
-	 * Is the InputField responsive?
-	 */
-	responsive?: boolean;
-	/**
-	 * Is the InputField required?
-	 */
-	required?: boolean;
-	/**
-	 * Minimal input length
-	 */
-	minLength?: number;
-	/**
-	 * Pattern the value has to match to be valid
-	 */
-	pattern?: string;
-	/**
-	 * Is the InputField read only?
-	 */
-	readOnly?: boolean;
-	/**
-	 * Additional classes
-	 */
-	className?: string;
-	/**
-	 * Change handler
-	 */
-	onChange?: ChangeEventHandler<HTMLInputElement>;
-	/**
-	 * Blur handler
-	 */
-	onBlur?: FocusEventHandler<HTMLInputElement>;
+	inputFieldSize?: keyof typeof getSize;
 }
 
 const getStyle = {
@@ -94,11 +41,19 @@ const getStyle = {
 };
 
 const getSize = {
-	xs: "text-xs sm:text-xs md:text-xs lg:text-sm xl:text-base",
-	sm: "text-xs sm:text-xs md:text-sm lg:text-base xl:text-lg",
-	md: "text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl",
-	lg: "text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl",
-	xl: "text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl",
+	"5xs": "text-xs sm:text-xs md:text-xs lg:text-xs xl:text-xs",
+	"4xs": "text-xs sm:text-xs md:text-xs lg:text-xs xl:text-sm",
+	"3xs": "text-xs sm:text-xs md:text-xs lg:text-sm xl:text-base",
+	"2xs": "text-xs sm:text-xs md:text-sm lg:text-base xl:text-lg",
+	xs: "text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl",
+	sm: "text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl",
+	md: "text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl",
+	lg: "text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl",
+	xl: "text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl",
+	"2xl": "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl",
+	"3xl": "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl",
+	"4xl": "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl",
+	"5xl": "text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl",
 } as const;
 
 const statusIcon = {
@@ -118,21 +73,19 @@ function getIcon(status: keyof typeof statusIcon, id: string): ReactNode {
 export const InputField = forwardRef(
 	(
 		{
-			id,
+			id = "inputFieldId",
 			type,
-			name,
 			label,
 			statusIcon,
 			tooltipMessage = `Please enter a valid ${type}.`,
-			style = "primary",
-			size = "md",
-			responsive = true,
+			inputFieldStyle = "primary",
+			inputFieldSize = "md",
 			pattern,
 			className = "",
 			onChange = () => {},
 			onBlur = () => {},
 			...props
-		}: InputFieldProps,
+		}: InputFieldProps & InputHTMLAttributes<HTMLInputElement>,
 		ref: Ref<HTMLInputElement>
 	) => {
 		const [initialised, setInitialised] = useState(false);
@@ -155,17 +108,13 @@ export const InputField = forwardRef(
 				className={`flex w-full flex-col text-kiokuDarkBlue ${className}`}
 			>
 				<label htmlFor={id}>
-					<Text
-						className="font-bold"
-						size={size}
-						responsive={responsive}
-					>
+					<Text className="font-bold" size={inputFieldSize}>
 						{label}
 					</Text>
 				</label>
 				<div
 					className={`flex flex-row items-center rounded-md bg-eggshell ${
-						getStyle[style]
+						getStyle[inputFieldStyle]
 					} ${
 						initialised && !isValid
 							? "border-kiokuRed"
@@ -175,9 +124,8 @@ export const InputField = forwardRef(
 					<input
 						id={id}
 						type={type}
-						name={name}
 						className={`w-full border-none bg-transparent font-medium outline-none ${
-							size && getSize[size]
+							inputFieldSize && getSize[inputFieldSize]
 						}`}
 						ref={ref}
 						onChange={(event) => {

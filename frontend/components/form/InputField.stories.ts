@@ -19,7 +19,7 @@ export const Primary: Story = {
 	args: {
 		label: "Primary",
 		value: "Test",
-		style: "primary",
+		inputFieldStyle: "primary",
 	},
 };
 
@@ -27,7 +27,7 @@ export const Secondary: Story = {
 	args: {
 		label: "Secondary",
 		value: "Test",
-		style: "secondary",
+		inputFieldStyle: "secondary",
 	},
 };
 
@@ -35,7 +35,7 @@ export const XS: Story = {
 	args: {
 		label: "extra small",
 		value: "Test",
-		size: "xs",
+		inputFieldSize: "xs",
 	},
 };
 
@@ -43,7 +43,7 @@ export const SM: Story = {
 	args: {
 		label: "small",
 		value: "Test",
-		size: "sm",
+		inputFieldSize: "sm",
 	},
 };
 
@@ -51,7 +51,7 @@ export const MD: Story = {
 	args: {
 		label: "medium",
 		value: "Test",
-		size: "md",
+		inputFieldSize: "md",
 	},
 };
 
@@ -59,7 +59,7 @@ export const LG: Story = {
 	args: {
 		label: "large",
 		value: "Test",
-		size: "lg",
+		inputFieldSize: "lg",
 	},
 };
 
@@ -67,7 +67,7 @@ export const XL: Story = {
 	args: {
 		label: "extra large",
 		value: "Test",
-		size: "xl",
+		inputFieldSize: "xl",
 	},
 };
 

@@ -85,12 +85,19 @@ export const Header = ({
 						{!deck && group && group.groupName}
 						{user && `Welcome ${user.userName}`}
 					</Text>
-					{!deck && group?.groupType && (
+					{deck?.deckType && (
 						<Badge
-							id="visibilityBadgeId"
+							id="deckTypeBadgeId"
+							label={deck.deckType}
+							style="tertiary"
+						/>
+					)}
+					{group?.groupType && (
+						<Badge
+							id="groupTypeBadgeId"
 							label={group.groupType}
 							style="tertiary"
-						></Badge>
+						/>
 					)}
 				</div>
 				<Text style="secondary" size="xs">
@@ -129,7 +136,7 @@ export const Header = ({
 			{/* {user && (
 				<Button
 					id="learnButtonId"
-					size="sm"
+					buttonSize="sm"
 					onClick={() => router.push("/user/learn")}
 				>
 					Start learning
@@ -139,7 +146,7 @@ export const Header = ({
 			{deck && (
 				<Button
 					id="learnDeckButtonId"
-					size="sm"
+					buttonSize="sm"
 					onClick={() => router.push(`/deck/${deck.deckID}/learn`)}
 				>
 					Learn Deck
@@ -151,7 +158,7 @@ export const Header = ({
 				(group.groupRole == "INVITED" || !group.groupRole) && (
 					<Button
 						id="joinGroupButtonId"
-						size="sm"
+						buttonSize="sm"
 						onClick={() => {
 							joinGroup();
 						}}

@@ -40,7 +40,7 @@ export default function Page() {
 							</Button>
 							<Button
 								id="lernmoreButton"
-								style="secondary"
+								buttonStyle="secondary"
 								onClick={() => {
 									router.push("/features");
 								}}

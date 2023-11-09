@@ -1,4 +1,4 @@
-import { Trans, msg } from "@lingui/macro";
+import { Trans, msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import router from "next/router";
 import { useEffect, useRef } from "react";
@@ -165,7 +165,7 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 		);
 		if (response?.ok) {
 			deckNameInput.current.value = "";
-			toast.info(_(msg`Deck created!`), { toastId: "newDeckToast" });
+			toast.info(t`Deck created!`, { toastId: "newDeckToast" });
 		} else {
 			toast.error("Error!", { toastId: "newDeckToast" });
 		}

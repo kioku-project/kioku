@@ -5,87 +5,16 @@ This documents outlines all the important information to understand how to run a
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Internationalization](#internationalization)
 - [Local development](#local-development)
   - [VSCode Extensions](#visual-studio-code-extensions)
   - [Storybook](#storybook)
   - [Chromatic](#chromatic)
 - [Create a component](#create-a-component)
+- [Internationalization](#internationalization)
 
 ## Introduction
 
 The frontend of Kioku is written in [React](https://react.dev/), using the [NextJS](https://nextjs.org/) framework. All the styling is done directly inside of the components, using [TailwindCSS](https://tailwindcss.com/). To document all of our frontend components, we use [Storybook](https://storybook.js.org/) in conjunction with [Chromatic](https://www.chromatic.com/) for visual regression testing.
-
-# Internationalization
-
-To internationalize Kioku in different languages, we use NextJS's native capability for [internationalized routing](https://nextjs.org/docs/pages/building-your-application/routing/internationalization) as well as the [Lingui](https://lingui.dev/) library. Our current policy is that english is the default language and a german translation for all texts has to be present. However, if you would like to add another language, contributions are always welcome!
-
-## NextJS’s native internationalised routing.
-NextJS natively supports internationalised routing. This means that it understands `/de/home` is asking for the `home` page with German text. Furthermore, all navigation using Next’s `Link` component and the `useRouter()` hook will automatically adjust the paths in order to keep the correct language for a user.
-
-## Lingui
-Lingui is a translation library that offers various macros to ease the process of translating such as plural handling and conditionals. The following section will briefly explain the most important concepts of Lingui:
-
-### The `<Trans>` macro
-
-The `<Trans>` macro will most probably be used the often when you want to create an internationalised component
-```jsx
-import { Trans } from "@lingui/macro";
-
-function render() {
-  return (
-    <>
-      <h1>
-        <Trans>LinguiJS example</Trans>
-      </h1>
-      <p>
-        <Trans>
-          Hello <a href="/profile">{name}</a>.
-        </Trans>
-      </p>
-    </>
-  );
-}
-```
-By simply wrapping text inside of components with the `<Trans>` macro, the text will be automatically recognized as translatable text.
-
-### The `useLingui()` macro
-
-It is not always possible to wrap text inside of components with the `<Trans>` tag. Take for example this situation, where you want to pass a string as a property to a component:
-```jsx
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
-
-export default function ImageWithCaption() {
-  const { _ } = useLingui();
-
-  return <img src="..." alt={_(msg`Image caption`)} />;
-}
-```
-Here, we want to be able to translate the image caption but we can’t use the `<Trans>` tag in the `alt` property so we have to do it like this.
-
-### Translate outside of React components
-If you want to translat texts that resides in functions that are not React components, you can not use the `<Trans>` tag and `useLingui()` hook, instead you will have to use the `t` macro.
-```jsx
-import { t } from "@lingui/macro";
-
-export function showAlert() {
-  alert(t`Warning! Something went wrong!`);
-}
-```
-
-### Plural
-With Lingui, it is also easy to work pluralization into the frontend text. Plural text can be defined like this and the correct text will automatically be selected depending on the number.
-plural(numBooks, {
-  one: "# book",
-  other: "# books",
-});
-
-### Extraction and Compilation
-After developing new components, you will have to generate the translation files using `npm run extract`.
-After that, the new source texts will be automatically added to `locale/de/messages.po`. You can search for the new texts and translate them inside of this file.
-Finally, run `npm run compile` to compile the translations into Typescript files that can be used by the frontend.
-
 
 ## Local development
 
@@ -190,3 +119,75 @@ A component should always have an implementation in Typescript and a story with 
 - Components should not handle business logic themselves, they should solely display given data.
 - Business logic should be inside of a page or generalized in functions outside of the component itself
 - A component should have stories for all different versions. For example: if a button can be toggled between a primary and secondary style, both cases should be covered by stories.
+
+## Internationalization
+
+To internationalize Kioku in different languages, we use NextJS's native capability for [internationalized routing](https://nextjs.org/docs/pages/building-your-application/routing/internationalization) as well as the [Lingui](https://lingui.dev/) library. Our current policy is that english is the default language and a german translation for all texts has to be provided. However, if you would like to add another language, contributions are always welcome!
+
+### NextJS’s native internationalized routing.
+NextJS natively supports internationalized routing. This means that it understands `/de/home` is asking for the `home` page with German text. Furthermore, all navigation using Next’s `Link` component and the `useRouter()` hook will automatically adjust the paths in order to keep the correct language for a user.
+
+### Lingui
+Lingui is a translation library that offers various macros to ease the process of translating such as plural handling and conditionals. The following section will briefly explain the most important concepts of Lingui:
+
+#### The `<Trans>` macro
+
+The `<Trans>` macro will probably be used most often when you want to create an internationalized component
+```jsx
+import { Trans } from "@lingui/macro";
+
+function render() {
+  return (
+    <>
+      <h1>
+        <Trans>LinguiJS example</Trans>
+      </h1>
+      <p>
+        <Trans>
+          Hello <a href="/profile">{name}</a>.
+        </Trans>
+      </p>
+    </>
+  );
+}
+```
+By simply wrapping text inside of components with the `<Trans>` macro, the text will be automatically recognized as translatable text.
+
+#### The `useLingui()` macro
+
+It is not always possible to wrap text inside of components with the `<Trans>` tag. Take for example this situation, where you want to pass a string as a property to a component:
+```jsx
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
+
+export default function ImageWithCaption() {
+  const { _ } = useLingui();
+
+  return <img src="..." alt={_(msg`Image caption`)} />;
+}
+```
+Here, we want to be able to translate the image caption but we can’t use the `<Trans>` tag in the `alt` property so we have to do it like this.
+
+#### Translate outside of React components
+If you want to translate texts that reside in functions that are not React components, you can not use the `<Trans>` tag and the `useLingui()` hook, instead you will have to use the `t` macro.
+```jsx
+import { t } from "@lingui/macro";
+
+export function showAlert() {
+  alert(t`Warning! Something went wrong!`);
+}
+```
+
+#### Plural
+With Lingui, it is also easy to work pluralization into the frontend text. Plural text can be defined like this and the correct text will automatically be selected depending on the number.
+```jsx
+plural(numBooks, {
+  one: "# book",
+  other: "# books",
+});
+```
+
+#### Extraction and Compilation
+After developing new components, you will have to generate the translation files using `npm run extract`.
+After that, the new source texts will be automatically added to `locale/de/messages.po`. You can search for the new texts and translate them inside of this file.
+Finally, run `npm run compile` to compile the translations into Typescript files that can be used by the frontend.

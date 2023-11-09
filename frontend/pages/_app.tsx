@@ -26,8 +26,6 @@ export function useLinguiInit(messages: Messages) {
 	}
 	if (isClient && i18n.locale === undefined) {
 		// first client render
-		console.log(locale);
-		console.log(messages);
 		i18n.loadAndActivate({ locale, messages });
 	}
 

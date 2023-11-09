@@ -79,11 +79,11 @@ msgid "Change how others join this group"
 msgstr "Change how others join this group"
 
 #: components/navigation/Tabs/GroupSettingsTab.tsx:133
+#: components/navigation/Tabs/UserSettingsTab.tsx:70
 msgid "Click again"
 msgstr "Click again"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:101
-#: components/navigation/Tabs/UserSettingsTab.tsx:70
 msgid "Click Again"
 msgstr "Click Again"
 
@@ -217,7 +217,7 @@ msgstr "Get started"
 msgid "Group created!"
 msgstr "Group created!"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:199
+#: components/navigation/Tabs/GroupSettingsTab.tsx:198
 msgid "Group deleted!"
 msgstr "Group deleted!"
 
@@ -233,7 +233,7 @@ msgstr "Group Name"
 msgid "Group Statistics"
 msgstr "Group Statistics"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:165
+#: components/navigation/Tabs/GroupSettingsTab.tsx:164
 msgid "Group updated!"
 msgstr "Group updated!"
 
@@ -286,7 +286,7 @@ msgstr "Learn more"
 msgid "Leave Group"
 msgstr "Leave Group"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:183
+#: components/navigation/Tabs/GroupSettingsTab.tsx:182
 msgid "Left group!"
 msgstr "Left group!"
 
@@ -370,8 +370,8 @@ msgid "Save"
 msgstr "Save"
 
 #: components/layout/Header.tsx:192
-msgid "Send request!"
-msgstr "Send request!"
+msgid "Sent request!"
+msgstr "Sent request!"
 
 #: pages/deck/[id]/index.tsx:56
 #: pages/group/[id]/index.tsx:62

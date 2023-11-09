@@ -67,7 +67,7 @@ export const UserSettingsTab = ({
 					)}
 					button={
 						isConfirmDeletion
-							? _(msg`Click Again`)
+							? _(msg`Click again`)
 							: _(msg`Delete Account`)
 					}
 					onClick={() => {

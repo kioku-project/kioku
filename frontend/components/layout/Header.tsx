@@ -189,7 +189,7 @@ export const Header = ({
 			}
 		);
 		if (response?.ok) {
-			toast.info(t`Send request!`, { toastId: "requestedGroupToast" });
+			toast.info(t`Sent request!`, { toastId: "requestedGroupToast" });
 		} else {
 			toast.error("Error!", { toastId: "requestedGroupToast" });
 		}

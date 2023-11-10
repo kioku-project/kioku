@@ -98,7 +98,7 @@ export const DeckSettingsTab = ({
 					)}
 					button={
 						isConfirmDeletion
-							? _(msg`Click Again`)
+							? _(msg`Click again`)
 							: _(msg`Delete Deck`)
 					}
 					disabled={!isAdmin}

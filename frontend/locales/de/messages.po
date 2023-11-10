@@ -15,7 +15,7 @@ msgstr ""
 
 #: components/navigation/Tabs/GroupSettingsTab.tsx:134
 msgid "\"Delete Group"
-msgstr "Gruppe Löschen"
+msgstr "Gruppe löschen"
 
 #: components/layout/Header.tsx:133
 msgid "{0, plural, one {in # deck to learn} other {in # decks to learn}}"
@@ -82,7 +82,7 @@ msgstr "Ändere, wie Andere der Gruppe beitreten können"
 #: components/navigation/Tabs/GroupSettingsTab.tsx:133
 #: components/navigation/Tabs/UserSettingsTab.tsx:70
 msgid "Click again"
-msgstr "Nochmal Klicken"
+msgstr "Nochmal klicken"
 
 #: pages/features.tsx:74
 msgid "Collaborate with your friends and fellow students in groups and work on shared decks. Learn together and motivate each other!"

@@ -28,6 +28,8 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
+				<link rel="alternate" hrefLang="en" href="https://app.kioku.dev/features" />
+				<link rel="alternate" hrefLang="de" href="https://app.kioku.dev/de/features" />
 			</Head>
 			<div className="min-w-screen flex flex-col bg-eggshell">
 				<div className="mx-auto flex flex-col justify-center p-5 text-base leading-7 md:w-2/3 md:p-10 md:text-center">

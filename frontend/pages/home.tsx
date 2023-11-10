@@ -5,6 +5,7 @@ import { ArrowRight } from "react-feather";
 import Cards from "../components/graphics/Cards";
 import { Button } from "../components/input/Button";
 import { Navbar } from "../components/navigation/Navbar";
+import Head from "next/head";
 
 export default function Page() {
 	const router = useRouter();
@@ -12,6 +13,9 @@ export default function Page() {
 	return (
 		<div>
 			<NextSeo noindex={false} nofollow={false} />
+			<Head>
+				<link rel="canonical" href="https://kioku.dev/" />
+			</Head>
 			<div className="min-w-screen flex h-screen flex-col bg-eggshell">
 				<Navbar
 					login={false}

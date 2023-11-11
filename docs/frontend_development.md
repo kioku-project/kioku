@@ -122,9 +122,9 @@ A component should always have an implementation in Typescript and a story with 
 
 ## Internationalization
 
-To internationalize Kioku in different languages, we use NextJS's native capability for [internationalized routing](https://nextjs.org/docs/pages/building-your-application/routing/internationalization) as well as the [Lingui](https://lingui.dev/) library. Our current policy is that English is the default language and a German translation for all texts has to be provided. However, if you would like to add another language, contributions are always welcome!
+To internationalize Kioku in different languages, we use Next.js' native capability for [internationalized routing](https://nextjs.org/docs/pages/building-your-application/routing/internationalization) as well as the [Lingui](https://lingui.dev/) library. Our current policy is that English is the default language and a German translation for all texts has to be provided. However, if you would like to add another language, contributions are always welcome!
 
-### NextJS’s native internationalized routing.
+### Next.js' native internationalized routing.
 
 Next.js natively supports internationalized routing, which means that it interprets `/de/home` as a request for the `home` page with German text. Additionally, all navigation using Next.js’s `Link` component and the `useRouter()` hook will automatically modify the paths to maintain the user’s language preference.
 

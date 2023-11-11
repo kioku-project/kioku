@@ -57,7 +57,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 					className="invisible sm:visible"
 					onClick={() => router.push("/login")}
 				>
-					<Trans>Login</Trans>{" "}
+					<Trans>Login</Trans>
 					<ArrowRight className="ml-1 h-2/3"></ArrowRight>
 				</Button>
 			)}

@@ -131,7 +131,7 @@ export const GroupSettingsTab = ({
 					button={
 						isConfirmDeletion
 							? _(msg`Click again`)
-							: _(msg`"Delete Group`)
+							: _(msg`Delete Group`)
 					}
 					disabled={!isAdmin}
 					onClick={() => {

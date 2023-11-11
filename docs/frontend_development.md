@@ -122,13 +122,15 @@ A component should always have an implementation in Typescript and a story with 
 
 ## Internationalization
 
-To internationalize Kioku in different languages, we use NextJS's native capability for [internationalized routing](https://nextjs.org/docs/pages/building-your-application/routing/internationalization) as well as the [Lingui](https://lingui.dev/) library. Our current policy is that english is the default language and a german translation for all texts has to be provided. However, if you would like to add another language, contributions are always welcome!
+To internationalize Kioku in different languages, we use NextJS's native capability for [internationalized routing](https://nextjs.org/docs/pages/building-your-application/routing/internationalization) as well as the [Lingui](https://lingui.dev/) library. Our current policy is that English is the default language and a German translation for all texts has to be provided. However, if you would like to add another language, contributions are always welcome!
 
 ### NextJS’s native internationalized routing.
-NextJS natively supports internationalized routing. This means that it understands `/de/home` is asking for the `home` page with German text. Furthermore, all navigation using Next’s `Link` component and the `useRouter()` hook will automatically adjust the paths in order to keep the correct language for a user.
+
+Next.js natively supports internationalized routing, which means that it interprets `/de/home` as a request for the `home` page with German text. Additionally, all navigation using Next.js’s `Link` component and the `useRouter()` hook will automatically modify the paths to maintain the user’s language preference.
 
 ### Lingui
-Lingui is a translation library that offers various macros to ease the process of translating such as plural handling and conditionals. The following section will briefly explain the most important concepts of Lingui:
+
+Lingui is a translation library that provides various macros to simplify the translation process, including plural handling and conditionals. The following section will briefly explain the most important concepts of Lingui:
 
 #### The `<Trans>` macro
 
@@ -155,7 +157,7 @@ By simply wrapping text inside of components with the `<Trans>` macro, the text 
 
 #### The `useLingui()` macro
 
-It is not always possible to wrap text inside of components with the `<Trans>` tag. Take for example this situation, where you want to pass a string as a property to a component:
+It is not always possible to wrap text within the `<Trans>` component. Take, for example, this situation, where you want to pass a string as a property to a component:
 ```jsx
 import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
@@ -166,10 +168,10 @@ export default function ImageWithCaption() {
   return <img src="..." alt={_(msg`Image caption`)} />;
 }
 ```
-Here, we want to be able to translate the image caption but we can’t use the `<Trans>` tag in the `alt` property so we have to do it like this.
+Here, we want to be able to translate the image caption but we can’t use the `<Trans>` component in the `alt` property so we have to do it like this:
 
 #### Translate outside of React components
-If you want to translate texts that reside in functions that are not React components, you can not use the `<Trans>` tag and the `useLingui()` hook, instead you will have to use the `t` macro.
+If you need to translate text that resides in functions not part of React components, you cannot use the `<Trans>` component or the `useLingui()` hook. Instead, you will need to use the `t` macro.
 ```jsx
 import { t } from "@lingui/macro";
 
@@ -179,7 +181,7 @@ export function showAlert() {
 ```
 
 #### Plural
-With Lingui, it is also easy to work pluralization into the frontend text. Plural text can be defined like this and the correct text will automatically be selected depending on the number.
+With Lingui, handling pluralization in frontend text is straightforward. You can define plural text as follows, and the appropriate form will be automatically selected based on the provided number.
 ```jsx
 plural(numBooks, {
   one: "# book",

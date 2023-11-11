@@ -7,6 +7,7 @@ We are delighted that you want to help us to make Kioku even better! To make thi
 1. [Git](#git)
    - [Branches](#branches)
    - [Commits](#commits)
+   - [Pull Requests](#pull-requests)
 2. [Backend](#backend)
 3. [Frontend](#frontend)
 

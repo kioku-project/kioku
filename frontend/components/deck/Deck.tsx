@@ -9,6 +9,7 @@ import { Deck as DeckType } from "../../types/Deck";
 import { Group as GroupType } from "../../types/Group";
 import { GroupRole } from "../../types/GroupRole";
 import { authedFetch } from "../../util/reauth";
+import { fetcher } from "../../util/swr";
 
 interface DeckProps {
 	/**
@@ -26,10 +27,6 @@ interface DeckProps {
 }
 
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
 	const { data: dueCards } = useSWR(
 		deck ? `/api/decks/${deck?.deckID}/dueCards` : null,
 		fetcher

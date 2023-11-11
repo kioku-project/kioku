@@ -7,6 +7,7 @@ import { Deck as DeckType } from "../../types/Deck";
 import { Group as GroupType } from "../../types/Group";
 import { User } from "../../types/User";
 import { authedFetch } from "../../util/reauth";
+import { fetcher } from "../../util/swr";
 import { Text } from "../Text";
 import { Badge } from "../graphics/Badge";
 import { Button } from "../input/Button";
@@ -40,10 +41,6 @@ interface HeaderProps {
 
 export const FetchHeader = ({ deck, group, ...props }: HeaderProps) => {
 	const router = useRouter();
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
 	useEffect(() => {
 		if (group) {
 			router.prefetch(`/group/${group.groupID}`);

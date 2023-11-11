@@ -2,7 +2,7 @@ import useSWR from "swr";
 
 import { Group as GroupType } from "../../types/Group";
 import { User } from "../../types/User";
-import { authedFetch } from "../../util/reauth";
+import { fetcher } from "../../util/swr";
 import Member from "./Member";
 
 interface MemberListProps {
@@ -23,10 +23,6 @@ export default function MemberList({
 	group,
 	className = "",
 }: Readonly<MemberListProps>) {
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
 	const { data: user } = useSWR(
 		`/api/groups/${group.groupID}/members`,
 		fetcher

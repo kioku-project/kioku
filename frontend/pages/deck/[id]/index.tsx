@@ -11,17 +11,13 @@ import { DeckSettingsTab } from "../../../components/navigation/Tabs/DeckSetting
 import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../../../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { authedFetch } from "../../../util/reauth";
+import { fetcher } from "../../../util/swr";
 
 export default function Page() {
 	const router = useRouter();
 
 	const deckID = router.query.id as string;
 
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
 	const { data: deck } = useSWR(
 		deckID ? `/api/decks/${deckID}` : null,
 		fetcher

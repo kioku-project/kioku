@@ -12,7 +12,7 @@ import { MembersTab } from "../../../components/navigation/Tabs/MembersTab";
 import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../../../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { authedFetch } from "../../../util/reauth";
+import { fetcher } from "../../../util/swr";
 
 export default function Page() {
 	const router = useRouter();
@@ -22,10 +22,6 @@ export default function Page() {
 		setGroupId(router.query.id as string);
 	}, [groupId, router]);
 
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
 	const { data: group } = useSWR(
 		groupId ? `/api/groups/${groupId}` : null,
 		fetcher

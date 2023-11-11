@@ -13,13 +13,9 @@ import { TabHeader } from "../components/navigation/Tabs/TabHeader";
 import { UserSettingsTab } from "../components/navigation/Tabs/UserSettingsTab";
 import { Group as GroupType } from "../types/Group";
 import { Invitation } from "../types/Invitation";
-import { authedFetch } from "../util/reauth";
+import { fetcher } from "../util/swr";
 
 export default function Home() {
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
 	const { data: groups } = useSWR("/api/groups", fetcher);
 	const { data: user } = useSWR("/api/user", fetcher);
 	const { data: due } = useSWR("/api/user/dueCards", fetcher);

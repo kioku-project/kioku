@@ -11,15 +11,12 @@ import { Button } from "../../../components/input/Button";
 import { Group } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
+import { fetcher } from "../../../util/swr";
 
 export default function Page() {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 	const deckID = router.query.id as string;
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
 	const { data: card } = useSWR(`/api/decks/${deckID}/pull`, fetcher);
 	const { data: dueCards } = useSWR(`/api/decks/${deckID}/dueCards`, fetcher);
 	const { data: deck } = useSWR(

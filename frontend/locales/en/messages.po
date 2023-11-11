@@ -13,10 +13,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:134
-msgid "\"Delete Group"
-msgstr "\"Delete Group"
-
 #: components/layout/Header.tsx:133
 msgid "{0, plural, one {in # deck to learn} other {in # decks to learn}}"
 msgstr "{0, plural, one {in # deck to learn} other {in # decks to learn}}"
@@ -155,6 +151,10 @@ msgstr "Delete Account"
 #: components/navigation/Tabs/DeckSettingsTab.tsx:102
 msgid "Delete Deck"
 msgstr "Delete Deck"
+
+#: components/navigation/Tabs/GroupSettingsTab.tsx:134
+msgid "Delete Group"
+msgstr "Delete Group"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:95
 msgid "Delete this deck"

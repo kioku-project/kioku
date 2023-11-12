@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR from "swr";
 
 import Authenticated from "../../../components/accessControl/Authenticated";
 import { FetchHeader } from "../../../components/layout/Header";
@@ -12,20 +11,16 @@ import { MembersTab } from "../../../components/navigation/Tabs/MembersTab";
 import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../../../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { fetcher } from "../../../util/swr";
+import { useGroup } from "../../../util/swr";
 
 export default function Page() {
 	const router = useRouter();
 
-	const [groupId, setGroupId] = useState<string>();
+	const [groupID, setGroupID] = useState<string>();
 	useEffect(() => {
-		setGroupId(router.query.id as string);
-	}, [groupId, router]);
-
-	const { data: group } = useSWR(
-		groupId ? `/api/groups/${groupId}` : null,
-		fetcher
-	);
+		setGroupID(router.query.id as string);
+	}, [groupID, router]);
+	const { group } = useGroup(groupID ? groupID : "");
 
 	const tabs: { [tab: string]: ReactNode } = {
 		decks: (

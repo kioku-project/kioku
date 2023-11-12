@@ -1,10 +1,8 @@
-import useSWR from "swr";
-
 import { Deck as DeckType } from "@/types/Deck";
 import { GroupRole } from "@/types/GroupRole";
 
 import { Card as CardType } from "../../types/Card";
-import { fetcher } from "../../util/swr";
+import { useCards } from "../../util/swr";
 import { Card } from "./Card";
 
 interface CardListProps {
@@ -27,8 +25,8 @@ interface CardListProps {
 }
 
 export const FetchCardList = ({ deck, ...props }: CardListProps) => {
-	const { data: cards } = useSWR(`/api/decks/${deck.deckID}/cards`, fetcher);
-	return <CardList deck={deck} cards={cards?.cards} {...props} />;
+	const { cards } = useCards(deck.deckID);
+	return <CardList deck={deck} cards={cards} {...props} />;
 };
 
 /**

@@ -3,13 +3,13 @@ import { useEffect, useRef } from "react";
 import { AlertTriangle } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR, { preload, useSWRConfig } from "swr";
+import { preload, useSWRConfig } from "swr";
 
 import { Deck as DeckType } from "../../types/Deck";
 import { Group as GroupType } from "../../types/Group";
 import { GroupRole } from "../../types/GroupRole";
 import { authedFetch } from "../../util/reauth";
-import { fetcher } from "../../util/swr";
+import { fetcher, useDueCards } from "../../util/swr";
 
 interface DeckProps {
 	/**
@@ -27,10 +27,7 @@ interface DeckProps {
 }
 
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
-	const { data: dueCards } = useSWR(
-		deck ? `/api/decks/${deck?.deckID}/dueCards` : null,
-		fetcher
-	);
+	const { dueCards } = useDueCards(deck ? deck.deckID : "");
 
 	useEffect(() => {
 		if (deck) {

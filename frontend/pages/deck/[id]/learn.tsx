@@ -2,31 +2,24 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import { toast } from "react-toastify";
-import useSWR, { useSWRConfig } from "swr";
+import { useSWRConfig } from "swr";
 
 import Authenticated from "../../../components/accessControl/Authenticated";
 import { Flashcard } from "../../../components/flashcard/Flashcard";
 import KiokuAward from "../../../components/graphics/KiokuAward";
 import { Button } from "../../../components/input/Button";
-import { Group } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
-import { fetcher } from "../../../util/swr";
+import { useDeck, useDueCards, useGroup, usePullCard } from "../../../util/swr";
 
 export default function Page() {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 	const deckID = router.query.id as string;
-	const { data: card } = useSWR(`/api/decks/${deckID}/pull`, fetcher);
-	const { data: dueCards } = useSWR(`/api/decks/${deckID}/dueCards`, fetcher);
-	const { data: deck } = useSWR(
-		deckID ? `/api/decks/${deckID}` : null,
-		fetcher
-	);
-	const { data: group } = useSWR<Group>(
-		deck?.groupID ? `/api/groups/${deck.groupID}` : null,
-		fetcher
-	);
+	const { card } = usePullCard(deckID);
+	const { deck } = useDeck(deckID);
+	const { dueCards } = useDueCards(deckID);
+	const { group } = useGroup(deck ? deck.groupID : "");
 	return (
 		<div>
 			<Head>

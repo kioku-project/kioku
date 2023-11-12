@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactNode, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR from "swr";
 
 import Authenticated from "../../../components/accessControl/Authenticated";
 import { FetchHeader } from "../../../components/layout/Header";
@@ -11,21 +10,14 @@ import { DeckSettingsTab } from "../../../components/navigation/Tabs/DeckSetting
 import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../../../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { fetcher } from "../../../util/swr";
+import { useDeck, useGroup } from "../../../util/swr";
 
 export default function Page() {
 	const router = useRouter();
 
 	const deckID = router.query.id as string;
-
-	const { data: deck } = useSWR(
-		deckID ? `/api/decks/${deckID}` : null,
-		fetcher
-	);
-	const { data: group } = useSWR(
-		deck?.groupID ? `/api/groups/${deck.groupID}` : null,
-		fetcher
-	);
+	const { deck } = useDeck(deckID);
+	const { group } = useGroup(deck ? deck.groupID : "");
 
 	const tabs: { [tab: string]: ReactNode } = {
 		cards: (

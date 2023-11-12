@@ -1,13 +1,12 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import useSWR, { preload, useSWRConfig } from "swr";
+import { preload, useSWRConfig } from "swr";
 
-import { Deck as DeckType } from "../../types/Deck";
 import { Group as GroupType } from "../../types/Group";
 import { GroupRole } from "../../types/GroupRole";
 import { authedFetch } from "../../util/reauth";
-import { fetcher } from "../../util/swr";
+import { fetcher, useDecks } from "../../util/swr";
 import { Section } from "../layout/Section";
 import { Deck, FetchDeck } from "./Deck";
 
@@ -31,9 +30,7 @@ export default function DeckOverview({
 }: Readonly<DeckOverviewProps>) {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
-	const { data: decks } = useSWR<{
-		decks: Pick<DeckType, "deckID" | "deckName">[];
-	}>(group ? `/api/groups/${group.groupID}/decks` : null, fetcher);
+	const { decks } = useDecks(group ? group.groupID : "");
 
 	const groupNameInput = useRef<HTMLInputElement>(null);
 
@@ -57,7 +54,7 @@ export default function DeckOverview({
 					onClick={() => router.push(`/group/${group.groupID}`)}
 				>
 					<div className="flex flex-row flex-wrap">
-						{decks?.decks?.map((deck) => (
+						{decks?.map((deck) => (
 							<FetchDeck
 								key={deck.deckID}
 								group={group}
@@ -66,11 +63,11 @@ export default function DeckOverview({
 						))}
 						{((group.groupRole &&
 							GroupRole[group.groupRole] >= GroupRole.WRITE) ||
-							!decks?.decks?.length) && (
+							!decks?.length) && (
 							<Deck
 								group={{
 									...group,
-									isEmpty: !decks?.decks?.length,
+									isEmpty: !decks?.length,
 								}}
 							/>
 						)}

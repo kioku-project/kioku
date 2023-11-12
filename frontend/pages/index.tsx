@@ -1,6 +1,5 @@
 import Head from "next/head";
 import React, { ReactNode, useState } from "react";
-import useSWR from "swr";
 
 import Authenticated from "../components/accessControl/Authenticated";
 import { FetchHeader } from "../components/layout/Header";
@@ -12,16 +11,13 @@ import { TabBar } from "../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../components/navigation/Tabs/TabHeader";
 import { UserSettingsTab } from "../components/navigation/Tabs/UserSettingsTab";
 import { Group as GroupType } from "../types/Group";
-import { Invitation } from "../types/Invitation";
-import { fetcher } from "../util/swr";
+import { useGroups, useInvitations, useUser, useUserDue } from "../util/swr";
 
 export default function Home() {
-	const { data: groups } = useSWR("/api/groups", fetcher);
-	const { data: user } = useSWR("/api/user", fetcher);
-	const { data: due } = useSWR("/api/user/dueCards", fetcher);
-	const { data: invitations } = useSWR<{
-		groupInvitation: Invitation[];
-	}>(`/api/user/invitations`, fetcher);
+	const { user } = useUser();
+	const { due } = useUserDue();
+	const { invitations } = useInvitations();
+	const { groups } = useGroups();
 
 	const tabs: { [tab: string]: ReactNode } = {
 		decks: (
@@ -43,9 +39,7 @@ export default function Home() {
 				id="invitationTabHeaderId"
 				name="Invitations"
 				style="invitations"
-				notificationBadgeContent={`${
-					invitations?.groupInvitation?.length || ""
-				}`}
+				notificationBadgeContent={`${invitations?.length || ""}`}
 			></TabHeader>
 		),
 		statistics: (
@@ -92,23 +86,18 @@ export default function Home() {
 									decks: (
 										<DecksTab
 											group={
-												groups.groups.filter(
-													(group: GroupType) =>
-														group.isDefault
+												groups.filter(
+													(group) => group.isDefault
 												)[0]
 											}
 										></DecksTab>
 									),
 									groups: (
-										<GroupsTab
-											groups={groups.groups}
-										></GroupsTab>
+										<GroupsTab groups={groups}></GroupsTab>
 									),
 									invitations: invitations && (
 										<InvitationsTab
-											invitations={
-												invitations.groupInvitation
-											}
+											invitations={invitations}
 										></InvitationsTab>
 									),
 									statistics: <StatisticsTab></StatisticsTab>,

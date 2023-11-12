@@ -20,15 +20,23 @@ export default function Page() {
 	const { card } = usePullCard(deckID);
 	const { deck } = useDeck(deckID);
 	const { dueCards } = useDueCards(deckID);
-	const { group } = useGroup(deck ? deck.groupID : "");
+	const { group } = useGroup(deck?.groupID);
 	return (
 		<div>
 			<Head>
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
-				<link rel="alternate" hrefLang="en" href={`https://app.kioku.dev/deck/${deckID}/learn`} />
-				<link rel="alternate" hrefLang="de" href={`https://app.kioku.dev/de/deck/${deckID}/learn`} />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href={`https://app.kioku.dev/deck/${deckID}/learn`}
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href={`https://app.kioku.dev/de/deck/${deckID}/learn`}
+				/>
 			</Head>
 			<Authenticated>
 				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">

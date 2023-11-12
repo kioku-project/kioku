@@ -32,7 +32,7 @@ export default function DeckOverview({
 }: Readonly<DeckOverviewProps>) {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
-	const { decks } = useDecks(group ? group.groupID : "");
+	const { decks } = useDecks(group?.groupID);
 
 	const groupNameInput = useRef<HTMLInputElement>(null);
 

@@ -14,9 +14,7 @@ export const fetcher = (url: RequestInfo | URL) =>
 	}).then((res) => res?.json());
 
 export function useUser() {
-	const { data, error, isLoading } = useSWR<
-		Pick<User, "userID" | "userName" | "userEmail">
-	>(`/api/user`, fetcher);
+	const { data, error, isLoading } = useSWR<User>(`/api/user`, fetcher);
 	return {
 		user: data,
 		error,
@@ -49,15 +47,7 @@ export function useInvitations() {
 
 export function useGroups() {
 	const { data, error, isLoading } = useSWR<{
-		groups: Pick<
-			Group,
-			| "groupID"
-			| "groupName"
-			| "groupDescription"
-			| "isDefault"
-			| "groupType"
-			| "groupRole"
-		>[];
+		groups: Group[];
 	}>(`/api/groups`, fetcher);
 	return {
 		groups: data?.groups,
@@ -66,18 +56,11 @@ export function useGroups() {
 	};
 }
 
-export function useGroup(groupID: string) {
-	const { data, error, isLoading } = useSWR<
-		Pick<
-			Group,
-			| "groupID"
-			| "groupName"
-			| "groupDescription"
-			| "isDefault"
-			| "groupType"
-			| "groupRole"
-		>
-	>(`/api/groups/${groupID}`, fetcher);
+export function useGroup(groupID?: string) {
+	const { data, error, isLoading } = useSWR<Group>(
+		groupID ? `/api/groups/${groupID}` : null,
+		fetcher
+	);
 	return {
 		group: data,
 		error,
@@ -85,10 +68,10 @@ export function useGroup(groupID: string) {
 	};
 }
 
-export function useMembers(groupID: string) {
+export function useMembers(groupID?: string) {
 	const { data, error, isLoading } = useSWR<{
-		users: Pick<User, "userID" | "userName" | "groupRole">[];
-	}>(`/api/groups/${groupID}/members`, fetcher);
+		users: User[];
+	}>(groupID ? `/api/groups/${groupID}/members` : null, fetcher);
 	return {
 		members: data?.users,
 		error,
@@ -96,10 +79,10 @@ export function useMembers(groupID: string) {
 	};
 }
 
-export function useRequestedUser(groupID: string) {
+export function useRequestedUser(groupID?: string) {
 	const { data, error, isLoading } = useSWR<{
-		memberRequests: Pick<User, "userID" | "userName" | "userEmail">[];
-	}>(`/api/groups/${groupID}/members/requests`, fetcher);
+		memberRequests: User[];
+	}>(groupID ? `/api/groups/${groupID}/members/requests` : null, fetcher);
 	return {
 		requestedUser: data?.memberRequests,
 		error,
@@ -107,10 +90,10 @@ export function useRequestedUser(groupID: string) {
 	};
 }
 
-export function useInvitedUser(groupID: string) {
+export function useInvitedUser(groupID?: string) {
 	const { data, error, isLoading } = useSWR<{
-		groupInvitations: Pick<User, "userID" | "userName" | "userEmail">[];
-	}>(`/api/groups/${groupID}/members/invitations`, fetcher);
+		groupInvitations: User[];
+	}>(groupID ? `/api/groups/${groupID}/members/invitations` : null, fetcher);
 	return {
 		invitedUser: data?.groupInvitations,
 		error,
@@ -118,9 +101,9 @@ export function useInvitedUser(groupID: string) {
 	};
 }
 
-export function useDecks(groupID: string) {
+export function useDecks(groupID?: string) {
 	const { data, error, isLoading } = useSWR<{
-		decks: Pick<Deck, "deckID" | "deckName" | "deckType" | "groupID">[];
+		decks: Deck[];
 	}>(groupID ? `/api/groups/${groupID}/decks` : null, fetcher);
 	return {
 		decks: data?.decks,
@@ -129,10 +112,11 @@ export function useDecks(groupID: string) {
 	};
 }
 
-export function useDeck(deckID: string) {
-	const { data, error, isLoading } = useSWR<
-		Pick<Deck, "deckID" | "deckName" | "deckType" | "groupID">
-	>(deckID ? `/api/decks/${deckID}` : null, fetcher);
+export function useDeck(deckID?: string) {
+	const { data, error, isLoading } = useSWR<Deck>(
+		deckID ? `/api/decks/${deckID}` : null,
+		fetcher
+	);
 	return {
 		deck: data,
 		error,
@@ -140,12 +124,11 @@ export function useDeck(deckID: string) {
 	};
 }
 
-export function useDueCards(deckID: string) {
-	const { data, error, isLoading } = useSWR(
+export function useDueCards(deckID?: string) {
+	const { data, error, isLoading } = useSWR<number>(
 		deckID ? `/api/decks/${deckID}/dueCards` : null,
 		fetcher
 	);
-	console.log(data);
 	return {
 		dueCards: data,
 		error,
@@ -153,9 +136,9 @@ export function useDueCards(deckID: string) {
 	};
 }
 
-export function useCards(deckID: string) {
+export function useCards(deckID?: string) {
 	const { data, error, isLoading } = useSWR<{
-		cards: Pick<Card, "cardID" | "sides">[];
+		cards: Card[];
 	}>(deckID ? `/api/decks/${deckID}/cards` : null, fetcher);
 	return {
 		cards: data?.cards,
@@ -164,8 +147,8 @@ export function useCards(deckID: string) {
 	};
 }
 
-export function usePullCard(deckID: string) {
-	const { data, error, isLoading } = useSWR<Pick<Card, "cardID" | "sides">>(
+export function usePullCard(deckID?: string) {
+	const { data, error, isLoading } = useSWR<Card>(
 		deckID ? `/api/decks/${deckID}/pull` : null,
 		fetcher
 	);

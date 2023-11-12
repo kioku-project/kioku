@@ -29,7 +29,7 @@ interface DeckProps {
 }
 
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
-	const { dueCards } = useDueCards(deck ? deck.deckID : "");
+	const { dueCards } = useDueCards(deck?.deckID);
 
 	useEffect(() => {
 		if (deck) {

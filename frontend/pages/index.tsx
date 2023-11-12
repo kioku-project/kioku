@@ -53,7 +53,7 @@ export default function Home() {
 				id="invitationTabHeaderId"
 				name={_(msg`Invitations`)}
 				style="invitations"
-				notificationBadgeContent={`${invitations?.length || ""}`}
+				notificationBadgeContent={`${invitations?.length ?? ""}`}
 			></TabHeader>
 		),
 		statistics: (

@@ -23,7 +23,7 @@ export default function Page() {
 	useEffect(() => {
 		setGroupID(router.query.id as string);
 	}, [groupID, router]);
-	const { group } = useGroup(groupID ? groupID : "");
+	const { group } = useGroup(groupID);
 
 	const tabs: { [tab: string]: ReactNode } = {
 		decks: (
@@ -64,8 +64,16 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
-				<link rel="alternate" hrefLang="en" href={`https://app.kioku.dev/group/${groupId}`} />
-				<link rel="alternate" hrefLang="de" href={`https://app.kioku.dev/de/group/${groupId}`} />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href={`https://app.kioku.dev/group/${groupID}`}
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href={`https://app.kioku.dev/de/group/${groupID}`}
+				/>
 			</Head>
 
 			<Authenticated>

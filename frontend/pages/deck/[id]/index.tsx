@@ -21,7 +21,7 @@ export default function Page() {
 
 	const deckID = router.query.id as string;
 	const { deck } = useDeck(deckID);
-	const { group } = useGroup(deck ? deck.groupID : "");
+	const { group } = useGroup(deck?.groupID);
 
 	const tabs: { [tab: string]: ReactNode } = {
 		cards: (
@@ -55,8 +55,16 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
-				<link rel="alternate" hrefLang="en" href={`https://app.kioku.dev/deck/${deckID}`} />
-				<link rel="alternate" hrefLang="de" href={`https://app.kioku.dev/de/deck/${deckID}`} />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href={`https://app.kioku.dev/deck/${deckID}`}
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href={`https://app.kioku.dev/de/deck/${deckID}`}
+				/>
 			</Head>
 
 			<Authenticated>

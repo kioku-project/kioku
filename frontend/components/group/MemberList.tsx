@@ -28,43 +28,37 @@ export default function MemberList({
 	return (
 		<div id={group.groupID} className={`flex flex-col ${className}`}>
 			<div className="snap-y overflow-y-auto">
-				{members &&
-					members.map((user: User) => (
+				{members?.map((user: User) => (
+					<Member
+						className="snap-center"
+						key={user.userID}
+						user={{ ...user, groupID: group.groupID }}
+					/>
+				))}
+				{requestedUser?.map(
+					(requestedUser: { userID: string; userName: string }) => (
 						<Member
 							className="snap-center"
-							key={user.userID}
-							user={{ ...user, groupID: group.groupID }}
-						/>
-					))}
-				{requestedUser &&
-					requestedUser.map(
-						(requestedUser: {
-							userID: string;
-							userName: string;
-						}) => (
-							<Member
-								className="snap-center"
-								key={requestedUser.userID}
-								user={{
-									...requestedUser,
-									groupRole: "REQUESTED",
-									groupID: group.groupID,
-								}}
-							/>
-						)
-					)}
-				{invitedUser &&
-					invitedUser.map((invitedUser) => (
-						<Member
-							className="snap-center"
-							key={invitedUser.userID}
+							key={requestedUser.userID}
 							user={{
-								...invitedUser,
-								groupRole: "INVITED",
+								...requestedUser,
+								groupRole: "REQUESTED",
 								groupID: group.groupID,
 							}}
 						/>
-					))}
+					)
+				)}
+				{invitedUser?.map((invitedUser) => (
+					<Member
+						className="snap-center"
+						key={invitedUser.userID}
+						user={{
+							...invitedUser,
+							groupRole: "INVITED",
+							groupID: group.groupID,
+						}}
+					/>
+				))}
 				{group.groupRole == "ADMIN" && (
 					<Member
 						user={{

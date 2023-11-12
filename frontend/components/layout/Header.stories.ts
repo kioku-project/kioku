@@ -32,31 +32,21 @@ export const UserWithDescription: Story = {
 	},
 };
 
-export const Deck: Story = {
-	args: {
-		deck: {
-			deckID: "D-12345678",
-			deckName: "Test Deck",
-		},
-		group: {
-			groupID: "G-12345678",
-			groupName: "Test Group",
-			groupType: "OPEN",
-		},
-	},
-};
-
 export const PublicDeck: Story = {
 	args: {
 		deck: {
 			deckID: "D-12345678",
 			deckName: "Test Deck",
 			deckType: "PUBLIC",
+			groupID: "G-12345678",
 		},
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
-			groupType: "OPEN",
+			groupDescription: "Group Description",
+			isDefault: false,
+			groupType: "REQUEST",
+			groupRole: "ADMIN",
 		},
 	},
 };
@@ -67,30 +57,15 @@ export const PrivateDeck: Story = {
 			deckID: "D-12345678",
 			deckName: "Test Deck",
 			deckType: "PRIVATE",
-		},
-		group: {
 			groupID: "G-12345678",
-			groupName: "Test Group",
-			groupType: "OPEN",
 		},
-	},
-};
-
-export const Group: Story = {
-	args: {
-		group: {
-			groupID: "G-12345678",
-			groupName: "Test Group",
-		},
-	},
-};
-
-export const GroupWithDescription: Story = {
-	args: {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
 			groupDescription: "Group Description",
+			isDefault: false,
+			groupType: "REQUEST",
+			groupRole: "ADMIN",
 		},
 	},
 };
@@ -100,7 +75,10 @@ export const OpenGroup: Story = {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupDescription: "Group Description",
+			isDefault: false,
 			groupType: "OPEN",
+			groupRole: "ADMIN",
 		},
 	},
 };
@@ -110,7 +88,10 @@ export const RequestGroup: Story = {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupDescription: "Group Description",
+			isDefault: false,
 			groupType: "REQUEST",
+			groupRole: "ADMIN",
 		},
 	},
 };
@@ -120,7 +101,10 @@ export const ClosedGroup: Story = {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupDescription: "Group Description",
+			isDefault: false,
 			groupType: "CLOSED",
+			groupRole: "ADMIN",
 		},
 	},
 };
@@ -130,6 +114,9 @@ export const RequestedGroup: Story = {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupDescription: "Group Description",
+			isDefault: false,
+			groupType: "REQUEST",
 			groupRole: "REQUESTED",
 		},
 	},
@@ -140,6 +127,9 @@ export const InvitedGroup: Story = {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupDescription: "Group Description",
+			isDefault: false,
+			groupType: "REQUEST",
 			groupRole: "INVITED",
 		},
 	},

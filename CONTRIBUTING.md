@@ -46,6 +46,13 @@ When you open a pull request, remember to label it and link the corresponding is
 
 # Backend
 
+If you make changes to the backend, please keep the following points in mind.
+
+- Export new proto definitions with every change via `make proto` in the corresponding service directory
+- Make yourself familiar with the `helper` and `converter` packages of the project as they contain standards for serializing/deserializing objects, error definition, JWT handling and ID naming
+- Document API changes in the `bruno` project inside `/backend/api-documentation`
+
+If you are not familiar with any of these points, take a look at our [backend documentation](./docs/backend_development.md) or ask us for help.
 # Frontend
 
 If you make changes to the frontend, please ensure the following points.

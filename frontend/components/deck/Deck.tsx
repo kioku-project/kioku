@@ -1,3 +1,5 @@
+import { Trans, msg, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import router from "next/router";
 import { useEffect, useRef } from "react";
 import { AlertTriangle } from "react-feather";
@@ -46,6 +48,7 @@ export const FetchDeck = ({ deck, ...props }: DeckProps) => {
  */
 export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 	const { mutate } = useSWRConfig();
+	const { _ } = useLingui();
 
 	const deckNameInput = useRef<HTMLInputElement>(null);
 
@@ -115,7 +118,7 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 						<input
 							id={`deckNameInput${group.groupID}`}
 							className="w-40 bg-transparent text-center outline-none"
-							placeholder={"Create new Deck"}
+							placeholder={_(msg`Create new Deck`)}
 							ref={deckNameInput}
 							onKeyUp={(event) => {
 								if (event.key === "Enter") {
@@ -132,8 +135,9 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 				{/* if group is empty, display placeholder for user without write permission */}
 				{group.isEmpty &&
 					group.groupRole &&
-					GroupRole[group.groupRole] < GroupRole.WRITE &&
-					"No decks in group"}
+					GroupRole[group.groupRole] < GroupRole.WRITE && (
+						<Trans>No decks in group</Trans>
+					)}
 			</div>
 		</div>
 	);
@@ -155,7 +159,7 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 		);
 		if (response?.ok) {
 			deckNameInput.current.value = "";
-			toast.info("Deck created!", { toastId: "newDeckToast" });
+			toast.info(t`Deck created!`, { toastId: "newDeckToast" });
 		} else {
 			toast.error("Error!", { toastId: "newDeckToast" });
 		}

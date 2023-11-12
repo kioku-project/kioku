@@ -2,5 +2,6 @@
   "extends": [
     "next/core-web-vitals",
     "plugin:storybook/recommended"
-  ]
+  ],
+  "plugins": ["lingui"]
 }

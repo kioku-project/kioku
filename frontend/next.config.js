@@ -2,9 +2,19 @@
 const nextConfig = {
 	reactStrictMode: true,
 	swcMinify: true,
+	experimental: {
+		swcPlugins: [
+			[
+				"@lingui/swc-plugin",
+				{
+
+				}
+			]
+		]
+	},
 	output: "standalone",
 	i18n: {
-		locales: ["en"],
+		locales: ["en", "de"],
 		defaultLocale: "en",
 	},
 	async rewrites() {

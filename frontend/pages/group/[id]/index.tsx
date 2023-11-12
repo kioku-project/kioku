@@ -1,3 +1,5 @@
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
@@ -15,6 +17,7 @@ import { useGroup } from "../../../util/swr";
 
 export default function Page() {
 	const router = useRouter();
+	const { _ } = useLingui();
 
 	const [groupID, setGroupID] = useState<string>();
 	useEffect(() => {
@@ -26,28 +29,28 @@ export default function Page() {
 		decks: (
 			<TabHeader
 				id="DecksTabHeaderId"
-				name="Decks"
+				name={_(msg`Decks`)}
 				style="decks"
 			></TabHeader>
 		),
 		user: (
 			<TabHeader
 				id="UserTabHeaderId"
-				name="User"
+				name={_(msg`User`)}
 				style="user"
 			></TabHeader>
 		),
 		statistics: (
 			<TabHeader
 				id="StatisticsTabHeaderId"
-				name="Statistics"
+				name={_(msg`Statistics`)}
 				style="statistics"
 			></TabHeader>
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
-				name="Settings"
+				name={_(msg`Settings`)}
 				style="settings"
 			></TabHeader>
 		),
@@ -61,6 +64,8 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
+				<link rel="alternate" hrefLang="en" href={`https://app.kioku.dev/group/${groupId}`} />
+				<link rel="alternate" hrefLang="de" href={`https://app.kioku.dev/de/group/${groupId}`} />
 			</Head>
 
 			<Authenticated>

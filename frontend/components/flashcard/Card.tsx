@@ -1,3 +1,5 @@
+import { msg, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import React, { useRef, useState } from "react";
 import { Check, Trash, X } from "react-feather";
 import { toast } from "react-toastify";
@@ -39,6 +41,8 @@ export const Card = ({
 	const { mutate } = useSWRConfig();
 	const [isDelete, setDelete] = useState(false);
 	const cardNameInput = useRef<HTMLInputElement>(null);
+
+	const { _ } = useLingui();
 
 	return (
 		<div className={`font-semibold text-kiokuDarkBlue ${className}`}>
@@ -97,7 +101,7 @@ export const Card = ({
 						id="cardNameInput"
 						className="w-full bg-transparent text-xs outline-none sm:text-sm md:text-base lg:text-lg xl:text-xl"
 						type="text"
-						placeholder="Create Card"
+						placeholder={_(msg`Create Card`)}
 						ref={cardNameInput}
 						onKeyUp={(event) => {
 							if (event.key === "Enter") {
@@ -132,7 +136,7 @@ export const Card = ({
 		});
 		if (response?.ok) {
 			cardNameInput.current.value = "";
-			toast.info("Card created!", { toastId: "newCardToast" });
+			toast.info(t`Card created!`, { toastId: "newCardToast" });
 			mutate(`/api/decks/${card.deckID}/cards`);
 			mutate(`/api/decks/${card.deckID}/pull`);
 			mutate(`/api/decks/${card.deckID}/dueCards`);

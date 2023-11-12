@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/macro";
 import { hasCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -56,7 +57,8 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 					className="invisible sm:visible"
 					onClick={() => router.push("/login")}
 				>
-					Login <ArrowRight className="ml-1 h-2/3"></ArrowRight>
+					<Trans>Login</Trans>
+					<ArrowRight className="ml-1 h-2/3"></ArrowRight>
 				</Button>
 			)}
 		</nav>

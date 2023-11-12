@@ -1,0 +1,21 @@
+name: Searching missing Translations
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+    - 'frontend/**'
+
+jobs:
+  check-translations:
+    name: Search for missing Translations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run translation tests
+        run: |
+          cd frontend
+          npm install
+          npm run extract --clean
+          npm run compile -- --strict

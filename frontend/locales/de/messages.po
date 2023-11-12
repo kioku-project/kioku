@@ -72,7 +72,7 @@ msgstr "Gelernte Karten"
 
 #: components/navigation/Tabs/GroupSettingsTab.tsx:100
 msgid "Change how others join this group"
-msgstr "Ändere, wie Andere der Gruppe beitreten können"
+msgstr "Ändere, wie andere der Gruppe beitreten können"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:101
 #: components/navigation/Tabs/GroupSettingsTab.tsx:133

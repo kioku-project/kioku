@@ -12,15 +12,15 @@ const config: StorybookConfig = {
 		"@storybook/addon-essentials",
 		"@storybook/addon-interactions",
 		{
-			name: 'storybook-addon-swc',
+			name: "storybook-addon-swc",
 			options: {
-        		swcLoaderOptions: {
-          			jsc: {
-            			experimental: {
-              				plugins: [['@lingui/swc-plugin', {}]],
-            			},
-          			},
-        		},
+				swcLoaderOptions: {
+					jsc: {
+						experimental: {
+							plugins: [["@lingui/swc-plugin", {}]],
+						},
+					},
+				},
 			},
 		},
 	],

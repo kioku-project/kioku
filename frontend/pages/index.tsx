@@ -80,7 +80,7 @@ export default function Home() {
 			<Authenticated>
 				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 					{user && groups && (
-						<div className="flex flex-col space-y-3 p-5 md:space-y-5 md:p-10">
+						<div className="flex flex-col space-y-3 px-5 py-1 md:space-y-5 md:px-10 md:py-3">
 							<FetchHeader
 								id="userPageHeaderId"
 								user={{ ...user, ...due }}

@@ -27,7 +27,7 @@ export default function Page() {
 	return (
 		<div className="flex flex-1 justify-center overflow-hidden">
 			<NextSeo
-				canonical="https://kioku.dev/"
+				canonical={ router.locale === "en" ? "https://kioku.dev/" : "https://app.kioku.dev/de/home/" }
 				title={_(
 					msg`Kioku | Learn flashcards together with friends for free online!`
 				)}

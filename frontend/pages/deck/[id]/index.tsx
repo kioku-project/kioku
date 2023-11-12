@@ -1,3 +1,5 @@
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactNode, useState } from "react";
@@ -15,6 +17,8 @@ import { authedFetch } from "../../../util/reauth";
 
 export default function Page() {
 	const router = useRouter();
+
+	const { _ } = useLingui();
 
 	const deckID = router.query.id as string;
 
@@ -35,21 +39,21 @@ export default function Page() {
 		cards: (
 			<TabHeader
 				id="CardsTabHeaderId"
-				name="Cards"
+				name={_(msg`Cards`)}
 				style="cards"
 			></TabHeader>
 		),
 		statistics: (
 			<TabHeader
 				id="StatisticsTabHeaderId"
-				name="Statistics"
+				name={_(msg`Statistics`)}
 				style="statistics"
 			></TabHeader>
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
-				name="Settings"
+				name={_(msg`Settings`)}
 				style="settings"
 			></TabHeader>
 		),
@@ -63,6 +67,8 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
+				<link rel="alternate" hrefLang="en" href={`https://app.kioku.dev/deck/${deckID}`} />
+				<link rel="alternate" hrefLang="de" href={`https://app.kioku.dev/de/deck/${deckID}`} />
 			</Head>
 
 			<Authenticated>

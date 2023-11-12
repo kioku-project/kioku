@@ -1,3 +1,4 @@
+import { Trans, plural, t } from "@lingui/macro";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -83,7 +84,7 @@ export const Header = ({
 					<Text style="primary" size="xl">
 						{deck?.deckName}
 						{!deck && group && group.groupName}
-						{user && `Welcome ${user.userName}`}
+						{user && <Trans>Welcome {user.userName}</Trans>}
 					</Text>
 					{deck?.deckType && (
 						<Badge
@@ -92,7 +93,7 @@ export const Header = ({
 							style="tertiary"
 						/>
 					)}
-					{group?.groupType && (
+					{!deck?.deckType && group?.groupType && (
 						<Badge
 							id="groupTypeBadgeId"
 							label={group.groupType}
@@ -124,11 +125,16 @@ export const Header = ({
 					)}
 					{!deck && group && <div>{group.groupDescription}</div>}
 					{!!user?.dueCards && !!user.dueDecks && (
-						<div>{`You have ${user.dueCards} card${
-							user.dueCards != 1 ? "s" : ""
-						} in ${user.dueDecks} deck${
-							user.dueDecks != 1 ? "s" : ""
-						} to learn`}</div>
+						<div>
+							{plural(user.dueCards, {
+								one: "You have # card",
+								other: "You have # cards",
+							})}{" "}
+							{plural(user.dueDecks, {
+								one: "in # deck to learn",
+								other: "in # decks to learn",
+							})}
+						</div>
 					)}
 				</Text>
 			</div>
@@ -149,7 +155,7 @@ export const Header = ({
 					buttonSize="sm"
 					onClick={() => router.push(`/deck/${deck.deckID}/learn`)}
 				>
-					Learn Deck
+					<Trans>Learn Deck</Trans>
 				</Button>
 			)}
 			{/* if on group page and user is not in group, display join group button */}
@@ -163,13 +169,13 @@ export const Header = ({
 							joinGroup();
 						}}
 					>
-						Join Group
+						<Trans>Join Group</Trans>
 					</Button>
 				)}
 			{/* if on group page and user already requested, display info text */}
 			{!deck && group?.groupRole == "REQUESTED" && (
 				<Text className="italic" style="primary">
-					Request pending
+					<Trans>Request pending</Trans>
 				</Text>
 			)}
 		</div>
@@ -183,7 +189,7 @@ export const Header = ({
 			}
 		);
 		if (response?.ok) {
-			toast.info("Send request!", { toastId: "requestedGroupToast" });
+			toast.info(t`Sent request!`, { toastId: "requestedGroupToast" });
 		} else {
 			toast.error("Error!", { toastId: "requestedGroupToast" });
 		}

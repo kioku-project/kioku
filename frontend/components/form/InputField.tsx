@@ -1,3 +1,4 @@
+import { t } from "@lingui/macro";
 import React, {
 	InputHTMLAttributes,
 	ReactNode,
@@ -77,7 +78,7 @@ export const InputField = forwardRef(
 			type,
 			label,
 			statusIcon,
-			tooltipMessage = `Please enter a valid ${type}.`,
+			tooltipMessage = t`Please enter a valid ${type}.`,
 			inputFieldStyle = "primary",
 			inputFieldSize = "md",
 			pattern,
@@ -165,7 +166,7 @@ export const InputField = forwardRef(
 			} else {
 				setIcon("error");
 				if (input.validity.valueMissing) {
-					setTooltip("Please fill out this field.");
+					setTooltip(t`Please fill out this field.`);
 				} else {
 					setTooltip(tooltipMessage);
 					input.setCustomValidity(tooltipMessage);

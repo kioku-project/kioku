@@ -1,6 +1,21 @@
+import { i18n } from "@lingui/core";
+import { I18nProvider } from "@lingui/react";
+import React from "react";
+
+import { messages } from "../locales/en/messages.ts";
 import "../styles/globals.css";
 
-export const parameters = {
+i18n.load("en", messages);
+i18n.activate("en");
+
+export const preview = {
+	decorators: [
+		(Story) => (
+			<I18nProvider i18n={i18n}>
+				<Story />
+			</I18nProvider>
+		),
+	],
 	actions: { argTypesRegex: "^on[A-Z].*" },
 	controls: {
 		matchers: {
@@ -25,3 +40,4 @@ export const parameters = {
 		},
 	},
 };
+export default preview;

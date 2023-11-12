@@ -1,3 +1,6 @@
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
+import { GetStaticProps } from "next";
 import Head from "next/head";
 import React, { ReactNode, useState } from "react";
 import useSWR from "swr";
@@ -14,6 +17,16 @@ import { UserSettingsTab } from "../components/navigation/Tabs/UserSettingsTab";
 import { Group as GroupType } from "../types/Group";
 import { Invitation } from "../types/Invitation";
 import { authedFetch } from "../util/reauth";
+import { loadCatalog } from "./_app";
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+	const translation = await loadCatalog(ctx.locale!);
+	return {
+		props: {
+			translation,
+		},
+	};
+};
 
 export default function Home() {
 	const fetcher = (url: RequestInfo | URL) =>
@@ -27,25 +40,27 @@ export default function Home() {
 		groupInvitation: Invitation[];
 	}>(`/api/user/invitations`, fetcher);
 
+	const { _ } = useLingui();
+
 	const tabs: { [tab: string]: ReactNode } = {
 		decks: (
 			<TabHeader
 				id="decksTabHeaderId"
-				name="Decks"
+				name={_(msg`Decks`)}
 				style="decks"
 			></TabHeader>
 		),
 		groups: (
 			<TabHeader
 				id="groupTabHeaderId"
-				name="Groups"
+				name={_(msg`Groups`)}
 				style="groups"
 			></TabHeader>
 		),
 		invitations: (
 			<TabHeader
 				id="invitationTabHeaderId"
-				name="Invitations"
+				name={_(msg`Invitations`)}
 				style="invitations"
 				notificationBadgeContent={`${
 					invitations?.groupInvitation?.length || ""
@@ -55,14 +70,14 @@ export default function Home() {
 		statistics: (
 			<TabHeader
 				id="StatisticsTabHeaderId"
-				name="Statistics"
+				name={_(msg`Statistics`)}
 				style="statistics"
 			></TabHeader>
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
-				name="Settings"
+				name={_(msg`Settings`)}
 				style="settings"
 			></TabHeader>
 		),
@@ -76,6 +91,8 @@ export default function Home() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
+				<link rel="alternate" hrefLang="en" href="https://app.kioku.dev/" />
+				<link rel="alternate" hrefLang="de" href="https://app.kioku.dev/de" />
 			</Head>
 			<Authenticated>
 				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">

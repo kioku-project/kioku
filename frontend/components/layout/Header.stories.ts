@@ -27,7 +27,7 @@ export const UserWithDescription: Story = {
 			userID: "U-12345678",
 			userName: "Test User",
 			dueCards: 7,
-			dueDecks: 2
+			dueDecks: 2,
 		},
 	},
 };
@@ -41,6 +41,7 @@ export const Deck: Story = {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupType: "OPEN",
 		},
 	},
 };
@@ -50,11 +51,12 @@ export const PublicDeck: Story = {
 		deck: {
 			deckID: "D-12345678",
 			deckName: "Test Deck",
-			deckType: "PUBLIC"
+			deckType: "PUBLIC",
 		},
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupType: "OPEN",
 		},
 	},
 };
@@ -64,11 +66,12 @@ export const PrivateDeck: Story = {
 		deck: {
 			deckID: "D-12345678",
 			deckName: "Test Deck",
-			deckType: "PRIVATE"
+			deckType: "PRIVATE",
 		},
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupType: "OPEN",
 		},
 	},
 };

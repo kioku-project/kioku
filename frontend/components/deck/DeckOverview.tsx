@@ -1,3 +1,5 @@
+import { msg, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
@@ -47,6 +49,8 @@ export default function DeckOverview({
 		}
 	}, [router, group]);
 
+	const { _ } = useLingui();
+
 	return (
 		<div
 			id={group?.groupID ?? "createGroupId"}
@@ -84,7 +88,7 @@ export default function DeckOverview({
 					<input
 						id="groupNameInput"
 						type="text"
-						placeholder="Create Group"
+						placeholder={_(msg`Create Group`)}
 						className="bg-transparent outline-none"
 						ref={groupNameInput}
 						onKeyUp={(event) => {
@@ -114,7 +118,7 @@ export default function DeckOverview({
 		});
 		if (response?.ok) {
 			groupNameInput.current.value = "";
-			toast.info("Group created!", { toastId: "newGroupToast" });
+			toast.info(t`Group created!`, { toastId: "newGroupToast" });
 		} else {
 			toast.error("Error!", { toastId: "newGroupToast" });
 		}

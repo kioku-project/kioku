@@ -3,7 +3,6 @@ import { useLingui } from "@lingui/react";
 import { hasCookie } from "cookies-next";
 import { GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { ArrowRight } from "react-feather";
 
@@ -42,7 +41,7 @@ export default function Page() {
 				noindex={false}
 				nofollow={false}
 				openGraph={{
-					url: "http://kioku.dev",
+					url: "https://kioku.dev",
 				}}
 			/>
 			<div className="flex min-w-full flex-col bg-eggshell">

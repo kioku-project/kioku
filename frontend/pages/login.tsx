@@ -4,7 +4,6 @@ import { hasCookie } from "cookies-next";
 import { GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
 import { Inter } from "next/font/google";
-import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";

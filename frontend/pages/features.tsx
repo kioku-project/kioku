@@ -3,7 +3,6 @@ import { useLingui } from "@lingui/react";
 import { hasCookie } from "cookies-next";
 import { GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
-import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";

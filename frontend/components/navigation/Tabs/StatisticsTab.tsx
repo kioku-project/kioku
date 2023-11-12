@@ -1,3 +1,6 @@
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
+
 import { Section } from "../../layout/Section";
 import { StatisticOverview } from "../../statistics/StatisticOverview";
 
@@ -12,15 +15,19 @@ interface StatisticsTabProps {
  * UI component for the StatisticsTab
  */
 export const StatisticsTab = ({ className = "" }: StatisticsTabProps) => {
+	const { _ } = useLingui();
 	return (
 		<div className={`space-y-5 ${className}`}>
 			<Section
 				id="personalStatisticsSectionId"
-				header="Personal Statistics"
+				header={_(msg`Personal Statistics`)}
 			>
 				<StatisticOverview id="personalStatisticsOverviewId"></StatisticOverview>
 			</Section>
-			<Section id="groupStatisticsSectionId" header="Group Statistics">
+			<Section
+				id="groupStatisticsSectionId"
+				header={_(msg`Group Statistics`)}
+			>
 				<StatisticOverview id="groupStatisticsOverviewId"></StatisticOverview>
 			</Section>
 		</div>

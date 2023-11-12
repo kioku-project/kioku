@@ -31,7 +31,6 @@ var (
 )
 
 func main() {
-
 	// Initialize the database connection
 	dbStore, err := store.NewCardDeckStore()
 	if err != nil {
@@ -39,7 +38,7 @@ func main() {
 	}
 
 	logger.Info("Trying to listen on: ", serviceAddress)
-	
+
 	tp, err := helper.SetupTracing(context.TODO(), service)
 	if err != nil {
 		logger.Fatal("Error setting up tracer: %v", err)
@@ -73,9 +72,6 @@ func main() {
 
 	// Register handler
 	if err := pb.RegisterCardDeckHandler(srv.Server(), svc); err != nil {
-		logger.Fatal(err)
-	}
-	if err := pb.RegisterHealthHandler(srv.Server(), new(handler.Health)); err != nil {
 		logger.Fatal(err)
 	}
 

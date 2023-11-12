@@ -91,6 +91,16 @@ func (s *UserStoreImpl) RegisterNewUser(newUser *model.User) error {
 	return s.db.Create(newUser).Error
 }
 
+func (s *UserStoreImpl) ModifyUser(user *model.User) error {
+	user.Email = strings.ToLower(user.Email)
+	return s.db.Save(&model.User{
+		ID:       user.ID,
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: user.Password,
+	}).Error
+}
+
 func (s *UserStoreImpl) DeleteUser(user *model.User) error {
 	return s.db.Delete(user).Error
 }
@@ -118,6 +128,15 @@ func (s *CardDeckStoreImpl) FindDecksByGroupID(groupID string) (decks []model.De
 	return
 }
 
+func (s *CardDeckStoreImpl) FindPublicDecksByGroupID(groupID string) (decks []model.Deck, err error) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).
+		Where(&model.Deck{DeckType: model.PublicDeckType}).
+		Find(&decks).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
 func (s *CardDeckStoreImpl) FindDeckByID(deckID string) (deck *model.Deck, err error) {
 	if err = s.db.Where(&model.Deck{ID: deckID}).
 		Preload("Cards").
@@ -137,6 +156,7 @@ func (s *CardDeckStoreImpl) ModifyDeck(deck *model.Deck) (err error) {
 		Name:      deck.Name,
 		GroupID:   deck.GroupID,
 		CreatedAt: deck.CreatedAt,
+		DeckType:  deck.DeckType,
 	}).Error
 	return
 }

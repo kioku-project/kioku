@@ -1,3 +1,5 @@
+import { Trans, t } from "@lingui/macro";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import { toast } from "react-toastify";
@@ -7,7 +9,6 @@ import Authenticated from "../../../components/accessControl/Authenticated";
 import { Flashcard } from "../../../components/flashcard/Flashcard";
 import KiokuAward from "../../../components/graphics/KiokuAward";
 import { Button } from "../../../components/input/Button";
-import { Navbar } from "../../../components/navigation/Navbar";
 import { Group } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
@@ -32,9 +33,23 @@ export default function Page() {
 	);
 	return (
 		<div>
+			<Head>
+				<title>Kioku</title>
+				<meta name="description" content="Kioku" />
+				<link rel="icon" href="/favicon.ico" />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href={`https://app.kioku.dev/deck/${deckID}/learn`}
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href={`https://app.kioku.dev/de/deck/${deckID}/learn`}
+				/>
+			</Head>
 			<Authenticated>
-				<div className="min-w-screen flex h-screen flex-col bg-eggshell">
-					<Navbar login={true}></Navbar>
+				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 					{card?.cardID ? (
 						<Flashcard
 							id="flashcardId"
@@ -52,18 +67,20 @@ export default function Page() {
 							<KiokuAward></KiokuAward>
 							<div className="flex flex-col items-center space-y-1">
 								<div className="text-4xl font-bold text-kiokuDarkBlue">
-									Congratulations!
+									<Trans>Congratulations!</Trans>
 								</div>
 								<div className="text-lg font-semibold text-kiokuLightBlue">
-									You did it! There are no cards left in this
-									deck to learn today.
+									<Trans>
+										You did it! There are no cards left in
+										this deck to learn today.
+									</Trans>
 								</div>
 							</div>
 							<Button
 								id="goBackButtonId"
 								onClick={() => router.push(`/deck/${deckID}`)}
 							>
-								Back to Deck!
+								<Trans>Back to Deck!</Trans>
 							</Button>
 						</div>
 					)}
@@ -81,7 +98,7 @@ export default function Page() {
 			body: JSON.stringify(body),
 		});
 		if (response?.ok) {
-			toast.info("Card updated!", { toastId: "updatedCardToast" });
+			toast.info(t`Card updated!`, { toastId: "updatedCardToast" });
 			mutate(`/api/decks/${deckID}/pull`);
 			mutate(`/api/decks/${deckID}/dueCards`);
 		} else {

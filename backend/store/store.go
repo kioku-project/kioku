@@ -4,6 +4,7 @@ import "github.com/kioku-project/kioku/pkg/model"
 
 type UserStore interface {
 	RegisterNewUser(newUser *model.User) error
+	ModifyUser(user *model.User) error
 	DeleteUser(user *model.User) error
 	FindUserByEmail(email string) (*model.User, error)
 	FindUserByID(userID string) (*model.User, error)
@@ -11,6 +12,7 @@ type UserStore interface {
 
 type CardDeckStore interface {
 	FindDecksByGroupID(groupID string) ([]model.Deck, error)
+	FindPublicDecksByGroupID(groupID string) ([]model.Deck, error)
 	FindDeckByID(deckID string) (*model.Deck, error)
 	CreateDeck(newDeck *model.Deck) error
 	ModifyDeck(deck *model.Deck) error

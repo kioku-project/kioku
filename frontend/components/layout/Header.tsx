@@ -1,3 +1,4 @@
+import { Trans, plural, t } from "@lingui/macro";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -83,14 +84,21 @@ export const Header = ({
 					<Text style="primary" size="xl">
 						{deck?.deckName}
 						{!deck && group && group.groupName}
-						{user && `Welcome ${user.userName}`}
+						{user && <Trans>Welcome {user.userName}</Trans>}
 					</Text>
-					{!deck && group?.groupType && (
+					{deck?.deckType && (
 						<Badge
-							id="visibilityBadgeId"
+							id="deckTypeBadgeId"
+							label={deck.deckType}
+							style="tertiary"
+						/>
+					)}
+					{!deck?.deckType && group?.groupType && (
+						<Badge
+							id="groupTypeBadgeId"
 							label={group.groupType}
 							style="tertiary"
-						></Badge>
+						/>
 					)}
 				</div>
 				<Text style="secondary" size="xs">
@@ -101,17 +109,32 @@ export const Header = ({
 								onClick={() =>
 									router.push(`/group/${group.groupID}`)
 								}
+								onKeyUp={(event) => {
+									if (event.key === "Enter") {
+										event.target.dispatchEvent(
+											new Event("click", {
+												bubbles: true,
+											})
+										);
+									}
+								}}
+								tabIndex={0}
 							>{`${group.groupName}`}</div>
 							<div>&nbsp;{`/ ${deck.deckName}`}</div>
 						</div>
 					)}
 					{!deck && group && <div>{group.groupDescription}</div>}
 					{!!user?.dueCards && !!user.dueDecks && (
-						<div>{`You have ${user.dueCards} card${
-							user.dueCards != 1 ? "s" : ""
-						} in ${user.dueDecks} deck${
-							user.dueDecks != 1 ? "s" : ""
-						} to learn`}</div>
+						<div>
+							{plural(user.dueCards, {
+								one: "You have # card",
+								other: "You have # cards",
+							})}{" "}
+							{plural(user.dueDecks, {
+								one: "in # deck to learn",
+								other: "in # decks to learn",
+							})}
+						</div>
 					)}
 				</Text>
 			</div>
@@ -119,7 +142,7 @@ export const Header = ({
 			{/* {user && (
 				<Button
 					id="learnButtonId"
-					size="sm"
+					buttonSize="sm"
 					onClick={() => router.push("/user/learn")}
 				>
 					Start learning
@@ -129,10 +152,10 @@ export const Header = ({
 			{deck && (
 				<Button
 					id="learnDeckButtonId"
-					size="sm"
+					buttonSize="sm"
 					onClick={() => router.push(`/deck/${deck.deckID}/learn`)}
 				>
-					Learn Deck
+					<Trans>Learn Deck</Trans>
 				</Button>
 			)}
 			{/* if on group page and user is not in group, display join group button */}
@@ -141,18 +164,18 @@ export const Header = ({
 				(group.groupRole == "INVITED" || !group.groupRole) && (
 					<Button
 						id="joinGroupButtonId"
-						size="sm"
+						buttonSize="sm"
 						onClick={() => {
 							joinGroup();
 						}}
 					>
-						Join Group
+						<Trans>Join Group</Trans>
 					</Button>
 				)}
 			{/* if on group page and user already requested, display info text */}
 			{!deck && group?.groupRole == "REQUESTED" && (
 				<Text className="italic" style="primary">
-					Request pending
+					<Trans>Request pending</Trans>
 				</Text>
 			)}
 		</div>
@@ -166,7 +189,7 @@ export const Header = ({
 			}
 		);
 		if (response?.ok) {
-			toast.info("Send request!", { toastId: "requestedGroupToast" });
+			toast.info(t`Sent request!`, { toastId: "requestedGroupToast" });
 		} else {
 			toast.error("Error!", { toastId: "requestedGroupToast" });
 		}

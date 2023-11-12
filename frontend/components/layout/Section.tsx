@@ -53,6 +53,14 @@ export const Section = ({
 					onClick ? "hover:cursor-pointer" : ""
 				}`}
 				onClick={onClick}
+				onKeyUp={(event) => {
+					if (event.key === "Enter") {
+						event.target.dispatchEvent(
+							new Event("click", { bubbles: true })
+						);
+					}
+				}}
+				tabIndex={onClick ? 0 : -1}
 			>
 				{header}
 			</div>

@@ -1,3 +1,5 @@
+import { Trans, msg, plural, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import React, { useRef, useState } from "react";
 import {
 	ArrowLeft,
@@ -79,6 +81,8 @@ export const Flashcard = ({
 	const headerInput = useRef<HTMLInputElement>(null);
 	const descriptionInput = useRef<HTMLTextAreaElement>(null);
 
+	const { _ } = useLingui();
+
 	return (
 		<div
 			id={id}
@@ -98,7 +102,7 @@ export const Flashcard = ({
 							value={tempCard.sides[side]?.header}
 							placeholder={edit ? "Header" : ""}
 							statusIcon="none"
-							style="secondary"
+							inputFieldStyle="secondary"
 							readOnly={!edit}
 							className="text-lg sm:text-xl md:text-2xl lg:text-3xl"
 							ref={headerInput}
@@ -188,7 +192,7 @@ export const Flashcard = ({
 						id="descriptionInputId"
 						name="descriptionInput"
 						value={tempCard.sides[side]?.description}
-						placeholder={edit ? "Description" : ""}
+						placeholder={edit ? _(msg`Description`) : ""}
 						readOnly={!edit}
 						className="text-base text-kiokuLightBlue sm:text-lg md:text-xl lg:text-2xl"
 						ref={descriptionInput}
@@ -207,7 +211,10 @@ export const Flashcard = ({
 					<div className="flex h-8 w-full items-center text-xs font-semibold text-kiokuLightBlue sm:h-full md:text-sm">
 						{!fullSize &&
 							dueCards &&
-							`${dueCards} card${dueCards !== 1 ? "s" : ""} left`}
+							plural(dueCards, {
+								one: "# card left",
+								other: "# cards left",
+							})}
 					</div>
 				)}
 				{/* Show arrow left if not on first side */}
@@ -231,27 +238,27 @@ export const Flashcard = ({
 					<div className="flex flex-row justify-end space-x-1">
 						<Button
 							id="buttonHardId"
-							size="sm"
+							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(0)}
 						>
-							Hard
+							<Trans>Hard</Trans>
 						</Button>
 						<Button
 							id="buttonMediumId"
-							size="sm"
+							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(1)}
 						>
-							Medium
+							<Trans>Medium</Trans>
 						</Button>
 						<Button
 							id="buttonEasyId"
-							size="sm"
+							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(2)}
 						>
-							Easy
+							<Trans>Easy</Trans>
 						</Button>
 					</div>
 				)}
@@ -276,7 +283,7 @@ export const Flashcard = ({
 			}),
 		});
 		if (response?.ok) {
-			toast.info("Card updated!", { toastId: "updatedCardToast" });
+			toast.info(t`Card updated!`, { toastId: "updatedCardToast" });
 		} else {
 			toast.error("Error!", { toastId: "updatedCardToast" });
 		}

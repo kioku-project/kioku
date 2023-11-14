@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package common;
+
+option go_package = "github.com/kioku-project/kioku/pkg/proto;common";
+
+message Success {
+  bool success = 1;
+}
+
+message User {
+  string userID = 1;
+  string userEmail = 2;
+  string userName = 3;
+  string userPassword = 4;
+  GroupRole groupRole = 5;
+}
+message Users {
+  repeated User users = 1;
+}
+
+enum GroupType {
+  GT_INVALID = 0;
+  GT_REQUEST = 1;
+  GT_OPEN = 2;
+  GT_CLOSED = 3;
+}
+
+enum GroupRole {
+  EXTERNAL = 0;
+  REQUESTED = 1;
+  INVITED = 2;
+  READ = 3;
+  WRITE = 4;
+  ADMIN = 5;
+}
+
+message Group {
+  string groupID = 1;
+  string groupName = 2;
+  string groupDescription = 3;
+  bool isDefault = 4;
+  GroupType groupType = 5;
+  GroupRole role = 6;
+}
+
+message Groups {
+  repeated Group groups = 1;
+}
+
+message GroupRequest {
+  string userID = 1;
+  Group group = 2;
+}
+
+message GroupMembers {
+  repeated User users = 1;
+}
+
+message ManageGroupMemberRequestRequest {
+  string userID = 1;
+  string groupID = 2;
+  bool requestResponse = 3;
+}
+
+message GroupModUserRequest {
+  string userID = 1;
+  Group group = 2;
+  string modUserID = 3;
+}
+
+message GroupInviteRequest {
+  string userID = 1;
+  Group group = 2;
+  string inviteUserEmail = 3;
+}
+
+message Card {
+  string cardID = 1;
+  string deckID = 2;
+  repeated CardSide sides = 3;
+}
+message CardRequest {
+  string userID = 1;
+  Card card = 2;
+}
+
+message Cards {
+  repeated Card cards = 1;
+}
+
+message CardSide {
+  string cardSideID = 1;
+  string header = 2;
+  string description = 3;
+}
+
+message CardSideRequest {
+  string userID = 1;
+  Card card = 2;
+  string placeBeforeCardSideID = 3;
+}
+
+enum DeckType {
+  DT_INVALID = 0;
+  DT_PUBLIC = 1;
+  DT_PRIVATE = 2;
+}
+
+message Deck {
+  string deckID = 1;
+  string deckName = 2;
+  DeckType deckType = 3;
+  int64 createdAt = 4;
+  string groupID = 5;
+}
+message DeckRequest {
+  string userID = 1;
+  Deck deck = 2;
+}
+
+message Decks {
+  repeated Deck decks = 1;
+}
+

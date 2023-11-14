@@ -1,7 +1,7 @@
 package helper
 
 import (
-	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
+	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	"go-micro.dev/v4/logger"
 	"regexp"
 )
@@ -11,7 +11,7 @@ var (
 	GroupAndDeckNameRegex = regexp.MustCompile("^[a-zA-Z0-9-._~ ]{3,20}$")
 )
 
-func IsAuthorized(groupRole pbCollaboration.GroupRole, requiredRole pbCollaboration.GroupRole) bool {
+func IsAuthorized(groupRole pbCommon.GroupRole, requiredRole pbCommon.GroupRole) bool {
 	return groupRole.Number() >= requiredRole.Number()
 }
 

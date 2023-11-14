@@ -1,47 +1,21 @@
 syntax = "proto3";
+import "pkg/proto/common.proto";
 
 package srs;
 
-option go_package = "./proto;srs";
+option go_package ="github.com/kioku-project/kioku/services/srs/proto;srs";
 
 service Srs {
-	rpc Push(SrsPushRequest) returns (SuccessResponse) {}
-	rpc Pull(DeckPullRequest) returns (SrsPullResponse) {}
-	rpc AddUserCardBinding(BindingRequest) returns (SuccessResponse) {}
-	rpc GetDeckCardsDue(DeckPullRequest) returns (DueResponse) {}
-	rpc GetUserCardsDue(UserDueRequest) returns (UserDueResponse) {}
-}
-
-message DeckPullRequest {
-	string userID = 1;
-	string deckID = 2;
-}
-
-message SrsPullResponse {
-	Card card = 1;
-}
-
-message UserDueRequest {
-	string userID = 1;
+	rpc Push(SrsPushRequest) returns (common.Success) {}
+	rpc Pull(common.DeckRequest) returns (common.Card) {}
+	rpc AddUserCardBinding(BindingRequest) returns (common.Success) {}
+	rpc GetDeckCardsDue(common.DeckRequest) returns (UserDueResponse) {}
+	rpc GetUserCardsDue(common.User) returns (UserDueResponse) {}
 }
 
 message UserDueResponse {
 	int64 dueCards = 1;
 	int64 dueDecks = 2;
-}
-
-message DueResponse {
-	int64 due = 1;
-}
-
-message Card {
-	string cardID = 1;
-	repeated Side sides = 2;
-}
-
-message Side {
-	string header = 1;
-	string description = 2;
 }
 
 message SrsPushRequest {
@@ -50,11 +24,6 @@ message SrsPushRequest {
 	string deckID = 3;
 	int64 rating = 4;
 }
-
-message SuccessResponse {
-	bool success = 1;
-}
-
 message BindingRequest {
 	string userID = 1;
 	string cardID = 2;

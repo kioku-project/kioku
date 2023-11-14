@@ -88,7 +88,6 @@ export default function Page() {
 			body: JSON.stringify(body),
 		});
 		if (response?.ok) {
-			toast.info(t`Card updated!`, { toastId: "updatedCardToast" });
 			mutate(`/api/decks/${deckID}/pull`);
 			mutate(`/api/decks/${deckID}/dueCards`);
 		} else {

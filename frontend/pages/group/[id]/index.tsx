@@ -19,7 +19,7 @@ import { TabBar } from "../../../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
 import { authedFetch } from "../../../util/reauth";
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
+export const getServerSideProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
 	return {
 		props: {

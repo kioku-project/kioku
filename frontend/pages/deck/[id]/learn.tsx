@@ -16,7 +16,7 @@ import { Group } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
+export const getServerSideProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
 	return {
 		props: {

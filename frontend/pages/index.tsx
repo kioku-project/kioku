@@ -3,7 +3,6 @@ import { useLingui } from "@lingui/react";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import React, { ReactNode, useState } from "react";
-import useSWR from "swr";
 
 import Authenticated from "../components/accessControl/Authenticated";
 import { FetchHeader } from "../components/layout/Header";
@@ -14,9 +13,7 @@ import { StatisticsTab } from "../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../components/navigation/Tabs/TabHeader";
 import { UserSettingsTab } from "../components/navigation/Tabs/UserSettingsTab";
-import { Group as GroupType } from "../types/Group";
-import { Invitation } from "../types/Invitation";
-import { authedFetch } from "../util/reauth";
+import { useGroups, useInvitations, useUser, useUserDue } from "../util/swr";
 import { loadCatalog } from "./_app";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
@@ -29,16 +26,10 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 };
 
 export default function Home() {
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
-	const { data: groups } = useSWR("/api/groups", fetcher);
-	const { data: user } = useSWR("/api/user", fetcher);
-	const { data: due } = useSWR("/api/user/dueCards", fetcher);
-	const { data: invitations } = useSWR<{
-		groupInvitation: Invitation[];
-	}>(`/api/user/invitations`, fetcher);
+	const { user } = useUser();
+	const { due } = useUserDue();
+	const { invitations } = useInvitations();
+	const { groups } = useGroups();
 
 	const { _ } = useLingui();
 
@@ -62,9 +53,7 @@ export default function Home() {
 				id="invitationTabHeaderId"
 				name={_(msg`Invitations`)}
 				style="invitations"
-				notificationBadgeContent={`${
-					invitations?.groupInvitation?.length || ""
-				}`}
+				notificationBadgeContent={`${invitations?.length ?? ""}`}
 			></TabHeader>
 		),
 		statistics: (
@@ -91,8 +80,16 @@ export default function Home() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
-				<link rel="alternate" hrefLang="en" href="https://app.kioku.dev/" />
-				<link rel="alternate" hrefLang="de" href="https://app.kioku.dev/de" />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href="https://app.kioku.dev/"
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href="https://app.kioku.dev/de"
+				/>
 			</Head>
 			<Authenticated>
 				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
@@ -113,23 +110,18 @@ export default function Home() {
 									decks: (
 										<DecksTab
 											group={
-												groups.groups.filter(
-													(group: GroupType) =>
-														group.isDefault
+												groups.filter(
+													(group) => group.isDefault
 												)[0]
 											}
 										></DecksTab>
 									),
 									groups: (
-										<GroupsTab
-											groups={groups.groups}
-										></GroupsTab>
+										<GroupsTab groups={groups}></GroupsTab>
 									),
 									invitations: invitations && (
 										<InvitationsTab
-											invitations={
-												invitations.groupInvitation
-											}
+											invitations={invitations}
 										></InvitationsTab>
 									),
 									statistics: <StatisticsTab></StatisticsTab>,

@@ -4,7 +4,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR from "swr";
 
 import Authenticated from "../../../components/accessControl/Authenticated";
 import { FetchHeader } from "../../../components/layout/Header";
@@ -14,25 +13,17 @@ import { MembersTab } from "../../../components/navigation/Tabs/MembersTab";
 import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../../../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { authedFetch } from "../../../util/reauth";
+import { useGroup } from "../../../util/swr";
 
 export default function Page() {
 	const router = useRouter();
 	const { _ } = useLingui();
 
-	const [groupId, setGroupId] = useState<string>();
+	const [groupID, setGroupID] = useState<string>();
 	useEffect(() => {
-		setGroupId(router.query.id as string);
-	}, [groupId, router]);
-
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
-	const { data: group } = useSWR(
-		groupId ? `/api/groups/${groupId}` : null,
-		fetcher
-	);
+		setGroupID(router.query.id as string);
+	}, [groupID, router]);
+	const { group } = useGroup(groupID);
 
 	const tabs: { [tab: string]: ReactNode } = {
 		decks: (
@@ -73,8 +64,16 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
-				<link rel="alternate" hrefLang="en" href={`https://app.kioku.dev/group/${groupId}`} />
-				<link rel="alternate" hrefLang="de" href={`https://app.kioku.dev/de/group/${groupId}`} />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href={`https://app.kioku.dev/group/${groupID}`}
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href={`https://app.kioku.dev/de/group/${groupID}`}
+				/>
 			</Head>
 
 			<Authenticated>

@@ -26,6 +26,7 @@ export const InvitationsTab = ({
 					key={invitation.groupID}
 					group={{
 						...invitation,
+						isDefault: false,
 						groupRole: "INVITED",
 					}}
 				/>

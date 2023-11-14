@@ -1,9 +1,12 @@
 import { Trans, t } from "@lingui/macro";
+import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import { toast } from "react-toastify";
 import useSWR, { useSWRConfig } from "swr";
+
+import { loadCatalog } from "@/pages/_app";
 
 import Authenticated from "../../../components/accessControl/Authenticated";
 import { Flashcard } from "../../../components/flashcard/Flashcard";
@@ -12,6 +15,15 @@ import { Button } from "../../../components/input/Button";
 import { Group } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+	const translation = await loadCatalog(ctx.locale!);
+	return {
+		props: {
+			translation,
+		},
+	};
+};
 
 export default function Page() {
 	const router = useRouter();

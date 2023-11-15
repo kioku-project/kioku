@@ -79,7 +79,7 @@ export default function Page() {
 			<Authenticated>
 				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 					{group && (
-						<div className="space-y-5 p-10">
+						<div className="space-y-5 px-5 py-1 md:px-10 md:py-3">
 							<FetchHeader id="groupPageHeaderId" group={group} />
 							<TabBar
 								id="groupTabBarId"

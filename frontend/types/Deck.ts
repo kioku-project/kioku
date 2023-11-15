@@ -3,9 +3,9 @@ import { GroupRole } from "./GroupRole";
 export type Deck = {
 	deckID: string;
 	deckName: string;
-	deckType?: "PUBLIC" | "PRIVATE";
+	deckType: "PUBLIC" | "PRIVATE";
+	groupID: string;
+	groupRole?: keyof typeof GroupRole;
 	dueCards?: number;
 	createdAt?: number;
-	groupID?: string;
-	groupRole?: keyof typeof GroupRole;
 };

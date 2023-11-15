@@ -4,7 +4,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactNode, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR from "swr";
 
 import Authenticated from "../../../components/accessControl/Authenticated";
 import { FetchHeader } from "../../../components/layout/Header";
@@ -13,7 +12,7 @@ import { DeckSettingsTab } from "../../../components/navigation/Tabs/DeckSetting
 import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../../../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { authedFetch } from "../../../util/reauth";
+import { useDeck, useGroup } from "../../../util/swr";
 
 export default function Page() {
 	const router = useRouter();
@@ -21,19 +20,8 @@ export default function Page() {
 	const { _ } = useLingui();
 
 	const deckID = router.query.id as string;
-
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
-	const { data: deck } = useSWR(
-		deckID ? `/api/decks/${deckID}` : null,
-		fetcher
-	);
-	const { data: group } = useSWR(
-		deck?.groupID ? `/api/groups/${deck.groupID}` : null,
-		fetcher
-	);
+	const { deck } = useDeck(deckID);
+	const { group } = useGroup(deck?.groupID);
 
 	const tabs: { [tab: string]: ReactNode } = {
 		cards: (
@@ -67,8 +55,16 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
-				<link rel="alternate" hrefLang="en" href={`https://app.kioku.dev/deck/${deckID}`} />
-				<link rel="alternate" hrefLang="de" href={`https://app.kioku.dev/de/deck/${deckID}`} />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href={`https://app.kioku.dev/deck/${deckID}`}
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href={`https://app.kioku.dev/de/deck/${deckID}`}
+				/>
 			</Head>
 
 			<Authenticated>

@@ -8,6 +8,7 @@ import (
 
 type UserStore interface {
 	RegisterNewUser(ctx context.Context, newUser *model.User) error
+	ModifyUser(ctx context.Context, user *model.User) error
 	DeleteUser(ctx context.Context, user *model.User) error
 	FindUserByEmail(ctx context.Context, email string) (*model.User, error)
 	FindUserByID(ctx context.Context, userID string) (*model.User, error)
@@ -15,6 +16,7 @@ type UserStore interface {
 
 type CardDeckStore interface {
 	FindDecksByGroupID(ctx context.Context, groupID string) ([]model.Deck, error)
+	FindPublicDecksByGroupID(ctx context.Context, groupID string) ([]model.Deck, error)
 	FindDeckByID(ctx context.Context, deckID string) (*model.Deck, error)
 	CreateDeck(ctx context.Context, newDeck *model.Deck) error
 	ModifyDeck(ctx context.Context, deck *model.Deck) error

@@ -12,54 +12,99 @@ const meta: Meta<typeof Header> = {
 export default meta;
 type Story = StoryObj<typeof Header>;
 
-export const Deck: Story = {
+export const User: Story = {
+	args: {
+		user: {
+			userID: "U-12345678",
+			userName: "Test User",
+		},
+	},
+};
+
+export const UserWithDescription: Story = {
+	args: {
+		user: {
+			userID: "U-12345678",
+			userName: "Test User",
+			dueCards: 7,
+			dueDecks: 2,
+		},
+	},
+};
+
+export const PublicDeck: Story = {
 	args: {
 		deck: {
 			deckID: "D-12345678",
 			deckName: "Test Deck",
+			deckType: "PUBLIC",
+			groupID: "G-12345678",
 		},
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupDescription: "Group Description",
+			isDefault: false,
+			groupType: "REQUEST",
+			groupRole: "ADMIN",
 		},
 	},
 };
 
-export const Group: Story = {
+export const PrivateDeck: Story = {
 	args: {
+		deck: {
+			deckID: "D-12345678",
+			deckName: "Test Deck",
+			deckType: "PRIVATE",
+			groupID: "G-12345678",
+		},
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupDescription: "Group Description",
+			isDefault: false,
+			groupType: "REQUEST",
+			groupRole: "ADMIN",
 		},
 	},
 };
 
-export const GroupWithDescription: Story = {
+export const OpenGroup: Story = {
 	args: {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
 			groupDescription: "Group Description",
+			isDefault: false,
+			groupType: "OPEN",
+			groupRole: "ADMIN",
 		},
 	},
 };
 
-export const PrivateGroup: Story = {
+export const RequestGroup: Story = {
 	args: {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
-			groupType: "PRIVATE",
+			groupDescription: "Group Description",
+			isDefault: false,
+			groupType: "REQUEST",
+			groupRole: "ADMIN",
 		},
 	},
 };
 
-export const PublicGroup: Story = {
+export const ClosedGroup: Story = {
 	args: {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
-			groupType: "PUBLIC",
+			groupDescription: "Group Description",
+			isDefault: false,
+			groupType: "CLOSED",
+			groupRole: "ADMIN",
 		},
 	},
 };
@@ -69,6 +114,9 @@ export const RequestedGroup: Story = {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupDescription: "Group Description",
+			isDefault: false,
+			groupType: "REQUEST",
 			groupRole: "REQUESTED",
 		},
 	},
@@ -79,16 +127,10 @@ export const InvitedGroup: Story = {
 		group: {
 			groupID: "G-12345678",
 			groupName: "Test Group",
+			groupDescription: "Group Description",
+			isDefault: false,
+			groupType: "REQUEST",
 			groupRole: "INVITED",
-		},
-	},
-};
-
-export const User: Story = {
-	args: {
-		user: {
-			userID: "U-12345678",
-			userName: "Test User",
 		},
 	},
 };

@@ -1,62 +1,53 @@
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactNode, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR from "swr";
 
 import Authenticated from "../../../components/accessControl/Authenticated";
 import { FetchHeader } from "../../../components/layout/Header";
-import { Navbar } from "../../../components/navigation/Navbar";
 import { CardsTab } from "../../../components/navigation/Tabs/CardsTab";
 import { DeckSettingsTab } from "../../../components/navigation/Tabs/DeckSettingsTab";
 import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../../../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { authedFetch } from "../../../util/reauth";
+import { useDeck, useGroup } from "../../../util/swr";
 
 export default function Page() {
 	const router = useRouter();
 
-	const deckID = router.query.id as string;
+	const { _ } = useLingui();
 
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
-	const { data: deck } = useSWR(
-		deckID ? `/api/decks/${deckID}` : null,
-		fetcher
-	);
-	const { data: group } = useSWR(
-		deck?.groupID ? `/api/groups/${deck.groupID}` : null,
-		fetcher
-	);
+	const deckID = router.query.id as string;
+	const { deck } = useDeck(deckID);
+	const { group } = useGroup(deck?.groupID);
 
 	const tabs: { [tab: string]: ReactNode } = {
 		cards: (
 			<TabHeader
 				id="CardsTabHeaderId"
-				name="Cards"
+				name={_(msg`Cards`)}
 				style="cards"
 			></TabHeader>
 		),
 		statistics: (
 			<TabHeader
 				id="StatisticsTabHeaderId"
-				name="Statistics"
+				name={_(msg`Statistics`)}
 				style="statistics"
 			></TabHeader>
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
-				name="Settings"
+				name={_(msg`Settings`)}
 				style="settings"
 			></TabHeader>
 		),
 	};
 
-	const [currentTab, setTab] = useState("cards");
+	const [currentTab, setCurrentTab] = useState("cards");
 
 	return (
 		<div>
@@ -64,23 +55,32 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href={`https://app.kioku.dev/deck/${deckID}`}
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href={`https://app.kioku.dev/de/deck/${deckID}`}
+				/>
 			</Head>
 
 			<Authenticated>
-				<div className="min-w-screen flex h-screen flex-col bg-eggshell">
-					<Navbar login={true}></Navbar>
+				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 					{group && deck && (
-						<div className="flex h-full flex-col space-y-3 overflow-y-auto p-5 md:space-y-5 md:p-10">
+						<div className="flex h-full flex-col space-y-3 overflow-y-auto px-5 py-1 md:space-y-5 md:px-10 md:py-3">
 							<FetchHeader
 								id={"deckPageHeaderId"}
 								group={group}
-								deck={{ ...deck, deckID: deck.deckID }}
+								deck={deck}
 							/>
 							<TabBar
 								id="deckTabBarId"
 								tabs={tabs}
 								currentTab={currentTab}
-								setTab={setTab}
+								setTab={setCurrentTab}
 							></TabBar>
 							<div className="h-full overflow-y-auto">
 								{{

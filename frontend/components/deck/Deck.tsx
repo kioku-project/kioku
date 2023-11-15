@@ -1,18 +1,21 @@
+import { Trans, msg, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import router from "next/router";
 import { useEffect, useRef } from "react";
 import { AlertTriangle } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR, { preload, useSWRConfig } from "swr";
+import { preload, useSWRConfig } from "swr";
 
 import { Deck as DeckType } from "../../types/Deck";
 import { Group as GroupType } from "../../types/Group";
 import { GroupRole } from "../../types/GroupRole";
 import { authedFetch } from "../../util/reauth";
+import { fetcher, useDueCards } from "../../util/swr";
 
 interface DeckProps {
 	/**
-	 * group
+	 * Group entity
 	 */
 	group: GroupType;
 	/**
@@ -26,14 +29,7 @@ interface DeckProps {
 }
 
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
-	const { data: dueCards } = useSWR(
-		deck ? `/api/decks/${deck?.deckID}/dueCards` : null,
-		fetcher
-	);
+	const { dueCards } = useDueCards(deck?.deckID);
 
 	useEffect(() => {
 		if (deck) {
@@ -52,6 +48,7 @@ export const FetchDeck = ({ deck, ...props }: DeckProps) => {
  */
 export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 	const { mutate } = useSWRConfig();
+	const { _ } = useLingui();
 
 	const deckNameInput = useRef<HTMLInputElement>(null);
 
@@ -61,20 +58,28 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 			className={`mb-3 mr-3 flex w-fit flex-col items-center rounded-md border-2 border-kiokuDarkBlue p-3 hover:cursor-pointer ${
 				deck ? "" : "border-dashed"
 			} ${className}`}
+			onClick={() => {
+				if (deck) {
+					router.push(`/deck/${deck.deckID}`);
+				} else {
+					createDeck()
+						.then((result) => {})
+						.catch((error) => {});
+				}
+			}}
+			onKeyUp={(event) => {
+				if (event.key === "Enter") {
+					event.target.dispatchEvent(
+						new Event("click", { bubbles: true })
+					);
+				}
+			}}
+			tabIndex={deck ? 0 : -1}
 		>
 			<div
 				className={`relative flex h-40 w-40 items-center space-y-1 rounded-md  ${
 					deck ? "bg-kiokuLightBlue" : ""
 				} `}
-				onClick={() => {
-					if (deck) {
-						router.push(`/deck/${deck.deckID}`);
-					} else {
-						createDeck()
-							.then((result) => {})
-							.catch((error) => {});
-					}
-				}}
 			>
 				<div
 					className={`flex w-full justify-center text-6xl font-black ${
@@ -113,7 +118,7 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 						<input
 							id={`deckNameInput${group.groupID}`}
 							className="w-40 bg-transparent text-center outline-none"
-							placeholder={"Create new Deck"}
+							placeholder={_(msg`Create new Deck`)}
 							ref={deckNameInput}
 							onKeyUp={(event) => {
 								if (event.key === "Enter") {
@@ -122,13 +127,17 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 										.catch((error) => {});
 								}
 							}}
+							onClick={(event) => {
+								event.stopPropagation();
+							}}
 						></input>
 					)}
 				{/* if group is empty, display placeholder for user without write permission */}
 				{group.isEmpty &&
 					group.groupRole &&
-					GroupRole[group.groupRole] < GroupRole.WRITE &&
-					"No decks in group"}
+					GroupRole[group.groupRole] < GroupRole.WRITE && (
+						<Trans>No decks in group</Trans>
+					)}
 			</div>
 		</div>
 	);
@@ -150,7 +159,7 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 		);
 		if (response?.ok) {
 			deckNameInput.current.value = "";
-			toast.info("Deck created!", { toastId: "newDeckToast" });
+			toast.info(t`Deck created!`, { toastId: "newDeckToast" });
 		} else {
 			toast.error("Error!", { toastId: "newDeckToast" });
 		}

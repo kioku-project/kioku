@@ -1,3 +1,5 @@
+import { msg, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import React, { useRef, useState } from "react";
 import { Check, Trash, X } from "react-feather";
 import { toast } from "react-toastify";
@@ -14,11 +16,15 @@ interface CardProps {
 	 */
 	card: CardType;
 	/**
+	 * Permission to edit
+	 */
+	editable?: boolean;
+	/**
 	 * Additional classes
 	 */
 	className?: string;
 	/**
-	 * click handler
+	 * Click handler
 	 */
 	setCard?: (card: CardType) => void;
 }
@@ -26,10 +32,17 @@ interface CardProps {
 /**
  * UI component for displaying a card
  */
-export const Card = ({ card, setCard, className = "" }: CardProps) => {
+export const Card = ({
+	card,
+	editable = false,
+	className = "",
+	setCard,
+}: CardProps) => {
 	const { mutate } = useSWRConfig();
 	const [isDelete, setDelete] = useState(false);
 	const cardNameInput = useRef<HTMLInputElement>(null);
+
+	const { _ } = useLingui();
 
 	return (
 		<div className={`font-semibold text-kiokuDarkBlue ${className}`}>
@@ -62,9 +75,13 @@ export const Card = ({ card, setCard, className = "" }: CardProps) => {
 							<Trash
 								id={`delete${card.cardID}ButtonId`}
 								data-testid={`deleteCardButtonId`}
-								className="hover:cursor-pointer"
+								className={`${
+									editable
+										? "hover:cursor-pointer"
+										: "text-gray-200 hover:cursor-not-allowed"
+								}`}
 								size={20}
-								onClick={() => setDelete(true)}
+								onClick={() => setDelete(editable)}
 							></Trash>
 						)}
 						{/* <Edit2
@@ -84,7 +101,7 @@ export const Card = ({ card, setCard, className = "" }: CardProps) => {
 						id="cardNameInput"
 						className="w-full bg-transparent text-xs outline-none sm:text-sm md:text-base lg:text-lg xl:text-xl"
 						type="text"
-						placeholder="Create Card"
+						placeholder={_(msg`Create Card`)}
 						ref={cardNameInput}
 						onKeyUp={(event) => {
 							if (event.key === "Enter") {
@@ -119,7 +136,7 @@ export const Card = ({ card, setCard, className = "" }: CardProps) => {
 		});
 		if (response?.ok) {
 			cardNameInput.current.value = "";
-			toast.info("Card created!", { toastId: "newCardToast" });
+			toast.info(t`Card created!`, { toastId: "newCardToast" });
 			mutate(`/api/decks/${card.deckID}/cards`);
 			mutate(`/api/decks/${card.deckID}/pull`);
 			mutate(`/api/decks/${card.deckID}/dueCards`);

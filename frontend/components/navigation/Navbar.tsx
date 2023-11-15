@@ -1,65 +1,66 @@
-import { Inter } from "next/font/google";
-import router from "next/router";
-import React from "react";
+import { Trans } from "@lingui/macro";
+import { hasCookie } from "cookies-next";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { ArrowRight, LogOut } from "react-feather";
 
 import { authedFetch } from "../../util/reauth";
 import { Logo } from "../graphics/Logo";
 import { Button } from "../input/Button";
 
-const inter = Inter({
-	weight: ["200", "400"],
-	subsets: ["latin"],
-});
-
 interface NavbarProps {
-	/**
-	 * show login or logout button
-	 */
-	login?: boolean;
 	/**
 	 * Additional classes
 	 */
 	className?: string;
-	/**
-	 * alternative click handler
-	 */
-	onClick?: () => void;
 }
 
 /**
  * UI component for diplaying the Navbar
  */
-export const Navbar = ({ login, className = "", onClick }: NavbarProps) => {
+export const Navbar = ({ className = "" }: NavbarProps) => {
+	const router = useRouter();
+	const [loggedIn, setLoggedIn] = useState<boolean>();
+	useEffect(() => {
+		if (router.pathname == "/login") {
+			setLoggedIn(undefined);
+		} else {
+			setLoggedIn(hasCookie("access_token"));
+		}
+	});
 	return (
-		<div
+		<nav
 			className={`flex items-center justify-between p-5 md:p-10 ${className}`}
 		>
-			<Logo onClick={onClick}></Logo>
-			{login ? (
-				<div className="flex flex-row">
-					<LogOut
-						className="text-kiokuDarkBlue hover:cursor-pointer"
-						onClick={async () => {
-							const response = await authedFetch("/api/logout", {
-								method: "POST",
-							});
-							if (response?.ok) {
-								location.reload();
-							}
-						}}
-					></LogOut>
-				</div>
-			) : (
+			<Logo
+				onClick={() =>
+					loggedIn ? router.push("/") : router.push("/home")
+				}
+			></Logo>
+			{loggedIn == true && (
+				<LogOut
+					className="text-kiokuDarkBlue hover:cursor-pointer"
+					onClick={async () => {
+						const response = await authedFetch("/api/logout", {
+							method: "POST",
+						});
+						if (response?.ok) {
+							router.replace("/home");
+						}
+					}}
+				></LogOut>
+			)}
+			{loggedIn == false && (
 				<Button
 					id="loginButton"
-					style="secondary"
-					className="invisible h-full justify-end sm:visible"
-					onClick={() => router.push("/")}
+					buttonStyle="secondary"
+					className="invisible sm:visible"
+					onClick={() => router.push("/login")}
 				>
-					Login <ArrowRight className="ml-1 h-2/3"></ArrowRight>
+					<Trans>Login</Trans>
+					<ArrowRight className="ml-1 h-2/3"></ArrowRight>
 				</Button>
 			)}
-		</div>
+		</nav>
 	);
 };

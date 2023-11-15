@@ -1,10 +1,12 @@
 import React from "react";
 
 import { Statistic } from "./Statistic";
+import { useLingui } from "@lingui/react";
+import { msg } from "@lingui/macro";
 
 interface StatisticOverviewProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -16,29 +18,33 @@ interface StatisticOverviewProps {
 /**
  * UI component for grouping statistics
  */
-export const StatisticOverview = ({ className }: StatisticOverviewProps) => {
+export const StatisticOverview = ({
+	id,
+	className,
+}: StatisticOverviewProps) => {
+	const { _ } = useLingui()
 	return (
-		<div className="flex flex-row justify-between rounded-lg">
+		<div id={id} className="flex flex-row justify-between rounded-lg">
 			<Statistic
 				id={"statisticId"}
-				header="Cards learned"
+				header={_(msg`Cards learned`)}
 				value={"176"}
-				seperator="from"
+				separator={_(msg`from`)}
 				reference={"200"}
 				change={12}
 				className="border-r-2 border-kiokuLightBlue"
 			></Statistic>
 			<Statistic
 				id={"statisticId"}
-				header="Hit Rate"
+				header={_(msg`Hit Rate`)}
 				value={"34%"}
 				change={2}
 			></Statistic>
 			<Statistic
 				id={"statisticId"}
-				header="Test"
+				header={_(msg`Test`)}
 				value={"0"}
-				seperator="from"
+				separator={_(msg`from`)}
 				reference={"100"}
 				change={-3}
 				className="border-l-2 border-kiokuLightBlue"

@@ -2,7 +2,7 @@ import React, { ChangeEventHandler, Ref, forwardRef } from "react";
 
 interface TextAreaProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id: string;
 	/**
@@ -26,7 +26,7 @@ interface TextAreaProps {
 	 */
 	className?: string;
 	/**
-	 * optional change handler
+	 * Change handler
 	 */
 	onChange?: ChangeEventHandler<HTMLTextAreaElement>;
 }

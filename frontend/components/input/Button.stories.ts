@@ -17,55 +17,55 @@ type Story = StoryObj<typeof Button>;
 export const Primary: Story = {
 	args: {
 		children: "Primary",
-		style: "primary",
+		buttonStyle: "primary",
 	},
 };
 
 export const Secondary: Story = {
 	args: {
 		children: "Secondary",
-		style: "secondary",
+		buttonStyle: "secondary",
 	},
 };
 
 export const Error: Story = {
 	args: {
 		children: "Error",
-		style: "error",
+		buttonStyle: "error",
 	},
 };
 
 export const Warning: Story = {
 	args: {
 		children: "Warning",
-		style: "warning",
+		buttonStyle: "warning",
 	},
 };
 
 export const Disabled: Story = {
 	args: {
 		children: "Disabled",
-		style: "disabled",
+		buttonStyle: "disabled",
 	},
 };
 
 export const Small: Story = {
 	args: {
 		children: "Small",
-		size: "sm",
+		buttonSize: "sm",
 	},
 };
 
 export const Medium: Story = {
 	args: {
 		children: "Medium",
-		size: "md",
+		buttonSize: "md",
 	},
 };
 
 export const Large: Story = {
 	args: {
 		children: "Large",
-		size: "lg",
+		buttonSize: "lg",
 	},
 };

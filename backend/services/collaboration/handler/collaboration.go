@@ -177,7 +177,7 @@ func (e *Collaboration) CreateNewGroupWithAdmin(
 		Name:        req.GroupName,
 		Description: req.GroupDescription,
 		IsDefault:   req.IsDefault,
-		GroupType:   model.Private,
+		GroupType:   model.ClosedGroupType,
 	}
 	err = e.store.CreateNewGroupWithAdmin(ctx, req.UserID, &newGroup)
 	if err != nil {
@@ -200,13 +200,8 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pb.GroupRequest, rsp 
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			logger.Infof("User does not have a group role")
-			if group.GroupType == model.Public {
-				logger.Infof("Group is public, so still returning information")
-				*rsp = pb.GroupWithUserRole{Group: protoGroup, Role: pb.GroupRole_EXTERNAL}
-				return nil
-			}
-			logger.Infof("Group is private")
-			return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+			*rsp = pb.GroupWithUserRole{Group: protoGroup, Role: pb.GroupRole_EXTERNAL}
+			return nil
 		}
 		return err
 	}
@@ -355,8 +350,13 @@ func (e *Collaboration) AddGroupUserRequest(
 		if err != nil {
 			return err
 		}
-		if group.GroupType == model.Private {
+		if group.GroupType == model.ClosedGroupType {
 			return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+		}
+		if group.GroupType == model.OpenGroupType {
+			err := e.store.AddNewMemberToGroup(ctx, req.UserID, req.GroupID)
+			rsp.Success = true
+			return err
 		}
 		if err = e.store.AddRequestingUserToGroup(ctx, req.UserID, req.GroupID); err != nil {
 			return err
@@ -629,7 +629,7 @@ func (e *Collaboration) LeaveGroup(ctx context.Context, req *pb.GroupRequest, rs
 	if err != nil {
 		return err
 	}
-	if len(groupUsers) > 1 || group.GroupType == model.Public {
+	if len(groupUsers) > 1 || group.GroupType == model.OpenGroupType {
 		if err = e.store.RemoveUserFromGroup(ctx, req.UserID, req.GroupID); err != nil {
 			return err
 		}

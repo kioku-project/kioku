@@ -1,3 +1,5 @@
+import { msg, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import React, { useRef, useState } from "react";
 import { Check, UserCheck, UserMinus, UserX, X } from "react-feather";
 import { toast } from "react-toastify";
@@ -10,7 +12,7 @@ import { Text } from "../Text";
 
 interface MemberProps {
 	/**
-	 * unique identifier
+	 * Unique identifier
 	 */
 	id?: string;
 	/**
@@ -24,12 +26,18 @@ interface MemberProps {
 }
 
 /**
- * UI component for dislpaying a user
+ * UI component for displaying a user
  */
-export default function Member({ id, user, className = "" }: MemberProps) {
+export default function Member({
+	id,
+	user,
+	className = "",
+}: Readonly<MemberProps>) {
 	const { mutate } = useSWRConfig();
 	const [isDelete, setDelete] = useState(false);
 	const userInputField = useRef<HTMLInputElement>(null);
+
+	const { _ } = useLingui();
 	return (
 		<div
 			id={id ?? `user${user?.userID}`}
@@ -121,7 +129,7 @@ export default function Member({ id, user, className = "" }: MemberProps) {
 						id="userInputFieldId"
 						type="email"
 						className="bg-transparent text-kiokuLightBlue outline-none"
-						placeholder="Invite user with email"
+						placeholder={_(msg`Invite user with email`)}
 						ref={userInputField}
 						onKeyUp={(event) => {
 							if (
@@ -154,7 +162,7 @@ export default function Member({ id, user, className = "" }: MemberProps) {
 			}
 		);
 		if (response?.ok) {
-			toast.info("User invited", {
+			toast.info(t`User invited`, {
 				toastId: "invitedUserToast",
 			});
 		} else {

@@ -12,26 +12,10 @@ spec:
         version: "15"
         parameters:  # Expert section
             shared_buffers: "32MB"
-            max_connections: "100"
+            max_connections: "500"
             log_statement: "all"
     
-    enableConnectionPooler: true
-    enableReplicaConnectionPooler: true
-
-    connectionPooler:
-        numberOfInstances: 1
-        schema: postgres
-        user: postgres
-
-        mode: session
-
-        resources:
-            requests:
-                cpu: 100m
-                memory: 100Mi
-            limits:
-                cpu: "0.2"
-                memory: 100Mi
+    enableConnectionPooler: false
 
 
     databases:

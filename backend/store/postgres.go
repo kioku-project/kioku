@@ -40,7 +40,6 @@ func NewPostgresStore(ctx context.Context) (*gorm.DB, error) {
 	dbname := os.Getenv("POSTGRES_DB")
 	port := os.Getenv("POSTGRES_PORT")
 
-
 	logger := logger.New(
 		logrus.NewWriter(),
 		logger.Config{
@@ -49,12 +48,22 @@ func NewPostgresStore(ctx context.Context) (*gorm.DB, error) {
 			Colorful:      false,
 		},
 	)
-	
+
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=prefer", username, password, host, port, dbname)
 	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{Logger: logger})
 	if err != nil {
 		return nil, err
 	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		return nil, err
+	}
+
+	sqlDB.SetMaxOpenConns(100)
+	sqlDB.SetMaxIdleConns(100)
+	sqlDB.SetConnMaxIdleTime(5 * time.Minute)
+
 	err = db.Use(
 		tracing.NewPlugin(
 			tracing.WithDBName("kioku"),
@@ -125,6 +134,16 @@ func (s *UserStoreImpl) RegisterNewUser(ctx context.Context, newUser *model.User
 	return s.db.WithContext(ctx).Create(newUser).Error
 }
 
+func (s *UserStoreImpl) ModifyUser(ctx context.Context, user *model.User) error {
+	user.Email = strings.ToLower(user.Email)
+	return s.db.Save(&model.User{
+		ID:       user.ID,
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: user.Password,
+	}).Error
+}
+
 func (s *UserStoreImpl) DeleteUser(ctx context.Context, user *model.User) error {
 	return s.db.WithContext(ctx).Delete(user).Error
 }
@@ -152,6 +171,15 @@ func (s *CardDeckStoreImpl) FindDecksByGroupID(ctx context.Context, groupID stri
 	return
 }
 
+func (s *CardDeckStoreImpl) FindPublicDecksByGroupID(ctx context.Context, groupID string) (decks []model.Deck, err error) {
+	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).
+		Where(&model.Deck{DeckType: model.PublicDeckType}).
+		Find(&decks).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
 func (s *CardDeckStoreImpl) FindDeckByID(ctx context.Context, deckID string) (deck *model.Deck, err error) {
 	if err = s.db.WithContext(ctx).Where(&model.Deck{ID: deckID}).
 		Preload("Cards").
@@ -171,6 +199,7 @@ func (s *CardDeckStoreImpl) ModifyDeck(ctx context.Context, deck *model.Deck) (e
 		Name:      deck.Name,
 		GroupID:   deck.GroupID,
 		CreatedAt: deck.CreatedAt,
+		DeckType:  deck.DeckType,
 	}).Error
 	return
 }

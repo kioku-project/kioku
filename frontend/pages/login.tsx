@@ -1,6 +1,5 @@
 import { Trans, msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
-import { hasCookie } from "cookies-next";
 import { GetStaticProps } from "next";
 import { Inter } from "next/font/google";
 import Head from "next/head";

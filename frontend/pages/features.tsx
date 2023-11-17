@@ -37,8 +37,8 @@ export default function Page() {
 						href: "https://app.kioku.dev/de/features",
 					},
 				]}
-				noindex={false}
-				nofollow={false}
+				noindex={!process.env.NEXT_PUBLIC_SEO}
+				nofollow={!process.env.NEXT_PUBLIC_SEO}
 				openGraph={{
 					url: "https://app.kioku.dev/features/",
 				}}

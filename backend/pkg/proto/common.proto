@@ -27,12 +27,12 @@ enum GroupType {
 }
 
 enum GroupRole {
-  EXTERNAL = 0;
-  REQUESTED = 1;
-  INVITED = 2;
-  READ = 3;
-  WRITE = 4;
-  ADMIN = 5;
+  GR_EXTERNAL = 0;
+  GR_REQUESTED = 1;
+  GR_INVITED = 2;
+  GR_READ = 3;
+  GR_WRITE = 4;
+  GR_ADMIN = 5;
 }
 
 message Group {

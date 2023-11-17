@@ -8,30 +8,30 @@ import (
 
 func MigrateModelRoleToProtoRole(modelRole model.RoleType) (protoRole pbCommon.GroupRole) {
 	if modelRole == model.RoleRequested {
-		protoRole = pbCommon.GroupRole_REQUESTED
+		protoRole = pbCommon.GroupRole_GR_REQUESTED
 	} else if modelRole == model.RoleInvited {
-		protoRole = pbCommon.GroupRole_INVITED
+		protoRole = pbCommon.GroupRole_GR_INVITED
 	} else if modelRole == model.RoleRead {
-		protoRole = pbCommon.GroupRole_READ
+		protoRole = pbCommon.GroupRole_GR_READ
 	} else if modelRole == model.RoleWrite {
-		protoRole = pbCommon.GroupRole_WRITE
+		protoRole = pbCommon.GroupRole_GR_WRITE
 	} else if modelRole == model.RoleAdmin {
-		protoRole = pbCommon.GroupRole_ADMIN
+		protoRole = pbCommon.GroupRole_GR_ADMIN
 	}
 	return
 }
 
 func MigrateProtoRoleToModelRole(protoRole pbCommon.GroupRole) (modelRole model.RoleType) {
 	switch protoRole {
-	case pbCommon.GroupRole_REQUESTED:
+	case pbCommon.GroupRole_GR_REQUESTED:
 		modelRole = model.RoleRequested
-	case pbCommon.GroupRole_INVITED:
+	case pbCommon.GroupRole_GR_INVITED:
 		modelRole = model.RoleInvited
-	case pbCommon.GroupRole_READ:
+	case pbCommon.GroupRole_GR_READ:
 		modelRole = model.RoleRead
-	case pbCommon.GroupRole_WRITE:
+	case pbCommon.GroupRole_GR_WRITE:
 		modelRole = model.RoleWrite
-	case pbCommon.GroupRole_ADMIN:
+	case pbCommon.GroupRole_GR_ADMIN:
 		modelRole = model.RoleAdmin
 	}
 	return
@@ -39,16 +39,16 @@ func MigrateProtoRoleToModelRole(protoRole pbCommon.GroupRole) (modelRole model.
 
 func MigrateStringRoleToProtoRole(stringRole string) (protoRole pbCommon.GroupRole) {
 	switch stringRole {
-	case pbCommon.GroupRole_REQUESTED.String():
-		protoRole = pbCommon.GroupRole_REQUESTED
-	case pbCommon.GroupRole_INVITED.String():
-		protoRole = pbCommon.GroupRole_INVITED
-	case pbCommon.GroupRole_READ.String():
-		protoRole = pbCommon.GroupRole_READ
-	case pbCommon.GroupRole_WRITE.String():
-		protoRole = pbCommon.GroupRole_WRITE
-	case pbCommon.GroupRole_ADMIN.String():
-		protoRole = pbCommon.GroupRole_ADMIN
+	case pbCommon.GroupRole_GR_REQUESTED.String():
+		protoRole = pbCommon.GroupRole_GR_REQUESTED
+	case pbCommon.GroupRole_GR_INVITED.String():
+		protoRole = pbCommon.GroupRole_GR_INVITED
+	case pbCommon.GroupRole_GR_READ.String():
+		protoRole = pbCommon.GroupRole_GR_READ
+	case pbCommon.GroupRole_GR_WRITE.String():
+		protoRole = pbCommon.GroupRole_GR_WRITE
+	case pbCommon.GroupRole_GR_ADMIN.String():
+		protoRole = pbCommon.GroupRole_GR_ADMIN
 	}
 	return
 }

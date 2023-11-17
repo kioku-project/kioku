@@ -75,12 +75,12 @@ func (GroupType) EnumDescriptor() ([]byte, []int) {
 type GroupRole int32
 
 const (
-	GroupRole_EXTERNAL  GroupRole = 0
-	GroupRole_REQUESTED GroupRole = 1
-	GroupRole_INVITED   GroupRole = 2
-	GroupRole_READ      GroupRole = 3
-	GroupRole_WRITE     GroupRole = 4
-	GroupRole_ADMIN     GroupRole = 5
+	GroupRole_EXTERNAL     GroupRole = 0
+	GroupRole_GR_REQUESTED GroupRole = 1
+	GroupRole_GR_INVITED GroupRole = 2
+	GroupRole_GR_READ  GroupRole = 3
+	GroupRole_GR_WRITE GroupRole = 4
+	GroupRole_GR_ADMIN GroupRole = 5
 )
 
 // Enum value maps for GroupRole.

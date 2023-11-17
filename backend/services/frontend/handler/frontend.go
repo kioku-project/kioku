@@ -227,11 +227,6 @@ func (e *Frontend) CreateGroupHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("no group name given")
 	}
 	var groupType pbCommon.GroupType
-	if data["groupType"] != "" {
-		if gt := strings.TrimSpace(data["groupType"]); gt != "" {
-			groupType = converter.MigrateStringGroupTypeToProtoGroupType(gt)
-		}
-	}
 	userID := helper.GetUserIDFromContext(c)
 	rspCreateGroup, err := e.collaborationService.CreateNewGroupWithAdmin(
 		c.Context(),
@@ -594,11 +589,6 @@ func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
 		return err
 	}
 	var deckType pbCommon.DeckType
-	if data["deckType"] != "" {
-		if dt := strings.TrimSpace(data["deckType"]); dt != "" {
-			deckType = converter.MigrateStringDeckTypeToProtoDeckType(dt)
-		}
-	}
 	userID := helper.GetUserIDFromContext(c)
 	rspModifyDeck, err := e.cardDeckService.ModifyDeck(c.Context(), &pbCommon.DeckRequest{
 		UserID: userID,

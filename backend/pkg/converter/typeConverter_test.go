@@ -62,7 +62,7 @@ var (
 	groupMembers = pbCommon.User{
 		UserID:    id,
 		UserName:  name,
-		GroupRole: pbCommon.GroupRole_READ,
+		GroupRole: pbCommon.GroupRole_GR_READ,
 	}
 )
 
@@ -74,9 +74,9 @@ func TestMigrateModelRoleToProtoRole(t *testing.T) {
 	}
 
 	protoRoles := []pbCommon.GroupRole{
-		pbCommon.GroupRole_READ,
-		pbCommon.GroupRole_WRITE,
-		pbCommon.GroupRole_ADMIN,
+		pbCommon.GroupRole_GR_READ,
+		pbCommon.GroupRole_GR_WRITE,
+		pbCommon.GroupRole_GR_ADMIN,
 	}
 
 	for idx, modelRole := range modelRoles {
@@ -209,7 +209,7 @@ func TestProtoGroupToFiberGroupConverter(t *testing.T) {
 		GroupDescription: desc,
 		IsDefault:        isDefault,
 		GroupType:        pbCommon.GroupType_GT_OPEN,
-		Role:             pbCommon.GroupRole_READ,
+		Role:             pbCommon.GroupRole_GR_READ,
 	}
 
 	conv := converter.ProtoGroupWithRoleToFiberGroupConverter(&group)
@@ -219,7 +219,7 @@ func TestProtoGroupToFiberGroupConverter(t *testing.T) {
 	assert.Equal(t, desc, conv.GroupDescription)
 	assert.Equal(t, isDefault, conv.IsDefault)
 	assert.Equal(t, pbCommon.GroupType_GT_OPEN.String(), conv.GroupType)
-	assert.Equal(t, pbCommon.GroupRole_READ.String(), conv.GroupRole)
+	assert.Equal(t, pbCommon.GroupRole_GR_READ.String(), conv.GroupRole)
 }
 
 func TestStoreDeckToProtoDeckConverter(t *testing.T) {
@@ -277,5 +277,5 @@ func TestProtoUserWithRoleToFiberGroupMember(t *testing.T) {
 
 	assert.Equal(t, id, conv.UserID)
 	assert.Equal(t, name, conv.Name)
-	assert.Equal(t, pbCommon.GroupRole_READ.String(), conv.GroupRole)
+	assert.Equal(t, pbCommon.GroupRole_GR_READ.String(), conv.GroupRole)
 }

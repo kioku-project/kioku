@@ -292,9 +292,7 @@ func (e *Frontend) ModifyGroupHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	var groupType pbCommon.GroupType
 	if data["groupType"] != "" {
-		if gt := strings.TrimSpace(data["groupType"]); gt != "" {
-			groupType = converter.MigrateStringGroupTypeToProtoGroupType(gt)
-		}
+		groupType = converter.MigrateStringGroupTypeToProtoGroupType(data["groupType"])
 	}
 	rspModifyGroup, err := e.collaborationService.ModifyGroup(c.Context(), &pbCommon.GroupRequest{
 		UserID: userID,

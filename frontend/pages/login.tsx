@@ -56,8 +56,8 @@ export default function Page() {
 					{ hrefLang: "en", href: "https://app.kioku.dev/login/" },
 					{ hrefLang: "de", href: "https://app.kioku.dev/de/login" },
 				]}
-				noindex={!process.env.NEXT_PUBLIC_SEO}
-				nofollow={!process.env.NEXT_PUBLIC_SEO}
+				noindex={process.env.NEXT_PUBLIC_SEO != "True"}
+				nofollow={process.env.NEXT_PUBLIC_SEO != "True"}
 				openGraph={{
 					url: "https://app.kioku.dev/login/",
 				}}

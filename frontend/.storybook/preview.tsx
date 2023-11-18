@@ -1,10 +1,13 @@
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
+import { initialize, mswDecorator } from "msw-storybook-addon";
 import React, { useEffect } from "react";
 
 import { messages as messagesDE } from "../locales/de/messages.ts";
 import { messages as messagesEN } from "../locales/en/messages.ts";
 import "../styles/globals.css";
+
+initialize();
 
 i18n.load({ en: messagesEN, de: messagesDE });
 i18n.activate("en");
@@ -24,6 +27,7 @@ export const preview = {
 				</I18nProvider>
 			);
 		},
+		mswDecorator,
 	],
 	actions: { argTypesRegex: "^on[A-Z].*" },
 	controls: {

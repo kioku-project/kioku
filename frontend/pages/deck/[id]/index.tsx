@@ -70,7 +70,7 @@ export default function Page() {
 			<Authenticated>
 				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 					{group && deck && (
-						<div className="flex h-full flex-col space-y-3 overflow-y-auto p-5 md:space-y-5 md:p-10">
+						<div className="flex h-full flex-col space-y-3 overflow-y-auto px-5 py-1 md:space-y-5 md:px-10 md:py-3">
 							<FetchHeader
 								id={"deckPageHeaderId"}
 								group={group}

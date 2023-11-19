@@ -1,6 +1,5 @@
 import { Trans, msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
-import { hasCookie } from "cookies-next";
 import { GetStaticProps } from "next";
 import { Inter } from "next/font/google";
 import Head from "next/head";
@@ -14,6 +13,7 @@ import { Text } from "../components/Text";
 import { FormButton } from "../components/form/FormButton";
 import { InputField } from "../components/form/InputField";
 import { loadCatalog } from "./_app";
+import { checkAccessTokenValid } from "@/util/reauth";
 
 const inter = Inter({
 	weight: ["200", "400"],
@@ -42,7 +42,7 @@ export default function Page() {
 	const { _ } = useLingui();
 
 	useEffect(() => {
-		if (hasCookie("access_token")) {
+		if (checkAccessTokenValid()) {
 			router.push("/");
 		}
 	}, []);

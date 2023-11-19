@@ -58,7 +58,6 @@ msgid "Card created!"
 msgstr "Karte erstellt!"
 
 #: components/flashcard/Flashcard.tsx:286
-#: pages/deck/[id]/learn.tsx:93
 msgid "Card updated!"
 msgstr "Karte aktualisiert!"
 

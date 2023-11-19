@@ -85,7 +85,7 @@ export const UserSettingsTab = ({
 	);
 
 	async function modifyUser(body: { userName?: string }) {
-		const response = await authedFetch(`/api/user/${user.userID}`, {
+		const response = await authedFetch(`/api/user`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -97,7 +97,7 @@ export const UserSettingsTab = ({
 		} else {
 			toast.error("Error!", { toastId: "updatedGroupToast" });
 		}
-		mutate(`/api/user/${user.userID}`);
+		mutate(`/api/user`);
 	}
 
 	async function deleteUser() {

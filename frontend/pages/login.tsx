@@ -12,8 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Text } from "../components/Text";
 import { FormButton } from "../components/form/FormButton";
 import { InputField } from "../components/form/InputField";
+import { checkAccessTokenValid } from "../util/reauth";
 import { loadCatalog } from "./_app";
-import { checkAccessTokenValid } from "@/util/reauth";
 
 const inter = Inter({
 	weight: ["200", "400"],
@@ -53,8 +53,16 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
-				<link rel="alternate" hrefLang="en" href="https://app.kioku.dev/login" />
-				<link rel="alternate" hrefLang="de" href="https://app.kioku.dev/de/login" />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href="https://app.kioku.dev/login"
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href="https://app.kioku.dev/de/login"
+				/>
 			</Head>
 
 			<div className="min-w-screen flex flex-1 items-center justify-center sm:p-5 md:p-10">

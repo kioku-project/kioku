@@ -61,163 +61,151 @@ export const Deck = ({
 
 	return (
 		<div
-			className={`group rounded-lg bg-gradient-to-b from-white shadow-lg transition-all hover:scale-105 hover:cursor-pointer ${
-				deckNotification ? "to-gray-100" : "to-white"
-			} ${className}`}
+			className={`group rounded-lg shadow-lg transition-all hover:scale-105 hover:cursor-pointer ${className}`}
+			onClick={() => router.push(`/deck/${deck.deckID}`)}
+			onKeyUp={(event) => {
+				if (event.key === "Enter") {
+					event.target.dispatchEvent(
+						new Event("click", { bubbles: true })
+					);
+				}
+			}}
+			tabIndex={0}
 		>
-			<div
-				className="w-full rounded-lg bg-gradient-to-br from-[#F7EBEB] to-transparent to-60% "
-				onClick={() => router.push(`/deck/${deck.deckID}`)}
-				onKeyUp={(event) => {
-					if (event.key === "Enter") {
-						event.target.dispatchEvent(
-							new Event("click", { bubbles: true })
-						);
-					}
-				}}
-				tabIndex={0}
-			>
-				<div className="w-full rounded-lg from-[#F68080]/50 to-10% p-0.5 pt-0.5 group-hover:bg-gradient-to-br md:to-15%">
-					<div className="flex h-[6.5rem] w-full flex-row bg-gradient-to-br from-[#F7EBEB] to-white to-60% first:rounded-t-md last:rounded-b-md sm:h-28 md:h-32 lg:h-32">
-						<div className="relative my-3 ml-3 flex aspect-square items-center justify-center rounded bg-[#F31212]/50">
-							<Text
-								style="none"
-								size="lg"
-								className="font-black text-[#7B100E]"
-							>
-								{deck.deckName.slice(0, 2).toUpperCase()}
-							</Text>
-							{!!deck.dueCards && (
-								<div className="absolute right-[-0.35rem] top-[-0.35rem] h-4 w-4 flex-none rounded-full bg-kiokuRed">
-									<div className="absolute h-full w-full animate-ping rounded-full bg-kiokuRed" />
-								</div>
-							)}
+			<div className="flex h-[6.5rem] w-full flex-row bg-gradient-to-r from-white to-white to-60% transition-all first:rounded-t-md last:rounded-b-md group-hover:from-[#F7EBEB] sm:h-28 md:h-32 lg:h-32">
+				<div className="relative my-3 ml-3 flex aspect-square items-center justify-center rounded bg-[#F31212]/50">
+					<Text
+						style="none"
+						size="lg"
+						className="font-black text-[#7B100E]"
+					>
+						{deck.deckName.slice(0, 2).toUpperCase()}
+					</Text>
+					{!!deck.dueCards && (
+						<div className="absolute right-[-0.35rem] top-[-0.35rem] h-4 w-4 flex-none rounded-full bg-kiokuRed">
+							<div className="absolute h-full w-full animate-[ping_0.8s_ease-out_3] rounded-full bg-kiokuRed" />
 						</div>
-						<div className="flex h-full flex-1 flex-col content-between justify-between space-y-3 overflow-hidden p-3 pl-3">
-							<div className="w-full space-y-1">
-								<div className="flex w-full flex-row items-center justify-between space-x-2">
-									<div className="flex flex-row items-center space-x-1 overflow-hidden">
-										<Text
-											size="sm"
-											className="flex-1 items-center space-x-1 truncate whitespace-nowrap font-extrabold"
-										>
-											{deck.deckName}
-										</Text>
-										{deck.deckType === "PUBLIC" && (
-											<Globe
-												size={12}
-												className="text-kiokuLightBlue"
-											></Globe>
-										)}
-										{deck.deckType === "PRIVATE" && (
-											<Lock
-												size={12}
-												className="text-kiokuLightBlue"
-											></Lock>
-										)}
-									</div>
-									<div className="relative flex-none text-kiokuRed">
-										{isFavorite && (
-											<Heart
-												size={20}
-												fill={"#DB2B39"}
-												className="absolute animate-[ping_0.7s_ease-out_1] hover:cursor-pointer"
-											></Heart>
-										)}
-										<Heart
-											size={20}
-											fill={
-												isFavorite
-													? "#DB2B39"
-													: "transparent"
-											}
-											className="relative hover:scale-105"
-											onClick={(event) => {
-												setFavorite((prev) => !prev);
-												event.stopPropagation();
-											}}
-										></Heart>
-									</div>
-								</div>
-								<div className="flex flex-row space-x-2 overflow-hidden  sm:space-x-3 md:space-x-3 lg:space-x-3">
-									{!!deck.dueCards && (
-										<IconLabel
-											iconLabel={{
-												icon: "Activity",
-												header: plural(deck.dueCards, {
-													one: "# card due",
-													other: "# cards due",
-												}),
-											}}
-											className="text-kiokuRed"
-										/>
-									)}
-									{stats?.map((stat) => (
-										<IconLabel
-											key={stat.header}
-											iconLabel={stat}
-											iconSize={12}
-											className={`whitespace-nowrap odd:text-kiokuDarkBlue even:text-gray-500`}
-										/>
-									))}
-								</div>
-							</div>
-							<div className="flex w-full flex-row items-center justify-between">
-								<div className="flex items-center space-x-3">
-									<Button
-										buttonSize="sm"
-										onClick={(event) => {
-											router.push(
-												`/deck/${deck.deckID}/learn`
-											);
-											event.stopPropagation();
-										}}
-									>
-										<div className="flex flex-row items-center space-x-1">
-											<div className="flex items-center">
-												<Trans>Learn</Trans>
-											</div>
-											<ArrowRight size={16} />
-										</div>
-									</Button>
-									<div className="flex flex-row items-center space-x-1">
-										{deck.deckType === "PUBLIC" && (
-											<Globe
-												size={12}
-												className="text-gray-400"
-											></Globe>
-										)}
-										{deck.deckType === "PRIVATE" && (
-											<Lock
-												size={12}
-												className="text-gray-400"
-											></Lock>
-										)}
-										<Text
-											size="5xs"
-											style="none"
-											className="text-gray-400"
-										>
-											{deck.deckType}
-										</Text>
-									</div>
-								</div>
-								<MoreVertical
-									size={20}
-									className="flex-none text-gray-500 hover:cursor-pointer"
-								></MoreVertical>
-							</div>
-						</div>
-					</div>
-					{deckNotification && (
-						<IconLabel
-							iconLabel={deckNotification}
-							color="text-kiokuRed"
-							className="rounded-b-md bg-gray-100 px-4 py-1 text-kiokuDarkBlue md:py-2"
-						></IconLabel>
 					)}
 				</div>
+				<div className="flex h-full flex-1 flex-col content-between justify-between space-y-3 overflow-hidden p-3 pl-3">
+					<div className="w-full space-y-1">
+						<div className="flex w-full flex-row items-center justify-between space-x-2">
+							<div className="flex flex-row items-center space-x-1 overflow-hidden">
+								<Text
+									size="sm"
+									className="flex-1 items-center space-x-1 truncate whitespace-nowrap font-extrabold"
+								>
+									{deck.deckName}
+								</Text>
+								{deck.deckType === "PUBLIC" && (
+									<Globe
+										size={12}
+										className="text-kiokuLightBlue"
+									></Globe>
+								)}
+								{deck.deckType === "PRIVATE" && (
+									<Lock
+										size={12}
+										className="text-kiokuLightBlue"
+									></Lock>
+								)}
+							</div>
+							<div className="relative flex-none text-kiokuRed">
+								{isFavorite && (
+									<Heart
+										size={20}
+										fill={"#DB2B39"}
+										className="absolute animate-[ping_0.7s_ease-out_1] hover:cursor-pointer"
+									></Heart>
+								)}
+								<Heart
+									size={20}
+									fill={
+										isFavorite ? "#DB2B39" : "transparent"
+									}
+									className="relative hover:scale-105"
+									onClick={(event) => {
+										setFavorite((prev) => !prev);
+										event.stopPropagation();
+									}}
+								></Heart>
+							</div>
+						</div>
+						<div className="flex flex-row space-x-2 overflow-hidden  sm:space-x-3 md:space-x-3 lg:space-x-3">
+							{!!deck.dueCards && (
+								<IconLabel
+									iconLabel={{
+										icon: "Activity",
+										header: plural(deck.dueCards, {
+											one: "# card due",
+											other: "# cards due",
+										}),
+									}}
+									className="text-kiokuRed"
+								/>
+							)}
+							{stats?.map((stat) => (
+								<IconLabel
+									key={stat.header}
+									iconLabel={stat}
+									iconSize={12}
+									className={`whitespace-nowrap odd:text-kiokuDarkBlue even:text-gray-500`}
+								/>
+							))}
+						</div>
+					</div>
+					<div className="flex w-full flex-row items-center justify-between">
+						<div className="flex items-center space-x-3">
+							<Button
+								buttonSize="sm"
+								onClick={(event) => {
+									router.push(`/deck/${deck.deckID}/learn`);
+									event.stopPropagation();
+								}}
+							>
+								<div className="flex flex-row items-center space-x-1">
+									<div className="flex items-center">
+										<Trans>Learn</Trans>
+									</div>
+									<ArrowRight size={16} />
+								</div>
+							</Button>
+							<div className="flex flex-row items-center space-x-1">
+								{deck.deckType === "PUBLIC" && (
+									<Globe
+										size={12}
+										className="text-gray-400"
+									></Globe>
+								)}
+								{deck.deckType === "PRIVATE" && (
+									<Lock
+										size={12}
+										className="text-gray-400"
+									></Lock>
+								)}
+								<Text
+									size="5xs"
+									style="none"
+									className="text-gray-400"
+								>
+									{deck.deckType}
+								</Text>
+							</div>
+						</div>
+						<MoreVertical
+							size={20}
+							className="flex-none text-gray-500 hover:cursor-pointer"
+						></MoreVertical>
+					</div>
+				</div>
 			</div>
+			{deckNotification && (
+				<IconLabel
+					iconLabel={deckNotification}
+					color="text-kiokuRed"
+					className="rounded-b-md bg-gray-100 px-4 py-1 text-kiokuDarkBlue md:py-2"
+				></IconLabel>
+			)}
 		</div>
 	);
 };

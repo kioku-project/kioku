@@ -10,6 +10,10 @@ interface InputActionProps {
 	 */
 	id: string;
 	/**
+	 * Type
+	 */
+	type: string;
+	/**
 	 * Header
 	 */
 	header?: string;
@@ -44,6 +48,7 @@ interface InputActionProps {
  */
 export const InputAction = ({
 	id,
+	type,
 	header,
 	value,
 	button,
@@ -64,11 +69,11 @@ export const InputAction = ({
 				description={
 					<InputField
 						id={`${id}InputFieldId`}
-						type="text"
+						type={type}
 						name="actionInput"
 						label={header}
 						value={value}
-						statusIcon="none"
+						statusOnFocus={true}
 						inputFieldStyle="tertiary"
 						inputFieldSize="3xs"
 						readOnly={disabled}

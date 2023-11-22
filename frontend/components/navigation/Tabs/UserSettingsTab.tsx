@@ -33,6 +33,7 @@ export const UserSettingsTab = ({
 	const { mutate } = useSWRConfig();
 
 	const [userName, setUserName] = useState(user.userName);
+	const [userEmail, setUserEmail] = useState(user.userEmail);
 
 	const [isConfirmDeletion, setConfirmDeletion] = useState(false);
 
@@ -43,6 +44,7 @@ export const UserSettingsTab = ({
 			<Section id="generalUserSettingsSectionId" header="General">
 				<InputAction
 					id="userNameInputAction"
+					type="text"
 					header={_(msg`Username`)}
 					value={userName}
 					button={_(msg`Rename`)}
@@ -51,6 +53,20 @@ export const UserSettingsTab = ({
 					}}
 					onClick={() => {
 						modifyUser({ userName: userName });
+					}}
+				></InputAction>
+				<hr className="border-kiokuLightBlue" />
+				<InputAction
+					id="userEmailInputAction"
+					type="email"
+					header={_(msg`Email`)}
+					value={userEmail}
+					button={_(msg`Change`)}
+					onChange={(event: ChangeEvent<HTMLInputElement>) => {
+						setUserEmail(event.target.value);
+					}}
+					onClick={() => {
+						modifyUser({ userEmail: userEmail });
 					}}
 				></InputAction>
 			</Section>
@@ -84,7 +100,7 @@ export const UserSettingsTab = ({
 		</div>
 	);
 
-	async function modifyUser(body: { userName?: string }) {
+	async function modifyUser(body: { userName?: string; userEmail?: string }) {
 		const response = await authedFetch(`/api/user`, {
 			method: "PUT",
 			headers: {

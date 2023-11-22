@@ -33,6 +33,10 @@ interface InputFieldProps {
 	 * InputField size
 	 */
 	inputFieldSize?: keyof typeof getSize;
+	/**
+	 * See status only when focused
+	 */
+	statusOnFocus?: boolean;
 }
 
 const getStyle = {
@@ -64,8 +68,19 @@ const statusIcon = {
 	warning: <AlertTriangle className="text-kiokuYellow outline-none" />,
 	info: <Info className="text-kiokuDarkBlue outline-none" />,
 };
-function getIcon(status: keyof typeof statusIcon, id: string): ReactNode {
-	return <span data-tooltip-id={`tooltip-${id}`}>{statusIcon[status]}</span>;
+function getIcon(
+	status: keyof typeof statusIcon,
+	id: string,
+	small: boolean
+): ReactNode {
+	return (
+		<span
+			className={small ? "h-6 w-6" : ""}
+			data-tooltip-id={`tooltip-${id}`}
+		>
+			{statusIcon[status]}
+		</span>
+	);
 }
 
 /**
@@ -82,6 +97,7 @@ export const InputField = forwardRef(
 			inputFieldStyle = "primary",
 			inputFieldSize = "md",
 			pattern,
+			statusOnFocus = false,
 			className = "",
 			onChange = () => {},
 			onBlur = () => {},
@@ -131,7 +147,7 @@ export const InputField = forwardRef(
 						ref={ref}
 						onChange={(event) => {
 							onChange(event);
-							if (initialised) {
+							if (initialised || statusOnFocus) {
 								checkValidity(event.target);
 							}
 						}}
@@ -145,11 +161,14 @@ export const InputField = forwardRef(
 							onBlur(event);
 							setInitialised(true);
 							checkValidity(event.target);
+							if (statusOnFocus && icon !== "error") {
+								setIcon("none");
+							}
 						}}
 						pattern={inputPattern}
 						{...props}
 					/>
-					{icon && getIcon(icon, id)}
+					{icon && getIcon(icon, id, statusOnFocus)}
 					<Tooltip id={`tooltip-${id}`} content={tooltip} />
 				</div>
 			</div>

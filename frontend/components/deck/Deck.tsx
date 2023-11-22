@@ -147,6 +147,7 @@ export const Deck = ({
 									)}
 									{stats?.map((stat) => (
 										<IconLabel
+											key={stat.header}
 											iconLabel={stat}
 											iconSize={12}
 											className={`whitespace-nowrap odd:text-kiokuDarkBlue even:text-gray-500`}

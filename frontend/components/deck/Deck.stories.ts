@@ -12,7 +12,7 @@ const meta: Meta<typeof Deck> = {
 export default meta;
 type Story = StoryObj<typeof Deck>;
 
-export const Default: Story = {
+export const PrivateDeck: Story = {
 	args: {
 		deck: {
 			deckID: "D-12345678",
@@ -20,40 +20,66 @@ export const Default: Story = {
 			deckType: "PRIVATE",
 			groupID: "G-12345678",
 		},
-		group: {
+	},
+};
+
+export const PublicDeck: Story = {
+	args: {
+		deck: {
+			deckID: "D-12345678",
+			deckName: "Example Deck",
+			deckType: "PUBLIC",
 			groupID: "G-12345678",
-			groupName: "Example Group",
-			groupDescription: "Group Description",
-			isDefault: false,
-			groupType: "REQUEST",
-			groupRole: "ADMIN",
 		},
 	},
 };
 
-export const CreateDeck: Story = {
+export const CardsDue: Story = {
 	args: {
-		group: {
+		deck: {
+			deckID: "D-12345678",
+			deckName: "Example Deck",
+			deckType: "PUBLIC",
 			groupID: "G-12345678",
-			groupName: "Example Group",
-			groupDescription: "Group Description",
-			isDefault: false,
-			groupType: "REQUEST",
-			groupRole: "ADMIN",
+			dueCards: 8,
 		},
 	},
 };
 
-export const EmptyGroup: Story = {
+export const MoreStats: Story = {
 	args: {
-		group: {
+		deck: {
+			deckID: "D-12345678",
+			deckName: "Example Deck",
+			deckType: "PUBLIC",
 			groupID: "G-12345678",
-			groupName: "Example Group",
-			groupDescription: "Group Description",
-			isDefault: false,
-			groupType: "REQUEST",
-			groupRole: "READ",
-			isEmpty: true,
+			dueCards: 8,
+		},
+		stats: [
+			{
+				icon: "Copy",
+				header: "34 Cards",
+			},
+			{
+				icon: "PieChart",
+				header: "75%",
+			},
+		],
+	},
+};
+
+export const WithNotification: Story = {
+	args: {
+		deck: {
+			deckID: "D-12345678",
+			deckName: "Example Deck",
+			deckType: "PUBLIC",
+			groupID: "G-12345678",
+		},
+		deckNotification: {
+			icon: "Award",
+			header: "You're close!",
+			description: "You've almost completed this deck! (75%)",
 		},
 	},
 };

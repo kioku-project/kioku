@@ -13,11 +13,15 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: components/layout/Header.tsx:133
+#: components/deck/Deck.tsx:147
+msgid "{0, plural, one {# card due} other {# cards due}}"
+msgstr "{0, plural, one {# card due} other {# cards due}}"
+
+#: components/layout/Header.tsx:130
 msgid "{0, plural, one {in # deck to learn} other {in # decks to learn}}"
 msgstr "{0, plural, one {in # deck to learn} other {in # decks to learn}}"
 
-#: components/layout/Header.tsx:129
+#: components/layout/Header.tsx:126
 msgid "{0, plural, one {You have # card} other {You have # cards}}"
 msgstr "{0, plural, one {You have # card} other {You have # cards}}"
 
@@ -49,7 +53,7 @@ msgstr "Already registered?"
 msgid "Available"
 msgstr "Available"
 
-#: pages/deck/[id]/learn.tsx:75
+#: pages/deck/[id]/learn.tsx:73
 msgid "Back to Deck!"
 msgstr "Back to Deck!"
 
@@ -61,7 +65,7 @@ msgstr "Card created!"
 msgid "Card updated!"
 msgstr "Card updated!"
 
-#: pages/deck/[id]/index.tsx:42
+#: pages/deck/[id]/index.tsx:30
 msgid "Cards"
 msgstr "Cards"
 
@@ -91,7 +95,7 @@ msgstr "Collaborative"
 msgid "Compatible"
 msgstr "Compatible"
 
-#: pages/deck/[id]/learn.tsx:62
+#: pages/deck/[id]/learn.tsx:60
 msgid "Congratulations!"
 msgstr "Congratulations!"
 
@@ -108,13 +112,13 @@ msgstr "Create and customize your own flashcards tailored to your needs and pref
 msgid "Create Card"
 msgstr "Create Card"
 
-#: components/deck/DeckOverview.tsx:91
+#: components/deck/DeckList.tsx:70
 msgid "Create Group"
 msgstr "Create Group"
 
-#: components/deck/Deck.tsx:127
-msgid "Create new Deck"
-msgstr "Create new Deck"
+#: components/navigation/Tabs/DecksTab.tsx:41
+msgid "Create New Deck"
+msgstr "Create New Deck"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:73
 #: components/navigation/Tabs/GroupSettingsTab.tsx:81
@@ -122,7 +126,7 @@ msgstr "Create new Deck"
 msgid "Danger Zone"
 msgstr "Danger Zone"
 
-#: components/deck/Deck.tsx:168
+#: components/navigation/Tabs/DecksTab.tsx:78
 msgid "Deck created!"
 msgstr "Deck created!"
 
@@ -138,8 +142,8 @@ msgstr "Deck Name"
 msgid "Deck updated!"
 msgstr "Deck updated!"
 
-#: pages/group/[id]/index.tsx:41
-#: pages/index.tsx:49
+#: pages/group/[id]/index.tsx:32
+#: pages/index.tsx:40
 msgid "Decks"
 msgstr "Decks"
 
@@ -209,7 +213,7 @@ msgstr "from"
 msgid "Get started"
 msgstr "Get started"
 
-#: components/deck/DeckOverview.tsx:121
+#: components/deck/DeckList.tsx:100
 msgid "Group created!"
 msgstr "Group created!"
 
@@ -233,7 +237,7 @@ msgstr "Group Statistics"
 msgid "Group updated!"
 msgstr "Group updated!"
 
-#: pages/index.tsx:56
+#: pages/index.tsx:47
 msgid "Groups"
 msgstr "Groups"
 
@@ -253,7 +257,7 @@ msgstr "Individual"
 msgid "Informative"
 msgstr "Informative"
 
-#: pages/index.tsx:63
+#: pages/index.tsx:54
 msgid "Invitations"
 msgstr "Invitations"
 
@@ -261,7 +265,7 @@ msgstr "Invitations"
 msgid "Invite user with email"
 msgstr "Invite user with email"
 
-#: components/layout/Header.tsx:172
+#: components/layout/Header.tsx:169
 msgid "Join Group"
 msgstr "Join Group"
 
@@ -269,7 +273,11 @@ msgstr "Join Group"
 msgid "Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
 msgstr "Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
 
-#: components/layout/Header.tsx:158
+#: components/deck/Deck.tsx:178
+msgid "Learn"
+msgstr "Learn"
+
+#: components/layout/Header.tsx:155
 msgid "Learn Deck"
 msgstr "Learn Deck"
 
@@ -302,10 +310,6 @@ msgstr "Medium"
 #: pages/login.tsx:150
 msgid "Name"
 msgstr "Name"
-
-#: components/deck/Deck.tsx:145
-msgid "No decks in group"
-msgstr "No decks in group"
 
 #: pages/login.tsx:94
 msgid "Not registered?"
@@ -357,7 +361,7 @@ msgstr "Rename"
 msgid "Repeat Password"
 msgstr "Repeat Password"
 
-#: components/layout/Header.tsx:178
+#: components/layout/Header.tsx:175
 msgid "Request pending"
 msgstr "Request pending"
 
@@ -365,13 +369,13 @@ msgstr "Request pending"
 msgid "Save"
 msgstr "Save"
 
-#: components/layout/Header.tsx:192
+#: components/layout/Header.tsx:189
 msgid "Sent request!"
 msgstr "Sent request!"
 
-#: pages/deck/[id]/index.tsx:56
-#: pages/group/[id]/index.tsx:62
-#: pages/index.tsx:80
+#: pages/deck/[id]/index.tsx:44
+#: pages/group/[id]/index.tsx:53
+#: pages/index.tsx:69
 msgid "Settings"
 msgstr "Settings"
 
@@ -387,9 +391,9 @@ msgstr "Sign in to your account"
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 
-#: pages/deck/[id]/index.tsx:49
-#: pages/group/[id]/index.tsx:55
-#: pages/index.tsx:73
+#: pages/deck/[id]/index.tsx:37
+#: pages/group/[id]/index.tsx:46
+#: pages/index.tsx:62
 msgid "Statistics"
 msgstr "Statistics"
 
@@ -401,7 +405,7 @@ msgstr "Test"
 msgid "Unexpected group type"
 msgstr "Unexpected group type"
 
-#: pages/group/[id]/index.tsx:48
+#: pages/group/[id]/index.tsx:39
 msgid "User"
 msgstr "User"
 
@@ -429,7 +433,7 @@ msgstr "We provide you with detailed statistics and insights into your study pro
 msgid "We're changing the way people learn."
 msgstr "We're changing the way people learn."
 
-#: components/layout/Header.tsx:87
+#: components/layout/Header.tsx:84
 msgid "Welcome {0}"
 msgstr "Welcome {0}"
 
@@ -441,7 +445,7 @@ msgstr "Welcome to Kioku - the cloud native flashcard application that focuses o
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 
-#: pages/deck/[id]/learn.tsx:65
+#: pages/deck/[id]/learn.tsx:63
 msgid "You did it! There are no cards left in this deck to learn today."
 msgstr "You did it! There are no cards left in this deck to learn today."
 

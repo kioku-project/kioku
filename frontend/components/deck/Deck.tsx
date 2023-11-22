@@ -1,3 +1,5 @@
+import { Trans, plural } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import { ArrowRight, Globe, Heart, Lock, MoreVertical } from "react-feather";
@@ -53,6 +55,8 @@ export const Deck = ({
 	deckNotification,
 	className = "",
 }: DeckProps) => {
+	const { _ } = useLingui();
+
 	const [isFavorite, setFavorite] = useState(deck.isFavorite);
 
 	return (
@@ -140,7 +144,10 @@ export const Deck = ({
 										<IconLabel
 											iconLabel={{
 												icon: "Activity",
-												header: `${deck.dueCards} cards due`,
+												header: plural(deck.dueCards, {
+													one: "# card due",
+													other: "# cards due",
+												}),
 											}}
 											className="text-kiokuRed"
 										/>
@@ -168,7 +175,7 @@ export const Deck = ({
 									>
 										<div className="flex flex-row items-center space-x-1">
 											<div className="flex items-center">
-												Learn
+												<Trans>Learn</Trans>
 											</div>
 											<ArrowRight size={16} />
 										</div>

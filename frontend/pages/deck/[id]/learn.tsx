@@ -1,4 +1,4 @@
-import { Trans, t } from "@lingui/macro";
+import { Trans } from "@lingui/macro";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
@@ -85,7 +85,6 @@ export default function Page() {
 			body: JSON.stringify(body),
 		});
 		if (response?.ok) {
-			toast.info(t`Card updated!`, { toastId: "updatedCardToast" });
 			mutate(`/api/decks/${deckID}/pull`);
 			mutate(`/api/decks/${deckID}/dueCards`);
 		} else {

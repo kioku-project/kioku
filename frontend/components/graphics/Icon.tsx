@@ -11,5 +11,5 @@ interface IconProps {
 
 export const Icon = ({ icon, ...props }: IconProps & icons.IconProps) => {
 	const FeatherIcon = icons[icon];
-	return <FeatherIcon {...props}></FeatherIcon>;
+	return <FeatherIcon {...props} />;
 };

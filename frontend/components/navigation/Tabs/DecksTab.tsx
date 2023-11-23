@@ -47,7 +47,7 @@ export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 										.catch((error) => {});
 								}
 							}}
-						></input>
+						/>
 						<PlusSquare
 							className="text-kiokuDarkBlue transition hover:scale-110 hover:cursor-pointer"
 							onClick={createDeck}

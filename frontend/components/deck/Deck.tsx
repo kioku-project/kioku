@@ -1,5 +1,6 @@
 import { Trans, plural } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
+import Link from "next/link";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import { ArrowRight, Globe, Heart, Lock, MoreVertical } from "react-feather";
@@ -60,9 +61,9 @@ export const Deck = ({
 	const [isFavorite, setFavorite] = useState(deck.isFavorite);
 
 	return (
-		<div
-			className={`group rounded-lg shadow-lg transition-all hover:scale-105 hover:cursor-pointer ${className}`}
-			onClick={() => router.push(`/deck/${deck.deckID}`)}
+		<Link
+			className={`group rounded-lg shadow-lg transition-transform hover:scale-105 hover:cursor-pointer ${className}`}
+			href={`/deck/${deck.deckID}`}
 			onKeyUp={(event) => {
 				if (event.key === "Enter") {
 					event.target.dispatchEvent(
@@ -72,7 +73,7 @@ export const Deck = ({
 			}}
 			tabIndex={0}
 		>
-			<div className="flex h-[6.5rem] w-full flex-row bg-gradient-to-r from-white to-white to-60% transition-all first:rounded-t-md last:rounded-b-md group-hover:from-[#F7EBEB] sm:h-28 md:h-32 lg:h-32">
+			<div className="flex h-[6.5rem] w-full flex-row bg-gradient-to-r to-60% transition-all first:rounded-t-md last:rounded-b-md group-hover:from-[#F7EBEB] sm:h-28 md:h-32 lg:h-32">
 				<div className="relative my-3 ml-3 flex aspect-square items-center justify-center rounded bg-[#F31212]/50">
 					<Text
 						style="none"
@@ -101,13 +102,13 @@ export const Deck = ({
 									<Globe
 										size={12}
 										className="text-kiokuLightBlue"
-									></Globe>
+									/>
 								)}
 								{deck.deckType === "PRIVATE" && (
 									<Lock
 										size={12}
 										className="text-kiokuLightBlue"
-									></Lock>
+									/>
 								)}
 							</div>
 							<div className="relative flex-none text-kiokuRed">
@@ -116,7 +117,7 @@ export const Deck = ({
 										size={20}
 										fill={"#DB2B39"}
 										className="absolute animate-[ping_0.7s_ease-out_1] hover:cursor-pointer"
-									></Heart>
+									/>
 								)}
 								<Heart
 									size={20}
@@ -128,10 +129,10 @@ export const Deck = ({
 										setFavorite((prev) => !prev);
 										event.stopPropagation();
 									}}
-								></Heart>
+								/>
 							</div>
 						</div>
-						<div className="flex flex-row space-x-2 overflow-hidden  sm:space-x-3 md:space-x-3 lg:space-x-3">
+						<div className="flex flex-row space-x-2 overflow-hidden sm:space-x-3 md:space-x-3 lg:space-x-3">
 							{!!deck.dueCards && (
 								<IconLabel
 									iconLabel={{
@@ -175,13 +176,10 @@ export const Deck = ({
 									<Globe
 										size={12}
 										className="text-gray-400"
-									></Globe>
+									/>
 								)}
 								{deck.deckType === "PRIVATE" && (
-									<Lock
-										size={12}
-										className="text-gray-400"
-									></Lock>
+									<Lock size={12} className="text-gray-400" />
 								)}
 								<Text
 									size="5xs"
@@ -195,7 +193,7 @@ export const Deck = ({
 						<MoreVertical
 							size={20}
 							className="flex-none text-gray-500 hover:cursor-pointer"
-						></MoreVertical>
+						/>
 					</div>
 				</div>
 			</div>
@@ -204,8 +202,8 @@ export const Deck = ({
 					iconLabel={deckNotification}
 					color="text-kiokuRed"
 					className="rounded-b-md bg-gray-100 px-4 py-1 text-kiokuDarkBlue md:py-2"
-				></IconLabel>
+				/>
 			)}
-		</div>
+		</Link>
 	);
 };

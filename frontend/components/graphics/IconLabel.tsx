@@ -41,11 +41,7 @@ export const IconLabel = ({
 	return (
 		<div className={`flex flex-row items-center space-x-1 ${className}`}>
 			{iconLabel.icon && (
-				<Icon
-					icon={iconLabel.icon}
-					size={iconSize}
-					className={color}
-				></Icon>
+				<Icon icon={iconLabel.icon} size={iconSize} className={color} />
 			)}
 			<Text
 				size={textSize}

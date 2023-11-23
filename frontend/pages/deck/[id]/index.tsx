@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import React, { ReactNode, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 
-import Authenticated from "../../../components/accessControl/Authenticated";
 import { FetchHeader } from "../../../components/layout/Header";
 import { CardsTab } from "../../../components/navigation/Tabs/CardsTab";
 import { DeckSettingsTab } from "../../../components/navigation/Tabs/DeckSettingsTab";
@@ -67,44 +66,42 @@ export default function Page() {
 				/>
 			</Head>
 
-			<Authenticated>
-				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-					{group && deck && (
-						<div className="flex h-full flex-col space-y-3 overflow-y-auto px-5 py-1 md:space-y-5 md:px-10 md:py-3">
-							<FetchHeader
-								id={"deckPageHeaderId"}
-								group={group}
-								deck={deck}
-							/>
-							<TabBar
-								id="deckTabBarId"
-								tabs={tabs}
-								currentTab={currentTab}
-								setTab={setCurrentTab}
-							></TabBar>
-							<div className="h-full overflow-y-auto">
-								{{
-									cards: (
-										<CardsTab
-											deck={{
-												...deck,
-												groupRole: group.groupRole,
-											}}
-										></CardsTab>
-									),
-									settings: (
-										<DeckSettingsTab
-											group={group}
-											deck={deck}
-										></DeckSettingsTab>
-									),
-									statistics: <StatisticsTab></StatisticsTab>,
-								}[currentTab] ?? <div>Error</div>}
-							</div>
+			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
+				{group && deck && (
+					<div className="flex h-full flex-col space-y-3 overflow-y-auto px-5 py-1 md:space-y-5 md:px-10 md:py-3">
+						<FetchHeader
+							id={"deckPageHeaderId"}
+							group={group}
+							deck={deck}
+						/>
+						<TabBar
+							id="deckTabBarId"
+							tabs={tabs}
+							currentTab={currentTab}
+							setTab={setCurrentTab}
+						></TabBar>
+						<div className="h-full overflow-y-auto">
+							{{
+								cards: (
+									<CardsTab
+										deck={{
+											...deck,
+											groupRole: group.groupRole,
+										}}
+									></CardsTab>
+								),
+								settings: (
+									<DeckSettingsTab
+										group={group}
+										deck={deck}
+									></DeckSettingsTab>
+								),
+								statistics: <StatisticsTab></StatisticsTab>,
+							}[currentTab] ?? <div>Error</div>}
 						</div>
-					)}
-				</div>
-			</Authenticated>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

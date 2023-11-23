@@ -20,11 +20,12 @@ export async function authedFetch(
 		if (!(await reauth())) {
 			return;
 		}
-	}
-	const accessToken = getCookie("access_token");
-	const decoded = jwtDecode<JwtPayload>(accessToken!.toString());
-	if (!decoded.exp || decoded.exp > Math.floor(Date.now() / 1000)) {
-		await reauth();
+	} else {
+		const accessToken = getCookie("access_token");
+		const decoded = jwtDecode<JwtPayload>(accessToken!.toString());
+		if (!decoded.exp || decoded.exp > Math.floor(Date.now() / 1000)) {
+			await reauth();
+		}
 	}
 	const answ = await fetch(input, {
 		...init,

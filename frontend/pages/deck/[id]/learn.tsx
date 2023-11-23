@@ -5,7 +5,6 @@ import React from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
-import Authenticated from "../../../components/accessControl/Authenticated";
 import { Flashcard } from "../../../components/flashcard/Flashcard";
 import KiokuAward from "../../../components/graphics/KiokuAward";
 import { Button } from "../../../components/input/Button";
@@ -38,44 +37,42 @@ export default function Page() {
 					href={`https://app.kioku.dev/de/deck/${deckID}/learn`}
 				/>
 			</Head>
-			<Authenticated>
-				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-					{card?.cardID ? (
-						<Flashcard
-							id="flashcardId"
-							key={card.cardID}
-							card={card}
-							dueCards={dueCards}
-							push={push}
-							editable={
-								group?.groupRole &&
-								GroupRole[group.groupRole] >= GroupRole.WRITE
-							}
-						></Flashcard>
-					) : (
-						<div className="mx-auto my-auto flex flex-col items-center space-y-5">
-							<KiokuAward></KiokuAward>
-							<div className="flex flex-col items-center space-y-1">
-								<div className="text-4xl font-bold text-kiokuDarkBlue">
-									<Trans>Congratulations!</Trans>
-								</div>
-								<div className="text-lg font-semibold text-kiokuLightBlue">
-									<Trans>
-										You did it! There are no cards left in
-										this deck to learn today.
-									</Trans>
-								</div>
+			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
+				{card?.cardID ? (
+					<Flashcard
+						id="flashcardId"
+						key={card.cardID}
+						card={card}
+						dueCards={dueCards}
+						push={push}
+						editable={
+							group?.groupRole &&
+							GroupRole[group.groupRole] >= GroupRole.WRITE
+						}
+					></Flashcard>
+				) : (
+					<div className="mx-auto my-auto flex flex-col items-center space-y-5">
+						<KiokuAward></KiokuAward>
+						<div className="flex flex-col items-center space-y-1">
+							<div className="text-4xl font-bold text-kiokuDarkBlue">
+								<Trans>Congratulations!</Trans>
 							</div>
-							<Button
-								id="goBackButtonId"
-								onClick={() => router.push(`/deck/${deckID}`)}
-							>
-								<Trans>Back to Deck!</Trans>
-							</Button>
+							<div className="text-lg font-semibold text-kiokuLightBlue">
+								<Trans>
+									You did it! There are no cards left in this
+									deck to learn today.
+								</Trans>
+							</div>
 						</div>
-					)}
-				</div>
-			</Authenticated>
+						<Button
+							id="goBackButtonId"
+							onClick={() => router.push(`/deck/${deckID}`)}
+						>
+							<Trans>Back to Deck!</Trans>
+						</Button>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 

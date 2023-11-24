@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 
-import Authenticated from "../../../components/accessControl/Authenticated";
 import { FetchHeader } from "../../../components/layout/Header";
 import { DecksTab } from "../../../components/navigation/Tabs/DecksTab";
 import { GroupSettingsTab } from "../../../components/navigation/Tabs/GroupSettingsTab";
@@ -76,35 +75,31 @@ export default function Page() {
 				/>
 			</Head>
 
-			<Authenticated>
-				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-					{group && (
-						<div className="space-y-5 px-5 py-1 md:px-10 md:py-3">
-							<FetchHeader id="groupPageHeaderId" group={group} />
-							<TabBar
-								id="groupTabBarId"
-								tabs={tabs}
-								currentTab={currentTab}
-								setTab={setCurrentTab}
-							></TabBar>
-							<div>
-								{{
-									decks: <DecksTab group={group}></DecksTab>,
-									user: (
-										<MembersTab group={group}></MembersTab>
-									),
-									settings: (
-										<GroupSettingsTab
-											group={group}
-										></GroupSettingsTab>
-									),
-									statistics: <StatisticsTab></StatisticsTab>,
-								}[currentTab] ?? <div>Error</div>}
-							</div>
+			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
+				{group && (
+					<div className="space-y-5 px-5 py-1 md:px-10 md:py-3">
+						<FetchHeader id="groupPageHeaderId" group={group} />
+						<TabBar
+							id="groupTabBarId"
+							tabs={tabs}
+							currentTab={currentTab}
+							setTab={setCurrentTab}
+						></TabBar>
+						<div>
+							{{
+								decks: <DecksTab group={group}></DecksTab>,
+								user: <MembersTab group={group}></MembersTab>,
+								settings: (
+									<GroupSettingsTab
+										group={group}
+									></GroupSettingsTab>
+								),
+								statistics: <StatisticsTab></StatisticsTab>,
+							}[currentTab] ?? <div>Error</div>}
 						</div>
-					)}
-				</div>
-			</Authenticated>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

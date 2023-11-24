@@ -1,6 +1,6 @@
 import { Trans, msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
-import router from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 import { AlertTriangle } from "react-feather";
 import { toast } from "react-toastify";
@@ -29,6 +29,7 @@ interface DeckProps {
 }
 
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
+	const router = useRouter();
 	const { dueCards } = useDueCards(deck?.deckID);
 
 	useEffect(() => {
@@ -36,7 +37,7 @@ export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 			router.prefetch(`/deck/${deck.deckID}`);
 			preload(`/api/decks/${deck.deckID}`, fetcher);
 		}
-	}, [deck]);
+	}, [router, deck]);
 
 	return (
 		<Deck deck={deck && { ...deck, dueCards: dueCards }} {...props}></Deck>
@@ -47,6 +48,7 @@ export const FetchDeck = ({ deck, ...props }: DeckProps) => {
  * UI component for dislpaying a deck
  */
 export const Deck = ({ group, deck, className = "" }: DeckProps) => {
+	const router = useRouter();
 	const { mutate } = useSWRConfig();
 	const { _ } = useLingui();
 

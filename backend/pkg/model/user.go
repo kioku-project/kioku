@@ -6,12 +6,10 @@ import (
 )
 
 type User struct {
-	ID             string  `gorm:"primaryKey;" json:"userID,omitempty"`
-	Name           string  `gorm:"not null;" json:"userName,omitempty"`
-	Email          string  `gorm:"unique;not null;" json:"userEmail,omitempty"`
-	Password       string  `gorm:"not null;" json:"userPassword,omitempty"`
-	FavoritesDecks []*Deck `gorm:"many2many:user_favorite_decks"`
-	ActiveDecks    []*Deck `gorm:"many2many:user_active_decks"`
+	ID       string `gorm:"primaryKey;" json:"userID,omitempty"`
+	Name     string `gorm:"not null;" json:"userName,omitempty"`
+	Email    string `gorm:"unique;not null;" json:"userEmail,omitempty"`
+	Password string `gorm:"not null;" json:"userPassword,omitempty"`
 }
 
 func (u *User) BeforeCreate(db *gorm.DB) (err error) {

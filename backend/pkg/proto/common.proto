@@ -21,18 +21,18 @@ message Users {
 
 enum GroupType {
   GT_INVALID = 0;
-  GT_REQUEST = 1;
-  GT_OPEN = 2;
-  GT_CLOSED = 3;
+  REQUEST = 1;
+  OPEN = 2;
+  CLOSED = 3;
 }
 
 enum GroupRole {
-  GR_EXTERNAL = 0;
-  GR_REQUESTED = 1;
-  GR_INVITED = 2;
-  GR_READ = 3;
-  GR_WRITE = 4;
-  GR_ADMIN = 5;
+  EXTERNAL = 0;
+  REQUESTED = 1;
+  INVITED = 2;
+  READ = 3;
+  WRITE = 4;
+  ADMIN = 5;
 }
 
 message Group {
@@ -103,8 +103,8 @@ message CardSideRequest {
 
 enum DeckType {
   DT_INVALID = 0;
-  DT_PUBLIC = 1;
-  DT_PRIVATE = 2;
+  PUBLIC = 1;
+  PRIVATE = 2;
 }
 
 message Deck {

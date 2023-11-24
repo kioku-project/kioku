@@ -552,7 +552,7 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("no deck name given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	deckType := pbCommon.DeckType_DT_PRIVATE
+	deckType := pbCommon.DeckType_PRIVATE
 	if dt := strings.TrimSpace(data["deckType"]); dt != "" {
 		deckType = converter.MigrateStringDeckTypeToProtoDeckType(dt)
 	}

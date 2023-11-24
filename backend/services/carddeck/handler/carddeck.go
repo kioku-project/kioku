@@ -61,7 +61,7 @@ func (e *CardDeck) checkUserDeckAccess(
 	}
 	if deck.DeckType == model.PrivateDeckType {
 		logger.Infof("Requesting group role for user (%s)", userID)
-		if err = e.checkUserRoleAccess(ctx, userID, deck.GroupID, pbCommon.GroupRole_GR_READ); err != nil {
+		if err = e.checkUserRoleAccess(ctx, userID, deck.GroupID, pbCommon.GroupRole_READ); err != nil {
 			return err
 		}
 	}
@@ -82,7 +82,7 @@ func (e *CardDeck) getCardSideAndCheckForValidAccess(
 	if err != nil {
 		return nil, err
 	}
-	if err = e.checkUserRoleAccess(ctx, userID, deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err = e.checkUserRoleAccess(ctx, userID, deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return nil, err
 	}
 	return cardSide, nil
@@ -177,7 +177,7 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pbCommon.GroupRequest
 	logger.Infof("Received CardDeck.GetGroupDecks request: %v", req)
 
 	var decks []model.Deck
-	err := e.checkUserRoleAccess(ctx, req.UserID, req.Group.GroupID, pbCommon.GroupRole_GR_INVITED)
+	err := e.checkUserRoleAccess(ctx, req.UserID, req.Group.GroupID, pbCommon.GroupRole_INVITED)
 	if err != nil {
 		decks, err = helper.FindStoreEntity(e.store.FindPublicDecksByGroupID, req.Group.GroupID, helper.CardDeckServiceID)
 		if err != nil {
@@ -199,7 +199,7 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pbCommon.GroupRequest
 
 func (e *CardDeck) CreateDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Deck) error {
 	logger.Infof("Received CardDeck.CreateDeck request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.Deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, req.Deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	if err := helper.CheckForValidName(req.Deck.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID); err != nil {
@@ -243,7 +243,7 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	if req.Deck.DeckName != "" {
@@ -275,7 +275,7 @@ func (e *CardDeck) DeleteDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_GR_ADMIN); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_ADMIN); err != nil {
 		return err
 	}
 	err = e.store.DeleteDeck(deck)
@@ -318,7 +318,7 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pbCommon.CardRequest, rs
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	newCard := model.Card{
@@ -366,7 +366,7 @@ func (e *CardDeck) GetCard(ctx context.Context, req *pbCommon.CardRequest, rsp *
 		return err
 	}
 	card.CardSides = cardSides
-	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_GR_INVITED); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_INVITED); err != nil {
 		return err
 	}
 	*rsp = *converter.StoreCardToProtoCardConverter(*card)
@@ -380,7 +380,7 @@ func (e *CardDeck) ModifyCard(ctx context.Context, req *pbCommon.CardRequest, rs
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	if err = e.store.DeleteCardSidesOfCardByID(card.ID); err != nil {
@@ -400,7 +400,7 @@ func (e *CardDeck) DeleteCard(ctx context.Context, req *pbCommon.CardRequest, rs
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	err = e.store.DeleteCard(card)
@@ -418,7 +418,7 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pbCommon.CardSideReq
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	var previousCardSideIDForNewCardSide string

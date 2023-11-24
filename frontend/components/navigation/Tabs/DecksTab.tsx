@@ -38,7 +38,7 @@ export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 						<input
 							id={`deckNameInput${group.groupID}`}
 							className="w-full bg-transparent font-medium text-kiokuDarkBlue outline-none"
-							placeholder={_(msg`Create New Deck`)}
+							placeholder={_(msg`Create new Deck`)}
 							ref={deckNameInput}
 							onKeyUp={(event) => {
 								if (event.key === "Enter") {

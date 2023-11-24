@@ -2,7 +2,9 @@ package handler
 
 import (
 	"context"
+	"errors"
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
+	"gorm.io/gorm"
 
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
@@ -53,8 +55,7 @@ func (e *CardDeck) checkUserDeckAccess(
 	userID string,
 	deckID string,
 ) error {
-	e.store.FindDeckByID(deckID)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, deckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(deckID, userID)
 	if err != nil {
 		return err
 	}
@@ -77,7 +78,7 @@ func (e *CardDeck) getCardSideAndCheckForValidAccess(
 	if err != nil {
 		return nil, err
 	}
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, cardSide.Card.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(cardSide.Card.DeckID, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -183,13 +184,15 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pbCommon.GroupRequest
 			return err
 		}
 	} else {
-		decks, err = helper.FindStoreEntity(e.store.FindDecksByGroupID, req.Group.GroupID, helper.CardDeckServiceID)
+		decks, err = e.store.FindDecksByGroupID(req.Group.GroupID, req.UserID)
 		if err != nil {
 			return err
 		}
 	}
+	logger.Info(decks)
 
 	rsp.Decks = converter.ConvertToTypeArray(decks, converter.StoreDeckToProtoDeckConverter)
+	logger.Info(rsp.Decks)
 	logger.Infof("Found %d decks in group with id %s", len(decks), req.Group.GroupID)
 	return nil
 }
@@ -221,21 +224,22 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 
 func (e *CardDeck) GetDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Deck) error {
 	logger.Infof("Received CardDeck.GetDeck request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(req.Deck.DeckID, req.UserID)
 	if err != nil {
 		return err
 	}
 	if err := e.checkUserDeckAccess(ctx, req.UserID, deck.ID); err != nil {
 		return err
 	}
-	*rsp = *converter.StoreDeckToProtoDeckResponseConverter(*deck)
+	*rsp = *converter.StoreDeckToProtoDeckConverter(*deck)
+	logger.Info(rsp)
 	logger.Infof("Successfully got information for deck %s", req.Deck.DeckID)
 	return nil
 }
 
 func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(req.Deck.DeckID, req.UserID)
 	if err != nil {
 		return err
 	}
@@ -267,7 +271,7 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 
 func (e *CardDeck) DeleteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.DeleteDeck request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(req.Deck.DeckID, req.UserID)
 	if err != nil {
 		return err
 	}
@@ -285,7 +289,7 @@ func (e *CardDeck) DeleteDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 
 func (e *CardDeck) GetDeckCards(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Cards) error {
 	logger.Infof("Received CardDeck.GetDeckCards request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(req.Deck.DeckID, req.UserID)
 	if err != nil {
 		return err
 	}
@@ -310,7 +314,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pbCommon.DeckRequest, 
 
 func (e *CardDeck) CreateCard(ctx context.Context, req *pbCommon.CardRequest, rsp *pbCommon.Card) error {
 	logger.Infof("Received CardDeck.CreateCard request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.Card.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(req.Card.DeckID, req.UserID)
 	if err != nil {
 		return err
 	}
@@ -535,5 +539,66 @@ func (e *CardDeck) DeleteCardSide(ctx context.Context, req *pbCommon.CardSideReq
 	}
 	rsp.Success = true
 	logger.Infof("Successfully deleted card side %s of card %s", req.Card.Sides[0].CardSideID, cardSideToDelete.CardID)
+	return nil
+}
+func (e *CardDeck) GetUserFavoriteDecks(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Decks) error {
+	logger.Infof("Received CardDeck.GetUserFavoriteDecks request: %v", req)
+	favoriteDecks, err := helper.FindStoreEntity(e.store.FindFavoriteDecks, req.UserID, helper.CardDeckServiceID)
+	if err != nil {
+		return err
+	}
+	rsp.Decks = converter.ConvertToTypeArray(favoriteDecks, converter.StoreDeckToProtoDeckConverter)
+	logger.Infof("Successfully retrieved user %s's favorite decks.", req.UserID)
+	return nil
+}
+func (e *CardDeck) AddUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received CardDeck.AddUserFavoriteDeck request: %v", req)
+	if err := e.store.AddFavoriteDeck(req.UserID, req.Deck.DeckID); err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return helper.NewMicroDeckAlreadyFavoriteErr(helper.CardDeckServiceID)
+		}
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully added %s to user %s's favorite decks.", req.Deck.DeckID, req.UserID)
+	return nil
+}
+func (e *CardDeck) DelUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received CardDeck.DelUserFavoriteDeck request: %v", req)
+	if err := e.store.DeleteFavoriteDeck(req.UserID, req.Deck.DeckID); err != nil {
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully deleted %s from user %s's favorite decks.", req.Deck.DeckID, req.UserID)
+	return nil
+}
+func (e *CardDeck) GetUserActiveDecks(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Decks) error {
+	logger.Infof("Received CardDeck.GetUserActiveDecks request: %v", req)
+	activeDecks, err := helper.FindStoreEntity(e.store.FindActiveDecks, req.UserID, helper.CardDeckServiceID)
+	if err != nil {
+		return err
+	}
+	rsp.Decks = converter.ConvertToTypeArray(activeDecks, converter.StoreDeckToProtoDeckConverter)
+	logger.Infof("Successfully retrieved user %s's active decks.", req.UserID)
+	return nil
+}
+func (e *CardDeck) AddUserActiveDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received CardDeck.AddUserActiveDeck request: %v", req)
+	if err := e.store.AddActiveDeck(req.UserID, req.Deck.DeckID); err != nil {
+		if !errors.Is(err, gorm.ErrDuplicatedKey) {
+			return err
+		}
+	}
+	rsp.Success = true
+	logger.Infof("Successfully added %s to user %s's active decks.", req.Deck.DeckID, req.UserID)
+	return nil
+}
+func (e *CardDeck) DelUserActiveDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received CardDeck.DelUserActiveDeck request: %v", req)
+	if err := e.store.DelActiveDeck(req.UserID, req.Deck.DeckID); err != nil {
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully deleted %s from user %s's active decks.", req.Deck.DeckID, req.UserID)
 	return nil
 }

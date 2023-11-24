@@ -3,6 +3,7 @@ package store
 import (
 	"errors"
 	"fmt"
+	"go-micro.dev/v4/logger"
 	"os"
 	"strings"
 
@@ -43,7 +44,7 @@ func NewUserStore() (UserStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = db.AutoMigrate(&model.User{})
+	err = db.AutoMigrate(&model.User{}, &model.UserActiveDecks{}, &model.UserFavoriteDecks{})
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +56,11 @@ func NewCardDeckStore() (CardDeckStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = db.AutoMigrate(&model.CardSide{}, &model.Card{}, &model.Deck{})
+	err = db.AutoMigrate(&model.CardSide{},
+		&model.Card{},
+		&model.Deck{},
+		&model.UserActiveDecks{},
+		&model.UserFavoriteDecks{})
 	if err != nil {
 		return nil, err
 	}
@@ -120,10 +125,63 @@ func (s *UserStoreImpl) FindUserByID(userID string) (user *model.User, err error
 	return
 }
 
-func (s *CardDeckStoreImpl) FindDecksByGroupID(groupID string) (decks []model.Deck, err error) {
+func (s *CardDeckStoreImpl) PopulateDeckFavoriteAttribute(deck *model.Deck, userID string) error {
+	var userFavoriteDeck []model.UserFavoriteDecks
+	err := s.db.Where(&model.UserFavoriteDecks{UserID: userID, DeckID: deck.ID}).Limit(1).Find(&userFavoriteDeck).Error
+	if err != nil {
+		return err
+	}
+	logger.Info(err)
+	if len(userFavoriteDeck) != 0 {
+		deck.Favorite = true
+	}
+	return nil
+}
+
+func (s *CardDeckStoreImpl) PopulateDeckActiveAttribute(deck *model.Deck, userID string) error {
+	var userActiveDeck []model.UserActiveDecks
+	err := s.db.Where(&model.UserActiveDecks{UserID: userID, DeckID: deck.ID}).Limit(1).Find(&userActiveDeck).Error
+	if err != nil {
+		return err
+	}
+	if len(userActiveDeck) != 0 {
+		deck.Active = true
+	}
+	return nil
+
+}
+
+func (s *CardDeckStoreImpl) FindDecks(userID string, groupID string, favoriteFilter bool, activeFilter bool) error {
+	var decks []model.Deck
+	if err := s.db.Where(&model.Deck{GroupID: groupID}).Find(&decks).Error; err != nil {
+		return err
+	}
+	for _, deck := range decks {
+		if err := s.PopulateDeckFavoriteAttribute(&deck, userID); err != nil {
+			return err
+		}
+		if err := s.PopulateDeckActiveAttribute(&deck, userID); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *CardDeckStoreImpl) FindDecksByGroupID(groupID string, userID string) (decks []model.Deck, err error) {
 	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).
 		Find(&decks).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
+	}
+	logger.Info(decks)
+	for i := range decks {
+		logger.Info(decks[i])
+		if err = s.PopulateDeckFavoriteAttribute(&decks[i], userID); err != nil {
+			return
+		}
+		if err = s.PopulateDeckActiveAttribute(&decks[i], userID); err != nil {
+			return
+		}
+		logger.Info(decks[i])
 	}
 	return
 }
@@ -137,12 +195,19 @@ func (s *CardDeckStoreImpl) FindPublicDecksByGroupID(groupID string) (decks []mo
 	return
 }
 
-func (s *CardDeckStoreImpl) FindDeckByID(deckID string) (deck *model.Deck, err error) {
+func (s *CardDeckStoreImpl) FindDeckByID(deckID string, userID string) (deck *model.Deck, err error) {
 	if err = s.db.Where(&model.Deck{ID: deckID}).
 		Preload("Cards").
 		First(&deck).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
+	if err = s.PopulateDeckFavoriteAttribute(deck, userID); err != nil {
+		return
+	}
+	if err = s.PopulateDeckActiveAttribute(deck, userID); err != nil {
+		return
+	}
+	logger.Info(deck)
 	return
 }
 
@@ -253,6 +318,61 @@ func (s *CardDeckStoreImpl) DeleteCardSide(cardSide *model.CardSide) error {
 
 func (s *CardDeckStoreImpl) DeleteCardSidesOfCardByID(cardID string) error {
 	return s.db.Where(&model.CardSide{CardID: cardID}).Delete(&model.CardSide{}).Error
+}
+func (s *CardDeckStoreImpl) FindFavoriteDecks(userID string) (decks []model.Deck, err error) {
+	var userFavoriteDecks []model.UserFavoriteDecks
+	err = s.db.
+		Preload("Deck").
+		Where(&model.UserFavoriteDecks{UserID: userID}).
+		Find(&userFavoriteDecks).Error
+	if err != nil {
+		return
+	}
+	for _, deck := range userFavoriteDecks {
+		deck.Deck.Favorite = true
+		if err = s.PopulateDeckActiveAttribute(&deck.Deck, userID); err != nil {
+			return
+		}
+		decks = append(decks, deck.Deck)
+	}
+	return
+}
+
+func (s *CardDeckStoreImpl) AddFavoriteDeck(userID string, deckID string) error {
+	return s.db.Create(&model.UserFavoriteDecks{UserID: userID, DeckID: deckID}).Error
+}
+
+func (s *CardDeckStoreImpl) DeleteFavoriteDeck(userID string, deckID string) error {
+	logger.Info(userID)
+	logger.Info(deckID)
+	return s.db.Where(&model.UserFavoriteDecks{UserID: userID, DeckID: deckID}).Delete(&model.UserFavoriteDecks{}).Error
+}
+
+func (s *CardDeckStoreImpl) FindActiveDecks(userID string) (decks []model.Deck, err error) {
+	var userActiveDecks []model.UserActiveDecks
+	err = s.db.
+		Preload("Deck").
+		Where(&model.UserActiveDecks{UserID: userID}).
+		Find(&userActiveDecks).Error
+	if err != nil {
+		return
+	}
+	for _, deck := range userActiveDecks {
+		deck.Deck.Active = true
+		if err = s.PopulateDeckFavoriteAttribute(&deck.Deck, userID); err != nil {
+			return
+		}
+		decks = append(decks, deck.Deck)
+	}
+	return
+}
+
+func (s *CardDeckStoreImpl) AddActiveDeck(userID string, deckID string) error {
+	return s.db.Create(&model.UserActiveDecks{UserID: userID, DeckID: deckID, Algorithm: model.AlgoDynamicSRS}).Error
+}
+
+func (s *CardDeckStoreImpl) DelActiveDeck(userID string, deckID string) error {
+	return s.db.Where(&model.UserActiveDecks{UserID: userID, DeckID: deckID}).Delete(&model.UserActiveDecks{}).Error
 }
 
 func (s *CollaborationStoreImpl) FindGroupsByUserID(userID string) (groups []model.Group, err error) {

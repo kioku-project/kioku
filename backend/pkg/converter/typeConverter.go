@@ -177,6 +177,9 @@ func ProtoDeckToFiberDeckConverter(deck *pbCommon.Deck) FiberDeck {
 		DeckID:   deck.DeckID,
 		DeckName: deck.DeckName,
 		DeckType: deck.DeckType.String(),
+		GroupID:  deck.GroupID,
+		Active:   deck.Active,
+		Favorite: deck.Favorite,
 	}
 }
 
@@ -186,6 +189,8 @@ func ProtoDeckRespToFiberDeckConverter(deck *pbCommon.Deck) FiberDeck {
 		DeckName: deck.DeckName,
 		DeckType: deck.DeckType.String(),
 		GroupID:  deck.GroupID,
+		Active:   deck.Active,
+		Favorite: deck.Favorite,
 	}
 }
 
@@ -195,17 +200,9 @@ func StoreDeckToProtoDeckConverter(deck model.Deck) *pbCommon.Deck {
 		DeckID:   deck.ID,
 		DeckName: deck.Name,
 		DeckType: dt,
-	}
-}
-
-func StoreDeckToProtoDeckResponseConverter(deck model.Deck) *pbCommon.Deck {
-	dt, _ := MigrateModelDeckTypeToProtoDeckType(deck.DeckType)
-	return &pbCommon.Deck{
-		DeckID:    deck.ID,
-		DeckName:  deck.Name,
-		CreatedAt: deck.CreatedAt.Unix(),
-		DeckType:  dt,
-		GroupID:   deck.GroupID,
+		GroupID:  deck.GroupID,
+		Favorite: deck.Favorite,
+		Active:   deck.Active,
 	}
 }
 

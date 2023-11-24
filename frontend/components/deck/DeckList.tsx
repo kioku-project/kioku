@@ -6,11 +6,10 @@ import { toast } from "react-toastify";
 import { preload, useSWRConfig } from "swr";
 
 import { Group as GroupType } from "../../types/Group";
-import { GroupRole } from "../../types/GroupRole";
 import { authedFetch } from "../../util/reauth";
 import { fetcher, useDecks } from "../../util/swr";
 import { Section } from "../layout/Section";
-import { Deck, FetchDeck } from "./Deck";
+import { FetchDeck } from "./Deck";
 
 interface DeckOverviewProps {
 	/**
@@ -57,24 +56,10 @@ export default function DeckOverview({
 					style="noBorder"
 					onClick={() => router.push(`/group/${group.groupID}`)}
 				>
-					<div className="flex flex-row flex-wrap">
+					<div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
 						{decks?.map((deck) => (
-							<FetchDeck
-								key={deck.deckID}
-								group={group}
-								deck={deck}
-							/>
+							<FetchDeck key={deck.deckID} deck={deck} />
 						))}
-						{((group.groupRole &&
-							GroupRole[group.groupRole] >= GroupRole.WRITE) ||
-							!decks?.length) && (
-							<Deck
-								group={{
-									...group,
-									isEmpty: !decks?.length,
-								}}
-							/>
-						)}
 					</div>
 				</Section>
 			) : (

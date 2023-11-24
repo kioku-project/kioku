@@ -78,6 +78,7 @@ function getSize(size: Size, responsive: boolean): string {
 }
 
 const getStyle = {
+	none: "",
 	primary: "text-kiokuDarkBlue",
 	secondary: "text-kiokuLightBlue",
 } as const;

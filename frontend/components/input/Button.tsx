@@ -38,7 +38,7 @@ export const Button = ({
 }: ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>) => {
 	return (
 		<button
-			className={`flex items-center justify-center rounded-md text-center font-semibold outline-none transition ${getStyle[buttonStyle]} ${getSize[buttonSize]} ${className}`}
+			className={`flex items-center justify-center rounded-md text-center font-medium outline-none transition ${getStyle[buttonStyle]} ${getSize[buttonSize]} ${className}`}
 			{...props}
 		></button>
 	);

@@ -20,4 +20,11 @@ service CardDeck {
 	rpc CreateCardSide(common.CardSideRequest) returns (common.CardSide) {}
 	rpc ModifyCardSide(common.CardSideRequest) returns (common.Success) {}
 	rpc DeleteCardSide(common.CardSideRequest) returns (common.Success) {}
+
+	rpc GetUserFavoriteDecks(common.User) returns (common.Decks) {}
+	rpc AddUserFavoriteDeck(common.DeckRequest) returns (common.Success) {}
+	rpc DelUserFavoriteDeck(common.DeckRequest) returns (common.Success) {}
+	rpc GetUserActiveDecks(common.User) returns (common.Decks) {}
+	rpc AddUserActiveDeck(common.DeckRequest) returns (common.Success) {}
+	rpc DelUserActiveDeck(common.DeckRequest) returns (common.Success) {}
 }

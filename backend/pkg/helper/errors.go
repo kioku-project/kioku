@@ -104,6 +104,10 @@ func NewMicroWrongDeckIDErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "wrong deck id")
 }
 
+func NewMicroDeckAlreadyFavoriteErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "This Deck is already your favorite")
+}
+
 func NewFiberBadRequestErr(detail string) error {
 	return fiber.NewError(fiber.StatusBadRequest, detail)
 }

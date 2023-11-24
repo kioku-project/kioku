@@ -25,6 +25,8 @@ type FiberDeck struct {
 	DeckName string `json:"deckName"`
 	DeckType string `json:"deckType"`
 	GroupID  string `json:"groupID"`
+	Active   bool   `json:"active"`
+	Favorite bool   `json:"favorite"`
 }
 
 type FiberGroupMemberAdmission struct {

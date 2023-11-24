@@ -61,7 +61,7 @@ func (e *User) Register(ctx context.Context, req *pbCommon.User, rsp *pbCommon.S
 			GroupName:        "Home Group",
 			GroupDescription: "Your personal deck space",
 			IsDefault:        true,
-			GroupType:        pbCommon.GroupType_GT_CLOSED,
+			GroupType:        pbCommon.GroupType_CLOSED,
 		},
 	})
 	if err != nil {

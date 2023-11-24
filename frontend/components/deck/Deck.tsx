@@ -1,7 +1,7 @@
 import { Trans, plural } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import Link from "next/link";
-import router from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ArrowRight, Globe, Heart, Lock, MoreVertical } from "react-feather";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,6 +33,7 @@ interface DeckProps {
 }
 
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
+	const router = useRouter();
 	const { dueCards } = useDueCards(deck.deckID);
 
 	useEffect(() => {
@@ -40,7 +41,7 @@ export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 			router.prefetch(`/deck/${deck.deckID}`);
 			preload(`/api/decks/${deck.deckID}`, fetcher);
 		}
-	}, [deck]);
+	}, [router, deck]);
 
 	return (
 		<Deck deck={deck && { ...deck, dueCards: dueCards }} {...props}></Deck>
@@ -56,6 +57,7 @@ export const Deck = ({
 	deckNotification,
 	className = "",
 }: DeckProps) => {
+	const router = useRouter();
 	const { _ } = useLingui();
 
 	const [isFavorite, setFavorite] = useState(deck.isFavorite);

@@ -14,14 +14,14 @@ export async function reauth(): Promise<boolean> {
 
 export function checkAccessTokenValid() {
 	if (!hasCookie("access_token")) {
-		return false
+		return false;
 	}
 	const accessToken = getCookie("access_token");
 	const decoded = jwtDecode<JwtPayload>(accessToken!.toString());
 	if (!decoded.exp || decoded.exp > Math.floor(Date.now() / 1000)) {
-		return false
+		return false;
 	}
-	return true
+	return true;
 }
 
 export async function authedFetch(

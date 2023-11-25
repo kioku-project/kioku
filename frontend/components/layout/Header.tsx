@@ -54,7 +54,7 @@ export const FetchHeader = ({ deck, group, ...props }: HeaderProps) => {
 			preload(`/api/decks/${deck.deckID}`, fetcher);
 		}
 	}, [deck, router]);
-	return <Header deck={deck} group={group} {...props}></Header>;
+	return <Header deck={deck} group={group} {...props} />;
 };
 
 /**

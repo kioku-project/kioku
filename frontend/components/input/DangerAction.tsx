@@ -80,7 +80,7 @@ export const DangerAction = ({
 						{button}
 					</Button>
 				}
-			></Action>
+			/>
 		</div>
 	);
 };

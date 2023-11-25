@@ -52,7 +52,7 @@ export const UserSettingsTab = ({
 					onClick={() => {
 						modifyUser({ userName: userName });
 					}}
-				></InputAction>
+				/>
 			</Section>
 			<Section
 				id="userSettingsDangerZoneSectionId"
@@ -79,7 +79,7 @@ export const UserSettingsTab = ({
 							setConfirmDeletion(true);
 						}
 					}}
-				></DangerAction>
+				/>
 			</Section>
 		</div>
 	);

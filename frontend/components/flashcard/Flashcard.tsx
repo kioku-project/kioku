@@ -109,7 +109,7 @@ export const Flashcard = ({
 							onChange={(event) => {
 								editField("header", event.target.value);
 							}}
-						></InputField>
+						/>
 						{edit ? (
 							<div className="flex flex-row items-center space-x-5">
 								{tempCard.sides.length > 1 && (
@@ -128,7 +128,7 @@ export const Flashcard = ({
 											card.sides.splice(side, 1);
 											setTempCard(card);
 										}}
-									></FileMinus>
+									/>
 								)}
 								<FilePlus
 									id="addSideButtonId"
@@ -154,7 +154,7 @@ export const Flashcard = ({
 										setSide(side + 1);
 										headerInput.current?.focus();
 									}}
-								></FilePlus>
+								/>
 								<div className="flex flex-row items-center space-x-3">
 									<Check
 										id="saveButtonId"
@@ -163,7 +163,7 @@ export const Flashcard = ({
 											setEdit(false);
 											modifyCard(tempCard);
 										}}
-									></Check>
+									/>
 									<X
 										id="cancelButtonId"
 										className="hover:cursor-pointer"
@@ -171,7 +171,7 @@ export const Flashcard = ({
 											setTempCard(card);
 											setEdit(false);
 										}}
-									></X>
+									/>
 								</div>
 							</div>
 						) : (
@@ -184,7 +184,7 @@ export const Flashcard = ({
 											: "text-gray-200 hover:cursor-not-allowed"
 									}`}
 									onClick={() => setEdit(editable)}
-								></Edit2>
+								/>
 							</div>
 						)}
 					</div>
@@ -199,7 +199,7 @@ export const Flashcard = ({
 						onChange={(event) =>
 							editField("description", event.target.value)
 						}
-					></TextArea>
+					/>
 				</div>
 			</div>
 			{(!fullSize || tempCard.sides.length > 1) && (
@@ -223,7 +223,7 @@ export const Flashcard = ({
 						id="arrowLeftId"
 						className="h-8 hover:cursor-pointer md:h-10 lg:h-12"
 						onClick={() => setSide(side - 1)}
-					></ArrowLeft>
+					/>
 				)}
 				{/* Show arrow right if not on the last side */}
 				{side < tempCard.sides.length - 1 && (
@@ -231,7 +231,7 @@ export const Flashcard = ({
 						id="arrowRightId"
 						className="h-8 hover:cursor-pointer md:h-10 lg:h-12"
 						onClick={() => setSide(side + 1)}
-					></ArrowRight>
+					/>
 				)}
 				{/* Show rating buttons if on last side */}
 				{!fullSize && side >= tempCard.sides.length - 1 && !edit && (

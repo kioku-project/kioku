@@ -66,7 +66,7 @@ export const DeckSettingsTab = ({
 					onClick={() => {
 						modifyDeck(deckState);
 					}}
-				></InputAction>
+				/>
 			</Section>
 			<Section
 				id={"deckSettingsDangerZoneSectionId"}
@@ -88,7 +88,7 @@ export const DeckSettingsTab = ({
 									: "PRIVATE",
 						});
 					}}
-				></DangerAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				<DangerAction
 					id="deleteDeckDangerAction"
@@ -111,7 +111,7 @@ export const DeckSettingsTab = ({
 							setConfirmDeletion(true);
 						}
 					}}
-				></DangerAction>
+				/>
 			</Section>
 		</div>
 	);

@@ -65,11 +65,11 @@ export const Card = ({
 											.then((result) => {})
 											.catch((error) => {});
 									}}
-								></Check>
+								/>
 								<X
 									className="hover:cursor-pointer"
 									onClick={() => setDelete(false)}
-								></X>
+								/>
 							</div>
 						) : (
 							<Trash
@@ -82,7 +82,7 @@ export const Card = ({
 								}`}
 								size={20}
 								onClick={() => setDelete(editable)}
-							></Trash>
+							/>
 						)}
 						{/* <Edit2
 							className="hover:cursor-pointer"
@@ -92,7 +92,7 @@ export const Card = ({
 									setCard(card);
 								}
 							}}
-						></Edit2> */}
+						/> */}
 					</div>
 				</div>
 			) : (

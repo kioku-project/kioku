@@ -18,7 +18,7 @@ interface MembersTabProps {
 export const MembersTab = ({ group, className = "" }: MembersTabProps) => {
 	return (
 		<div className={`${className}`}>
-			<MemberList group={group}></MemberList>
+			<MemberList group={group} />
 		</div>
 	);
 };

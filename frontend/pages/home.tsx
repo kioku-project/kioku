@@ -28,7 +28,11 @@ export default function Page() {
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
 				<link rel="alternate" hrefLang="en" href="https://kioku.dev" />
-				<link rel="alternate" hrefLang="de" href="https://app.kioku.dev/de/home" />
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href="https://app.kioku.dev/de/home"
+				/>
 			</Head>
 			<div className="flex min-w-full flex-col bg-eggshell">
 				<div className="flex grow flex-row justify-start">

@@ -36,7 +36,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 				onClick={() =>
 					loggedIn ? router.push("/") : router.push("/home")
 				}
-			></Logo>
+			/>
 			{loggedIn == true && (
 				<LogOut
 					className="text-kiokuDarkBlue hover:cursor-pointer"
@@ -48,7 +48,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 							router.replace("/home");
 						}
 					}}
-				></LogOut>
+				/>
 			)}
 			{loggedIn == false && (
 				<Button

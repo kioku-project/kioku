@@ -92,9 +92,9 @@ export const ToggleAction = ({
 						onChange={(event) => {
 							!disabled && onChange?.(event);
 						}}
-					></ToggleButtonGroup>
+					/>
 				}
-			></Action>
+			/>
 		</div>
 	);
 };

@@ -60,7 +60,7 @@ export const GroupSettingsTab = ({
 					onClick={() => {
 						modifyGroup({ groupName: groupName });
 					}}
-				></InputAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				<InputAction
 					id="GroupDescriptionInputAction"
@@ -74,7 +74,7 @@ export const GroupSettingsTab = ({
 					onClick={() => {
 						modifyGroup({ groupDescription: groupDescription });
 					}}
-				></InputAction>
+				/>
 			</Section>
 			<Section
 				id="groupSettingsDangerZoneSectionId"
@@ -92,7 +92,7 @@ export const GroupSettingsTab = ({
 					onClick={() => {
 						leaveGroup();
 					}}
-				></DangerAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				{/* Settings for group admins */}
 				<ToggleAction
@@ -120,7 +120,7 @@ export const GroupSettingsTab = ({
 					onChange={(event) => {
 						modifyGroup({ groupType: event.currentTarget.value });
 					}}
-				></ToggleAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				<DangerAction
 					id="deleteGroupDangerAction"
@@ -143,7 +143,7 @@ export const GroupSettingsTab = ({
 							setConfirmDelete(true);
 						}
 					}}
-				></DangerAction>
+				/>
 			</Section>
 		</div>
 	);

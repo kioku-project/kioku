@@ -43,9 +43,7 @@ export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 		}
 	}, [router, deck]);
 
-	return (
-		<Deck deck={deck && { ...deck, dueCards: dueCards }} {...props}></Deck>
-	);
+	return <Deck deck={deck && { ...deck, dueCards: dueCards }} {...props} />;
 };
 
 /**

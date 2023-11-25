@@ -62,11 +62,11 @@ export default function Member({
 														.then((result) => {})
 														.catch((error) => {});
 												}}
-											></Check>
+											/>
 											<X
 												className="hover:cursor-pointer"
 												onClick={() => setDelete(false)}
-											></X>
+											/>
 										</div>
 									)}
 									{!isDelete && (
@@ -75,7 +75,7 @@ export default function Member({
 											id={`deleteUser${user.userID}ButtonId`}
 											className="hover:cursor-pointer"
 											onClick={() => setDelete(true)}
-										></UserMinus>
+										/>
 									)}
 								</>
 							)}
@@ -93,7 +93,7 @@ export default function Member({
 												.then((result) => {})
 												.catch((error) => {});
 										}}
-									></UserCheck>
+									/>
 									<UserX
 										className="hover:cursor-pointer"
 										onClick={() => {
@@ -104,7 +104,7 @@ export default function Member({
 												.then((result) => {})
 												.catch((error) => {});
 										}}
-									></UserX>
+									/>
 								</div>
 							</div>
 						)}
@@ -118,7 +118,7 @@ export default function Member({
 									onClick={() => {
 										inviteUser(user.userEmail ?? "", false);
 									}}
-								></X>
+								/>
 							</div>
 						)}
 					</div>
@@ -142,7 +142,7 @@ export default function Member({
 								userInputField.current.value = "";
 							}
 						}}
-					></input>
+					/>
 				</div>
 			)}
 		</div>

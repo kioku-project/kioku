@@ -73,7 +73,7 @@ export const InputAction = ({
 						inputFieldSize="3xs"
 						readOnly={disabled}
 						onChange={onChange}
-					></InputField>
+					/>
 				}
 				button={
 					<FormButton
@@ -85,7 +85,7 @@ export const InputAction = ({
 						onClick={() => !disabled && onClick?.()}
 					></FormButton>
 				}
-			></Action>
+			/>
 		</form>
 	);
 };

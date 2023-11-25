@@ -86,7 +86,7 @@ export default function Page() {
 						className={`flex w-full flex-col items-center rounded-2xl bg-kiokuLightBlue p-3 sm:w-5/6 sm:p-5 md:w-1/2 lg:w-1/3 ${inter.className}`}
 					>
 						<Text
-							size="md"
+							textSize="md"
 							className="text-center font-bold leading-9 tracking-tight text-kiokuDarkBlue"
 						>
 							{login ? (
@@ -97,7 +97,10 @@ export default function Page() {
 						</Text>
 						{forms()}
 
-						<Text size="3xs" className="text-center text-gray-500">
+						<Text
+							textSize="3xs"
+							className="text-center text-gray-500"
+						>
 							{login ? (
 								<Trans>Not registered?</Trans>
 							) : (

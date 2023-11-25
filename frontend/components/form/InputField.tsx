@@ -109,7 +109,11 @@ export const InputField = forwardRef(
 				className={`flex w-full flex-col text-kiokuDarkBlue ${className}`}
 			>
 				<label htmlFor={id}>
-					<Text className="font-bold" size={inputFieldSize}>
+					<Text
+						textStyle="primary"
+						textSize={inputFieldSize}
+						className="font-bold"
+					>
 						{label}
 					</Text>
 				</label>

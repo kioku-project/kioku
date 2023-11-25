@@ -45,7 +45,7 @@ export default function Member({
 		>
 			{user?.userID ? (
 				<div className="flex w-full flex-row items-center border-b-2 border-kiokuLightBlue p-2 md:p-3">
-					<Text className="w-full" size="xs">
+					<Text textStyle="primary" textSize="xs" className="w-full">
 						{user.userName}
 					</Text>
 					<div className="flex flex-row items-center space-x-5">

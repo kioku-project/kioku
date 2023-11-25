@@ -78,7 +78,7 @@ export const Header = ({
 		>
 			<div className="flex flex-col font-black">
 				<div className="flex flex-row items-center space-x-3">
-					<Text style="primary" size="xl">
+					<Text textStyle="primary" textSize="xl">
 						{deck?.deckName}
 						{!deck && group && group.groupName}
 						{user && <Trans>Welcome {user.userName}</Trans>}
@@ -98,7 +98,7 @@ export const Header = ({
 						/>
 					)}
 				</div>
-				<Text style="secondary" size="xs">
+				<Text textStyle="secondary" textSize="xs">
 					{deck && group && !group.isDefault && (
 						<div className="flex flex-row">
 							<div
@@ -171,7 +171,7 @@ export const Header = ({
 				)}
 			{/* if on group page and user already requested, display info text */}
 			{!deck && group?.groupRole == "REQUESTED" && (
-				<Text className="italic" style="primary">
+				<Text textStyle="secondary" className="italic">
 					<Trans>Request pending</Trans>
 				</Text>
 			)}

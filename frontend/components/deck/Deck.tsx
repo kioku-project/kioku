@@ -75,11 +75,7 @@ export const Deck = ({
 		>
 			<div className="flex h-[6.5rem] w-full flex-row bg-gradient-to-r to-60% transition-all first:rounded-t-md last:rounded-b-md group-hover:from-[#F7EBEB] sm:h-28 md:h-32 lg:h-32">
 				<div className="relative my-3 ml-3 flex aspect-square items-center justify-center rounded bg-[#F31212]/50">
-					<Text
-						style="none"
-						size="lg"
-						className="font-black text-[#7B100E]"
-					>
+					<Text textSize="lg" className="font-black text-[#7B100E]">
 						{deck.deckName.slice(0, 2).toUpperCase()}
 					</Text>
 					{!!deck.dueCards && (
@@ -93,7 +89,8 @@ export const Deck = ({
 						<div className="flex w-full flex-row items-center justify-between space-x-2">
 							<div className="flex flex-row items-center space-x-1 overflow-hidden">
 								<Text
-									size="sm"
+									textStyle="primary"
+									textSize="sm"
 									className="flex-1 items-center space-x-1 truncate whitespace-nowrap font-extrabold"
 								>
 									{deck.deckName}
@@ -181,11 +178,7 @@ export const Deck = ({
 								{deck.deckType === "PRIVATE" && (
 									<Lock size={12} className="text-gray-400" />
 								)}
-								<Text
-									size="5xs"
-									style="none"
-									className="text-gray-400"
-								>
+								<Text textSize="5xs" className="text-gray-400">
 									{deck.deckType}
 								</Text>
 							</div>

@@ -49,8 +49,9 @@ export const Card = ({
 			{card.cardID ? (
 				<div className="flex w-full flex-row items-center border-b-2 border-kiokuLightBlue p-2 md:p-3">
 					<Text
+						textStyle="primary"
+						textSize="xs"
 						className="w-full hover:cursor-pointer"
-						size="xs"
 						onClick={() => setCard?.(card)}
 					>
 						{card.sides[0].header}

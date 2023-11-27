@@ -2,7 +2,7 @@ import { Trans, plural } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Globe, Heart, Lock, MoreVertical } from "react-feather";
 import "react-toastify/dist/ReactToastify.css";
 import { preload } from "swr";
@@ -43,7 +43,11 @@ export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 		}
 	}, [router, deck]);
 
-	return <Deck deck={deck && { ...deck, dueCards: dueCards }} {...props} />;
+	const newDeck = useMemo(() => {
+		return { ...deck, dueCards: dueCards };
+	}, [deck, dueCards]);
+
+	return <Deck deck={newDeck} {...props} />;
 };
 
 /**

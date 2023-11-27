@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Text } from "../components/Text";
 import { InputField } from "../components/form/InputField";
 import { Button } from "../components/input/Button";
-import { usePOST } from "../util/api";
+import { postRequest } from "../util/api";
 import { checkAccessTokenValid } from "../util/reauth";
 import { loadCatalog } from "./_app";
 
@@ -220,7 +220,7 @@ export default function Page() {
 		if (!form.current?.checkValidity()) {
 			return;
 		}
-		const response = await usePOST(
+		const response = await postRequest(
 			`/api/login`,
 			JSON.stringify({
 				userEmail: emailInput.current?.value,
@@ -244,7 +244,7 @@ export default function Page() {
 		) {
 			return;
 		}
-		const response = await usePOST(
+		const response = await postRequest(
 			`/api/register`,
 			JSON.stringify({
 				userEmail: emailInput.current?.value,

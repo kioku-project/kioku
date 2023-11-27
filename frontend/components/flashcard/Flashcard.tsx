@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
 import { Card as CardType } from "../../types/Card";
-import { usePUT } from "../../util/api";
+import { putRequests } from "../../util/api";
 import { InputField } from "../form/InputField";
 import { TextArea } from "../form/TextArea";
 import { Button } from "../input/Button";
@@ -275,7 +275,7 @@ export const Flashcard = ({
 	}
 
 	async function modifyCard(card: CardType) {
-		const response = await usePUT(
+		const response = await putRequests(
 			`/api/cards/${card.cardID}`,
 			JSON.stringify({
 				sides: card.sides,

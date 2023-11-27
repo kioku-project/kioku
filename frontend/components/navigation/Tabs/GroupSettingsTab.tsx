@@ -9,7 +9,7 @@ import { ToggleAction } from "@/components/input/ToggleAction";
 
 import { Group as GroupType } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
-import { useDELETE, usePUT } from "../../../util/api";
+import { deleteRequest, putRequests } from "../../../util/api";
 import { DangerAction } from "../../input/DangerAction";
 import { InputAction } from "../../input/InputAction";
 import { Section } from "../../layout/Section";
@@ -153,7 +153,7 @@ export const GroupSettingsTab = ({
 		groupDescription?: string;
 		groupType?: string;
 	}) {
-		const response = await usePUT(
+		const response = await putRequests(
 			`/api/groups/${group.groupID}`,
 			JSON.stringify(body)
 		);
@@ -166,7 +166,7 @@ export const GroupSettingsTab = ({
 	}
 
 	async function leaveGroup() {
-		const response = await useDELETE(
+		const response = await deleteRequest(
 			`/api/groups/${group.groupID}/members`
 		);
 		if (response?.ok) {
@@ -179,7 +179,7 @@ export const GroupSettingsTab = ({
 	}
 
 	async function deleteGroup() {
-		const response = await useDELETE(`/api/groups/${group.groupID}`);
+		const response = await deleteRequest(`/api/groups/${group.groupID}`);
 		if (response?.ok) {
 			toast.info(t`Group deleted!`, { toastId: "deletedGroupToast" });
 			router.push(`/`);

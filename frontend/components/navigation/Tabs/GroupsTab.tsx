@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { mutate } from "swr";
 
 import { Group as GroupType } from "../../../types/Group";
-import { usePOST } from "../../../util/api";
+import { postRequest } from "../../../util/api";
 import DeckList from "../../deck/DeckList";
 import { InputField } from "../../form/InputField";
 
@@ -81,7 +81,7 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 			groupNameInput.current?.focus();
 			return;
 		}
-		const response = await usePOST(
+		const response = await postRequest(
 			`/api/groups`,
 			JSON.stringify({ groupName: groupNameInput.current.value })
 		);

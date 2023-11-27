@@ -9,7 +9,7 @@ import { Deck } from "@/types/Deck";
 
 import { Group as GroupType } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
-import { useDELETE, usePUT } from "../../../util/api";
+import { deleteRequest, putRequests } from "../../../util/api";
 import { DangerAction } from "../../input/DangerAction";
 import { InputAction } from "../../input/InputAction";
 import { Section } from "../../layout/Section";
@@ -120,7 +120,7 @@ export const DeckSettingsTab = ({
 		deckName?: string;
 		deckType?: "PUBLIC" | "PRIVATE";
 	}) {
-		const response = await usePUT(
+		const response = await putRequests(
 			`/api/decks/${deck.deckID}`,
 			JSON.stringify(body)
 		);
@@ -133,7 +133,7 @@ export const DeckSettingsTab = ({
 	}
 
 	async function deleteDeck() {
-		const response = await useDELETE(`/api/decks/${deck.deckID}`);
+		const response = await deleteRequest(`/api/decks/${deck.deckID}`);
 		if (response?.ok) {
 			toast.info(t`Deck deleted!`, { toastId: "deletedDeckToast" });
 		} else {

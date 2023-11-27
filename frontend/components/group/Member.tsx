@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 
 import { User } from "../../types/User";
-import { useAPI, useDELETE } from "../../util/api";
+import { apiRequest, deleteRequest } from "../../util/api";
 import { Text } from "../Text";
 import { InputField } from "../form/InputField";
 
@@ -151,7 +151,7 @@ export default function Member({
 	);
 
 	async function inviteUser(userEmail: string, invite: boolean) {
-		const response = await useAPI(
+		const response = await apiRequest(
 			invite ? "POST" : "DELETE",
 			`/api/groups/${user.groupID}/members/invitation`,
 			JSON.stringify({
@@ -171,7 +171,7 @@ export default function Member({
 	}
 
 	async function deleteMember(user: User) {
-		const response = await useDELETE(
+		const response = await deleteRequest(
 			`/api/groups/${user.groupID}/members/${user.userID}`
 		);
 		if (response?.ok) {

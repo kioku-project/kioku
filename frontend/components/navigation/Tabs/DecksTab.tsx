@@ -7,7 +7,7 @@ import { useSWRConfig } from "swr";
 
 import { Group as GroupType } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
-import { usePOST } from "../../../util/api";
+import { postRequest } from "../../../util/api";
 import { useDecks } from "../../../util/swr";
 import DeckList from "../../deck/DeckList";
 import { InputField } from "../../form/InputField";
@@ -67,7 +67,7 @@ export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 			deckNameInput.current?.focus();
 			return;
 		}
-		const response = await usePOST(
+		const response = await postRequest(
 			`/api/groups/${group.groupID}/decks`,
 			JSON.stringify({ deckName: deckNameInput.current.value })
 		);

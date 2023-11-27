@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 
 import { Card as CardType } from "../../types/Card";
-import { useDELETE, usePOST } from "../../util/api";
+import { deleteRequest, postRequest } from "../../util/api";
 import { Text } from "../Text";
 import { InputField } from "../form/InputField";
 
@@ -124,7 +124,7 @@ export const Card = ({
 			cardNameInput.current?.focus();
 			return;
 		}
-		const response = await usePOST(
+		const response = await postRequest(
 			`/api/decks/${card.deckID}/cards`,
 			JSON.stringify({
 				sides: [
@@ -146,7 +146,7 @@ export const Card = ({
 	}
 
 	async function deleteCard() {
-		const response = await useDELETE(`/api/cards/${card.cardID}`);
+		const response = await deleteRequest(`/api/cards/${card.cardID}`);
 		if (response?.ok) {
 			toast.info("Card deleted!", { toastId: "deletedCardToast" });
 			mutate(`/api/decks/${card.deckID}/cards`);

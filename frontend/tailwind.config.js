@@ -8,7 +8,7 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				eggshell: "#fffff3",
+				eggshell: "#ffffff",
 				kiokuRed: "#db2b39",
 				kiokuYellow: "#f3a712",
 				kiokuLightBlue: "#9eadc8",

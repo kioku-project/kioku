@@ -4,7 +4,6 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import React, { ReactNode, useState } from "react";
 
-import Authenticated from "../components/accessControl/Authenticated";
 import { FetchHeader } from "../components/layout/Header";
 import { DecksTab } from "../components/navigation/Tabs/DecksTab";
 import { GroupsTab } from "../components/navigation/Tabs/GroupsTab";
@@ -31,6 +30,8 @@ export default function Home() {
 	const { invitations } = useInvitations();
 	const { groups } = useGroups();
 
+	const homeGroup = groups?.filter((group) => group.isDefault)[0];
+
 	const { _ } = useLingui();
 
 	const tabs: { [tab: string]: ReactNode } = {
@@ -39,14 +40,14 @@ export default function Home() {
 				id="decksTabHeaderId"
 				name={_(msg`Decks`)}
 				style="decks"
-			></TabHeader>
+			/>
 		),
 		groups: (
 			<TabHeader
 				id="groupTabHeaderId"
 				name={_(msg`Groups`)}
 				style="groups"
-			></TabHeader>
+			/>
 		),
 		invitations: (
 			<TabHeader
@@ -54,21 +55,21 @@ export default function Home() {
 				name={_(msg`Invitations`)}
 				style="invitations"
 				notificationBadgeContent={`${invitations?.length ?? ""}`}
-			></TabHeader>
+			/>
 		),
 		statistics: (
 			<TabHeader
 				id="StatisticsTabHeaderId"
 				name={_(msg`Statistics`)}
 				style="statistics"
-			></TabHeader>
+			/>
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
 				name={_(msg`Settings`)}
 				style="settings"
-			></TabHeader>
+			/>
 		),
 	};
 
@@ -91,51 +92,35 @@ export default function Home() {
 					href="https://app.kioku.dev/de"
 				/>
 			</Head>
-			<Authenticated>
-				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-					{user && groups && (
-						<div className="flex flex-col space-y-3 px-5 py-1 md:space-y-5 md:px-10 md:py-3">
-							<FetchHeader
-								id="userPageHeaderId"
-								user={{ ...user, ...due }}
-							/>
-							<TabBar
-								id="deckTabBarId"
-								tabs={tabs}
-								currentTab={currentTab}
-								setTab={setCurrentTab}
-							></TabBar>
-							<div>
-								{{
-									decks: (
-										<DecksTab
-											group={
-												groups.filter(
-													(group) => group.isDefault
-												)[0]
-											}
-										></DecksTab>
-									),
-									groups: (
-										<GroupsTab groups={groups}></GroupsTab>
-									),
-									invitations: invitations && (
-										<InvitationsTab
-											invitations={invitations}
-										></InvitationsTab>
-									),
-									statistics: <StatisticsTab></StatisticsTab>,
-									settings: (
-										<UserSettingsTab
-											user={user}
-										></UserSettingsTab>
-									),
-								}[currentTab] ?? <div>Error</div>}
-							</div>
+			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
+				{user && groups && (
+					<div className="flex flex-col space-y-3 px-5 py-1 md:space-y-5 md:px-10 md:py-3">
+						<FetchHeader
+							id="userPageHeaderId"
+							user={{ ...user, ...due }}
+						/>
+						<TabBar
+							id="deckTabBarId"
+							tabs={tabs}
+							currentTab={currentTab}
+							setTab={setCurrentTab}
+						/>
+						<div>
+							{{
+								decks: homeGroup && (
+									<DecksTab group={homeGroup} />
+								),
+								groups: <GroupsTab groups={groups} />,
+								invitations: invitations && (
+									<InvitationsTab invitations={invitations} />
+								),
+								statistics: <StatisticsTab />,
+								settings: <UserSettingsTab user={user} />,
+							}[currentTab] ?? <div>Error</div>}
 						</div>
-					)}
-				</div>
-			</Authenticated>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

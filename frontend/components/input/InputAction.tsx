@@ -1,8 +1,8 @@
 import { ChangeEventHandler } from "react";
 
-import { FormButton } from "../form/FormButton";
 import { InputField } from "../form/InputField";
 import { Action } from "./Action";
+import { Button } from "./Button";
 
 interface InputActionProps {
 	/**
@@ -68,24 +68,25 @@ export const InputAction = ({
 						name="actionInput"
 						label={header}
 						value={value}
-						statusIcon="none"
-						inputFieldStyle="tertiary"
-						inputFieldSize="3xs"
 						readOnly={disabled}
+						inputFieldStyle="secondary"
+						inputFieldSize="3xs"
 						onChange={onChange}
-					></InputField>
+					/>
 				}
 				button={
-					<FormButton
+					<Button
 						id={`${id}ButtonId`}
-						value={button}
-						style={disabled ? "disabled" : "primary"}
-						size="sm"
-						className="w-full"
+						buttonStyle={disabled ? "disabled" : "primary"}
+						buttonSize="sm"
+						buttonTextSize="3xs"
+						className="w-full justify-center"
 						onClick={() => !disabled && onClick?.()}
-					></FormButton>
+					>
+						{button}
+					</Button>
 				}
-			></Action>
+			/>
 		</form>
 	);
 };

@@ -1,5 +1,5 @@
 import { Invitation } from "../../../types/Invitation";
-import DeckOverview from "../../deck/DeckOverview";
+import DeckList from "../../deck/DeckList";
 
 interface InvitationsTabProps {
 	/**
@@ -22,13 +22,9 @@ export const InvitationsTab = ({
 	return (
 		<div className={`${className}`}>
 			{invitations?.map((invitation) => (
-				<DeckOverview
+				<DeckList
 					key={invitation.groupID}
-					group={{
-						...invitation,
-						isDefault: false,
-						groupRole: "INVITED",
-					}}
+					header={invitation.groupName}
 				/>
 			))}
 		</div>

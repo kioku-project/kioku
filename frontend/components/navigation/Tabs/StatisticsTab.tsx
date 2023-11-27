@@ -22,13 +22,13 @@ export const StatisticsTab = ({ className = "" }: StatisticsTabProps) => {
 				id="personalStatisticsSectionId"
 				header={_(msg`Personal Statistics`)}
 			>
-				<StatisticOverview id="personalStatisticsOverviewId"></StatisticOverview>
+				<StatisticOverview id="personalStatisticsOverviewId" />
 			</Section>
 			<Section
 				id="groupStatisticsSectionId"
 				header={_(msg`Group Statistics`)}
 			>
-				<StatisticOverview id="groupStatisticsOverviewId"></StatisticOverview>
+				<StatisticOverview id="groupStatisticsOverviewId" />
 			</Section>
 		</div>
 	);

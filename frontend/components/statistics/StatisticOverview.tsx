@@ -1,8 +1,8 @@
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import React from "react";
 
 import { Statistic } from "./Statistic";
-import { useLingui } from "@lingui/react";
-import { msg } from "@lingui/macro";
 
 interface StatisticOverviewProps {
 	/**
@@ -22,7 +22,7 @@ export const StatisticOverview = ({
 	id,
 	className,
 }: StatisticOverviewProps) => {
-	const { _ } = useLingui()
+	const { _ } = useLingui();
 	return (
 		<div id={id} className="flex flex-row justify-between rounded-lg">
 			<Statistic
@@ -33,13 +33,13 @@ export const StatisticOverview = ({
 				reference={"200"}
 				change={12}
 				className="border-r-2 border-kiokuLightBlue"
-			></Statistic>
+			/>
 			<Statistic
 				id={"statisticId"}
 				header={_(msg`Hit Rate`)}
 				value={"34%"}
 				change={2}
-			></Statistic>
+			/>
 			<Statistic
 				id={"statisticId"}
 				header={_(msg`Test`)}
@@ -48,7 +48,7 @@ export const StatisticOverview = ({
 				reference={"100"}
 				change={-3}
 				className="border-l-2 border-kiokuLightBlue"
-			></Statistic>
+			/>
 		</div>
 	);
 };

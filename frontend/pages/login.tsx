@@ -10,10 +10,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { Text } from "../components/Text";
-import { FormButton } from "../components/form/FormButton";
 import { InputField } from "../components/form/InputField";
+import { Button } from "../components/input/Button";
+import { postRequest } from "../util/api";
+import { checkAccessTokenValid } from "../util/reauth";
 import { loadCatalog } from "./_app";
-import { checkAccessTokenValid } from "@/util/reauth";
 
 const inter = Inter({
 	weight: ["200", "400"],
@@ -53,8 +54,16 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
-				<link rel="alternate" hrefLang="en" href="https://app.kioku.dev/login" />
-				<link rel="alternate" hrefLang="de" href="https://app.kioku.dev/de/login" />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href="https://app.kioku.dev/login"
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href="https://app.kioku.dev/de/login"
+				/>
 			</Head>
 
 			<div className="min-w-screen flex flex-1 items-center justify-center sm:p-5 md:p-10">
@@ -78,7 +87,7 @@ export default function Page() {
 						className={`flex w-full flex-col items-center rounded-2xl bg-kiokuLightBlue p-3 sm:w-5/6 sm:p-5 md:w-1/2 lg:w-1/3 ${inter.className}`}
 					>
 						<Text
-							size="md"
+							textSize="md"
 							className="text-center font-bold leading-9 tracking-tight text-kiokuDarkBlue"
 						>
 							{login ? (
@@ -89,7 +98,10 @@ export default function Page() {
 						</Text>
 						{forms()}
 
-						<Text size="3xs" className="text-center text-gray-500">
+						<Text
+							textSize="3xs"
+							className="text-center text-gray-500"
+						>
 							{login ? (
 								<Trans>Not registered?</Trans>
 							) : (
@@ -172,7 +184,7 @@ export default function Page() {
 						type="password"
 						name="passwordRepeat"
 						label={_(msg`Repeat Password`)}
-						tooltipMessage={_(msg`Passwords have to match.`)}
+						tooltip={_(msg`Passwords have to match.`)}
 						required={true}
 						minLength={3}
 						pattern={password}
@@ -181,11 +193,11 @@ export default function Page() {
 					/>
 				)}
 
-				<FormButton
+				<Button
 					id={login ? "login" : "register"}
-					value={login ? _(msg`Login`) : _(msg`Register`)}
-					size="sm"
-					className="w-full"
+					buttonStyle="primary"
+					buttonSize="sm"
+					className="w-full justify-center"
 					onClick={() => {
 						if (login) {
 							loginLogic()
@@ -197,7 +209,9 @@ export default function Page() {
 								.catch((error) => {});
 						}
 					}}
-				/>
+				>
+					{login ? _(msg`Login`) : _(msg`Register`)}
+				</Button>
 			</form>
 		);
 	}
@@ -206,16 +220,13 @@ export default function Page() {
 		if (!form.current?.checkValidity()) {
 			return;
 		}
-		const response = await fetch("/api/login", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		const response = await postRequest(
+			`/api/login`,
+			JSON.stringify({
 				userEmail: emailInput.current?.value,
 				userPassword: passwordInput.current?.value,
-			}),
-		});
+			})
+		);
 		if (response.ok) {
 			toast.info(<Trans>Logged in!</Trans>, { toastId: "accountToast" });
 			router.push("/");
@@ -233,17 +244,14 @@ export default function Page() {
 		) {
 			return;
 		}
-		const response = await fetch("/api/register", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		const response = await postRequest(
+			`/api/register`,
+			JSON.stringify({
 				userEmail: emailInput.current?.value,
 				userName: nameInput.current?.value,
 				userPassword: passwordInput.current?.value,
-			}),
-		});
+			})
+		);
 		if (response.ok) {
 			toast.info(<Trans>Account created!</Trans>, {
 				toastId: "accountToast",

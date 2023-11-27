@@ -9,7 +9,7 @@ import { ToggleAction } from "@/components/input/ToggleAction";
 
 import { Group as GroupType } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
-import { authedFetch } from "../../../util/reauth";
+import { deleteRequest, putRequests } from "../../../util/api";
 import { DangerAction } from "../../input/DangerAction";
 import { InputAction } from "../../input/InputAction";
 import { Section } from "../../layout/Section";
@@ -60,7 +60,7 @@ export const GroupSettingsTab = ({
 					onClick={() => {
 						modifyGroup({ groupName: groupName });
 					}}
-				></InputAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				<InputAction
 					id="GroupDescriptionInputAction"
@@ -74,7 +74,7 @@ export const GroupSettingsTab = ({
 					onClick={() => {
 						modifyGroup({ groupDescription: groupDescription });
 					}}
-				></InputAction>
+				/>
 			</Section>
 			<Section
 				id="groupSettingsDangerZoneSectionId"
@@ -92,7 +92,7 @@ export const GroupSettingsTab = ({
 					onClick={() => {
 						leaveGroup();
 					}}
-				></DangerAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				{/* Settings for group admins */}
 				<ToggleAction
@@ -120,7 +120,7 @@ export const GroupSettingsTab = ({
 					onChange={(event) => {
 						modifyGroup({ groupType: event.currentTarget.value });
 					}}
-				></ToggleAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				<DangerAction
 					id="deleteGroupDangerAction"
@@ -143,7 +143,7 @@ export const GroupSettingsTab = ({
 							setConfirmDelete(true);
 						}
 					}}
-				></DangerAction>
+				/>
 			</Section>
 		</div>
 	);
@@ -153,13 +153,10 @@ export const GroupSettingsTab = ({
 		groupDescription?: string;
 		groupType?: string;
 	}) {
-		const response = await authedFetch(`/api/groups/${group.groupID}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(body),
-		});
+		const response = await putRequests(
+			`/api/groups/${group.groupID}`,
+			JSON.stringify(body)
+		);
 		if (response?.ok) {
 			toast.info(t`Group updated!`, { toastId: "updatedGroupToast" });
 		} else {
@@ -169,14 +166,8 @@ export const GroupSettingsTab = ({
 	}
 
 	async function leaveGroup() {
-		const response = await authedFetch(
-			`/api/groups/${group.groupID}/members`,
-			{
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
+		const response = await deleteRequest(
+			`/api/groups/${group.groupID}/members`
 		);
 		if (response?.ok) {
 			toast.info(t`Left group!`, { toastId: "leftGroupToast" });
@@ -188,12 +179,7 @@ export const GroupSettingsTab = ({
 	}
 
 	async function deleteGroup() {
-		const response = await authedFetch(`/api/groups/${group.groupID}`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+		const response = await deleteRequest(`/api/groups/${group.groupID}`);
 		if (response?.ok) {
 			toast.info(t`Group deleted!`, { toastId: "deletedGroupToast" });
 			router.push(`/`);

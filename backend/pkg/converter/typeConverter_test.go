@@ -244,23 +244,10 @@ func TestStoreCardToProtoCardConverter(t *testing.T) {
 	assert.Equal(t, id, conv.CardID)
 }
 
-func TestCardDeckProtoCardToSrsProtoCardConverter(t *testing.T) {
-	conv := converter.CardDeckProtoCardToSrsProtoCardConverter(&pbCard)
-
-	assert.Equal(t, id, conv.CardID)
-}
-
 func TestStoreCardSideToProtoCardSideConverter(t *testing.T) {
 	conv := converter.StoreCardSideToProtoCardSideConverter(cardSide)
 
 	assert.Equal(t, id, conv.CardSideID)
-	assert.Equal(t, header, conv.Header)
-	assert.Equal(t, desc, conv.Description)
-}
-
-func TestCardDeckProtoCardSideToSrsProtoCardSideConverter(t *testing.T) {
-	conv := converter.CardDeckProtoCardSideToSrsProtoCardSideConverter(&pbCardSide)
-
 	assert.Equal(t, header, conv.Header)
 	assert.Equal(t, desc, conv.Description)
 }

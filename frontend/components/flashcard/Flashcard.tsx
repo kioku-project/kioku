@@ -1,3 +1,5 @@
+import { Trans, msg, plural, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import React, { useRef, useState } from "react";
 import {
 	ArrowLeft,
@@ -12,7 +14,7 @@ import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
 import { Card as CardType } from "../../types/Card";
-import { authedFetch } from "../../util/reauth";
+import { putRequests } from "../../util/api";
 import { InputField } from "../form/InputField";
 import { TextArea } from "../form/TextArea";
 import { Button } from "../input/Button";
@@ -79,6 +81,8 @@ export const Flashcard = ({
 	const headerInput = useRef<HTMLInputElement>(null);
 	const descriptionInput = useRef<HTMLTextAreaElement>(null);
 
+	const { _ } = useLingui();
+
 	return (
 		<div
 			id={id}
@@ -97,15 +101,14 @@ export const Flashcard = ({
 							name="headerInput"
 							value={tempCard.sides[side]?.header}
 							placeholder={edit ? "Header" : ""}
-							statusIcon="none"
-							style="secondary"
 							readOnly={!edit}
+							inputFieldStyle="primary"
 							className="text-lg sm:text-xl md:text-2xl lg:text-3xl"
-							ref={headerInput}
 							onChange={(event) => {
 								editField("header", event.target.value);
 							}}
-						></InputField>
+							ref={headerInput}
+						/>
 						{edit ? (
 							<div className="flex flex-row items-center space-x-5">
 								{tempCard.sides.length > 1 && (
@@ -124,7 +127,7 @@ export const Flashcard = ({
 											card.sides.splice(side, 1);
 											setTempCard(card);
 										}}
-									></FileMinus>
+									/>
 								)}
 								<FilePlus
 									id="addSideButtonId"
@@ -150,7 +153,7 @@ export const Flashcard = ({
 										setSide(side + 1);
 										headerInput.current?.focus();
 									}}
-								></FilePlus>
+								/>
 								<div className="flex flex-row items-center space-x-3">
 									<Check
 										id="saveButtonId"
@@ -159,7 +162,7 @@ export const Flashcard = ({
 											setEdit(false);
 											modifyCard(tempCard);
 										}}
-									></Check>
+									/>
 									<X
 										id="cancelButtonId"
 										className="hover:cursor-pointer"
@@ -167,7 +170,7 @@ export const Flashcard = ({
 											setTempCard(card);
 											setEdit(false);
 										}}
-									></X>
+									/>
 								</div>
 							</div>
 						) : (
@@ -180,7 +183,7 @@ export const Flashcard = ({
 											: "text-gray-200 hover:cursor-not-allowed"
 									}`}
 									onClick={() => setEdit(editable)}
-								></Edit2>
+								/>
 							</div>
 						)}
 					</div>
@@ -188,14 +191,14 @@ export const Flashcard = ({
 						id="descriptionInputId"
 						name="descriptionInput"
 						value={tempCard.sides[side]?.description}
-						placeholder={edit ? "Description" : ""}
+						placeholder={edit ? _(msg`Description`) : ""}
 						readOnly={!edit}
 						className="text-base text-kiokuLightBlue sm:text-lg md:text-xl lg:text-2xl"
 						ref={descriptionInput}
 						onChange={(event) =>
 							editField("description", event.target.value)
 						}
-					></TextArea>
+					/>
 				</div>
 			</div>
 			{(!fullSize || tempCard.sides.length > 1) && (
@@ -207,7 +210,10 @@ export const Flashcard = ({
 					<div className="flex h-8 w-full items-center text-xs font-semibold text-kiokuLightBlue sm:h-full md:text-sm">
 						{!fullSize &&
 							dueCards &&
-							`${dueCards} card${dueCards !== 1 ? "s" : ""} left`}
+							plural(dueCards, {
+								one: "# card left",
+								other: "# cards left",
+							})}
 					</div>
 				)}
 				{/* Show arrow left if not on first side */}
@@ -216,7 +222,7 @@ export const Flashcard = ({
 						id="arrowLeftId"
 						className="h-8 hover:cursor-pointer md:h-10 lg:h-12"
 						onClick={() => setSide(side - 1)}
-					></ArrowLeft>
+					/>
 				)}
 				{/* Show arrow right if not on the last side */}
 				{side < tempCard.sides.length - 1 && (
@@ -224,34 +230,37 @@ export const Flashcard = ({
 						id="arrowRightId"
 						className="h-8 hover:cursor-pointer md:h-10 lg:h-12"
 						onClick={() => setSide(side + 1)}
-					></ArrowRight>
+					/>
 				)}
 				{/* Show rating buttons if on last side */}
 				{!fullSize && side >= tempCard.sides.length - 1 && !edit && (
 					<div className="flex flex-row justify-end space-x-1">
 						<Button
 							id="buttonHardId"
-							size="sm"
+							buttonStyle="primary"
+							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(0)}
 						>
-							Hard
+							<Trans>Hard</Trans>
 						</Button>
 						<Button
 							id="buttonMediumId"
-							size="sm"
+							buttonStyle="primary"
+							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(1)}
 						>
-							Medium
+							<Trans>Medium</Trans>
 						</Button>
 						<Button
 							id="buttonEasyId"
-							size="sm"
+							buttonStyle="primary"
+							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(2)}
 						>
-							Easy
+							<Trans>Easy</Trans>
 						</Button>
 					</div>
 				)}
@@ -266,17 +275,14 @@ export const Flashcard = ({
 	}
 
 	async function modifyCard(card: CardType) {
-		const response = await authedFetch(`/api/cards/${card.cardID}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		const response = await putRequests(
+			`/api/cards/${card.cardID}`,
+			JSON.stringify({
 				sides: card.sides,
-			}),
-		});
+			})
+		);
 		if (response?.ok) {
-			toast.info("Card updated!", { toastId: "updatedCardToast" });
+			toast.info(t`Card updated!`, { toastId: "updatedCardToast" });
 		} else {
 			toast.error("Error!", { toastId: "updatedCardToast" });
 		}

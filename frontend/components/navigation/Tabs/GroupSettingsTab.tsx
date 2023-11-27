@@ -1,11 +1,15 @@
+import { msg, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
+import { ToggleAction } from "@/components/input/ToggleAction";
+
 import { Group as GroupType } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
-import { authedFetch } from "../../../util/reauth";
+import { deleteRequest, putRequests } from "../../../util/api";
 import { DangerAction } from "../../input/DangerAction";
 import { InputAction } from "../../input/InputAction";
 import { Section } from "../../layout/Section";
@@ -38,15 +42,17 @@ export const GroupSettingsTab = ({
 
 	const isAdmin = GroupRole[group.groupRole!] >= GroupRole.ADMIN;
 
+	const { _ } = useLingui();
+
 	return (
 		<div className={`space-y-5 ${className}`}>
 			{/* Settings for group admins */}
 			<Section id="generalGroupSettingsId" header="General">
 				<InputAction
 					id="GroupNameInputAction"
-					header="Group Name"
+					header={_(msg`Group Name`)}
 					value={groupName}
-					button="Rename"
+					button={_(msg`Rename`)}
 					disabled={!isAdmin}
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {
 						setGroupName(event.target.value);
@@ -54,13 +60,13 @@ export const GroupSettingsTab = ({
 					onClick={() => {
 						modifyGroup({ groupName: groupName });
 					}}
-				></InputAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				<InputAction
 					id="GroupDescriptionInputAction"
-					header="Group Description"
+					header={_(msg`Group Description`)}
 					value={groupDescription}
-					button="Save"
+					button={_(msg`Save`)}
 					disabled={!isAdmin}
 					onChange={(event: ChangeEvent<HTMLInputElement>) => {
 						setGroupDescription(event.target.value);
@@ -68,46 +74,65 @@ export const GroupSettingsTab = ({
 					onClick={() => {
 						modifyGroup({ groupDescription: groupDescription });
 					}}
-				></InputAction>
+				/>
 			</Section>
 			<Section
 				id="groupSettingsDangerZoneSectionId"
-				header="Danger Zone"
+				header={_(msg`Danger Zone`)}
 				style="error"
 			>
 				{/* Settings for all group members */}
 				<DangerAction
 					id={"leaveGroupDangerAction"}
-					header="Leave Group"
-					description="You must either be invited or request to join the group again."
-					button="Leave Group"
+					header={_(msg`Leave Group`)}
+					description={_(
+						msg`You must either be invited or request to join the group again.`
+					)}
+					button={_(msg`Leave Group`)}
 					onClick={() => {
 						leaveGroup();
 					}}
-				></DangerAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				{/* Settings for group admins */}
-				<DangerAction
-					id="visibilityGroupDangerAction"
-					header="Change group visibility"
-					description={`This group is currently ${group.groupType?.toLowerCase()}.`}
-					button="Change Visibility"
+				<ToggleAction
+					id="groupTypeDangerAction"
+					header={_(msg`Change how others join this group`)}
+					description={(() => {
+						switch (group.groupType) {
+							case "OPEN":
+								return _(msg`Everyone can join this group`);
+							case "REQUEST":
+								return _(
+									msg`Everyone can request to join this group`
+								);
+							case "CLOSED":
+								return _(
+									msg`Everyone has to be invited to join this group`
+								);
+							default:
+								return _(msg`Unexpected group type`);
+						}
+					})()}
+					choices={["OPEN", "REQUEST", "CLOSED"]}
+					activeButton={group.groupType}
 					disabled={!isAdmin}
-					onClick={() => {
-						modifyGroup({
-							groupType:
-								group.groupType === "PRIVATE"
-									? "PUBLIC"
-									: "PRIVATE",
-						});
+					onChange={(event) => {
+						modifyGroup({ groupType: event.currentTarget.value });
 					}}
-				></DangerAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				<DangerAction
 					id="deleteGroupDangerAction"
-					header="Delete this group"
-					description="Please be certain before deleting a group, as there is no way to undo this action."
-					button={isConfirmDeletion ? "Click again" : "Delete Group"}
+					header={_(msg`Delete this group`)}
+					description={_(
+						msg`Please be certain before deleting a group, as there is no way to undo this action.`
+					)}
+					button={
+						isConfirmDeletion
+							? _(msg`Click again`)
+							: _(msg`Delete Group`)
+					}
 					disabled={!isAdmin}
 					onClick={() => {
 						if (isConfirmDeletion) {
@@ -118,7 +143,7 @@ export const GroupSettingsTab = ({
 							setConfirmDelete(true);
 						}
 					}}
-				></DangerAction>
+				/>
 			</Section>
 		</div>
 	);
@@ -128,15 +153,12 @@ export const GroupSettingsTab = ({
 		groupDescription?: string;
 		groupType?: string;
 	}) {
-		const response = await authedFetch(`/api/groups/${group.groupID}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(body),
-		});
+		const response = await putRequests(
+			`/api/groups/${group.groupID}`,
+			JSON.stringify(body)
+		);
 		if (response?.ok) {
-			toast.info("Group updated!", { toastId: "updatedGroupToast" });
+			toast.info(t`Group updated!`, { toastId: "updatedGroupToast" });
 		} else {
 			toast.error("Error!", { toastId: "updatedGroupToast" });
 		}
@@ -144,17 +166,11 @@ export const GroupSettingsTab = ({
 	}
 
 	async function leaveGroup() {
-		const response = await authedFetch(
-			`/api/groups/${group.groupID}/members`,
-			{
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
+		const response = await deleteRequest(
+			`/api/groups/${group.groupID}/members`
 		);
 		if (response?.ok) {
-			toast.info("Left group!", { toastId: "leftGroupToast" });
+			toast.info(t`Left group!`, { toastId: "leftGroupToast" });
 			router.push(`/`);
 		} else {
 			toast.error("Error!", { toastId: "leftGroupToast" });
@@ -163,14 +179,9 @@ export const GroupSettingsTab = ({
 	}
 
 	async function deleteGroup() {
-		const response = await authedFetch(`/api/groups/${group.groupID}`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+		const response = await deleteRequest(`/api/groups/${group.groupID}`);
 		if (response?.ok) {
-			toast.info("Group deleted!", { toastId: "deletedGroupToast" });
+			toast.info(t`Group deleted!`, { toastId: "deletedGroupToast" });
 			router.push(`/`);
 		} else {
 			toast.error("Error!", { toastId: "deletedGroupToast" });

@@ -1,3 +1,4 @@
+import { Text } from "../Text";
 import { Action } from "./Action";
 import { Button } from "./Button";
 
@@ -54,26 +55,35 @@ export const DangerAction = ({
 			<Action
 				description={
 					<>
-						<div className="font-bold text-kiokuDarkBlue">
+						<Text
+							textStyle="primary"
+							textSize="3xs"
+							className="font-bold"
+						>
 							{header}
-						</div>
-						<div className="font-medium text-kiokuLightBlue">
+						</Text>
+						<Text
+							textStyle="secondary"
+							textSize="3xs"
+							className="font-medium"
+						>
 							{description}
-						</div>
+						</Text>
 					</>
 				}
 				button={
 					<Button
 						id={`${id}ButtonId`}
-						style={disabled ? "disabled" : "error"}
-						size="sm"
-						className="h-fit w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6"
+						buttonStyle={disabled ? "disabled" : "error"}
+						buttonSize="sm"
+						buttonTextSize="3xs"
+						className="w-full justify-center"
 						onClick={() => !disabled && onClick?.()}
 					>
 						{button}
 					</Button>
 				}
-			></Action>
+			/>
 		</div>
 	);
 };

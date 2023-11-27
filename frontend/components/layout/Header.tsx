@@ -1,3 +1,4 @@
+import { Trans, plural, t } from "@lingui/macro";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -7,6 +8,7 @@ import { Deck as DeckType } from "../../types/Deck";
 import { Group as GroupType } from "../../types/Group";
 import { User } from "../../types/User";
 import { authedFetch } from "../../util/reauth";
+import { fetcher } from "../../util/swr";
 import { Text } from "../Text";
 import { Badge } from "../graphics/Badge";
 import { Button } from "../input/Button";
@@ -40,10 +42,6 @@ interface HeaderProps {
 
 export const FetchHeader = ({ deck, group, ...props }: HeaderProps) => {
 	const router = useRouter();
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
 	useEffect(() => {
 		if (group) {
 			router.prefetch(`/group/${group.groupID}`);
@@ -56,7 +54,7 @@ export const FetchHeader = ({ deck, group, ...props }: HeaderProps) => {
 			preload(`/api/decks/${deck.deckID}`, fetcher);
 		}
 	}, [deck, router]);
-	return <Header deck={deck} group={group} {...props}></Header>;
+	return <Header deck={deck} group={group} {...props} />;
 };
 
 /**
@@ -80,20 +78,27 @@ export const Header = ({
 		>
 			<div className="flex flex-col font-black">
 				<div className="flex flex-row items-center space-x-3">
-					<Text style="primary" size="xl">
+					<Text textStyle="primary" textSize="xl">
 						{deck?.deckName}
 						{!deck && group && group.groupName}
-						{user && `Welcome ${user.userName}`}
+						{user && <Trans>Welcome {user.userName}</Trans>}
 					</Text>
-					{!deck && group?.groupType && (
+					{deck?.deckType && (
 						<Badge
-							id="visibilityBadgeId"
+							id="deckTypeBadgeId"
+							label={deck.deckType}
+							style="tertiary"
+						/>
+					)}
+					{!deck?.deckType && group?.groupType && (
+						<Badge
+							id="groupTypeBadgeId"
 							label={group.groupType}
 							style="tertiary"
-						></Badge>
+						/>
 					)}
 				</div>
-				<Text style="secondary" size="xs">
+				<Text textStyle="secondary" textSize="xs">
 					{deck && group && !group.isDefault && (
 						<div className="flex flex-row">
 							<div
@@ -102,7 +107,7 @@ export const Header = ({
 									router.push(`/group/${group.groupID}`)
 								}
 								onKeyUp={(event) => {
-									if (event.key == "Enter") {
+									if (event.key === "Enter") {
 										event.target.dispatchEvent(
 											new Event("click", {
 												bubbles: true,
@@ -117,32 +122,29 @@ export const Header = ({
 					)}
 					{!deck && group && <div>{group.groupDescription}</div>}
 					{!!user?.dueCards && !!user.dueDecks && (
-						<div>{`You have ${user.dueCards} card${
-							user.dueCards != 1 ? "s" : ""
-						} in ${user.dueDecks} deck${
-							user.dueDecks != 1 ? "s" : ""
-						} to learn`}</div>
+						<div>
+							{plural(user.dueCards, {
+								one: "You have # card",
+								other: "You have # cards",
+							})}{" "}
+							{plural(user.dueDecks, {
+								one: "in # deck to learn",
+								other: "in # decks to learn",
+							})}
+						</div>
 					)}
 				</Text>
 			</div>
-			{/* If on user page, display learn button */}
-			{/* {user && (
-				<Button
-					id="learnButtonId"
-					size="sm"
-					onClick={() => router.push("/user/learn")}
-				>
-					Start learning
-				</Button>
-			)} */}
 			{/* if on deck page, display learn deck button */}
 			{deck && (
 				<Button
 					id="learnDeckButtonId"
-					size="sm"
+					buttonStyle="primary"
+					buttonSize="sm"
+					buttonTextSize="xs"
 					onClick={() => router.push(`/deck/${deck.deckID}/learn`)}
 				>
-					Learn Deck
+					<Trans>Learn Deck</Trans>
 				</Button>
 			)}
 			{/* if on group page and user is not in group, display join group button */}
@@ -151,18 +153,20 @@ export const Header = ({
 				(group.groupRole == "INVITED" || !group.groupRole) && (
 					<Button
 						id="joinGroupButtonId"
-						size="sm"
+						buttonStyle="primary"
+						buttonSize="sm"
+						buttonTextSize="xs"
 						onClick={() => {
 							joinGroup();
 						}}
 					>
-						Join Group
+						<Trans>Join Group</Trans>
 					</Button>
 				)}
 			{/* if on group page and user already requested, display info text */}
 			{!deck && group?.groupRole == "REQUESTED" && (
-				<Text className="italic" style="primary">
-					Request pending
+				<Text textStyle="secondary" className="italic">
+					<Trans>Request pending</Trans>
 				</Text>
 			)}
 		</div>
@@ -176,7 +180,7 @@ export const Header = ({
 			}
 		);
 		if (response?.ok) {
-			toast.info("Send request!", { toastId: "requestedGroupToast" });
+			toast.info(t`Sent request!`, { toastId: "requestedGroupToast" });
 		} else {
 			toast.error("Error!", { toastId: "requestedGroupToast" });
 		}

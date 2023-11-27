@@ -1,4 +1,6 @@
-import { hasCookie } from "cookies-next";
+import { Trans, msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
+import { GetStaticProps } from "next";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import Image from "next/image";
@@ -8,13 +10,25 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { Text } from "../components/Text";
-import { FormButton } from "../components/form/FormButton";
 import { InputField } from "../components/form/InputField";
+import { Button } from "../components/input/Button";
+import { postRequest } from "../util/api";
+import { checkAccessTokenValid } from "../util/reauth";
+import { loadCatalog } from "./_app";
 
 const inter = Inter({
 	weight: ["200", "400"],
 	subsets: ["latin"],
 });
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+	const translation = await loadCatalog(ctx.locale!);
+	return {
+		props: {
+			translation,
+		},
+	};
+};
 
 export default function Page() {
 	const router = useRouter();
@@ -26,8 +40,10 @@ export default function Page() {
 	const repeatPasswordInput = useRef<HTMLInputElement>(null);
 	const [password, setPassword] = useState("");
 
+	const { _ } = useLingui();
+
 	useEffect(() => {
-		if (hasCookie("access_token")) {
+		if (checkAccessTokenValid()) {
 			router.push("/");
 		}
 	}, []);
@@ -38,6 +54,16 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href="https://app.kioku.dev/login"
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href="https://app.kioku.dev/de/login"
+				/>
 			</Head>
 
 			<div className="min-w-screen flex flex-1 items-center justify-center sm:p-5 md:p-10">
@@ -61,27 +87,49 @@ export default function Page() {
 						className={`flex w-full flex-col items-center rounded-2xl bg-kiokuLightBlue p-3 sm:w-5/6 sm:p-5 md:w-1/2 lg:w-1/3 ${inter.className}`}
 					>
 						<Text
-							size="md"
+							textSize="md"
 							className="text-center font-bold leading-9 tracking-tight text-kiokuDarkBlue"
 						>
-							{login
-								? "Sign in to your account"
-								: "Create an account"}
+							{login ? (
+								<Trans>Sign in to your account</Trans>
+							) : (
+								<Trans>Create an account</Trans>
+							)}
 						</Text>
 						{forms()}
 
-						<Text size="3xs" className="text-center text-gray-500">
-							{login
-								? "Not registered? "
-								: "Already registered? "}
+						<Text
+							textSize="3xs"
+							className="text-center text-gray-500"
+						>
+							{login ? (
+								<Trans>Not registered?</Trans>
+							) : (
+								<Trans>Already registered?</Trans>
+							)}
 							<a
 								className="whitespace-nowrap font-semibold text-kiokuDarkBlue transition hover:cursor-pointer hover:text-eggshell"
 								onClick={() => {
 									emailInput.current?.focus();
 									setLogin((prev) => !prev);
 								}}
+								onKeyUp={(event) => {
+									if (event.key === "Enter") {
+										event.target.dispatchEvent(
+											new Event("click", {
+												bubbles: true,
+											})
+										);
+									}
+								}}
+								tabIndex={0}
 							>
-								{login ? "Create an account" : "Sign in"}
+								<span> </span>
+								{login ? (
+									<Trans>Create an account</Trans>
+								) : (
+									<Trans>Sign in</Trans>
+								)}
 							</a>
 						</Text>
 					</div>
@@ -101,9 +149,9 @@ export default function Page() {
 					id="email"
 					type="email"
 					name="email"
-					label="Email"
+					label={_(msg`Email`)}
 					required={true}
-					size="xs"
+					inputFieldSize="xs"
 					ref={emailInput}
 				/>
 				{!login && (
@@ -111,9 +159,9 @@ export default function Page() {
 						id="name"
 						type="text"
 						name="name"
-						label="Name"
+						label={_(msg`Name`)}
 						required={true}
-						size="xs"
+						inputFieldSize="xs"
 						ref={nameInput}
 					/>
 				)}
@@ -121,10 +169,10 @@ export default function Page() {
 					id="password"
 					type="password"
 					name="password"
-					label="Password"
+					label={_(msg`Password`)}
 					required={true}
 					minLength={3}
-					size="xs"
+					inputFieldSize="xs"
 					onChange={(event) => {
 						setPassword(event.target.value);
 					}}
@@ -135,21 +183,21 @@ export default function Page() {
 						id="passwordRepeat"
 						type="password"
 						name="passwordRepeat"
-						label="Repeat Password"
-						tooltipMessage="Passwords have to match."
+						label={_(msg`Repeat Password`)}
+						tooltip={_(msg`Passwords have to match.`)}
 						required={true}
 						minLength={3}
 						pattern={password}
-						size="xs"
+						inputFieldSize="xs"
 						ref={repeatPasswordInput}
 					/>
 				)}
 
-				<FormButton
+				<Button
 					id={login ? "login" : "register"}
-					value={login ? "Login" : "Register"}
-					size="sm"
-					className="w-full"
+					buttonStyle="primary"
+					buttonSize="sm"
+					className="w-full justify-center"
 					onClick={() => {
 						if (login) {
 							loginLogic()
@@ -161,7 +209,9 @@ export default function Page() {
 								.catch((error) => {});
 						}
 					}}
-				/>
+				>
+					{login ? _(msg`Login`) : _(msg`Register`)}
+				</Button>
 			</form>
 		);
 	}
@@ -170,21 +220,18 @@ export default function Page() {
 		if (!form.current?.checkValidity()) {
 			return;
 		}
-		const response = await fetch("/api/login", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		const response = await postRequest(
+			`/api/login`,
+			JSON.stringify({
 				userEmail: emailInput.current?.value,
 				userPassword: passwordInput.current?.value,
-			}),
-		});
+			})
+		);
 		if (response.ok) {
-			toast.info("Logged in!", { toastId: "accountToast" });
+			toast.info(<Trans>Logged in!</Trans>, { toastId: "accountToast" });
 			router.push("/");
 		} else {
-			toast.error("Wrong username or password", {
+			toast.error(<Trans>Wrong username or password</Trans>, {
 				toastId: "accountToast",
 			});
 		}
@@ -197,23 +244,22 @@ export default function Page() {
 		) {
 			return;
 		}
-		const response = await fetch("/api/register", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		const response = await postRequest(
+			`/api/register`,
+			JSON.stringify({
 				userEmail: emailInput.current?.value,
 				userName: nameInput.current?.value,
 				userPassword: passwordInput.current?.value,
-			}),
-		});
+			})
+		);
 		if (response.ok) {
-			toast.info("Account created!", { toastId: "accountToast" });
+			toast.info(<Trans>Account created!</Trans>, {
+				toastId: "accountToast",
+			});
 			setLogin(true);
 			emailInput.current?.focus();
 		} else {
-			toast.error("Account already exists!", {
+			toast.error(<Trans>Account already exists!</Trans>, {
 				toastId: "accountToast",
 			});
 		}

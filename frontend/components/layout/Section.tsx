@@ -1,10 +1,12 @@
 import React, { ReactNode } from "react";
 
+import { Text } from "../Text";
+
 interface SectionProps {
 	/**
 	 * Unique identifier
 	 */
-	id: string;
+	id?: string;
 	/**
 	 * Section header
 	 */
@@ -48,13 +50,15 @@ export const Section = ({
 }: SectionProps) => {
 	return (
 		<div className={`space-y-1 ${className}`} {...props}>
-			<div
-				className={`text-lg font-extrabold text-kiokuDarkBlue ${
+			<Text
+				textStyle="primary"
+				textSize="xs"
+				className={`font-extrabold ${
 					onClick ? "hover:cursor-pointer" : ""
 				}`}
 				onClick={onClick}
 				onKeyUp={(event) => {
-					if (event.key == "Enter") {
+					if (event.key === "Enter") {
 						event.target.dispatchEvent(
 							new Event("click", { bubbles: true })
 						);
@@ -63,7 +67,7 @@ export const Section = ({
 				tabIndex={onClick ? 0 : -1}
 			>
 				{header}
-			</div>
+			</Text>
 			<div
 				className={`flex flex-col rounded-lg border-2 ${getStyle[style]}`}
 			>

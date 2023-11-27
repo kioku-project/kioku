@@ -2,6 +2,6 @@ syntax = "proto3";
 
 package frontend;
 
-option go_package = "./proto;frontend";
+option go_package = "github.com/kioku-project/kioku/services/frontend/proto;frontend";
 
 service Frontend {}

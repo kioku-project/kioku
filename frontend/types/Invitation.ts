@@ -1,4 +1,3 @@
-export type Invitation = {
-	groupID: string;
-	groupName: string;
-};
+import { Group } from "./Group";
+
+export type Invitation = Pick<Group, "groupID" | "groupName">;

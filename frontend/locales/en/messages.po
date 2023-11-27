@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {# card left} other {# cards left}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 
-#: pages/login.tsx:316
+#: pages/login.tsx:318
 msgid "Account already exists!"
 msgstr "Account already exists!"
 
-#: pages/login.tsx:310
+#: pages/login.tsx:312
 msgid "Account created!"
 msgstr "Account created!"
 
@@ -45,7 +45,7 @@ msgstr "Account created!"
 msgid "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 msgstr "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 
-#: pages/login.tsx:239
+#: pages/login.tsx:241
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -293,7 +293,7 @@ msgstr "Leave Group"
 msgid "Left group!"
 msgstr "Left group!"
 
-#: pages/login.tsx:285
+#: pages/login.tsx:287
 msgid "Logged in!"
 msgstr "Logged in!"
 
@@ -374,11 +374,11 @@ msgstr "Settings"
 msgid "Sign in"
 msgstr "Sign in"
 
-#: pages/login.tsx:262
+#: pages/login.tsx:264
 msgid "Sign in now!"
 msgstr "Sign in now!"
 
-#: pages/login.tsx:260
+#: pages/login.tsx:262
 msgid "Sign up now!"
 msgstr "Sign up now!"
 
@@ -437,7 +437,7 @@ msgstr "Welcome {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 
-#: pages/login.tsx:288
+#: pages/login.tsx:290
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 

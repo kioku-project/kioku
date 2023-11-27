@@ -234,7 +234,9 @@ export default function Page() {
 							>
 								<span className="whitespace-nowrap">
 									{login ? (
-										<Trans>Don't have an account?</Trans>
+										<Trans>
+											Don&apos;t have an account?
+										</Trans>
 									) : (
 										<Trans>Already have an account?</Trans>
 									)}

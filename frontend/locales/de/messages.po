@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {Eine Karte übrig} other {# Karten übrig}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Greife von überall und jederzeit auf Deine Karteikarten zu. Wechsle nahtlos zwischen verschiedenen Plattformen und verpasse nie wieder eine Lerngelegenheit!"
 
-#: pages/login.tsx:316
+#: pages/login.tsx:318
 msgid "Account already exists!"
 msgstr "Account existiert bereits!"
 
-#: pages/login.tsx:310
+#: pages/login.tsx:312
 msgid "Account created!"
 msgstr "Account erstellt!"
 
@@ -45,7 +45,7 @@ msgstr "Account erstellt!"
 msgid "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivierender. Kioku hilft Dir, bessere Ergebnisse zu erzielen und Deine persönlichen Lernziele zu erreichen!"
 
-#: pages/login.tsx:239
+#: pages/login.tsx:241
 msgid "Already have an account?"
 msgstr "Bereits registriert?"
 
@@ -293,7 +293,7 @@ msgstr "Gruppe verlassen"
 msgid "Left group!"
 msgstr "Gruppe verlassen!"
 
-#: pages/login.tsx:285
+#: pages/login.tsx:287
 msgid "Logged in!"
 msgstr "Eingeloggt!"
 
@@ -374,11 +374,11 @@ msgstr "Einstellungen"
 msgid "Sign in"
 msgstr "Einloggen"
 
-#: pages/login.tsx:262
+#: pages/login.tsx:264
 msgid "Sign in now!"
 msgstr "Jetzt anmelden!"
 
-#: pages/login.tsx:260
+#: pages/login.tsx:262
 msgid "Sign up now!"
 msgstr "Jetzt registrieren!"
 
@@ -437,7 +437,7 @@ msgstr "Willkommen, {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Willkommen bei Kioku - der cloudbasierten Karteikarten-Anwendung, die sich auf die gemeinsame Erstellung von Lerninhalten konzentriert. Unsere innovative Plattform ermöglicht es Dir, Dein Wissen auf Karteikarten zu organisieren und diese mit anderen Nutzern zu teilen, um Dein Wissen auf die nächste Stufe zu heben. Melde Dich noch heute bei Kioku an und erlebe die Zukunft des Lernens."
 
-#: pages/login.tsx:288
+#: pages/login.tsx:290
 msgid "Wrong username or password"
 msgstr "Falscher Benutzername oder falsches Passwort"
 

@@ -29,7 +29,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 		}
 	});
 	if (loggedIn == undefined) {
-		return;
+		return <></>;
 	}
 	return (
 		<nav

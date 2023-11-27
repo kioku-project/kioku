@@ -824,10 +824,9 @@ func (e *Frontend) SrsDeckDueHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	if rspSrsDue.DueCards == 0 {
-		return c.JSON(0)
-	}
-	return c.JSON(rspSrsDue)
+	return c.JSON(converter.FiberGetDueResponseBody{
+		DueCards: rspSrsDue.DueCards,
+	})
 }
 
 func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
@@ -838,7 +837,7 @@ func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(converter.FiberGetUserDueCardsResponseBody{
+	return c.JSON(converter.FiberGetDueResponseBody{
 		DueCards: dueCards.DueCards,
 		DueDecks: dueCards.DueDecks,
 	})

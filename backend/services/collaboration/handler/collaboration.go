@@ -60,6 +60,17 @@ func (e *Collaboration) checkUserRoleAccessWithGroupAndRoleReturn(
 	return
 }
 
+func (e *Collaboration) checkUserAuthorized(userID string, groupID string, role model.RoleType) error {
+	requestingUserRole, err := e.store.FindGroupUserRole(userID, groupID)
+	if err != nil {
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
+	if requestingUserRole != role {
+		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	}
+	return nil
+}
+
 func (e *Collaboration) generateGroupMemberAdmissionResponse(
 	ctx context.Context,
 	groupAdmissions []model.GroupUserRole,
@@ -348,7 +359,6 @@ func (e *Collaboration) AddGroupUserRequest(
 	rsp *pbCommon.Success,
 ) error {
 	logger.Infof("Received Collaboration.AddGroupUserRequest request: %v", req)
-
 	groupRole, err := e.store.FindGroupUserRole(req.UserID, req.Group.GroupID)
 	if err != nil {
 		if !errors.Is(err, helper.ErrStoreNoEntryWithID) {
@@ -485,12 +495,8 @@ func (e *Collaboration) AddGroupUserInvite(
 ) error {
 	logger.Infof("Received Collaboration.AddGroupUserInvite request: %v", req)
 
-	requestingUserRole, err := e.store.FindGroupUserRole(req.UserID, req.Group.GroupID)
-	if err != nil {
-		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
-	}
-	if requestingUserRole != model.RoleAdmin {
-		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	if err := e.checkUserAuthorized(req.UserID, req.Group.GroupID, model.RoleAdmin); err != nil {
+		return err
 	}
 
 	userRsp, err := e.userService.GetUserIDFromEmail(ctx, &pbCommon.User{UserEmail: req.InviteUserEmail})
@@ -528,12 +534,8 @@ func (e *Collaboration) RemoveGroupUserInvite(
 ) error {
 	logger.Infof("Received Collaboration.RemoveGroupUserInvite request: %v", req)
 
-	requestingUserRole, err := e.store.FindGroupUserRole(req.UserID, req.Group.GroupID)
-	if err != nil {
-		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
-	}
-	if requestingUserRole != model.RoleAdmin {
-		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+	if err := e.checkUserAuthorized(req.UserID, req.Group.GroupID, model.RoleAdmin); err != nil {
+		return err
 	}
 	userRsp, err := e.userService.GetUserIDFromEmail(ctx, &pbCommon.User{UserEmail: req.InviteUserEmail})
 	if err != nil {

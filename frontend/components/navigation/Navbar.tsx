@@ -28,11 +28,15 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 			setLoggedIn(hasCookie("access_token"));
 		}
 	});
+	if (loggedIn == undefined) {
+		return;
+	}
 	return (
 		<nav
 			className={`flex items-center justify-between p-5 md:p-10 ${className}`}
 		>
 			<Logo
+				className="hover:cursor-pointer"
 				onClick={() =>
 					loggedIn ? router.push("/") : router.push("/home")
 				}

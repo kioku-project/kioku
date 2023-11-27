@@ -4,9 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR from "swr";
 
-import Authenticated from "../../../components/accessControl/Authenticated";
 import { FetchHeader } from "../../../components/layout/Header";
 import { DecksTab } from "../../../components/navigation/Tabs/DecksTab";
 import { GroupSettingsTab } from "../../../components/navigation/Tabs/GroupSettingsTab";
@@ -14,25 +12,17 @@ import { MembersTab } from "../../../components/navigation/Tabs/MembersTab";
 import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../../../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { authedFetch } from "../../../util/reauth";
+import { useGroup } from "../../../util/swr";
 
 export default function Page() {
 	const router = useRouter();
 	const { _ } = useLingui();
 
-	const [groupId, setGroupId] = useState<string>();
+	const [groupID, setGroupID] = useState<string>();
 	useEffect(() => {
-		setGroupId(router.query.id as string);
-	}, [groupId, router]);
-
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
-	const { data: group } = useSWR(
-		groupId ? `/api/groups/${groupId}` : null,
-		fetcher
-	);
+		setGroupID(router.query.id as string);
+	}, [groupID, router]);
+	const { group } = useGroup(groupID);
 
 	const tabs: { [tab: string]: ReactNode } = {
 		decks: (
@@ -40,28 +30,24 @@ export default function Page() {
 				id="DecksTabHeaderId"
 				name={_(msg`Decks`)}
 				style="decks"
-			></TabHeader>
+			/>
 		),
 		user: (
-			<TabHeader
-				id="UserTabHeaderId"
-				name={_(msg`User`)}
-				style="user"
-			></TabHeader>
+			<TabHeader id="UserTabHeaderId" name={_(msg`User`)} style="user" />
 		),
 		statistics: (
 			<TabHeader
 				id="StatisticsTabHeaderId"
 				name={_(msg`Statistics`)}
 				style="statistics"
-			></TabHeader>
+			/>
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
 				name={_(msg`Settings`)}
 				style="settings"
-			></TabHeader>
+			/>
 		),
 	};
 
@@ -73,39 +59,39 @@ export default function Page() {
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
 				<link rel="icon" href="/favicon.ico" />
-				<link rel="alternate" hrefLang="en" href={`https://app.kioku.dev/group/${groupId}`} />
-				<link rel="alternate" hrefLang="de" href={`https://app.kioku.dev/de/group/${groupId}`} />
+				<link
+					rel="alternate"
+					hrefLang="en"
+					href={`https://app.kioku.dev/group/${groupID}`}
+				/>
+				<link
+					rel="alternate"
+					hrefLang="de"
+					href={`https://app.kioku.dev/de/group/${groupID}`}
+				/>
 			</Head>
 
-			<Authenticated>
-				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-					{group && (
-						<div className="space-y-5 p-10">
-							<FetchHeader id="groupPageHeaderId" group={group} />
-							<TabBar
-								id="groupTabBarId"
-								tabs={tabs}
-								currentTab={currentTab}
-								setTab={setCurrentTab}
-							></TabBar>
-							<div>
-								{{
-									decks: <DecksTab group={group}></DecksTab>,
-									user: (
-										<MembersTab group={group}></MembersTab>
-									),
-									settings: (
-										<GroupSettingsTab
-											group={group}
-										></GroupSettingsTab>
-									),
-									statistics: <StatisticsTab></StatisticsTab>,
-								}[currentTab] ?? <div>Error</div>}
-							</div>
+			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
+				{group && (
+					<div className="space-y-5 px-5 py-1 md:px-10 md:py-3">
+						<FetchHeader id="groupPageHeaderId" group={group} />
+						<TabBar
+							id="groupTabBarId"
+							tabs={tabs}
+							currentTab={currentTab}
+							setTab={setCurrentTab}
+						/>
+						<div>
+							{{
+								decks: <DecksTab group={group} />,
+								user: <MembersTab group={group} />,
+								settings: <GroupSettingsTab group={group} />,
+								statistics: <StatisticsTab />,
+							}[currentTab] ?? <div>Error</div>}
 						</div>
-					)}
-				</div>
-			</Authenticated>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

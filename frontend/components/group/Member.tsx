@@ -7,8 +7,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 
 import { User } from "../../types/User";
-import { authedFetch } from "../../util/reauth";
+import { apiRequest, deleteRequest } from "../../util/api";
 import { Text } from "../Text";
+import { InputField } from "../form/InputField";
 
 interface MemberProps {
 	/**
@@ -45,7 +46,7 @@ export default function Member({
 		>
 			{user?.userID ? (
 				<div className="flex w-full flex-row items-center border-b-2 border-kiokuLightBlue p-2 md:p-3">
-					<Text className="w-full" size="xs">
+					<Text textStyle="primary" textSize="xs" className="w-full">
 						{user.userName}
 					</Text>
 					<div className="flex flex-row items-center space-x-5">
@@ -62,11 +63,11 @@ export default function Member({
 														.then((result) => {})
 														.catch((error) => {});
 												}}
-											></Check>
+											/>
 											<X
 												className="hover:cursor-pointer"
 												onClick={() => setDelete(false)}
-											></X>
+											/>
 										</div>
 									)}
 									{!isDelete && (
@@ -75,7 +76,7 @@ export default function Member({
 											id={`deleteUser${user.userID}ButtonId`}
 											className="hover:cursor-pointer"
 											onClick={() => setDelete(true)}
-										></UserMinus>
+										/>
 									)}
 								</>
 							)}
@@ -93,7 +94,7 @@ export default function Member({
 												.then((result) => {})
 												.catch((error) => {});
 										}}
-									></UserCheck>
+									/>
 									<UserX
 										className="hover:cursor-pointer"
 										onClick={() => {
@@ -104,7 +105,7 @@ export default function Member({
 												.then((result) => {})
 												.catch((error) => {});
 										}}
-									></UserX>
+									/>
 								</div>
 							</div>
 						)}
@@ -118,19 +119,19 @@ export default function Member({
 									onClick={() => {
 										inviteUser(user.userEmail ?? "", false);
 									}}
-								></X>
+								/>
 							</div>
 						)}
 					</div>
 				</div>
 			) : (
 				<div className="flex w-full flex-row justify-between p-2 md:p-3">
-					<input
+					<InputField
 						id="userInputFieldId"
 						type="email"
-						className="bg-transparent text-kiokuLightBlue outline-none"
 						placeholder={_(msg`Invite user with email`)}
-						ref={userInputField}
+						inputFieldStyle="secondary"
+						inputFieldSize="xs"
 						onKeyUp={(event) => {
 							if (
 								userInputField.current &&
@@ -142,24 +143,20 @@ export default function Member({
 								userInputField.current.value = "";
 							}
 						}}
-					></input>
+						ref={userInputField}
+					/>
 				</div>
 			)}
 		</div>
 	);
 
 	async function inviteUser(userEmail: string, invite: boolean) {
-		const response = await authedFetch(
+		const response = await apiRequest(
+			invite ? "POST" : "DELETE",
 			`/api/groups/${user.groupID}/members/invitation`,
-			{
-				method: `${invite ? "POST" : "DELETE"}`,
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					invitedUserEmail: userEmail,
-				}),
-			}
+			JSON.stringify({
+				invitedUserEmail: userEmail,
+			})
 		);
 		if (response?.ok) {
 			toast.info(t`User invited`, {
@@ -174,14 +171,8 @@ export default function Member({
 	}
 
 	async function deleteMember(user: User) {
-		const response = await authedFetch(
-			`/api/groups/${user.groupID}/members/${user.userID}`,
-			{
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
+		const response = await deleteRequest(
+			`/api/groups/${user.groupID}/members/${user.userID}`
 		);
 		if (response?.ok) {
 			toast.info("User removed!", { toastId: "removedUserToast" });

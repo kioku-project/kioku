@@ -97,8 +97,9 @@ message CardSide {
 
 message CardSideRequest {
   string userID = 1;
-  Card card = 2;
-  string placeBeforeCardSideID = 3;
+  string cardID = 2;
+  CardSide cardSide = 3;
+  string placeBeforeCardSideID = 4;
 }
 
 enum DeckType {

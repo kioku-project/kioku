@@ -559,9 +559,9 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 	rspCreateDeck, err := e.cardDeckService.CreateDeck(c.Context(), &pbCommon.DeckRequest{
 		UserID: userID,
 		Deck: &pbCommon.Deck{
+			GroupID:  c.Params("groupID"),
 			DeckName: data["deckName"],
 			DeckType: deckType,
-			GroupID:  c.Params("groupID"),
 		},
 	})
 	if err != nil {
@@ -724,14 +724,10 @@ func (e *Frontend) CreateCardSideHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspCreateCardSide, err := e.cardDeckService.CreateCardSide(c.Context(), &pbCommon.CardSideRequest{
 		UserID: userID,
-		Card: &pbCommon.Card{
-			CardID: c.Params("cardID"),
-			Sides: []*pbCommon.CardSide{
-				{
-					Header:      data.FiberCardSideContent.Header,
-					Description: data.FiberCardSideContent.Description,
-				},
-			},
+		CardID: c.Params("cardID"),
+		CardSide: &pbCommon.CardSide{
+			Header:      data.FiberCardSideContent.Header,
+			Description: data.FiberCardSideContent.Description,
 		},
 		PlaceBeforeCardSideID: data.PlaceBeforeCardSideID,
 	})
@@ -749,14 +745,10 @@ func (e *Frontend) ModifyCardSideHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspModifyCardSide, err := e.cardDeckService.ModifyCardSide(c.Context(), &pbCommon.CardSideRequest{
 		UserID: userID,
-		Card: &pbCommon.Card{
-			Sides: []*pbCommon.CardSide{
-				{
-					CardSideID:  c.Params("cardSideID"),
-					Header:      data.FiberCardSideContent.Header,
-					Description: data.FiberCardSideContent.Description,
-				},
-			},
+		CardSide: &pbCommon.CardSide{
+			CardSideID:  c.Params("cardSideID"),
+			Header:      data.FiberCardSideContent.Header,
+			Description: data.FiberCardSideContent.Description,
 		},
 	})
 	if err != nil {
@@ -771,12 +763,8 @@ func (e *Frontend) DeleteCardSideHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspDeleteCardSide, err := e.cardDeckService.DeleteCardSide(c.Context(), &pbCommon.CardSideRequest{
 		UserID: userID,
-		Card: &pbCommon.Card{
-			Sides: []*pbCommon.CardSide{
-				{
-					CardSideID: c.Params("cardSideID"),
-				},
-			},
+		CardSide: &pbCommon.CardSide{
+			CardSideID: c.Params("cardSideID"),
 		},
 	})
 	if err != nil {

@@ -410,7 +410,7 @@ func (e *CardDeck) DeleteCard(ctx context.Context, req *pbCommon.CardRequest, rs
 
 func (e *CardDeck) CreateCardSide(ctx context.Context, req *pbCommon.CardSideRequest, rsp *pbCommon.CardSide) error {
 	logger.Infof("Received CardDeck.CreateCardSide request: %v", req)
-	card, err := helper.FindStoreEntity(e.store.FindCardByID, req.Card.CardID, helper.CardDeckServiceID)
+	card, err := helper.FindStoreEntity(e.store.FindCardByID, req.CardID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -445,7 +445,7 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pbCommon.CardSideReq
 		if card.FirstCardSideID != "" {
 			newPreviousCard, err = helper.FindStoreEntity(
 				e.store.FindLastCardSideOfCardByID,
-				req.Card.CardID,
+				req.CardID,
 				helper.CardDeckServiceID,
 			)
 			if err != nil {
@@ -456,8 +456,8 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pbCommon.CardSideReq
 	}
 	newCardSide := model.CardSide{
 		CardID:             card.ID,
-		Header:             req.Card.Sides[0].Header,
-		Description:        req.Card.Sides[0].Description,
+		Header:             req.CardSide.Header,
+		Description:        req.CardSide.Description,
 		PreviousCardSideID: previousCardSideIDForNewCardSide,
 		NextCardSideID:     req.PlaceBeforeCardSideID,
 	}
@@ -492,24 +492,24 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pbCommon.CardSideReq
 
 func (e *CardDeck) ModifyCardSide(ctx context.Context, req *pbCommon.CardSideRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.ModifyCardSide request: %v", req)
-	cardSide, err := e.getCardSideAndCheckForValidAccess(ctx, req.UserID, req.Card.Sides[0].CardSideID)
+	cardSide, err := e.getCardSideAndCheckForValidAccess(ctx, req.UserID, req.CardSide.CardSideID)
 	if err != nil {
 		return err
 	}
-	cardSide.Header = req.Card.Sides[0].Header
-	cardSide.Description = req.Card.Sides[0].Description
+	cardSide.Header = req.CardSide.Header
+	cardSide.Description = req.CardSide.Description
 	err = e.store.ModifyCardSide(cardSide)
 	if err != nil {
 		return err
 	}
 	rsp.Success = true
-	logger.Infof("Successfully modified card side %s of card %s", req.Card.Sides[0].CardSideID, cardSide.CardID)
+	logger.Infof("Successfully modified card side %s of card %s", req.CardSide.CardSideID, cardSide.CardID)
 	return nil
 }
 
 func (e *CardDeck) DeleteCardSide(ctx context.Context, req *pbCommon.CardSideRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.DeleteCardSide request: %v", req)
-	cardSideToDelete, err := e.getCardSideAndCheckForValidAccess(ctx, req.UserID, req.Card.Sides[0].CardSideID)
+	cardSideToDelete, err := e.getCardSideAndCheckForValidAccess(ctx, req.UserID, req.CardSide.CardSideID)
 	if err != nil {
 		return err
 	}
@@ -534,6 +534,6 @@ func (e *CardDeck) DeleteCardSide(ctx context.Context, req *pbCommon.CardSideReq
 		}
 	}
 	rsp.Success = true
-	logger.Infof("Successfully deleted card side %s of card %s", req.Card.Sides[0].CardSideID, cardSideToDelete.CardID)
+	logger.Infof("Successfully deleted card side %s of card %s", req.CardSide.CardSideID, cardSideToDelete.CardID)
 	return nil
 }

@@ -11,6 +11,7 @@ import { InvitationsTab } from "../components/navigation/Tabs/InvitationsTabs";
 import { StatisticsTab } from "../components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "../components/navigation/Tabs/TabBar";
 import { TabHeader } from "../components/navigation/Tabs/TabHeader";
+import { UserSettingsTab } from "../components/navigation/Tabs/UserSettingsTab";
 import { useGroups, useInvitations, useUser, useUserDue } from "../util/swr";
 import { loadCatalog } from "./_app";
 

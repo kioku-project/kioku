@@ -15,10 +15,6 @@ interface TextProps {
 	 * Text size
 	 */
 	textSize?: Size;
-	/**
-	 * Additional classes
-	 */
-	className?: string;
 }
 
 const getSize = {

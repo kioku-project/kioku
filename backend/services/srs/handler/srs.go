@@ -24,9 +24,9 @@ func New(s store.SrsStore, cds pbCardDeck.CardDeckService) *Srs {
 	return &Srs{store: s, cardDeckService: cds}
 }
 
-func (e *Srs) Push(_ context.Context, req *pb.SrsPushRequest, rsp *pb.SuccessResponse) error {
+func (e *Srs) Push(ctx context.Context, req *pb.SrsPushRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Srs.Push request: %v", req)
-	cardBinding, err := e.store.FindCardBinding(req.UserID, req.CardID)
+	cardBinding, err := e.store.FindCardBinding(ctx, req.UserID, req.CardID)
 	if err != nil {
 		return err
 	}
@@ -51,12 +51,13 @@ func (e *Srs) Push(_ context.Context, req *pb.SrsPushRequest, rsp *pb.SuccessRes
 	default:
 		return helper.NewMicroWrongRatingErr(helper.SrsServiceID)
 	}
-	if err = e.store.ModifyUserCard(cardBinding); err != nil {
+	if err = e.store.ModifyUserCard(ctx, cardBinding); err != nil {
 		return err
 	}
 
 	// Add revlog entry
-	if err = e.store.CreateRevlog(&model.Revlog{
+	if err = e.store.CreateRevlog(ctx,
+		&model.Revlog{
 		CardID: req.CardID,
 		UserID: req.UserID,
 		Date:   time.Now().Unix(),
@@ -71,6 +72,7 @@ func (e *Srs) Push(_ context.Context, req *pb.SrsPushRequest, rsp *pb.SuccessRes
 func (e *Srs) Pull(ctx context.Context, req *pb.DeckPullRequest, rsp *pb.SrsPullResponse) error {
 	logger.Infof("Received Srs.Pull request: %v", req)
 	cards, err := e.store.FindDeckCards(
+		ctx,
 		req.UserID,
 		req.DeckID,
 	)
@@ -112,9 +114,10 @@ func (e *Srs) Pull(ctx context.Context, req *pb.DeckPullRequest, rsp *pb.SrsPull
 	return nil
 }
 
-func (e *Srs) AddUserCardBinding(_ context.Context, req *pb.BindingRequest, rsp *pb.SuccessResponse) error {
+func (e *Srs) AddUserCardBinding(ctx context.Context, req *pb.BindingRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Srs.AddUserCardBinding request: %v", req)
-	err := e.store.CreateUserCard(&model.UserCardBinding{
+	err := e.store.CreateUserCard(ctx, 
+		&model.UserCardBinding{
 		UserID:       req.UserID,
 		CardID:       req.CardID,
 		DeckID:       req.DeckID,
@@ -129,9 +132,10 @@ func (e *Srs) AddUserCardBinding(_ context.Context, req *pb.BindingRequest, rsp 
 	rsp.Success = true
 	return nil
 }
-func (e *Srs) GetDeckCardsDue(_ context.Context, req *pb.DeckPullRequest, rsp *pb.DueResponse) error {
+func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pb.DeckPullRequest, rsp *pb.DueResponse) error {
 	logger.Infof("Received Srs.GetDeckCardsDue request: %v", req)
 	cards, err := e.store.FindDeckCards(
+		ctx,
 		req.UserID,
 		req.DeckID,
 	)
@@ -147,9 +151,9 @@ func (e *Srs) GetDeckCardsDue(_ context.Context, req *pb.DeckPullRequest, rsp *p
 	rsp.Due = int64(len(dueCards))
 	return nil
 }
-func (e *Srs) GetUserCardsDue(_ context.Context, req *pb.UserDueRequest, rsp *pb.UserDueResponse) error {
+func (e *Srs) GetUserCardsDue(ctx context.Context, req *pb.UserDueRequest, rsp *pb.UserDueResponse) error {
 	logger.Infof("Received Srs.GetUserCardsDue request: %v", req)
-	cards, err := e.store.FindUserCards(req.UserID)
+	cards, err := e.store.FindUserCards(ctx, req.UserID)
 	if err != nil {
 		return err
 	}

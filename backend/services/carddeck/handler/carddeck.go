@@ -51,8 +51,8 @@ func (e *CardDeck) checkUserDeckAccess(
 	userID string,
 	deckID string,
 ) error {
-	e.store.FindDeckByID(deckID)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, deckID, helper.CardDeckServiceID)
+	e.store.FindDeckByID(ctx, deckID)
+	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, deckID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -71,11 +71,11 @@ func (e *CardDeck) getCardSideAndCheckForValidAccess(
 	userID string,
 	cardSideID string,
 ) (*model.CardSide, error) {
-	cardSide, err := helper.FindStoreEntity(e.store.FindCardSideByID, cardSideID, helper.CardDeckServiceID)
+	cardSide, err := helper.FindStoreEntity(e.store.FindCardSideByID, ctx, cardSideID, helper.CardDeckServiceID)
 	if err != nil {
 		return nil, err
 	}
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, cardSide.Card.DeckID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, cardSide.Card.DeckID, helper.CardDeckServiceID)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func (e *CardDeck) getCardSideAndCheckForValidAccess(
 	return cardSide, nil
 }
 
-func (e *CardDeck) generateCardSidesForCard(card model.Card, sides []*pb.CardSideContent) error {
+func (e *CardDeck) generateCardSidesForCard(ctx context.Context, card model.Card, sides []*pb.CardSideContent) error {
 	var previousCardSide *model.CardSide
 	var firstCardSideID string
 	for _, side := range sides {
@@ -94,16 +94,16 @@ func (e *CardDeck) generateCardSidesForCard(card model.Card, sides []*pb.CardSid
 			Header:      side.Header,
 			Description: side.Description,
 		}
-		if err := e.store.CreateCardSide(newCardSide); err != nil {
+		if err := e.store.CreateCardSide(ctx, newCardSide); err != nil {
 			return err
 		}
 		if previousCardSide != nil {
 			previousCardSide.NextCardSideID = newCardSide.ID
-			if err := e.store.ModifyCardSide(previousCardSide); err != nil {
+			if err := e.store.ModifyCardSide(ctx, previousCardSide); err != nil {
 				return err
 			}
 			newCardSide.PreviousCardSideID = previousCardSide.ID
-			if err := e.store.ModifyCardSide(newCardSide); err != nil {
+			if err := e.store.ModifyCardSide(ctx, newCardSide); err != nil {
 				return err
 			}
 		} else {
@@ -113,16 +113,17 @@ func (e *CardDeck) generateCardSidesForCard(card model.Card, sides []*pb.CardSid
 		previousCardSide = newCardSide
 	}
 	card.FirstCardSideID = firstCardSideID
-	if err := e.store.ModifyCard(&card); err != nil {
+	if err := e.store.ModifyCard(ctx, &card); err != nil {
 		return err
 	}
 	logger.Infof("Modified first card reference in card %s", card.ID)
 	return nil
 }
 
-func (e *CardDeck) updateCardSideReferences(cardSidesToUpdate [2]string, index int) error {
+func (e *CardDeck) updateCardSideReferences(ctx context.Context, cardSidesToUpdate [2]string, index int) error {
 	side, err := helper.FindStoreEntity(
 		e.store.FindCardSideByID,
+		ctx,
 		cardSidesToUpdate[index],
 		helper.CollaborationServiceID,
 	)
@@ -134,16 +135,17 @@ func (e *CardDeck) updateCardSideReferences(cardSidesToUpdate [2]string, index i
 	} else {
 		side.PreviousCardSideID = cardSidesToUpdate[0]
 	}
-	if err = e.store.ModifyCardSide(side); err != nil {
+	if err = e.store.ModifyCardSide(ctx, side); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (e *CardDeck) updateCardReferences(cardSideToDelete *model.CardSide) (bool, error) {
+func (e *CardDeck) updateCardReferences(ctx context.Context, cardSideToDelete *model.CardSide) (bool, error) {
 	isLastCardSide := false
 	card, err := helper.FindStoreEntity(
 		e.store.FindCardByID,
+		ctx,
 		cardSideToDelete.CardID,
 		helper.CollaborationServiceID,
 	)
@@ -154,12 +156,12 @@ func (e *CardDeck) updateCardReferences(cardSideToDelete *model.CardSide) (bool,
 		isLastCardSide = true
 		logger.Infof("Card side %s is the last from card %s - will delete card",
 			card.ID, cardSideToDelete.CardID)
-		if err = e.store.DeleteCard(card); err != nil {
+		if err = e.store.DeleteCard(ctx, card); err != nil {
 			return false, err
 		}
 	} else {
 		card.FirstCardSideID = cardSideToDelete.NextCardSideID
-		if err = e.store.ModifyCard(card); err != nil {
+		if err = e.store.ModifyCard(ctx, card); err != nil {
 			return false, err
 		}
 	}
@@ -176,12 +178,12 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pb.GroupDecksRequest,
 	var decks []model.Deck
 	err := e.checkUserRoleAccess(ctx, req.UserID, req.GroupID, pbCollaboration.GroupRole_INVITED)
 	if err != nil {
-		decks, err = helper.FindStoreEntity(e.store.FindPublicDecksByGroupID, req.GroupID, helper.CardDeckServiceID)
+		decks, err = helper.FindStoreEntity(e.store.FindPublicDecksByGroupID, ctx, req.GroupID, helper.CardDeckServiceID)
 		if err != nil {
 			return err
 		}
 	} else {
-		decks, err = helper.FindStoreEntity(e.store.FindDecksByGroupID, req.GroupID, helper.CardDeckServiceID)
+		decks, err = helper.FindStoreEntity(e.store.FindDecksByGroupID, ctx, req.GroupID, helper.CardDeckServiceID)
 		if err != nil {
 			return err
 		}
@@ -209,7 +211,7 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 		GroupID:  req.GroupID,
 		DeckType: dt,
 	}
-	if err := e.store.CreateDeck(&newDeck); err != nil {
+	if err := e.store.CreateDeck(ctx, &newDeck); err != nil {
 		return err
 	}
 	rsp.ID = newDeck.ID
@@ -219,7 +221,7 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pb.CreateDeckRequest, rs
 
 func (e *CardDeck) GetDeck(ctx context.Context, req *pb.IDRequest, rsp *pb.DeckResponse) error {
 	logger.Infof("Received CardDeck.GetDeck request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.EntityID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, req.EntityID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -233,7 +235,7 @@ func (e *CardDeck) GetDeck(ctx context.Context, req *pb.IDRequest, rsp *pb.DeckR
 
 func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.DeckID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, req.DeckID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -254,7 +256,7 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rs
 		}
 		deck.DeckType = dt
 	}
-	err = e.store.ModifyDeck(deck)
+	err = e.store.ModifyDeck(ctx, deck)
 	if err != nil {
 		return err
 	}
@@ -265,14 +267,14 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pb.ModifyDeckRequest, rs
 
 func (e *CardDeck) DeleteDeck(ctx context.Context, req *pb.IDRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.DeleteDeck request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.EntityID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, req.EntityID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
 	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCollaboration.GroupRole_ADMIN); err != nil {
 		return err
 	}
-	err = e.store.DeleteDeck(deck)
+	err = e.store.DeleteDeck(ctx, deck)
 	if err != nil {
 		return err
 	}
@@ -283,7 +285,7 @@ func (e *CardDeck) DeleteDeck(ctx context.Context, req *pb.IDRequest, rsp *pb.Su
 
 func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.IDRequest, rsp *pb.DeckCardsResponse) error {
 	logger.Infof("Received CardDeck.GetDeckCards request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.EntityID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, req.EntityID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -293,7 +295,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.IDRequest, rsp *pb.
 	slices.SortFunc(deck.Cards, cardModelDateComparator)
 	rsp.Cards = make([]*pb.Card, len(deck.Cards))
 	for i, card := range deck.Cards {
-		cardSides, err := e.store.FindCardSidesByCardID(card.ID)
+		cardSides, err := e.store.FindCardSidesByCardID(ctx, card.ID)
 		if err != nil {
 			return err
 		}
@@ -308,7 +310,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pb.IDRequest, rsp *pb.
 
 func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rsp *pb.IDResponse) error {
 	logger.Infof("Received CardDeck.CreateCard request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.DeckID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, req.DeckID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -318,10 +320,10 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 	newCard := model.Card{
 		DeckID: deck.ID,
 	}
-	if err = e.store.CreateCard(&newCard); err != nil {
+	if err = e.store.CreateCard(ctx, &newCard); err != nil {
 		return err
 	}
-	if err = e.generateCardSidesForCard(newCard, req.Sides); err != nil {
+	if err = e.generateCardSidesForCard(ctx, newCard, req.Sides); err != nil {
 		return err
 	}
 
@@ -349,11 +351,11 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pb.CreateCardRequest, rs
 
 func (e *CardDeck) GetCard(ctx context.Context, req *pb.IDRequest, rsp *pb.Card) error {
 	logger.Infof("Received CardDeck.GetCard request: %v", req)
-	card, err := helper.FindStoreEntity(e.store.FindCardByID, req.EntityID, helper.CardDeckServiceID)
+	card, err := helper.FindStoreEntity(e.store.FindCardByID, ctx, req.EntityID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
-	cardSides, err := helper.FindStoreEntity(e.store.FindCardSidesByCardID, req.EntityID, helper.CardDeckServiceID)
+	cardSides, err := helper.FindStoreEntity(e.store.FindCardSidesByCardID, ctx, req.EntityID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -368,17 +370,17 @@ func (e *CardDeck) GetCard(ctx context.Context, req *pb.IDRequest, rsp *pb.Card)
 
 func (e *CardDeck) ModifyCard(ctx context.Context, req *pb.ModifyCardRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
-	card, err := helper.FindStoreEntity(e.store.FindCardByID, req.CardID, helper.CardDeckServiceID)
+	card, err := helper.FindStoreEntity(e.store.FindCardByID, ctx, req.CardID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
 	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
 		return err
 	}
-	if err = e.store.DeleteCardSidesOfCardByID(card.ID); err != nil {
+	if err = e.store.DeleteCardSidesOfCardByID(ctx, card.ID); err != nil {
 		return err
 	}
-	if err = e.generateCardSidesForCard(*card, req.Sides); err != nil {
+	if err = e.generateCardSidesForCard(ctx, *card, req.Sides); err != nil {
 		return err
 	}
 	rsp.Success = true
@@ -388,14 +390,14 @@ func (e *CardDeck) ModifyCard(ctx context.Context, req *pb.ModifyCardRequest, rs
 
 func (e *CardDeck) DeleteCard(ctx context.Context, req *pb.IDRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received CardDeck.DeleteCard request: %v", req)
-	card, err := helper.FindStoreEntity(e.store.FindCardByID, req.EntityID, helper.CardDeckServiceID)
+	card, err := helper.FindStoreEntity(e.store.FindCardByID, ctx, req.EntityID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
 	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCollaboration.GroupRole_WRITE); err != nil {
 		return err
 	}
-	err = e.store.DeleteCard(card)
+	err = e.store.DeleteCard(ctx, card)
 	if err != nil {
 		return err
 	}
@@ -406,7 +408,7 @@ func (e *CardDeck) DeleteCard(ctx context.Context, req *pb.IDRequest, rsp *pb.Su
 
 func (e *CardDeck) CreateCardSide(ctx context.Context, req *pb.CreateCardSideRequest, rsp *pb.IDResponse) error {
 	logger.Infof("Received CardDeck.CreateCardSide request: %v", req)
-	card, err := helper.FindStoreEntity(e.store.FindCardByID, req.CardID, helper.CardDeckServiceID)
+	card, err := helper.FindStoreEntity(e.store.FindCardByID, ctx, req.CardID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -418,6 +420,7 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pb.CreateCardSideReq
 	if req.PlaceBeforeCardSideID != "" {
 		newNextCard, err = helper.FindStoreEntity(
 			e.store.FindCardSideByID,
+			ctx,
 			req.PlaceBeforeCardSideID,
 			helper.CardDeckServiceID,
 		)
@@ -430,6 +433,7 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pb.CreateCardSideReq
 		if newNextCard.PreviousCardSideID != "" {
 			if newPreviousCard, err = helper.FindStoreEntity(
 				e.store.FindCardSideByID,
+				ctx,
 				newNextCard.PreviousCardSideID,
 				helper.CardDeckServiceID,
 			); err != nil {
@@ -441,6 +445,7 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pb.CreateCardSideReq
 		if card.FirstCardSideID != "" {
 			newPreviousCard, err = helper.FindStoreEntity(
 				e.store.FindLastCardSideOfCardByID,
+				ctx,
 				req.CardID,
 				helper.CardDeckServiceID,
 			)
@@ -457,26 +462,26 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pb.CreateCardSideReq
 		PreviousCardSideID: previousCardSideIDForNewCardSide,
 		NextCardSideID:     req.PlaceBeforeCardSideID,
 	}
-	err = e.store.CreateCardSide(&newCardSide)
+	err = e.store.CreateCardSide(ctx, &newCardSide)
 	if err != nil {
 		return err
 	}
 	if newPreviousCard != nil {
 		newPreviousCard.NextCardSideID = newCardSide.ID
-		err = e.store.ModifyCardSide(newPreviousCard)
+		err = e.store.ModifyCardSide(ctx, newPreviousCard)
 		if err != nil {
 			return err
 		}
 	} else {
 		card.FirstCardSideID = newCardSide.ID
-		err = e.store.ModifyCard(card)
+		err = e.store.ModifyCard(ctx, card)
 		if err != nil {
 			return err
 		}
 	}
 	if newNextCard != nil {
 		newNextCard.PreviousCardSideID = newCardSide.ID
-		err = e.store.ModifyCardSide(newNextCard)
+		err = e.store.ModifyCardSide(ctx, newNextCard)
 		if err != nil {
 			return err
 		}
@@ -496,7 +501,7 @@ func (e *CardDeck) ModifyCardSide(ctx context.Context, req *pb.ModifyCardSideReq
 		cardSide.Header = req.Content.Header
 		cardSide.Description = req.Content.Description
 	}
-	err = e.store.ModifyCardSide(cardSide)
+	err = e.store.ModifyCardSide(ctx, cardSide)
 	if err != nil {
 		return err
 	}
@@ -515,19 +520,19 @@ func (e *CardDeck) DeleteCardSide(ctx context.Context, req *pb.IDRequest, rsp *p
 	cardSidesToUpdate := [2]string{cardSideToDelete.PreviousCardSideID, cardSideToDelete.NextCardSideID}
 	for index, cardSideToUpdate := range cardSidesToUpdate {
 		if cardSideToUpdate != "" {
-			err = e.updateCardSideReferences(cardSidesToUpdate, index)
+			err = e.updateCardSideReferences(ctx, cardSidesToUpdate, index)
 			if err != nil {
 				return err
 			}
 		} else if index%2 == 0 {
-			isLastCardSide, err = e.updateCardReferences(cardSideToDelete)
+			isLastCardSide, err = e.updateCardReferences(ctx, cardSideToDelete)
 			if err != nil {
 				return err
 			}
 		}
 	}
 	if !isLastCardSide {
-		if err = e.store.DeleteCardSide(cardSideToDelete); err != nil {
+		if err = e.store.DeleteCardSide(ctx, cardSideToDelete); err != nil {
 			return err
 		}
 	}

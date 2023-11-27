@@ -32,18 +32,18 @@ func New(
 }
 
 func (e *Collaboration) checkUserRoleAccessWithGroupAndRoleReturn(
-	_ context.Context,
+	ctx context.Context,
 	userID string,
 	groupID string,
 	requiredRole pb.GroupRole,
 ) (group *model.Group, protoRole pb.GroupRole, err error) {
 	logger.Infof("Find group with id %s", groupID)
-	group, err = helper.FindStoreEntity(e.store.FindGroupByID, groupID, helper.CollaborationServiceID)
+	group, err = helper.FindStoreEntity(e.store.FindGroupByID, ctx, groupID, helper.CollaborationServiceID)
 	if err != nil {
 		return
 	}
 	logger.Infof("Requesting group role for user (%s)", userID)
-	role, err := e.store.FindGroupUserRole(userID, groupID)
+	role, err := e.store.FindGroupUserRole(ctx, userID, groupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			err = helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
@@ -86,12 +86,12 @@ func (e *Collaboration) generateGroupMemberAdmissionResponse(
 }
 
 func (e *Collaboration) GetGroupInvitations(
-	_ context.Context,
+	ctx context.Context,
 	req *pb.UserIDRequest,
 	rsp *pb.GroupInvitationsResponse,
 ) error {
 	logger.Infof("Received Collaboration.GetGroupInvitations request: %v", req)
-	groupInvitations, err := e.store.FindGroupInvitationsByUserID(req.UserID)
+	groupInvitations, err := e.store.FindGroupInvitationsByUserID(ctx, req.UserID)
 	if err != nil && !errors.Is(err, helper.ErrStoreNoEntryWithID) {
 		return err
 	}
@@ -134,16 +134,16 @@ func (e *Collaboration) createUserCardBindingsForWholeGroup(ctx context.Context,
 	return nil
 }
 
-func (e *Collaboration) GetUserGroups(_ context.Context, req *pb.UserIDRequest, rsp *pb.UserGroupsResponse) error {
+func (e *Collaboration) GetUserGroups(ctx context.Context, req *pb.UserIDRequest, rsp *pb.UserGroupsResponse) error {
 	logger.Infof("Received Collaboration.GetUserGroups request: %v", req)
-	groups, err := helper.FindStoreEntity(e.store.FindGroupsByUserID, req.UserID, helper.CollaborationServiceID)
+	groups, err := helper.FindStoreEntity(e.store.FindGroupsByUserID, ctx, req.UserID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}
 	protoGroups := converter.ConvertToTypeArray(groups, converter.StoreGroupToProtoGroupConverter)
 	protoRoles := make([]pb.GroupRole, len(protoGroups))
 	for index, group := range protoGroups {
-		role, err := e.store.FindGroupUserRole(req.UserID, group.GroupID)
+		role, err := e.store.FindGroupUserRole(ctx, req.UserID, group.GroupID)
 		if err != nil {
 			return err
 		}
@@ -164,7 +164,7 @@ func (e *Collaboration) GetUserGroups(_ context.Context, req *pb.UserIDRequest, 
 }
 
 func (e *Collaboration) CreateNewGroupWithAdmin(
-	_ context.Context,
+	ctx context.Context,
 	req *pb.CreateGroupRequest,
 	rsp *pb.IDResponse,
 ) error {
@@ -179,7 +179,7 @@ func (e *Collaboration) CreateNewGroupWithAdmin(
 		IsDefault:   req.IsDefault,
 		GroupType:   model.ClosedGroupType,
 	}
-	err = e.store.CreateNewGroupWithAdmin(req.UserID, &newGroup)
+	err = e.store.CreateNewGroupWithAdmin(ctx, req.UserID, &newGroup)
 	if err != nil {
 		return err
 	}
@@ -190,13 +190,13 @@ func (e *Collaboration) CreateNewGroupWithAdmin(
 
 func (e *Collaboration) GetGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupWithUserRole) error {
 	logger.Infof("Received Collaboration.GetGroup request: %v", req)
-	group, err := e.store.FindGroupByID(req.GroupID)
+	group, err := e.store.FindGroupByID(ctx, req.GroupID)
 	if err != nil {
 		return err
 	}
 	protoGroup := converter.StoreGroupToProtoGroupConverter(*group)
 
-	_, err = e.store.FindGroupUserRole(req.UserID, req.GroupID)
+	_, err = e.store.FindGroupUserRole(ctx, req.UserID, req.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			logger.Infof("User does not have a group role")
@@ -245,7 +245,7 @@ func (e *Collaboration) ModifyGroup(ctx context.Context, req *pb.ModifyGroupRequ
 	if req.GroupType != nil && *req.GroupType != pb.GroupType_INVALID {
 		group.GroupType = converter.MigrateProtoGroupTypeToModelGroupType(*req.GroupType)
 	}
-	err = e.store.ModifyGroup(group)
+	err = e.store.ModifyGroup(ctx, group)
 	if err != nil {
 		return err
 	}
@@ -264,7 +264,7 @@ func (e *Collaboration) DeleteGroup(ctx context.Context, req *pb.GroupRequest, r
 		logger.Infof("Cannot delete group %s as it is default group for user %s", req.GroupID, req.UserID)
 		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 	}
-	err = e.store.DeleteGroup(group)
+	err = e.store.DeleteGroup(ctx, group)
 	if err != nil {
 		return err
 	}
@@ -283,7 +283,7 @@ func (e *Collaboration) GetGroupMembers(ctx context.Context, req *pb.GroupReques
 	); err != nil {
 		return err
 	}
-	groupMembers, err := helper.FindStoreEntity(e.store.FindGroupMemberRoles, req.GroupID, helper.CollaborationServiceID)
+	groupMembers, err := helper.FindStoreEntity(e.store.FindGroupMemberRoles, ctx, req.GroupID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}
@@ -322,7 +322,7 @@ func (e *Collaboration) GetGroupMemberRequests(
 	); err != nil {
 		return err
 	}
-	groupRequests, err := e.store.FindGroupRequestsByGroupID(req.GroupID)
+	groupRequests, err := e.store.FindGroupRequestsByGroupID(ctx, req.GroupID)
 	if err != nil && !errors.Is(err, helper.ErrStoreNoEntryWithID) {
 		return err
 	}
@@ -335,18 +335,18 @@ func (e *Collaboration) GetGroupMemberRequests(
 }
 
 func (e *Collaboration) AddGroupUserRequest(
-	_ context.Context,
+	ctx context.Context,
 	req *pb.GroupUserRequest,
 	rsp *pb.SuccessResponse,
 ) error {
 	logger.Infof("Received Collaboration.AddGroupUserRequest request: %v", req)
 
-	groupRole, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
+	groupRole, err := e.store.FindGroupUserRole(ctx, req.UserID, req.GroupID)
 	if err != nil {
 		if !errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			return err
 		}
-		group, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
+		group, err := helper.FindStoreEntity(e.store.FindGroupByID, ctx, req.GroupID, helper.CollaborationServiceID)
 		if err != nil {
 			return err
 		}
@@ -354,11 +354,11 @@ func (e *Collaboration) AddGroupUserRequest(
 			return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 		}
 		if group.GroupType == model.OpenGroupType {
-			err := e.store.AddNewMemberToGroup(req.UserID, req.GroupID)
+			err := e.store.AddNewMemberToGroup(ctx, req.UserID, req.GroupID)
 			rsp.Success = true
 			return err
 		}
-		if err = e.store.AddRequestingUserToGroup(req.UserID, req.GroupID); err != nil {
+		if err = e.store.AddRequestingUserToGroup(ctx, req.UserID, req.GroupID); err != nil {
 			return err
 		}
 		rsp.Success = true
@@ -368,7 +368,7 @@ func (e *Collaboration) AddGroupUserRequest(
 		return helper.NewMicroAlreadyRequestedErr(helper.CollaborationServiceID)
 	}
 	if groupRole == model.RoleInvited {
-		if err = e.store.PromoteUserToFullGroupMember(req.UserID, req.GroupID); err != nil {
+		if err = e.store.PromoteUserToFullGroupMember(ctx, req.UserID, req.GroupID); err != nil {
 			return err
 		}
 		rsp.Success = true
@@ -378,20 +378,20 @@ func (e *Collaboration) AddGroupUserRequest(
 }
 
 func (e *Collaboration) ModifyGroupUserRequest(
-	_ context.Context,
+	ctx context.Context,
 	req *pb.GroupModUserRequest,
 	rsp *pb.SuccessResponse,
 ) error {
 	logger.Infof("Received Collaboration.ModifyGroupUserRequest request: %v", req)
 
-	role, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
+	role, err := e.store.FindGroupUserRole(ctx, req.UserID, req.GroupID)
 	if err != nil {
 		return err
 	}
 	if role != model.RoleAdmin {
 		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 	}
-	modUserCurrRole, err := e.store.FindGroupUserRole(req.ModUserID, req.GroupID)
+	modUserCurrRole, err := e.store.FindGroupUserRole(ctx, req.ModUserID, req.GroupID)
 	if err != nil {
 		return err
 	}
@@ -404,7 +404,7 @@ func (e *Collaboration) ModifyGroupUserRequest(
 	newModelRole := converter.MigrateProtoRoleToModelRole(req.NewRole)
 	switch newModelRole {
 	case model.RoleAdmin, model.RoleWrite, model.RoleRead:
-		if err := e.store.ModifyUserRole(req.ModUserID, req.GroupID, newModelRole); err != nil {
+		if err := e.store.ModifyUserRole(ctx, req.ModUserID, req.GroupID, newModelRole); err != nil {
 			return err
 		}
 	default:
@@ -414,20 +414,20 @@ func (e *Collaboration) ModifyGroupUserRequest(
 	return nil
 }
 
-func (e *Collaboration) KickGroupUser(_ context.Context, req *pb.GroupKickUserRequest, rsp *pb.SuccessResponse) error {
+func (e *Collaboration) KickGroupUser(ctx context.Context, req *pb.GroupKickUserRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.KickGroupUserRequest request: %v", req)
 
 	if req.UserID == req.DelUserID {
 		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 	}
-	role, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
+	role, err := e.store.FindGroupUserRole(ctx, req.UserID, req.GroupID)
 	if err != nil {
 		return err
 	}
 	if role != model.RoleAdmin {
 		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 	}
-	delUserCurrRole, err := e.store.FindGroupUserRole(req.DelUserID, req.GroupID)
+	delUserCurrRole, err := e.store.FindGroupUserRole(ctx, req.DelUserID, req.GroupID)
 	if err != nil {
 		return err
 	}
@@ -437,7 +437,7 @@ func (e *Collaboration) KickGroupUser(_ context.Context, req *pb.GroupKickUserRe
 	if delUserCurrRole == model.RoleAdmin {
 		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 	}
-	if err := e.store.RemoveUserFromGroup(req.DelUserID, req.GroupID); err != nil {
+	if err := e.store.RemoveUserFromGroup(ctx, req.DelUserID, req.GroupID); err != nil {
 		return err
 	}
 
@@ -446,13 +446,13 @@ func (e *Collaboration) KickGroupUser(_ context.Context, req *pb.GroupKickUserRe
 }
 
 func (e *Collaboration) RemoveGroupUserRequest(
-	_ context.Context,
+	ctx context.Context,
 	req *pb.GroupUserRequest,
 	rsp *pb.SuccessResponse,
 ) error {
 	logger.Infof("Received Collaboration.RemoveGroupUserRequest request: %v", req)
 
-	groupRole, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
+	groupRole, err := e.store.FindGroupUserRole(ctx, req.UserID, req.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			return helper.NewMicroNoEntryWithIDErr(helper.CollaborationServiceID)
@@ -460,7 +460,7 @@ func (e *Collaboration) RemoveGroupUserRequest(
 		return err
 	}
 	if groupRole == model.RoleRequested || groupRole == model.RoleInvited {
-		if err := e.store.RemoveUserFromGroup(req.UserID, req.GroupID); err != nil {
+		if err := e.store.RemoveUserFromGroup(ctx, req.UserID, req.GroupID); err != nil {
 			return err
 		}
 		rsp.Success = true
@@ -477,7 +477,7 @@ func (e *Collaboration) AddGroupUserInvite(
 ) error {
 	logger.Infof("Received Collaboration.AddGroupUserInvite request: %v", req)
 
-	requestingUserRole, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
+	requestingUserRole, err := e.store.FindGroupUserRole(ctx, req.UserID, req.GroupID)
 	if err != nil {
 		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 	}
@@ -489,10 +489,10 @@ func (e *Collaboration) AddGroupUserInvite(
 	if err != nil {
 		return err
 	}
-	invitedUserRole, err := e.store.FindGroupUserRole(userRsp.UserID, req.GroupID)
+	invitedUserRole, err := e.store.FindGroupUserRole(ctx, userRsp.UserID, req.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
-			if err := e.store.AddInvitedUserToGroup(userRsp.UserID, req.GroupID); err != nil {
+			if err := e.store.AddInvitedUserToGroup(ctx, userRsp.UserID, req.GroupID); err != nil {
 				return err
 			}
 			rsp.Success = true
@@ -503,7 +503,7 @@ func (e *Collaboration) AddGroupUserInvite(
 	if invitedUserRole == model.RoleInvited {
 		return helper.NewMicroAlreadyInvitedErr(helper.CollaborationServiceID)
 	} else if invitedUserRole == model.RoleRequested {
-		if err := e.store.PromoteUserToFullGroupMember(userRsp.UserID, req.GroupID); err != nil {
+		if err := e.store.PromoteUserToFullGroupMember(ctx, userRsp.UserID, req.GroupID); err != nil {
 			return err
 		}
 		rsp.Success = true
@@ -520,7 +520,7 @@ func (e *Collaboration) RemoveGroupUserInvite(
 ) error {
 	logger.Infof("Received Collaboration.RemoveGroupUserInvite request: %v", req)
 
-	requestingUserRole, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
+	requestingUserRole, err := e.store.FindGroupUserRole(ctx, req.UserID, req.GroupID)
 	if err != nil {
 		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
 	}
@@ -531,7 +531,7 @@ func (e *Collaboration) RemoveGroupUserInvite(
 	if err != nil {
 		return err
 	}
-	invitedUserRole, err := e.store.FindGroupUserRole(userRsp.UserID, req.GroupID)
+	invitedUserRole, err := e.store.FindGroupUserRole(ctx, userRsp.UserID, req.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			return helper.NewMicroNoEntryWithIDErr(helper.CollaborationServiceID)
@@ -539,7 +539,7 @@ func (e *Collaboration) RemoveGroupUserInvite(
 		return err
 	}
 	if invitedUserRole == model.RoleInvited || invitedUserRole == model.RoleRequested {
-		if err := e.store.RemoveUserFromGroup(userRsp.UserID, req.GroupID); err != nil {
+		if err := e.store.RemoveUserFromGroup(ctx, userRsp.UserID, req.GroupID); err != nil {
 			return err
 		}
 		rsp.Success = true
@@ -563,7 +563,7 @@ func (e *Collaboration) GetInvitationsForGroup(
 	); err != nil {
 		return err
 	}
-	memberInvitations, err := e.store.FindGroupInvitationsByGroupID(req.GroupID)
+	memberInvitations, err := e.store.FindGroupInvitationsByGroupID(ctx, req.GroupID)
 	if err != nil {
 		return err
 	}
@@ -574,13 +574,13 @@ func (e *Collaboration) GetInvitationsForGroup(
 	return nil
 }
 
-func (e *Collaboration) GetGroupUserRole(_ context.Context, req *pb.GroupRequest, rsp *pb.GroupRoleResponse) error {
+func (e *Collaboration) GetGroupUserRole(ctx context.Context, req *pb.GroupRequest, rsp *pb.GroupRoleResponse) error {
 	logger.Infof("Received Collaboration.GetUserGroupRole request: %v", req)
-	_, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
+	_, err := helper.FindStoreEntity(e.store.FindGroupByID, ctx, req.GroupID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}
-	role, err := e.store.FindGroupUserRole(req.UserID, req.GroupID)
+	role, err := e.store.FindGroupUserRole(ctx, req.UserID, req.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			return helper.NewMicroNoEntryWithIDErr(helper.CollaborationServiceID)
@@ -596,9 +596,9 @@ func (e *Collaboration) GetGroupUserRole(_ context.Context, req *pb.GroupRequest
 	return nil
 }
 
-func (e *Collaboration) FindGroupByID(_ context.Context, req *pb.GroupRequest, rsp *pb.Group) error {
+func (e *Collaboration) FindGroupByID(ctx context.Context, req *pb.GroupRequest, rsp *pb.Group) error {
 	logger.Infof("Received Collaboration.FindGroupByID request: %v", req)
-	group, err := helper.FindStoreEntity(e.store.FindGroupByID, req.GroupID, helper.CollaborationServiceID)
+	group, err := helper.FindStoreEntity(e.store.FindGroupByID, ctx, req.GroupID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}
@@ -609,7 +609,7 @@ func (e *Collaboration) FindGroupByID(_ context.Context, req *pb.GroupRequest, r
 
 func (e *Collaboration) LeaveGroupSafe(ctx context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.LeaveGroupSafe request: %+v", req)
-	remainingAdmins, err := e.store.FindGroupAdmins(req.GroupID)
+	remainingAdmins, err := e.store.FindGroupAdmins(ctx, req.GroupID)
 	if err != nil {
 		return err
 	}
@@ -619,22 +619,22 @@ func (e *Collaboration) LeaveGroupSafe(ctx context.Context, req *pb.GroupRequest
 	return e.LeaveGroup(ctx, req, rsp)
 }
 
-func (e *Collaboration) LeaveGroup(_ context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
+func (e *Collaboration) LeaveGroup(ctx context.Context, req *pb.GroupRequest, rsp *pb.SuccessResponse) error {
 	logger.Infof("Received Collaboration.LeaveGroup request: %+v", req)
-	group, err := e.store.FindGroupByID(req.GroupID)
+	group, err := e.store.FindGroupByID(ctx, req.GroupID)
 	if err != nil {
 		return err
 	}
-	groupUsers, err := helper.FindStoreEntity(e.store.FindGroupMemberRoles, req.GroupID, helper.CollaborationServiceID)
+	groupUsers, err := helper.FindStoreEntity(e.store.FindGroupMemberRoles, ctx, req.GroupID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}
 	if len(groupUsers) > 1 || group.GroupType == model.OpenGroupType {
-		if err = e.store.RemoveUserFromGroup(req.UserID, req.GroupID); err != nil {
+		if err = e.store.RemoveUserFromGroup(ctx, req.UserID, req.GroupID); err != nil {
 			return err
 		}
 	} else {
-		if err = e.store.DeleteGroup(group); err != nil {
+		if err = e.store.DeleteGroup(ctx, group); err != nil {
 			return err
 		}
 	}

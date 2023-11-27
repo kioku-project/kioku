@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: components/deck/Deck.tsx:137
+#: components/deck/Deck.tsx:141
 msgid "{0, plural, one {# card due} other {# cards due}}"
 msgstr "{0, plural, one {# Karte fällig} other {# Karten fällig}}"
 
@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {Eine Karte übrig} other {# Karten übrig}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Greife von überall und jederzeit auf Deine Karteikarten zu. Wechsle nahtlos zwischen verschiedenen Plattformen und verpasse nie wieder eine Lerngelegenheit!"
 
-#: pages/login.tsx:262
+#: pages/login.tsx:316
 msgid "Account already exists!"
 msgstr "Account existiert bereits!"
 
-#: pages/login.tsx:256
+#: pages/login.tsx:310
 msgid "Account created!"
 msgstr "Account erstellt!"
 
@@ -45,8 +45,8 @@ msgstr "Account erstellt!"
 msgid "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivierender. Kioku hilft Dir, bessere Ergebnisse zu erzielen und Deine persönlichen Lernziele zu erreichen!"
 
-#: pages/login.tsx:108
-msgid "Already registered?"
+#: pages/login.tsx:239
+msgid "Already have an account?"
 msgstr "Bereits registriert?"
 
 #: pages/features.tsx:112
@@ -99,11 +99,6 @@ msgstr "Kompatibel"
 msgid "Congratulations!"
 msgstr "Glückwunsch!"
 
-#: pages/login.tsx:96
-#: pages/login.tsx:129
-msgid "Create an account"
-msgstr "Erstelle einen Account"
-
 #: pages/features.tsx:89
 msgid "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 msgstr "Erstelle und individualisiere Karteikarten, die genau auf Deine Bedürfnisse und Vorlieben zugeschnitten sind. Bestimme Dein eigenes Tempo mit unserem Spaced Repetition System, um Dein Potenzial zu maximieren!"
@@ -143,7 +138,7 @@ msgid "Deck updated!"
 msgstr "Stapel aktualisiert!"
 
 #: pages/group/[id]/index.tsx:31
-#: pages/index.tsx:39
+#: pages/index.tsx:41
 msgid "Decks"
 msgstr "Stapel"
 
@@ -179,11 +174,15 @@ msgstr "Beschreibung"
 msgid "Discover Kioku's awesome Features"
 msgstr "Entdecke Kiokus einzigartige Funktionen"
 
+#: pages/login.tsx:237
+msgid "Don't have an account?"
+msgstr "Noch kein Account?"
+
 #: components/flashcard/Flashcard.tsx:263
 msgid "Easy"
 msgstr "Einfach"
 
-#: pages/login.tsx:152
+#: pages/login.tsx:93
 msgid "Email"
 msgstr "E-Mail"
 
@@ -209,11 +208,11 @@ msgid "from"
 msgstr "von"
 
 #: pages/features.tsx:60
-#: pages/home.tsx:64
+#: pages/home.tsx:63
 msgid "Get started"
 msgstr "Los geht's"
 
-#: components/navigation/Tabs/GroupsTab.tsx:90
+#: components/navigation/Tabs/GroupsTab.tsx:100
 msgid "Group created!"
 msgstr "Gruppe erstellt!"
 
@@ -237,7 +236,7 @@ msgstr "Gruppenstatistiken"
 msgid "Group updated!"
 msgstr "Gruppe aktualisert!"
 
-#: pages/index.tsx:46
+#: pages/index.tsx:48
 msgid "Groups"
 msgstr "Gruppen"
 
@@ -257,7 +256,7 @@ msgstr "Individuell"
 msgid "Informative"
 msgstr "Informativ"
 
-#: pages/index.tsx:53
+#: pages/index.tsx:55
 msgid "Invitations"
 msgstr "Einladungen"
 
@@ -265,7 +264,7 @@ msgstr "Einladungen"
 msgid "Invite user with email"
 msgstr "Benutzer per E-Mail einladen"
 
-#: components/layout/Header.tsx:173
+#: components/layout/Header.tsx:163
 msgid "Join Group"
 msgstr "Gruppe beitreten"
 
@@ -273,15 +272,15 @@ msgstr "Gruppe beitreten"
 msgid "Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
 msgstr "Kioku ist mit Anki kompatibel, sodass Du Deine bestehenden Stapel in unsere Anwendung importieren und auch wieder exportieren kannst, während Du die Vorteile der kollaborativen Funktionen von Kioku entdeckst!"
 
-#: components/deck/Deck.tsx:167
+#: components/deck/Deck.tsx:171
 msgid "Learn"
 msgstr "Lernen"
 
-#: components/layout/Header.tsx:157
+#: components/layout/Header.tsx:147
 msgid "Learn Deck"
 msgstr "Stapel lernen"
 
-#: pages/home.tsx:76
+#: pages/home.tsx:75
 msgid "Learn more"
 msgstr "Erfahre mehr"
 
@@ -294,12 +293,11 @@ msgstr "Gruppe verlassen"
 msgid "Left group!"
 msgstr "Gruppe verlassen!"
 
-#: pages/login.tsx:231
+#: pages/login.tsx:285
 msgid "Logged in!"
 msgstr "Eingeloggt!"
 
-#: components/navigation/Navbar.tsx:63
-#: pages/login.tsx:213
+#: components/navigation/Navbar.tsx:67
 msgid "Login"
 msgstr "Einloggen"
 
@@ -307,25 +305,26 @@ msgstr "Einloggen"
 msgid "Medium"
 msgstr "Mittel"
 
-#: pages/login.tsx:162
-msgid "Name"
-msgstr "Name"
-
-#: pages/login.tsx:106
-msgid "Not registered?"
-msgstr "Nicht registriert?"
+#: pages/login.tsx:181
+msgid "Minimum {passwordMinLength} characters"
+msgstr "Mindestens {passwordMinLength} Zeichen"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:66
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Nachdem Du Deinen Benutzer gelöscht hast, gibt es kein Zurück mehr."
 
-#: pages/login.tsx:172
+#: pages/login.tsx:113
 msgid "Password"
 msgstr "Passwort"
 
-#: pages/login.tsx:187
-msgid "Passwords have to match."
-msgstr "Passwörter müssen übereinstimmen."
+#: pages/login.tsx:130
+msgid "Password must have at least {passwordMinLength} characters"
+msgstr "Passwort muss mindestens {passwordMinLength} Zeichen lang sein"
+
+#: pages/login.tsx:153
+#: pages/login.tsx:200
+msgid "Passwords have to match"
+msgstr "Passwörter müssen übereinstimmen"
 
 #: components/navigation/Tabs/StatisticsTab.tsx:23
 msgid "Personal Statistics"
@@ -339,7 +338,7 @@ msgstr "Nachdem Du die Gruppe gelöscht hast, gibt es kein Zurück mehr."
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Nachdem Du den Stapel gelöscht hast, gibt es kein Zurück mehr."
 
-#: pages/login.tsx:213
+#: pages/login.tsx:227
 msgid "Register"
 msgstr "Registrieren"
 
@@ -349,11 +348,11 @@ msgstr "Registrieren"
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: pages/login.tsx:186
+#: pages/login.tsx:140
 msgid "Repeat Password"
 msgstr "Passwort wiederholen"
 
-#: components/layout/Header.tsx:179
+#: components/layout/Header.tsx:169
 msgid "Request pending"
 msgstr "Anfrage ausstehend"
 
@@ -361,31 +360,35 @@ msgstr "Anfrage ausstehend"
 msgid "Save"
 msgstr "Speichern"
 
-#: components/layout/Header.tsx:193
+#: components/layout/Header.tsx:183
 msgid "Sent request!"
 msgstr "Anfrage gesendet!"
 
 #: pages/deck/[id]/index.tsx:43
 #: pages/group/[id]/index.tsx:48
-#: pages/index.tsx:68
+#: pages/index.tsx:70
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: pages/login.tsx:131
+#: pages/login.tsx:225
 msgid "Sign in"
 msgstr "Einloggen"
 
-#: pages/login.tsx:94
-msgid "Sign in to your account"
-msgstr "Logge Dich ein"
+#: pages/login.tsx:262
+msgid "Sign in now!"
+msgstr "Jetzt anmelden!"
 
-#: pages/home.tsx:46
+#: pages/login.tsx:260
+msgid "Sign up now!"
+msgstr "Jetzt registrieren!"
+
+#: pages/home.tsx:45
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten-Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
 
 #: pages/deck/[id]/index.tsx:36
 #: pages/group/[id]/index.tsx:41
-#: pages/index.tsx:61
+#: pages/index.tsx:63
 msgid "Statistics"
 msgstr "Statistiken"
 
@@ -414,6 +417,7 @@ msgid "User updated!"
 msgstr "Benutzer aktualisiert!"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:46
+#: pages/login.tsx:103
 msgid "Username"
 msgstr "Benutzername"
 
@@ -421,7 +425,7 @@ msgstr "Benutzername"
 msgid "We provide you with detailed statistics and insights into your study progress. Identify areas of improvement to optimize your strategy for maximum effectiveness!"
 msgstr "Wir stellen Dir detaillierte Statistiken und Einblicke in Deinen Studienfortschritt zur Verfügung. Finde Bereiche mit Verbesserungspotenzial, um Deine Strategie für maximale Effektivität zu optimieren!"
 
-#: pages/home.tsx:41
+#: pages/home.tsx:40
 msgid "We're changing the way people learn."
 msgstr "Wir revolutionieren, wie Menschen lernen."
 
@@ -433,7 +437,7 @@ msgstr "Willkommen, {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Willkommen bei Kioku - der cloudbasierten Karteikarten-Anwendung, die sich auf die gemeinsame Erstellung von Lerninhalten konzentriert. Unsere innovative Plattform ermöglicht es Dir, Dein Wissen auf Karteikarten zu organisieren und diese mit anderen Nutzern zu teilen, um Dein Wissen auf die nächste Stufe zu heben. Melde Dich noch heute bei Kioku an und erlebe die Zukunft des Lernens."
 
-#: pages/login.tsx:234
+#: pages/login.tsx:288
 msgid "Wrong username or password"
 msgstr "Falscher Benutzername oder falsches Passwort"
 

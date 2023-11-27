@@ -9,7 +9,7 @@ import { Deck } from "@/types/Deck";
 
 import { Group as GroupType } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
-import { authedFetch } from "../../../util/reauth";
+import { useDELETE, usePUT } from "../../../util/api";
 import { DangerAction } from "../../input/DangerAction";
 import { InputAction } from "../../input/InputAction";
 import { Section } from "../../layout/Section";
@@ -120,13 +120,10 @@ export const DeckSettingsTab = ({
 		deckName?: string;
 		deckType?: "PUBLIC" | "PRIVATE";
 	}) {
-		const response = await authedFetch(`/api/decks/${deck.deckID}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(body),
-		});
+		const response = await usePUT(
+			`/api/decks/${deck.deckID}`,
+			JSON.stringify(body)
+		);
 		if (response?.ok) {
 			toast.info(t`Deck updated!`, { toastId: "updatedDeckToast" });
 		} else {
@@ -136,12 +133,7 @@ export const DeckSettingsTab = ({
 	}
 
 	async function deleteDeck() {
-		const response = await authedFetch(`/api/decks/${deck.deckID}`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+		const response = await useDELETE(`/api/decks/${deck.deckID}`);
 		if (response?.ok) {
 			toast.info(t`Deck deleted!`, { toastId: "deletedDeckToast" });
 		} else {

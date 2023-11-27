@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
 import { Card as CardType } from "../../types/Card";
-import { authedFetch } from "../../util/reauth";
+import { usePUT } from "../../util/api";
 import { InputField } from "../form/InputField";
 import { TextArea } from "../form/TextArea";
 import { Button } from "../input/Button";
@@ -275,15 +275,12 @@ export const Flashcard = ({
 	}
 
 	async function modifyCard(card: CardType) {
-		const response = await authedFetch(`/api/cards/${card.cardID}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		const response = await usePUT(
+			`/api/cards/${card.cardID}`,
+			JSON.stringify({
 				sides: card.sides,
-			}),
-		});
+			})
+		);
 		if (response?.ok) {
 			toast.info(t`Card updated!`, { toastId: "updatedCardToast" });
 		} else {

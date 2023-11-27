@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 
 import { Card as CardType } from "../../types/Card";
-import { authedFetch } from "../../util/reauth";
+import { useDELETE, usePOST } from "../../util/api";
 import { Text } from "../Text";
 import { InputField } from "../form/InputField";
 
@@ -124,19 +124,16 @@ export const Card = ({
 			cardNameInput.current?.focus();
 			return;
 		}
-		const response = await authedFetch(`/api/decks/${card.deckID}/cards`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		const response = await usePOST(
+			`/api/decks/${card.deckID}/cards`,
+			JSON.stringify({
 				sides: [
 					{
 						header: cardNameInput.current.value,
 					},
 				],
-			}),
-		});
+			})
+		);
 		if (response?.ok) {
 			cardNameInput.current.value = "";
 			toast.info(t`Card created!`, { toastId: "newCardToast" });
@@ -149,12 +146,7 @@ export const Card = ({
 	}
 
 	async function deleteCard() {
-		const response = await authedFetch(`/api/cards/${card.cardID}`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+		const response = await useDELETE(`/api/cards/${card.cardID}`);
 		if (response?.ok) {
 			toast.info("Card deleted!", { toastId: "deletedCardToast" });
 			mutate(`/api/decks/${card.deckID}/cards`);

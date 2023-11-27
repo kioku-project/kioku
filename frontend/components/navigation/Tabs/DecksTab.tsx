@@ -7,7 +7,7 @@ import { useSWRConfig } from "swr";
 
 import { Group as GroupType } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
-import { authedFetch } from "../../../util/reauth";
+import { usePOST } from "../../../util/api";
 import { useDecks } from "../../../util/swr";
 import DeckList from "../../deck/DeckList";
 import { InputField } from "../../form/InputField";
@@ -67,15 +67,9 @@ export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 			deckNameInput.current?.focus();
 			return;
 		}
-		const response = await authedFetch(
+		const response = await usePOST(
 			`/api/groups/${group.groupID}/decks`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ deckName: deckNameInput.current.value }),
-			}
+			JSON.stringify({ deckName: deckNameInput.current.value })
 		);
 		if (response?.ok) {
 			deckNameInput.current.value = "";

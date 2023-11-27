@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Text } from "../components/Text";
 import { InputField } from "../components/form/InputField";
 import { Button } from "../components/input/Button";
+import { usePOST } from "../util/api";
 import { checkAccessTokenValid } from "../util/reauth";
 import { loadCatalog } from "./_app";
 
@@ -219,16 +220,13 @@ export default function Page() {
 		if (!form.current?.checkValidity()) {
 			return;
 		}
-		const response = await fetch("/api/login", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		const response = await usePOST(
+			`/api/login`,
+			JSON.stringify({
 				userEmail: emailInput.current?.value,
 				userPassword: passwordInput.current?.value,
-			}),
-		});
+			})
+		);
 		if (response.ok) {
 			toast.info(<Trans>Logged in!</Trans>, { toastId: "accountToast" });
 			router.push("/");
@@ -246,17 +244,14 @@ export default function Page() {
 		) {
 			return;
 		}
-		const response = await fetch("/api/register", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		const response = await usePOST(
+			`/api/register`,
+			JSON.stringify({
 				userEmail: emailInput.current?.value,
 				userName: nameInput.current?.value,
 				userPassword: passwordInput.current?.value,
-			}),
-		});
+			})
+		);
 		if (response.ok) {
 			toast.info(<Trans>Account created!</Trans>, {
 				toastId: "accountToast",

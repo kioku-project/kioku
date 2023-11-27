@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { mutate } from "swr";
 
 import { Group as GroupType } from "../../../types/Group";
-import { authedFetch } from "../../../util/reauth";
+import { usePOST } from "../../../util/api";
 import DeckList from "../../deck/DeckList";
 import { InputField } from "../../form/InputField";
 
@@ -81,13 +81,10 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 			groupNameInput.current?.focus();
 			return;
 		}
-		const response = await authedFetch(`/api/groups`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ groupName: groupNameInput.current.value }),
-		});
+		const response = await usePOST(
+			`/api/groups`,
+			JSON.stringify({ groupName: groupNameInput.current.value })
+		);
 		if (response?.ok) {
 			groupNameInput.current.value = "";
 			toast.info(t`Group created!`, { toastId: "newGroupToast" });

@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 
 import { User } from "../../types/User";
-import { authedFetch } from "../../util/reauth";
+import { useAPI, useDELETE } from "../../util/api";
 import { Text } from "../Text";
 import { InputField } from "../form/InputField";
 
@@ -151,17 +151,12 @@ export default function Member({
 	);
 
 	async function inviteUser(userEmail: string, invite: boolean) {
-		const response = await authedFetch(
+		const response = await useAPI(
+			invite ? "POST" : "DELETE",
 			`/api/groups/${user.groupID}/members/invitation`,
-			{
-				method: `${invite ? "POST" : "DELETE"}`,
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					invitedUserEmail: userEmail,
-				}),
-			}
+			JSON.stringify({
+				invitedUserEmail: userEmail,
+			})
 		);
 		if (response?.ok) {
 			toast.info(t`User invited`, {
@@ -176,14 +171,8 @@ export default function Member({
 	}
 
 	async function deleteMember(user: User) {
-		const response = await authedFetch(
-			`/api/groups/${user.groupID}/members/${user.userID}`,
-			{
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
+		const response = await useDELETE(
+			`/api/groups/${user.groupID}/members/${user.userID}`
 		);
 		if (response?.ok) {
 			toast.info("User removed!", { toastId: "removedUserToast" });

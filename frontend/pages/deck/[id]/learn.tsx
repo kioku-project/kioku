@@ -9,7 +9,7 @@ import { Flashcard } from "../../../components/flashcard/Flashcard";
 import KiokuAward from "../../../components/graphics/KiokuAward";
 import { Button } from "../../../components/input/Button";
 import { GroupRole } from "../../../types/GroupRole";
-import { authedFetch } from "../../../util/reauth";
+import { usePOST } from "../../../util/api";
 import { useDeck, useDueCards, useGroup, usePullCard } from "../../../util/swr";
 
 export default function Page() {
@@ -79,13 +79,10 @@ export default function Page() {
 	);
 
 	async function push(body: { cardID: string; rating: number }) {
-		const response = await authedFetch(`/api/decks/${deckID}/push`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(body),
-		});
+		const response = await usePOST(
+			`/api/decks/${deckID}/push`,
+			JSON.stringify(body)
+		);
 		if (response?.ok) {
 			mutate(`/api/decks/${deckID}/pull`);
 			mutate(`/api/decks/${deckID}/dueCards`);

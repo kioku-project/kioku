@@ -8,6 +8,8 @@ import { useSWRConfig } from "swr";
 import { Group as GroupType } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
+import { useDecks } from "../../../util/swr";
+import DeckList from "../../deck/DeckList";
 import { InputField } from "../../form/InputField";
 
 interface DecksTabProps {
@@ -28,6 +30,7 @@ export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 	const { mutate } = useSWRConfig();
 	const { _ } = useLingui();
 
+	const { decks } = useDecks(group.groupID);
 	const deckNameInput = useRef<HTMLInputElement>(null);
 
 	return (
@@ -55,7 +58,7 @@ export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 						/>
 					</div>
 				)}
-			<DeckOverview group={{ ...group, groupName: "" }}></DeckOverview>
+			<DeckList decks={decks} />
 		</div>
 	);
 

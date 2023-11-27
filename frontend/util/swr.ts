@@ -125,12 +125,12 @@ export function useDeck(deckID?: string) {
 }
 
 export function useDueCards(deckID?: string) {
-	const { data, error, isLoading } = useSWR<number>(
+	const { data, error, isLoading } = useSWR<{ dueCards: number }>(
 		deckID ? `/api/decks/${deckID}/dueCards` : null,
 		fetcher
 	);
 	return {
-		dueCards: data,
+		dueCards: data?.dueCards,
 		error,
 		isLoading,
 	};

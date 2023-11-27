@@ -2,8 +2,8 @@ import { Trans, plural } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { ArrowRight, Globe, Heart, Lock, MoreVertical } from "react-feather";
+import { useEffect, useMemo, useState } from "react";
+import { Globe, Heart, Lock, MoreVertical } from "react-feather";
 import "react-toastify/dist/ReactToastify.css";
 import { preload } from "swr";
 
@@ -43,9 +43,11 @@ export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 		}
 	}, [router, deck]);
 
-	return (
-		<Deck deck={deck && { ...deck, dueCards: dueCards }} {...props}></Deck>
-	);
+	const newDeck = useMemo(() => {
+		return { ...deck, dueCards: dueCards };
+	}, [deck, dueCards]);
+
+	return <Deck deck={newDeck} {...props} />;
 };
 
 /**
@@ -77,11 +79,7 @@ export const Deck = ({
 		>
 			<div className="flex h-[6.5rem] w-full flex-row bg-gradient-to-r to-60% transition-all first:rounded-t-md last:rounded-b-md group-hover:from-[#F7EBEB] sm:h-28 md:h-32 lg:h-32">
 				<div className="relative my-3 ml-3 flex aspect-square items-center justify-center rounded bg-[#F31212]/50">
-					<Text
-						style="none"
-						size="lg"
-						className="font-black text-[#7B100E]"
-					>
+					<Text textSize="lg" className="font-black text-[#7B100E]">
 						{deck.deckName.slice(0, 2).toUpperCase()}
 					</Text>
 					{!!deck.dueCards && (
@@ -95,7 +93,8 @@ export const Deck = ({
 						<div className="flex w-full flex-row items-center justify-between space-x-2">
 							<div className="flex flex-row items-center space-x-1 overflow-hidden">
 								<Text
-									size="sm"
+									textStyle="primary"
+									textSize="sm"
 									className="flex-1 items-center space-x-1 truncate whitespace-nowrap font-extrabold"
 								>
 									{deck.deckName}
@@ -160,18 +159,16 @@ export const Deck = ({
 					<div className="flex w-full flex-row items-center justify-between">
 						<div className="flex items-center space-x-3">
 							<Button
-								buttonSize="sm"
+								buttonStyle="primary"
+								buttonTextSize="3xs"
+								buttonIcon="ArrowRight"
+								className="px-3 py-1.5"
 								onClick={(event) => {
 									router.push(`/deck/${deck.deckID}/learn`);
 									event.stopPropagation();
 								}}
 							>
-								<div className="flex flex-row items-center space-x-1">
-									<div className="flex items-center">
-										<Trans>Learn</Trans>
-									</div>
-									<ArrowRight size={16} />
-								</div>
+								<Trans>Learn</Trans>
 							</Button>
 							<div className="flex flex-row items-center space-x-1">
 								{deck.deckType === "PUBLIC" && (
@@ -183,11 +180,7 @@ export const Deck = ({
 								{deck.deckType === "PRIVATE" && (
 									<Lock size={12} className="text-gray-400" />
 								)}
-								<Text
-									size="5xs"
-									style="none"
-									className="text-gray-400"
-								>
+								<Text textSize="5xs" className="text-gray-400">
 									{deck.deckType}
 								</Text>
 							</div>

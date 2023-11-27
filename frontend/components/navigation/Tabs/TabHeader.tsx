@@ -1,4 +1,12 @@
-import { BarChart2, Copy, Layers, Mail, Settings, Users } from "react-feather";
+import {
+	BarChart2,
+	Copy,
+	Home,
+	Layers,
+	Mail,
+	Settings,
+	Users,
+} from "react-feather";
 
 interface TabHeaderProps {
 	/**
@@ -24,13 +32,14 @@ interface TabHeaderProps {
 }
 
 const getIcon = {
-	cards: <Copy size={20}></Copy>,
-	decks: <Layers size={20}></Layers>,
-	groups: <Users size={20}></Users>,
-	invitations: <Mail size={20}></Mail>,
-	settings: <Settings size={20}></Settings>,
-	statistics: <BarChart2 size={20}></BarChart2>,
-	user: <Users size={20}></Users>,
+	cards: <Copy size={20} />,
+	dashboard: <Home size={20} />,
+	decks: <Layers size={20} />,
+	groups: <Users size={20} />,
+	invitations: <Mail size={20} />,
+	settings: <Settings size={20} />,
+	statistics: <BarChart2 size={20} />,
+	user: <Users size={20} />,
 } as const;
 
 /**
@@ -52,7 +61,7 @@ export const TabHeader = ({
 			<div>{name}</div>
 			{notificationBadgeContent && (
 				<div className="relative flex h-full text-sm text-eggshell">
-					<div className="absolute inline-flex h-full w-full animate-[ping_1s_ease-out_3] rounded-full bg-kiokuRed opacity-75"></div>
+					<div className="absolute inline-flex h-full w-full animate-[ping_1s_ease-out_3] rounded-full bg-kiokuRed opacity-75" />
 					<div className="relative flex h-full w-full justify-center rounded-full bg-kiokuRed px-2">
 						{notificationBadgeContent}
 					</div>

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
 import { User } from "../../../types/User";
-import { authedFetch } from "../../../util/reauth";
+import { deleteRequest, putRequests } from "../../../util/api";
 import { DangerAction } from "../../input/DangerAction";
 import { InputAction } from "../../input/InputAction";
 import { Section } from "../../layout/Section";
@@ -52,7 +52,7 @@ export const UserSettingsTab = ({
 					onClick={() => {
 						modifyUser({ userName: userName });
 					}}
-				></InputAction>
+				/>
 			</Section>
 			<Section
 				id="userSettingsDangerZoneSectionId"
@@ -79,19 +79,13 @@ export const UserSettingsTab = ({
 							setConfirmDeletion(true);
 						}
 					}}
-				></DangerAction>
+				/>
 			</Section>
 		</div>
 	);
 
 	async function modifyUser(body: { userName?: string }) {
-		const response = await authedFetch(`/api/user`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(body),
-		});
+		const response = await putRequests(`/api/user`, JSON.stringify(body));
 		if (response?.ok) {
 			toast.info(t`User updated!`, { toastId: "updatedUserToast" });
 		} else {
@@ -101,12 +95,7 @@ export const UserSettingsTab = ({
 	}
 
 	async function deleteUser() {
-		const response = await authedFetch(`/api/user`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+		const response = await deleteRequest(`/api/user`);
 		if (response?.ok) {
 			toast.info(t`User deleted!`, { toastId: "deletedUserToast" });
 		} else {

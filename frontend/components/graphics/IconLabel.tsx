@@ -43,11 +43,7 @@ export const IconLabel = ({
 			{iconLabel.icon && (
 				<Icon icon={iconLabel.icon} size={iconSize} className={color} />
 			)}
-			<Text
-				size={textSize}
-				style="none"
-				className="flex flex-row items-center"
-			>
+			<Text textSize={textSize} className="flex flex-row items-center">
 				<div className="space-x-1">
 					<span className={color}>{iconLabel.header}</span>
 					<span>{iconLabel.description}</span>

@@ -30,28 +30,24 @@ export default function Page() {
 				id="DecksTabHeaderId"
 				name={_(msg`Decks`)}
 				style="decks"
-			></TabHeader>
+			/>
 		),
 		user: (
-			<TabHeader
-				id="UserTabHeaderId"
-				name={_(msg`User`)}
-				style="user"
-			></TabHeader>
+			<TabHeader id="UserTabHeaderId" name={_(msg`User`)} style="user" />
 		),
 		statistics: (
 			<TabHeader
 				id="StatisticsTabHeaderId"
 				name={_(msg`Statistics`)}
 				style="statistics"
-			></TabHeader>
+			/>
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
 				name={_(msg`Settings`)}
 				style="settings"
-			></TabHeader>
+			/>
 		),
 	};
 
@@ -84,17 +80,13 @@ export default function Page() {
 							tabs={tabs}
 							currentTab={currentTab}
 							setTab={setCurrentTab}
-						></TabBar>
+						/>
 						<div>
 							{{
-								decks: <DecksTab group={group}></DecksTab>,
-								user: <MembersTab group={group}></MembersTab>,
-								settings: (
-									<GroupSettingsTab
-										group={group}
-									></GroupSettingsTab>
-								),
-								statistics: <StatisticsTab></StatisticsTab>,
+								decks: <DecksTab group={group} />,
+								user: <MembersTab group={group} />,
+								settings: <GroupSettingsTab group={group} />,
+								statistics: <StatisticsTab />,
 							}[currentTab] ?? <div>Error</div>}
 						</div>
 					</div>

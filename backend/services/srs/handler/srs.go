@@ -2,9 +2,9 @@ package handler
 
 import (
 	"context"
-	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
+	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	"go-micro.dev/v4/logger"
 	"math"
@@ -24,7 +24,7 @@ func New(s store.SrsStore, cds pbCardDeck.CardDeckService) *Srs {
 	return &Srs{store: s, cardDeckService: cds}
 }
 
-func (e *Srs) Push(ctx context.Context, req *pb.SrsPushRequest, rsp *pb.SuccessResponse) error {
+func (e *Srs) Push(ctx context.Context, req *pb.SrsPushRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received Srs.Push request: %v", req)
 	cardBinding, err := e.store.FindCardBinding(ctx, req.UserID, req.CardID)
 	if err != nil {
@@ -69,13 +69,9 @@ func (e *Srs) Push(ctx context.Context, req *pb.SrsPushRequest, rsp *pb.SuccessR
 	return nil
 }
 
-func (e *Srs) Pull(ctx context.Context, req *pb.DeckPullRequest, rsp *pb.SrsPullResponse) error {
+func (e *Srs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Card) error {
 	logger.Infof("Received Srs.Pull request: %v", req)
-	cards, err := e.store.FindDeckCards(
-		ctx,
-		req.UserID,
-		req.DeckID,
-	)
+	cards, err := e.store.FindDeckCards(ctx, req.UserID, req.Deck.DeckID)
 	if err != nil {
 		return err
 	}
@@ -92,29 +88,34 @@ func (e *Srs) Pull(ctx context.Context, req *pb.DeckPullRequest, rsp *pb.SrsPull
 	})
 	// if no more cards are due, return empty card
 	if len(dueCards) == 0 {
-		rsp.Card = &pb.Card{
+		*rsp = pbCommon.Card{
 			CardID: "",
 			Sides:  nil,
 		}
 		return nil
 	}
 
-	returnedCard := &pb.Card{CardID: dueCards[0].CardID}
+	returnedCard := &pbCommon.Card{CardID: dueCards[0].CardID}
 
 	// get content of card
-	cardWithContent, err := e.cardDeckService.GetCard(ctx, &pbCardDeck.IDRequest{
-		UserID:   req.UserID,
-		EntityID: returnedCard.CardID,
+	cardWithContent, err := e.cardDeckService.GetCard(ctx, &pbCommon.CardRequest{
+		UserID: req.UserID,
+		Card: &pbCommon.Card{
+			CardID: returnedCard.CardID,
+		},
 	})
 	if err != nil {
 		return err
 	}
-	returnedCard = converter.CardDeckProtoCardToSrsProtoCardConverter(cardWithContent)
-	rsp.Card = returnedCard
+	*rsp = pbCommon.Card{
+		CardID: cardWithContent.CardID,
+		DeckID: cardWithContent.DeckID,
+		Sides:  cardWithContent.Sides,
+	}
 	return nil
 }
 
-func (e *Srs) AddUserCardBinding(ctx context.Context, req *pb.BindingRequest, rsp *pb.SuccessResponse) error {
+func (e *Srs) AddUserCardBinding(ctx context.Context, req *pb.BindingRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received Srs.AddUserCardBinding request: %v", req)
 	err := e.store.CreateUserCard(ctx, 
 		&model.UserCardBinding{
@@ -132,12 +133,12 @@ func (e *Srs) AddUserCardBinding(ctx context.Context, req *pb.BindingRequest, rs
 	rsp.Success = true
 	return nil
 }
-func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pb.DeckPullRequest, rsp *pb.DueResponse) error {
+func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pbCommon.DeckRequest, rsp *pb.UserDueResponse) error {
 	logger.Infof("Received Srs.GetDeckCardsDue request: %v", req)
 	cards, err := e.store.FindDeckCards(
 		ctx,
 		req.UserID,
-		req.DeckID,
+		req.Deck.DeckID,
 	)
 	if err != nil {
 		return err
@@ -148,10 +149,10 @@ func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pb.DeckPullRequest, rsp 
 			dueCards = append(dueCards, card)
 		}
 	}
-	rsp.Due = int64(len(dueCards))
+	rsp.DueCards = int64(len(dueCards))
 	return nil
 }
-func (e *Srs) GetUserCardsDue(ctx context.Context, req *pb.UserDueRequest, rsp *pb.UserDueResponse) error {
+func (e *Srs) GetUserCardsDue(ctx context.Context, req *pbCommon.User, rsp *pb.UserDueResponse) error {
 	logger.Infof("Received Srs.GetUserCardsDue request: %v", req)
 	cards, err := e.store.FindUserCards(ctx, req.UserID)
 	if err != nil {

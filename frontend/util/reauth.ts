@@ -18,7 +18,7 @@ export function checkAccessTokenValid() {
 	}
 	const accessToken = getCookie("access_token");
 	const decoded = jwtDecode<JwtPayload>(accessToken!.toString());
-	if (!decoded.exp || decoded.exp > Math.floor(Date.now() / 1000)) {
+	if (!decoded.exp || decoded.exp < Math.floor(Date.now() / 1000)) {
 		return false;
 	}
 	return true;

@@ -28,21 +28,21 @@ export default function Page() {
 				id="CardsTabHeaderId"
 				name={_(msg`Cards`)}
 				style="cards"
-			></TabHeader>
+			/>
 		),
 		statistics: (
 			<TabHeader
 				id="StatisticsTabHeaderId"
 				name={_(msg`Statistics`)}
 				style="statistics"
-			></TabHeader>
+			/>
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
 				name={_(msg`Settings`)}
 				style="settings"
-			></TabHeader>
+			/>
 		),
 	};
 
@@ -79,7 +79,7 @@ export default function Page() {
 							tabs={tabs}
 							currentTab={currentTab}
 							setTab={setCurrentTab}
-						></TabBar>
+						/>
 						<div className="h-full overflow-y-auto">
 							{{
 								cards: (
@@ -88,15 +88,15 @@ export default function Page() {
 											...deck,
 											groupRole: group.groupRole,
 										}}
-									></CardsTab>
+									/>
 								),
 								settings: (
 									<DeckSettingsTab
 										group={group}
 										deck={deck}
-									></DeckSettingsTab>
+									/>
 								),
-								statistics: <StatisticsTab></StatisticsTab>,
+								statistics: <StatisticsTab />,
 							}[currentTab] ?? <div>Error</div>}
 						</div>
 					</div>

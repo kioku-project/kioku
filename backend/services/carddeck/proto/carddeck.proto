@@ -1,122 +1,23 @@
 syntax = "proto3";
 
-package cardDeck;
+import "pkg/proto/common.proto";
 
-option go_package = "./proto;cardDeck";
+package cardDeckService;
+
+option go_package ="github.com/kioku-project/kioku/services/carddeck/proto;cardDeck";
 
 service CardDeck {
-	rpc GetGroupDecks(GroupDecksRequest) returns (GroupDecksResponse) {}
-	rpc CreateDeck(CreateDeckRequest) returns (IDResponse) {}
-	rpc GetDeck(IDRequest) returns (DeckResponse) {}
-	rpc ModifyDeck(ModifyDeckRequest) returns (SuccessResponse) {}
-	rpc DeleteDeck(IDRequest) returns (SuccessResponse) {}
-	rpc GetDeckCards(IDRequest) returns (DeckCardsResponse) {}
-	rpc CreateCard(CreateCardRequest) returns (IDResponse) {}
-	rpc GetCard(IDRequest) returns (Card) {}
-	rpc ModifyCard(ModifyCardRequest) returns (SuccessResponse) {}
-	rpc DeleteCard(IDRequest) returns (SuccessResponse) {}
-	rpc CreateCardSide(CreateCardSideRequest) returns (IDResponse) {}
-	rpc ModifyCardSide(ModifyCardSideRequest) returns (SuccessResponse) {}
-	rpc DeleteCardSide(IDRequest) returns (SuccessResponse) {}
-}
-
-enum DeckType {
-	PUBLIC = 0;
-	PRIVATE = 1;
-	INVALID = 2;
-}
-
-message GroupDecksRequest {
-	string userID = 1;
-	string groupID = 2;
-}
-
-message GroupDecksResponse {
-	repeated Deck decks = 1;
-}
-
-message Deck {
-	string deckID = 1;
-	string deckName = 2;
-	DeckType deckType = 3;
-}
-
-message DeckResponse {
-	string deckID = 1;
-	string deckName = 2;
-	int64 createdAt = 3;
-	string groupID = 4;
-	DeckType deckType = 5;
-}
-
-message CreateDeckRequest {
-	string userID = 1;
-	string groupID = 2;
-	string deckName = 3;
-	DeckType deckType = 4;
-}
-
-message IDResponse {
-	string ID = 1;
-}
-
-message ModifyDeckRequest {
-	string userID = 1;
-	string deckID = 2;
-	optional string deckName = 3;
-	optional DeckType deckType = 4;
-}
-
-message SuccessResponse {
-	bool success = 1;
-}
-
-message IDRequest {
-	string userID = 1;
-	string entityID = 2;
-}
-
-message DeckCardsResponse {
-	repeated Card cards = 1;
-}
-
-message Card {
-	string cardID = 1;
-	repeated CardSide sides = 2;
-}
-
-message CardSide {
-	string cardSideID = 1;
-	string header = 2;
-	string description = 3;
-}
-
-message CardSideContent {
-	string header = 1;
-	string description = 2;
-}
-
-message CreateCardRequest {
-	string userID = 1;
-	string deckID = 2;
-	repeated CardSideContent sides = 3;
-}
-
-message ModifyCardRequest {
-	string userID = 1;
-	string cardID = 2;
-	repeated CardSideContent sides = 3;
-}
-
-message CreateCardSideRequest {
-	string userID = 1;
-	string cardID = 2;
-	string placeBeforeCardSideID = 3;
-	CardSideContent content = 4;
-}
-
-message ModifyCardSideRequest {
-	string userID = 1;
-	string cardSideID = 2;
-	optional CardSideContent content = 3;
+	rpc GetGroupDecks(common.GroupRequest) returns (common.Decks) {}
+	rpc CreateDeck(common.DeckRequest) returns (common.Deck) {}
+	rpc GetDeck(common.DeckRequest) returns (common.Deck) {}
+	rpc ModifyDeck(common.DeckRequest) returns (common.Success) {}
+	rpc DeleteDeck(common.DeckRequest) returns (common.Success) {}
+	rpc GetDeckCards(common.DeckRequest) returns (common.Cards) {}
+	rpc CreateCard(common.CardRequest) returns (common.Card) {}
+	rpc GetCard(common.CardRequest) returns (common.Card) {}
+	rpc ModifyCard(common.CardRequest) returns (common.Success) {}
+	rpc DeleteCard(common.CardRequest) returns (common.Success) {}
+	rpc CreateCardSide(common.CardSideRequest) returns (common.CardSide) {}
+	rpc ModifyCardSide(common.CardSideRequest) returns (common.Success) {}
+	rpc DeleteCardSide(common.CardSideRequest) returns (common.Success) {}
 }

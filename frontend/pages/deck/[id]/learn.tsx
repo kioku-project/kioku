@@ -9,7 +9,7 @@ import { Flashcard } from "../../../components/flashcard/Flashcard";
 import KiokuAward from "../../../components/graphics/KiokuAward";
 import { Button } from "../../../components/input/Button";
 import { GroupRole } from "../../../types/GroupRole";
-import { authedFetch } from "../../../util/reauth";
+import { postRequest } from "../../../util/api";
 import { useDeck, useDueCards, useGroup, usePullCard } from "../../../util/swr";
 
 export default function Page() {
@@ -21,7 +21,7 @@ export default function Page() {
 	const { dueCards } = useDueCards(deckID);
 	const { group } = useGroup(deck?.groupID);
 	return (
-		<div>
+		<>
 			<Head>
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
@@ -49,15 +49,15 @@ export default function Page() {
 							group?.groupRole &&
 							GroupRole[group.groupRole] >= GroupRole.WRITE
 						}
-					></Flashcard>
+					/>
 				) : (
 					<div className="mx-auto my-auto flex flex-col items-center space-y-5">
-						<KiokuAward></KiokuAward>
+						<KiokuAward />
 						<div className="flex flex-col items-center space-y-1">
 							<div className="text-4xl font-bold text-kiokuDarkBlue">
 								<Trans>Congratulations!</Trans>
 							</div>
-							<div className="text-lg font-semibold text-kiokuLightBlue">
+							<div className="text-center text-lg font-semibold text-kiokuLightBlue">
 								<Trans>
 									You did it! There are no cards left in this
 									deck to learn today.
@@ -66,6 +66,8 @@ export default function Page() {
 						</div>
 						<Button
 							id="goBackButtonId"
+							buttonStyle="primary"
+							buttonSize="sm"
 							onClick={() => router.push(`/deck/${deckID}`)}
 						>
 							<Trans>Back to Deck!</Trans>
@@ -73,17 +75,14 @@ export default function Page() {
 					</div>
 				)}
 			</div>
-		</div>
+		</>
 	);
 
 	async function push(body: { cardID: string; rating: number }) {
-		const response = await authedFetch(`/api/decks/${deckID}/push`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(body),
-		});
+		const response = await postRequest(
+			`/api/decks/${deckID}/push`,
+			JSON.stringify(body)
+		);
 		if (response?.ok) {
 			mutate(`/api/decks/${deckID}/pull`);
 			mutate(`/api/decks/${deckID}/dueCards`);

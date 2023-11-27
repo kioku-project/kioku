@@ -11,8 +11,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/kioku-project/kioku/pkg/model"
+	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
-	pb "github.com/kioku-project/kioku/services/user/proto"
 	"github.com/kioku-project/kioku/store"
 )
 
@@ -25,7 +25,7 @@ func New(s store.UserStore, cS pbCollaboration.CollaborationService) *User {
 	return &User{store: s, collaborationService: cS}
 }
 
-func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.NameIDResponse) error {
+func (e *User) Register(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Success) error {
 	logger.Infof("Received User.Register request: email: %v", req.UserEmail)
 	if _, err := e.store.FindUserByEmail(ctx, req.UserEmail); err == nil {
 		return helper.NewMicroUserAlreadyExistsErr(helper.UserServiceID)
@@ -55,22 +55,24 @@ func (e *User) Register(ctx context.Context, req *pb.RegisterRequest, rsp *pb.Na
 	if err != nil {
 		return err
 	}
-	_, err = e.collaborationService.CreateNewGroupWithAdmin(ctx, &pbCollaboration.CreateGroupRequest{
-		UserID:           newUser.ID,
-		GroupName:        "Home Group",
-		GroupDescription: "Your personal deck space",
-		IsDefault:        true,
+	_, err = e.collaborationService.CreateNewGroupWithAdmin(ctx, &pbCommon.GroupRequest{
+		UserID: newUser.ID,
+		Group: &pbCommon.Group{
+			GroupName:        "Home Group",
+			GroupDescription: "Your personal deck space",
+			IsDefault:        true,
+			GroupType:        pbCommon.GroupType_GT_CLOSED,
+		},
 	})
 	if err != nil {
 		return err
 	}
-	rsp.UserName = newUser.Name
-	rsp.UserID = newUser.ID
+	rsp.Success = true
 	logger.Infof("Successfully created new user with id %s", newUser.ID)
 	return nil
 }
 
-func (e *User) VerifyUserExists(ctx context.Context, req *pb.VerificationRequest, rsp *pb.SuccessResponse) error {
+func (e *User) VerifyUserExists(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Success) error {
 	user, err := e.store.FindUserByEmail(ctx, req.UserEmail)
 	if err != nil {
 		return err
@@ -81,7 +83,7 @@ func (e *User) VerifyUserExists(ctx context.Context, req *pb.VerificationRequest
 	return nil
 }
 
-func (e *User) DeleteUser(ctx context.Context, req *pb.UserID, rsp *pb.SuccessResponse) error {
+func (e *User) DeleteUser(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Success) error {
 	logger.Infof("Received User.Delete request: %v", req)
 	user, err := e.store.FindUserByID(ctx, req.UserID)
 	if err != nil {
@@ -89,14 +91,16 @@ func (e *User) DeleteUser(ctx context.Context, req *pb.UserID, rsp *pb.SuccessRe
 		return err
 	}
 	// Handle groups that the user is part of
-	groupRes, err := e.collaborationService.GetUserGroups(ctx, &pbCollaboration.UserIDRequest{UserID: user.ID})
+	groupRes, err := e.collaborationService.GetUserGroups(ctx, &pbCommon.User{UserID: user.ID})
 	if err != nil {
 		return err
 	}
 	for _, group := range groupRes.Groups {
-		_, err := e.collaborationService.LeaveGroup(ctx, &pbCollaboration.GroupRequest{
-			UserID:  req.UserID,
-			GroupID: group.Group.GroupID,
+		_, err := e.collaborationService.LeaveGroup(ctx, &pbCommon.GroupRequest{
+			UserID: req.UserID,
+			Group: &pbCommon.Group{
+				GroupID: group.GroupID,
+			},
 		})
 		if err != nil {
 			return err
@@ -112,7 +116,7 @@ func (e *User) DeleteUser(ctx context.Context, req *pb.UserID, rsp *pb.SuccessRe
 	return nil
 }
 
-func (e *User) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.NameIDResponse) error {
+func (e *User) Login(ctx context.Context, req *pbCommon.User, rsp *pbCommon.User) error {
 	logger.Infof("Received User.Login request: email: %v", req.UserEmail)
 	user, err := e.store.FindUserByEmail(ctx, req.UserEmail)
 	if err != nil {
@@ -131,7 +135,7 @@ func (e *User) Login(ctx context.Context, req *pb.LoginRequest, rsp *pb.NameIDRe
 	return nil
 }
 
-func (e *User) GetUserIDFromEmail(ctx context.Context, req *pb.UserIDRequest, rsp *pb.UserID) error {
+func (e *User) GetUserIDFromEmail(ctx context.Context, req *pbCommon.User, rsp *pbCommon.User) error {
 	logger.Infof("Received User.GetUserIDFromEmail request: %v", req)
 	user, err := e.store.FindUserByEmail(ctx, req.UserEmail)
 	if err != nil {
@@ -144,20 +148,19 @@ func (e *User) GetUserIDFromEmail(ctx context.Context, req *pb.UserIDRequest, rs
 	logger.Infof("Found user with id %s", user.ID)
 	return nil
 }
-
 func (e *User) GetUserInformation(
 	ctx context.Context,
-	req *pb.UserInformationRequest,
-	rsp *pb.UserInformationResponse,
+	req *pbCommon.Users,
+	rsp *pbCommon.Users,
 ) error {
 	logger.Infof("Received User.GetUserInformation request: %v", req)
-	rsp.Users = make([]*pb.UserInformation, len(req.UserIDs))
-	for i, user := range req.UserIDs {
+	rsp.Users = make([]*pbCommon.User, len(req.Users))
+	for i, user := range req.Users {
 		user, err := e.store.FindUserByID(ctx, user.UserID)
 		if err != nil {
 			return err
 		}
-		rsp.Users[i] = &pb.UserInformation{
+		rsp.Users[i] = &pbCommon.User{
 			UserID:    user.ID,
 			UserName:  user.Name,
 			UserEmail: user.Email,
@@ -169,8 +172,8 @@ func (e *User) GetUserInformation(
 
 func (e *User) GetUserProfileInformation(
 	ctx context.Context,
-	req *pb.UserID,
-	rsp *pb.UserProfileInformationResponse,
+	req *pbCommon.User,
+	rsp *pbCommon.User,
 ) error {
 	logger.Infof("Received User.GetUserProfileInformation request: %v", req)
 	user, err := e.store.FindUserByID(ctx, req.UserID)
@@ -184,33 +187,30 @@ func (e *User) GetUserProfileInformation(
 
 func (e *User) ModifyUserProfileInformation(
 	ctx context.Context,
-	req *pb.ModifyRequest,
-	rsp *pb.SuccessResponse,
+	req *pbCommon.User,
+	rsp *pbCommon.Success,
 ) error {
 	logger.Infof("Received User.ModifyUserProfileInformation request: %v", req)
 	user, err := e.store.FindUserByID(ctx, req.UserID)
 	if err != nil {
 		return err
 	}
-	if req.UserName != nil {
-		err = helper.CheckForValidName(*req.UserName, helper.UserNameRegex, helper.UserServiceID)
+	if req.UserName != "" {
+		err = helper.CheckForValidName(req.UserName, helper.UserNameRegex, helper.UserServiceID)
 		if err != nil {
 			return err
 		}
-		user.Name = *req.UserName
+		user.Name = req.UserName
 	}
-	if req.UserEmail != nil {
-		addr, err := mail.ParseAddress(*req.UserEmail)
+	if req.UserEmail != "" {
+		addr, err := mail.ParseAddress(req.UserEmail)
 		if err != nil {
 			return err
 		}
 		user.Email = addr.Address
 	}
-	if req.UserPassword != nil {
-		if *req.UserPassword == "" {
-			return helper.NewMicroInvalidPasswordErr(helper.UserServiceID)
-		}
-		hash, err := bcrypt.GenerateFromPassword([]byte(*req.UserPassword), bcrypt.MinCost)
+	if req.UserPassword != "" {
+		hash, err := bcrypt.GenerateFromPassword([]byte(req.UserPassword), bcrypt.MinCost)
 		if err != nil {
 			return helper.NewMicroHashingFailedErr(helper.UserServiceID)
 		}

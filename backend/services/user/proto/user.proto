@@ -1,74 +1,18 @@
 syntax = "proto3";
 
-package user;
+import "pkg/proto/common.proto";
 
-option go_package = "./proto;user";
+package userService;
+
+option go_package ="github.com/kioku-project/kioku/services/user/proto;user";
 
 service User {
-	rpc Register(RegisterRequest) returns (NameIDResponse) {}
-	rpc DeleteUser(UserID) returns (SuccessResponse) {}
-	rpc Login(LoginRequest) returns (NameIDResponse) {}
-	rpc GetUserIDFromEmail(UserIDRequest) returns (UserID) {}
-	rpc GetUserInformation(UserInformationRequest) returns (UserInformationResponse) {}
-	rpc GetUserProfileInformation(UserID) returns (UserProfileInformationResponse) {}
-	rpc ModifyUserProfileInformation(ModifyRequest) returns (SuccessResponse) {}
-        rpc VerifyUserExists(VerificationRequest) returns (SuccessResponse) {}
-}
-
-message RegisterRequest {
-	string userEmail = 1;
-	string userName = 2;
-	string userPassword = 3;
-}
-
-message ModifyRequest {
-	string userID = 1;
-	optional string userEmail = 2;
-	optional string userName = 3;
-	optional string userPassword = 4;
-}
-
-message NameIDResponse {
-	string userID = 1;
-	string userName = 2;
-}
-
-message LoginRequest {
-	string userEmail = 1;
-	string userPassword = 2;
-}
-
-message UserIDRequest {
-	string userEmail = 1;
-}
-message VerificationRequest {
-	string userID = 1;
-	string userEmail = 2;
-}
-
-message UserID {
-	string userID = 1;
-}
-message SuccessResponse {
-        bool success = 1;
-}
-
-message UserInformationRequest {
-	repeated UserID userIDs = 1;
-}
-
-message UserInformationResponse {
-	repeated UserInformation users = 1;
-}
-
-message UserInformation {
-	string userID = 1;
-	string userEmail = 2;
-	string userName = 3;
-}
-
-message UserProfileInformationResponse {
-	string userID = 1;
-	string userEmail = 2;
-	string userName = 3;
+	rpc Register(common.User) returns (common.Success) {}
+	rpc DeleteUser(common.User) returns (common.Success) {}
+	rpc Login(common.User) returns (common.User) {}
+	rpc GetUserIDFromEmail(common.User) returns (common.User) {}
+	rpc GetUserInformation(common.Users) returns (common.Users) {}
+	rpc GetUserProfileInformation(common.User) returns (common.User) {}
+	rpc ModifyUserProfileInformation(common.User) returns (common.Success) {}
+	rpc VerifyUserExists(common.User) returns (common.Success) {}
 }

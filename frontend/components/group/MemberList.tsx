@@ -66,7 +66,7 @@ export default function MemberList({
 							userName: "",
 							groupID: group.groupID,
 						}}
-					></Member>
+					/>
 				)}
 			</div>
 		</div>

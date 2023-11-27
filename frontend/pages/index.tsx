@@ -30,6 +30,8 @@ export default function Home() {
 	const { invitations } = useInvitations();
 	const { groups } = useGroups();
 
+	const homeGroup = groups?.filter((group) => group.isDefault)[0];
+
 	const { _ } = useLingui();
 
 	const tabs: { [tab: string]: ReactNode } = {
@@ -38,14 +40,14 @@ export default function Home() {
 				id="decksTabHeaderId"
 				name={_(msg`Decks`)}
 				style="decks"
-			></TabHeader>
+			/>
 		),
 		groups: (
 			<TabHeader
 				id="groupTabHeaderId"
 				name={_(msg`Groups`)}
 				style="groups"
-			></TabHeader>
+			/>
 		),
 		invitations: (
 			<TabHeader
@@ -53,21 +55,21 @@ export default function Home() {
 				name={_(msg`Invitations`)}
 				style="invitations"
 				notificationBadgeContent={`${invitations?.length ?? ""}`}
-			></TabHeader>
+			/>
 		),
 		statistics: (
 			<TabHeader
 				id="StatisticsTabHeaderId"
 				name={_(msg`Statistics`)}
 				style="statistics"
-			></TabHeader>
+			/>
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
 				name={_(msg`Settings`)}
 				style="settings"
-			></TabHeader>
+			/>
 		),
 	};
 
@@ -102,30 +104,18 @@ export default function Home() {
 							tabs={tabs}
 							currentTab={currentTab}
 							setTab={setCurrentTab}
-						></TabBar>
+						/>
 						<div>
 							{{
-								decks: (
-									<DecksTab
-										group={
-											groups.filter(
-												(group) => group.isDefault
-											)[0]
-										}
-									></DecksTab>
+								decks: homeGroup && (
+									<DecksTab group={homeGroup} />
 								),
-								groups: <GroupsTab groups={groups}></GroupsTab>,
+								groups: <GroupsTab groups={groups} />,
 								invitations: invitations && (
-									<InvitationsTab
-										invitations={invitations}
-									></InvitationsTab>
+									<InvitationsTab invitations={invitations} />
 								),
-								statistics: <StatisticsTab></StatisticsTab>,
-								settings: (
-									<UserSettingsTab
-										user={user}
-									></UserSettingsTab>
-								),
+								statistics: <StatisticsTab />,
+								settings: <UserSettingsTab user={user} />,
 							}[currentTab] ?? <div>Error</div>}
 						</div>
 					</div>

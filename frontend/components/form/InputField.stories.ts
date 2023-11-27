@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { userEvent, within } from "@storybook/testing-library";
 
 import { InputField } from "./InputField";
 
@@ -8,7 +9,6 @@ const meta: Meta<typeof InputField> = {
 	tags: ["autodocs"],
 	args: {
 		id: "InputFieldId",
-		tooltipMessage: "This is a tooltip!",
 	},
 };
 
@@ -71,68 +71,49 @@ export const XL: Story = {
 	},
 };
 
-export const TextInput: Story = {
+export const Text: Story = {
 	args: {
 		type: "text",
-		name: "text",
-		label: "Text Input",
 		value: "Test",
 	},
 };
 
-export const EmailInput: Story = {
+export const Email: Story = {
 	args: {
 		type: "email",
-		name: "email",
-		label: "Email Input",
 		value: "test@example.com",
 	},
 };
 
-export const PasswordInput: Story = {
+export const Password: Story = {
 	args: {
 		type: "password",
-		name: "password",
-		label: "Password Input",
 		value: "superSecret!",
 	},
 };
 
-export const Success: Story = {
+export const PasswordShown: Story = {
 	args: {
-		label: "Success",
-		value: "Test",
-		statusIcon: "success",
+		type: "password",
+		value: "superSecret!",
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const icon = await canvas.getByTestId("inputFieldIconId");
+		await userEvent.click(icon);
 	},
 };
 
-export const Error: Story = {
+export const Icon: Story = {
 	args: {
-		label: "Error",
 		value: "Test",
-		statusIcon: "error",
-	},
-};
-
-export const Warning: Story = {
-	args: {
-		label: "Warning",
-		value: "Test",
-		statusIcon: "warning",
-	},
-};
-
-export const Info: Story = {
-	args: {
-		label: "Info",
-		value: "Test",
-		statusIcon: "info",
+		inputFieldIcon: "Check",
+		tooltip: "This is a tooltip!",
 	},
 };
 
 export const Placeholder: Story = {
 	args: {
-		label: "Placeholder",
 		placeholder: "Placeholder",
 	},
 };

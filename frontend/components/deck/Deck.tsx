@@ -3,7 +3,7 @@ import { useLingui } from "@lingui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ArrowRight, Globe, Heart, Lock, MoreVertical } from "react-feather";
+import { Globe, Heart, Lock, MoreVertical } from "react-feather";
 import "react-toastify/dist/ReactToastify.css";
 import { preload } from "swr";
 
@@ -155,18 +155,16 @@ export const Deck = ({
 					<div className="flex w-full flex-row items-center justify-between">
 						<div className="flex items-center space-x-3">
 							<Button
-								buttonSize="sm"
+								buttonStyle="primary"
+								buttonTextSize="3xs"
+								buttonIcon="ArrowRight"
+								className="px-3 py-1.5"
 								onClick={(event) => {
 									router.push(`/deck/${deck.deckID}/learn`);
 									event.stopPropagation();
 								}}
 							>
-								<div className="flex flex-row items-center space-x-1">
-									<div className="flex items-center">
-										<Trans>Learn</Trans>
-									</div>
-									<ArrowRight size={16} />
-								</div>
+								<Trans>Learn</Trans>
 							</Button>
 							<div className="flex flex-row items-center space-x-1">
 								{deck.deckType === "PUBLIC" && (

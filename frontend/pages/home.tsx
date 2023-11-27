@@ -52,6 +52,9 @@ export default function Page() {
 						<div className="flex flex-row space-x-3 md:space-x-5">
 							<Button
 								id="getstartedButton"
+								buttonStyle="primary"
+								buttonSize="sm"
+								buttonTextSize="xs"
 								onClick={() =>
 									hasCookie("access_token")
 										? router.push("/")
@@ -61,14 +64,16 @@ export default function Page() {
 								<Trans>Get started</Trans>
 							</Button>
 							<Button
-								id="lernmoreButton"
+								id="learnmoreButton"
 								buttonStyle="secondary"
+								buttonSize="sm"
+								buttonTextSize="xs"
+								buttonIcon="ArrowRight"
 								onClick={() => {
 									router.push("/features");
 								}}
 							>
 								<Trans>Learn more</Trans>
-								<ArrowRight className="ml-1 h-2/3"></ArrowRight>
 							</Button>
 						</div>
 					</div>

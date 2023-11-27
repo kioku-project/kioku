@@ -238,6 +238,7 @@ export const Flashcard = ({
 					<div className="flex flex-row justify-end space-x-1">
 						<Button
 							id="buttonHardId"
+							buttonStyle="primary"
 							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(0)}
@@ -246,6 +247,7 @@ export const Flashcard = ({
 						</Button>
 						<Button
 							id="buttonMediumId"
+							buttonStyle="primary"
 							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(1)}
@@ -254,6 +256,7 @@ export const Flashcard = ({
 						</Button>
 						<Button
 							id="buttonEasyId"
+							buttonStyle="primary"
 							buttonSize="sm"
 							className="w-auto"
 							onClick={() => pushCard(2)}

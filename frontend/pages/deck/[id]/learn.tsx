@@ -66,6 +66,8 @@ export default function Page() {
 						</div>
 						<Button
 							id="goBackButtonId"
+							buttonStyle="primary"
+							buttonSize="sm"
 							onClick={() => router.push(`/deck/${deckID}`)}
 						>
 							<Trans>Back to Deck!</Trans>

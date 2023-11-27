@@ -69,10 +69,11 @@ export const ToggleButtonGroup = ({
 				<Button
 					id={`${choice}ButtonId`}
 					value={choice}
-					buttonStyle={disabled ? "disabled" : "none"}
+					buttonStyle={disabled ? "disabled" : undefined}
 					buttonSize={buttonSize}
+					buttonTextSize="3xs"
 					key={choice}
-					className={`flex flex-1 rounded-none ${
+					className={`flex flex-1 justify-center rounded-none ${
 						choice == active
 							? getStyle[activeButtonStyle]
 							: getStyle["inactive"]

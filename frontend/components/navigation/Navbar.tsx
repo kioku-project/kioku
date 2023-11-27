@@ -2,7 +2,7 @@ import { Trans } from "@lingui/macro";
 import { hasCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ArrowRight, LogOut } from "react-feather";
+import { LogOut } from "react-feather";
 
 import { authedFetch } from "../../util/reauth";
 import { Logo } from "../graphics/Logo";
@@ -54,11 +54,13 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 				<Button
 					id="loginButton"
 					buttonStyle="secondary"
+					buttonSize="sm"
+					buttonTextSize="xs"
+					buttonIcon="ArrowRight"
 					className="invisible sm:visible"
 					onClick={() => router.push("/login")}
 				>
 					<Trans>Login</Trans>
-					<ArrowRight className="ml-1 h-2/3"></ArrowRight>
 				</Button>
 			)}
 		</nav>

@@ -10,8 +10,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { Text } from "../components/Text";
-import { FormButton } from "../components/form/FormButton";
 import { InputField } from "../components/form/InputField";
+import { Button } from "../components/input/Button";
 import { checkAccessTokenValid } from "../util/reauth";
 import { loadCatalog } from "./_app";
 
@@ -192,11 +192,11 @@ export default function Page() {
 					/>
 				)}
 
-				<FormButton
+				<Button
 					id={login ? "login" : "register"}
-					value={login ? _(msg`Login`) : _(msg`Register`)}
-					size="sm"
-					className="w-full"
+					buttonStyle="primary"
+					buttonSize="sm"
+					className="w-full justify-center"
 					onClick={() => {
 						if (login) {
 							loginLogic()
@@ -208,7 +208,9 @@ export default function Page() {
 								.catch((error) => {});
 						}
 					}}
-				/>
+				>
+					{login ? _(msg`Login`) : _(msg`Register`)}
+				</Button>
 			</form>
 		);
 	}

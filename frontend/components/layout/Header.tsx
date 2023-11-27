@@ -149,7 +149,9 @@ export const Header = ({
 			{deck && (
 				<Button
 					id="learnDeckButtonId"
+					buttonStyle="primary"
 					buttonSize="sm"
+					buttonTextSize="xs"
 					onClick={() => router.push(`/deck/${deck.deckID}/learn`)}
 				>
 					<Trans>Learn Deck</Trans>
@@ -161,7 +163,9 @@ export const Header = ({
 				(group.groupRole == "INVITED" || !group.groupRole) && (
 					<Button
 						id="joinGroupButtonId"
+						buttonStyle="primary"
 						buttonSize="sm"
+						buttonTextSize="xs"
 						onClick={() => {
 							joinGroup();
 						}}

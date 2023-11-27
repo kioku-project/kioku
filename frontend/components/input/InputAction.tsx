@@ -68,10 +68,9 @@ export const InputAction = ({
 						name="actionInput"
 						label={header}
 						value={value}
-						statusIcon="none"
-						inputFieldStyle="tertiary"
-						inputFieldSize="3xs"
 						readOnly={disabled}
+						inputFieldStyle="secondary"
+						inputFieldSize="3xs"
 						onChange={onChange}
 					/>
 				}

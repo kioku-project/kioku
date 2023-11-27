@@ -101,14 +101,13 @@ export const Flashcard = ({
 							name="headerInput"
 							value={tempCard.sides[side]?.header}
 							placeholder={edit ? "Header" : ""}
-							statusIcon="none"
-							inputFieldStyle="secondary"
 							readOnly={!edit}
+							inputFieldStyle="primary"
 							className="text-lg sm:text-xl md:text-2xl lg:text-3xl"
-							ref={headerInput}
 							onChange={(event) => {
 								editField("header", event.target.value);
 							}}
+							ref={headerInput}
 						/>
 						{edit ? (
 							<div className="flex flex-row items-center space-x-5">

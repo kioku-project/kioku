@@ -9,6 +9,7 @@ import { useSWRConfig } from "swr";
 import { User } from "../../types/User";
 import { authedFetch } from "../../util/reauth";
 import { Text } from "../Text";
+import { InputField } from "../form/InputField";
 
 interface MemberProps {
 	/**
@@ -125,12 +126,12 @@ export default function Member({
 				</div>
 			) : (
 				<div className="flex w-full flex-row justify-between p-2 md:p-3">
-					<input
+					<InputField
 						id="userInputFieldId"
 						type="email"
-						className="bg-transparent text-kiokuLightBlue outline-none"
 						placeholder={_(msg`Invite user with email`)}
-						ref={userInputField}
+						inputFieldStyle="secondary"
+						inputFieldSize="xs"
 						onKeyUp={(event) => {
 							if (
 								userInputField.current &&
@@ -142,6 +143,7 @@ export default function Member({
 								userInputField.current.value = "";
 							}
 						}}
+						ref={userInputField}
 					/>
 				</div>
 			)}

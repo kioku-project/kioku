@@ -183,7 +183,7 @@ export default function Page() {
 						type="password"
 						name="passwordRepeat"
 						label={_(msg`Repeat Password`)}
-						tooltipMessage={_(msg`Passwords have to match.`)}
+						tooltip={_(msg`Passwords have to match.`)}
 						required={true}
 						minLength={3}
 						pattern={password}

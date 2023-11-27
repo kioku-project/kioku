@@ -9,6 +9,7 @@ import { useSWRConfig } from "swr";
 import { Card as CardType } from "../../types/Card";
 import { authedFetch } from "../../util/reauth";
 import { Text } from "../Text";
+import { InputField } from "../form/InputField";
 
 interface CardProps {
 	/**
@@ -98,12 +99,12 @@ export const Card = ({
 				</div>
 			) : (
 				<div className="flex w-full flex-row justify-between p-2 md:p-3">
-					<input
+					<InputField
 						id="cardNameInput"
-						className="w-full bg-transparent text-xs outline-none sm:text-sm md:text-base lg:text-lg xl:text-xl"
 						type="text"
 						placeholder={_(msg`Create Card`)}
-						ref={cardNameInput}
+						inputFieldStyle="primary"
+						inputFieldSize="xs"
 						onKeyUp={(event) => {
 							if (event.key === "Enter") {
 								createCard()
@@ -111,6 +112,7 @@ export const Card = ({
 									.catch((error) => {});
 							}
 						}}
+						ref={cardNameInput}
 					/>
 				</div>
 			)}

@@ -8,7 +8,7 @@ import { useSWRConfig } from "swr";
 import { Group as GroupType } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
 import { authedFetch } from "../../../util/reauth";
-import DeckOverview from "../../deck/DeckList";
+import { InputField } from "../../form/InputField";
 
 interface DecksTabProps {
 	/**
@@ -35,11 +35,11 @@ export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 			{group.groupRole &&
 				GroupRole[group.groupRole] >= GroupRole.WRITE && (
 					<div className="flex w-full items-center justify-between rounded-md bg-neutral-100 px-4 py-3">
-						<input
+						<InputField
 							id={`deckNameInput${group.groupID}`}
-							className="w-full bg-transparent font-medium text-kiokuDarkBlue outline-none"
 							placeholder={_(msg`Create new Deck`)}
-							ref={deckNameInput}
+							inputFieldSize="xs"
+							className="w-full bg-transparent font-medium text-kiokuDarkBlue outline-none"
 							onKeyUp={(event) => {
 								if (event.key === "Enter") {
 									createDeck()
@@ -47,6 +47,7 @@ export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 										.catch((error) => {});
 								}
 							}}
+							ref={deckNameInput}
 						/>
 						<PlusSquare
 							className="text-kiokuDarkBlue transition hover:scale-110 hover:cursor-pointer"

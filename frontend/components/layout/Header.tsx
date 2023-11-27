@@ -135,16 +135,6 @@ export const Header = ({
 					)}
 				</Text>
 			</div>
-			{/* If on user page, display learn button */}
-			{/* {user && (
-				<Button
-					id="learnButtonId"
-					buttonSize="sm"
-					onClick={() => router.push("/user/learn")}
-				>
-					Start learning
-				</Button>
-			)} */}
 			{/* if on deck page, display learn deck button */}
 			{deck && (
 				<Button

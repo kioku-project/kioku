@@ -29,6 +29,8 @@ export default function Home() {
 	const { invitations } = useInvitations();
 	const { groups } = useGroups();
 
+	const homeGroup = groups?.filter((group) => group.isDefault)[0];
+
 	const { _ } = useLingui();
 
 	const tabs: { [tab: string]: ReactNode } = {
@@ -104,20 +106,15 @@ export default function Home() {
 						/>
 						<div>
 							{{
-								decks: (
-									<DecksTab
-										group={
-											groups.filter(
-												(group) => group.isDefault
-											)[0]
-										}
-									></DecksTab>
+								decks: homeGroup && (
+									<DecksTab group={homeGroup} />
 								),
 								groups: <GroupsTab groups={groups} />,
 								invitations: invitations && (
 									<InvitationsTab invitations={invitations} />
 								),
 								statistics: <StatisticsTab />,
+								settings: <UserSettingsTab user={user} />,
 							}[currentTab] ?? <div>Error</div>}
 						</div>
 					</div>

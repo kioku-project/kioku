@@ -257,8 +257,8 @@ func (e *CardDeck) CopyDeck(ctx context.Context, req *pbCardDeck.CopyDeckRequest
 		deckType model.DeckType
 		err      error
 	)
-	if req.DeckType != nil {
-		deckType, err = converter.MigrateProtoDeckTypeToModelDeckType(*req.DeckType)
+	if req.NewDeck.DeckType != pbCommon.DeckType_DT_INVALID {
+		deckType, err = converter.MigrateProtoDeckTypeToModelDeckType(req.Deck.DeckType)
 		if err != nil {
 			return err
 		}
@@ -268,7 +268,7 @@ func (e *CardDeck) CopyDeck(ctx context.Context, req *pbCardDeck.CopyDeckRequest
 
 	newDeck := &model.Deck{
 		GroupID:  req.TargetGroupID,
-		Name:     req.Deck.DeckName,
+		Name:     req.NewDeck.DeckName,
 		DeckType: deckType,
 	}
 	if err := e.store.CreateDeck(newDeck); err != nil {

@@ -27,6 +27,6 @@ service CardDeck {
 message CopyDeckRequest {
 	string userID = 1;
 	common.Deck deck = 2;
-	string targetGroupID = 3;
-	optional common.DeckType deckType = 4;
+	common.Deck newDeck = 3;
+	string targetGroupID = 4;
 }

@@ -612,6 +612,7 @@ func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
 
 type copyDeckBody struct {
 	DeckName      string `json:"deckName"`
+	DeckType      string `json:"deckType"`
 	TargetGroupID string `json:"targetGroupID"`
 }
 
@@ -628,15 +629,20 @@ func (e *Frontend) CopyDeckHandler(c *fiber.Ctx) error {
 	}
 	userID := helper.GetUserIDFromContext(c)
 	rsp, err := e.cardDeckService.CopyDeck(c.Context(), &pbCardDeck.CopyDeckRequest{
-		UserID:        userID,
-		DeckID:        c.Params("deckID"),
+		UserID: userID,
+		Deck: &pbCommon.Deck{
+			DeckID: c.Params("deckID"),
+		},
 		TargetGroupID: data.TargetGroupID,
-		DeckName:      data.DeckName,
+		NewDeck: &pbCommon.Deck{
+			DeckName: data.DeckName,
+			DeckType: converter.MigrateStringDeckTypeToProtoDeckType(data.DeckType),
+		},
 	})
 	if err != nil {
 		return err
 	}
-	return c.SendString(rsp.ID)
+	return c.SendString(rsp.DeckID)
 }
 
 func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {

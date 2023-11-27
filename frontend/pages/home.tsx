@@ -3,7 +3,6 @@ import { hasCookie } from "cookies-next";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { ArrowRight } from "react-feather";
 
 import Cards from "../components/graphics/Cards";
 import { Button } from "../components/input/Button";

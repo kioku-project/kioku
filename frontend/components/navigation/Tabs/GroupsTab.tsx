@@ -59,10 +59,20 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 					.map((group: GroupType) => {
 						return (
 							<div
+								key={group.groupID}
 								className="hover:cursor-pointer"
 								onClick={() =>
 									router.push(`/group/${group.groupID}`)
 								}
+								onKeyUp={(event) => {
+									if (event.key === "Enter") {
+										event.target.dispatchEvent(
+											new Event("click", {
+												bubbles: true,
+											})
+										);
+									}
+								}}
 							>
 								<DeckList
 									header={group.groupName}

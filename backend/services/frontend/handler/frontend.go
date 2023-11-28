@@ -731,8 +731,7 @@ func (e *Frontend) GetFavoriteDecksHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) AddFavoriteDeckHandler(c *fiber.Ctx) error {
 	var deck = &pbCommon.Deck{}
-	err := c.BodyParser(deck)
-	if err != nil {
+	if err := c.BodyParser(deck); err != nil {
 		return err
 	}
 	if deck.DeckID == "" {
@@ -754,8 +753,7 @@ func (e *Frontend) AddFavoriteDeckHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) DelFavoriteDeckHandler(c *fiber.Ctx) error {
 	var deck = &pbCommon.Deck{}
-	err := c.BodyParser(deck)
-	if err != nil {
+	if err := c.BodyParser(deck); err != nil {
 		return err
 	}
 	if deck.DeckID == "" {
@@ -790,8 +788,7 @@ func (e *Frontend) GetActiveDecksHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) DelActiveDeckHandler(c *fiber.Ctx) error {
 	var deck = &pbCommon.Deck{}
-	err := c.BodyParser(deck)
-	if err != nil {
+	if err := c.BodyParser(deck); err != nil {
 		return err
 	}
 	if deck.DeckID == "" {

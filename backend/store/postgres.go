@@ -125,28 +125,25 @@ func (s *UserStoreImpl) FindUserByID(userID string) (user *model.User, err error
 }
 
 func (s *CardDeckStoreImpl) PopulateDeckFavoriteAttribute(deck *model.Deck, userID string) error {
-	var userFavoriteDeck []model.UserFavoriteDecks
-	err := s.db.Where(&model.UserFavoriteDecks{UserID: userID, DeckID: deck.ID}).Limit(1).Find(&userFavoriteDeck).Error
-	if err != nil {
+	var count int64
+	if err := s.db.Where(&model.UserFavoriteDecks{UserID: userID, DeckID: deck.ID}).Count(&count).Error; err != nil {
 		return err
 	}
-	if len(userFavoriteDeck) != 0 {
+	if count > 0 {
 		deck.Favorite = true
 	}
 	return nil
 }
 
 func (s *CardDeckStoreImpl) PopulateDeckActiveAttribute(deck *model.Deck, userID string) error {
-	var userActiveDeck []model.UserActiveDecks
-	err := s.db.Where(&model.UserActiveDecks{UserID: userID, DeckID: deck.ID}).Limit(1).Find(&userActiveDeck).Error
-	if err != nil {
+	var count int64
+	if err := s.db.Where(&model.UserActiveDecks{UserID: userID, DeckID: deck.ID}).Count(&count).Error; err != nil {
 		return err
 	}
-	if len(userActiveDeck) != 0 {
+	if count > 0 {
 		deck.Active = true
 	}
 	return nil
-
 }
 
 func (s *CardDeckStoreImpl) FindDecks(userID string, groupID string, favoriteFilter bool, activeFilter bool) error {
@@ -337,7 +334,7 @@ func (s *CardDeckStoreImpl) AddFavoriteDeck(userID string, deckID string) error 
 }
 
 func (s *CardDeckStoreImpl) DeleteFavoriteDeck(userID string, deckID string) error {
-	return s.db.Where(&model.UserFavoriteDecks{UserID: userID, DeckID: deckID}).Delete(&model.UserFavoriteDecks{}).Error
+	return s.db.Delete(&model.UserFavoriteDecks{UserID: userID, DeckID: deckID}).Error
 }
 
 func (s *CardDeckStoreImpl) FindActiveDecks(userID string) (decks []model.Deck, err error) {
@@ -364,7 +361,7 @@ func (s *CardDeckStoreImpl) AddActiveDeck(userID string, deckID string) error {
 }
 
 func (s *CardDeckStoreImpl) DelActiveDeck(userID string, deckID string) error {
-	return s.db.Where(&model.UserActiveDecks{UserID: userID, DeckID: deckID}).Delete(&model.UserActiveDecks{}).Error
+	return s.db.Delete(&model.UserActiveDecks{UserID: userID, DeckID: deckID}).Error
 }
 
 func (s *CollaborationStoreImpl) FindGroupsByUserID(userID string) (groups []model.Group, err error) {

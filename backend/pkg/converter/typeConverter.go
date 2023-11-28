@@ -174,35 +174,35 @@ func ProtoGroupWithRoleToFiberGroupConverter(group *pbCommon.Group) FiberGroup {
 
 func ProtoDeckToFiberDeckConverter(deck *pbCommon.Deck) FiberDeck {
 	return FiberDeck{
-		DeckID:   deck.DeckID,
-		DeckName: deck.DeckName,
-		DeckType: deck.DeckType.String(),
-		GroupID:  deck.GroupID,
-		Active:   deck.Active,
-		Favorite: deck.Favorite,
+		DeckID:     deck.DeckID,
+		DeckName:   deck.DeckName,
+		DeckType:   deck.DeckType.String(),
+		GroupID:    deck.GroupID,
+		IsActive:   deck.IsActive,
+		IsFavorite: deck.IsFavorite,
 	}
 }
 
 func ProtoDeckRespToFiberDeckConverter(deck *pbCommon.Deck) FiberDeck {
 	return FiberDeck{
-		DeckID:   deck.DeckID,
-		DeckName: deck.DeckName,
-		DeckType: deck.DeckType.String(),
-		GroupID:  deck.GroupID,
-		Active:   deck.Active,
-		Favorite: deck.Favorite,
+		DeckID:     deck.DeckID,
+		DeckName:   deck.DeckName,
+		DeckType:   deck.DeckType.String(),
+		GroupID:    deck.GroupID,
+		IsActive:   deck.IsActive,
+		IsFavorite: deck.IsFavorite,
 	}
 }
 
 func StoreDeckToProtoDeckConverter(deck model.Deck) *pbCommon.Deck {
 	dt, _ := MigrateModelDeckTypeToProtoDeckType(deck.DeckType)
 	return &pbCommon.Deck{
-		DeckID:   deck.ID,
-		DeckName: deck.Name,
-		DeckType: dt,
-		GroupID:  deck.GroupID,
-		Favorite: deck.Favorite,
-		Active:   deck.Active,
+		DeckID:     deck.ID,
+		DeckName:   deck.Name,
+		DeckType:   dt,
+		GroupID:    deck.GroupID,
+		IsFavorite: deck.IsFavorite,
+		IsActive:   deck.IsActive,
 	}
 }
 

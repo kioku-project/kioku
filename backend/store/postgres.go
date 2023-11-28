@@ -126,22 +126,22 @@ func (s *UserStoreImpl) FindUserByID(userID string) (user *model.User, err error
 
 func (s *CardDeckStoreImpl) PopulateDeckFavoriteAttribute(deck *model.Deck, userID string) error {
 	var count int64
-	if err := s.db.Where(&model.UserFavoriteDecks{UserID: userID, DeckID: deck.ID}).Count(&count).Error; err != nil {
+	if err := s.db.Model(&model.UserFavoriteDecks{}).Where(&model.UserFavoriteDecks{UserID: userID, DeckID: deck.ID}).Count(&count).Error; err != nil {
 		return err
 	}
 	if count > 0 {
-		deck.Favorite = true
+		deck.IsFavorite = true
 	}
 	return nil
 }
 
 func (s *CardDeckStoreImpl) PopulateDeckActiveAttribute(deck *model.Deck, userID string) error {
 	var count int64
-	if err := s.db.Where(&model.UserActiveDecks{UserID: userID, DeckID: deck.ID}).Count(&count).Error; err != nil {
+	if err := s.db.Model(&model.UserActiveDecks{}).Where(&model.UserActiveDecks{UserID: userID, DeckID: deck.ID}).Count(&count).Error; err != nil {
 		return err
 	}
 	if count > 0 {
-		deck.Active = true
+		deck.IsActive = true
 	}
 	return nil
 }
@@ -328,7 +328,7 @@ func (s *CardDeckStoreImpl) FindFavoriteDecks(userID string) (decks []model.Deck
 		return
 	}
 	for _, deck := range userFavoriteDecks {
-		deck.Deck.Favorite = true
+		deck.Deck.IsFavorite = true
 		if err = s.PopulateDeckActiveAttribute(&deck.Deck, userID); err != nil {
 			return
 		}
@@ -355,7 +355,7 @@ func (s *CardDeckStoreImpl) FindActiveDecks(userID string) (decks []model.Deck, 
 		return
 	}
 	for _, deck := range userActiveDecks {
-		deck.Deck.Active = true
+		deck.Deck.IsActive = true
 		if err = s.PopulateDeckFavoriteAttribute(&deck.Deck, userID); err != nil {
 			return
 		}

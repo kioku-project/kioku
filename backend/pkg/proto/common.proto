@@ -114,8 +114,8 @@ message Deck {
   DeckType deckType = 3;
   int64 createdAt = 4;
   string groupID = 5;
-  bool active = 6;
-  bool favorite = 7;
+  bool isActive = 6;
+  bool isFavorite = 7;
 }
 message DeckRequest {
   string userID = 1;

@@ -99,7 +99,7 @@ func MigrateModelDeckTypeToProtoDeckType(modelType model.DeckType) (protoType pb
 	return
 }
 
-func MigrateProtoDeckTypeToModelDeckType(protoType pbCommon.DeckType) (err error, modelType model.DeckType) {
+func MigrateProtoDeckTypeToModelDeckType(protoType pbCommon.DeckType) (modelType model.DeckType, err error) {
 	if protoType == pbCommon.DeckType_PUBLIC {
 		modelType = model.PublicDeckType
 	} else if protoType == pbCommon.DeckType_PRIVATE {

@@ -7,8 +7,10 @@ package cardDeckService;
 option go_package ="github.com/kioku-project/kioku/services/carddeck/proto;cardDeck";
 
 service CardDeck {
+
 	rpc GetGroupDecks(common.GroupRequest) returns (common.Decks) {}
 	rpc CreateDeck(common.DeckRequest) returns (common.Deck) {}
+	rpc CopyDeck(CopyDeckRequest) returns (common.Deck) {}
 	rpc GetDeck(common.DeckRequest) returns (common.Deck) {}
 	rpc ModifyDeck(common.DeckRequest) returns (common.Success) {}
 	rpc DeleteDeck(common.DeckRequest) returns (common.Success) {}
@@ -27,4 +29,11 @@ service CardDeck {
 	rpc GetUserActiveDecks(common.User) returns (common.Decks) {}
 	rpc AddUserActiveDeck(common.DeckRequest) returns (common.Success) {}
 	rpc DelUserActiveDeck(common.DeckRequest) returns (common.Success) {}
+}
+
+message CopyDeckRequest {
+	string userID = 1;
+	common.Deck deck = 2;
+	common.Deck newDeck = 3;
+	string targetGroupID = 4;
 }

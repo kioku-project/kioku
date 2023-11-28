@@ -12,6 +12,7 @@ type UserStore interface {
 
 type CardDeckStore interface {
 	FindDecksByGroupID(groupID string, userID string) ([]model.Deck, error)
+	FindDeckCards(deckID string) ([]*model.Card, error)
 	FindPublicDecksByGroupID(groupID string) ([]model.Deck, error)
 	FindDeckByID(deckID string, userID string) (*model.Deck, error)
 	CreateDeck(newDeck *model.Deck) error
@@ -59,7 +60,7 @@ type CollaborationStore interface {
 type SrsStore interface {
 	CreateRevlog(newRev *model.Revlog) error
 	FindCardBinding(userID string, cardID string) (*model.UserCardBinding, error)
-	FindDeckCards(userID string, deckID string) ([]*model.UserCardBinding, error)
+	FindUserDeckCards(userID string, deckID string) ([]*model.UserCardBinding, error)
 	FindUserCards(userID string) ([]*model.UserCardBinding, error)
 	CreateUserCard(newCard *model.UserCardBinding) error
 	ModifyUserCard(card *model.UserCardBinding) error

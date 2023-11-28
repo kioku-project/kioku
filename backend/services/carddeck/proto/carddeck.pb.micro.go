@@ -39,6 +39,7 @@ func NewCardDeckEndpoints() []*api.Endpoint {
 type CardDeckService interface {
 	GetGroupDecks(ctx context.Context, in *proto1.GroupRequest, opts ...client.CallOption) (*proto1.Decks, error)
 	CreateDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Deck, error)
+	CopyDeck(ctx context.Context, in *CopyDeckRequest, opts ...client.CallOption) (*proto1.Deck, error)
 	GetDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Deck, error)
 	ModifyDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error)
 	DeleteDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error)
@@ -82,6 +83,16 @@ func (c *cardDeckService) GetGroupDecks(ctx context.Context, in *proto1.GroupReq
 
 func (c *cardDeckService) CreateDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Deck, error) {
 	req := c.c.NewRequest(c.name, "CardDeck.CreateDeck", in)
+	out := new(proto1.Deck)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cardDeckService) CopyDeck(ctx context.Context, in *CopyDeckRequest, opts ...client.CallOption) (*proto1.Deck, error) {
+	req := c.c.NewRequest(c.name, "CardDeck.CopyDeck", in)
 	out := new(proto1.Deck)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -265,6 +276,7 @@ func (c *cardDeckService) DelUserActiveDeck(ctx context.Context, in *proto1.Deck
 type CardDeckHandler interface {
 	GetGroupDecks(context.Context, *proto1.GroupRequest, *proto1.Decks) error
 	CreateDeck(context.Context, *proto1.DeckRequest, *proto1.Deck) error
+	CopyDeck(context.Context, *CopyDeckRequest, *proto1.Deck) error
 	GetDeck(context.Context, *proto1.DeckRequest, *proto1.Deck) error
 	ModifyDeck(context.Context, *proto1.DeckRequest, *proto1.Success) error
 	DeleteDeck(context.Context, *proto1.DeckRequest, *proto1.Success) error
@@ -288,6 +300,7 @@ func RegisterCardDeckHandler(s server.Server, hdlr CardDeckHandler, opts ...serv
 	type cardDeck interface {
 		GetGroupDecks(ctx context.Context, in *proto1.GroupRequest, out *proto1.Decks) error
 		CreateDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Deck) error
+		CopyDeck(ctx context.Context, in *CopyDeckRequest, out *proto1.Deck) error
 		GetDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Deck) error
 		ModifyDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error
 		DeleteDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error
@@ -323,6 +336,10 @@ func (h *cardDeckHandler) GetGroupDecks(ctx context.Context, in *proto1.GroupReq
 
 func (h *cardDeckHandler) CreateDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Deck) error {
 	return h.CardDeckHandler.CreateDeck(ctx, in, out)
+}
+
+func (h *cardDeckHandler) CopyDeck(ctx context.Context, in *CopyDeckRequest, out *proto1.Deck) error {
+	return h.CardDeckHandler.CopyDeck(ctx, in, out)
 }
 
 func (h *cardDeckHandler) GetDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Deck) error {

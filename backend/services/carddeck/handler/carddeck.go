@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
+	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	"gorm.io/gorm"
 
 	"github.com/kioku-project/kioku/pkg/converter"
@@ -173,6 +174,32 @@ func cardModelDateComparator(a, b model.Card) int {
 	return a.CreatedAt.Compare(b.CreatedAt)
 }
 
+func (e *CardDeck) copyCards(cards []*model.Card, deckID string) error {
+	for _, card := range cards {
+		newCard := &model.Card{
+			DeckID: deckID,
+		}
+		if err := e.store.CreateCard(newCard); err != nil {
+			return err
+		}
+		cardSides, err := e.store.FindCardSidesByCardID(card.ID)
+		if err != nil {
+			return err
+		}
+		pbCardSides := make([]*pbCommon.CardSide, 0, len(cardSides))
+		for _, cardSide := range cardSides {
+			pbCardSides = append(pbCardSides, &pbCommon.CardSide{
+				Header:      cardSide.Header,
+				Description: cardSide.Description,
+			})
+		}
+		if err := e.generateCardSidesForCard(*newCard, pbCardSides); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pbCommon.GroupRequest, rsp *pbCommon.Decks) error {
 	logger.Infof("Received CardDeck.GetGroupDecks request: %v", req)
 
@@ -205,7 +232,7 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 	if err := helper.CheckForValidName(req.Deck.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID); err != nil {
 		return err
 	}
-	err, dt := converter.MigrateProtoDeckTypeToModelDeckType(req.Deck.DeckType)
+	dt, err := converter.MigrateProtoDeckTypeToModelDeckType(req.Deck.DeckType)
 	if err != nil {
 		return err
 	}
@@ -222,13 +249,53 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 	return nil
 }
 
+func (e *CardDeck) CopyDeck(ctx context.Context, req *pbCardDeck.CopyDeckRequest, rsp *pbCommon.Deck) error {
+	logger.Infof("Received CardDeck.CopyDeck request: %v", req)
+	if err := e.checkUserDeckAccess(ctx, req.UserID, req.Deck.DeckID); err != nil {
+		return err
+	}
+	if err := e.checkUserRoleAccess(ctx, req.UserID, req.TargetGroupID, pbCommon.GroupRole_WRITE); err != nil {
+		return err
+	}
+	var (
+		deckType model.DeckType
+		err      error
+	)
+	if req.NewDeck.DeckType != pbCommon.DeckType_DT_INVALID {
+		deckType, err = converter.MigrateProtoDeckTypeToModelDeckType(req.Deck.DeckType)
+		if err != nil {
+			return err
+		}
+	} else {
+		deckType = model.PrivateDeckType
+	}
+
+	newDeck := &model.Deck{
+		GroupID:  req.TargetGroupID,
+		Name:     req.NewDeck.DeckName,
+		DeckType: deckType,
+	}
+	if err := e.store.CreateDeck(newDeck); err != nil {
+		return err
+	}
+	cards, err := e.store.FindDeckCards(req.Deck.DeckID)
+	if err != nil {
+		return err
+	}
+	if err := e.copyCards(cards, newDeck.ID); err != nil {
+		return err
+	}
+	rsp.DeckID = newDeck.ID
+	return nil
+}
+
 func (e *CardDeck) GetDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Deck) error {
 	logger.Infof("Received CardDeck.GetDeck request: %v", req)
 	deck, err := e.store.FindDeckByID(req.Deck.DeckID, req.UserID)
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserDeckAccess(ctx, req.UserID, deck.ID); err != nil {
+	if err = e.checkUserDeckAccess(ctx, req.UserID, deck.ID); err != nil {
 		return err
 	}
 	*rsp = *converter.StoreDeckToProtoDeckConverter(*deck)
@@ -254,7 +321,7 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 		deck.Name = req.Deck.DeckName
 	}
 	if req.Deck.DeckType != pbCommon.DeckType_DT_INVALID {
-		err, dt := converter.MigrateProtoDeckTypeToModelDeckType(req.Deck.DeckType)
+		dt, err := converter.MigrateProtoDeckTypeToModelDeckType(req.Deck.DeckType)
 		if err != nil {
 			return err
 		}

@@ -178,6 +178,14 @@ func (s *CardDeckStoreImpl) FindDecksByGroupID(groupID string, userID string) (d
 	return
 }
 
+func (s *CardDeckStoreImpl) FindDeckCards(deckID string) (cards []*model.Card, err error) {
+	if err = s.db.Where(model.Card{DeckID: deckID}).
+		Find(&cards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
 func (s *CardDeckStoreImpl) FindPublicDecksByGroupID(groupID string) (decks []model.Deck, err error) {
 	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).
 		Where(&model.Deck{DeckType: model.PublicDeckType}).
@@ -503,7 +511,7 @@ func (s *SrsStoreImpl) FindCardBinding(userID string, cardID string) (userCardBi
 	return
 }
 
-func (s *SrsStoreImpl) FindDeckCards(userID string, deckID string) (userCards []*model.UserCardBinding, err error) {
+func (s *SrsStoreImpl) FindUserDeckCards(userID string, deckID string) (userCards []*model.UserCardBinding, err error) {
 	if err = s.db.Where(model.UserCardBinding{UserID: userID, DeckID: deckID}).
 		Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID

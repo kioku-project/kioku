@@ -5,8 +5,8 @@ export type Deck = {
 	deckID: string;
 	deckName: string;
 	deckType: "PUBLIC" | "PRIVATE";
-	active?: boolean;
-	favorite?: boolean;
+	isActive?: boolean;
+	isFavorite?: boolean;
 	groupID: string;
 	groupRole?: keyof typeof GroupRole;
 	dueCards?: number;

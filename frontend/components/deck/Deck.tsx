@@ -63,10 +63,10 @@ export const Deck = ({
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 
-	const [isFavorite, setFavorite] = useState(deck.favorite);
+	const [isFavorite, setFavorite] = useState(deck.isFavorite);
 
 	useEffect(() => {
-		setFavorite(deck.favorite);
+		setFavorite(deck.isFavorite);
 	});
 
 	return (

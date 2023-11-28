@@ -184,10 +184,11 @@ export default function Page() {
 								)}
 								<Button
 									id="loginSubmitButton"
-									buttonText={
-										login
-											? _(msg`Sign in`)
-											: _(msg`Register`)
+									buttonIcon={
+										<ArrowRight
+											size={16}
+											className="flex-none"
+										/>
 									}
 									buttonTextSize="5xs"
 									className="w-full justify-between bg-black p-3 text-white hover:scale-[1.02] hover:cursor-pointer hover:bg-neutral-900"
@@ -199,10 +200,11 @@ export default function Page() {
 										}
 									}}
 								>
-									<ArrowRight
-										size={16}
-										className="flex-none"
-									></ArrowRight>
+									{login ? (
+										<Trans>Sign in</Trans>
+									) : (
+										<Trans>Sign up</Trans>
+									)}
 								</Button>
 							</form>
 							<Text

@@ -1,14 +1,10 @@
-import React, { ButtonHTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes, ReactNode } from "react";
 
 import { Size } from "../../types/Size";
 import { Text } from "../Text";
 import { Icon, IconName } from "../graphics/Icon";
 
 export interface ButtonProps {
-	/**
-	 * Text
-	 */
-	buttonText?: string;
 	/**
 	 * Button styling
 	 */
@@ -24,7 +20,7 @@ export interface ButtonProps {
 	/**
 	 * Icon that will be displayed in the Button
 	 */
-	buttonIcon?: IconName;
+	buttonIcon?: IconName | ReactNode;
 	/**
 	 * Icon size
 	 */
@@ -50,7 +46,6 @@ const getSize = {
  * UI component for user interactions
  */
 export const Button = ({
-	buttonText,
 	buttonStyle,
 	buttonSize,
 	buttonTextSize,
@@ -67,15 +62,17 @@ export const Button = ({
 			} ${buttonSize ? getSize[buttonSize] : ""} ${className}`}
 			{...props}
 		>
-			{buttonText && <Text textSize={buttonTextSize}>{buttonText}</Text>}
-			{children}
-			{buttonIcon && (
-				<Icon
-					icon={buttonIcon}
-					size={buttonIconSize}
-					className="flex-none"
-				/>
-			)}
+			<Text>{children}</Text>
+			{buttonIcon &&
+				(typeof buttonIcon === "string" ? (
+					<Icon
+						icon={buttonIcon as IconName}
+						size={buttonIconSize}
+						className="flex-none"
+					/>
+				) : (
+					buttonIcon
+				))}
 		</button>
 	);
 };

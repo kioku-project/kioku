@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {# card left} other {# cards left}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 
-#: pages/login.tsx:295
+#: pages/login.tsx:297
 msgid "Account already exists!"
 msgstr "Account already exists!"
 
-#: pages/login.tsx:289
+#: pages/login.tsx:291
 msgid "Account created!"
 msgstr "Account created!"
 
@@ -45,7 +45,7 @@ msgstr "Account created!"
 msgid "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 msgstr "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 
-#: pages/login.tsx:218
+#: pages/login.tsx:220
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -174,7 +174,7 @@ msgstr "Description"
 msgid "Discover Kioku's awesome Features"
 msgstr "Discover Kioku's awesome Features"
 
-#: pages/login.tsx:214
+#: pages/login.tsx:216
 msgid "Don't have an account?"
 msgstr "Don't have an account?"
 
@@ -293,7 +293,7 @@ msgstr "Leave Group"
 msgid "Left group!"
 msgstr "Left group!"
 
-#: pages/login.tsx:264
+#: pages/login.tsx:266
 msgid "Logged in!"
 msgstr "Logged in!"
 
@@ -338,10 +338,6 @@ msgstr "Please be certain before deleting a group, as there is no way to undo th
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Please be certain when deleting a deck, as there is no way to undo this action."
 
-#: pages/login.tsx:190
-msgid "Register"
-msgstr "Register"
-
 #: components/navigation/Tabs/DeckSettingsTab.tsx:58
 #: components/navigation/Tabs/GroupSettingsTab.tsx:55
 #: components/navigation/Tabs/UserSettingsTab.tsx:48
@@ -370,15 +366,19 @@ msgstr "Sent request!"
 msgid "Settings"
 msgstr "Settings"
 
-#: pages/login.tsx:189
+#: pages/login.tsx:204
 msgid "Sign in"
 msgstr "Sign in"
 
-#: pages/login.tsx:241
+#: pages/login.tsx:243
 msgid "Sign in now!"
 msgstr "Sign in now!"
 
-#: pages/login.tsx:239
+#: pages/login.tsx:206
+msgid "Sign up"
+msgstr "Sign up"
+
+#: pages/login.tsx:241
 msgid "Sign up now!"
 msgstr "Sign up now!"
 
@@ -437,7 +437,7 @@ msgstr "Welcome {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 
-#: pages/login.tsx:267
+#: pages/login.tsx:269
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 

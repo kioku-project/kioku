@@ -4,8 +4,8 @@ type AlgorithmType string
 
 const (
 	AlgoDynamicSRS AlgorithmType = "Dynamic-Spaced-Repetition"
-	AlgoLinearSRS  AlgorithmType = "Linear-Spaced-Repetition"
-	AlgoAISRS      AlgorithmType = "AI-Spaced-Repetition"
+	AlgoLinearSRS                = "Linear-Spaced-Repetition"
+	AlgoAISRS                    = "AI-Spaced-Repetition"
 )
 
 type UserActiveDecks struct {

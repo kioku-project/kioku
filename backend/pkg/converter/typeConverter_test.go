@@ -229,15 +229,6 @@ func TestStoreDeckToProtoDeckConverter(t *testing.T) {
 	assert.Equal(t, name, conv.DeckName)
 }
 
-func TestStoreDeckToProtoDeckResponseConverter(t *testing.T) {
-	conv := converter.StoreDeckToProtoDeckResponseConverter(deck)
-
-	assert.Equal(t, id, conv.DeckID)
-	assert.Equal(t, name, conv.DeckName)
-	assert.Equal(t, timeConstant.Unix(), conv.CreatedAt)
-	assert.Equal(t, id, conv.GroupID)
-}
-
 func TestStoreCardToProtoCardConverter(t *testing.T) {
 	conv := converter.StoreCardToProtoCardConverter(card)
 

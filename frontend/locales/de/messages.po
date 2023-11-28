@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {Eine Karte übrig} other {# Karten übrig}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Greife von überall und jederzeit auf Deine Karteikarten zu. Wechsle nahtlos zwischen verschiedenen Plattformen und verpasse nie wieder eine Lerngelegenheit!"
 
-#: pages/login.tsx:318
+#: pages/login.tsx:295
 msgid "Account already exists!"
 msgstr "Account existiert bereits!"
 
-#: pages/login.tsx:312
+#: pages/login.tsx:289
 msgid "Account created!"
 msgstr "Account erstellt!"
 
@@ -45,7 +45,7 @@ msgstr "Account erstellt!"
 msgid "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivierender. Kioku hilft Dir, bessere Ergebnisse zu erzielen und Deine persönlichen Lernziele zu erreichen!"
 
-#: pages/login.tsx:241
+#: pages/login.tsx:218
 msgid "Already have an account?"
 msgstr "Bereits registriert?"
 
@@ -174,7 +174,7 @@ msgstr "Beschreibung"
 msgid "Discover Kioku's awesome Features"
 msgstr "Entdecke Kiokus einzigartige Funktionen"
 
-#: pages/login.tsx:237
+#: pages/login.tsx:214
 msgid "Don't have an account?"
 msgstr "Noch kein Account?"
 
@@ -182,7 +182,7 @@ msgstr "Noch kein Account?"
 msgid "Easy"
 msgstr "Einfach"
 
-#: pages/login.tsx:93
+#: pages/login.tsx:87
 msgid "Email"
 msgstr "E-Mail"
 
@@ -293,7 +293,7 @@ msgstr "Gruppe verlassen"
 msgid "Left group!"
 msgstr "Gruppe verlassen!"
 
-#: pages/login.tsx:287
+#: pages/login.tsx:264
 msgid "Logged in!"
 msgstr "Eingeloggt!"
 
@@ -305,7 +305,7 @@ msgstr "Einloggen"
 msgid "Medium"
 msgstr "Mittel"
 
-#: pages/login.tsx:181
+#: pages/login.tsx:167
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Mindestens {passwordMinLength} Zeichen"
 
@@ -313,16 +313,16 @@ msgstr "Mindestens {passwordMinLength} Zeichen"
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Nachdem Du Deinen Benutzer gelöscht hast, gibt es kein Zurück mehr."
 
-#: pages/login.tsx:113
+#: pages/login.tsx:107
 msgid "Password"
 msgstr "Passwort"
 
-#: pages/login.tsx:130
+#: pages/login.tsx:124
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Passwort muss mindestens {passwordMinLength} Zeichen lang sein"
 
 #: pages/login.tsx:153
-#: pages/login.tsx:200
+#: pages/login.tsx:178
 msgid "Passwords have to match"
 msgstr "Passwörter müssen übereinstimmen"
 
@@ -338,7 +338,7 @@ msgstr "Nachdem Du die Gruppe gelöscht hast, gibt es kein Zurück mehr."
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Nachdem Du den Stapel gelöscht hast, gibt es kein Zurück mehr."
 
-#: pages/login.tsx:227
+#: pages/login.tsx:190
 msgid "Register"
 msgstr "Registrieren"
 
@@ -348,7 +348,7 @@ msgstr "Registrieren"
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: pages/login.tsx:140
+#: pages/login.tsx:136
 msgid "Repeat Password"
 msgstr "Passwort wiederholen"
 
@@ -370,15 +370,15 @@ msgstr "Anfrage gesendet!"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: pages/login.tsx:225
+#: pages/login.tsx:189
 msgid "Sign in"
 msgstr "Einloggen"
 
-#: pages/login.tsx:264
+#: pages/login.tsx:241
 msgid "Sign in now!"
 msgstr "Jetzt anmelden!"
 
-#: pages/login.tsx:262
+#: pages/login.tsx:239
 msgid "Sign up now!"
 msgstr "Jetzt registrieren!"
 
@@ -417,7 +417,7 @@ msgid "User updated!"
 msgstr "Benutzer aktualisiert!"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:46
-#: pages/login.tsx:103
+#: pages/login.tsx:97
 msgid "Username"
 msgstr "Benutzername"
 
@@ -437,7 +437,7 @@ msgstr "Willkommen, {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Willkommen bei Kioku - der cloudbasierten Karteikarten-Anwendung, die sich auf die gemeinsame Erstellung von Lerninhalten konzentriert. Unsere innovative Plattform ermöglicht es Dir, Dein Wissen auf Karteikarten zu organisieren und diese mit anderen Nutzern zu teilen, um Dein Wissen auf die nächste Stufe zu heben. Melde Dich noch heute bei Kioku an und erlebe die Zukunft des Lernens."
 
-#: pages/login.tsx:290
+#: pages/login.tsx:267
 msgid "Wrong username or password"
 msgstr "Falscher Benutzername oder falsches Passwort"
 

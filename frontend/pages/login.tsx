@@ -1,11 +1,10 @@
 import { Trans, msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { GetStaticProps } from "next";
-import { Inter } from "next/font/google";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { Check } from "react-feather";
+import { ArrowRight, Check } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,11 +15,6 @@ import { Button } from "../components/input/Button";
 import { postRequest } from "../util/api";
 import { checkAccessTokenValid } from "../util/reauth";
 import { loadCatalog } from "./_app";
-
-const inter = Inter({
-	weight: ["200", "400"],
-	subsets: ["latin"],
-});
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -134,98 +128,81 @@ export default function Page() {
 									ref={passwordInput}
 								/>
 								{!login && (
-									<InputField
-										id="repeatPasswordInputFieldId"
-										type={"password"}
-										placeholder={_(msg`Repeat Password`)}
-										required
-										pattern={password}
-										inputFieldSize="5xs"
-										className="bg-[#ECECEC] p-3 text-[#A4A4A4]"
-										ref={repeatPasswordInput}
-										onChange={(event) => {
-											event.target.setCustomValidity("");
-											if (
-												passwordInput.current?.value !==
-												event.target.value
-											) {
+									<>
+										<InputField
+											id="repeatPasswordInputFieldId"
+											type={"password"}
+											placeholder={_(
+												msg`Repeat Password`
+											)}
+											required
+											pattern={password}
+											inputFieldSize="5xs"
+											className="bg-[#ECECEC] p-3 text-[#A4A4A4]"
+											ref={repeatPasswordInput}
+											onChange={(event) => {
 												event.target.setCustomValidity(
-													t`Passwords have to match`
+													""
 												);
-											}
-											setPasswordsMatching(
-												passwordInput.current?.value ===
+												if (
+													passwordInput.current
+														?.value !==
 													event.target.value
-											);
-										}}
-									/>
-								)}
-								{!login && (
-									<div className="space-y-1 py-1">
-										<div className="flex flex-row items-center space-x-1">
-											<Check
-												size={12}
-												className={
+												) {
+													event.target.setCustomValidity(
+														t`Passwords have to match`
+													);
+												}
+												setPasswordsMatching(
 													passwordInput.current
-														?.validity.tooShort ||
-													passwordInput.current
+														?.value ===
+														event.target.value
+												);
+											}}
+										/>
+
+										<div className="space-y-1 py-1 font-light text-[#676767]">
+											<PasswordCheck
+												text={_(
+													msg`Minimum ${passwordMinLength} characters`
+												)}
+												valid={
+													!passwordInput.current
+														?.validity.tooShort &&
+													!passwordInput.current
 														?.validity.valueMissing
-														? "text-[#C2C2C2]"
-														: "text-[#2DE100]"
 												}
 											/>
-											<Text
-												textSize="5xs"
-												className="font-light text-[#676767]"
-											>
-												<Trans>
-													Minimum {passwordMinLength}{" "}
-													characters
-												</Trans>
-											</Text>
+											<PasswordCheck
+												text={_(
+													msg`Passwords have to match`
+												)}
+												valid={passwordsMatching}
+											></PasswordCheck>
 										</div>
-										<div className="flex flex-row items-center space-x-1">
-											<Check
-												size={12}
-												className={
-													passwordsMatching
-														? "text-[#2DE100]"
-														: "text-[#C2C2C2]"
-												}
-											/>
-											<Text
-												textSize="5xs"
-												className="font-light text-[#676767]"
-											>
-												<Trans>
-													Passwords have to match
-												</Trans>
-											</Text>
-										</div>
-									</div>
+									</>
 								)}
 								<Button
 									id="loginSubmitButton"
-									buttonIcon="ArrowRight"
+									buttonText={
+										login
+											? _(msg`Sign in`)
+											: _(msg`Register`)
+									}
 									buttonTextSize="5xs"
 									className="w-full justify-between bg-black p-3 text-white hover:scale-[1.02] hover:cursor-pointer hover:bg-neutral-900"
 									onClick={() => {
 										if (login) {
-											loginLogic()
-												.then((result) => {})
-												.catch((error) => {});
+											loginLogic();
 										} else {
-											registerLogic()
-												.then((result) => {})
-												.catch((error) => {});
+											registerLogic();
 										}
 									}}
 								>
-									{login ? (
-										<Trans>Sign in</Trans>
-									) : (
-										<Trans>Register</Trans>
-									)}
+									<ArrowRight
+										size={16}
+										className="flex-none"
+									></ArrowRight>
 								</Button>
 							</form>
 							<Text
@@ -241,8 +218,8 @@ export default function Page() {
 										<Trans>Already have an account?</Trans>
 									)}
 								</span>
-								<a
-									className="whitespace-nowrap text-black underline hover:cursor-pointer"
+								<button
+									className="whitespace-nowrap text-black underline"
 									onClick={() => {
 										emailInput.current?.focus();
 										setLogin((prev) => !prev);
@@ -263,7 +240,7 @@ export default function Page() {
 									) : (
 										<Trans>Sign in now!</Trans>
 									)}
-								</a>
+								</button>
 							</Text>
 						</div>
 					</div>
@@ -321,3 +298,15 @@ export default function Page() {
 		}
 	}
 }
+
+const PasswordCheck = ({ text, valid }: { text: string; valid: boolean }) => {
+	return (
+		<div className="flex flex-row items-center space-x-1">
+			<Check
+				size={12}
+				className={valid ? "text-[#2DE100]" : "text-[#C2C2C2]"}
+			/>
+			<Text textSize="5xs">{text}</Text>
+		</div>
+	);
+};

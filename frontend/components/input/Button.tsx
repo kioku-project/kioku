@@ -6,6 +6,10 @@ import { Icon, IconName } from "../graphics/Icon";
 
 export interface ButtonProps {
 	/**
+	 * Text
+	 */
+	buttonText?: string;
+	/**
 	 * Button styling
 	 */
 	buttonStyle?: keyof typeof getStyle;
@@ -46,6 +50,7 @@ const getSize = {
  * UI component for user interactions
  */
 export const Button = ({
+	buttonText,
 	buttonStyle,
 	buttonSize,
 	buttonTextSize,
@@ -62,7 +67,8 @@ export const Button = ({
 			} ${buttonSize ? getSize[buttonSize] : ""} ${className}`}
 			{...props}
 		>
-			<Text textSize={buttonTextSize}>{children}</Text>
+			{buttonText && <Text textSize={buttonTextSize}>{buttonText}</Text>}
+			{children}
 			{buttonIcon && (
 				<Icon
 					icon={buttonIcon}

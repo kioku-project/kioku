@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {# card left} other {# cards left}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 
-#: pages/login.tsx:318
+#: pages/login.tsx:295
 msgid "Account already exists!"
 msgstr "Account already exists!"
 
-#: pages/login.tsx:312
+#: pages/login.tsx:289
 msgid "Account created!"
 msgstr "Account created!"
 
@@ -45,7 +45,7 @@ msgstr "Account created!"
 msgid "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 msgstr "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 
-#: pages/login.tsx:241
+#: pages/login.tsx:218
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -174,7 +174,7 @@ msgstr "Description"
 msgid "Discover Kioku's awesome Features"
 msgstr "Discover Kioku's awesome Features"
 
-#: pages/login.tsx:237
+#: pages/login.tsx:214
 msgid "Don't have an account?"
 msgstr "Don't have an account?"
 
@@ -182,7 +182,7 @@ msgstr "Don't have an account?"
 msgid "Easy"
 msgstr "Easy"
 
-#: pages/login.tsx:93
+#: pages/login.tsx:87
 msgid "Email"
 msgstr "Email"
 
@@ -293,7 +293,7 @@ msgstr "Leave Group"
 msgid "Left group!"
 msgstr "Left group!"
 
-#: pages/login.tsx:287
+#: pages/login.tsx:264
 msgid "Logged in!"
 msgstr "Logged in!"
 
@@ -305,7 +305,7 @@ msgstr "Login"
 msgid "Medium"
 msgstr "Medium"
 
-#: pages/login.tsx:181
+#: pages/login.tsx:167
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Minimum {passwordMinLength} characters"
 
@@ -313,16 +313,16 @@ msgstr "Minimum {passwordMinLength} characters"
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Once you delete your user, there is no going back. Please be certain."
 
-#: pages/login.tsx:113
+#: pages/login.tsx:107
 msgid "Password"
 msgstr "Password"
 
-#: pages/login.tsx:130
+#: pages/login.tsx:124
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Password must have at least {passwordMinLength} characters"
 
 #: pages/login.tsx:153
-#: pages/login.tsx:200
+#: pages/login.tsx:178
 msgid "Passwords have to match"
 msgstr "Passwords have to match"
 
@@ -338,7 +338,7 @@ msgstr "Please be certain before deleting a group, as there is no way to undo th
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Please be certain when deleting a deck, as there is no way to undo this action."
 
-#: pages/login.tsx:227
+#: pages/login.tsx:190
 msgid "Register"
 msgstr "Register"
 
@@ -348,7 +348,7 @@ msgstr "Register"
 msgid "Rename"
 msgstr "Rename"
 
-#: pages/login.tsx:140
+#: pages/login.tsx:136
 msgid "Repeat Password"
 msgstr "Repeat Password"
 
@@ -370,15 +370,15 @@ msgstr "Sent request!"
 msgid "Settings"
 msgstr "Settings"
 
-#: pages/login.tsx:225
+#: pages/login.tsx:189
 msgid "Sign in"
 msgstr "Sign in"
 
-#: pages/login.tsx:264
+#: pages/login.tsx:241
 msgid "Sign in now!"
 msgstr "Sign in now!"
 
-#: pages/login.tsx:262
+#: pages/login.tsx:239
 msgid "Sign up now!"
 msgstr "Sign up now!"
 
@@ -417,7 +417,7 @@ msgid "User updated!"
 msgstr "User updated!"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:46
-#: pages/login.tsx:103
+#: pages/login.tsx:97
 msgid "Username"
 msgstr "Username"
 
@@ -437,7 +437,7 @@ msgstr "Welcome {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 
-#: pages/login.tsx:290
+#: pages/login.tsx:267
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 

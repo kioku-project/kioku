@@ -133,6 +133,7 @@ func main() {
 	app.Get("/api/decks/:deckID", svc.GetDeckHandler)
 	app.Put("/api/decks/:deckID", svc.ModifyDeckHandler)
 	app.Delete("/api/decks/:deckID", svc.DeleteDeckHandler)
+	app.Post("/api/decks/:deckID/copy", svc.CopyDeckHandler)
 
 	app.Get("/api/decks/:deckID/cards", svc.GetDeckCardsHandler)
 	app.Post("/api/decks/:deckID/cards", svc.CreateCardHandler)

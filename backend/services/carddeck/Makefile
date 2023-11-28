@@ -8,8 +8,9 @@ init:
 
 .PHONY: proto
 proto:
-	@protoc --proto_path=. --micro_out=. --go_out=:. proto/carddeck.proto
-	
+	@protoc --proto_path=../../ --go_out=:../../ --go_opt=module=github.com/kioku-project/kioku services/carddeck/proto/carddeck.proto ../../pkg/proto/common.proto
+	@protoc --proto_path=../../ --micro_out=../../ --micro_opt=module=github.com/kioku-project/kioku services/carddeck/proto/carddeck.proto
+
 
 .PHONY: update
 update:

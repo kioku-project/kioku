@@ -1,7 +1,7 @@
 meta {
   name: copy deck
   type: http
-  seq: 9
+  seq: 7
 }
 
 post {
@@ -17,6 +17,10 @@ auth:bearer {
 body:json {
   {
       "targetGroupID": "G-12345678",
-      "deckName": "test group"
+      "deckName": "deck copy"
   }
+}
+
+script:post-response {
+  bru.setEnvVar("deckID", res.body)
 }

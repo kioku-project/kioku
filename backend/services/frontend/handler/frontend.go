@@ -736,7 +736,7 @@ func (e *Frontend) AddFavoriteDeckHandler(c *fiber.Ctx) error {
 		return err
 	}
 	if deck.DeckID == "" {
-		return helper.NewFiberBadRequestErr("No DeckID provided")
+		return helper.NewFiberMissingDeckIDErr()
 	}
 	userID := helper.GetUserIDFromContext(c)
 	rspAddFavoriteDeck, err := e.cardDeckService.AddUserFavoriteDeck(c.Context(), &pbCommon.DeckRequest{
@@ -759,7 +759,7 @@ func (e *Frontend) DelFavoriteDeckHandler(c *fiber.Ctx) error {
 		return err
 	}
 	if deck.DeckID == "" {
-		return helper.NewFiberBadRequestErr("No DeckID provided")
+		return helper.NewFiberMissingDeckIDErr()
 	}
 	userID := helper.GetUserIDFromContext(c)
 	rspDelFavoriteDeck, err := e.cardDeckService.DelUserFavoriteDeck(c.Context(), &pbCommon.DeckRequest{
@@ -795,7 +795,7 @@ func (e *Frontend) DelActiveDeckHandler(c *fiber.Ctx) error {
 		return err
 	}
 	if deck.DeckID == "" {
-		return helper.NewFiberBadRequestErr("No DeckID provided")
+		return helper.NewFiberMissingDeckIDErr()
 	}
 	userID := helper.GetUserIDFromContext(c)
 	rspDelActiveDeck, err := e.cardDeckService.DelUserActiveDeck(c.Context(), &pbCommon.DeckRequest{

@@ -124,6 +124,10 @@ func NewFiberMissingPasswordErr() error {
 	return fiber.NewError(fiber.StatusBadRequest, "no Password provided")
 }
 
+func NewFiberMissingDeckIDErr() error {
+	return fiber.NewError(fiber.StatusBadRequest, "no deckID provided")
+}
+
 func NewFiberUnauthorizedErr(detail string) error {
 	return fiber.NewError(fiber.StatusUnauthorized, detail)
 }

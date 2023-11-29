@@ -71,6 +71,9 @@ func (e *Srs) Push(_ context.Context, req *pb.SrsPushRequest, rsp *pbCommon.Succ
 
 func (e *Srs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Card) error {
 	logger.Infof("Received Srs.Pull request: %v", req)
+	if _, err := e.cardDeckService.AddUserActiveDeck(ctx, &pbCommon.DeckRequest{UserID: req.UserID, Deck: &pbCommon.Deck{DeckID: req.Deck.DeckID}}); err != nil {
+		return err
+	}
 	cards, err := e.store.FindUserDeckCards(
 		req.UserID,
 		req.Deck.DeckID,

@@ -164,13 +164,13 @@ export const Deck = ({
 					<div className="flex w-full flex-row items-center justify-between">
 						<div className="flex items-center space-x-3">
 							<Button
+								href={`/deck/${deck.deckID}/learn`}
 								buttonStyle="primary"
+								buttonSize="md"
 								buttonTextSize="3xs"
 								buttonIcon="ArrowRight"
-								className="px-3 py-1.5"
 								onClick={(event) => {
-									router.push(`/deck/${deck.deckID}/learn`);
-									event.stopPropagation();
+									event.preventDefault();
 								}}
 							>
 								<Trans>Learn</Trans>

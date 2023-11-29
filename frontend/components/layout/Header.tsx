@@ -1,4 +1,5 @@
 import { Trans, plural, t } from "@lingui/macro";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -101,22 +102,9 @@ export const Header = ({
 				<Text textStyle="secondary" textSize="xs">
 					{deck && group && !group.isDefault && (
 						<div className="flex flex-row">
-							<div
-								className="hover:cursor-pointer"
-								onClick={() =>
-									router.push(`/group/${group.groupID}`)
-								}
-								onKeyUp={(event) => {
-									if (event.key === "Enter") {
-										event.target.dispatchEvent(
-											new Event("click", {
-												bubbles: true,
-											})
-										);
-									}
-								}}
-								tabIndex={0}
-							>{`${group.groupName}`}</div>
+							<Link
+								href={`/group/${group.groupID}`}
+							>{`${group.groupName}`}</Link>
 							<div>&nbsp;{`/ ${deck.deckName}`}</div>
 						</div>
 					)}
@@ -139,10 +127,10 @@ export const Header = ({
 			{deck && (
 				<Button
 					id="learnDeckButtonId"
+					href={`/deck/${deck.deckID}/learn`}
 					buttonStyle="primary"
 					buttonSize="sm"
 					buttonTextSize="xs"
-					onClick={() => router.push(`/deck/${deck.deckID}/learn`)}
 				>
 					<Trans>Learn Deck</Trans>
 				</Button>

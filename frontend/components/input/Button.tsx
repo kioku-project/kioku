@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { ButtonHTMLAttributes, ReactNode } from "react";
 
 import { Size } from "../../types/Size";
@@ -5,6 +6,10 @@ import { Text } from "../Text";
 import { Icon, IconName } from "../graphics/Icon";
 
 export interface ButtonProps {
+	/**
+	 * If href is set, a Link will be returned
+	 */
+	href?: string;
 	/**
 	 * Button styling
 	 */
@@ -46,6 +51,7 @@ const getSize = {
  * UI component for user interactions
  */
 export const Button = ({
+	href,
 	buttonStyle,
 	buttonSize,
 	buttonTextSize,
@@ -55,13 +61,8 @@ export const Button = ({
 	children,
 	...props
 }: ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>) => {
-	return (
-		<button
-			className={`flex items-center space-x-1 rounded-md font-medium outline-none transition ${
-				buttonStyle ? getStyle[buttonStyle] : ""
-			} ${buttonSize ? getSize[buttonSize] : ""} ${className}`}
-			{...props}
-		>
+	const innerButton = (
+		<>
 			<Text textSize={buttonTextSize}>{children}</Text>
 			{buttonIcon &&
 				(typeof buttonIcon === "string" ? (
@@ -73,6 +74,26 @@ export const Button = ({
 				) : (
 					buttonIcon
 				))}
+		</>
+	);
+	const classNames = [
+		"flex items-center space-x-1 rounded-md font-medium  outline-none transition",
+		className,
+	];
+	if (buttonStyle) {
+		classNames.push(getStyle[buttonStyle]);
+	}
+	if (buttonSize) {
+		classNames.push(getSize[buttonSize]);
+	}
+
+	return href ? (
+		<Link href={href} className={classNames.join(" ")}>
+			{innerButton}
+		</Link>
+	) : (
+		<button className={classNames.join(" ")} {...props}>
+			{innerButton}
 		</button>
 	);
 };

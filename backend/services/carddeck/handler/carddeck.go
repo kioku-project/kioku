@@ -2,8 +2,10 @@ package handler
 
 import (
 	"context"
+	"errors"
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
+	"gorm.io/gorm"
 
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
@@ -54,13 +56,13 @@ func (e *CardDeck) checkUserDeckAccess(
 	userID string,
 	deckID string,
 ) error {
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, deckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(deckID, userID)
 	if err != nil {
 		return err
 	}
 	if deck.DeckType == model.PrivateDeckType {
 		logger.Infof("Requesting group role for user (%s)", userID)
-		if err = e.checkUserRoleAccess(ctx, userID, deck.GroupID, pbCommon.GroupRole_GR_READ); err != nil {
+		if err = e.checkUserRoleAccess(ctx, userID, deck.GroupID, pbCommon.GroupRole_READ); err != nil {
 			return err
 		}
 	}
@@ -77,11 +79,11 @@ func (e *CardDeck) getCardSideAndCheckForValidAccess(
 	if err != nil {
 		return nil, err
 	}
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, cardSide.Card.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(cardSide.Card.DeckID, userID)
 	if err != nil {
 		return nil, err
 	}
-	if err = e.checkUserRoleAccess(ctx, userID, deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err = e.checkUserRoleAccess(ctx, userID, deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return nil, err
 	}
 	return cardSide, nil
@@ -202,14 +204,14 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pbCommon.GroupRequest
 	logger.Infof("Received CardDeck.GetGroupDecks request: %v", req)
 
 	var decks []model.Deck
-	err := e.checkUserRoleAccess(ctx, req.UserID, req.Group.GroupID, pbCommon.GroupRole_GR_INVITED)
+	err := e.checkUserRoleAccess(ctx, req.UserID, req.Group.GroupID, pbCommon.GroupRole_INVITED)
 	if err != nil {
 		decks, err = helper.FindStoreEntity(e.store.FindPublicDecksByGroupID, req.Group.GroupID, helper.CardDeckServiceID)
 		if err != nil {
 			return err
 		}
 	} else {
-		decks, err = helper.FindStoreEntity(e.store.FindDecksByGroupID, req.Group.GroupID, helper.CardDeckServiceID)
+		decks, err = e.store.FindDecksByGroupID(req.Group.GroupID, req.UserID)
 		if err != nil {
 			return err
 		}
@@ -222,7 +224,7 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pbCommon.GroupRequest
 
 func (e *CardDeck) CreateDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Deck) error {
 	logger.Infof("Received CardDeck.CreateDeck request: %v", req)
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.Deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, req.Deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	if err := helper.CheckForValidName(req.Deck.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID); err != nil {
@@ -250,7 +252,7 @@ func (e *CardDeck) CopyDeck(ctx context.Context, req *pbCardDeck.CopyDeckRequest
 	if err := e.checkUserDeckAccess(ctx, req.UserID, req.Deck.DeckID); err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, req.TargetGroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, req.TargetGroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	var (
@@ -287,25 +289,25 @@ func (e *CardDeck) CopyDeck(ctx context.Context, req *pbCardDeck.CopyDeckRequest
 
 func (e *CardDeck) GetDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Deck) error {
 	logger.Infof("Received CardDeck.GetDeck request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(req.Deck.DeckID, req.UserID)
 	if err != nil {
 		return err
 	}
 	if err = e.checkUserDeckAccess(ctx, req.UserID, deck.ID); err != nil {
 		return err
 	}
-	*rsp = *converter.StoreDeckToProtoDeckResponseConverter(*deck)
+	*rsp = *converter.StoreDeckToProtoDeckConverter(*deck)
 	logger.Infof("Successfully got information for deck %s", req.Deck.DeckID)
 	return nil
 }
 
 func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(req.Deck.DeckID, req.UserID)
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	if req.Deck.DeckName != "" {
@@ -333,11 +335,11 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 
 func (e *CardDeck) DeleteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.DeleteDeck request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(req.Deck.DeckID, req.UserID)
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_GR_ADMIN); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_ADMIN); err != nil {
 		return err
 	}
 	err = e.store.DeleteDeck(deck)
@@ -351,7 +353,7 @@ func (e *CardDeck) DeleteDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 
 func (e *CardDeck) GetDeckCards(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Cards) error {
 	logger.Infof("Received CardDeck.GetDeckCards request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(req.Deck.DeckID, req.UserID)
 	if err != nil {
 		return err
 	}
@@ -376,11 +378,11 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pbCommon.DeckRequest, 
 
 func (e *CardDeck) CreateCard(ctx context.Context, req *pbCommon.CardRequest, rsp *pbCommon.Card) error {
 	logger.Infof("Received CardDeck.CreateCard request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, req.Card.DeckID, helper.CardDeckServiceID)
+	deck, err := e.store.FindDeckByID(req.Card.DeckID, req.UserID)
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	newCard := model.Card{
@@ -428,7 +430,7 @@ func (e *CardDeck) GetCard(ctx context.Context, req *pbCommon.CardRequest, rsp *
 		return err
 	}
 	card.CardSides = cardSides
-	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_GR_INVITED); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_INVITED); err != nil {
 		return err
 	}
 	*rsp = *converter.StoreCardToProtoCardConverter(*card)
@@ -442,7 +444,7 @@ func (e *CardDeck) ModifyCard(ctx context.Context, req *pbCommon.CardRequest, rs
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	if err = e.store.DeleteCardSidesOfCardByID(card.ID); err != nil {
@@ -462,7 +464,7 @@ func (e *CardDeck) DeleteCard(ctx context.Context, req *pbCommon.CardRequest, rs
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	err = e.store.DeleteCard(card)
@@ -480,7 +482,7 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pbCommon.CardSideReq
 	if err != nil {
 		return err
 	}
-	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_GR_WRITE); err != nil {
+	if err := e.checkUserRoleAccess(ctx, req.UserID, card.Deck.GroupID, pbCommon.GroupRole_WRITE); err != nil {
 		return err
 	}
 	var previousCardSideIDForNewCardSide string
@@ -601,5 +603,72 @@ func (e *CardDeck) DeleteCardSide(ctx context.Context, req *pbCommon.CardSideReq
 	}
 	rsp.Success = true
 	logger.Infof("Successfully deleted card side %s of card %s", req.CardSide.CardSideID, cardSideToDelete.CardID)
+	return nil
+}
+
+func (e *CardDeck) GetUserFavoriteDecks(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Decks) error {
+	logger.Infof("Received CardDeck.GetUserFavoriteDecks request: %v", req)
+	favoriteDecks, err := helper.FindStoreEntity(e.store.FindFavoriteDecks, req.UserID, helper.CardDeckServiceID)
+	if err != nil {
+		return err
+	}
+	rsp.Decks = converter.ConvertToTypeArray(favoriteDecks, converter.StoreDeckToProtoDeckConverter)
+	logger.Infof("Successfully retrieved user %s's favorite decks.", req.UserID)
+	return nil
+}
+
+func (e *CardDeck) AddUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received CardDeck.AddUserFavoriteDeck request: %v", req)
+	if err := e.store.AddFavoriteDeck(req.UserID, req.Deck.DeckID); err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return helper.NewMicroDeckAlreadyFavoriteErr(helper.CardDeckServiceID)
+		}
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully added %s to user %s's favorite decks.", req.Deck.DeckID, req.UserID)
+	return nil
+}
+
+func (e *CardDeck) DeleteUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received CardDeck.DeleteUserFavoriteDeck request: %v", req)
+	if err := e.store.DeleteFavoriteDeck(req.UserID, req.Deck.DeckID); err != nil {
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully deleted %s from user %s's favorite decks.", req.Deck.DeckID, req.UserID)
+	return nil
+}
+
+func (e *CardDeck) GetUserActiveDecks(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Decks) error {
+	logger.Infof("Received CardDeck.GetUserActiveDecks request: %v", req)
+	activeDecks, err := helper.FindStoreEntity(e.store.FindActiveDecks, req.UserID, helper.CardDeckServiceID)
+	if err != nil {
+		return err
+	}
+	rsp.Decks = converter.ConvertToTypeArray(activeDecks, converter.StoreDeckToProtoDeckConverter)
+	logger.Infof("Successfully retrieved user %s's active decks.", req.UserID)
+	return nil
+}
+
+func (e *CardDeck) AddUserActiveDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received CardDeck.AddUserActiveDeck request: %v", req)
+	if err := e.store.AddActiveDeck(req.UserID, req.Deck.DeckID); err != nil {
+		if !errors.Is(err, gorm.ErrDuplicatedKey) {
+			return err
+		}
+	}
+	rsp.Success = true
+	logger.Infof("Successfully added %s to user %s's active decks.", req.Deck.DeckID, req.UserID)
+	return nil
+}
+
+func (e *CardDeck) DeleteUserActiveDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received CardDeck.DeleteUserActiveDeck request: %v", req)
+	if err := e.store.DeleteActiveDeck(req.UserID, req.Deck.DeckID); err != nil {
+		return err
+	}
+	rsp.Success = true
+	logger.Infof("Successfully deleted %s from user %s's active decks.", req.Deck.DeckID, req.UserID)
 	return nil
 }

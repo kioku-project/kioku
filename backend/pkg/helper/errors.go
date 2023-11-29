@@ -104,6 +104,10 @@ func NewMicroWrongDeckIDErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "wrong deck id")
 }
 
+func NewMicroDeckAlreadyFavoriteErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "This Deck is already your favorite")
+}
+
 func NewFiberBadRequestErr(detail string) error {
 	return fiber.NewError(fiber.StatusBadRequest, detail)
 }
@@ -118,6 +122,10 @@ func NewFiberMissingNameErr() error {
 
 func NewFiberMissingPasswordErr() error {
 	return fiber.NewError(fiber.StatusBadRequest, "no Password provided")
+}
+
+func NewFiberMissingDeckIDErr() error {
+	return fiber.NewError(fiber.StatusBadRequest, "no deckID provided")
 }
 
 func NewFiberUnauthorizedErr(detail string) error {

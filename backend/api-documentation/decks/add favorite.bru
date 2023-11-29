@@ -1,0 +1,21 @@
+meta {
+  name: add favorite
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/api/decks/favorites
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "deckID": "D-12345678"
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: delete active
+  type: http
+  seq: 13
+}
+
+delete {
+  url: {{baseUrl}}/api/decks/active
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "deckID": "D-12345678"
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: get active decks
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{baseUrl}}/api/decks/active
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "deckID": "D-hw8xB3B3"
+  }
+}

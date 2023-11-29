@@ -43,7 +43,7 @@ func NewUserStore() (UserStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = db.AutoMigrate(&model.User{}, &model.UserActiveDecks{}, &model.UserFavoriteDecks{})
+	err = db.AutoMigrate(&model.User{})
 	if err != nil {
 		return nil, err
 	}
@@ -368,7 +368,7 @@ func (s *CardDeckStoreImpl) AddActiveDeck(userID string, deckID string) error {
 	return s.db.Create(&model.UserActiveDecks{UserID: userID, DeckID: deckID, Algorithm: model.AlgoDynamicSRS}).Error
 }
 
-func (s *CardDeckStoreImpl) DelActiveDeck(userID string, deckID string) error {
+func (s *CardDeckStoreImpl) DeleteActiveDeck(userID string, deckID string) error {
 	return s.db.Delete(&model.UserActiveDecks{UserID: userID, DeckID: deckID}).Error
 }
 

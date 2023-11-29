@@ -34,7 +34,7 @@ type CardDeckStore interface {
 	DeleteFavoriteDeck(userID string, deckID string) error
 	FindActiveDecks(userID string) ([]model.Deck, error)
 	AddActiveDeck(userID string, deckID string) error
-	DelActiveDeck(userID string, deckID string) error
+	DeleteActiveDeck(userID string, deckID string) error
 }
 
 type CollaborationStore interface {

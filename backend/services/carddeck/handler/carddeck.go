@@ -216,10 +216,8 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pbCommon.GroupRequest
 			return err
 		}
 	}
-	logger.Info(decks)
 
 	rsp.Decks = converter.ConvertToTypeArray(decks, converter.StoreDeckToProtoDeckConverter)
-	logger.Info(rsp.Decks)
 	logger.Infof("Found %d decks in group with id %s", len(decks), req.Group.GroupID)
 	return nil
 }
@@ -299,7 +297,6 @@ func (e *CardDeck) GetDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *
 		return err
 	}
 	*rsp = *converter.StoreDeckToProtoDeckConverter(*deck)
-	logger.Info(rsp)
 	logger.Infof("Successfully got information for deck %s", req.Deck.DeckID)
 	return nil
 }
@@ -608,6 +605,7 @@ func (e *CardDeck) DeleteCardSide(ctx context.Context, req *pbCommon.CardSideReq
 	logger.Infof("Successfully deleted card side %s of card %s", req.CardSide.CardSideID, cardSideToDelete.CardID)
 	return nil
 }
+
 func (e *CardDeck) GetUserFavoriteDecks(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Decks) error {
 	logger.Infof("Received CardDeck.GetUserFavoriteDecks request: %v", req)
 	favoriteDecks, err := helper.FindStoreEntity(e.store.FindFavoriteDecks, req.UserID, helper.CardDeckServiceID)
@@ -618,6 +616,7 @@ func (e *CardDeck) GetUserFavoriteDecks(ctx context.Context, req *pbCommon.User,
 	logger.Infof("Successfully retrieved user %s's favorite decks.", req.UserID)
 	return nil
 }
+
 func (e *CardDeck) AddUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.AddUserFavoriteDeck request: %v", req)
 	if err := e.store.AddFavoriteDeck(req.UserID, req.Deck.DeckID); err != nil {
@@ -630,8 +629,9 @@ func (e *CardDeck) AddUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRe
 	logger.Infof("Successfully added %s to user %s's favorite decks.", req.Deck.DeckID, req.UserID)
 	return nil
 }
-func (e *CardDeck) DelUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
-	logger.Infof("Received CardDeck.DelUserFavoriteDeck request: %v", req)
+
+func (e *CardDeck) DeleteUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received CardDeck.DeleteUserFavoriteDeck request: %v", req)
 	if err := e.store.DeleteFavoriteDeck(req.UserID, req.Deck.DeckID); err != nil {
 		return err
 	}
@@ -639,6 +639,7 @@ func (e *CardDeck) DelUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRe
 	logger.Infof("Successfully deleted %s from user %s's favorite decks.", req.Deck.DeckID, req.UserID)
 	return nil
 }
+
 func (e *CardDeck) GetUserActiveDecks(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Decks) error {
 	logger.Infof("Received CardDeck.GetUserActiveDecks request: %v", req)
 	activeDecks, err := helper.FindStoreEntity(e.store.FindActiveDecks, req.UserID, helper.CardDeckServiceID)
@@ -649,6 +650,7 @@ func (e *CardDeck) GetUserActiveDecks(ctx context.Context, req *pbCommon.User, r
 	logger.Infof("Successfully retrieved user %s's active decks.", req.UserID)
 	return nil
 }
+
 func (e *CardDeck) AddUserActiveDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.AddUserActiveDeck request: %v", req)
 	if err := e.store.AddActiveDeck(req.UserID, req.Deck.DeckID); err != nil {
@@ -660,9 +662,10 @@ func (e *CardDeck) AddUserActiveDeck(ctx context.Context, req *pbCommon.DeckRequ
 	logger.Infof("Successfully added %s to user %s's active decks.", req.Deck.DeckID, req.UserID)
 	return nil
 }
-func (e *CardDeck) DelUserActiveDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
-	logger.Infof("Received CardDeck.DelUserActiveDeck request: %v", req)
-	if err := e.store.DelActiveDeck(req.UserID, req.Deck.DeckID); err != nil {
+
+func (e *CardDeck) DeleteUserActiveDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received CardDeck.DeleteUserActiveDeck request: %v", req)
+	if err := e.store.DeleteActiveDeck(req.UserID, req.Deck.DeckID); err != nil {
 		return err
 	}
 	rsp.Success = true

@@ -20,5 +20,5 @@ type UserFavoriteDecks struct {
 	UserID string `gorm:"not null;primaryKey"`
 	User   User   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	DeckID string `gorm:"not null;primaryKey"`
-	Deck   Deck
+	Deck   Deck   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }

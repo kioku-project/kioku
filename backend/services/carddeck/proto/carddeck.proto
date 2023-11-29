@@ -25,10 +25,10 @@ service CardDeck {
 
 	rpc GetUserFavoriteDecks(common.User) returns (common.Decks) {}
 	rpc AddUserFavoriteDeck(common.DeckRequest) returns (common.Success) {}
-	rpc DelUserFavoriteDeck(common.DeckRequest) returns (common.Success) {}
+	rpc DeleteUserFavoriteDeck(common.DeckRequest) returns (common.Success) {}
 	rpc GetUserActiveDecks(common.User) returns (common.Decks) {}
 	rpc AddUserActiveDeck(common.DeckRequest) returns (common.Success) {}
-	rpc DelUserActiveDeck(common.DeckRequest) returns (common.Success) {}
+	rpc DeleteUserActiveDeck(common.DeckRequest) returns (common.Success) {}
 }
 
 message CopyDeckRequest {

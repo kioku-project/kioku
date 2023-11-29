@@ -130,9 +130,9 @@ func main() {
 
 	app.Get("/api/decks/favorites", svc.GetFavoriteDecksHandler)
 	app.Post("/api/decks/favorites", svc.AddFavoriteDeckHandler)
-	app.Delete("/api/decks/favorites", svc.DelFavoriteDeckHandler)
+	app.Delete("/api/decks/favorites", svc.DeleteFavoriteDeckHandler)
 	app.Get("/api/decks/active", svc.GetActiveDecksHandler)
-	app.Delete("/api/decks/active", svc.DelActiveDeckHandler)
+	app.Delete("/api/decks/active", svc.DeleteActiveDeckHandler)
 
 	app.Get("/api/groups/:groupID/decks", svc.GetGroupDecksHandler)
 	app.Post("/api/groups/:groupID/decks", svc.CreateDeckHandler)

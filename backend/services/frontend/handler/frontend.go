@@ -786,7 +786,7 @@ func (e *Frontend) AddFavoriteDeckHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
-func (e *Frontend) DelFavoriteDeckHandler(c *fiber.Ctx) error {
+func (e *Frontend) DeleteFavoriteDeckHandler(c *fiber.Ctx) error {
 	var deck = &pbCommon.Deck{}
 	if err := c.BodyParser(deck); err != nil {
 		return err
@@ -795,7 +795,7 @@ func (e *Frontend) DelFavoriteDeckHandler(c *fiber.Ctx) error {
 		return helper.NewFiberMissingDeckIDErr()
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspDelFavoriteDeck, err := e.cardDeckService.DelUserFavoriteDeck(c.Context(), &pbCommon.DeckRequest{
+	rspDelFavoriteDeck, err := e.cardDeckService.DeleteUserFavoriteDeck(c.Context(), &pbCommon.DeckRequest{
 		UserID: userID,
 		Deck:   deck,
 	})
@@ -821,7 +821,7 @@ func (e *Frontend) GetActiveDecksHandler(c *fiber.Ctx) error {
 	})
 }
 
-func (e *Frontend) DelActiveDeckHandler(c *fiber.Ctx) error {
+func (e *Frontend) DeleteActiveDeckHandler(c *fiber.Ctx) error {
 	var deck = &pbCommon.Deck{}
 	if err := c.BodyParser(deck); err != nil {
 		return err
@@ -830,7 +830,7 @@ func (e *Frontend) DelActiveDeckHandler(c *fiber.Ctx) error {
 		return helper.NewFiberMissingDeckIDErr()
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspDelActiveDeck, err := e.cardDeckService.DelUserActiveDeck(c.Context(), &pbCommon.DeckRequest{
+	rspDelActiveDeck, err := e.cardDeckService.DeleteUserActiveDeck(c.Context(), &pbCommon.DeckRequest{
 		UserID: userID,
 		Deck:   deck,
 	})

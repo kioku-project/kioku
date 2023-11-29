@@ -53,10 +53,10 @@ type CardDeckService interface {
 	DeleteCardSide(ctx context.Context, in *proto1.CardSideRequest, opts ...client.CallOption) (*proto1.Success, error)
 	GetUserFavoriteDecks(ctx context.Context, in *proto1.User, opts ...client.CallOption) (*proto1.Decks, error)
 	AddUserFavoriteDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error)
-	DelUserFavoriteDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error)
+	DeleteUserFavoriteDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error)
 	GetUserActiveDecks(ctx context.Context, in *proto1.User, opts ...client.CallOption) (*proto1.Decks, error)
 	AddUserActiveDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error)
-	DelUserActiveDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error)
+	DeleteUserActiveDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error)
 }
 
 type cardDeckService struct {
@@ -231,8 +231,8 @@ func (c *cardDeckService) AddUserFavoriteDeck(ctx context.Context, in *proto1.De
 	return out, nil
 }
 
-func (c *cardDeckService) DelUserFavoriteDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error) {
-	req := c.c.NewRequest(c.name, "CardDeck.DelUserFavoriteDeck", in)
+func (c *cardDeckService) DeleteUserFavoriteDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error) {
+	req := c.c.NewRequest(c.name, "CardDeck.DeleteUserFavoriteDeck", in)
 	out := new(proto1.Success)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -261,8 +261,8 @@ func (c *cardDeckService) AddUserActiveDeck(ctx context.Context, in *proto1.Deck
 	return out, nil
 }
 
-func (c *cardDeckService) DelUserActiveDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error) {
-	req := c.c.NewRequest(c.name, "CardDeck.DelUserActiveDeck", in)
+func (c *cardDeckService) DeleteUserActiveDeck(ctx context.Context, in *proto1.DeckRequest, opts ...client.CallOption) (*proto1.Success, error) {
+	req := c.c.NewRequest(c.name, "CardDeck.DeleteUserActiveDeck", in)
 	out := new(proto1.Success)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -290,10 +290,10 @@ type CardDeckHandler interface {
 	DeleteCardSide(context.Context, *proto1.CardSideRequest, *proto1.Success) error
 	GetUserFavoriteDecks(context.Context, *proto1.User, *proto1.Decks) error
 	AddUserFavoriteDeck(context.Context, *proto1.DeckRequest, *proto1.Success) error
-	DelUserFavoriteDeck(context.Context, *proto1.DeckRequest, *proto1.Success) error
+	DeleteUserFavoriteDeck(context.Context, *proto1.DeckRequest, *proto1.Success) error
 	GetUserActiveDecks(context.Context, *proto1.User, *proto1.Decks) error
 	AddUserActiveDeck(context.Context, *proto1.DeckRequest, *proto1.Success) error
-	DelUserActiveDeck(context.Context, *proto1.DeckRequest, *proto1.Success) error
+	DeleteUserActiveDeck(context.Context, *proto1.DeckRequest, *proto1.Success) error
 }
 
 func RegisterCardDeckHandler(s server.Server, hdlr CardDeckHandler, opts ...server.HandlerOption) error {
@@ -314,10 +314,10 @@ func RegisterCardDeckHandler(s server.Server, hdlr CardDeckHandler, opts ...serv
 		DeleteCardSide(ctx context.Context, in *proto1.CardSideRequest, out *proto1.Success) error
 		GetUserFavoriteDecks(ctx context.Context, in *proto1.User, out *proto1.Decks) error
 		AddUserFavoriteDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error
-		DelUserFavoriteDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error
+		DeleteUserFavoriteDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error
 		GetUserActiveDecks(ctx context.Context, in *proto1.User, out *proto1.Decks) error
 		AddUserActiveDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error
-		DelUserActiveDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error
+		DeleteUserActiveDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error
 	}
 	type CardDeck struct {
 		cardDeck
@@ -394,8 +394,8 @@ func (h *cardDeckHandler) AddUserFavoriteDeck(ctx context.Context, in *proto1.De
 	return h.CardDeckHandler.AddUserFavoriteDeck(ctx, in, out)
 }
 
-func (h *cardDeckHandler) DelUserFavoriteDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error {
-	return h.CardDeckHandler.DelUserFavoriteDeck(ctx, in, out)
+func (h *cardDeckHandler) DeleteUserFavoriteDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error {
+	return h.CardDeckHandler.DeleteUserFavoriteDeck(ctx, in, out)
 }
 
 func (h *cardDeckHandler) GetUserActiveDecks(ctx context.Context, in *proto1.User, out *proto1.Decks) error {
@@ -406,6 +406,6 @@ func (h *cardDeckHandler) AddUserActiveDeck(ctx context.Context, in *proto1.Deck
 	return h.CardDeckHandler.AddUserActiveDeck(ctx, in, out)
 }
 
-func (h *cardDeckHandler) DelUserActiveDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error {
-	return h.CardDeckHandler.DelUserActiveDeck(ctx, in, out)
+func (h *cardDeckHandler) DeleteUserActiveDeck(ctx context.Context, in *proto1.DeckRequest, out *proto1.Success) error {
+	return h.CardDeckHandler.DeleteUserActiveDeck(ctx, in, out)
 }

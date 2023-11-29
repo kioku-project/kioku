@@ -28,7 +28,7 @@ export default function Page() {
 			<NextSeo
 				title={_(msg`Kioku | Features of the Kioku platform`)}
 				description={_(
-					msg`Explore the features of the Kioku platform! The most important features are collaborative flashcard creation and compability with anki`
+					msg`Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!`
 				)}
 				languageAlternates={[
 					{ hrefLang: "en", href: "https://app.kioku.dev/features/" },

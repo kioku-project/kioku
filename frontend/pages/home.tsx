@@ -28,10 +28,10 @@ export default function Page() {
 			<NextSeo
 				canonical={ router.locale === "en" ? "https://kioku.dev/" : "https://app.kioku.dev/de/home/" }
 				title={_(
-					msg`Kioku | Learn flashcards together with friends for free online!`
+					msg`Kioku | The free flashcard application that focusses on collaborative content creation!`
 				)}
 				description={_(
-					msg`Kioku is a free flashcard application where you can create decks and learn together with friends. Import decks from anki or create new ones yourself and learn them together with friends. Compare your learning statistics with each other as motivatation to continue learning!`
+					msg`Kioku is a free flashcard application. You can create or import decks from Anki and edit your flashcards together. Learn your flashcards with our customized spaced repetition algorithm (SRS) and compare your statistics with your friends. Motivate each other and keep learning!`
 				)}
 				languageAlternates={[
 					{ hrefLang: "en", href: "https://kioku.dev/" },

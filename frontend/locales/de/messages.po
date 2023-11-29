@@ -69,7 +69,7 @@ msgstr "Karte erstellt!"
 msgid "Card updated!"
 msgstr "Karte aktualisiert!"
 
-#: pages/deck/[id]/index.tsx:42
+#: pages/deck/[id]/index.tsx:41
 msgid "Cards"
 msgstr "Karten"
 
@@ -145,7 +145,7 @@ msgstr "Stapelname"
 msgid "Deck updated!"
 msgstr "Stapel aktualisiert!"
 
-#: pages/group/[id]/index.tsx:44
+#: pages/group/[id]/index.tsx:43
 #: pages/index.tsx:49
 msgid "Decks"
 msgstr "Stapel"
@@ -182,6 +182,10 @@ msgstr "Beschreibung"
 msgid "Discover Kioku's awesome Features"
 msgstr "Entdecke Kiokus einzigartige Funktionen"
 
+#: pages/features.tsx:31
+msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
+msgstr "Entdecke die Funktionen unserer kostenlosen Karteikarten-Anwendung. Importiere Stapel aus Anki, erstelle Gruppen, lerne gemeinsam mit Freunden und vergleiche deine Statistiken. Jetzt auf allen Geräten!"
+
 #: pages/login.tsx:214
 msgid "Don't have an account?"
 msgstr "Noch kein Account?"
@@ -209,10 +213,6 @@ msgstr "Jeder kann anfragen, dieser Gruppe beizutreten"
 #: components/navigation/Tabs/GroupSettingsTab.tsx:111
 msgid "Everyone has to be invited to join this group"
 msgstr "Jeder muss eingeladen werden, um der Gruppe beizutreten"
-
-#: pages/features.tsx:31
-msgid "Explore the features of the Kioku platform! The most important features are collaborative flashcard creation and compability with anki"
-msgstr "Entdecke die Funktionen der Kioku Platform! Die wichtigsten Funktionen sind gemeinsame Karteikarten Erstellung und Kompatibilität mit Anki"
 
 #: components/navigation/Tabs/DashboardTab.tsx:26
 msgid "Favorite Decks"
@@ -288,17 +288,17 @@ msgstr "Gruppe beitreten"
 msgid "Kioku | Features of the Kioku platform"
 msgstr "Kioku | Funktionen der Kioku Platform!"
 
-#: pages/home.tsx:31
-msgid "Kioku | Learn flashcards together with friends for free online!"
-msgstr "Kioku | Lerne Karteikarten gemeinsam mit Freunden kostenlos online!"
-
 #: pages/login.tsx:51
-msgid "Kioku | Login or Register for Kioku!"
-msgstr "Kioku | Logge Dich ein oder Registriere dich für Kioku"
+msgid "Kioku | Login or register for Kioku!"
+msgstr "Kioku | Logge Dich ein oder registriere dich für Kioku"
+
+#: pages/home.tsx:31
+msgid "Kioku | The free flashcard application that focusses on collaborative content creation!"
+msgstr "Kioku | Die kostenlose Karteikartenanwendung, die sich auf die gemeinsame Erarbeitung von Inhalten fokussiert!"
 
 #: pages/home.tsx:34
-msgid "Kioku is a free flashcard application where you can create decks and learn together with friends. Import decks from anki or create new ones yourself and learn them together with friends. Compare your learning statistics with each other as motivatation to continue learning!"
-msgstr "Kioku ist eine kostenlose Karteikarten Anwendung in der Du Stapel erstellen und gemeinsam mit Freunden lernen kannst. Importiere Stapel von Anki oder erstelle neue und lerne sie zusammen mit Freunden. Vergleicht eure Lernstatistiken untereinander um euch zum Lernen zu motivieren!"
+msgid "Kioku is a free flashcard application. You can create or import decks from Anki and edit your flashcards together. Learn your flashcards with our customized spaced repetition algorithm (SRS) and compare your statistics with your friends. Motivate each other and keep learning!"
+msgstr "Kioku ist eine kostenlose Karteikarten-Anwendung. Du kannst Decks erstellen oder aus Anki importieren und Deine Karteikarten zusammen bearbeiten. Lerne Deine Karteikarten mit unserem angepassten Spaced Repetition Algorithmus (SRS) und vergleiche Deine Statistiken mit denen Deiner Freunde. Motiviert euch gegenseitig und ermutigt euch zum Weiterlernen!"
 
 #: pages/features.tsx:103
 msgid "Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
@@ -332,10 +332,6 @@ msgstr "Eingeloggt!"
 #: components/navigation/Navbar.tsx:67
 msgid "Login"
 msgstr "Einloggen"
-
-#: pages/login.tsx:52
-msgid "Login or Register for Kioku to start using the flashcard application for free!"
-msgstr "Logge Dich ein oder Registriere Dich für Kioku um die Karteikarten Anwendung kostenlos zu benutzen!"
 
 #: components/flashcard/Flashcard.tsx:254
 msgid "Medium"
@@ -374,6 +370,10 @@ msgstr "Nachdem Du die Gruppe gelöscht hast, gibt es kein Zurück mehr."
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Nachdem Du den Stapel gelöscht hast, gibt es kein Zurück mehr."
 
+#: pages/login.tsx:52
+msgid "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
+msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikartenanwendung zusammen mit Deinen Freunden zu nutzen."
+
 #: components/navigation/Tabs/DeckSettingsTab.tsx:58
 #: components/navigation/Tabs/GroupSettingsTab.tsx:55
 #: components/navigation/Tabs/UserSettingsTab.tsx:48
@@ -396,8 +396,8 @@ msgstr "Speichern"
 msgid "Sent request!"
 msgstr "Anfrage gesendet!"
 
-#: pages/deck/[id]/index.tsx:56
-#: pages/group/[id]/index.tsx:61
+#: pages/deck/[id]/index.tsx:55
+#: pages/group/[id]/index.tsx:60
 #: pages/index.tsx:78
 msgid "Settings"
 msgstr "Einstellungen"
@@ -422,8 +422,8 @@ msgstr "Jetzt registrieren!"
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten-Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
 
-#: pages/deck/[id]/index.tsx:49
-#: pages/group/[id]/index.tsx:54
+#: pages/deck/[id]/index.tsx:48
+#: pages/group/[id]/index.tsx:53
 #: pages/index.tsx:71
 msgid "Statistics"
 msgstr "Statistiken"
@@ -436,7 +436,7 @@ msgstr "Test"
 msgid "Unexpected group type"
 msgstr "Unerwarteter Gruppentyp"
 
-#: pages/group/[id]/index.tsx:49
+#: pages/group/[id]/index.tsx:48
 msgid "User"
 msgstr "Benutzer"
 

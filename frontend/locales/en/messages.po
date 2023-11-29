@@ -6,6 +6,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
 #: components/deck/Deck.tsx:146
 msgid "{0, plural, one {# card due} other {# cards due}}"
@@ -63,7 +69,7 @@ msgstr "Card created!"
 msgid "Card updated!"
 msgstr "Card updated!"
 
-#: pages/deck/[id]/index.tsx:42
+#: pages/deck/[id]/index.tsx:41
 msgid "Cards"
 msgstr "Cards"
 
@@ -139,7 +145,7 @@ msgstr "Deck Name"
 msgid "Deck updated!"
 msgstr "Deck updated!"
 
-#: pages/group/[id]/index.tsx:44
+#: pages/group/[id]/index.tsx:43
 #: pages/index.tsx:49
 msgid "Decks"
 msgstr "Decks"
@@ -176,6 +182,10 @@ msgstr "Description"
 msgid "Discover Kioku's awesome Features"
 msgstr "Discover Kioku's awesome Features"
 
+#: pages/features.tsx:31
+msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
+msgstr "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
+
 #: pages/login.tsx:214
 msgid "Don't have an account?"
 msgstr "Don't have an account?"
@@ -203,10 +213,6 @@ msgstr "Everyone can request to join this group"
 #: components/navigation/Tabs/GroupSettingsTab.tsx:111
 msgid "Everyone has to be invited to join this group"
 msgstr "Everyone has to be invited to join this group"
-
-#: pages/features.tsx:31
-msgid "Explore the features of the Kioku platform! The most important features are collaborative flashcard creation and compability with anki"
-msgstr "Explore the features of the Kioku platform! The most important features are collaborative flashcard creation and compability with anki"
 
 #: components/navigation/Tabs/DashboardTab.tsx:26
 msgid "Favorite Decks"
@@ -282,17 +288,17 @@ msgstr "Join Group"
 msgid "Kioku | Features of the Kioku platform"
 msgstr "Kioku | Features of the Kioku platform"
 
-#: pages/home.tsx:31
-msgid "Kioku | Learn flashcards together with friends for free online!"
-msgstr "Kioku | Learn flashcards together with friends for free online!"
-
 #: pages/login.tsx:51
-msgid "Kioku | Login or Register for Kioku!"
-msgstr "Kioku | Login or Register for Kioku!"
+msgid "Kioku | Login or register for Kioku!"
+msgstr "Kioku | Login or register for Kioku!"
+
+#: pages/home.tsx:31
+msgid "Kioku | The free flashcard application that focusses on collaborative content creation!"
+msgstr "Kioku | The free flashcard application that focusses on collaborative content creation!"
 
 #: pages/home.tsx:34
-msgid "Kioku is a free flashcard application where you can create decks and learn together with friends. Import decks from anki or create new ones yourself and learn them together with friends. Compare your learning statistics with each other as motivatation to continue learning!"
-msgstr "Kioku is a free flashcard application where you can create decks and learn together with friends. Import decks from anki or create new ones yourself and learn them together with friends. Compare your learning statistics with each other as motivatation to continue learning!"
+msgid "Kioku is a free flashcard application. You can create or import decks from Anki and edit your flashcards together. Learn your flashcards with our customized spaced repetition algorithm (SRS) and compare your statistics with your friends. Motivate each other and keep learning!"
+msgstr "Kioku is a free flashcard application. You can create or import decks from Anki and edit your flashcards together. Learn your flashcards with our customized spaced repetition algorithm (SRS) and compare your statistics with your friends. Motivate each other and keep learning!"
 
 #: pages/features.tsx:103
 msgid "Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
@@ -326,10 +332,6 @@ msgstr "Logged in!"
 #: components/navigation/Navbar.tsx:67
 msgid "Login"
 msgstr "Login"
-
-#: pages/login.tsx:52
-msgid "Login or Register for Kioku to start using the flashcard application for free!"
-msgstr "Login or Register for Kioku to start using the flashcard application for free!"
 
 #: components/flashcard/Flashcard.tsx:254
 msgid "Medium"
@@ -368,6 +370,10 @@ msgstr "Please be certain before deleting a group, as there is no way to undo th
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Please be certain when deleting a deck, as there is no way to undo this action."
 
+#: pages/login.tsx:52
+msgid "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
+msgstr "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
+
 #: components/navigation/Tabs/DeckSettingsTab.tsx:58
 #: components/navigation/Tabs/GroupSettingsTab.tsx:55
 #: components/navigation/Tabs/UserSettingsTab.tsx:48
@@ -390,8 +396,8 @@ msgstr "Save"
 msgid "Sent request!"
 msgstr "Sent request!"
 
-#: pages/deck/[id]/index.tsx:56
-#: pages/group/[id]/index.tsx:61
+#: pages/deck/[id]/index.tsx:55
+#: pages/group/[id]/index.tsx:60
 #: pages/index.tsx:78
 msgid "Settings"
 msgstr "Settings"
@@ -416,8 +422,8 @@ msgstr "Sign up now!"
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 
-#: pages/deck/[id]/index.tsx:49
-#: pages/group/[id]/index.tsx:54
+#: pages/deck/[id]/index.tsx:48
+#: pages/group/[id]/index.tsx:53
 #: pages/index.tsx:71
 msgid "Statistics"
 msgstr "Statistics"
@@ -430,7 +436,7 @@ msgstr "Test"
 msgid "Unexpected group type"
 msgstr "Unexpected group type"
 
-#: pages/group/[id]/index.tsx:49
+#: pages/group/[id]/index.tsx:48
 msgid "User"
 msgstr "User"
 

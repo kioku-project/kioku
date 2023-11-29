@@ -48,8 +48,8 @@ export default function Page() {
 	return (
 		<>
 			<NextSeo
-				title={_(msg`Kioku | Login or Register for Kioku!`)}
-				description={_(msg`Login or Register for Kioku to start using the flashcard application for free!`)}
+				title={_(msg`Kioku | Login or register for Kioku!`)}
+				description={_(msg`Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups.`)}
 				languageAlternates={[
 					{ hrefLang: "en", href: "https://app.kioku.dev/login/" },
 					{ hrefLang: "de", href: "https://app.kioku.dev/de/login" },

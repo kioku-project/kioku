@@ -112,6 +112,28 @@ export function useDecks(groupID?: string) {
 	};
 }
 
+export function useFavoriteDecks() {
+	const { data, error, isLoading } = useSWR<{
+		decks: Deck[];
+	}>(`/api/decks/favorites`, fetcher);
+	return {
+		decks: data?.decks,
+		error,
+		isLoading,
+	};
+}
+
+export function useActiveDecks() {
+	const { data, error, isLoading } = useSWR<{
+		decks: Deck[];
+	}>(`/api/decks/active`, fetcher);
+	return {
+		decks: data?.decks,
+		error,
+		isLoading,
+	};
+}
+
 export function useDeck(deckID?: string) {
 	const { data, error, isLoading } = useSWR<Deck>(
 		deckID ? `/api/decks/${deckID}` : null,
@@ -125,12 +147,12 @@ export function useDeck(deckID?: string) {
 }
 
 export function useDueCards(deckID?: string) {
-	const { data, error, isLoading } = useSWR<number>(
+	const { data, error, isLoading } = useSWR<{ dueCards: number }>(
 		deckID ? `/api/decks/${deckID}/dueCards` : null,
 		fetcher
 	);
 	return {
-		dueCards: data,
+		dueCards: data?.dueCards,
 		error,
 		isLoading,
 	};

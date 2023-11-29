@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: components/deck/Deck.tsx:141
+#: components/deck/Deck.tsx:146
 msgid "{0, plural, one {# card due} other {# cards due}}"
 msgstr "{0, plural, one {# Karte fällig} other {# Karten fällig}}"
 
@@ -44,6 +44,10 @@ msgstr "Account erstellt!"
 #: pages/features.tsx:121
 msgid "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivierender. Kioku hilft Dir, bessere Ergebnisse zu erzielen und Deine persönlichen Lernziele zu erreichen!"
+
+#: components/navigation/Tabs/DashboardTab.tsx:25
+msgid "Active Decks"
+msgstr "Aktive Decks"
 
 #: pages/login.tsx:220
 msgid "Already have an account?"
@@ -121,6 +125,10 @@ msgstr "Gruppe erstellen"
 msgid "Danger Zone"
 msgstr "Gefahrenzone"
 
+#: pages/index.tsx:42
+msgid "Dashboard"
+msgstr "Dashboard"
+
 #: components/navigation/Tabs/DecksTab.tsx:76
 msgid "Deck created!"
 msgstr "Stapel erstellt!"
@@ -138,7 +146,7 @@ msgid "Deck updated!"
 msgstr "Stapel aktualisiert!"
 
 #: pages/group/[id]/index.tsx:31
-#: pages/index.tsx:41
+#: pages/index.tsx:49
 msgid "Decks"
 msgstr "Stapel"
 
@@ -202,6 +210,10 @@ msgstr "Jeder kann anfragen, dieser Gruppe beizutreten"
 msgid "Everyone has to be invited to join this group"
 msgstr "Jeder muss eingeladen werden, um der Gruppe beizutreten"
 
+#: components/navigation/Tabs/DashboardTab.tsx:26
+msgid "Favorite Decks"
+msgstr "Favoriten"
+
 #: components/statistics/StatisticOverview.tsx:32
 #: components/statistics/StatisticOverview.tsx:47
 msgid "from"
@@ -236,7 +248,7 @@ msgstr "Gruppenstatistiken"
 msgid "Group updated!"
 msgstr "Gruppe aktualisert!"
 
-#: pages/index.tsx:48
+#: pages/index.tsx:56
 msgid "Groups"
 msgstr "Gruppen"
 
@@ -256,7 +268,7 @@ msgstr "Individuell"
 msgid "Informative"
 msgstr "Informativ"
 
-#: pages/index.tsx:55
+#: pages/index.tsx:63
 msgid "Invitations"
 msgstr "Einladungen"
 
@@ -272,7 +284,7 @@ msgstr "Gruppe beitreten"
 msgid "Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
 msgstr "Kioku ist mit Anki kompatibel, sodass Du Deine bestehenden Stapel in unsere Anwendung importieren und auch wieder exportieren kannst, während Du die Vorteile der kollaborativen Funktionen von Kioku entdeckst!"
 
-#: components/deck/Deck.tsx:171
+#: components/deck/Deck.tsx:176
 msgid "Learn"
 msgstr "Lernen"
 
@@ -362,7 +374,7 @@ msgstr "Anfrage gesendet!"
 
 #: pages/deck/[id]/index.tsx:43
 #: pages/group/[id]/index.tsx:48
-#: pages/index.tsx:70
+#: pages/index.tsx:78
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -388,7 +400,7 @@ msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteik
 
 #: pages/deck/[id]/index.tsx:36
 #: pages/group/[id]/index.tsx:41
-#: pages/index.tsx:63
+#: pages/index.tsx:71
 msgid "Statistics"
 msgstr "Statistiken"
 

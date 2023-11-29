@@ -62,7 +62,7 @@ export const Button = ({
 			} ${buttonSize ? getSize[buttonSize] : ""} ${className}`}
 			{...props}
 		>
-			<Text>{children}</Text>
+			<Text textSize={buttonTextSize}>{children}</Text>
 			{buttonIcon &&
 				(typeof buttonIcon === "string" ? (
 					<Icon

@@ -33,12 +33,12 @@ type CardDeckStore interface {
 	ModifyCardSide(ctx context.Context, cardSide *model.CardSide) error
 	DeleteCardSide(ctx context.Context, cardSide *model.CardSide) error
 	DeleteCardSidesOfCardByID(ctx context.Context, cardID string) error
-	FindFavoriteDecks(userID string) ([]model.Deck, error)
-	AddFavoriteDeck(userID string, deckID string) error
-	DeleteFavoriteDeck(userID string, deckID string) error
-	FindActiveDecks(userID string) ([]model.Deck, error)
-	AddActiveDeck(userID string, deckID string) error
-	DeleteActiveDeck(userID string, deckID string) error
+	FindFavoriteDecks(ctx context.Context, userID string) ([]model.Deck, error)
+	AddFavoriteDeck(ctx context.Context, userID string, deckID string) error
+	DeleteFavoriteDeck(ctx context.Context, userID string, deckID string) error
+	FindActiveDecks(ctx context.Context, userID string) ([]model.Deck, error)
+	AddActiveDeck(ctx context.Context, userID string, deckID string) error
+	DeleteActiveDeck(ctx context.Context, userID string, deckID string) error
 }
 
 type CollaborationStore interface {

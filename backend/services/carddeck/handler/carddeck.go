@@ -614,7 +614,7 @@ func (e *CardDeck) DeleteCardSide(ctx context.Context, req *pbCommon.CardSideReq
 
 func (e *CardDeck) GetUserFavoriteDecks(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Decks) error {
 	logger.Infof("Received CardDeck.GetUserFavoriteDecks request: %v", req)
-	favoriteDecks, err := helper.FindStoreEntitye.store.FindFavoriteDecks, req.UserID, helper.CardDeckServiceID)
+	favoriteDecks, err := helper.FindStoreEntity(ctx, e.store.FindFavoriteDecks, req.UserID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -625,7 +625,7 @@ func (e *CardDeck) GetUserFavoriteDecks(ctx context.Context, req *pbCommon.User,
 
 func (e *CardDeck) AddUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.AddUserFavoriteDeck request: %v", req)
-	if err := e.store.AddFavoriteDeck(req.UserID, req.Deck.DeckID); err != nil {
+	if err := e.store.AddFavoriteDeck(ctx, req.UserID, req.Deck.DeckID); err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return helper.NewMicroDeckAlreadyFavoriteErr(helper.CardDeckServiceID)
 		}
@@ -638,7 +638,7 @@ func (e *CardDeck) AddUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRe
 
 func (e *CardDeck) DeleteUserFavoriteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.DeleteUserFavoriteDeck request: %v", req)
-	if err := e.store.DeleteFavoriteDeck(req.UserID, req.Deck.DeckID); err != nil {
+	if err := e.store.DeleteFavoriteDeck(ctx, req.UserID, req.Deck.DeckID); err != nil {
 		return err
 	}
 	rsp.Success = true
@@ -648,7 +648,7 @@ func (e *CardDeck) DeleteUserFavoriteDeck(ctx context.Context, req *pbCommon.Dec
 
 func (e *CardDeck) GetUserActiveDecks(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Decks) error {
 	logger.Infof("Received CardDeck.GetUserActiveDecks request: %v", req)
-	activeDecks, err := helper.FindStoreEntity(e.store.FindActiveDecks, req.UserID, helper.CardDeckServiceID)
+	activeDecks, err := helper.FindStoreEntity(ctx, e.store.FindActiveDecks, req.UserID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -659,7 +659,7 @@ func (e *CardDeck) GetUserActiveDecks(ctx context.Context, req *pbCommon.User, r
 
 func (e *CardDeck) AddUserActiveDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.AddUserActiveDeck request: %v", req)
-	if err := e.store.AddActiveDeck(req.UserID, req.Deck.DeckID); err != nil {
+	if err := e.store.AddActiveDeck(ctx, req.UserID, req.Deck.DeckID); err != nil {
 		if !errors.Is(err, gorm.ErrDuplicatedKey) {
 			return err
 		}
@@ -671,7 +671,7 @@ func (e *CardDeck) AddUserActiveDeck(ctx context.Context, req *pbCommon.DeckRequ
 
 func (e *CardDeck) DeleteUserActiveDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.DeleteUserActiveDeck request: %v", req)
-	if err := e.store.DeleteActiveDeck(req.UserID, req.Deck.DeckID); err != nil {
+	if err := e.store.DeleteActiveDeck(ctx, req.UserID, req.Deck.DeckID); err != nil {
 		return err
 	}
 	rsp.Success = true

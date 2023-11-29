@@ -69,7 +69,6 @@ export const Header = ({
 	onClick,
 	...props
 }: HeaderProps) => {
-	const router = useRouter();
 	const { mutate } = useSWRConfig();
 
 	return (

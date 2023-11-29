@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link, { LinkProps } from "next/link";
 import React, { ButtonHTMLAttributes, ReactNode } from "react";
 
 import { Size } from "../../types/Size";
@@ -52,6 +52,9 @@ const getSize = {
  */
 export const Button = ({
 	href,
+	replace,
+	scroll,
+	prefetch,
 	buttonStyle,
 	buttonSize,
 	buttonTextSize,
@@ -60,7 +63,9 @@ export const Button = ({
 	className = "",
 	children,
 	...props
-}: ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>) => {
+}: ButtonProps &
+	ButtonHTMLAttributes<HTMLButtonElement> &
+	Pick<LinkProps, "replace" | "scroll" | "prefetch">) => {
 	const innerButton = (
 		<>
 			<Text textSize={buttonTextSize}>{children}</Text>
@@ -77,7 +82,7 @@ export const Button = ({
 		</>
 	);
 	const classNames = [
-		"flex items-center space-x-1 rounded-md font-medium  outline-none transition",
+		"flex items-center space-x-1 rounded-md font-medium outline-none transition",
 		className,
 	];
 	if (buttonStyle) {
@@ -88,7 +93,13 @@ export const Button = ({
 	}
 
 	return href ? (
-		<Link href={href} className={classNames.join(" ")}>
+		<Link
+			href={href}
+			replace
+			scroll
+			prefetch
+			className={classNames.join(" ")}
+		>
 			{innerButton}
 		</Link>
 	) : (

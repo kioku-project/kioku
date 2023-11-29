@@ -2,7 +2,6 @@ import { Trans } from "@lingui/macro";
 import { hasCookie } from "cookies-next";
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 
 import Cards from "../components/graphics/Cards";
 import { Button } from "../components/input/Button";
@@ -18,8 +17,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 };
 
 export default function Page() {
-	const router = useRouter();
-
 	return (
 		<div className="flex flex-1 justify-center overflow-hidden">
 			<Head>

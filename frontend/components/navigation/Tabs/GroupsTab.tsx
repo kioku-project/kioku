@@ -1,7 +1,6 @@
 import { msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useRef } from "react";
 import { PlusSquare } from "react-feather";
 import { toast } from "react-toastify";
@@ -27,7 +26,6 @@ interface GroupsTabProps {
  * UI component for the GroupsTab
  */
 export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
-	const router = useRouter();
 	const { _ } = useLingui();
 
 	const groupNameInput = useRef<HTMLInputElement>(null);

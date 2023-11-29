@@ -60,7 +60,6 @@ export const Deck = ({
 	deckNotification,
 	className = "",
 }: DeckProps) => {
-	const router = useRouter();
 	const { mutate } = useSWRConfig();
 
 	const [isFavorite, setFavorite] = useState(deck.isFavorite);

@@ -4,7 +4,6 @@ import { hasCookie } from "cookies-next";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { Award, BarChart2, Cloud, Code, Compass, Users } from "react-feather";
 
@@ -20,7 +19,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 };
 
 export default function Page() {
-	const router = useRouter();
 	const { _ } = useLingui();
 
 	return (

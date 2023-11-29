@@ -146,22 +146,6 @@ func (s *CardDeckStoreImpl) PopulateDeckActiveAttribute(deck *model.Deck, userID
 	return nil
 }
 
-func (s *CardDeckStoreImpl) FindDecks(userID string, groupID string, favoriteFilter bool, activeFilter bool) error {
-	var decks []model.Deck
-	if err := s.db.Where(&model.Deck{GroupID: groupID}).Find(&decks).Error; err != nil {
-		return err
-	}
-	for _, deck := range decks {
-		if err := s.PopulateDeckFavoriteAttribute(&deck, userID); err != nil {
-			return err
-		}
-		if err := s.PopulateDeckActiveAttribute(&deck, userID); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 func (s *CardDeckStoreImpl) FindDecksByGroupID(groupID string, userID string) (decks []model.Deck, err error) {
 	if err = s.db.Where(&model.GroupUserRole{GroupID: groupID}).
 		Find(&decks).Error; errors.Is(err, gorm.ErrRecordNotFound) {

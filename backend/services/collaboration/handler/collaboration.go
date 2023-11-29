@@ -38,7 +38,7 @@ func (e *Collaboration) checkUserRoleAccessWithGroupAndRoleReturn(
 	requiredRole pbCommon.GroupRole,
 ) (group *model.Group, protoRole pbCommon.GroupRole, err error) {
 	logger.Infof("Find group with id %s", groupID)
-	group, err = helper.FindStoreEntity(e.store.FindGroupByID, ctx, groupID, helper.CollaborationServiceID)
+	group, err = helper.FindStoreEntity(ctx, e.store.FindGroupByID, groupID, helper.CollaborationServiceID)
 	if err != nil {
 		return
 	}
@@ -149,7 +149,7 @@ func (e *Collaboration) createUserCardBindingsForWholeGroup(ctx context.Context,
 
 func (e *Collaboration) GetUserGroups(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Groups) error {
 	logger.Infof("Received Collaboration.GetUserGroups request: %v", req)
-	groups, err := helper.FindStoreEntity(e.store.FindGroupsByUserID, ctx, req.UserID, helper.CollaborationServiceID)
+	groups, err := helper.FindStoreEntity(ctx, e.store.FindGroupsByUserID, req.UserID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}
@@ -304,7 +304,7 @@ func (e *Collaboration) GetGroupMembers(ctx context.Context, req *pbCommon.Group
 	); err != nil {
 		return err
 	}
-	groupMembers, err := helper.FindStoreEntity(e.store.FindGroupMemberRoles, ctx, req.Group.GroupID, helper.CollaborationServiceID)
+	groupMembers, err := helper.FindStoreEntity(ctx, e.store.FindGroupMemberRoles, req.Group.GroupID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}
@@ -364,7 +364,7 @@ func (e *Collaboration) AddGroupUserRequest(
 		if !errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			return err
 		}
-		group, err := helper.FindStoreEntity(e.store.FindGroupByID, ctx, req.Group.GroupID, helper.CollaborationServiceID)
+		group, err := helper.FindStoreEntity(ctx, e.store.FindGroupByID, req.Group.GroupID, helper.CollaborationServiceID)
 		if err != nil {
 			return err
 		}
@@ -586,7 +586,7 @@ func (e *Collaboration) GetInvitationsForGroup(
 
 func (e *Collaboration) GetGroupUserRole(ctx context.Context, req *pbCommon.GroupRequest, rsp *pbCommon.Group) error {
 	logger.Infof("Received Collaboration.GetUserGroupRole request: %v", req)
-	_, err := helper.FindStoreEntity(e.store.FindGroupByID, ctx, req.Group.GroupID, helper.CollaborationServiceID)
+	_, err := helper.FindStoreEntity(ctx, e.store.FindGroupByID, req.Group.GroupID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}
@@ -608,7 +608,7 @@ func (e *Collaboration) GetGroupUserRole(ctx context.Context, req *pbCommon.Grou
 
 func (e *Collaboration) FindGroupByID(ctx context.Context, req *pbCommon.GroupRequest, rsp *pbCommon.Group) error {
 	logger.Infof("Received Collaboration.FindGroupByID request: %v", req)
-	group, err := helper.FindStoreEntity(e.store.FindGroupByID, ctx, req.Group.GroupID, helper.CollaborationServiceID)
+	group, err := helper.FindStoreEntity(ctx, e.store.FindGroupByID, req.Group.GroupID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}
@@ -635,7 +635,7 @@ func (e *Collaboration) LeaveGroup(ctx context.Context, req *pbCommon.GroupReque
 	if err != nil {
 		return err
 	}
-	groupUsers, err := helper.FindStoreEntity(e.store.FindGroupMemberRoles, ctx, req.Group.GroupID, helper.CollaborationServiceID)
+	groupUsers, err := helper.FindStoreEntity(ctx, e.store.FindGroupMemberRoles, req.Group.GroupID, helper.CollaborationServiceID)
 	if err != nil {
 		return err
 	}

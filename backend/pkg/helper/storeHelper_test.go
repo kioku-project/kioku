@@ -19,8 +19,8 @@ func errorStoreFunc(context.Context, string) (string, error) {
 func TestStoreHelper(t *testing.T) {
 	// NoError
 	entity, err := helper.FindStoreEntity[string](
-		noErrorStoreFunc,
 		context.TODO(),
+		noErrorStoreFunc,
 		id,
 		id,
 	)
@@ -29,8 +29,8 @@ func TestStoreHelper(t *testing.T) {
 
 	// Error
 	entity, err = helper.FindStoreEntity[string](
-		errorStoreFunc,
 		context.TODO(),
+		errorStoreFunc,
 		id,
 		id,
 	)

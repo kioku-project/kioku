@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 
 	"github.com/kioku-project/kioku/pkg/converter"
@@ -54,7 +55,7 @@ func (e *CardDeck) checkUserDeckAccess(
 	deckID string,
 ) error {
 	e.store.FindDeckByID(ctx, deckID)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, deckID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(ctx, e.store.FindDeckByID, deckID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -73,11 +74,11 @@ func (e *CardDeck) getCardSideAndCheckForValidAccess(
 	userID string,
 	cardSideID string,
 ) (*model.CardSide, error) {
-	cardSide, err := helper.FindStoreEntity(e.store.FindCardSideByID, ctx, cardSideID, helper.CardDeckServiceID)
+	cardSide, err := helper.FindStoreEntity(ctx, e.store.FindCardSideByID, cardSideID, helper.CardDeckServiceID)
 	if err != nil {
 		return nil, err
 	}
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, cardSide.Card.DeckID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(ctx, e.store.FindDeckByID, cardSide.Card.DeckID, helper.CardDeckServiceID)
 	if err != nil {
 		return nil, err
 	}
@@ -124,8 +125,8 @@ func (e *CardDeck) generateCardSidesForCard(ctx context.Context, card model.Card
 
 func (e *CardDeck) updateCardSideReferences(ctx context.Context, cardSidesToUpdate [2]string, index int) error {
 	side, err := helper.FindStoreEntity(
-		e.store.FindCardSideByID,
 		ctx,
+		e.store.FindCardSideByID,
 		cardSidesToUpdate[index],
 		helper.CollaborationServiceID,
 	)
@@ -146,8 +147,8 @@ func (e *CardDeck) updateCardSideReferences(ctx context.Context, cardSidesToUpda
 func (e *CardDeck) updateCardReferences(ctx context.Context, cardSideToDelete *model.CardSide) (bool, error) {
 	isLastCardSide := false
 	card, err := helper.FindStoreEntity(
-		e.store.FindCardByID,
 		ctx,
+		e.store.FindCardByID,
 		cardSideToDelete.CardID,
 		helper.CollaborationServiceID,
 	)
@@ -180,12 +181,12 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pbCommon.GroupRequest
 	var decks []model.Deck
 	err := e.checkUserRoleAccess(ctx, req.UserID, req.Group.GroupID, pbCommon.GroupRole_GR_INVITED)
 	if err != nil {
-		decks, err = helper.FindStoreEntity(e.store.FindPublicDecksByGroupID, ctx, req.Group.GroupID, helper.CardDeckServiceID)
+		decks, err = helper.FindStoreEntity(ctx, e.store.FindPublicDecksByGroupID, req.Group.GroupID, helper.CardDeckServiceID)
 		if err != nil {
 			return err
 		}
 	} else {
-		decks, err = helper.FindStoreEntity(e.store.FindDecksByGroupID, ctx, req.Group.GroupID, helper.CardDeckServiceID)
+		decks, err = helper.FindStoreEntity(ctx, e.store.FindDecksByGroupID, req.Group.GroupID, helper.CardDeckServiceID)
 		if err != nil {
 			return err
 		}
@@ -223,7 +224,7 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 
 func (e *CardDeck) GetDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Deck) error {
 	logger.Infof("Received CardDeck.GetDeck request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(ctx, e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -237,7 +238,7 @@ func (e *CardDeck) GetDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *
 
 func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(ctx, e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -269,7 +270,7 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 
 func (e *CardDeck) DeleteDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.DeleteDeck request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(ctx, e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -287,7 +288,7 @@ func (e *CardDeck) DeleteDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 
 func (e *CardDeck) GetDeckCards(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Cards) error {
 	logger.Infof("Received CardDeck.GetDeckCards request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, req.Deck.DeckID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(ctx, e.store.FindDeckByID, req.Deck.DeckID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -312,7 +313,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pbCommon.DeckRequest, 
 
 func (e *CardDeck) CreateCard(ctx context.Context, req *pbCommon.CardRequest, rsp *pbCommon.Card) error {
 	logger.Infof("Received CardDeck.CreateCard request: %v", req)
-	deck, err := helper.FindStoreEntity(e.store.FindDeckByID, ctx, req.Card.DeckID, helper.CardDeckServiceID)
+	deck, err := helper.FindStoreEntity(ctx, e.store.FindDeckByID, req.Card.DeckID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -355,11 +356,11 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pbCommon.CardRequest, rs
 
 func (e *CardDeck) GetCard(ctx context.Context, req *pbCommon.CardRequest, rsp *pbCommon.Card) error {
 	logger.Infof("Received CardDeck.GetCard request: %v", req)
-	card, err := helper.FindStoreEntity(e.store.FindCardByID, ctx, req.Card.CardID, helper.CardDeckServiceID)
+	card, err := helper.FindStoreEntity(ctx, e.store.FindCardByID, req.Card.CardID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
-	cardSides, err := helper.FindStoreEntity(e.store.FindCardSidesByCardID, ctx, req.Card.CardID, helper.CardDeckServiceID)
+	cardSides, err := helper.FindStoreEntity(ctx, e.store.FindCardSidesByCardID, req.Card.CardID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -374,7 +375,7 @@ func (e *CardDeck) GetCard(ctx context.Context, req *pbCommon.CardRequest, rsp *
 
 func (e *CardDeck) ModifyCard(ctx context.Context, req *pbCommon.CardRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
-	card, err := helper.FindStoreEntity(e.store.FindCardByID, ctx, req.Card.CardID, helper.CardDeckServiceID)
+	card, err := helper.FindStoreEntity(ctx, e.store.FindCardByID, req.Card.CardID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -394,7 +395,7 @@ func (e *CardDeck) ModifyCard(ctx context.Context, req *pbCommon.CardRequest, rs
 
 func (e *CardDeck) DeleteCard(ctx context.Context, req *pbCommon.CardRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received CardDeck.DeleteCard request: %v", req)
-	card, err := helper.FindStoreEntity(e.store.FindCardByID, ctx, req.Card.CardID, helper.CardDeckServiceID)
+	card, err := helper.FindStoreEntity(ctx, e.store.FindCardByID, req.Card.CardID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -412,7 +413,7 @@ func (e *CardDeck) DeleteCard(ctx context.Context, req *pbCommon.CardRequest, rs
 
 func (e *CardDeck) CreateCardSide(ctx context.Context, req *pbCommon.CardSideRequest, rsp *pbCommon.CardSide) error {
 	logger.Infof("Received CardDeck.CreateCardSide request: %v", req)
-	card, err := helper.FindStoreEntity(e.store.FindCardByID, ctx, req.CardID, helper.CardDeckServiceID)
+	card, err := helper.FindStoreEntity(ctx, e.store.FindCardByID, req.CardID, helper.CardDeckServiceID)
 	if err != nil {
 		return err
 	}
@@ -423,8 +424,8 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pbCommon.CardSideReq
 	var newPreviousCard, newNextCard *model.CardSide
 	if req.PlaceBeforeCardSideID != "" {
 		newNextCard, err = helper.FindStoreEntity(
-			e.store.FindCardSideByID,
 			ctx,
+			e.store.FindCardSideByID,
 			req.PlaceBeforeCardSideID,
 			helper.CardDeckServiceID,
 		)
@@ -436,8 +437,8 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pbCommon.CardSideReq
 		}
 		if newNextCard.PreviousCardSideID != "" {
 			if newPreviousCard, err = helper.FindStoreEntity(
-				e.store.FindCardSideByID,
 				ctx,
+				e.store.FindCardSideByID,
 				newNextCard.PreviousCardSideID,
 				helper.CardDeckServiceID,
 			); err != nil {
@@ -448,8 +449,8 @@ func (e *CardDeck) CreateCardSide(ctx context.Context, req *pbCommon.CardSideReq
 	} else {
 		if card.FirstCardSideID != "" {
 			newPreviousCard, err = helper.FindStoreEntity(
-				e.store.FindLastCardSideOfCardByID,
 				ctx,
+				e.store.FindLastCardSideOfCardByID,
 				req.CardID,
 				helper.CardDeckServiceID,
 			)

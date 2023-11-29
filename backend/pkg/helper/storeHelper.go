@@ -8,8 +8,8 @@ import (
 )
 
 func FindStoreEntity[C any](
-	storeFunction func(context.Context, string) (C, error),
 	ctx context.Context,
+	storeFunction func(context.Context, string) (C, error),
 	ID string,
 	callContext ClientID,
 ) (entity C, err error) {

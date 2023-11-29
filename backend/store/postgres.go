@@ -54,17 +54,17 @@ func NewPostgresStore(ctx context.Context) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	
-	err = db.Use(tracing.NewPlugin(
-		tracing.WithDBName("kioku"),
-	))
-	
+
+	if err = db.Use(tracing.NewPlugin(tracing.WithDBName("kioku"))); err != nil {
+		return nil, err
+	}
+
 	tracer := otel.Tracer("gorm.io/plugin/opentelemetry")
 
 	ctx, span := tracer.Start(ctx, "root")
 	defer span.End()
 
-	return db.WithContext(ctx), err
+	return db.WithContext(ctx), nil
 }
 
 func NewUserStore(ctx context.Context) (UserStore, error) {

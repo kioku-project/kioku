@@ -286,19 +286,19 @@ msgstr "Gruppe beitreten"
 
 #: pages/features.tsx:29
 msgid "Kioku | Features of the Kioku platform"
-msgstr "Kioku | Funktionen der Kioku Platform!"
+msgstr "Kioku | Funktionen der Kioku Plattform!"
 
 #: pages/login.tsx:51
 msgid "Kioku | Login or register for Kioku!"
-msgstr "Kioku | Logge Dich ein oder registriere dich für Kioku"
+msgstr "Kioku | Logge Dich ein oder registriere Dich für Kioku"
 
 #: pages/home.tsx:31
 msgid "Kioku | The free flashcard application that focusses on collaborative content creation!"
-msgstr "Kioku | Die kostenlose Karteikartenanwendung, die sich auf die gemeinsame Erarbeitung von Inhalten fokussiert!"
+msgstr "Kioku | Die kostenlose Karteikarten Anwendung, die sich auf die gemeinsame Erstellung von Lerninhalten fokussiert!"
 
 #: pages/home.tsx:34
 msgid "Kioku is a free flashcard application. You can create or import decks from Anki and edit your flashcards together. Learn your flashcards with our customized spaced repetition algorithm (SRS) and compare your statistics with your friends. Motivate each other and keep learning!"
-msgstr "Kioku ist eine kostenlose Karteikarten-Anwendung. Du kannst Decks erstellen oder aus Anki importieren und Deine Karteikarten zusammen bearbeiten. Lerne Deine Karteikarten mit unserem angepassten Spaced Repetition Algorithmus (SRS) und vergleiche Deine Statistiken mit denen Deiner Freunde. Motiviert euch gegenseitig und ermutigt euch zum Weiterlernen!"
+msgstr "Kioku ist eine kostenlose Karteikarten-Anwendung. Du kannst Decks erstellen oder aus Anki importieren und Deine Karteikarten in Gruppen gemeinsam bearbeiten. Lerne Deine Karteikarten mit unserem angepassten Spaced Repetition Algorithmus (SRS) und vergleiche Deine Statistiken mit Deinen Freunden. Motiviert euch gegenseitig und ermutigt euch zum Weiterlernen!"
 
 #: pages/features.tsx:103
 msgid "Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
@@ -372,7 +372,7 @@ msgstr "Nachdem Du den Stapel gelöscht hast, gibt es kein Zurück mehr."
 
 #: pages/login.tsx:52
 msgid "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
-msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikartenanwendung zusammen mit Deinen Freunden zu nutzen."
+msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten Anwendung zusammen mit Deinen Freunden zu nutzen."
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:58
 #: components/navigation/Tabs/GroupSettingsTab.tsx:55

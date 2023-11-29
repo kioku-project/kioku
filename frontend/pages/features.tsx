@@ -31,7 +31,7 @@ export default function Page() {
 					msg`Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!`
 				)}
 				languageAlternates={[
-					{ hrefLang: "en", href: "https://app.kioku.dev/features/" },
+					{ hrefLang: "en", href: "https://app.kioku.dev/features" },
 					{
 						hrefLang: "de",
 						href: "https://app.kioku.dev/de/features",
@@ -40,7 +40,7 @@ export default function Page() {
 				noindex={process.env.NEXT_PUBLIC_SEO != "True"}
 				nofollow={process.env.NEXT_PUBLIC_SEO != "True"}
 				openGraph={{
-					url: "https://app.kioku.dev/features/",
+					url: "https://app.kioku.dev/features",
 				}}
 			/>
 			<div className="min-w-screen flex flex-col bg-eggshell">

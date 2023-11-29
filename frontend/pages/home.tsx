@@ -26,7 +26,7 @@ export default function Page() {
 	return (
 		<div className="flex flex-1 justify-center overflow-hidden">
 			<NextSeo
-				canonical={ router.locale === "en" ? "https://kioku.dev/" : "https://app.kioku.dev/de/home/" }
+				canonical={ router.locale === "en" ? "https://kioku.dev" : "https://app.kioku.dev/de/home" }
 				title={_(
 					msg`Kioku | The free flashcard application that focusses on collaborative content creation!`
 				)}
@@ -34,7 +34,7 @@ export default function Page() {
 					msg`Kioku is a free flashcard application. You can create or import decks from Anki and edit your flashcards together. Learn your flashcards with our customized spaced repetition algorithm (SRS) and compare your statistics with your friends. Motivate each other and keep learning!`
 				)}
 				languageAlternates={[
-					{ hrefLang: "en", href: "https://kioku.dev/" },
+					{ hrefLang: "en", href: "https://kioku.dev" },
 					{ hrefLang: "de", href: "https://app.kioku.dev/de/home" },
 				]}
 				noindex={process.env.NEXT_PUBLIC_SEO != "True"}

@@ -52,7 +52,7 @@ export default function App({ Component, pageProps }: AppProps) {
 					<title>Kioku | Learn together with friends!</title>
 					<meta
 						name="description"
-						content="Kioku | The free Flashcard Application that focusses on collaborative content creation"
+						content="Kioku | The free flashcard Application that focusses on collaborative content creation"
 					/>
 					<link rel="icon" href="/favicon.ico" />
 				</Head>
@@ -64,7 +64,7 @@ export default function App({ Component, pageProps }: AppProps) {
 						locale: "en_US",
 						title: "Kioku | Learn together with friends!",
 						description:
-							"Kioku | The free Flashcard Application that focusses on collaborative content creation",
+							"Kioku | The free flashcard Application that focusses on collaborative content creation",
 						url: "https://kioku.dev/",
 						siteName: "Kioku",
 						images: [

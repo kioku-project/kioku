@@ -52,13 +52,13 @@ export default function Page() {
 				title={_(msg`Kioku | Login or register for Kioku!`)}
 				description={_(msg`Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups.`)}
 				languageAlternates={[
-					{ hrefLang: "en", href: "https://app.kioku.dev/login/" },
+					{ hrefLang: "en", href: "https://app.kioku.dev/login" },
 					{ hrefLang: "de", href: "https://app.kioku.dev/de/login" },
 				]}
 				noindex={process.env.NEXT_PUBLIC_SEO != "True"}
 				nofollow={process.env.NEXT_PUBLIC_SEO != "True"}
 				openGraph={{
-					url: "https://app.kioku.dev/login/",
+					url: "https://app.kioku.dev/login",
 				}}
 			/>
 			<div className="min-w-screen flex flex-1 bg-[#F8F8F8]">

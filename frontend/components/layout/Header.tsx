@@ -4,14 +4,14 @@ import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 import { preload, useSWRConfig } from "swr";
 
-import { Deck as DeckType } from "../../types/Deck";
-import { Group as GroupType } from "../../types/Group";
-import { User } from "../../types/User";
-import { authedFetch } from "../../util/reauth";
-import { fetcher } from "../../util/swr";
-import { Text } from "../Text";
-import { Badge } from "../graphics/Badge";
-import { Button } from "../input/Button";
+import { Text } from "@/components/Text";
+import { Badge } from "@/components/graphics/Badge";
+import { Button } from "@/components/input/Button";
+import { Deck as DeckType } from "@/types/Deck";
+import { Group as GroupType } from "@/types/Group";
+import { User } from "@/types/User";
+import { authedFetch } from "@/util/reauth";
+import { fetcher } from "@/util/swr";
 
 interface HeaderProps {
 	/**

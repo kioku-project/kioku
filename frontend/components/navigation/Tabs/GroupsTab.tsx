@@ -6,10 +6,10 @@ import { PlusSquare } from "react-feather";
 import { toast } from "react-toastify";
 import { mutate } from "swr";
 
-import { Group as GroupType } from "../../../types/Group";
-import { postRequest } from "../../../util/api";
-import DeckList from "../../deck/DeckList";
-import { InputField } from "../../form/InputField";
+import DeckList from "@/components/deck/DeckList";
+import { InputField } from "@/components/form/InputField";
+import { Group as GroupType } from "@/types/Group";
+import { postRequest } from "@/util/api";
 
 interface GroupsTabProps {
 	/**

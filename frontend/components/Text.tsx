@@ -1,6 +1,6 @@
 import React, { HTMLAttributes, ReactNode } from "react";
 
-import { Size } from "../types/Size";
+import { Size } from "@/types/Size";
 
 interface TextProps {
 	/**

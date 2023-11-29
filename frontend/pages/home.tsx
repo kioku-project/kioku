@@ -4,9 +4,9 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import Cards from "../components/graphics/Cards";
-import { Button } from "../components/input/Button";
-import { loadCatalog } from "./_app";
+import Cards from "@/components/graphics/Cards";
+import { Button } from "@/components/input/Button";
+import { loadCatalog } from "@/pages/_app";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);

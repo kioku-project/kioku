@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 
-import { User } from "../../types/User";
-import { apiRequest, deleteRequest } from "../../util/api";
-import { Text } from "../Text";
-import { InputField } from "../form/InputField";
+import { Text } from "@/components/Text";
+import { InputField } from "@/components/form/InputField";
+import { User } from "@/types/User";
+import { apiRequest, deleteRequest } from "@/util/api";
 
 interface MemberProps {
 	/**

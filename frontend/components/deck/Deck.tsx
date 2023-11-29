@@ -6,12 +6,12 @@ import { Globe, Heart, Lock, MoreVertical } from "react-feather";
 import "react-toastify/dist/ReactToastify.css";
 import { preload, useSWRConfig } from "swr";
 
-import { Deck as DeckType } from "../../types/Deck";
-import { deleteRequest, postRequest } from "../../util/api";
-import { fetcher, useDueCards } from "../../util/swr";
-import { Text } from "../Text";
-import { IconLabel, IconLabelType } from "../graphics/IconLabel";
-import { Button } from "../input/Button";
+import { Text } from "@/components/Text";
+import { IconLabel, IconLabelType } from "@/components/graphics/IconLabel";
+import { Button } from "@/components/input/Button";
+import { Deck as DeckType } from "@/types/Deck";
+import { deleteRequest, postRequest } from "@/util/api";
+import { fetcher, useDueCards } from "@/util/swr";
 
 interface DeckProps {
 	/**

@@ -13,11 +13,11 @@ import {
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
-import { Card as CardType } from "../../types/Card";
-import { putRequests } from "../../util/api";
-import { InputField } from "../form/InputField";
-import { TextArea } from "../form/TextArea";
-import { Button } from "../input/Button";
+import { InputField } from "@/components/form/InputField";
+import { TextArea } from "@/components/form/TextArea";
+import { Button } from "@/components/input/Button";
+import { Card as CardType } from "@/types/Card";
+import { putRequests } from "@/util/api";
 
 interface FlashcardProps {
 	/**

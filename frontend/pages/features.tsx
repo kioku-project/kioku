@@ -86,19 +86,15 @@ export default function Page() {
 							description={_(
 								msg`Collaborate with your friends and fellow students in groups and work on shared decks. Learn together and motivate each other!`
 							)}
-							icon={
-								<Users className="text-kiokuDarkBlue"></Users>
-							}
-						></FeatureCard>
+							icon={<Users className="text-kiokuDarkBlue" />}
+						/>
 						<FeatureCard
 							header={_(msg`Individual`)}
 							description={_(
 								msg`Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!`
 							)}
-							icon={
-								<Compass className="text-kiokuDarkBlue"></Compass>
-							}
-						></FeatureCard>
+							icon={<Compass className="text-kiokuDarkBlue" />}
+						/>
 					</div>
 					<div className="flex flex-col md:flex-row md:space-x-5">
 						<FeatureCard
@@ -106,17 +102,15 @@ export default function Page() {
 							description={_(
 								msg`Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!`
 							)}
-							icon={<Code className="text-kiokuDarkBlue"></Code>}
-						></FeatureCard>
+							icon={<Code className="text-kiokuDarkBlue" />}
+						/>
 						<FeatureCard
 							header={_(msg`Informative`)}
 							description={_(
 								msg`We provide you with detailed statistics and insights into your study progress. Identify areas of improvement to optimize your strategy for maximum effectiveness!`
 							)}
-							icon={
-								<BarChart2 className="text-kiokuDarkBlue"></BarChart2>
-							}
-						></FeatureCard>
+							icon={<BarChart2 className="text-kiokuDarkBlue" />}
+						/>
 					</div>
 					<div className="flex flex-col md:flex-row md:space-x-5">
 						<FeatureCard
@@ -124,19 +118,15 @@ export default function Page() {
 							description={_(
 								msg`Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!`
 							)}
-							icon={
-								<Cloud className="text-kiokuDarkBlue"></Cloud>
-							}
-						></FeatureCard>
+							icon={<Cloud className="text-kiokuDarkBlue" />}
+						/>
 						<FeatureCard
 							header={_(msg`Entertaining`)}
 							description={_(
 								msg`Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!`
 							)}
-							icon={
-								<Award className="text-kiokuDarkBlue"></Award>
-							}
-						></FeatureCard>
+							icon={<Award className="text-kiokuDarkBlue" />}
+						/>
 					</div>
 				</div>
 			</div>

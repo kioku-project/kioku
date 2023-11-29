@@ -11,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
+	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
@@ -39,28 +40,30 @@ func New(
 }
 
 func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
-	var data map[string]string
+	var data model.User
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	if data["userEmail"] == "" {
+	if data.Email == "" {
 		return helper.NewFiberMissingEmailErr()
 	}
-	if data["userName"] == "" {
+	if data.Name == "" {
 		return helper.NewFiberMissingNameErr()
 	}
-	if data["userPassword"] == "" {
+	if data.Password == "" {
 		return helper.NewFiberMissingPasswordErr()
 	}
-	rspRegister, err := e.userService.Register(c.Context(), &pbUser.RegisterRequest{
-		UserEmail:    data["userEmail"],
-		UserName:     data["userName"],
-		UserPassword: data["userPassword"],
+	_, err := e.userService.Register(c.Context(), &pbCommon.User{
+		UserEmail:    data.Email,
+		UserName:     data.Name,
+		UserPassword: data.Password,
 	})
+	// empty password in order to omit field on return
+	data.Password = ""
 	if err != nil {
 		return err
 	}
-	return c.SendString(rspRegister.UserName)
+	return c.JSON(data)
 }
 
 func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
@@ -74,7 +77,7 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	if reqUser.Password == "" {
 		return helper.NewFiberMissingPasswordErr()
 	}
-	rspLogin, err := e.userService.Login(c.Context(), &pbUser.LoginRequest{
+	rspLogin, err := e.userService.Login(c.Context(), &pbCommon.User{
 		UserEmail:    reqUser.Email,
 		UserPassword: reqUser.Password,
 	})
@@ -104,7 +107,7 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 		return helper.NewFiberUnauthorizedErr("Please re-authenticate")
 	}
 
-	rsp, err := e.userService.VerifyUserExists(c.Context(), &pbUser.VerificationRequest{
+	rsp, err := e.userService.VerifyUserExists(c.Context(), &pbCommon.User{
 		UserID:    fmt.Sprint(claims["sub"]),
 		UserEmail: fmt.Sprint(claims["email"]),
 	})
@@ -138,7 +141,7 @@ func (e *Frontend) LogoutHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetUserHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspGetUser, err := e.userService.GetUserProfileInformation(c.Context(), &pbUser.UserID{
+	rspGetUser, err := e.userService.GetUserProfileInformation(c.Context(), &pbCommon.User{
 		UserID: userID,
 	})
 	if err != nil {
@@ -147,23 +150,17 @@ func (e *Frontend) GetUserHandler(c *fiber.Ctx) error {
 	return c.JSON(rspGetUser)
 }
 
-type modifyUserPayload struct {
-	UserEmail    *string `json:"userEmail"`
-	UserName     *string `json:"userName"`
-	UserPassword *string `json:"userPassword"`
-}
-
 func (e *Frontend) ModifyUserHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	var data modifyUserPayload
+	var data model.User
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	rspModUser, err := e.userService.ModifyUserProfileInformation(c.Context(), &pbUser.ModifyRequest{
+	rspModUser, err := e.userService.ModifyUserProfileInformation(c.Context(), &pbCommon.User{
 		UserID:       userID,
-		UserName:     data.UserName,
-		UserEmail:    data.UserEmail,
-		UserPassword: data.UserPassword,
+		UserName:     data.Name,
+		UserEmail:    data.Email,
+		UserPassword: data.Password,
 	})
 	if err != nil {
 		return err
@@ -171,7 +168,7 @@ func (e *Frontend) ModifyUserHandler(c *fiber.Ctx) error {
 	if !rspModUser.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
-	rspGetUser, err := e.userService.GetUserProfileInformation(c.Context(), &pbUser.UserID{
+	rspGetUser, err := e.userService.GetUserProfileInformation(c.Context(), &pbCommon.User{
 		UserID: userID,
 	})
 	if err != nil {
@@ -184,7 +181,7 @@ func (e *Frontend) ModifyUserHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) DeleteUserHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeleteUser, err := e.userService.DeleteUser(c.Context(), &pbUser.UserID{
+	rspDeleteUser, err := e.userService.DeleteUser(c.Context(), &pbCommon.User{
 		UserID: userID,
 	})
 	if err != nil {
@@ -198,7 +195,7 @@ func (e *Frontend) DeleteUserHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetGroupInvitationsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspGroupInvitations, err := e.collaborationService.GetGroupInvitations(c.Context(), &pbCollaboration.UserIDRequest{
+	rspGroupInvitations, err := e.collaborationService.GetGroupInvitations(c.Context(), &pbCommon.User{
 		UserID: userID,
 	})
 	if err != nil {
@@ -209,7 +206,7 @@ func (e *Frontend) GetGroupInvitationsHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetUserGroupsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspUserGroups, err := e.collaborationService.GetUserGroups(c.Context(), &pbCollaboration.UserIDRequest{
+	rspUserGroups, err := e.collaborationService.GetUserGroups(c.Context(), &pbCommon.User{
 		UserID: userID,
 	})
 	if err != nil {
@@ -229,20 +226,27 @@ func (e *Frontend) CreateGroupHandler(c *fiber.Ctx) error {
 	if groupName = strings.TrimSpace(data["groupName"]); groupName == "" {
 		return helper.NewFiberBadRequestErr("no group name given")
 	}
+	var groupType pbCommon.GroupType
+	if data["groupType"] != "" {
+		groupType = converter.MigrateStringGroupTypeToProtoGroupType(data["groupType"])
+	}
 	userID := helper.GetUserIDFromContext(c)
 	rspCreateGroup, err := e.collaborationService.CreateNewGroupWithAdmin(
 		c.Context(),
-		&pbCollaboration.CreateGroupRequest{
-			UserID:           userID,
-			GroupName:        groupName,
-			GroupDescription: data["groupDescription"],
-			IsDefault:        false,
+		&pbCommon.GroupRequest{
+			UserID: userID,
+			Group: &pbCommon.Group{
+				GroupName:        groupName,
+				GroupDescription: data["groupDescription"],
+				GroupType:        groupType,
+				IsDefault:        false,
+			},
 		},
 	)
 	if err != nil {
 		return err
 	}
-	return c.SendString(rspCreateGroup.ID)
+	return c.SendString(rspCreateGroup.GroupID)
 }
 
 func (e *Frontend) LeaveGroupHandler(c *fiber.Ctx) error {
@@ -250,9 +254,11 @@ func (e *Frontend) LeaveGroupHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspLeaveGroup, err := e.collaborationService.LeaveGroupSafe(
 		c.Context(),
-		&pbCollaboration.GroupRequest{
-			UserID:  userID,
-			GroupID: groupID,
+		&pbCommon.GroupRequest{
+			UserID: userID,
+			Group: &pbCommon.Group{
+				GroupID: groupID,
+			},
 		},
 	)
 	if err != nil {
@@ -266,9 +272,11 @@ func (e *Frontend) LeaveGroupHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetGroupHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspGetGroup, err := e.collaborationService.GetGroup(c.Context(), &pbCollaboration.GroupRequest{
-		UserID:  userID,
-		GroupID: c.Params("groupID"),
+	rspGetGroup, err := e.collaborationService.GetGroup(c.Context(), &pbCommon.GroupRequest{
+		UserID: userID,
+		Group: &pbCommon.Group{
+			GroupID: c.Params("groupID"),
+		},
 	})
 	if err != nil {
 		return err
@@ -277,23 +285,23 @@ func (e *Frontend) GetGroupHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) ModifyGroupHandler(c *fiber.Ctx) error {
-	var data map[string]*string
+	var data map[string]string
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
 	userID := helper.GetUserIDFromContext(c)
-	var groupType pbCollaboration.GroupType
-	if data["groupType"] != nil {
-		if gt := strings.TrimSpace(*data["groupType"]); gt != "" {
-			groupType = converter.MigrateStringGroupTypeToProtoGroupType(gt)
-		}
+	var groupType pbCommon.GroupType
+	if data["groupType"] != "" {
+		groupType = converter.MigrateStringGroupTypeToProtoGroupType(data["groupType"])
 	}
-	rspModifyGroup, err := e.collaborationService.ModifyGroup(c.Context(), &pbCollaboration.ModifyGroupRequest{
-		UserID:           userID,
-		GroupID:          c.Params("groupID"),
-		GroupName:        data["groupName"],
-		GroupDescription: data["groupDescription"],
-		GroupType:        &groupType,
+	rspModifyGroup, err := e.collaborationService.ModifyGroup(c.Context(), &pbCommon.GroupRequest{
+		UserID: userID,
+		Group: &pbCommon.Group{
+			GroupID:          c.Params("groupID"),
+			GroupName:        data["groupName"],
+			GroupDescription: data["groupDescription"],
+			GroupType:        groupType,
+		},
 	})
 	if err != nil {
 		return err
@@ -305,9 +313,11 @@ func (e *Frontend) ModifyGroupHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) DeleteGroupHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeleteGroup, err := e.collaborationService.DeleteGroup(c.Context(), &pbCollaboration.GroupRequest{
-		UserID:  userID,
-		GroupID: c.Params("groupID"),
+	rspDeleteGroup, err := e.collaborationService.DeleteGroup(c.Context(), &pbCommon.GroupRequest{
+		UserID: userID,
+		Group: &pbCommon.Group{
+			GroupID: c.Params("groupID"),
+		},
 	})
 	if err != nil {
 		return err
@@ -319,9 +329,11 @@ func (e *Frontend) DeleteGroupHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetGroupMembersHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspGroupMembers, err := e.collaborationService.GetGroupMembers(c.Context(), &pbCollaboration.GroupRequest{
-		UserID:  userID,
-		GroupID: c.Params("groupID"),
+	rspGroupMembers, err := e.collaborationService.GetGroupMembers(c.Context(), &pbCommon.GroupRequest{
+		UserID: userID,
+		Group: &pbCommon.Group{
+			GroupID: c.Params("groupID"),
+		},
 	})
 	if err != nil {
 		return err
@@ -337,7 +349,7 @@ func (e *Frontend) ModifyGroupMemberHandler(c *fiber.Ctx) error {
 		return err
 	}
 	userID := helper.GetUserIDFromContext(c)
-	var groupRole pbCollaboration.GroupRole
+	var groupRole pbCommon.GroupRole
 	if dataGroupRole, ok := data["groupRole"]; ok {
 		if gr := strings.TrimSpace(dataGroupRole); gr != "" {
 			groupRole = converter.MigrateStringRoleToProtoRole(gr)
@@ -345,11 +357,13 @@ func (e *Frontend) ModifyGroupMemberHandler(c *fiber.Ctx) error {
 	}
 	rspModifyGroupUser, err := e.collaborationService.ModifyGroupUserRequest(
 		c.Context(),
-		&pbCollaboration.GroupModUserRequest{
-			UserID:    userID,
-			GroupID:   c.Params("groupID"),
+		&pbCommon.GroupModUserRequest{
+			UserID: userID,
+			Group: &pbCommon.Group{
+				GroupID: c.Params("groupID"),
+				Role:    groupRole,
+			},
 			ModUserID: c.Params("userID"),
-			NewRole:   groupRole,
 		},
 	)
 	if err != nil {
@@ -363,10 +377,12 @@ func (e *Frontend) ModifyGroupMemberHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) KickGroupMemberHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspKickGroupUser, err := e.collaborationService.KickGroupUser(c.Context(), &pbCollaboration.GroupKickUserRequest{
-		UserID:    userID,
-		GroupID:   c.Params("groupID"),
-		DelUserID: c.Params("userID"),
+	rspKickGroupUser, err := e.collaborationService.KickGroupUser(c.Context(), &pbCommon.GroupModUserRequest{
+		UserID: userID,
+		Group: &pbCommon.Group{
+			GroupID: c.Params("groupID"),
+		},
+		ModUserID: c.Params("userID"),
 	})
 	if err != nil {
 		return err
@@ -379,16 +395,18 @@ func (e *Frontend) KickGroupMemberHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetGroupMemberRequestsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspMemberRequests, err := e.collaborationService.GetGroupMemberRequests(c.Context(), &pbCollaboration.GroupRequest{
-		UserID:  userID,
-		GroupID: c.Params("groupID"),
+	rspMemberRequests, err := e.collaborationService.GetGroupMemberRequests(c.Context(), &pbCommon.GroupRequest{
+		UserID: userID,
+		Group: &pbCommon.Group{
+			GroupID: c.Params("groupID"),
+		},
 	})
 	if err != nil {
 		return err
 	}
 	return c.JSON(converter.FiberGetGroupMemberRequestsResponseBody{
 		MemberRequests: converter.ConvertToTypeArray(
-			rspMemberRequests.MemberAdmissions,
+			rspMemberRequests.Users,
 			converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter,
 		),
 	})
@@ -398,9 +416,11 @@ func (e *Frontend) AddUserGroupRequestHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspJoinGroupRequest, err := e.collaborationService.AddGroupUserRequest(
 		c.Context(),
-		&pbCollaboration.GroupUserRequest{
-			UserID:  userID,
-			GroupID: c.Params("groupID"),
+		&pbCommon.GroupRequest{
+			UserID: userID,
+			Group: &pbCommon.Group{
+				GroupID: c.Params("groupID"),
+			},
 		},
 	)
 	if err != nil {
@@ -415,9 +435,11 @@ func (e *Frontend) RemoveUserGroupRequestHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspJoinGroupRequest, err := e.collaborationService.RemoveGroupUserRequest(
 		c.Context(),
-		&pbCollaboration.GroupUserRequest{
-			UserID:  userID,
-			GroupID: c.Params("groupID"),
+		&pbCommon.GroupRequest{
+			UserID: userID,
+			Group: &pbCommon.Group{
+				GroupID: c.Params("groupID"),
+			},
 		},
 	)
 	if err != nil {
@@ -432,9 +454,11 @@ func (e *Frontend) GetInvitationsForGroupHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspInvitationsForGroup, err := e.collaborationService.GetInvitationsForGroup(
 		c.Context(),
-		&pbCollaboration.GroupRequest{
-			UserID:  userID,
-			GroupID: c.Params("groupID"),
+		&pbCommon.GroupRequest{
+			UserID: userID,
+			Group: &pbCommon.Group{
+				GroupID: c.Params("groupID"),
+			},
 		},
 	)
 	if err != nil {
@@ -442,7 +466,7 @@ func (e *Frontend) GetInvitationsForGroupHandler(c *fiber.Ctx) error {
 	}
 	return c.JSON(converter.FiberGetInvitationsForGroupResponseBody{
 		MemberRequests: converter.ConvertToTypeArray(
-			rspInvitationsForGroup.MemberAdmissions,
+			rspInvitationsForGroup.Users,
 			converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter,
 		),
 	})
@@ -458,9 +482,11 @@ func (e *Frontend) AddUserGroupInviteHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("no email for user to invite given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspInviteUser, err := e.collaborationService.AddGroupUserInvite(c.Context(), &pbCollaboration.GroupUserInvite{
-		UserID:          userID,
-		GroupID:         c.Params("groupID"),
+	rspInviteUser, err := e.collaborationService.AddGroupUserInvite(c.Context(), &pbCommon.GroupInviteRequest{
+		UserID: userID,
+		Group: &pbCommon.Group{
+			GroupID: c.Params("groupID"),
+		},
 		InviteUserEmail: data["invitedUserEmail"],
 	})
 	if err != nil {
@@ -481,9 +507,11 @@ func (e *Frontend) RemoveUserGroupInviteHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("no email for user to invite given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspInviteUser, err := e.collaborationService.RemoveGroupUserInvite(c.Context(), &pbCollaboration.GroupUserInvite{
-		UserID:          userID,
-		GroupID:         c.Params("groupID"),
+	rspInviteUser, err := e.collaborationService.RemoveGroupUserInvite(c.Context(), &pbCommon.GroupInviteRequest{
+		UserID: userID,
+		Group: &pbCommon.Group{
+			GroupID: c.Params("groupID"),
+		},
 		InviteUserEmail: data["invitedUserEmail"],
 	})
 	if err != nil {
@@ -496,9 +524,11 @@ func (e *Frontend) RemoveUserGroupInviteHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetGroupDecksHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspGroupDecks, err := e.cardDeckService.GetGroupDecks(c.Context(), &pbCardDeck.GroupDecksRequest{
-		UserID:  userID,
-		GroupID: c.Params("groupID"),
+	rspGroupDecks, err := e.cardDeckService.GetGroupDecks(c.Context(), &pbCommon.GroupRequest{
+		UserID: userID,
+		Group: &pbCommon.Group{
+			GroupID: c.Params("groupID"),
+		},
 	})
 	if err != nil {
 		return err
@@ -522,27 +552,31 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("no deck name given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	deckType := pbCardDeck.DeckType_PRIVATE
+	deckType := pbCommon.DeckType_DT_PRIVATE
 	if dt := strings.TrimSpace(data["deckType"]); dt != "" {
 		deckType = converter.MigrateStringDeckTypeToProtoDeckType(dt)
 	}
-	rspCreateDeck, err := e.cardDeckService.CreateDeck(c.Context(), &pbCardDeck.CreateDeckRequest{
-		UserID:   userID,
-		GroupID:  c.Params("groupID"),
-		DeckName: data["deckName"],
-		DeckType: deckType,
+	rspCreateDeck, err := e.cardDeckService.CreateDeck(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck: &pbCommon.Deck{
+			GroupID:  c.Params("groupID"),
+			DeckName: data["deckName"],
+			DeckType: deckType,
+		},
 	})
 	if err != nil {
 		return err
 	}
-	return c.SendString(rspCreateDeck.ID)
+	return c.SendString(rspCreateDeck.DeckID)
 }
 
 func (e *Frontend) GetDeckHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspGetDeck, err := e.cardDeckService.GetDeck(c.Context(), &pbCardDeck.IDRequest{
-		UserID:   userID,
-		EntityID: c.Params("deckID"),
+	rspGetDeck, err := e.cardDeckService.GetDeck(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck: &pbCommon.Deck{
+			DeckID: c.Params("deckID"),
+		},
 	})
 	if err != nil {
 		return err
@@ -551,22 +585,22 @@ func (e *Frontend) GetDeckHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
-	var data map[string]*string
+	var data map[string]string
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	var deckType pbCardDeck.DeckType
-	if data["deckType"] != nil {
-		if dt := strings.TrimSpace(*data["deckType"]); dt != "" {
-			deckType = converter.MigrateStringDeckTypeToProtoDeckType(dt)
-		}
+	var deckType pbCommon.DeckType
+	if data["deckType"] != "" {
+		deckType = converter.MigrateStringDeckTypeToProtoDeckType(data["deckType"])
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspModifyDeck, err := e.cardDeckService.ModifyDeck(c.Context(), &pbCardDeck.ModifyDeckRequest{
-		UserID:   userID,
-		DeckID:   c.Params("deckID"),
-		DeckName: data["deckName"],
-		DeckType: &deckType,
+	rspModifyDeck, err := e.cardDeckService.ModifyDeck(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck: &pbCommon.Deck{
+			DeckID:   c.Params("deckID"),
+			DeckName: data["deckName"],
+			DeckType: deckType,
+		},
 	})
 	if err != nil {
 		return err
@@ -576,11 +610,48 @@ func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+type copyDeckBody struct {
+	DeckName      string `json:"deckName"`
+	DeckType      string `json:"deckType"`
+	TargetGroupID string `json:"targetGroupID"`
+}
+
+func (e *Frontend) CopyDeckHandler(c *fiber.Ctx) error {
+	var data copyDeckBody
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if data.DeckName == "" {
+		return helper.NewFiberBadRequestErr("no deck name given")
+	}
+	if data.TargetGroupID == "" {
+		return helper.NewFiberBadRequestErr("no targetGroupID given")
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rsp, err := e.cardDeckService.CopyDeck(c.Context(), &pbCardDeck.CopyDeckRequest{
+		UserID: userID,
+		Deck: &pbCommon.Deck{
+			DeckID: c.Params("deckID"),
+		},
+		TargetGroupID: data.TargetGroupID,
+		NewDeck: &pbCommon.Deck{
+			DeckName: data.DeckName,
+			DeckType: converter.MigrateStringDeckTypeToProtoDeckType(data.DeckType),
+		},
+	})
+	if err != nil {
+		return err
+	}
+	return c.SendString(rsp.DeckID)
+}
+
 func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeleteDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCardDeck.IDRequest{
-		UserID:   userID,
-		EntityID: c.Params("deckID"),
+	rspDeleteDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck: &pbCommon.Deck{
+			DeckID: c.Params("deckID"),
+		},
 	})
 	if err != nil {
 		return err
@@ -592,9 +663,11 @@ func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeckCards, err := e.cardDeckService.GetDeckCards(c.Context(), &pbCardDeck.IDRequest{
-		UserID:   userID,
-		EntityID: c.Params("deckID"),
+	rspDeckCards, err := e.cardDeckService.GetDeckCards(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck: &pbCommon.Deck{
+			DeckID: c.Params("deckID"),
+		},
 	})
 	if err != nil {
 		return err
@@ -611,22 +684,26 @@ func (e *Frontend) CreateCardHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("new card should at least have one side")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspCreateCard, err := e.cardDeckService.CreateCard(c.Context(), &pbCardDeck.CreateCardRequest{
+	rspCreateCard, err := e.cardDeckService.CreateCard(c.Context(), &pbCommon.CardRequest{
 		UserID: userID,
-		DeckID: c.Params("deckID"),
-		Sides:  converter.ConvertToTypeArray(data.Sides, converter.FiberCardSideContentToProtoCardSideContent),
+		Card: &pbCommon.Card{
+			DeckID: c.Params("deckID"),
+			Sides:  converter.ConvertToTypeArray(data.Sides, converter.FiberCardSideContentToProtoCardSideContent),
+		},
 	})
 	if err != nil {
 		return err
 	}
-	return c.SendString(rspCreateCard.ID)
+	return c.SendString(rspCreateCard.CardID)
 }
 
 func (e *Frontend) GetCardHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspGetCard, err := e.cardDeckService.GetCard(c.Context(), &pbCardDeck.IDRequest{
-		UserID:   userID,
-		EntityID: c.Params("cardID"),
+	rspGetCard, err := e.cardDeckService.GetCard(c.Context(), &pbCommon.CardRequest{
+		UserID: userID,
+		Card: &pbCommon.Card{
+			CardID: c.Params("cardID"),
+		},
 	})
 	if err != nil {
 		return err
@@ -643,10 +720,12 @@ func (e *Frontend) ModifyCardHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("modified card should at least have one side")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspModifyCard, err := e.cardDeckService.ModifyCard(c.Context(), &pbCardDeck.ModifyCardRequest{
+	rspModifyCard, err := e.cardDeckService.ModifyCard(c.Context(), &pbCommon.CardRequest{
 		UserID: userID,
-		CardID: c.Params("cardID"),
-		Sides:  converter.ConvertToTypeArray(data.Sides, converter.FiberCardSideContentToProtoCardSideContent),
+		Card: &pbCommon.Card{
+			CardID: c.Params("cardID"),
+			Sides:  converter.ConvertToTypeArray(data.Sides, converter.FiberCardSideContentToProtoCardSideContent),
+		},
 	})
 	if err != nil {
 		return err
@@ -658,9 +737,11 @@ func (e *Frontend) ModifyCardHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeleteCard, err := e.cardDeckService.DeleteCard(c.Context(), &pbCardDeck.IDRequest{
-		UserID:   userID,
-		EntityID: c.Params("cardID"),
+	rspDeleteCard, err := e.cardDeckService.DeleteCard(c.Context(), &pbCommon.CardRequest{
+		UserID: userID,
+		Card: &pbCommon.Card{
+			CardID: c.Params("cardID"),
+		},
 	})
 	if err != nil {
 		return err
@@ -676,16 +757,19 @@ func (e *Frontend) CreateCardSideHandler(c *fiber.Ctx) error {
 		return err
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspCreateCardSide, err := e.cardDeckService.CreateCardSide(c.Context(), &pbCardDeck.CreateCardSideRequest{
-		UserID:                userID,
-		CardID:                c.Params("cardID"),
+	rspCreateCardSide, err := e.cardDeckService.CreateCardSide(c.Context(), &pbCommon.CardSideRequest{
+		UserID: userID,
+		CardID: c.Params("cardID"),
+		CardSide: &pbCommon.CardSide{
+			Header:      data.FiberCardSideContent.Header,
+			Description: data.FiberCardSideContent.Description,
+		},
 		PlaceBeforeCardSideID: data.PlaceBeforeCardSideID,
-		Content:               converter.FiberCardSideContentToProtoCardSideContent(data.FiberCardSideContent),
 	})
 	if err != nil {
 		return err
 	}
-	return c.SendString(rspCreateCardSide.ID)
+	return c.SendString(rspCreateCardSide.CardSideID)
 }
 
 func (e *Frontend) ModifyCardSideHandler(c *fiber.Ctx) error {
@@ -694,10 +778,13 @@ func (e *Frontend) ModifyCardSideHandler(c *fiber.Ctx) error {
 		return err
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspModifyCardSide, err := e.cardDeckService.ModifyCardSide(c.Context(), &pbCardDeck.ModifyCardSideRequest{
-		UserID:     userID,
-		CardSideID: c.Params("cardSideID"),
-		Content:    converter.FiberCardSideContentToProtoCardSideContent(data.FiberCardSideContent),
+	rspModifyCardSide, err := e.cardDeckService.ModifyCardSide(c.Context(), &pbCommon.CardSideRequest{
+		UserID: userID,
+		CardSide: &pbCommon.CardSide{
+			CardSideID:  c.Params("cardSideID"),
+			Header:      data.FiberCardSideContent.Header,
+			Description: data.FiberCardSideContent.Description,
+		},
 	})
 	if err != nil {
 		return err
@@ -709,9 +796,11 @@ func (e *Frontend) ModifyCardSideHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) DeleteCardSideHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspDeleteCardSide, err := e.cardDeckService.DeleteCardSide(c.Context(), &pbCardDeck.IDRequest{
-		UserID:   userID,
-		EntityID: c.Params("cardSideID"),
+	rspDeleteCardSide, err := e.cardDeckService.DeleteCardSide(c.Context(), &pbCommon.CardSideRequest{
+		UserID: userID,
+		CardSide: &pbCommon.CardSide{
+			CardSideID: c.Params("cardSideID"),
+		},
 	})
 	if err != nil {
 		return err
@@ -723,14 +812,16 @@ func (e *Frontend) DeleteCardSideHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) SrsPullHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspSrsPull, err := e.srsService.Pull(c.Context(), &pbSrs.DeckPullRequest{
+	rspSrsPull, err := e.srsService.Pull(c.Context(), &pbCommon.DeckRequest{
 		UserID: userID,
-		DeckID: c.Params("deckID"),
+		Deck: &pbCommon.Deck{
+			DeckID: c.Params("deckID"),
+		},
 	})
 	if err != nil {
 		return err
 	}
-	return c.JSON(rspSrsPull.Card)
+	return c.JSON(rspSrsPull)
 }
 
 func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
@@ -759,28 +850,29 @@ func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) SrsDeckDueHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspSrsDue, err := e.srsService.GetDeckCardsDue(c.Context(), &pbSrs.DeckPullRequest{
+	rspSrsDue, err := e.srsService.GetDeckCardsDue(c.Context(), &pbCommon.DeckRequest{
 		UserID: userID,
-		DeckID: c.Params("deckID"),
+		Deck: &pbCommon.Deck{
+			DeckID: c.Params("deckID"),
+		},
 	})
 	if err != nil {
 		return err
 	}
-	if rspSrsDue.Due == 0 {
-		return c.JSON(0)
-	}
-	return c.JSON(rspSrsDue.Due)
+	return c.JSON(converter.FiberGetDueResponseBody{
+		DueCards: rspSrsDue.DueCards,
+	})
 }
 
 func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	dueCards, err := e.srsService.GetUserCardsDue(c.Context(), &pbSrs.UserDueRequest{
+	dueCards, err := e.srsService.GetUserCardsDue(c.Context(), &pbCommon.User{
 		UserID: userID,
 	})
 	if err != nil {
 		return err
 	}
-	return c.JSON(converter.FiberGetUserDueCardsResponseBody{
+	return c.JSON(converter.FiberGetDueResponseBody{
 		DueCards: dueCards.DueCards,
 		DueDecks: dueCards.DueDecks,
 	})

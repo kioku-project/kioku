@@ -34,6 +34,6 @@ export default function LoadingSpinner({
 			alt="Loading spinner"
 			className={`animate-spin ${className}`}
 			priority={true}
-		></Image>
+		/>
 	);
 }

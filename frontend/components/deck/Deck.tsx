@@ -1,26 +1,31 @@
-import { Trans, msg, t } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
-import router from "next/router";
-import { useEffect, useRef } from "react";
-import { AlertTriangle } from "react-feather";
-import { toast } from "react-toastify";
+import { Trans, plural } from "@lingui/macro";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
+import { Globe, Heart, Lock, MoreVertical } from "react-feather";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR, { preload, useSWRConfig } from "swr";
+import { preload, useSWRConfig } from "swr";
 
 import { Deck as DeckType } from "../../types/Deck";
-import { Group as GroupType } from "../../types/Group";
-import { GroupRole } from "../../types/GroupRole";
-import { authedFetch } from "../../util/reauth";
+import { deleteRequest, postRequest } from "../../util/api";
+import { fetcher, useDueCards } from "../../util/swr";
+import { Text } from "../Text";
+import { IconLabel, IconLabelType } from "../graphics/IconLabel";
+import { Button } from "../input/Button";
 
 interface DeckProps {
 	/**
-	 * Group entity
+	 * Deck
 	 */
-	group: GroupType;
+	deck: DeckType;
 	/**
-	 * Deck to display. If deck is undefined, placeholder for creating decks will be displayed.
+	 * Stats displayed under the deck name
 	 */
-	deck?: DeckType;
+	stats?: IconLabelType[];
+	/**
+	 * Notification (Icon, Header, Description) displayed below the deck component
+	 */
+	deckNotification?: IconLabelType;
 	/**
 	 * Additional classes
 	 */
@@ -28,51 +33,46 @@ interface DeckProps {
 }
 
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
-	const { data: dueCards } = useSWR(
-		deck ? `/api/decks/${deck?.deckID}/dueCards` : null,
-		fetcher
-	);
+	const router = useRouter();
+
+	const { dueCards } = useDueCards(deck.deckID);
 
 	useEffect(() => {
 		if (deck) {
 			router.prefetch(`/deck/${deck.deckID}`);
 			preload(`/api/decks/${deck.deckID}`, fetcher);
 		}
-	}, [deck]);
+	}, [router, deck]);
 
-	return (
-		<Deck deck={deck && { ...deck, dueCards: dueCards }} {...props}></Deck>
-	);
+	const newDeck = useMemo(() => {
+		return { ...deck, dueCards: dueCards };
+	}, [deck, dueCards]);
+
+	return <Deck deck={newDeck} {...props} />;
 };
 
 /**
  * UI component for dislpaying a deck
  */
-export const Deck = ({ group, deck, className = "" }: DeckProps) => {
+export const Deck = ({
+	deck,
+	stats,
+	deckNotification,
+	className = "",
+}: DeckProps) => {
+	const router = useRouter();
 	const { mutate } = useSWRConfig();
-	const { _ } = useLingui();
 
-	const deckNameInput = useRef<HTMLInputElement>(null);
+	const [isFavorite, setFavorite] = useState(deck.isFavorite);
+
+	useEffect(() => {
+		setFavorite(deck.isFavorite);
+	}, [deck.isFavorite, setFavorite]);
 
 	return (
-		<div
-			id={deck?.deckID ?? "createDeckId"}
-			className={`mb-3 mr-3 flex w-fit flex-col items-center rounded-md border-2 border-kiokuDarkBlue p-3 hover:cursor-pointer ${
-				deck ? "" : "border-dashed"
-			} ${className}`}
-			onClick={() => {
-				if (deck) {
-					router.push(`/deck/${deck.deckID}`);
-				} else {
-					createDeck()
-						.then((result) => {})
-						.catch((error) => {});
-				}
-			}}
+		<Link
+			className={`group rounded-lg shadow-lg transition-transform hover:scale-105 hover:cursor-pointer ${className}`}
+			href={`/deck/${deck.deckID}`}
 			onKeyUp={(event) => {
 				if (event.key === "Enter") {
 					event.target.dispatchEvent(
@@ -80,95 +80,150 @@ export const Deck = ({ group, deck, className = "" }: DeckProps) => {
 					);
 				}
 			}}
-			tabIndex={deck ? 0 : -1}
+			tabIndex={0}
 		>
-			<div
-				className={`relative flex h-40 w-40 items-center space-y-1 rounded-md  ${
-					deck ? "bg-kiokuLightBlue" : ""
-				} `}
-			>
-				<div
-					className={`flex w-full justify-center text-6xl font-black ${
-						deck ? "" : "text-kiokuDarkBlue"
-					}`}
-				>
-					{/* display first two characters of deckName */}
-					{deck?.deckName.slice(0, 2).toUpperCase()}
-					{/* if no deck provided, display placeholder for creating decks for user with write permission */}
-					{!deck &&
-						group.groupRole &&
-						GroupRole[group.groupRole] >= GroupRole.WRITE &&
-						"+"}
-					{/* if group is empty, display placeholder for user without write permission */}
-					{group.isEmpty &&
-						group.groupRole &&
-						GroupRole[group.groupRole] < GroupRole.WRITE && (
-							<AlertTriangle size={50}></AlertTriangle>
-						)}
+			<div className="flex h-[6.5rem] w-full flex-row bg-gradient-to-r to-60% transition-all first:rounded-t-md last:rounded-b-md group-hover:from-[#F7EBEB] sm:h-28 md:h-32 lg:h-32">
+				<div className="relative my-3 ml-3 flex aspect-square items-center justify-center rounded bg-[#F31212]/50">
+					<Text textSize="lg" className="font-black text-[#7B100E]">
+						{deck.deckName.slice(0, 2).toUpperCase()}
+					</Text>
+					{!!deck.dueCards && (
+						<div className="absolute right-[-0.35rem] top-[-0.35rem] h-4 w-4 flex-none rounded-full bg-kiokuRed">
+							<div className="absolute h-full w-full animate-[ping_0.8s_ease-out_3] rounded-full bg-kiokuRed" />
+						</div>
+					)}
 				</div>
-				{!!deck?.dueCards && (
-					<div className="absolute right-[-0.3rem] top-[-0.5rem] flex h-5 w-5 rounded-sm bg-kiokuRed p-1">
-						<div className="flex h-full w-full items-center justify-center text-xs font-bold text-white">
-							{Math.min(99, deck.dueCards)}
+				<div className="flex h-full flex-1 flex-col content-between justify-between space-y-3 overflow-hidden p-3 pl-3">
+					<div className="w-full space-y-1">
+						<div className="flex w-full flex-row items-center justify-between space-x-2">
+							<div className="flex flex-row items-center space-x-1 overflow-hidden">
+								<Text
+									textStyle="primary"
+									textSize="sm"
+									className="flex-1 items-center space-x-1 truncate whitespace-nowrap font-extrabold"
+								>
+									{deck.deckName}
+								</Text>
+								{deck.deckType === "PUBLIC" && (
+									<Globe
+										size={12}
+										className="text-kiokuLightBlue"
+									/>
+								)}
+								{deck.deckType === "PRIVATE" && (
+									<Lock
+										size={12}
+										className="text-kiokuLightBlue"
+									/>
+								)}
+							</div>
+							<div className="relative flex-none text-kiokuRed">
+								{isFavorite && (
+									<Heart
+										size={20}
+										fill={"#DB2B39"}
+										className="absolute animate-[ping_0.7s_ease-out_1] hover:cursor-pointer"
+									/>
+								)}
+								<Heart
+									size={20}
+									fill={
+										isFavorite ? "#DB2B39" : "transparent"
+									}
+									className="relative hover:scale-105"
+									onClick={(event) => {
+										modifyFavorite(deck);
+										event.preventDefault();
+									}}
+								/>
+							</div>
+						</div>
+						<div className="flex flex-row space-x-2 overflow-hidden sm:space-x-3 md:space-x-3 lg:space-x-3">
+							{!!deck.dueCards && (
+								<IconLabel
+									iconLabel={{
+										icon: "Activity",
+										header: plural(deck.dueCards, {
+											one: "# card due",
+											other: "# cards due",
+										}),
+									}}
+									className="text-kiokuRed"
+								/>
+							)}
+							{stats?.map((stat) => (
+								<IconLabel
+									key={stat.header}
+									iconLabel={stat}
+									iconSize={12}
+									className={`whitespace-nowrap odd:text-kiokuDarkBlue even:text-gray-500`}
+								/>
+							))}
 						</div>
 					</div>
-				)}
+					<div className="flex w-full flex-row items-center justify-between">
+						<div className="flex items-center space-x-3">
+							<Button
+								buttonStyle="primary"
+								buttonTextSize="3xs"
+								buttonIcon="ArrowRight"
+								className="px-3 py-1.5"
+								onClick={(event) => {
+									router.push(`/deck/${deck.deckID}/learn`);
+									event.stopPropagation();
+								}}
+							>
+								<Trans>Learn</Trans>
+							</Button>
+							<div className="flex flex-row items-center space-x-1">
+								{deck.deckType === "PUBLIC" && (
+									<Globe
+										size={12}
+										className="text-gray-400"
+									/>
+								)}
+								{deck.deckType === "PRIVATE" && (
+									<Lock size={12} className="text-gray-400" />
+								)}
+								<Text textSize="5xs" className="text-gray-400">
+									{deck.deckType}
+								</Text>
+							</div>
+						</div>
+						<MoreVertical
+							size={20}
+							className="flex-none text-gray-500 hover:cursor-pointer"
+						/>
+					</div>
+				</div>
 			</div>
-			<div className="text-center font-semibold text-kiokuDarkBlue">
-				{/* display deckName */}
-				{deck?.deckName}
-				{/* if no deck provided, display placeholder for creating decks for user with write permission */}
-				{!deck &&
-					group.groupRole &&
-					GroupRole[group.groupRole] >= GroupRole.WRITE && (
-						<input
-							id={`deckNameInput${group.groupID}`}
-							className="w-40 bg-transparent text-center outline-none"
-							placeholder={_(msg`Create new Deck`)}
-							ref={deckNameInput}
-							onKeyUp={(event) => {
-								if (event.key === "Enter") {
-									createDeck()
-										.then((result) => {})
-										.catch((error) => {});
-								}
-							}}
-							onClick={(event) => {
-								event.stopPropagation();
-							}}
-						></input>
-					)}
-				{/* if group is empty, display placeholder for user without write permission */}
-				{group.isEmpty &&
-					group.groupRole &&
-					GroupRole[group.groupRole] < GroupRole.WRITE && (
-						<Trans>No decks in group</Trans>
-					)}
-			</div>
-		</div>
+			{deckNotification && (
+				<IconLabel
+					iconLabel={deckNotification}
+					color="text-kiokuRed"
+					className="rounded-b-md bg-gray-100 px-4 py-1 text-kiokuDarkBlue md:py-2"
+				/>
+			)}
+		</Link>
 	);
 
-	async function createDeck() {
-		if (!deckNameInput.current?.value) {
-			deckNameInput.current?.focus();
-			return;
-		}
-		const response = await authedFetch(
-			`/api/groups/${group.groupID}/decks`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ deckName: deckNameInput.current.value }),
-			}
-		);
-		if (response?.ok) {
-			deckNameInput.current.value = "";
-			toast.info(t`Deck created!`, { toastId: "newDeckToast" });
-		} else {
-			toast.error("Error!", { toastId: "newDeckToast" });
-		}
-		mutate(`/api/groups/${group.groupID}/decks`);
+	async function modifyFavorite(deck: DeckType) {
+		const response = isFavorite
+			? await deleteRequest(
+					"/api/decks/favorites",
+					JSON.stringify({
+						deckID: deck.deckID,
+					})
+			  )
+			: await postRequest(
+					"/api/decks/favorites",
+					JSON.stringify({
+						deckID: deck.deckID,
+					})
+			  );
+		setFavorite((prev) => !prev);
+		mutate(`/api/groups/${deck.groupID}/decks`);
+		mutate("/api/decks/favorites");
+		mutate("/api/decks/active");
 	}
 };

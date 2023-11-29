@@ -43,16 +43,16 @@ export const TabBar = ({
 			<div className="flex flex-row">
 				{Object.keys(tabs).map((tab) => (
 					<Text
-						size="xs"
-						onClick={() => {
-							setTab(tab);
-						}}
+						textSize="xs"
 						key={tab}
 						className={`border-kiokuDarkBlue p-3 font-bold transition hover:cursor-pointer ${
 							currentTab === tab
 								? "border-b-2 text-kiokuDarkBlue"
 								: "border-none text-kiokuLightBlue"
 						}`}
+						onClick={() => {
+							setTab(tab);
+						}}
 					>
 						{tabs[tab]}
 					</Text>

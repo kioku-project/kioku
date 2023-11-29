@@ -1,20 +1,19 @@
-import { Trans, t } from "@lingui/macro";
+import { Trans } from "@lingui/macro";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import { toast } from "react-toastify";
-import useSWR, { useSWRConfig } from "swr";
+import { useSWRConfig } from "swr";
 
 import { loadCatalog } from "@/pages/_app";
 
-import Authenticated from "../../../components/accessControl/Authenticated";
 import { Flashcard } from "../../../components/flashcard/Flashcard";
 import KiokuAward from "../../../components/graphics/KiokuAward";
 import { Button } from "../../../components/input/Button";
-import { Group } from "../../../types/Group";
 import { GroupRole } from "../../../types/GroupRole";
-import { authedFetch } from "../../../util/reauth";
+import { postRequest } from "../../../util/api";
+import { useDeck, useDueCards, useGroup, usePullCard } from "../../../util/swr";
 
 export const getServerSideProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -29,22 +28,12 @@ export default function Page() {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 	const deckID = router.query.id as string;
-	const fetcher = (url: RequestInfo | URL) =>
-		authedFetch(url, {
-			method: "GET",
-		}).then((res) => res?.json());
-	const { data: card } = useSWR(`/api/decks/${deckID}/pull`, fetcher);
-	const { data: dueCards } = useSWR(`/api/decks/${deckID}/dueCards`, fetcher);
-	const { data: deck } = useSWR(
-		deckID ? `/api/decks/${deckID}` : null,
-		fetcher
-	);
-	const { data: group } = useSWR<Group>(
-		deck?.groupID ? `/api/groups/${deck.groupID}` : null,
-		fetcher
-	);
+	const { card } = usePullCard(deckID);
+	const { deck } = useDeck(deckID);
+	const { dueCards } = useDueCards(deckID);
+	const { group } = useGroup(deck?.groupID);
 	return (
-		<div>
+		<>
 			<Head>
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
@@ -60,57 +49,53 @@ export default function Page() {
 					href={`https://app.kioku.dev/de/deck/${deckID}/learn`}
 				/>
 			</Head>
-			<Authenticated>
-				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-					{card?.cardID ? (
-						<Flashcard
-							id="flashcardId"
-							key={card.cardID}
-							card={card}
-							dueCards={dueCards}
-							push={push}
-							editable={
-								group?.groupRole &&
-								GroupRole[group.groupRole] >= GroupRole.WRITE
-							}
-						></Flashcard>
-					) : (
-						<div className="mx-auto my-auto flex flex-col items-center space-y-5">
-							<KiokuAward></KiokuAward>
-							<div className="flex flex-col items-center space-y-1">
-								<div className="text-4xl font-bold text-kiokuDarkBlue">
-									<Trans>Congratulations!</Trans>
-								</div>
-								<div className="text-lg font-semibold text-kiokuLightBlue">
-									<Trans>
-										You did it! There are no cards left in
-										this deck to learn today.
-									</Trans>
-								</div>
+			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
+				{card?.cardID ? (
+					<Flashcard
+						id="flashcardId"
+						key={card.cardID}
+						card={card}
+						dueCards={dueCards}
+						push={push}
+						editable={
+							group?.groupRole &&
+							GroupRole[group.groupRole] >= GroupRole.WRITE
+						}
+					/>
+				) : (
+					<div className="mx-auto my-auto flex flex-col items-center space-y-5">
+						<KiokuAward />
+						<div className="flex flex-col items-center space-y-1">
+							<div className="text-4xl font-bold text-kiokuDarkBlue">
+								<Trans>Congratulations!</Trans>
 							</div>
-							<Button
-								id="goBackButtonId"
-								onClick={() => router.push(`/deck/${deckID}`)}
-							>
-								<Trans>Back to Deck!</Trans>
-							</Button>
+							<div className="text-center text-lg font-semibold text-kiokuLightBlue">
+								<Trans>
+									You did it! There are no cards left in this
+									deck to learn today.
+								</Trans>
+							</div>
 						</div>
-					)}
-				</div>
-			</Authenticated>
-		</div>
+						<Button
+							id="goBackButtonId"
+							buttonStyle="primary"
+							buttonSize="sm"
+							onClick={() => router.push(`/deck/${deckID}`)}
+						>
+							<Trans>Back to Deck!</Trans>
+						</Button>
+					</div>
+				)}
+			</div>
+		</>
 	);
 
 	async function push(body: { cardID: string; rating: number }) {
-		const response = await authedFetch(`/api/decks/${deckID}/push`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(body),
-		});
+		const response = await postRequest(
+			`/api/decks/${deckID}/push`,
+			JSON.stringify(body)
+		);
 		if (response?.ok) {
-			toast.info(t`Card updated!`, { toastId: "updatedCardToast" });
 			mutate(`/api/decks/${deckID}/pull`);
 			mutate(`/api/decks/${deckID}/dueCards`);
 		} else {

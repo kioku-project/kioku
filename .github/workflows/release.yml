@@ -11,8 +11,8 @@ jobs:
       image-tag: prod
       path: ./frontend
       context: ./frontend
-    env:
-      NEXT_PUBLIC_SEO: "True"
+      env:
+        NEXT_PUBLIC_SEO: "True"
 
   build-carddeck:
     uses: ./.github/workflows/build_service.yml

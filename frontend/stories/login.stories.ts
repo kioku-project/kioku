@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { within, userEvent } from "@storybook/testing-library";
+import { userEvent, within } from "@storybook/testing-library";
 
 import Page from "../pages/login";
 
@@ -19,7 +19,7 @@ export const Login: Story = {};
 export const Register: Story = {
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const registerButton = await canvas.getByText("Create an account");
+		const registerButton = await canvas.getByText("Sign up now!");
 		await userEvent.click(registerButton);
 	},
 };

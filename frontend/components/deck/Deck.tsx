@@ -67,7 +67,7 @@ export const Deck = ({
 
 	useEffect(() => {
 		setFavorite(deck.isFavorite);
-	});
+	}, [deck.isFavorite, setFavorite]);
 
 	return (
 		<Link

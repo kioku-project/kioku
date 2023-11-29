@@ -22,7 +22,7 @@ export const DashboardTab = ({ className = "" }: DashboardTabProps) => {
 
 	return (
 		<div className={`space-y-5 ${className}`}>
-			<DeckList header={_(msg`Active decks`)} decks={activeDecks} />
+			<DeckList header={_(msg`Active Decks`)} decks={activeDecks} />
 			<DeckList header={_(msg`Favorite Decks`)} decks={favoriteDecks} />
 		</div>
 	);

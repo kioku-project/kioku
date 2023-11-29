@@ -46,8 +46,8 @@ msgid "Achievements and leaderboards make learning more engaging and motivating.
 msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivierender. Kioku hilft Dir, bessere Ergebnisse zu erzielen und Deine persönlichen Lernziele zu erreichen!"
 
 #: components/navigation/Tabs/DashboardTab.tsx:25
-msgid "Active decks"
-msgstr "Aktive decks"
+msgid "Active Decks"
+msgstr "Aktive Decks"
 
 #: pages/login.tsx:220
 msgid "Already have an account?"

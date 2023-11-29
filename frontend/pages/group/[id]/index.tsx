@@ -74,7 +74,7 @@ export default function Page() {
 				<link
 					rel="alternate"
 					hrefLang="en"
-					href={`https://app.kioku.dev/group/${groupId}`}
+					href={`https://app.kioku.dev/group/${groupID}`}
 				/>
 				<link
 					rel="alternate"

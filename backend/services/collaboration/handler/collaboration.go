@@ -217,7 +217,7 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pbCommon.GroupRequest
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			logger.Infof("User does not have a group role")
-			*rsp = pbCommon.Group{GroupID: protoGroup.GroupID, GroupName: protoGroup.GroupName, GroupDescription: protoGroup.GroupDescription, GroupType: protoGroup.GroupType, Role: pbCommon.GroupRole_GR_EXTERNAL}
+			*rsp = pbCommon.Group{GroupID: protoGroup.GroupID, GroupName: protoGroup.GroupName, GroupDescription: protoGroup.GroupDescription, GroupType: protoGroup.GroupType, Role: pbCommon.GroupRole_EXTERNAL}
 			return nil
 		}
 		return err
@@ -226,7 +226,7 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pbCommon.GroupRequest
 		ctx,
 		req.UserID,
 		req.Group.GroupID,
-		pbCommon.GroupRole_GR_INVITED,
+		pbCommon.GroupRole_INVITED,
 	)
 	if err != nil {
 		return err
@@ -245,7 +245,7 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pbCommon.GroupRequest
 
 func (e *Collaboration) ModifyGroup(ctx context.Context, req *pbCommon.GroupRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received Collaboration.ModifyGroup request: %v", req)
-	group, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.Group.GroupID, pbCommon.GroupRole_GR_ADMIN)
+	group, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.Group.GroupID, pbCommon.GroupRole_ADMIN)
 	if err != nil {
 		return err
 	}
@@ -277,7 +277,7 @@ func (e *Collaboration) ModifyGroup(ctx context.Context, req *pbCommon.GroupRequ
 
 func (e *Collaboration) DeleteGroup(ctx context.Context, req *pbCommon.GroupRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received Collaboration.DeleteGroup request: %v", req)
-	group, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.Group.GroupID, pbCommon.GroupRole_GR_ADMIN)
+	group, _, err := e.checkUserRoleAccessWithGroupAndRoleReturn(ctx, req.UserID, req.Group.GroupID, pbCommon.GroupRole_ADMIN)
 	if err != nil {
 		return err
 	}
@@ -300,7 +300,7 @@ func (e *Collaboration) GetGroupMembers(ctx context.Context, req *pbCommon.Group
 		ctx,
 		req.UserID,
 		req.Group.GroupID,
-		pbCommon.GroupRole_GR_INVITED,
+		pbCommon.GroupRole_INVITED,
 	); err != nil {
 		return err
 	}
@@ -337,7 +337,7 @@ func (e *Collaboration) GetGroupMemberRequests(
 		ctx,
 		req.UserID,
 		req.Group.GroupID,
-		pbCommon.GroupRole_GR_ADMIN,
+		pbCommon.GroupRole_ADMIN,
 	); err != nil {
 		return err
 	}
@@ -569,7 +569,7 @@ func (e *Collaboration) GetInvitationsForGroup(
 		ctx,
 		req.UserID,
 		req.Group.GroupID,
-		pbCommon.GroupRole_GR_ADMIN,
+		pbCommon.GroupRole_ADMIN,
 	); err != nil {
 		return err
 	}

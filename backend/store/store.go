@@ -11,10 +11,10 @@ type UserStore interface {
 }
 
 type CardDeckStore interface {
-	FindDecksByGroupID(groupID string) ([]model.Deck, error)
+	FindDecksByGroupID(groupID string, userID string) ([]model.Deck, error)
 	FindDeckCards(deckID string) ([]*model.Card, error)
 	FindPublicDecksByGroupID(groupID string) ([]model.Deck, error)
-	FindDeckByID(deckID string) (*model.Deck, error)
+	FindDeckByID(deckID string, userID string) (*model.Deck, error)
 	CreateDeck(newDeck *model.Deck) error
 	ModifyDeck(deck *model.Deck) error
 	DeleteDeck(deck *model.Deck) error
@@ -29,6 +29,12 @@ type CardDeckStore interface {
 	ModifyCardSide(cardSide *model.CardSide) error
 	DeleteCardSide(cardSide *model.CardSide) error
 	DeleteCardSidesOfCardByID(cardID string) error
+	FindFavoriteDecks(userID string) ([]model.Deck, error)
+	AddFavoriteDeck(userID string, deckID string) error
+	DeleteFavoriteDeck(userID string, deckID string) error
+	FindActiveDecks(userID string) ([]model.Deck, error)
+	AddActiveDeck(userID string, deckID string) error
+	DeleteActiveDeck(userID string, deckID string) error
 }
 
 type CollaborationStore interface {

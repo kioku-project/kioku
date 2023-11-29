@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { loadCatalog } from "@/pages/_app";
 
-import Authenticated from "../../../components/accessControl/Authenticated";
 import { FetchHeader } from "../../../components/layout/Header";
 import { CardsTab } from "../../../components/navigation/Tabs/CardsTab";
 import { DeckSettingsTab } from "../../../components/navigation/Tabs/DeckSettingsTab";

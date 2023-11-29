@@ -1,13 +1,13 @@
 import { Trans, plural } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { Globe, Heart, Lock, MoreVertical } from "react-feather";
 import "react-toastify/dist/ReactToastify.css";
-import { preload } from "swr";
+import { preload, useSWRConfig } from "swr";
 
 import { Deck as DeckType } from "../../types/Deck";
+import { deleteRequest, postRequest } from "../../util/api";
 import { fetcher, useDueCards } from "../../util/swr";
 import { Text } from "../Text";
 import { IconLabel, IconLabelType } from "../graphics/IconLabel";
@@ -34,6 +34,7 @@ interface DeckProps {
 
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 	const router = useRouter();
+
 	const { dueCards } = useDueCards(deck.deckID);
 
 	useEffect(() => {
@@ -60,9 +61,13 @@ export const Deck = ({
 	className = "",
 }: DeckProps) => {
 	const router = useRouter();
-	const { _ } = useLingui();
+	const { mutate } = useSWRConfig();
 
 	const [isFavorite, setFavorite] = useState(deck.isFavorite);
+
+	useEffect(() => {
+		setFavorite(deck.isFavorite);
+	}, [deck.isFavorite, setFavorite]);
 
 	return (
 		<Link
@@ -127,8 +132,8 @@ export const Deck = ({
 									}
 									className="relative hover:scale-105"
 									onClick={(event) => {
-										setFavorite((prev) => !prev);
-										event.stopPropagation();
+										modifyFavorite(deck);
+										event.preventDefault();
 									}}
 								/>
 							</div>
@@ -201,4 +206,24 @@ export const Deck = ({
 			)}
 		</Link>
 	);
+
+	async function modifyFavorite(deck: DeckType) {
+		const response = isFavorite
+			? await deleteRequest(
+					"/api/decks/favorites",
+					JSON.stringify({
+						deckID: deck.deckID,
+					})
+			  )
+			: await postRequest(
+					"/api/decks/favorites",
+					JSON.stringify({
+						deckID: deck.deckID,
+					})
+			  );
+		setFavorite((prev) => !prev);
+		mutate(`/api/groups/${deck.groupID}/decks`);
+		mutate("/api/decks/favorites");
+		mutate("/api/decks/active");
+	}
 };

@@ -52,7 +52,7 @@ export default function Page() {
 							<Button
 								id="getstartedButton"
 								buttonStyle="primary"
-								buttonSize="sm"
+								buttonSize="md"
 								buttonTextSize="xs"
 								onClick={() =>
 									hasCookie("access_token")
@@ -65,7 +65,7 @@ export default function Page() {
 							<Button
 								id="learnmoreButton"
 								buttonStyle="secondary"
-								buttonSize="sm"
+								buttonSize="md"
 								buttonTextSize="xs"
 								buttonIcon="ArrowRight"
 								onClick={() => {

@@ -2,14 +2,15 @@ package handler
 
 import (
 	"context"
+	"math"
+	"sort"
+	"time"
+
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	"go-micro.dev/v4/logger"
-	"math"
-	"sort"
-	"time"
 
 	pb "github.com/kioku-project/kioku/services/srs/proto"
 	"github.com/kioku-project/kioku/store"
@@ -58,11 +59,11 @@ func (e *Srs) Push(ctx context.Context, req *pb.SrsPushRequest, rsp *pbCommon.Su
 	// Add revlog entry
 	if err = e.store.CreateRevlog(ctx,
 		&model.Revlog{
-		CardID: req.CardID,
-		UserID: req.UserID,
-		Date:   time.Now().Unix(),
-		Rating: req.Rating,
-	}); err != nil {
+			CardID: req.CardID,
+			UserID: req.UserID,
+			Date:   time.Now().Unix(),
+			Rating: req.Rating,
+		}); err != nil {
 		return err
 	}
 	rsp.Success = true
@@ -71,7 +72,13 @@ func (e *Srs) Push(ctx context.Context, req *pb.SrsPushRequest, rsp *pbCommon.Su
 
 func (e *Srs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Card) error {
 	logger.Infof("Received Srs.Pull request: %v", req)
-	cards, err := e.store.FindDeckCards(ctx, req.UserID, req.Deck.DeckID)
+	if _, err := e.cardDeckService.AddUserActiveDeck(ctx, &pbCommon.DeckRequest{UserID: req.UserID, Deck: &pbCommon.Deck{DeckID: req.Deck.DeckID}}); err != nil {
+		return err
+	}
+	cards, err := e.store.FindUserDeckCards(
+		ctx, req.UserID,
+		req.Deck.DeckID,
+	)
 	if err != nil {
 		return err
 	}
@@ -117,25 +124,26 @@ func (e *Srs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon
 
 func (e *Srs) AddUserCardBinding(ctx context.Context, req *pb.BindingRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received Srs.AddUserCardBinding request: %v", req)
-	err := e.store.CreateUserCard(ctx, 
+	err := e.store.CreateUserCard(ctx,
 		&model.UserCardBinding{
-		UserID:       req.UserID,
-		CardID:       req.CardID,
-		DeckID:       req.DeckID,
-		Type:         0,
-		Due:          time.Now().Unix(),
-		LastInterval: 0,
-		Factor:       1,
-	})
+			UserID:       req.UserID,
+			CardID:       req.CardID,
+			DeckID:       req.DeckID,
+			Type:         0,
+			Due:          time.Now().Unix(),
+			LastInterval: 0,
+			Factor:       1,
+		})
 	if err != nil {
 		return err
 	}
 	rsp.Success = true
 	return nil
 }
+
 func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pbCommon.DeckRequest, rsp *pb.UserDueResponse) error {
 	logger.Infof("Received Srs.GetDeckCardsDue request: %v", req)
-	cards, err := e.store.FindDeckCards(
+	cards, err := e.store.FindUserDeckCards(
 		ctx,
 		req.UserID,
 		req.Deck.DeckID,

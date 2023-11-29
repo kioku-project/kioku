@@ -552,7 +552,7 @@ func (e *Frontend) CreateDeckHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("no deck name given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	deckType := pbCommon.DeckType_DT_PRIVATE
+	deckType := pbCommon.DeckType_PRIVATE
 	if dt := strings.TrimSpace(data["deckType"]); dt != "" {
 		deckType = converter.MigrateStringDeckTypeToProtoDeckType(dt)
 	}
@@ -608,6 +608,41 @@ func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)
+}
+
+type copyDeckBody struct {
+	DeckName      string `json:"deckName"`
+	DeckType      string `json:"deckType"`
+	TargetGroupID string `json:"targetGroupID"`
+}
+
+func (e *Frontend) CopyDeckHandler(c *fiber.Ctx) error {
+	var data copyDeckBody
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	if data.DeckName == "" {
+		return helper.NewFiberBadRequestErr("no deck name given")
+	}
+	if data.TargetGroupID == "" {
+		return helper.NewFiberBadRequestErr("no targetGroupID given")
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rsp, err := e.cardDeckService.CopyDeck(c.Context(), &pbCardDeck.CopyDeckRequest{
+		UserID: userID,
+		Deck: &pbCommon.Deck{
+			DeckID: c.Params("deckID"),
+		},
+		TargetGroupID: data.TargetGroupID,
+		NewDeck: &pbCommon.Deck{
+			DeckName: data.DeckName,
+			DeckType: converter.MigrateStringDeckTypeToProtoDeckType(data.DeckType),
+		},
+	})
+	if err != nil {
+		return err
+	}
+	return c.SendString(rsp.DeckID)
 }
 
 func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
@@ -711,6 +746,98 @@ func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	} else if !rspDeleteCard.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) GetFavoriteDecksHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGetFavoriteDecks, err := e.cardDeckService.GetUserFavoriteDecks(c.Context(), &pbCommon.User{UserID: userID})
+	if err != nil {
+		return err
+	}
+	decks := converter.ConvertToTypeArray(rspGetFavoriteDecks.Decks, converter.ProtoDeckToFiberDeckConverter)
+
+	return c.JSON(converter.FiberGetGroupDecksResponseBody{
+		Decks: decks,
+	})
+}
+
+func (e *Frontend) AddFavoriteDeckHandler(c *fiber.Ctx) error {
+	var deck = &pbCommon.Deck{}
+	if err := c.BodyParser(deck); err != nil {
+		return err
+	}
+	if deck.DeckID == "" {
+		return helper.NewFiberMissingDeckIDErr()
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspAddFavoriteDeck, err := e.cardDeckService.AddUserFavoriteDeck(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck:   deck,
+	})
+	if err != nil {
+		return err
+	}
+	if !rspAddFavoriteDeck.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) DeleteFavoriteDeckHandler(c *fiber.Ctx) error {
+	var deck = &pbCommon.Deck{}
+	if err := c.BodyParser(deck); err != nil {
+		return err
+	}
+	if deck.DeckID == "" {
+		return helper.NewFiberMissingDeckIDErr()
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspDelFavoriteDeck, err := e.cardDeckService.DeleteUserFavoriteDeck(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck:   deck,
+	})
+	if err != nil {
+		return err
+	}
+	if !rspDelFavoriteDeck.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) GetActiveDecksHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGetActiveDecks, err := e.cardDeckService.GetUserActiveDecks(c.Context(), &pbCommon.User{UserID: userID})
+	if err != nil {
+		return err
+	}
+	decks := converter.ConvertToTypeArray(rspGetActiveDecks.Decks, converter.ProtoDeckToFiberDeckConverter)
+
+	return c.JSON(converter.FiberGetGroupDecksResponseBody{
+		Decks: decks,
+	})
+}
+
+func (e *Frontend) DeleteActiveDeckHandler(c *fiber.Ctx) error {
+	var deck = &pbCommon.Deck{}
+	if err := c.BodyParser(deck); err != nil {
+		return err
+	}
+	if deck.DeckID == "" {
+		return helper.NewFiberMissingDeckIDErr()
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspDelActiveDeck, err := e.cardDeckService.DeleteUserActiveDeck(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck:   deck,
+	})
+	if err != nil {
+		return err
+	}
+	if !rspDelActiveDeck.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)

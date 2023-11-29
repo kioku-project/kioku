@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes, ReactNode } from "react";
 
 import { Size } from "../../types/Size";
 import { Text } from "../Text";
@@ -20,7 +20,7 @@ export interface ButtonProps {
 	/**
 	 * Icon that will be displayed in the Button
 	 */
-	buttonIcon?: IconName;
+	buttonIcon?: IconName | ReactNode;
 	/**
 	 * Icon size
 	 */
@@ -63,13 +63,16 @@ export const Button = ({
 			{...props}
 		>
 			<Text textSize={buttonTextSize}>{children}</Text>
-			{buttonIcon && (
-				<Icon
-					icon={buttonIcon}
-					size={buttonIconSize}
-					className="flex-none"
-				/>
-			)}
+			{buttonIcon &&
+				(typeof buttonIcon === "string" ? (
+					<Icon
+						icon={buttonIcon as IconName}
+						size={buttonIconSize}
+						className="flex-none"
+					/>
+				) : (
+					buttonIcon
+				))}
 		</button>
 	);
 };

@@ -50,7 +50,10 @@ func NewPostgresStore(ctx context.Context) (*gorm.DB, error) {
 	)
 
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=prefer", username, password, host, port, dbname)
-	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{Logger: logger})
+	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{
+		TranslateError: true,
+		Logger:         logger,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +87,11 @@ func NewCardDeckStore(ctx context.Context) (CardDeckStore, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = db.WithContext(ctx).AutoMigrate(&model.CardSide{}, &model.Card{}, &model.Deck{})
+	err = db.WithContext(ctx).AutoMigrate(&model.CardSide{},
+		&model.Card{},
+		&model.Deck{},
+		&model.UserActiveDecks{},
+		&model.UserFavoriteDecks{})
 	if err != nil {
 		return nil, err
 	}
@@ -149,9 +156,47 @@ func (s *UserStoreImpl) FindUserByID(ctx context.Context, userID string) (user *
 	return
 }
 
-func (s *CardDeckStoreImpl) FindDecksByGroupID(ctx context.Context, groupID string) (decks []model.Deck, err error) {
+func (s *CardDeckStoreImpl) PopulateDeckFavoriteAttribute(ctx context.Context, deck *model.Deck, userID string) error {
+	var count int64
+	if err := s.db.WithContext(ctx).Model(&model.UserFavoriteDecks{}).Where(&model.UserFavoriteDecks{UserID: userID, DeckID: deck.ID}).Count(&count).Error; err != nil {
+		return err
+	}
+	if count > 0 {
+		deck.IsFavorite = true
+	}
+	return nil
+}
+
+func (s *CardDeckStoreImpl) PopulateDeckActiveAttribute(ctx context.Context, deck *model.Deck, userID string) error {
+	var count int64
+	if err := s.db.WithContext(ctx).Model(&model.UserActiveDecks{}).Where(&model.UserActiveDecks{UserID: userID, DeckID: deck.ID}).Count(&count).Error; err != nil {
+		return err
+	}
+	if count > 0 {
+		deck.IsActive = true
+	}
+	return nil
+}
+
+func (s *CardDeckStoreImpl) FindDecksByGroupID(ctx context.Context, groupID string, userID string) (decks []model.Deck, err error) {
 	if err = s.db.WithContext(ctx).Where(&model.GroupUserRole{GroupID: groupID}).
 		Find(&decks).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	for i := range decks {
+		if err = s.PopulateDeckFavoriteAttribute(ctx, &decks[i], userID); err != nil {
+			return
+		}
+		if err = s.PopulateDeckActiveAttribute(ctx, &decks[i], userID); err != nil {
+			return
+		}
+	}
+	return
+}
+
+func (s *CardDeckStoreImpl) FindDeckCards(ctx context.Context, deckID string) (cards []*model.Card, err error) {
+	if err = s.db.WithContext(ctx).Where(model.Card{DeckID: deckID}).
+		Find(&cards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
@@ -166,11 +211,17 @@ func (s *CardDeckStoreImpl) FindPublicDecksByGroupID(ctx context.Context, groupI
 	return
 }
 
-func (s *CardDeckStoreImpl) FindDeckByID(ctx context.Context, deckID string) (deck *model.Deck, err error) {
+func (s *CardDeckStoreImpl) FindDeckByID(ctx context.Context, deckID string, userID string) (deck *model.Deck, err error) {
 	if err = s.db.WithContext(ctx).Where(&model.Deck{ID: deckID}).
 		Preload("Cards").
 		First(&deck).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID
+	}
+	if err = s.PopulateDeckFavoriteAttribute(ctx, deck, userID); err != nil {
+		return
+	}
+	if err = s.PopulateDeckActiveAttribute(ctx, deck, userID); err != nil {
+		return
 	}
 	return
 }
@@ -282,6 +333,60 @@ func (s *CardDeckStoreImpl) DeleteCardSide(ctx context.Context, cardSide *model.
 
 func (s *CardDeckStoreImpl) DeleteCardSidesOfCardByID(ctx context.Context, cardID string) error {
 	return s.db.WithContext(ctx).Where(&model.CardSide{CardID: cardID}).Delete(&model.CardSide{}).Error
+}
+func (s *CardDeckStoreImpl) FindFavoriteDecks(ctx context.Context, userID string) (decks []model.Deck, err error) {
+	var userFavoriteDecks []model.UserFavoriteDecks
+	err = s.db.
+		Preload("Deck").
+		Where(&model.UserFavoriteDecks{UserID: userID}).
+		Find(&userFavoriteDecks).Error
+	if err != nil {
+		return
+	}
+	for _, deck := range userFavoriteDecks {
+		deck.Deck.IsFavorite = true
+		if err = s.PopulateDeckActiveAttribute(ctx, &deck.Deck, userID); err != nil {
+			return
+		}
+		decks = append(decks, deck.Deck)
+	}
+	return
+}
+
+func (s *CardDeckStoreImpl) AddFavoriteDeck(ctx context.Context, userID string, deckID string) error {
+	return s.db.WithContext(ctx).Create(&model.UserFavoriteDecks{UserID: userID, DeckID: deckID}).Error
+}
+
+func (s *CardDeckStoreImpl) DeleteFavoriteDeck(ctx context.Context, userID string, deckID string) error {
+	return s.db.WithContext(ctx).Delete(&model.UserFavoriteDecks{UserID: userID, DeckID: deckID}).Error
+}
+
+func (s *CardDeckStoreImpl) FindActiveDecks(ctx context.Context, userID string) (decks []model.Deck, err error) {
+	var userActiveDecks []model.UserActiveDecks
+	err = s.db.
+		WithContext(ctx).
+		Preload("Deck").
+		Where(&model.UserActiveDecks{UserID: userID}).
+		Find(&userActiveDecks).Error
+	if err != nil {
+		return
+	}
+	for _, deck := range userActiveDecks {
+		deck.Deck.IsActive = true
+		if err = s.PopulateDeckFavoriteAttribute(ctx, &deck.Deck, userID); err != nil {
+			return
+		}
+		decks = append(decks, deck.Deck)
+	}
+	return
+}
+
+func (s *CardDeckStoreImpl) AddActiveDeck(ctx context.Context, userID string, deckID string) error {
+	return s.db.WithContext(ctx).Create(&model.UserActiveDecks{UserID: userID, DeckID: deckID, Algorithm: model.AlgoDynamicSRS}).Error
+}
+
+func (s *CardDeckStoreImpl) DeleteActiveDeck(ctx context.Context, userID string, deckID string) error {
+	return s.db.WithContext(ctx).Delete(&model.UserActiveDecks{UserID: userID, DeckID: deckID}).Error
 }
 
 func (s *CollaborationStoreImpl) FindGroupsByUserID(ctx context.Context, userID string) (groups []model.Group, err error) {
@@ -423,7 +528,7 @@ func (s *SrsStoreImpl) FindCardBinding(ctx context.Context, userID string, cardI
 	return
 }
 
-func (s *SrsStoreImpl) FindDeckCards(ctx context.Context, userID string, deckID string) (userCards []*model.UserCardBinding, err error) {
+func (s *SrsStoreImpl) FindUserDeckCards(ctx context.Context, userID string, deckID string) (userCards []*model.UserCardBinding, err error) {
 	if err = s.db.WithContext(ctx).Where(model.UserCardBinding{UserID: userID, DeckID: deckID}).
 		Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		err = helper.ErrStoreNoEntryWithID

@@ -5,6 +5,7 @@ import Head from "next/head";
 import React, { ReactNode, useState } from "react";
 
 import { FetchHeader } from "../components/layout/Header";
+import { DashboardTab } from "../components/navigation/Tabs/DashboardTab";
 import { DecksTab } from "../components/navigation/Tabs/DecksTab";
 import { GroupsTab } from "../components/navigation/Tabs/GroupsTab";
 import { InvitationsTab } from "../components/navigation/Tabs/InvitationsTabs";
@@ -35,6 +36,13 @@ export default function Home() {
 	const { _ } = useLingui();
 
 	const tabs: { [tab: string]: ReactNode } = {
+		dashboard: (
+			<TabHeader
+				id="dashboardTabHeaderId"
+				name={_(msg`Dashboard`)}
+				style="dashboard"
+			/>
+		),
 		decks: (
 			<TabHeader
 				id="decksTabHeaderId"
@@ -73,7 +81,7 @@ export default function Home() {
 		),
 	};
 
-	const [currentTab, setCurrentTab] = useState("decks");
+	const [currentTab, setCurrentTab] = useState("dashboard");
 
 	return (
 		<div>
@@ -114,8 +122,9 @@ export default function Home() {
 								invitations: invitations && (
 									<InvitationsTab invitations={invitations} />
 								),
-								statistics: <StatisticsTab />,
 								settings: <UserSettingsTab user={user} />,
+								statistics: <StatisticsTab />,
+								dashboard: homeGroup && <DashboardTab />,
 							}[currentTab] ?? <div>Error</div>}
 						</div>
 					</div>

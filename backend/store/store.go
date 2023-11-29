@@ -15,9 +15,10 @@ type UserStore interface {
 }
 
 type CardDeckStore interface {
-	FindDecksByGroupID(ctx context.Context, groupID string) ([]model.Deck, error)
+	FindDecksByGroupID(ctx context.Context, groupID string, userID string) ([]model.Deck, error)
+	FindDeckCards(ctx context.Context, deckID string) ([]*model.Card, error)
 	FindPublicDecksByGroupID(ctx context.Context, groupID string) ([]model.Deck, error)
-	FindDeckByID(ctx context.Context, deckID string) (*model.Deck, error)
+	FindDeckByID(ctx context.Context, deckID string, userID string) (*model.Deck, error)
 	CreateDeck(ctx context.Context, newDeck *model.Deck) error
 	ModifyDeck(ctx context.Context, deck *model.Deck) error
 	DeleteDeck(ctx context.Context, deck *model.Deck) error
@@ -32,6 +33,12 @@ type CardDeckStore interface {
 	ModifyCardSide(ctx context.Context, cardSide *model.CardSide) error
 	DeleteCardSide(ctx context.Context, cardSide *model.CardSide) error
 	DeleteCardSidesOfCardByID(ctx context.Context, cardID string) error
+	FindFavoriteDecks(userID string) ([]model.Deck, error)
+	AddFavoriteDeck(userID string, deckID string) error
+	DeleteFavoriteDeck(userID string, deckID string) error
+	FindActiveDecks(userID string) ([]model.Deck, error)
+	AddActiveDeck(userID string, deckID string) error
+	DeleteActiveDeck(userID string, deckID string) error
 }
 
 type CollaborationStore interface {
@@ -57,7 +64,7 @@ type CollaborationStore interface {
 type SrsStore interface {
 	CreateRevlog(ctx context.Context, newRev *model.Revlog) error
 	FindCardBinding(ctx context.Context, userID string, cardID string) (*model.UserCardBinding, error)
-	FindDeckCards(ctx context.Context, userID string, deckID string) ([]*model.UserCardBinding, error)
+	FindUserDeckCards(ctx context.Context, userID string, deckID string) ([]*model.UserCardBinding, error)
 	FindUserCards(ctx context.Context, userID string) ([]*model.UserCardBinding, error)
 	CreateUserCard(ctx context.Context, newCard *model.UserCardBinding) error
 	ModifyUserCard(ctx context.Context, card *model.UserCardBinding) error

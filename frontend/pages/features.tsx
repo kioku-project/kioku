@@ -3,7 +3,7 @@ import { useLingui } from "@lingui/react";
 import { hasCookie } from "cookies-next";
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { ReactElement } from "react";
 import { Award, BarChart2, Cloud, Code, Compass, Users } from "react-feather";
 
@@ -19,7 +19,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 };
 
 export default function Page() {
-	const router = useRouter();
 	const { _ } = useLingui();
 
 	return (
@@ -41,24 +40,12 @@ export default function Page() {
 			</Head>
 			<div className="min-w-screen flex flex-col bg-eggshell">
 				<div className="mx-auto flex flex-col justify-center p-5 text-base leading-7 md:w-2/3 md:p-10 md:text-center">
-					<a
-						className="text-lg font-semibold text-kiokuLightBlue hover:cursor-pointer"
-						onClick={() =>
-							hasCookie("access_token")
-								? router.push("/")
-								: router.push("/login")
-						}
-						onKeyUp={(event) => {
-							if (event.key === "Enter") {
-								event.target.dispatchEvent(
-									new Event("click", { bubbles: true })
-								);
-							}
-						}}
-						tabIndex={0}
+					<Link
+						href={hasCookie("access_token") ? "/" : "/login"}
+						className="text-lg font-semibold text-kiokuLightBlue"
 					>
 						<Trans>Get started</Trans>
-					</a>
+					</Link>
 					<div className="mb-7 mt-1 text-3xl font-semibold leading-7 text-kiokuDarkBlue sm:text-4xl">
 						<Trans>Discover Kioku&apos;s awesome Features</Trans>
 					</div>

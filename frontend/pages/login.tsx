@@ -2,6 +2,7 @@ import { Trans, msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { GetStaticProps } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "react-feather";
@@ -13,8 +14,6 @@ import { InputField } from "@/components/form/InputField";
 import { Logo } from "@/components/graphics/Logo";
 import { Button } from "@/components/input/Button";
 import { loadCatalog } from "@/pages/_app";
-import { postRequest } from "@/util/api";
-import { checkAccessTokenValid } from "@/util/reauth";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -40,9 +39,12 @@ export default function Page() {
 	const passwordMinLength = 3;
 
 	useEffect(() => {
-		if (checkAccessTokenValid()) {
-			router.push("/");
-		}
+		(async () => {
+			const response = await fetch("/api/reauth");
+			if (response.status === 200) {
+				router.replace("/");
+			}
+		})();
 	}, []);
 
 	return (
@@ -66,14 +68,13 @@ export default function Page() {
 				<div className="h-full w-full bg-gradient-to-bl from-[#FF83FA]/20 to-50%">
 					<div className="flex h-full w-full items-center justify-center bg-gradient-to-tr from-[#83DAFF]/20 p-3 sm:p-5">
 						<div className="flex w-80 flex-col items-center space-y-3 rounded-md bg-white p-5 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)] md:px-7">
-							<Logo
-								text={false}
-								logoSize="sm"
-								className="p-3"
-								onClick={() => {
-									router.push("/home");
-								}}
-							/>
+							<Link href="/home">
+								<Logo
+									text={false}
+									logoSize="sm"
+									className="p-3"
+								/>
+							</Link>
 							<form
 								className="w-full space-y-3"
 								onSubmit={(event) => {
@@ -255,13 +256,16 @@ export default function Page() {
 		if (!form.current?.checkValidity()) {
 			return;
 		}
-		const response = await postRequest(
-			`/api/login`,
-			JSON.stringify({
+		const response = await fetch(`/api/login`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
 				userEmail: emailInput.current?.value,
 				userPassword: passwordInput.current?.value,
-			})
-		);
+			}),
+		});
 		if (response.ok) {
 			toast.info(<Trans>Logged in!</Trans>, { toastId: "accountToast" });
 			router.push("/");
@@ -279,14 +283,17 @@ export default function Page() {
 		) {
 			return;
 		}
-		const response = await postRequest(
-			`/api/register`,
-			JSON.stringify({
+		const response = await fetch(`/api/register`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
 				userEmail: emailInput.current?.value,
 				userName: nameInput.current?.value,
 				userPassword: passwordInput.current?.value,
-			})
-		);
+			}),
+		});
 		if (response.ok) {
 			toast.info(<Trans>Account created!</Trans>, {
 				toastId: "accountToast",

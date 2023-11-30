@@ -1,16 +1,15 @@
 import { Trans } from "@lingui/macro";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
-import { Flashcard } from "../../../components/flashcard/Flashcard";
-import KiokuAward from "../../../components/graphics/KiokuAward";
-import { Button } from "../../../components/input/Button";
-import { GroupRole } from "../../../types/GroupRole";
-import { postRequest } from "../../../util/api";
-import { useDeck, useDueCards, useGroup, usePullCard } from "../../../util/swr";
+import { Flashcard } from "@/components/flashcard/Flashcard";
+import KiokuAward from "@/components/graphics/KiokuAward";
+import { Button } from "@/components/input/Button";
+import { GroupRole } from "@/types/GroupRole";
+import { postRequest } from "@/util/api";
+import { useDeck, useDueCards, useGroup, usePullCard } from "@/util/swr";
 
 export default function Page() {
 	const router = useRouter();

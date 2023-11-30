@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { Tooltip } from "react-tooltip";
 
-import { Text } from "../Text";
-import { Icon, IconName } from "../graphics/Icon";
+import { Text } from "@/components/Text";
+import { Icon, IconName } from "@/components/graphics/Icon";
 
 interface InputFieldProps {
 	/**

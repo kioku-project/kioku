@@ -1,8 +1,8 @@
 import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 
-import { Section } from "../../layout/Section";
-import { StatisticOverview } from "../../statistics/StatisticOverview";
+import { Section } from "@/components/layout/Section";
+import { StatisticOverview } from "@/components/statistics/StatisticOverview";
 
 interface StatisticsTabProps {
 	/**

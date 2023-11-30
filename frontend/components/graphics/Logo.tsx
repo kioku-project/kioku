@@ -1,10 +1,9 @@
 import { Inter } from "next/font/google";
 import Image from "next/image";
-import React from "react";
 
-import kiokuLogo from "../../public/kioku-logo.svg";
-import { Size } from "../../types/Size";
-import { Text } from "../Text";
+import { Text } from "@/components/Text";
+import kiokuLogo from "@/public/kioku-logo.svg";
+import { Size } from "@/types/Size";
 
 const inter = Inter({
 	weight: ["200", "400"],

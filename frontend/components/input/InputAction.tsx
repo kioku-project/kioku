@@ -1,8 +1,8 @@
 import { ChangeEventHandler } from "react";
 
-import { InputField } from "../form/InputField";
-import { Action } from "./Action";
-import { Button } from "./Button";
+import { InputField } from "@/components/form/InputField";
+import { Action } from "@/components/input/Action";
+import { Button } from "@/components/input/Button";
 
 interface InputActionProps {
 	/**

@@ -1,6 +1,6 @@
-import { Size } from "../../types/Size";
-import { Text } from "../Text";
-import { Icon, IconName } from "./Icon";
+import { Text } from "@/components/Text";
+import { Icon, IconName } from "@/components/graphics/Icon";
+import { Size } from "@/types/Size";
 
 export type IconLabelType = {
 	icon?: IconName;

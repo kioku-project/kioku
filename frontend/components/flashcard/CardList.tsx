@@ -1,9 +1,8 @@
+import { Card } from "@/components/flashcard/Card";
+import { Card as CardType } from "@/types/Card";
 import { Deck as DeckType } from "@/types/Deck";
 import { GroupRole } from "@/types/GroupRole";
-
-import { Card as CardType } from "../../types/Card";
-import { useCards } from "../../util/swr";
-import { Card } from "./Card";
+import { useCards } from "@/util/swr";
 
 interface CardListProps {
 	/**

@@ -5,9 +5,9 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ArrowRight, LogOut } from "react-feather";
 
-import { authedFetch } from "../../util/reauth";
-import { Logo } from "../graphics/Logo";
-import { Button } from "../input/Button";
+import { Logo } from "@/components/graphics/Logo";
+import { Button } from "@/components/input/Button";
+import { authedFetch } from "@/util/reauth";
 
 interface NavbarProps {
 	/**

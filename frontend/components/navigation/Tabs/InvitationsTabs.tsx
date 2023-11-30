@@ -1,5 +1,5 @@
-import { Invitation } from "../../../types/Invitation";
-import DeckList from "../../deck/DeckList";
+import DeckList from "@/components/deck/DeckList";
+import { Invitation } from "@/types/Invitation";
 
 interface InvitationsTabProps {
 	/**

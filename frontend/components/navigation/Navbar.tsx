@@ -1,6 +1,5 @@
 import { Trans } from "@lingui/macro";
 import { hasCookie } from "cookies-next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ArrowRight, LogOut } from "react-feather";
@@ -36,9 +35,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 		<nav
 			className={`flex items-center justify-between p-5 md:p-10 ${className}`}
 		>
-			<Link href={loggedIn ? "/" : "/home"}>
-				<Logo />
-			</Link>
+			<Logo href={loggedIn ? "/" : "/home"} />
 			{loggedIn == true && (
 				<LogOut
 					className="text-kiokuDarkBlue hover:cursor-pointer"

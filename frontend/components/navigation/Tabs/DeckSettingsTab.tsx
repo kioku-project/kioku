@@ -43,7 +43,7 @@ export const DeckSettingsTab = ({
 	const [deckState, setDeckState] = useState<Deck>(deck);
 	const [isConfirmDeletion, setConfirmDeletion] = useState(false);
 
-	const isAdmin = GroupRole[group.groupRole!] >= GroupRole.ADMIN;
+	const isAdmin = GroupRole[group.groupRole] >= GroupRole.ADMIN;
 
 	const { _ } = useLingui();
 

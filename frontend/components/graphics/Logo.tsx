@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import Image from "next/image";
+import Link, { LinkProps } from "next/link";
 import React from "react";
 
 import kiokuLogo from "../../public/kioku-logo.svg";
@@ -28,10 +29,6 @@ interface LogoProps {
 	 * Additional classes
 	 */
 	className?: string;
-	/**
-	 * alternative click handler
-	 */
-	onClick?: () => void;
 }
 
 const getSize = {
@@ -48,18 +45,12 @@ export const Logo = ({
 	textSize = "lg",
 	logoSize = "md",
 	className = "",
-	onClick,
-}: LogoProps) => {
+	...props
+}: LogoProps & LinkProps) => {
 	return (
-		<div
+		<Link
 			className={`flex flex-row items-center hover:cursor-pointer ${className}`}
-			onClick={onClick}
-			onKeyUp={(event) => {
-				if (event.key === "Enter") {
-					onClick?.();
-				}
-			}}
-			tabIndex={0}
+			{...props}
 		>
 			<Image
 				src={kiokuLogo}
@@ -74,6 +65,6 @@ export const Logo = ({
 					Kioku
 				</Text>
 			)}
-		</div>
+		</Link>
 	);
 };

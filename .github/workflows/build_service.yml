@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Print Environment
-        run: echo ${{ github.env }}
+        run: echo ${{ env }}
 
       - name: Checkout code
         uses: actions/checkout@v3

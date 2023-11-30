@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { IconLabel } from "./IconLabel";
+import { IconLabel } from "@/components/graphics/IconLabel";
 
 const meta: Meta<typeof IconLabel> = {
 	title: "Graphics/IconLabel",

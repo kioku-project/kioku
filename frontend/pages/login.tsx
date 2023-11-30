@@ -8,11 +8,11 @@ import { ArrowRight, Check } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Text } from "../components/Text";
-import { InputField } from "../components/form/InputField";
-import { Logo } from "../components/graphics/Logo";
-import { Button } from "../components/input/Button";
-import { loadCatalog } from "./_app";
+import { Text } from "@/components/Text";
+import { InputField } from "@/components/form/InputField";
+import { Logo } from "@/components/graphics/Logo";
+import { Button } from "@/components/input/Button";
+import { loadCatalog } from "@/pages/_app";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);

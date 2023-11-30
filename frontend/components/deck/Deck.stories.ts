@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { Deck } from "./Deck";
+import { Deck } from "@/components/deck/Deck";
 
 const meta: Meta<typeof Deck> = {
 	title: "Components/Deck",

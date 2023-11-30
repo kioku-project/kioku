@@ -1,9 +1,9 @@
 import Link, { LinkProps } from "next/link";
 import React, { ButtonHTMLAttributes, ReactNode } from "react";
 
-import { Size } from "../../types/Size";
-import { Text } from "../Text";
-import { Icon, IconName } from "../graphics/Icon";
+import { Text } from "@/components/Text";
+import { Icon, IconName } from "@/components/graphics/Icon";
+import { Size } from "@/types/Size";
 
 export interface ButtonProps {
 	/**

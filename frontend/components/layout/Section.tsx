@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-import { Text } from "../Text";
+import { Text } from "@/components/Text";
 
 interface SectionProps {
 	/**

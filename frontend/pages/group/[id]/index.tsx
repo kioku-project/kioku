@@ -5,14 +5,14 @@ import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 
-import { FetchHeader } from "../../../components/layout/Header";
-import { DecksTab } from "../../../components/navigation/Tabs/DecksTab";
-import { GroupSettingsTab } from "../../../components/navigation/Tabs/GroupSettingsTab";
-import { MembersTab } from "../../../components/navigation/Tabs/MembersTab";
-import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
-import { TabBar } from "../../../components/navigation/Tabs/TabBar";
-import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { useGroup } from "../../../util/swr";
+import { FetchHeader } from "@/components/layout/Header";
+import { DecksTab } from "@/components/navigation/Tabs/DecksTab";
+import { GroupSettingsTab } from "@/components/navigation/Tabs/GroupSettingsTab";
+import { MembersTab } from "@/components/navigation/Tabs/MembersTab";
+import { StatisticsTab } from "@/components/navigation/Tabs/StatisticsTab";
+import { TabBar } from "@/components/navigation/Tabs/TabBar";
+import { TabHeader } from "@/components/navigation/Tabs/TabHeader";
+import { useGroup } from "@/util/swr";
 
 export default function Page() {
 	const router = useRouter();

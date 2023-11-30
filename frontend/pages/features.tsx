@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ReactElement } from "react";
 import { Award, BarChart2, Cloud, Code, Compass, Users } from "react-feather";
 
-import { loadCatalog } from "./_app";
+import { loadCatalog } from "@/pages/_app";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);

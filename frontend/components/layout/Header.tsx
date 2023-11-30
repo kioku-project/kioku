@@ -78,7 +78,7 @@ export const Header = ({
 		>
 			<div className="flex flex-col font-black">
 				<div className="flex flex-row items-center space-x-3">
-					<Text textStyle="primary" textSize="xl">
+					<Text id="headerTitleId" textStyle="primary" textSize="xl">
 						{deck?.deckName}
 						{!deck && group && group.groupName}
 						{user && <Trans>Welcome {user.userName}</Trans>}

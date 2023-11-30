@@ -39,7 +39,7 @@ export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 				GroupRole[group.groupRole] >= GroupRole.WRITE && (
 					<div className="flex w-full items-center justify-between rounded-md bg-neutral-100 px-4 py-3">
 						<InputField
-							id={`deckNameInput${group.groupID}`}
+							id={`deckNameInputFieldId`}
 							placeholder={_(msg`Create new Deck`)}
 							inputFieldSize="xs"
 							className="w-full bg-transparent font-medium text-kiokuDarkBlue outline-none"
@@ -53,6 +53,7 @@ export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 							ref={deckNameInput}
 						/>
 						<PlusSquare
+							id="createDeckButtonId"
 							className="text-kiokuDarkBlue transition hover:scale-110 hover:cursor-pointer"
 							onClick={createDeck}
 						/>

@@ -27,7 +27,7 @@ func New(s store.UserStore, cS pbCollaboration.CollaborationService) *User {
 
 func (e *User) Register(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Success) error {
 	logger.Infof("Received User.Register request: email: %v", req.UserEmail)
-	if _, err := e.store.FindUserByEmail(req.UserEmail); err == nil {
+	if _, err := e.store.FindUserByEmail(ctx, req.UserEmail); err == nil {
 		return helper.NewMicroUserAlreadyExistsErr(helper.UserServiceID)
 	} else if !errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
 		return err
@@ -51,7 +51,7 @@ func (e *User) Register(ctx context.Context, req *pbCommon.User, rsp *pbCommon.S
 		return helper.NewMicroHashingFailedErr(helper.UserServiceID)
 	}
 	newUser.Password = string(hash)
-	err = e.store.RegisterNewUser(&newUser)
+	err = e.store.RegisterNewUser(ctx, &newUser)
 	if err != nil {
 		return err
 	}
@@ -72,8 +72,8 @@ func (e *User) Register(ctx context.Context, req *pbCommon.User, rsp *pbCommon.S
 	return nil
 }
 
-func (e *User) VerifyUserExists(_ context.Context, req *pbCommon.User, rsp *pbCommon.Success) error {
-	user, err := e.store.FindUserByEmail(req.UserEmail)
+func (e *User) VerifyUserExists(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Success) error {
+	user, err := e.store.FindUserByEmail(ctx, req.UserEmail)
 	if err != nil {
 		return err
 	}
@@ -85,7 +85,7 @@ func (e *User) VerifyUserExists(_ context.Context, req *pbCommon.User, rsp *pbCo
 
 func (e *User) DeleteUser(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Success) error {
 	logger.Infof("Received User.Delete request: %v", req)
-	user, err := e.store.FindUserByID(req.UserID)
+	user, err := e.store.FindUserByID(ctx, req.UserID)
 	if err != nil {
 		logger.Errorf("Could not find user with userid: %s: %s", user.ID, err)
 		return err
@@ -106,7 +106,7 @@ func (e *User) DeleteUser(ctx context.Context, req *pbCommon.User, rsp *pbCommon
 			return err
 		}
 	}
-	err = e.store.DeleteUser(user)
+	err = e.store.DeleteUser(ctx, user)
 	if err != nil {
 		logger.Errorf("An error occurred while trying to delete user with ID '%s': %s", user.ID, err)
 		return err
@@ -116,9 +116,9 @@ func (e *User) DeleteUser(ctx context.Context, req *pbCommon.User, rsp *pbCommon
 	return nil
 }
 
-func (e *User) Login(_ context.Context, req *pbCommon.User, rsp *pbCommon.User) error {
+func (e *User) Login(ctx context.Context, req *pbCommon.User, rsp *pbCommon.User) error {
 	logger.Infof("Received User.Login request: email: %v", req.UserEmail)
-	user, err := e.store.FindUserByEmail(req.UserEmail)
+	user, err := e.store.FindUserByEmail(ctx, req.UserEmail)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
 			return helper.NewMicroNoExistingUserWithEmailErr(helper.UserServiceID)
@@ -135,9 +135,9 @@ func (e *User) Login(_ context.Context, req *pbCommon.User, rsp *pbCommon.User) 
 	return nil
 }
 
-func (e *User) GetUserIDFromEmail(_ context.Context, req *pbCommon.User, rsp *pbCommon.User) error {
+func (e *User) GetUserIDFromEmail(ctx context.Context, req *pbCommon.User, rsp *pbCommon.User) error {
 	logger.Infof("Received User.GetUserIDFromEmail request: %v", req)
-	user, err := e.store.FindUserByEmail(req.UserEmail)
+	user, err := e.store.FindUserByEmail(ctx, req.UserEmail)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
 			return helper.NewMicroNoExistingUserWithEmailErr(helper.UserServiceID)
@@ -149,14 +149,14 @@ func (e *User) GetUserIDFromEmail(_ context.Context, req *pbCommon.User, rsp *pb
 	return nil
 }
 func (e *User) GetUserInformation(
-	_ context.Context,
+	ctx context.Context,
 	req *pbCommon.Users,
 	rsp *pbCommon.Users,
 ) error {
 	logger.Infof("Received User.GetUserInformation request: %v", req)
 	rsp.Users = make([]*pbCommon.User, len(req.Users))
 	for i, user := range req.Users {
-		user, err := e.store.FindUserByID(user.UserID)
+		user, err := e.store.FindUserByID(ctx, user.UserID)
 		if err != nil {
 			return err
 		}
@@ -171,12 +171,12 @@ func (e *User) GetUserInformation(
 }
 
 func (e *User) GetUserProfileInformation(
-	_ context.Context,
+	ctx context.Context,
 	req *pbCommon.User,
 	rsp *pbCommon.User,
 ) error {
 	logger.Infof("Received User.GetUserProfileInformation request: %v", req)
-	user, err := e.store.FindUserByID(req.UserID)
+	user, err := e.store.FindUserByID(ctx, req.UserID)
 	if err != nil {
 		return err
 	}
@@ -186,12 +186,12 @@ func (e *User) GetUserProfileInformation(
 }
 
 func (e *User) ModifyUserProfileInformation(
-	_ context.Context,
+	ctx context.Context,
 	req *pbCommon.User,
 	rsp *pbCommon.Success,
 ) error {
 	logger.Infof("Received User.ModifyUserProfileInformation request: %v", req)
-	user, err := e.store.FindUserByID(req.UserID)
+	user, err := e.store.FindUserByID(ctx, req.UserID)
 	if err != nil {
 		return err
 	}
@@ -216,7 +216,7 @@ func (e *User) ModifyUserProfileInformation(
 		}
 		user.Password = string(hash)
 	}
-	if err = e.store.ModifyUser(user); err != nil {
+	if err = e.store.ModifyUser(ctx, user); err != nil {
 		return err
 	}
 	logger.Infof("Modified profile information for user with id %s", req.UserID)

@@ -13,8 +13,6 @@ import { Text } from "../components/Text";
 import { InputField } from "../components/form/InputField";
 import { Logo } from "../components/graphics/Logo";
 import { Button } from "../components/input/Button";
-import { postRequest } from "../util/api";
-import { checkAccessTokenValid } from "../util/reauth";
 import { loadCatalog } from "./_app";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
@@ -41,9 +39,12 @@ export default function Page() {
 	const passwordMinLength = 3;
 
 	useEffect(() => {
-		if (checkAccessTokenValid()) {
-			router.push("/");
-		}
+		(async () => {
+			const response = await fetch("/api/reauth");
+			if (response.status === 200) {
+				router.replace("/");
+			}
+		})();
 	}, []);
 
 	return (
@@ -255,13 +256,16 @@ export default function Page() {
 		if (!form.current?.checkValidity()) {
 			return;
 		}
-		const response = await postRequest(
-			`/api/login`,
-			JSON.stringify({
+		const response = await fetch(`/api/login`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
 				userEmail: emailInput.current?.value,
 				userPassword: passwordInput.current?.value,
-			})
-		);
+			}),
+		});
 		if (response.ok) {
 			toast.info(<Trans>Logged in!</Trans>, { toastId: "accountToast" });
 			router.push("/");
@@ -279,14 +283,17 @@ export default function Page() {
 		) {
 			return;
 		}
-		const response = await postRequest(
-			`/api/register`,
-			JSON.stringify({
+		const response = await fetch(`/api/register`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
 				userEmail: emailInput.current?.value,
 				userName: nameInput.current?.value,
 				userPassword: passwordInput.current?.value,
-			})
-		);
+			}),
+		});
 		if (response.ok) {
 			toast.info(<Trans>Account created!</Trans>, {
 				toastId: "accountToast",

@@ -28,7 +28,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 		} else {
 			setLoggedIn(hasCookie("access_token"));
 		}
-	});
+	}, [router.pathname]);
 	if (loggedIn == undefined) {
 		return <></>;
 	}

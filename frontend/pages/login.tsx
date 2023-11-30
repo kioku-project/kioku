@@ -45,7 +45,7 @@ export default function Page() {
 				router.replace("/");
 			}
 		})();
-	}, []);
+	}, [router]);
 
 	return (
 		<>

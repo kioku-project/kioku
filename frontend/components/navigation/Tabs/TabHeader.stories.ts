@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { TabHeader } from "./TabHeader";
+import { TabHeader } from "@/components/navigation/Tabs/TabHeader";
 
 const meta: Meta<typeof TabHeader> = {
 	title: "Navigation/Tabs/TabHeader",

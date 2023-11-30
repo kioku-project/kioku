@@ -8,13 +8,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { loadCatalog } from "@/pages/_app";
 
-import { FetchHeader } from "../../../components/layout/Header";
-import { CardsTab } from "../../../components/navigation/Tabs/CardsTab";
-import { DeckSettingsTab } from "../../../components/navigation/Tabs/DeckSettingsTab";
-import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
-import { TabBar } from "../../../components/navigation/Tabs/TabBar";
-import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { useDeck, useGroup } from "../../../util/swr";
+import { FetchHeader } from "@/components/layout/Header";
+import { CardsTab } from "@/components/navigation/Tabs/CardsTab";
+import { DeckSettingsTab } from "@/components/navigation/Tabs/DeckSettingsTab";
+import { StatisticsTab } from "@/components/navigation/Tabs/StatisticsTab";
+import { TabBar } from "@/components/navigation/Tabs/TabBar";
+import { TabHeader } from "@/components/navigation/Tabs/TabHeader";
+import { useDeck, useGroup } from "@/util/swr";
 
 export const getServerSideProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);

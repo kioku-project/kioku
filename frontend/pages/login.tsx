@@ -2,17 +2,18 @@ import { Trans, msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Text } from "../components/Text";
-import { InputField } from "../components/form/InputField";
-import { Logo } from "../components/graphics/Logo";
-import { Button } from "../components/input/Button";
-import { loadCatalog } from "./_app";
+import { Text } from "@/components/Text";
+import { InputField } from "@/components/form/InputField";
+import { Logo } from "@/components/graphics/Logo";
+import { Button } from "@/components/input/Button";
+import { loadCatalog } from "@/pages/_app";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -65,14 +66,13 @@ export default function Page() {
 				<div className="h-full w-full bg-gradient-to-bl from-[#FF83FA]/20 to-50%">
 					<div className="flex h-full w-full items-center justify-center bg-gradient-to-tr from-[#83DAFF]/20 p-3 sm:p-5">
 						<div className="flex w-80 flex-col items-center space-y-3 rounded-md bg-white p-5 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)] md:px-7">
-							<Logo
-								text={false}
-								logoSize="sm"
-								className="p-3"
-								onClick={() => {
-									router.push("/home");
-								}}
-							/>
+							<Link href="/home">
+								<Logo
+									text={false}
+									logoSize="sm"
+									className="p-3"
+								/>
+							</Link>
 							<form
 								className="w-full space-y-3"
 								onSubmit={(event) => {

@@ -5,11 +5,11 @@ import { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
-import { User } from "../../../types/User";
-import { deleteRequest, putRequests } from "../../../util/api";
-import { DangerAction } from "../../input/DangerAction";
-import { InputAction } from "../../input/InputAction";
-import { Section } from "../../layout/Section";
+import { DangerAction } from "@/components/input/DangerAction";
+import { InputAction } from "@/components/input/InputAction";
+import { Section } from "@/components/layout/Section";
+import { User } from "@/types/User";
+import { deleteRequest, putRequests } from "@/util/api";
 
 interface UserSettingsTabProps {
 	/**

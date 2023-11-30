@@ -1,7 +1,7 @@
-import { Group as GroupType } from "../../types/Group";
-import { User } from "../../types/User";
-import { useInvitedUser, useMembers, useRequestedUser } from "../../util/swr";
-import Member from "./Member";
+import Member from "@/components/group/Member";
+import { Group as GroupType } from "@/types/Group";
+import { User } from "@/types/User";
+import { useInvitedUser, useMembers, useRequestedUser } from "@/util/swr";
 
 interface MemberListProps {
 	/**

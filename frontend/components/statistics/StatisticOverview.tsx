@@ -1,8 +1,7 @@
 import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
-import React from "react";
 
-import { Statistic } from "./Statistic";
+import { Statistic } from "@/components/statistics/Statistic";
 
 interface StatisticOverviewProps {
 	/**

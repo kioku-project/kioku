@@ -4,11 +4,10 @@ import { hasCookie } from "cookies-next";
 import { GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { Award, BarChart2, Cloud, Code, Compass, Users } from "react-feather";
 
-import { loadCatalog } from "./_app";
+import { loadCatalog } from "@/pages/_app";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -20,7 +19,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 };
 
 export default function Page() {
-	const router = useRouter();
 	const { _ } = useLingui();
 
 	return (
@@ -46,21 +44,8 @@ export default function Page() {
 			<div className="min-w-screen flex flex-col bg-eggshell">
 				<div className="mx-auto flex flex-col justify-center p-5 text-base leading-7 md:w-2/3 md:p-10 md:text-center">
 					<Link
-						href="/login"
-						className="text-lg font-semibold text-kiokuLightBlue hover:cursor-pointer"
-						onClick={() =>
-							hasCookie("access_token")
-								? router.push("/")
-								: router.push("/login")
-						}
-						onKeyUp={(event) => {
-							if (event.key === "Enter") {
-								event.target.dispatchEvent(
-									new Event("click", { bubbles: true })
-								);
-							}
-						}}
-						tabIndex={0}
+						href={hasCookie("access_token") ? "/" : "/login"}
+						className="text-lg font-semibold text-kiokuLightBlue"
 					>
 						<Trans>Get started</Trans>
 					</Link>

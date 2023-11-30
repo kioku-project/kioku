@@ -8,14 +8,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { loadCatalog } from "@/pages/_app";
 
-import { FetchHeader } from "../../../components/layout/Header";
-import { DecksTab } from "../../../components/navigation/Tabs/DecksTab";
-import { GroupSettingsTab } from "../../../components/navigation/Tabs/GroupSettingsTab";
-import { MembersTab } from "../../../components/navigation/Tabs/MembersTab";
-import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
-import { TabBar } from "../../../components/navigation/Tabs/TabBar";
-import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { useGroup } from "../../../util/swr";
+import { FetchHeader } from "@/components/layout/Header";
+import { DecksTab } from "@/components/navigation/Tabs/DecksTab";
+import { GroupSettingsTab } from "@/components/navigation/Tabs/GroupSettingsTab";
+import { MembersTab } from "@/components/navigation/Tabs/MembersTab";
+import { StatisticsTab } from "@/components/navigation/Tabs/StatisticsTab";
+import { TabBar } from "@/components/navigation/Tabs/TabBar";
+import { TabHeader } from "@/components/navigation/Tabs/TabHeader";
+import { useGroup } from "@/util/swr";
 
 export const getServerSideProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);

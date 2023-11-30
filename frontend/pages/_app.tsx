@@ -7,8 +7,8 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 
-import { Navbar } from "../components/navigation/Navbar";
-import "../styles/globals.css";
+import { Navbar } from "@/components/navigation/Navbar";
+import "@/styles/globals.css";
 
 export async function loadCatalog(locale: string) {
 	const catalog = await import(

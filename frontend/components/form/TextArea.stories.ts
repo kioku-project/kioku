@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { TextArea } from "./TextArea";
+import { TextArea } from "@/components/form/TextArea";
 
 const meta: Meta<typeof TextArea> = {
 	title: "Form/TextArea",
@@ -20,4 +20,3 @@ export const Default: Story = {
 		value: "Test",
 	},
 };
-

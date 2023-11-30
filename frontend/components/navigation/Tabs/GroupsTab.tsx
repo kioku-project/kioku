@@ -1,15 +1,15 @@
 import { msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { useRef } from "react";
 import { PlusSquare } from "react-feather";
 import { toast } from "react-toastify";
 import { mutate } from "swr";
 
-import { Group as GroupType } from "../../../types/Group";
-import { postRequest } from "../../../util/api";
-import DeckList from "../../deck/DeckList";
-import { InputField } from "../../form/InputField";
+import DeckList from "@/components/deck/DeckList";
+import { InputField } from "@/components/form/InputField";
+import { Group as GroupType } from "@/types/Group";
+import { postRequest } from "@/util/api";
 
 interface GroupsTabProps {
 	/**
@@ -26,7 +26,6 @@ interface GroupsTabProps {
  * UI component for the GroupsTab
  */
 export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
-	const router = useRouter();
 	const { _ } = useLingui();
 
 	const groupNameInput = useRef<HTMLInputElement>(null);
@@ -58,27 +57,15 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 					?.filter((group: GroupType) => !group.isDefault)
 					.map((group: GroupType) => {
 						return (
-							<div
+							<Link
 								key={group.groupID}
-								className="hover:cursor-pointer"
-								onClick={() =>
-									router.push(`/group/${group.groupID}`)
-								}
-								onKeyUp={(event) => {
-									if (event.key === "Enter") {
-										event.target.dispatchEvent(
-											new Event("click", {
-												bubbles: true,
-											})
-										);
-									}
-								}}
+								href={`/group/${group.groupID}`}
 							>
 								<DeckList
 									header={group.groupName}
 									key={group.groupID}
 								/>
-							</div>
+							</Link>
 						);
 					})}
 				<DeckList />

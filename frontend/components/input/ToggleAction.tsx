@@ -1,8 +1,11 @@
 import { MouseEventHandler } from "react";
 
-import { Text } from "../Text";
-import { Action } from "./Action";
-import { ToggleButtonGroup, ToggleButtonGroupProps } from "./ToggleButtonGroup";
+import { Text } from "@/components/Text";
+import { Action } from "@/components/input/Action";
+import {
+	ToggleButtonGroup,
+	ToggleButtonGroupProps,
+} from "@/components/input/ToggleButtonGroup";
 
 interface ToggleActionProps {
 	/**

@@ -1,6 +1,6 @@
-import { Deck as DeckType } from "../../types/Deck";
-import { Section } from "../layout/Section";
-import { FetchDeck } from "./Deck";
+import { FetchDeck } from "@/components/deck/Deck";
+import { Section } from "@/components/layout/Section";
+import { Deck as DeckType } from "@/types/Deck";
 
 interface DeckListProps {
 	/**

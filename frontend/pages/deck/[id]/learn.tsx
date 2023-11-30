@@ -2,18 +2,17 @@ import { Trans } from "@lingui/macro";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
 import { loadCatalog } from "@/pages/_app";
 
-import { Flashcard } from "../../../components/flashcard/Flashcard";
-import KiokuAward from "../../../components/graphics/KiokuAward";
-import { Button } from "../../../components/input/Button";
-import { GroupRole } from "../../../types/GroupRole";
-import { postRequest } from "../../../util/api";
-import { useDeck, useDueCards, useGroup, usePullCard } from "../../../util/swr";
+import { Flashcard } from "@/components/flashcard/Flashcard";
+import KiokuAward from "@/components/graphics/KiokuAward";
+import { Button } from "@/components/input/Button";
+import { GroupRole } from "@/types/GroupRole";
+import { postRequest } from "@/util/api";
+import { useDeck, useDueCards, useGroup, usePullCard } from "@/util/swr";
 
 export const getServerSideProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -78,9 +77,9 @@ export default function Page() {
 						</div>
 						<Button
 							id="goBackButtonId"
+							href={`/deck/${deckID}`}
 							buttonStyle="primary"
 							buttonSize="sm"
-							onClick={() => router.push(`/deck/${deckID}`)}
 						>
 							<Trans>Back to Deck!</Trans>
 						</Button>

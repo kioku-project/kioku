@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2023-11-29 09:41+0100\n"
+"POT-Creation-Date: 2023-11-29 23:51+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {# card left} other {# cards left}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 
-#: pages/login.tsx:295
+#: pages/login.tsx:302
 msgid "Account already exists!"
 msgstr "Account already exists!"
 
-#: pages/login.tsx:289
+#: pages/login.tsx:296
 msgid "Account created!"
 msgstr "Account created!"
 
@@ -49,7 +49,7 @@ msgstr "Achievements and leaderboards make learning more engaging and motivating
 msgid "Active Decks"
 msgstr "Active Decks"
 
-#: pages/login.tsx:218
+#: pages/login.tsx:219
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -186,7 +186,7 @@ msgstr "Discover Kioku's awesome Features"
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 msgstr "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 
-#: pages/login.tsx:214
+#: pages/login.tsx:215
 msgid "Don't have an account?"
 msgstr "Don't have an account?"
 
@@ -194,7 +194,7 @@ msgstr "Don't have an account?"
 msgid "Easy"
 msgstr "Easy"
 
-#: pages/login.tsx:85
+#: pages/login.tsx:86
 msgid "Email"
 msgstr "Email"
 
@@ -288,7 +288,7 @@ msgstr "Join Group"
 msgid "Kioku | Features of the Kioku platform"
 msgstr "Kioku | Features of the Kioku platform"
 
-#: pages/login.tsx:51
+#: pages/login.tsx:52
 msgid "Kioku | Login or register for Kioku!"
 msgstr "Kioku | Login or register for Kioku!"
 
@@ -325,7 +325,7 @@ msgstr "Leave Group"
 msgid "Left group!"
 msgstr "Left group!"
 
-#: pages/login.tsx:264
+#: pages/login.tsx:268
 msgid "Logged in!"
 msgstr "Logged in!"
 
@@ -337,7 +337,7 @@ msgstr "Login"
 msgid "Medium"
 msgstr "Medium"
 
-#: pages/login.tsx:165
+#: pages/login.tsx:166
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Minimum {passwordMinLength} characters"
 
@@ -345,16 +345,16 @@ msgstr "Minimum {passwordMinLength} characters"
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Once you delete your user, there is no going back. Please be certain."
 
-#: pages/login.tsx:105
+#: pages/login.tsx:106
 msgid "Password"
 msgstr "Password"
 
-#: pages/login.tsx:122
+#: pages/login.tsx:123
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Password must have at least {passwordMinLength} characters"
 
-#: pages/login.tsx:151
-#: pages/login.tsx:176
+#: pages/login.tsx:152
+#: pages/login.tsx:177
 msgid "Passwords have to match"
 msgstr "Passwords have to match"
 
@@ -370,7 +370,7 @@ msgstr "Please be certain before deleting a group, as there is no way to undo th
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Please be certain when deleting a deck, as there is no way to undo this action."
 
-#: pages/login.tsx:52
+#: pages/login.tsx:53
 msgid "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
 msgstr "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
 
@@ -380,7 +380,7 @@ msgstr "Register today and start using the free flashcard application together w
 msgid "Rename"
 msgstr "Rename"
 
-#: pages/login.tsx:134
+#: pages/login.tsx:135
 msgid "Repeat Password"
 msgstr "Repeat Password"
 
@@ -402,19 +402,19 @@ msgstr "Sent request!"
 msgid "Settings"
 msgstr "Settings"
 
-#: pages/login.tsx:202
+#: pages/login.tsx:203
 msgid "Sign in"
 msgstr "Sign in"
 
-#: pages/login.tsx:241
+#: pages/login.tsx:242
 msgid "Sign in now!"
 msgstr "Sign in now!"
 
-#: pages/login.tsx:204
+#: pages/login.tsx:205
 msgid "Sign up"
 msgstr "Sign up"
 
-#: pages/login.tsx:239
+#: pages/login.tsx:240
 msgid "Sign up now!"
 msgstr "Sign up now!"
 
@@ -453,7 +453,7 @@ msgid "User updated!"
 msgstr "User updated!"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:46
-#: pages/login.tsx:95
+#: pages/login.tsx:96
 msgid "Username"
 msgstr "Username"
 
@@ -473,7 +473,7 @@ msgstr "Welcome {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 
-#: pages/login.tsx:267
+#: pages/login.tsx:271
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 

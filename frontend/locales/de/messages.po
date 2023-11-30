@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {Eine Karte übrig} other {# Karten übrig}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Greife von überall und jederzeit auf Deine Karteikarten zu. Wechsle nahtlos zwischen verschiedenen Plattformen und verpasse nie wieder eine Lerngelegenheit!"
 
-#: pages/login.tsx:295
+#: pages/login.tsx:302
 msgid "Account already exists!"
 msgstr "Account existiert bereits!"
 
-#: pages/login.tsx:289
+#: pages/login.tsx:296
 msgid "Account created!"
 msgstr "Account erstellt!"
 
@@ -49,7 +49,7 @@ msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivier
 msgid "Active Decks"
 msgstr "Aktive Decks"
 
-#: pages/login.tsx:218
+#: pages/login.tsx:219
 msgid "Already have an account?"
 msgstr "Bereits registriert?"
 
@@ -184,9 +184,9 @@ msgstr "Entdecke Kiokus einzigartige Funktionen"
 
 #: pages/features.tsx:31
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
-msgstr "Entdecke die Funktionen unserer kostenlosen Karteikarten-Anwendung. Importiere Stapel aus Anki, erstelle Gruppen, lerne gemeinsam mit Freunden und vergleiche deine Statistiken. Jetzt auf allen Geräten!"
+msgstr "Entdecke die Funktionen unserer kostenlosen Karteikarten Anwendung. Importiere Stapel aus Anki, erstelle Gruppen, lerne gemeinsam mit Freunden und vergleicht Eure Statistiken. Jetzt auf allen Geräten!"
 
-#: pages/login.tsx:214
+#: pages/login.tsx:215
 msgid "Don't have an account?"
 msgstr "Noch kein Account?"
 
@@ -194,7 +194,7 @@ msgstr "Noch kein Account?"
 msgid "Easy"
 msgstr "Einfach"
 
-#: pages/login.tsx:85
+#: pages/login.tsx:86
 msgid "Email"
 msgstr "E-Mail"
 
@@ -288,7 +288,7 @@ msgstr "Gruppe beitreten"
 msgid "Kioku | Features of the Kioku platform"
 msgstr "Kioku | Funktionen der Kioku Plattform!"
 
-#: pages/login.tsx:51
+#: pages/login.tsx:52
 msgid "Kioku | Login or register for Kioku!"
 msgstr "Kioku | Logge Dich ein oder registriere Dich für Kioku"
 
@@ -298,7 +298,7 @@ msgstr "Kioku | Die kostenlose Karteikarten Anwendung, die sich auf die gemeinsa
 
 #: pages/home.tsx:34
 msgid "Kioku is a free flashcard application. You can create or import decks from Anki and edit your flashcards together. Learn your flashcards with our customized spaced repetition algorithm (SRS) and compare your statistics with your friends. Motivate each other and keep learning!"
-msgstr "Kioku ist eine kostenlose Karteikarten-Anwendung. Du kannst Decks erstellen oder aus Anki importieren und Deine Karteikarten in Gruppen gemeinsam bearbeiten. Lerne Deine Karteikarten mit unserem angepassten Spaced Repetition Algorithmus (SRS) und vergleiche Deine Statistiken mit Deinen Freunden. Motiviert euch gegenseitig und ermutigt euch zum Weiterlernen!"
+msgstr "Kioku ist eine kostenlose Karteikarten Anwendung. Du kannst Decks erstellen oder aus Anki importieren und Deine Karteikarten in Gruppen gemeinsam bearbeiten. Lerne Deine Karteikarten mit unserem angepassten Spaced Repetition Algorithmus (SRS) und vergleiche Deine Statistiken mit Deinen Freunden. Motiviert euch gegenseitig und ermutigt euch zum Weiterlernen!"
 
 #: pages/features.tsx:103
 msgid "Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
@@ -325,7 +325,7 @@ msgstr "Gruppe verlassen"
 msgid "Left group!"
 msgstr "Gruppe verlassen!"
 
-#: pages/login.tsx:264
+#: pages/login.tsx:268
 msgid "Logged in!"
 msgstr "Eingeloggt!"
 
@@ -337,7 +337,7 @@ msgstr "Einloggen"
 msgid "Medium"
 msgstr "Mittel"
 
-#: pages/login.tsx:165
+#: pages/login.tsx:166
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Mindestens {passwordMinLength} Zeichen"
 
@@ -345,16 +345,16 @@ msgstr "Mindestens {passwordMinLength} Zeichen"
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Nachdem Du Deinen Benutzer gelöscht hast, gibt es kein Zurück mehr."
 
-#: pages/login.tsx:105
+#: pages/login.tsx:106
 msgid "Password"
 msgstr "Passwort"
 
-#: pages/login.tsx:122
+#: pages/login.tsx:123
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Passwort muss mindestens {passwordMinLength} Zeichen lang sein"
 
-#: pages/login.tsx:151
-#: pages/login.tsx:176
+#: pages/login.tsx:152
+#: pages/login.tsx:177
 msgid "Passwords have to match"
 msgstr "Passwörter müssen übereinstimmen"
 
@@ -370,9 +370,9 @@ msgstr "Nachdem Du die Gruppe gelöscht hast, gibt es kein Zurück mehr."
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Nachdem Du den Stapel gelöscht hast, gibt es kein Zurück mehr."
 
-#: pages/login.tsx:52
+#: pages/login.tsx:53
 msgid "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
-msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten Anwendung zusammen mit Deinen Freunden zu nutzen."
+msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten Anwendung zusammen mit Deinen Freunden zu nutzen. Erstelle einfach neue Stapel oder importiere bestehende Stapel aus Anki und arbeite in Gruppen zusammen."
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:58
 #: components/navigation/Tabs/GroupSettingsTab.tsx:55
@@ -380,7 +380,7 @@ msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten An
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: pages/login.tsx:134
+#: pages/login.tsx:135
 msgid "Repeat Password"
 msgstr "Passwort wiederholen"
 
@@ -402,25 +402,25 @@ msgstr "Anfrage gesendet!"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: pages/login.tsx:202
+#: pages/login.tsx:203
 msgid "Sign in"
 msgstr "Einloggen"
 
-#: pages/login.tsx:241
+#: pages/login.tsx:242
 msgid "Sign in now!"
 msgstr "Jetzt anmelden!"
 
-#: pages/login.tsx:204
+#: pages/login.tsx:205
 msgid "Sign up"
 msgstr "Registrieren"
 
-#: pages/login.tsx:239
+#: pages/login.tsx:240
 msgid "Sign up now!"
 msgstr "Jetzt registrieren!"
 
 #: pages/home.tsx:55
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
-msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten-Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
+msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
 
 #: pages/deck/[id]/index.tsx:48
 #: pages/group/[id]/index.tsx:53
@@ -453,7 +453,7 @@ msgid "User updated!"
 msgstr "Benutzer aktualisiert!"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:46
-#: pages/login.tsx:95
+#: pages/login.tsx:96
 msgid "Username"
 msgstr "Benutzername"
 
@@ -471,9 +471,9 @@ msgstr "Willkommen, {0}"
 
 #: pages/features.tsx:71
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
-msgstr "Willkommen bei Kioku - der cloudbasierten Karteikarten-Anwendung, die sich auf die gemeinsame Erstellung von Lerninhalten konzentriert. Unsere innovative Plattform ermöglicht es Dir, Dein Wissen auf Karteikarten zu organisieren und diese mit anderen Nutzern zu teilen, um Dein Wissen auf die nächste Stufe zu heben. Melde Dich noch heute bei Kioku an und erlebe die Zukunft des Lernens."
+msgstr "Willkommen bei Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die gemeinsame Erstellung von Lerninhalten konzentriert. Unsere innovative Plattform ermöglicht es Dir, Dein Wissen auf Karteikarten zu organisieren und diese mit anderen Nutzern zu teilen, um Dein Wissen auf die nächste Stufe zu heben. Melde Dich noch heute bei Kioku an und erlebe die Zukunft des Lernens."
 
-#: pages/login.tsx:267
+#: pages/login.tsx:271
 msgid "Wrong username or password"
 msgstr "Falscher Benutzername oder falsches Passwort"
 

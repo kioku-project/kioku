@@ -24,6 +24,10 @@ interface InputFieldProps {
 	 */
 	inputFieldSize?: keyof typeof getSize;
 	/**
+	 * Label style
+	 */
+	inputFieldLabelStyle?: string;
+	/**
 	 * Icon that will be displayed on the right side of the InputField.
 	 */
 	inputFieldIcon?: IconName;
@@ -77,8 +81,9 @@ export const InputField = forwardRef(
 			label,
 			inputFieldStyle,
 			inputFieldSize,
+			inputFieldLabelStyle = "",
 			inputFieldIcon,
-			inputFieldIconStyle,
+			inputFieldIconStyle = "",
 			inputFieldIconSize = 16,
 			tooltip,
 			className = "",
@@ -96,9 +101,8 @@ export const InputField = forwardRef(
 			<div className={`flex w-full flex-col rounded-md ${className}`}>
 				<label htmlFor={id}>
 					<Text
-						textStyle="primary"
 						textSize={inputFieldSize}
-						className="font-bold"
+						className={`font-bold ${inputFieldLabelStyle}`}
 					>
 						{label}
 					</Text>

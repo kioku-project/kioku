@@ -3,7 +3,6 @@ import { useLingui } from "@lingui/react";
 import { hasCookie } from "cookies-next";
 import { GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
-import { useRouter } from "next/router";
 
 import Cards from "@/components/graphics/Cards";
 import { Button } from "@/components/input/Button";
@@ -19,7 +18,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 };
 
 export default function Page() {
-	const router = useRouter();
 
 	const { _ } = useLingui();
 

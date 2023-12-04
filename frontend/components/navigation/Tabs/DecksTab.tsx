@@ -34,7 +34,7 @@ export const DecksTab = ({ group, className = "" }: DecksTabProps) => {
 	const deckNameInput = useRef<HTMLInputElement>(null);
 
 	return (
-		<div className={`space-y-3 ${className}`}>
+		<div className={`flex h-full flex-col space-y-3 ${className}`}>
 			{group.groupRole &&
 				GroupRole[group.groupRole] >= GroupRole.WRITE && (
 					<div className="flex w-full items-center justify-between rounded-md bg-neutral-100 px-4 py-3">

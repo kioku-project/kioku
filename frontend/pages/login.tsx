@@ -1,7 +1,8 @@
 import { Trans, msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { GetStaticProps } from "next";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "react-feather";
@@ -44,25 +45,23 @@ export default function Page() {
 				router.replace("/");
 			}
 		})();
-	}, []);
+	}, [router]);
 
 	return (
 		<>
-			<Head>
-				<title>Kioku</title>
-				<meta name="description" content="Kioku" />
-				<link rel="icon" href="/favicon.ico" />
-				<link
-					rel="alternate"
-					hrefLang="en"
-					href="https://app.kioku.dev/login"
-				/>
-				<link
-					rel="alternate"
-					hrefLang="de"
-					href="https://app.kioku.dev/de/login"
-				/>
-			</Head>
+			<NextSeo
+				title={_(msg`Kioku | Login or register for Kioku!`)}
+				description={_(msg`Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups.`)}
+				languageAlternates={[
+					{ hrefLang: "en", href: "https://app.kioku.dev/login" },
+					{ hrefLang: "de", href: "https://app.kioku.dev/de/login" },
+				]}
+				noindex={process.env.NEXT_PUBLIC_SEO != "True"}
+				nofollow={process.env.NEXT_PUBLIC_SEO != "True"}
+				openGraph={{
+					url: "https://app.kioku.dev/login",
+				}}
+			/>
 			<div className="min-w-screen flex flex-1 bg-[#F8F8F8]">
 				<div className="h-full w-full bg-gradient-to-bl from-[#FF83FA]/20 to-50%">
 					<div className="flex h-full w-full items-center justify-center bg-gradient-to-tr from-[#83DAFF]/20 p-3 sm:p-5">
@@ -91,7 +90,7 @@ export default function Page() {
 								/>
 								{!login && (
 									<InputField
-										id="userNameInputFieldId"
+										id="usernameInputFieldId"
 										type="text"
 										placeholder={_(msg`Username`)}
 										required
@@ -182,7 +181,7 @@ export default function Page() {
 									</>
 								)}
 								<Button
-									id="loginSubmitButton"
+									id="loginSubmitButtonId"
 									buttonIcon={
 										<ArrowRight
 											size={16}
@@ -220,6 +219,7 @@ export default function Page() {
 									)}
 								</span>
 								<button
+									id="switchLoginButtonId"
 									className="whitespace-nowrap text-black underline"
 									onClick={() => {
 										emailInput.current?.focus();

@@ -49,11 +49,12 @@ export default function Page() {
 				/>
 			</Head>
 			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-				{isCardLoading || isCardValidating ? (
+				{isCardLoading || isCardValidating && (
 					<div className="flex-grow flex items-center justify-center">
 						<LoadingSpinner className="w-16" delay={3000}/>
 					</div>
-				) : card?.cardID ? (
+				)}
+				{!isCardLoading && !isCardValidating && card?.cardID && (
 					<Flashcard
 						id="flashcardId"
 						key={card.cardID}
@@ -65,7 +66,8 @@ export default function Page() {
 							GroupRole[group.groupRole] >= GroupRole.WRITE
 						}
 					/>
-				) : (
+				)}
+				{!isCardLoading && !isCardValidating && !card?.cardID && (
 					<div className="mx-auto my-auto flex flex-col items-center space-y-5">
 						<KiokuAward />
 						<div className="flex flex-col items-center space-y-1">

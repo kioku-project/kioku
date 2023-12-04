@@ -66,13 +66,12 @@ export default function Page() {
 				<div className="h-full w-full bg-gradient-to-bl from-[#FF83FA]/20 to-50%">
 					<div className="flex h-full w-full items-center justify-center bg-gradient-to-tr from-[#83DAFF]/20 p-3 sm:p-5">
 						<div className="flex w-80 flex-col items-center space-y-3 rounded-md bg-white p-5 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)] md:px-7">
-							<Link href="/home">
-								<Logo
-									text={false}
-									logoSize="sm"
-									className="p-3"
-								/>
-							</Link>
+							<Logo
+								href={"/home"}
+								text={false}
+								logoSize="sm"
+								className="p-3"
+							/>
 							<form
 								className="w-full space-y-3"
 								onSubmit={(event) => {

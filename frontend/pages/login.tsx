@@ -91,7 +91,7 @@ export default function Page() {
 								/>
 								{!login && (
 									<InputField
-										id="userNameInputFieldId"
+										id="usernameInputFieldId"
 										type="text"
 										placeholder={_(msg`Username`)}
 										required
@@ -182,7 +182,7 @@ export default function Page() {
 									</>
 								)}
 								<Button
-									id="loginSubmitButton"
+									id="loginSubmitButtonId"
 									buttonIcon={
 										<ArrowRight
 											size={16}
@@ -220,6 +220,7 @@ export default function Page() {
 									)}
 								</span>
 								<button
+									id="switchLoginButtonId"
 									className="whitespace-nowrap text-black underline"
 									onClick={() => {
 										emailInput.current?.focus();

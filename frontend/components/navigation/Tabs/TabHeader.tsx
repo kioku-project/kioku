@@ -1,13 +1,3 @@
-import {
-	BarChart2,
-	Copy,
-	Home,
-	Layers,
-	Mail,
-	Settings,
-	Users,
-} from "react-feather";
-
 import { Icon, IconName } from "@/components/graphics/Icon";
 
 interface TabHeaderProps {

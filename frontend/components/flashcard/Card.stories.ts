@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { userEvent, within } from "@storybook/testing-library";
 
-import { Card } from "./Card";
+import { Card } from "@/components/flashcard/Card";
 
 const meta: Meta<typeof Card> = {
 	title: "Components/Card",

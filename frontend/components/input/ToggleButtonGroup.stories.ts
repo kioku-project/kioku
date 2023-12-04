@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { ToggleButtonGroup } from "./ToggleButtonGroup";
+import { ToggleButtonGroup } from "@/components/input/ToggleButtonGroup";
 
 const meta: Meta<typeof ToggleButtonGroup> = {
 	title: "Input/ToggleButtonGroup",
@@ -25,20 +25,20 @@ export const Primary: Story = {
 export const Warning: Story = {
 	args: {
 		activeButton: "TWO",
-		activeButtonStyle: "warning"
+		activeButtonStyle: "warning",
 	},
 };
 
 export const Error: Story = {
 	args: {
 		activeButton: "THREE",
-		activeButtonStyle: "error"
+		activeButtonStyle: "error",
 	},
 };
 
 export const Disabled: Story = {
 	args: {
 		activeButton: "ONE",
-		disabled: true
+		disabled: true,
 	},
 };

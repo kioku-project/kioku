@@ -1,8 +1,8 @@
 import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 
-import { useActiveDecks, useFavoriteDecks } from "../../../util/swr";
-import DeckList from "../../deck/DeckList";
+import DeckList from "@/components/deck/DeckList";
+import { useActiveDecks, useFavoriteDecks } from "@/util/swr";
 
 interface DashboardTabProps {
 	/**

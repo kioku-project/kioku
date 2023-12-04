@@ -3,8 +3,8 @@ import jwtDecode, { JwtPayload } from "jwt-decode";
 import { useRouter } from "next/router";
 import { PropsWithChildren, useEffect, useState } from "react";
 
-import { reauth } from "../../util/reauth";
-import LoadingSpinner from "../graphics/LoadingSpinner";
+import LoadingSpinner from "@/components/graphics/LoadingSpinner";
+import { reauth } from "@/util/reauth";
 
 export default function Authenticated({ children }: PropsWithChildren) {
 	const router = useRouter();

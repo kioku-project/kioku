@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { Statistic } from "./Statistic";
+import { Statistic } from "@/components/statistics/Statistic";
 
 const meta: Meta<typeof Statistic> = {
 	title: "Statistics/Statistic",

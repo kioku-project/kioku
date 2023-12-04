@@ -1,18 +1,19 @@
 import { Trans, msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { GetStaticProps } from "next";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Text } from "../components/Text";
-import { InputField } from "../components/form/InputField";
-import { Logo } from "../components/graphics/Logo";
-import { Button } from "../components/input/Button";
-import { loadCatalog } from "./_app";
+import { Text } from "@/components/Text";
+import { InputField } from "@/components/form/InputField";
+import { Logo } from "@/components/graphics/Logo";
+import { Button } from "@/components/input/Button";
+import { loadCatalog } from "@/pages/_app";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -44,37 +45,34 @@ export default function Page() {
 				router.replace("/");
 			}
 		})();
-	}, []);
+	}, [router]);
 
 	return (
 		<>
-			<Head>
-				<title>Kioku</title>
-				<meta name="description" content="Kioku" />
-				<link rel="icon" href="/favicon.ico" />
-				<link
-					rel="alternate"
-					hrefLang="en"
-					href="https://app.kioku.dev/login"
-				/>
-				<link
-					rel="alternate"
-					hrefLang="de"
-					href="https://app.kioku.dev/de/login"
-				/>
-			</Head>
+			<NextSeo
+				title={_(msg`Kioku | Login or register for Kioku!`)}
+				description={_(msg`Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups.`)}
+				languageAlternates={[
+					{ hrefLang: "en", href: "https://app.kioku.dev/login" },
+					{ hrefLang: "de", href: "https://app.kioku.dev/de/login" },
+				]}
+				noindex={process.env.NEXT_PUBLIC_SEO != "True"}
+				nofollow={process.env.NEXT_PUBLIC_SEO != "True"}
+				openGraph={{
+					url: "https://app.kioku.dev/login",
+				}}
+			/>
 			<div className="min-w-screen flex flex-1 bg-[#F8F8F8]">
 				<div className="h-full w-full bg-gradient-to-bl from-[#FF83FA]/20 to-50%">
 					<div className="flex h-full w-full items-center justify-center bg-gradient-to-tr from-[#83DAFF]/20 p-3 sm:p-5">
 						<div className="flex w-80 flex-col items-center space-y-3 rounded-md bg-white p-5 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)] md:px-7">
-							<Logo
-								text={false}
-								logoSize="sm"
-								className="p-3"
-								onClick={() => {
-									router.push("/home");
-								}}
-							/>
+							<Link href="/home">
+								<Logo
+									text={false}
+									logoSize="sm"
+									className="p-3"
+								/>
+							</Link>
 							<form
 								className="w-full space-y-3"
 								onSubmit={(event) => {

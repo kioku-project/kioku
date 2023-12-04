@@ -1,6 +1,6 @@
-import { Text } from "../Text";
-import { Action } from "./Action";
-import { Button } from "./Button";
+import { Text } from "@/components/Text";
+import { Action } from "@/components/input/Action";
+import { Button } from "@/components/input/Button";
 
 interface DangerActionProps {
 	/**

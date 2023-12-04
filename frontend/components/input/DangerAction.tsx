@@ -75,7 +75,6 @@ export const DangerAction = ({
 					<Button
 						id={`${id}ButtonId`}
 						buttonStyle={disabled ? "disabled" : "error"}
-						buttonSize="sm"
 						buttonTextSize="3xs"
 						className="w-full justify-center"
 						onClick={() => !disabled && onClick?.()}

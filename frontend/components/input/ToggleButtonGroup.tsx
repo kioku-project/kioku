@@ -22,7 +22,7 @@ export interface ToggleButtonGroupProps {
 	/**
 	 * Button size
 	 */
-	buttonSize?: ButtonProps["buttonSize"];
+	buttonSize?: string;
 	/**
 	 * Is the ToggleButtonGroup disabled?
 	 */
@@ -53,7 +53,7 @@ export const ToggleButtonGroup = ({
 	choices,
 	activeButton,
 	activeButtonStyle = "disabled",
-	buttonSize = "md",
+	buttonSize,
 	disabled = false,
 	className = "",
 	onChange,

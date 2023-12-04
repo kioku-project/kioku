@@ -1,8 +1,11 @@
 import { Trans } from "@lingui/macro";
+import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
+
+import { loadCatalog } from "@/pages/_app";
 
 import { Flashcard } from "@/components/flashcard/Flashcard";
 import KiokuAward from "@/components/graphics/KiokuAward";
@@ -10,6 +13,15 @@ import { Button } from "@/components/input/Button";
 import { GroupRole } from "@/types/GroupRole";
 import { postRequest } from "@/util/api";
 import { useDeck, useDueCards, useGroup, usePullCard } from "@/util/swr";
+
+export const getServerSideProps: GetStaticProps = async (ctx) => {
+	const translation = await loadCatalog(ctx.locale!);
+	return {
+		props: {
+			translation,
+		},
+	};
+};
 
 export default function Page() {
 	const router = useRouter();

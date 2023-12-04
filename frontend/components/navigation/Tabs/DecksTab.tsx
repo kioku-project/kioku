@@ -1,5 +1,3 @@
-import { msg } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
 import { useState } from "react";
 import { PlusSquare } from "react-feather";
 
@@ -24,8 +22,6 @@ export const DecksTab = ({ group }: DecksTabProps) => {
 
 	const [showModal, setShowModal] = useState(false);
 
-	console.log(group.groupRole);
-
 	const hasWrite =
 		group.groupRole && GroupRole[group.groupRole] >= GroupRole.WRITE;
 
@@ -33,7 +29,6 @@ export const DecksTab = ({ group }: DecksTabProps) => {
 		<div>
 			<CreateDeckModal
 				group={group}
-				header="Create new Deck"
 				visible={showModal}
 				setVisible={setShowModal}
 			/>

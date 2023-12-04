@@ -1,4 +1,5 @@
-import { Trans, t } from "@lingui/macro";
+import { Trans, msg, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { useRef } from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
@@ -26,21 +27,27 @@ export const CreateDeckModal = ({
 	...props
 }: CreateDeckModalProps & ModalProps) => {
 	const { mutate } = useSWRConfig();
+	const { _ } = useLingui();
 
 	const deckNameInput = useRef<HTMLInputElement>(null);
 	const deckDescriptionInput = useRef<HTMLInputElement>(null);
 
 	return (
-		<Modal visible={visible} setVisible={setVisible} {...props}>
+		<Modal
+			header={_(msg`Create new Deck`)}
+			visible={visible}
+			setVisible={setVisible}
+			{...props}
+		>
 			<form className="space-y-5">
 				<div className="space-y-3">
 					<InputField
 						id="deckNameInputFieldId"
 						type="text"
-						label="Deck name"
+						label={_(msg`Deck Name`)}
 						inputFieldLabelStyle="text-gray-400"
 						required
-						placeholder="Enter deck name"
+						placeholder={_(msg`Enter deck name`)}
 						className="bg-gray-100 px-2 py-3"
 						inputFieldSize="5xs"
 						autoFocus
@@ -49,9 +56,9 @@ export const CreateDeckModal = ({
 					<InputField
 						id="deckDescriptionInputFieldId"
 						type="text"
-						label="Deck description"
+						label={_(msg`Deck Description`)}
 						inputFieldLabelStyle="text-gray-400"
-						placeholder="Enter deck description"
+						placeholder={_(msg`Enter deck description`)}
 						className="bg-gray-100 px-2 py-3"
 						inputFieldSize="5xs"
 						ref={deckDescriptionInput}
@@ -77,7 +84,7 @@ export const CreateDeckModal = ({
 							setVisible(false);
 						}}
 					>
-						Create Deck
+						<Trans>Create Deck</Trans>
 					</Button>
 				</div>
 			</form>

@@ -1,6 +1,6 @@
 import { MouseEventHandler, useState } from "react";
 
-import { Button, ButtonProps } from "@/components/input/Button";
+import { Button } from "@/components/input/Button";
 
 export interface ToggleButtonGroupProps {
 	/**

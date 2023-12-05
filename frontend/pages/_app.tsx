@@ -46,7 +46,7 @@ export default function App({ Component, pageProps }: AppProps) {
 	useLinguiInit(pageProps.translation);
 
 	return (
-		<div className="flex h-screen flex-col scroll-auto">
+		<div className="flex h-[100dvh] flex-col scroll-auto">
 			<I18nProvider i18n={i18n}>
 				<Head>
 					<title>Kioku | Learn together with friends!</title>

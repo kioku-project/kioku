@@ -5,11 +5,11 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
-import { loadCatalog } from "@/pages/_app";
-
 import { Flashcard } from "@/components/flashcard/Flashcard";
 import KiokuAward from "@/components/graphics/KiokuAward";
+import LoadingSpinner from "@/components/graphics/LoadingSpinner";
 import { Button } from "@/components/input/Button";
+import { loadCatalog } from "@/pages/_app";
 import { GroupRole } from "@/types/GroupRole";
 import { postRequest } from "@/util/api";
 import { useDeck, useDueCards, useGroup, usePullCard } from "@/util/swr";
@@ -27,7 +27,7 @@ export default function Page() {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 	const deckID = router.query.id as string;
-	const { card } = usePullCard(deckID);
+	const { isLoading:isCardLoading, isValidating:isCardValidating, card } = usePullCard(deckID);
 	const { deck } = useDeck(deckID);
 	const { dueCards } = useDueCards(deckID);
 	const { group } = useGroup(deck?.groupID);
@@ -49,7 +49,12 @@ export default function Page() {
 				/>
 			</Head>
 			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-				{card?.cardID ? (
+				{isCardLoading || isCardValidating && (
+					<div className="flex-grow flex items-center justify-center">
+						<LoadingSpinner className="w-16" delay={3000}/>
+					</div>
+				)}
+				{!isCardLoading && !isCardValidating && card?.cardID && (
 					<Flashcard
 						id="flashcardId"
 						key={card.cardID}
@@ -61,7 +66,8 @@ export default function Page() {
 							GroupRole[group.groupRole] >= GroupRole.WRITE
 						}
 					/>
-				) : (
+				)}
+				{!isCardLoading && !isCardValidating && !card?.cardID && (
 					<div className="mx-auto my-auto flex flex-col items-center space-y-5">
 						<KiokuAward />
 						<div className="flex flex-col items-center space-y-1">

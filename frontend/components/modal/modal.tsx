@@ -21,14 +21,6 @@ export interface ModalProps {
 	className?: string;
 }
 
-const getStyle = {
-	primary: "",
-} as const;
-
-const getSize = {
-	md: "",
-} as const;
-
 /**
  * UI component for text
  */

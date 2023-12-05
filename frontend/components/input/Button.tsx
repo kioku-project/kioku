@@ -64,9 +64,7 @@ export const Button = ({
 	Pick<LinkProps, "replace" | "scroll" | "prefetch">) => {
 	const innerButton = (
 		<>
-			<Text className="" textSize={buttonTextSize}>
-				{children}
-			</Text>
+			<Text textSize={buttonTextSize}>{children}</Text>
 			{buttonIcon &&
 				(typeof buttonIcon === "string" ? (
 					<Icon

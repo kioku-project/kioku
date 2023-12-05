@@ -39,7 +39,7 @@ export const GroupSettingsTab = ({
 	const [groupName, setGroupName] = useState(group.groupName);
 	const [isConfirmDeletion, setConfirmDelete] = useState(false);
 
-	const isAdmin = GroupRole[group.groupRole!] >= GroupRole.ADMIN;
+	const isAdmin = GroupRole[group.groupRole] >= GroupRole.ADMIN;
 
 	const { _ } = useLingui();
 

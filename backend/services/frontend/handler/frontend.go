@@ -585,20 +585,20 @@ func (e *Frontend) GetDeckHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
-	var data map[string]string
+	var data converter.FiberDeck
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
 	var deckType pbCommon.DeckType
-	if data["deckType"] != "" {
-		deckType = converter.MigrateStringDeckTypeToProtoDeckType(data["deckType"])
+	if data.DeckType != "" {
+		deckType = converter.MigrateStringDeckTypeToProtoDeckType(data.DeckType)
 	}
 	userID := helper.GetUserIDFromContext(c)
 	rspModifyDeck, err := e.cardDeckService.ModifyDeck(c.Context(), &pbCommon.DeckRequest{
 		UserID: userID,
 		Deck: &pbCommon.Deck{
 			DeckID:   c.Params("deckID"),
-			DeckName: data["deckName"],
+			DeckName: data.DeckName,
 			DeckType: deckType,
 		},
 	})

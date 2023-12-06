@@ -61,7 +61,7 @@ export const Button = ({
 	...props
 }: ButtonProps &
 	ButtonHTMLAttributes<HTMLButtonElement> &
-	Pick<LinkProps, "replace" | "scroll" | "prefetch">) => {
+	Pick<LinkProps, "replace" | "scroll">) => {
 	const innerButton = (
 		<>
 			<Text textSize={buttonTextSize}>{children}</Text>

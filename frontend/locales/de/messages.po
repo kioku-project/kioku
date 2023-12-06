@@ -146,12 +146,12 @@ msgid "Deck deleted!"
 msgstr "Stapel gelöscht!"
 
 #: components/modal/CreateDeckModal.tsx:59
-msgid "Deck Description"
+msgid "Deck description"
 msgstr "Stapel Beschreibung"
 
 #: components/modal/CreateDeckModal.tsx:47
 #: components/navigation/Tabs/DeckSettingsTab.tsx:55
-msgid "Deck Name"
+msgid "Deck name"
 msgstr "Stapel Name"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:127

@@ -44,7 +44,7 @@ export const CreateDeckModal = ({
 					<InputField
 						id="deckNameInputFieldId"
 						type="text"
-						label={_(msg`Deck Name`)}
+						label={_(msg`Deck name`)}
 						inputFieldLabelStyle="text-gray-400"
 						required
 						placeholder={_(msg`Enter deck name`)}
@@ -56,7 +56,7 @@ export const CreateDeckModal = ({
 					<InputField
 						id="deckDescriptionInputFieldId"
 						type="text"
-						label={_(msg`Deck Description`)}
+						label={_(msg`Deck description`)}
 						inputFieldLabelStyle="text-gray-400"
 						placeholder={_(msg`Enter deck description`)}
 						className="bg-gray-100 px-2 py-3"

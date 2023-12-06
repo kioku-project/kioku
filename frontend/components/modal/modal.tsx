@@ -8,8 +8,17 @@ export interface ModalProps {
 	 * Unique identifier
 	 */
 	id?: string;
+	/**
+	 * Is the modal visible?
+	 */
 	visible: boolean;
+	/**
+	 * Change visibility
+	 */
 	setVisible: Dispatch<SetStateAction<boolean>>;
+	/**
+	 * Header
+	 */
 	header?: string;
 	/**
 	 * Content
@@ -37,10 +46,10 @@ export const Modal = ({
 			<div className="relative z-10">
 				{visible && (
 					<>
-						<div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+						<div className="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
 						<div className="fixed inset-0 w-screen overflow-y-auto">
 							<div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
-								<div className="relative w-full transform space-y-5 overflow-hidden rounded-t-lg bg-white p-5 text-left shadow-xl transition-all sm:max-w-xl sm:rounded-lg">
+								<div className="relative w-full space-y-5 overflow-hidden rounded-t-lg bg-white p-5 text-left shadow-xl sm:max-w-xl sm:rounded-lg">
 									<div className="flex w-full justify-between">
 										<Text
 											textSize="xs"

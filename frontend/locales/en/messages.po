@@ -146,13 +146,13 @@ msgid "Deck deleted!"
 msgstr "Deck deleted!"
 
 #: components/modal/CreateDeckModal.tsx:59
-msgid "Deck Description"
-msgstr "Deck Description"
+msgid "Deck description"
+msgstr "Deck description"
 
 #: components/modal/CreateDeckModal.tsx:47
 #: components/navigation/Tabs/DeckSettingsTab.tsx:55
-msgid "Deck Name"
-msgstr "Deck Name"
+msgid "Deck name"
+msgstr "Deck name"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:127
 msgid "Deck updated!"

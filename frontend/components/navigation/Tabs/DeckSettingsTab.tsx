@@ -52,7 +52,7 @@ export const DeckSettingsTab = ({
 			<Section id="generalDeckSettingsId" header="General">
 				<InputAction
 					id="deckNameInputAction"
-					header={_(msg`Deck Name`)}
+					header={_(msg`Deck name`)}
 					value={deckState.deckName}
 					button={_(msg`Rename`)}
 					disabled={!isAdmin}

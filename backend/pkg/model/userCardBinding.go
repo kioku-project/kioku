@@ -10,9 +10,9 @@ type UserCardBinding struct {
 	UserID       string `gorm:"not null"`
 	User         User   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CardID       string `gorm:"not null"`
-	Card         Card
+	Card         Card   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	DeckID       string `gorm:"not null"`
-	Deck         Deck
+	Deck         Deck   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Type         uint8  `gorm:"not null"`
 	Due          int64  `gorm:"not null"`
 	LastInterval uint32 `gorm:"not null"`

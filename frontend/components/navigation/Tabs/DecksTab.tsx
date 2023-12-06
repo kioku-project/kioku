@@ -26,13 +26,13 @@ export const DecksTab = ({ group }: DecksTabProps) => {
 		group.groupRole && GroupRole[group.groupRole] >= GroupRole.WRITE;
 
 	return (
-		<div>
+		<>
 			<CreateDeckModal
 				group={group}
 				visible={showModal}
 				setVisible={setShowModal}
 			/>
-			<div className="space-y-3">
+			<div className="flex h-full flex-col space-y-3">
 				<div className="flex w-full items-center justify-end rounded-md bg-neutral-100 px-4 py-3">
 					<PlusSquare
 						className={`${
@@ -49,6 +49,6 @@ export const DecksTab = ({ group }: DecksTabProps) => {
 				</div>
 				<DeckList decks={decks} />
 			</div>
-		</div>
+		</>
 	);
 };

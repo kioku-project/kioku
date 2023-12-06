@@ -40,12 +40,12 @@ export const TabBar = ({
 			className={`flex flex-row justify-between ${className}`}
 			{...props}
 		>
-			<div className="flex flex-row">
+			<div className="flex w-full flex-row md:relative">
 				{Object.keys(tabs).map((tab) => (
 					<Text
 						textSize="xs"
 						key={tab}
-						className={`border-kiokuDarkBlue p-3 font-bold transition hover:cursor-pointer ${
+						className={`flex-1 border-kiokuDarkBlue p-3 font-bold transition hover:cursor-pointer md:flex-initial ${
 							currentTab === tab
 								? "border-b-2 text-kiokuDarkBlue"
 								: "border-none text-kiokuLightBlue"

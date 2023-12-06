@@ -38,7 +38,7 @@ export const CardList = ({
 	setCard,
 }: CardListProps) => {
 	return (
-		<div id="cardListId" className={`flex flex-col ${className}`}>
+		<div id="cardListId" className={`flex h-full flex-col ${className}`}>
 			<div className="snap-y overflow-y-auto">
 				{cards?.map((card: CardType) => (
 					<Card

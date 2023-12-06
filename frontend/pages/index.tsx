@@ -40,43 +40,28 @@ export default function Home() {
 			<TabHeader
 				id="dashboardTabHeaderId"
 				name={_(msg`Dashboard`)}
-				style="dashboard"
+				icon="Home"
 			/>
 		),
 		decks: (
 			<TabHeader
 				id="decksTabHeaderId"
 				name={_(msg`Decks`)}
-				style="decks"
+				icon="Layers"
 			/>
 		),
 		groups: (
 			<TabHeader
 				id="groupTabHeaderId"
 				name={_(msg`Groups`)}
-				style="groups"
-			/>
-		),
-		invitations: (
-			<TabHeader
-				id="invitationTabHeaderId"
-				name={_(msg`Invitations`)}
-				style="invitations"
-				notificationBadgeContent={`${invitations?.length ?? ""}`}
-			/>
-		),
-		statistics: (
-			<TabHeader
-				id="StatisticsTabHeaderId"
-				name={_(msg`Statistics`)}
-				style="statistics"
+				icon="Users"
 			/>
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
 				name={_(msg`Settings`)}
-				style="settings"
+				icon="Settings"
 			/>
 		),
 	};
@@ -84,7 +69,7 @@ export default function Home() {
 	const [currentTab, setCurrentTab] = useState("dashboard");
 
 	return (
-		<div>
+		<div className="flex flex-1 overflow-auto">
 			<Head>
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
@@ -102,30 +87,34 @@ export default function Home() {
 			</Head>
 			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 				{user && groups && (
-					<div className="flex flex-col space-y-3 px-5 py-1 md:space-y-5 md:px-10 md:py-3">
+					<div className="flex h-full flex-col px-5 py-1 md:space-y-5 md:px-10 md:py-3">
 						<FetchHeader
 							id="userPageHeaderId"
 							user={{ ...user, ...due }}
 						/>
-						<TabBar
-							id="deckTabBarId"
-							tabs={tabs}
-							currentTab={currentTab}
-							setTab={setCurrentTab}
-						/>
-						<div>
-							{{
-								decks: homeGroup && (
-									<DecksTab group={homeGroup} />
-								),
-								groups: <GroupsTab groups={groups} />,
-								invitations: invitations && (
-									<InvitationsTab invitations={invitations} />
-								),
-								settings: <UserSettingsTab user={user} />,
-								statistics: <StatisticsTab />,
-								dashboard: homeGroup && <DashboardTab />,
-							}[currentTab] ?? <div>Error</div>}
+						<div className="flex h-full flex-1 flex-col-reverse justify-between space-y-5 overflow-auto md:flex-col md:justify-normal">
+							<TabBar
+								id="deckTabBarId"
+								tabs={tabs}
+								currentTab={currentTab}
+								setTab={setCurrentTab}
+							/>
+							<div className="overflow-auto">
+								{{
+									decks: homeGroup && (
+										<DecksTab group={homeGroup} />
+									),
+									groups: <GroupsTab groups={groups} />,
+									invitations: invitations && (
+										<InvitationsTab
+											invitations={invitations}
+										/>
+									),
+									settings: <UserSettingsTab user={user} />,
+									statistics: <StatisticsTab />,
+									dashboard: homeGroup && <DashboardTab />,
+								}[currentTab] ?? <div>Error</div>}
+							</div>
 						</div>
 					</div>
 				)}

@@ -26,7 +26,11 @@ export default function DeckList({
 	className = "",
 }: Readonly<DeckListProps>) {
 	return (
-		<Section header={header} style="noBorder" className={className}>
+		<Section
+			header={header}
+			style="noBorder"
+			className={`overflow-auto pb-5 ${className}`}
+		>
 			<div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
 				{decks?.map((deck) => (
 					<FetchDeck key={deck.deckID} deck={deck} />

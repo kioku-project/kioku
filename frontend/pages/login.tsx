@@ -2,7 +2,6 @@ import { Trans, msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "react-feather";
@@ -51,7 +50,9 @@ export default function Page() {
 		<>
 			<NextSeo
 				title={_(msg`Kioku | Login or register for Kioku!`)}
-				description={_(msg`Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups.`)}
+				description={_(
+					msg`Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups.`
+				)}
 				languageAlternates={[
 					{ hrefLang: "en", href: "https://app.kioku.dev/login" },
 					{ hrefLang: "de", href: "https://app.kioku.dev/de/login" },
@@ -182,6 +183,8 @@ export default function Page() {
 								)}
 								<Button
 									id="loginSubmitButtonId"
+									buttonStyle="secondary"
+									buttonSize="p-3"
 									buttonIcon={
 										<ArrowRight
 											size={16}
@@ -189,7 +192,7 @@ export default function Page() {
 										/>
 									}
 									buttonTextSize="5xs"
-									className="w-full justify-between bg-black p-3 text-white hover:scale-[1.02] hover:cursor-pointer hover:bg-neutral-900"
+									className="w-full justify-between"
 									onClick={() => {
 										if (login) {
 											loginLogic();
@@ -225,16 +228,6 @@ export default function Page() {
 										emailInput.current?.focus();
 										setLogin((prev) => !prev);
 									}}
-									onKeyUp={(event) => {
-										if (event.key === "Enter") {
-											event.target.dispatchEvent(
-												new Event("click", {
-													bubbles: true,
-												})
-											);
-										}
-									}}
-									tabIndex={0}
 								>
 									{login ? (
 										<Trans>Sign up now!</Trans>

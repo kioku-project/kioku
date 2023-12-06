@@ -128,7 +128,6 @@ export const Header = ({
 					id="learnDeckButtonId"
 					href={`/deck/${deck.deckID}/learn`}
 					buttonStyle="primary"
-					buttonSize="sm"
 					buttonTextSize="xs"
 				>
 					<Trans>Learn Deck</Trans>
@@ -141,7 +140,6 @@ export const Header = ({
 					<Button
 						id="joinGroupButtonId"
 						buttonStyle="primary"
-						buttonSize="sm"
 						buttonTextSize="xs"
 						onClick={() => {
 							joinGroup();

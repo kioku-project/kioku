@@ -70,7 +70,7 @@ export const Deck = ({
 
 	return (
 		<Link
-			className={`group rounded-lg shadow-lg transition-transform hover:scale-105 hover:cursor-pointer ${className}`}
+			className={`group rounded-lg shadow-lg transition-transform hover:cursor-pointer ${className}`}
 			href={`/deck/${deck.deckID}`}
 			onKeyUp={(event) => {
 				if (event.key === "Enter") {
@@ -165,7 +165,6 @@ export const Deck = ({
 							<Button
 								href={`/deck/${deck.deckID}/learn`}
 								buttonStyle="primary"
-								buttonSize="sm"
 								buttonTextSize="3xs"
 								buttonIcon="ArrowRight"
 								onClick={(event) => {

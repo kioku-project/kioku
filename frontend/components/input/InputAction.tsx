@@ -78,7 +78,6 @@ export const InputAction = ({
 					<Button
 						id={`${id}ButtonId`}
 						buttonStyle={disabled ? "disabled" : "primary"}
-						buttonSize="sm"
 						buttonTextSize="3xs"
 						className="w-full justify-center"
 						onClick={() => !disabled && onClick?.()}

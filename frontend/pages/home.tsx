@@ -63,7 +63,6 @@ export default function Page() {
 									hasCookie("access_token") ? "/" : "/login"
 								}
 								buttonStyle="primary"
-								buttonSize="md"
 								buttonTextSize="xs"
 							>
 								<Trans>Get started</Trans>
@@ -71,10 +70,10 @@ export default function Page() {
 							<Button
 								id="learnmoreButton"
 								href="/features"
-								buttonStyle="secondary"
-								buttonSize="md"
+								buttonStyle="tertiary"
 								buttonTextSize="xs"
 								buttonIcon="ArrowRight"
+								className="hover:space-x-2"
 							>
 								<Trans>Learn more</Trans>
 							</Button>

@@ -53,8 +53,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 				<Button
 					id="loginButton"
 					href="/login"
-					buttonStyle="secondary"
-					buttonSize="sm"
+					buttonStyle="tertiary"
 					buttonTextSize="xs"
 					buttonIcon={<ArrowRight size={16} />}
 					className="invisible sm:visible"

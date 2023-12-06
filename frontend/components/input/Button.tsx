@@ -17,7 +17,7 @@ export interface ButtonProps {
 	/**
 	 * Button size
 	 */
-	buttonSize?: keyof typeof getSize;
+	buttonSize?: string;
 	/**
 	 * Text size
 	 */
@@ -33,18 +33,15 @@ export interface ButtonProps {
 }
 
 const getStyle = {
-	primary: "bg-kiokuDarkBlue text-eggshell shadow-sm hover:scale-105",
+	primary: "bg-kiokuDarkBlue font-medium text-white hover:scale-[1.02]",
 	secondary:
-		"bg-transparent text-kiokuDarkBlue hover:bg-gray-100 hover:scale-105",
-	error: "bg-kiokuRed text-white hover:scale-105",
-	warning: "bg-kiokuYellow text-white hover:scale-105",
-	disabled: "bg-gray-200 text-gray-400 hover:cursor-not-allowed",
-} as const;
-
-const getSize = {
-	sm: "px-2 py-1.5 lg:px-3 lg:py-2",
-	md: "px-3 py-2 lg:px-5 lg:py-3",
-	lg: "px-5 py-3 lg:px-5 lg:py-3",
+		"bg-black font-medium text-white hover:scale-[1.02] hover:bg-neutral-900",
+	tertiary:
+		"bg-transparent font-medium text-kiokuDarkBlue hover:scale-105 hover:bg-gray-100",
+	cancel: "bg-transparent font-normal text-gray-400 hover:bg-gray-100",
+	error: "bg-kiokuRed font-medium text-white hover:scale-105",
+	warning: "bg-kiokuYellow font-medium text-white hover:scale-105",
+	disabled: "bg-gray-200 font-medium text-gray-400 hover:cursor-not-allowed",
 } as const;
 
 /**
@@ -54,9 +51,8 @@ export const Button = ({
 	href,
 	replace,
 	scroll,
-	prefetch,
 	buttonStyle,
-	buttonSize,
+	buttonSize = "px-3 py-1.5 lg:px-3 lg:py-2",
 	buttonTextSize,
 	buttonIcon,
 	buttonIconSize = 16,
@@ -65,7 +61,7 @@ export const Button = ({
 	...props
 }: ButtonProps &
 	ButtonHTMLAttributes<HTMLButtonElement> &
-	Pick<LinkProps, "replace" | "scroll" | "prefetch">) => {
+	Pick<LinkProps, "replace" | "scroll">) => {
 	const innerButton = (
 		<>
 			<Text textSize={buttonTextSize}>{children}</Text>
@@ -82,22 +78,19 @@ export const Button = ({
 		</>
 	);
 	const classNames = [
-		"flex items-center space-x-1 rounded-md font-medium outline-none transition",
+		"flex items-center space-x-1 rounded-md outline-none transition",
 		className,
 	];
 	if (buttonStyle) {
 		classNames.push(getStyle[buttonStyle]);
 	}
-	if (buttonSize) {
-		classNames.push(getSize[buttonSize]);
-	}
+	classNames.push(buttonSize);
 
 	return href ? (
 		<Link
 			href={href}
-			replace
-			scroll
-			prefetch
+			replace={replace}
+			scroll={scroll}
 			className={classNames.join(" ")}
 		>
 			{innerButton}

@@ -165,7 +165,6 @@ export const Deck = ({
 							<Button
 								href={`/deck/${deck.deckID}/learn`}
 								buttonStyle="primary"
-								buttonSize="sm"
 								buttonTextSize="3xs"
 								buttonIcon="ArrowRight"
 								onClick={(event) => {

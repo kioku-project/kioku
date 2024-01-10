@@ -115,7 +115,7 @@ export const InputField = forwardRef(
 					<input
 						id={id}
 						type={inputType}
-						className={`w-full border-none bg-transparent font-medium outline-none ${
+						className={`w-full border-none bg-transparent outline-none ${
 							inputFieldSize ? getSize[inputFieldSize] : ""
 						}`}
 						ref={ref}
@@ -125,7 +125,7 @@ export const InputField = forwardRef(
 						<Icon
 							icon={statusIcon}
 							size={inputFieldIconSize}
-							className={`${inputFieldIconStyle} ${
+							className={`ml-1 ${inputFieldIconStyle} ${
 								onClickIcon ? "hover:cursor-pointer" : ""
 							}`}
 							data-tooltip-id={`tooltip-${id}`}

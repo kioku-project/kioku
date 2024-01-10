@@ -65,16 +65,16 @@ export default function Page() {
 			/>
 			<div className="min-w-screen flex flex-1 bg-[#F8F8F8]">
 				<div className="h-full w-full bg-gradient-to-bl from-[#FF83FA]/20 to-50%">
-					<div className="flex h-full w-full items-center justify-center bg-gradient-to-tr from-[#83DAFF]/20 p-3 sm:p-5">
-						<div className="flex w-80 flex-col items-center space-y-3 rounded-md bg-white p-5 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)] md:px-7">
+					<div className="flex h-full w-full items-center justify-center bg-gradient-to-tr from-[#83DAFF]/20 sm:p-5">
+						<div className="flex h-full w-full flex-col items-center justify-center space-y-3 rounded-md bg-white p-8 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)] sm:h-fit sm:w-80 md:px-7">
 							<Logo
 								href={"/home"}
 								text={false}
-								logoSize="sm"
-								className="p-3"
+								logoSize="reverse"
+								className="m-10 w-32 sm:m-3 sm:w-16 md:w-20 lg:w-24"
 							/>
 							<form
-								className="w-full space-y-3"
+								className="w-full space-y-3 text-black"
 								onSubmit={(event) => {
 									event.preventDefault();
 								}}
@@ -85,8 +85,7 @@ export default function Page() {
 									type="email"
 									placeholder={_(msg`Email`)}
 									required
-									inputFieldSize="5xs"
-									className="bg-[#ECECEC] p-3 text-[#A4A4A4]"
+									className="bg-[#ECECEC] p-3 text-base sm:text-xs"
 									ref={emailInput}
 								/>
 								{!login && (
@@ -95,8 +94,7 @@ export default function Page() {
 										type="text"
 										placeholder={_(msg`Username`)}
 										required
-										inputFieldSize="5xs"
-										className="bg-[#ECECEC] p-3 text-[#A4A4A4]"
+										className="bg-[#ECECEC] p-3 text-base sm:text-xs"
 										ref={nameInput}
 									/>
 								)}
@@ -106,8 +104,7 @@ export default function Page() {
 									placeholder={_(msg`Password`)}
 									required
 									minLength={passwordMinLength}
-									inputFieldSize="5xs"
-									className="bg-[#ECECEC] p-3 text-[#A4A4A4]"
+									className="bg-[#ECECEC] p-3 text-base sm:text-xs"
 									onChange={(event) => {
 										event.target.setCustomValidity("");
 										setPassword(event.target.value);
@@ -136,8 +133,7 @@ export default function Page() {
 											)}
 											required
 											pattern={password}
-											inputFieldSize="5xs"
-											className="bg-[#ECECEC] p-3 text-[#A4A4A4]"
+											className="bg-[#ECECEC] p-3 text-base sm:text-xs"
 											ref={repeatPasswordInput}
 											onChange={(event) => {
 												event.target.setCustomValidity(
@@ -191,8 +187,7 @@ export default function Page() {
 											className="flex-none"
 										/>
 									}
-									buttonTextSize="5xs"
-									className="w-full justify-between"
+									className="w-full justify-between text-base sm:text-xs"
 									onClick={() => {
 										if (login) {
 											loginLogic();

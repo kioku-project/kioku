@@ -57,11 +57,12 @@ msgstr "Already have an account?"
 msgid "Available"
 msgstr "Available"
 
-#: pages/deck/[id]/learn.tsx:84
+#: pages/deck/[id]/learn.tsx:90
 msgid "Back to Deck!"
 msgstr "Back to Deck!"
 
 #: components/modal/CreateDeckModal.tsx:76
+#: components/modal/CreateGroupModal.tsx:67
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -73,7 +74,7 @@ msgstr "Card created!"
 msgid "Card updated!"
 msgstr "Card updated!"
 
-#: pages/deck/[id]/index.tsx:41
+#: pages/deck/[id]/index.tsx:38
 msgid "Cards"
 msgstr "Cards"
 
@@ -103,7 +104,7 @@ msgstr "Collaborative"
 msgid "Compatible"
 msgstr "Compatible"
 
-#: pages/deck/[id]/learn.tsx:69
+#: pages/deck/[id]/learn.tsx:75
 msgid "Congratulations!"
 msgstr "Congratulations!"
 
@@ -119,11 +120,15 @@ msgstr "Create Card"
 msgid "Create Deck"
 msgstr "Create Deck"
 
+#: components/modal/CreateGroupModal.tsx:78
+msgid "Create Group"
+msgstr "Create Group"
+
 #: components/modal/CreateDeckModal.tsx:37
 msgid "Create new Deck"
 msgstr "Create new Deck"
 
-#: components/navigation/Tabs/GroupsTab.tsx:38
+#: components/modal/CreateGroupModal.tsx:28
 msgid "Create new Group"
 msgstr "Create new Group"
 
@@ -158,7 +163,7 @@ msgstr "Deck name"
 msgid "Deck updated!"
 msgstr "Deck updated!"
 
-#: pages/group/[id]/index.tsx:43
+#: pages/group/[id]/index.tsx:42
 #: pages/index.tsx:49
 msgid "Decks"
 msgstr "Decks"
@@ -219,6 +224,14 @@ msgstr "Enter deck description"
 msgid "Enter deck name"
 msgstr "Enter deck name"
 
+#: components/modal/CreateGroupModal.tsx:52
+msgid "Enter group description"
+msgstr "Enter group description"
+
+#: components/modal/CreateGroupModal.tsx:41
+msgid "Enter group name"
+msgstr "Enter group name"
+
 #: pages/features.tsx:109
 msgid "Entertaining"
 msgstr "Entertaining"
@@ -249,7 +262,7 @@ msgstr "from"
 msgid "Get started"
 msgstr "Get started"
 
-#: components/navigation/Tabs/GroupsTab.tsx:87
+#: components/modal/CreateGroupModal.tsx:98
 msgid "Group created!"
 msgstr "Group created!"
 
@@ -257,9 +270,14 @@ msgstr "Group created!"
 msgid "Group deleted!"
 msgstr "Group deleted!"
 
+#: components/modal/CreateGroupModal.tsx:50
 #: components/navigation/Tabs/GroupSettingsTab.tsx:66
-msgid "Group Description"
-msgstr "Group Description"
+msgid "Group description"
+msgstr "Group description"
+
+#: components/modal/CreateGroupModal.tsx:38
+msgid "Group name"
+msgstr "Group name"
 
 #: components/navigation/Tabs/GroupSettingsTab.tsx:52
 msgid "Group Name"
@@ -292,10 +310,6 @@ msgstr "Individual"
 #: pages/features.tsx:93
 msgid "Informative"
 msgstr "Informative"
-
-#: pages/index.tsx:63
-msgid "Invitations"
-msgstr "Invitations"
 
 #: components/group/Member.tsx:132
 msgid "Invite user with email"
@@ -413,13 +427,25 @@ msgstr "Request pending"
 msgid "Save"
 msgstr "Save"
 
+#: components/input/ActionBar.tsx:36
+msgid "Search"
+msgstr "Search"
+
+#: components/navigation/Tabs/DecksTab.tsx:43
+msgid "Search decks..."
+msgstr "Search decks..."
+
+#: components/navigation/Tabs/GroupsTab.tsx:39
+msgid "Search groups..."
+msgstr "Search groups..."
+
 #: components/layout/Header.tsx:168
 msgid "Sent request!"
 msgstr "Sent request!"
 
-#: pages/deck/[id]/index.tsx:55
-#: pages/group/[id]/index.tsx:60
-#: pages/index.tsx:78
+#: pages/deck/[id]/index.tsx:43
+#: pages/group/[id]/index.tsx:52
+#: pages/index.tsx:63
 msgid "Settings"
 msgstr "Settings"
 
@@ -443,12 +469,6 @@ msgstr "Sign up now!"
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 
-#: pages/deck/[id]/index.tsx:48
-#: pages/group/[id]/index.tsx:53
-#: pages/index.tsx:71
-msgid "Statistics"
-msgstr "Statistics"
-
 #: components/statistics/StatisticOverview.tsx:44
 msgid "Test"
 msgstr "Test"
@@ -457,7 +477,7 @@ msgstr "Test"
 msgid "Unexpected group type"
 msgstr "Unexpected group type"
 
-#: pages/group/[id]/index.tsx:48
+#: pages/group/[id]/index.tsx:47
 msgid "User"
 msgstr "User"
 
@@ -498,7 +518,7 @@ msgstr "Welcome to Kioku - the cloud native flashcard application that focuses o
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 
-#: pages/deck/[id]/learn.tsx:72
+#: pages/deck/[id]/learn.tsx:78
 msgid "You did it! There are no cards left in this deck to learn today."
 msgstr "You did it! There are no cards left in this deck to learn today."
 

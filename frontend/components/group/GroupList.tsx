@@ -14,7 +14,10 @@ interface GroupListProps {
 	className?: string;
 }
 
-export default function GroupList({ groups, className }: GroupListProps) {
+export default function GroupList({
+	groups,
+	className,
+}: Readonly<GroupListProps>) {
 	return (
 		<div className={`space-y-3 ${className}`}>
 			{groups.map((group: GroupType) => {

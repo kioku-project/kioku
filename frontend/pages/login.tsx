@@ -70,7 +70,6 @@ export default function Page() {
 							<Logo
 								href={"/home"}
 								text={false}
-								logoSize="reverse"
 								className="m-10 w-32 sm:m-3 sm:w-16 md:w-20 lg:w-24"
 							/>
 							<form
@@ -102,6 +101,7 @@ export default function Page() {
 									id="passwordInputFieldId"
 									type={"password"}
 									placeholder={_(msg`Password`)}
+									inputFieldIconStyle="text-[#B4B4B4]"
 									required
 									minLength={passwordMinLength}
 									className="bg-[#ECECEC] p-3 text-base sm:text-xs"
@@ -131,6 +131,7 @@ export default function Page() {
 											placeholder={_(
 												msg`Repeat Password`
 											)}
+											inputFieldIconStyle="text-[#B4B4B4]"
 											required
 											pattern={password}
 											className="bg-[#ECECEC] p-3 text-base sm:text-xs"

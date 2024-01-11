@@ -1,4 +1,3 @@
-import { log } from "console";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import Link, { LinkProps } from "next/link";

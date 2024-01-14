@@ -116,6 +116,8 @@ func main() {
 	app.Put("/api/groups/:groupID", svc.ModifyGroupHandler)
 	app.Delete("/api/groups/:groupID", svc.DeleteGroupHandler)
 
+	app.Get("/api/groups/:groupID/members", svc.GetGroupMembersHandler)
+	app.Delete("/api/groups/:groupID/members", svc.LeaveGroupHandler)
 	app.Get("/api/groups/:groupID/members/requests", svc.GetGroupMemberRequestsHandler)
 	app.Get("/api/groups/:groupID/members/invitations", svc.GetInvitationsForGroupHandler)
 	app.Post("/api/groups/:groupID/members/invitation", svc.AddUserGroupInviteHandler)
@@ -123,8 +125,6 @@ func main() {
 	app.Post("/api/groups/:groupID/members/request", svc.AddUserGroupRequestHandler)
 	app.Delete("/api/groups/:groupID/members/request", svc.RemoveUserGroupRequestHandler)
 
-	app.Get("/api/groups/:groupID/members", svc.GetGroupMembersHandler)
-	app.Delete("/api/groups/:groupID/members", svc.LeaveGroupHandler)
 	app.Put("/api/groups/:groupID/members/:userID", svc.ModifyGroupMemberHandler)
 	app.Delete("/api/groups/:groupID/members/:userID", svc.KickGroupMemberHandler)
 

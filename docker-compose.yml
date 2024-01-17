@@ -62,6 +62,17 @@ services:
     depends_on:
       - db
 
+  notifications_service:
+    build:
+      context: backend
+      dockerfile: services/notifications/Dockerfile
+    container_name: kioku-notifications_service
+    restart: always
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+
   frontend:
     build:
       context: frontend

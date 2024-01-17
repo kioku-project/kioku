@@ -32,6 +32,8 @@ type CollaborationStoreImpl GormStore
 
 type SrsStoreImpl GormStore
 
+type NotificationStoreImpl GormStore
+
 func NewPostgresStore(ctx context.Context) (*gorm.DB, error) {
 	_ = godotenv.Load("../.env", "../.env.example")
 	host := os.Getenv("POSTGRES_HOST")
@@ -559,4 +561,24 @@ func (s *SrsStoreImpl) ModifyUserCard(ctx context.Context, userCard *model.UserC
 		LastInterval: userCard.LastInterval,
 		Factor:       userCard.Factor,
 	}).Error
+}
+
+func NewNotificationStore(ctx context.Context) (NotificationsStore, error) {
+	db, err := NewPostgresStore(ctx)
+	if err != nil {
+		return nil, err
+	}
+	err = db.WithContext(ctx).AutoMigrate(&model.PushSubscription{})
+	if err != nil {
+		return nil, err
+	}
+	return &NotificationStoreImpl{db: db}, nil
+}
+
+func (s *NotificationStoreImpl) CreatePushSubscription(ctx context.Context, newSubscription *model.PushSubscription) error {
+	return s.db.WithContext(ctx).Create(newSubscription).Error
+}
+
+func (s *NotificationStoreImpl) FindAllPushSubscriptions(ctx context.Context) (subscriptions []*model.PushSubscription, err error) {
+	return subscriptions, s.db.WithContext(ctx).Find(&subscriptions).Error
 }

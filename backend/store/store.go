@@ -69,3 +69,9 @@ type SrsStore interface {
 	CreateUserCard(ctx context.Context, newCard *model.UserCardBinding) error
 	ModifyUserCard(ctx context.Context, card *model.UserCardBinding) error
 }
+
+type NotificationsStore interface {
+  FindAllPushSubscriptions(ctx context.Context) ([]*model.PushSubscription, error)
+  CreatePushSubscription(ctx context.Context, newSubscription *model.PushSubscription) error
+}
+

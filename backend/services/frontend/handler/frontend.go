@@ -14,6 +14,7 @@ import (
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
+	pbNotifications "github.com/kioku-project/kioku/services/notifications/proto"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	pbUser "github.com/kioku-project/kioku/services/user/proto"
 )
@@ -23,6 +24,7 @@ type Frontend struct {
 	cardDeckService      pbCardDeck.CardDeckService
 	collaborationService pbCollaboration.CollaborationService
 	srsService           pbSrs.SrsService
+	notificationsService pbNotifications.NotificationsService
 }
 
 func New(
@@ -30,12 +32,14 @@ func New(
 	cardDeckService pbCardDeck.CardDeckService,
 	collaborationService pbCollaboration.CollaborationService,
 	srsService pbSrs.SrsService,
+	notificationsService pbNotifications.NotificationsService,
 ) *Frontend {
 	return &Frontend{
 		userService:          userService,
 		cardDeckService:      cardDeckService,
 		collaborationService: collaborationService,
 		srsService:           srsService,
+		notificationsService: notificationsService,
 	}
 }
 
@@ -968,4 +972,27 @@ func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
 		DueCards: dueCards.DueCards,
 		DueDecks: dueCards.DueDecks,
 	})
+}
+
+func (e *Frontend) SubscribeNotificationsHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	subscription := &pbNotifications.PushSubscription{}
+	if err := c.BodyParser(subscription); err != nil {
+		return err
+	}
+	rspSubscribeNotifications, err := e.notificationsService.Enroll(c.Context(), &pbNotifications.PushSubscriptionRequest{
+		UserID: userID,
+		Subscription: &pbNotifications.PushSubscription{
+			Endpoint: subscription.Endpoint,
+			Auth:     subscription.Auth,
+			P256Dh:   subscription.P256Dh,
+		},
+	})
+	if err != nil {
+		return err
+	}
+	if !rspSubscribeNotifications.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
 }

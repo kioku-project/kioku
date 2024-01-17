@@ -1,0 +1,21 @@
+syntax = "proto3";
+import "pkg/proto/common.proto";
+
+package notifications;
+
+option go_package ="github.com/kioku-project/kioku/services/notifications/proto;notifications";
+
+service Notifications {
+	rpc Enroll(PushSubscriptionRequest) returns (common.Success) {}
+}
+
+message PushSubscriptionRequest {
+  string userID = 1;
+  PushSubscription subscription = 2;
+}
+
+message PushSubscription {
+  string endpoint = 1;
+  string auth = 2;
+  string p256dh = 3;
+}

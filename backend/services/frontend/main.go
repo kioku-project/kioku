@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	pbNotifications "github.com/kioku-project/kioku/services/notifications/proto"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	microErrors "go-micro.dev/v4/errors"
 
@@ -69,6 +70,7 @@ func main() {
 		pbCardDeck.NewCardDeckService("cardDeck", srv.Client()),
 		pbCollaboration.NewCollaborationService("collaboration", srv.Client()),
 		pbSrs.NewSrsService("srs", srv.Client()),
+		pbNotifications.NewNotificationsService("srs", srv.Client()),
 	)
 
 	fiberConfig := fiber.Config{
@@ -154,6 +156,8 @@ func main() {
 	app.Get("/api/decks/:deckID/pull", svc.SrsPullHandler)
 	app.Post("/api/decks/:deckID/push", svc.SrsPushHandler)
 	app.Get("/api/decks/:deckID/dueCards", svc.SrsDeckDueHandler)
+
+	app.Post("/api/user/notifications/subscribe", svc.SubscribeNotificationsHandler)
 
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {

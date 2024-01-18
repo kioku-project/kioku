@@ -76,18 +76,18 @@ func main() {
 
 	c := cron.New()
 	// TODO: change to daily at 6pm
-	c.AddFunc("0 * * * * *", func() {
+	c.AddFunc("* * * * *", func() {
 		logger.Info("Cronjob: Sending daily notification reminder")
-		subscriptions, err := dbStore.FindAllPushSubscriptions(ctx)
+				subscriptions, err := dbStore.FindAllPushSubscriptions(ctx)
 		if err != nil {
 			// TODO: Handle error
 		}
-		privateKey, publicKey, err := webpush.GenerateVAPIDKeys()
+		privateKey, publicKey := "", ""
 		if err != nil {
 			// TODO: Handle error
 		}
 		for _, subscription := range subscriptions {
-			s := &webpush.Subscription{
+						s := &webpush.Subscription{
 				Endpoint: subscription.Endpoint,
 				Keys: webpush.Keys{
 					P256dh: subscription.P256DH,
@@ -104,10 +104,11 @@ func main() {
 			}
 			defer resp.Body.Close()
 		}
-
-		// Run service
-		if err := srv.Run(); err != nil {
-			logger.Fatal(err)
-		}
 	})
+	c.Start()
+
+	// Run service
+	if err := srv.Run(); err != nil {
+		logger.Fatal(err)
+	}
 }

@@ -70,7 +70,7 @@ func main() {
 		pbCardDeck.NewCardDeckService("cardDeck", srv.Client()),
 		pbCollaboration.NewCollaborationService("collaboration", srv.Client()),
 		pbSrs.NewSrsService("srs", srv.Client()),
-		pbNotifications.NewNotificationsService("srs", srv.Client()),
+		pbNotifications.NewNotificationsService("notifications", srv.Client()),
 	)
 
 	fiberConfig := fiber.Config{

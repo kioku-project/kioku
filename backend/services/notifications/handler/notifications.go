@@ -5,7 +5,7 @@ import (
 
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
-	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
+	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	"go-micro.dev/v4/logger"
 
 	pb "github.com/kioku-project/kioku/services/notifications/proto"
@@ -13,12 +13,12 @@ import (
 )
 
 type Notifications struct {
-	store           store.NotificationsStore
-	cardDeckService pbCardDeck.CardDeckService
+	store      store.NotificationsStore
+	srsService pbSrs.SrsService
 }
 
-func New(s store.NotificationsStore, cds pbCardDeck.CardDeckService) *Notifications {
-	return &Notifications{store: s, cardDeckService: cds}
+func New(s store.NotificationsStore, cds pbSrs.SrsService) *Notifications {
+	return &Notifications{store: s, srsService: cds}
 }
 
 func (e *Notifications) Enroll(ctx context.Context, req *pb.PushSubscriptionRequest, rsp *pbCommon.Success) error {

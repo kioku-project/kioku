@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 
 	"github.com/kioku-project/kioku/pkg/helper"
-	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
+	pbCommon "github.com/kioku-project/kioku/pkg/proto"
+	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	"go-micro.dev/v4/server"
 
 	"github.com/kioku-project/kioku/services/notifications/handler"
@@ -67,7 +69,8 @@ func main() {
 	)
 
 	// Create a new instance of the service handler with the initialized database connection
-	svc := handler.New(dbStore, pbCardDeck.NewCardDeckService("cardDeck", srv.Client()))
+	srsService := pbSrs.NewSrsService("srs", srv.Client())
+	svc := handler.New(dbStore, srsService)
 
 	// Register handler
 	if err := pb.RegisterNotificationsHandler(srv.Server(), svc); err != nil {
@@ -78,29 +81,58 @@ func main() {
 	// TODO: change to daily at 6pm
 	c.AddFunc("* * * * *", func() {
 		logger.Info("Cronjob: Sending daily notification reminder")
-				subscriptions, err := dbStore.FindAllPushSubscriptions(ctx)
+		subscriptions, err := dbStore.FindAllPushSubscriptions(ctx)
 		if err != nil {
-			// TODO: Handle error
+			logger.Errorf("Cronjob: Error while gathering subscriptions: %s", err)
 		}
-		privateKey, publicKey := "", ""
-		if err != nil {
-			// TODO: Handle error
+		privateKey, success := os.LookupEnv("VAPID_PRIVATE_KEY")
+		if !success {
+			logger.Fatal("VAPID_PRIVATE_KEY not set")
+		}
+		publicKey, success := os.LookupEnv("VAPID_PUBLIC_KEY")
+		if !success {
+			logger.Fatal("VAPID_PUBLIC_KEY not set")
 		}
 		for _, subscription := range subscriptions {
-						s := &webpush.Subscription{
+
+			userDueRsp, err := srsService.GetUserCardsDue(ctx, &pbCommon.User{
+				UserID: subscription.UserID,
+			})
+
+			s := &webpush.Subscription{
 				Endpoint: subscription.Endpoint,
 				Keys: webpush.Keys{
 					P256dh: subscription.P256DH,
 					Auth:   subscription.Auth,
 				},
 			}
-			resp, err := webpush.SendNotification([]byte("Test"), s, &webpush.Options{
+
+			type PushNotification struct {
+				Title   string              `json:"title"`
+				Body    string              `json:"body"`
+				Actions []map[string]string `json:"actions"`
+				Vibrate []int               `json:"vibrate"`
+			}
+
+			notification := &PushNotification{
+				Title:   "Don't forget to review your cards today!",
+				Body:    fmt.Sprintf("You have %d cards in %d decks to learn", userDueRsp.DueCards, userDueRsp.DueDecks),
+				Actions: []map[string]string{},
+				Vibrate: []int{10000, 100, 10000},
+			}
+			jsonNotification, err := json.Marshal(notification)
+			if err != nil {
+				logger.Errorf("Cronjob: Error while marshalling subscriptions: %s", err)
+				logger.Info(notification)
+			}
+
+			resp, err := webpush.SendNotification(jsonNotification, s, &webpush.Options{
 				VAPIDPublicKey:  publicKey,
 				VAPIDPrivateKey: privateKey,
 				TTL:             30,
 			})
 			if err != nil {
-				// TODO: Handle error
+				logger.Errorf("Cronjob: Error while sending push message: %s", err)
 			}
 			defer resp.Body.Close()
 		}

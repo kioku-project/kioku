@@ -111,10 +111,19 @@ func main() {
 				},
 			}
 
+			cardString := "card"
+			if userDueRsp.DueCards > 1 {
+				cardString += "s"
+			}
+			deckString := "deck"
+			if userDueRsp.DueDecks > 1 {
+				deckString += "s"
+			}
+
 			notification := &model.PushNotification{
 				Title: "Don't forget to review your cards!",
 				Options: model.PushNotificationOptions{
-					Body:    fmt.Sprintf("You have %d cards in %d decks to learn", userDueRsp.DueCards, userDueRsp.DueDecks),
+					Body:    fmt.Sprintf("You have %d %s in %d %s to learn", userDueRsp.DueCards, cardString, userDueRsp.DueDecks, deckString),
 					Actions: []map[string]string{},
 					Vibrate: []int{200, 100, 200},
 					Tag:     "Kioku",

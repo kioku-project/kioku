@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/kioku-project/kioku/pkg/model"
 	"os"
 
 	"github.com/kioku-project/kioku/pkg/helper"
@@ -107,18 +108,14 @@ func main() {
 				},
 			}
 
-			type PushNotification struct {
-				Title   string              `json:"title"`
-				Body    string              `json:"body"`
-				Actions []map[string]string `json:"actions"`
-				Vibrate []int               `json:"vibrate"`
-			}
-
-			notification := &PushNotification{
-				Title:   "Don't forget to review your cards today!",
-				Body:    fmt.Sprintf("You have %d cards in %d decks to learn", userDueRsp.DueCards, userDueRsp.DueDecks),
-				Actions: []map[string]string{},
-				Vibrate: []int{10000, 100, 10000},
+			notification := &model.PushNotification{
+				Title: "Don't forget to review your cards!",
+				Options: model.PushNotificationOptions{
+					Body:    fmt.Sprintf("You have %d cards in %d decks to learn", userDueRsp.DueCards, userDueRsp.DueDecks),
+					Actions: []map[string]string{},
+					Vibrate: []int{200, 100, 200},
+					Tag:     "Kioku",
+				},
 			}
 			jsonNotification, err := json.Marshal(notification)
 			if err != nil {
@@ -127,11 +124,12 @@ func main() {
 			}
 
 			resp, err := webpush.SendNotification(jsonNotification, s, &webpush.Options{
+				Subscriber:      "web-push@kioku.dev",
 				VAPIDPublicKey:  publicKey,
 				VAPIDPrivateKey: privateKey,
 				TTL:             30,
 			})
-			if err != nil {
+						if err != nil {
 				logger.Errorf("Cronjob: Error while sending push message: %s", err)
 			}
 			defer resp.Body.Close()

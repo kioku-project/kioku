@@ -4,10 +4,15 @@ import gorm "gorm.io/gorm"
 import "github.com/kioku-project/kioku/pkg/helper"
 
 type PushNotification struct {
-	Title   string              `json:"title"`
+	Title   string                  `json:"title"`
+	Options PushNotificationOptions `json:"options"`
+}
+
+type PushNotificationOptions struct {
 	Body    string              `json:"body"`
 	Actions []map[string]string `json:"actions"`
 	Vibrate []int               `json:"vibrate"`
+	Tag     string              `json:"tag"`
 }
 
 type PushSubscription struct {

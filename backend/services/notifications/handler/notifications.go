@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"os"
 
 	"github.com/SherClockHolmes/webpush-go"

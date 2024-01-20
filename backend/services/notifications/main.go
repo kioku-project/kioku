@@ -99,6 +99,9 @@ func main() {
 			userDueRsp, err := srsService.GetUserCardsDue(ctx, &pbCommon.User{
 				UserID: subscription.UserID,
 			})
+			if userDueRsp.DueCards == 0 {
+				continue
+			}
 
 			s := &webpush.Subscription{
 				Endpoint: subscription.Endpoint,
@@ -129,7 +132,7 @@ func main() {
 				VAPIDPrivateKey: privateKey,
 				TTL:             30,
 			})
-						if err != nil {
+			if err != nil {
 				logger.Errorf("Cronjob: Error while sending push message: %s", err)
 			}
 			defer resp.Body.Close()

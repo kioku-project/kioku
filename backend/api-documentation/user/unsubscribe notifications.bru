@@ -1,11 +1,11 @@
 meta {
-  name: delete user
+  name: unsubscribe notifications
   type: http
-  seq: 8
+  seq: 9
 }
 
 delete {
-  url: {{baseUrl}}/api/user
+  url: {{baseUrl}}/api/user/notifications/{{subscriptionID}}
   body: none
   auth: bearer
 }

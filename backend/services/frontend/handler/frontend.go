@@ -980,7 +980,7 @@ func (e *Frontend) SubscribeNotificationsHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(subscription); err != nil {
 		return err
 	}
-	rspSubscribeNotifications, err := e.notificationsService.Enroll(c.Context(), &pbNotifications.PushSubscriptionRequest{
+	rspSubscribeNotifications, err := e.notificationsService.Subscribe(c.Context(), &pbNotifications.PushSubscriptionRequest{
 		UserID: userID,
 		Subscription: &pbNotifications.PushSubscription{
 			Endpoint: subscription.Endpoint,
@@ -991,7 +991,21 @@ func (e *Frontend) SubscribeNotificationsHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	if !rspSubscribeNotifications.Success {
+	return c.SendString(rspSubscribeNotifications.SubscriptionID)
+}
+
+func (e *Frontend) UnsubscribeNotificationsHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspUnsubscribeNotifications, err := e.notificationsService.Unsubscribe(c.Context(), &pbNotifications.PushSubscriptionRequest{
+		UserID: userID,
+		Subscription: &pbNotifications.PushSubscription{
+			SubscriptionID: c.Params("subscriptionID"),
+		},
+	})
+	if err != nil {
+		return err
+	}
+	if !rspUnsubscribeNotifications.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)

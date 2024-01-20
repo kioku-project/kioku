@@ -71,7 +71,8 @@ type SrsStore interface {
 }
 
 type NotificationsStore interface {
-  FindAllPushSubscriptions(ctx context.Context) ([]*model.PushSubscription, error)
-  CreatePushSubscription(ctx context.Context, newSubscription *model.PushSubscription) error
+	FindAllPushSubscriptions(ctx context.Context) ([]*model.PushSubscription, error)
+	CreatePushSubscription(ctx context.Context, newSubscription *model.PushSubscription) error
+	DeletePushSubscription(ctx context.Context, subscription *model.PushSubscription) error
+	FindPushSubscriptionByID(ctx context.Context, subscriptionID string) (*model.PushSubscription, error)
 }
-

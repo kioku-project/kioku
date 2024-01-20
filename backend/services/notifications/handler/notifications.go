@@ -3,9 +3,11 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 
 	"github.com/SherClockHolmes/webpush-go"
+	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
@@ -24,7 +26,7 @@ func New(s store.NotificationsStore, cds pbSrs.SrsService) *Notifications {
 	return &Notifications{store: s, srsService: cds}
 }
 
-func (e *Notifications) Enroll(ctx context.Context, req *pb.PushSubscriptionRequest, rsp *pbCommon.Success) error {
+func (e *Notifications) Subscribe(ctx context.Context, req *pb.PushSubscriptionRequest, rsp *pb.PushSubscription) error {
 	logger.Infof("Received Notifications.Enroll request: %v", req)
 	subscription := &model.PushSubscription{
 		UserID:   req.UserID,
@@ -73,6 +75,23 @@ func (e *Notifications) Enroll(ctx context.Context, req *pb.PushSubscriptionRequ
 		return err
 	}
 	defer resp.Body.Close()
+	rsp.SubscriptionID = subscription.ID
+	return nil
+}
+
+func (e *Notifications) Unsubscribe(ctx context.Context, req *pb.PushSubscriptionRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received Notifications.Unenroll request: %v", req)
+	subscription, err := e.store.FindPushSubscriptionByID(ctx, req.Subscription.SubscriptionID)
+	if err != nil {
+		return err
+	}
+	if subscription.UserID != req.UserID {
+		return helper.NewMicroNotAuthorizedErr(helper.NotificationsServiceID)
+	}
+
+	if err := e.store.DeletePushSubscription(ctx, subscription); err != nil {
+		return err
+	}
 	rsp.Success = true
 	return nil
 }

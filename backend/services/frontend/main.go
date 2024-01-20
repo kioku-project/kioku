@@ -157,7 +157,8 @@ func main() {
 	app.Post("/api/decks/:deckID/push", svc.SrsPushHandler)
 	app.Get("/api/decks/:deckID/dueCards", svc.SrsDeckDueHandler)
 
-	app.Post("/api/user/notifications/subscribe", svc.SubscribeNotificationsHandler)
+	app.Post("/api/user/notifications", svc.SubscribeNotificationsHandler)
+	app.Delete("/api/user/notifications/:subscriptionID", svc.UnsubscribeNotificationsHandler)
 
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {

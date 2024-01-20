@@ -37,7 +37,8 @@ func NewNotificationsEndpoints() []*api.Endpoint {
 // Client API for Notifications service
 
 type NotificationsService interface {
-	Enroll(ctx context.Context, in *PushSubscriptionRequest, opts ...client.CallOption) (*proto1.Success, error)
+	Subscribe(ctx context.Context, in *PushSubscriptionRequest, opts ...client.CallOption) (*PushSubscription, error)
+	Unsubscribe(ctx context.Context, in *PushSubscriptionRequest, opts ...client.CallOption) (*proto1.Success, error)
 }
 
 type notificationsService struct {
@@ -52,8 +53,18 @@ func NewNotificationsService(name string, c client.Client) NotificationsService 
 	}
 }
 
-func (c *notificationsService) Enroll(ctx context.Context, in *PushSubscriptionRequest, opts ...client.CallOption) (*proto1.Success, error) {
-	req := c.c.NewRequest(c.name, "Notifications.Enroll", in)
+func (c *notificationsService) Subscribe(ctx context.Context, in *PushSubscriptionRequest, opts ...client.CallOption) (*PushSubscription, error) {
+	req := c.c.NewRequest(c.name, "Notifications.Subscribe", in)
+	out := new(PushSubscription)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *notificationsService) Unsubscribe(ctx context.Context, in *PushSubscriptionRequest, opts ...client.CallOption) (*proto1.Success, error) {
+	req := c.c.NewRequest(c.name, "Notifications.Unsubscribe", in)
 	out := new(proto1.Success)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -65,12 +76,14 @@ func (c *notificationsService) Enroll(ctx context.Context, in *PushSubscriptionR
 // Server API for Notifications service
 
 type NotificationsHandler interface {
-	Enroll(context.Context, *PushSubscriptionRequest, *proto1.Success) error
+	Subscribe(context.Context, *PushSubscriptionRequest, *PushSubscription) error
+	Unsubscribe(context.Context, *PushSubscriptionRequest, *proto1.Success) error
 }
 
 func RegisterNotificationsHandler(s server.Server, hdlr NotificationsHandler, opts ...server.HandlerOption) error {
 	type notifications interface {
-		Enroll(ctx context.Context, in *PushSubscriptionRequest, out *proto1.Success) error
+		Subscribe(ctx context.Context, in *PushSubscriptionRequest, out *PushSubscription) error
+		Unsubscribe(ctx context.Context, in *PushSubscriptionRequest, out *proto1.Success) error
 	}
 	type Notifications struct {
 		notifications
@@ -83,6 +96,10 @@ type notificationsHandler struct {
 	NotificationsHandler
 }
 
-func (h *notificationsHandler) Enroll(ctx context.Context, in *PushSubscriptionRequest, out *proto1.Success) error {
-	return h.NotificationsHandler.Enroll(ctx, in, out)
+func (h *notificationsHandler) Subscribe(ctx context.Context, in *PushSubscriptionRequest, out *PushSubscription) error {
+	return h.NotificationsHandler.Subscribe(ctx, in, out)
+}
+
+func (h *notificationsHandler) Unsubscribe(ctx context.Context, in *PushSubscriptionRequest, out *proto1.Success) error {
+	return h.NotificationsHandler.Unsubscribe(ctx, in, out)
 }

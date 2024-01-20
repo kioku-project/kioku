@@ -582,3 +582,14 @@ func (s *NotificationStoreImpl) CreatePushSubscription(ctx context.Context, newS
 func (s *NotificationStoreImpl) FindAllPushSubscriptions(ctx context.Context) (subscriptions []*model.PushSubscription, err error) {
 	return subscriptions, s.db.WithContext(ctx).Find(&subscriptions).Error
 }
+
+func (s *NotificationStoreImpl) FindPushSubscriptionByID(ctx context.Context, subscriptionID string) (subscription *model.PushSubscription, err error) {
+	if err = s.db.WithContext(ctx).Where(&model.PushSubscription{ID: subscriptionID}).First(&subscription).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *NotificationStoreImpl) DeletePushSubscription(ctx context.Context, subscription *model.PushSubscription) error {
+	return s.db.WithContext(ctx).Delete(subscription).Error
+}

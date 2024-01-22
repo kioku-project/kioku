@@ -26,7 +26,6 @@ func New(s store.UserStore, cS pbCollaboration.CollaborationService) *User {
 }
 
 func (e *User) Register(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Success) error {
-	logger.Infof("Received User.Register request: email: %v", req.UserEmail)
 	if _, err := e.store.FindUserByEmail(ctx, req.UserEmail); err == nil {
 		return helper.NewMicroUserAlreadyExistsErr(helper.UserServiceID)
 	} else if !errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
@@ -117,7 +116,6 @@ func (e *User) DeleteUser(ctx context.Context, req *pbCommon.User, rsp *pbCommon
 }
 
 func (e *User) Login(ctx context.Context, req *pbCommon.User, rsp *pbCommon.User) error {
-	logger.Infof("Received User.Login request: email: %v", req.UserEmail)
 	user, err := e.store.FindUserByEmail(ctx, req.UserEmail)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
@@ -136,7 +134,6 @@ func (e *User) Login(ctx context.Context, req *pbCommon.User, rsp *pbCommon.User
 }
 
 func (e *User) GetUserIDFromEmail(ctx context.Context, req *pbCommon.User, rsp *pbCommon.User) error {
-	logger.Infof("Received User.GetUserIDFromEmail request: %v", req)
 	user, err := e.store.FindUserByEmail(ctx, req.UserEmail)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {

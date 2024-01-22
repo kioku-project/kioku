@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/kioku-project/kioku/pkg/helper"
 	"go.opentelemetry.io/otel"
@@ -43,9 +42,9 @@ func NewPostgresStore(ctx context.Context) (*gorm.DB, error) {
 	logger := logger.New(
 		logrus.NewWriter(),
 		logger.Config{
-			SlowThreshold: time.Millisecond,
-			LogLevel:      logger.Warn,
-			Colorful:      false,
+			LogLevel:                  logger.Silent,
+			Colorful:                  false,
+			IgnoreRecordNotFoundError: true,
 		},
 	)
 

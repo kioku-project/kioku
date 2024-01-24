@@ -7,18 +7,7 @@ package notifications;
 option go_package ="github.com/kioku-project/kioku/services/notifications/proto;notifications";
 
 service Notifications {
-	rpc Subscribe(PushSubscriptionRequest) returns (PushSubscription) {}
-	rpc Unsubscribe(PushSubscriptionRequest) returns (common.Success) {}
-}
-
-message PushSubscriptionRequest {
-  string userID = 1;
-  PushSubscription subscription = 2;
-}
-
-message PushSubscription {
-  string subscriptionID = 1;
-  string endpoint = 2;
-  string auth = 3;
-  string p256dh = 4;
+	rpc Subscribe(common.PushSubscriptionRequest) returns (common.PushSubscription) {}
+	rpc Unsubscribe(common.PushSubscriptionRequest) returns (common.Success) {}
+	rpc GetUserNotificationSubscriptions(common.User) returns (common.PushSubscriptions) {}
 }

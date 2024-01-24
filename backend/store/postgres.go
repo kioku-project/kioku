@@ -593,3 +593,6 @@ func (s *NotificationStoreImpl) FindPushSubscriptionByID(ctx context.Context, su
 func (s *NotificationStoreImpl) DeletePushSubscription(ctx context.Context, subscription *model.PushSubscription) error {
 	return s.db.WithContext(ctx).Delete(subscription).Error
 }
+func (s *NotificationStoreImpl) FindPushSubscriptionsByUserID(ctx context.Context, userID string) (subscriptions []*model.PushSubscription, err error) {
+	return subscriptions, s.db.WithContext(ctx).Where(&model.PushSubscription{UserID: userID}).Find(&subscriptions).Error
+}

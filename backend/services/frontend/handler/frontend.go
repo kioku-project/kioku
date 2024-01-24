@@ -976,7 +976,7 @@ func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) SubscribeNotificationsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	subscription := &pbNotifications.PushSubscription{}
+	subscription := &pbCommon.PushSubscription{}
 	if err := c.BodyParser(subscription); err != nil {
 		return err
 	}
@@ -984,9 +984,9 @@ func (e *Frontend) SubscribeNotificationsHandler(c *fiber.Ctx) error {
 		return err
 	}
 
-	rspSubscribeNotifications, err := e.notificationsService.Subscribe(c.Context(), &pbNotifications.PushSubscriptionRequest{
+	rspSubscribeNotifications, err := e.notificationsService.Subscribe(c.Context(), &pbCommon.PushSubscriptionRequest{
 		UserID: userID,
-		Subscription: &pbNotifications.PushSubscription{
+		Subscription: &pbCommon.PushSubscription{
 			Endpoint: subscription.Endpoint,
 			Auth:     subscription.Auth,
 			P256Dh:   subscription.P256Dh,
@@ -998,11 +998,20 @@ func (e *Frontend) SubscribeNotificationsHandler(c *fiber.Ctx) error {
 	return c.SendString(rspSubscribeNotifications.SubscriptionID)
 }
 
+func (e *Frontend) GetUserNotificationSubscriptionsHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGetUserSubscriptions, err := e.notificationsService.GetUserNotificationSubscriptions(c.Context(), &pbCommon.User{UserID: userID})
+	if err != nil {
+		return err
+	}
+	return c.JSON(converter.ConvertToTypeArray(rspGetUserSubscriptions.Subscriptions, converter.ProtoPushSubscriptionToModelPushSubscriptionConverter))
+}
+
 func (e *Frontend) UnsubscribeNotificationsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspUnsubscribeNotifications, err := e.notificationsService.Unsubscribe(c.Context(), &pbNotifications.PushSubscriptionRequest{
+	rspUnsubscribeNotifications, err := e.notificationsService.Unsubscribe(c.Context(), &pbCommon.PushSubscriptionRequest{
 		UserID: userID,
-		Subscription: &pbNotifications.PushSubscription{
+		Subscription: &pbCommon.PushSubscription{
 			SubscriptionID: c.Params("subscriptionID"),
 		},
 	})

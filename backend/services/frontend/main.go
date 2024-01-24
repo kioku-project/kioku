@@ -157,6 +157,7 @@ func main() {
 	app.Post("/api/decks/:deckID/push", svc.SrsPushHandler)
 	app.Get("/api/decks/:deckID/dueCards", svc.SrsDeckDueHandler)
 
+	app.Get("/api/user/notifications", svc.GetUserNotificationSubscriptionsHandler)
 	app.Post("/api/user/notifications", svc.SubscribeNotificationsHandler)
 	app.Delete("/api/user/notifications/:subscriptionID", svc.UnsubscribeNotificationsHandler)
 

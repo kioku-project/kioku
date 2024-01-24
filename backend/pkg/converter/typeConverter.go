@@ -235,3 +235,20 @@ func ProtoUserWithRoleToFiberGroupMember(groupMembers *pbCommon.User) FiberGroup
 		GroupRole: groupMembers.GroupRole.String(),
 	}
 }
+
+func StoreNotificationSubscriptionToProtoNotificationSubscriptionConverter(subscription *model.PushSubscription) *pbCommon.PushSubscription {
+	return &pbCommon.PushSubscription{
+		SubscriptionID: subscription.ID,
+		Endpoint:       subscription.Endpoint,
+		P256Dh:         subscription.P256DH,
+		Auth:           subscription.Auth,
+	}
+}
+func ProtoPushSubscriptionToModelPushSubscriptionConverter(subscription *pbCommon.PushSubscription) *model.PushSubscription {
+	return &model.PushSubscription{
+		ID:       subscription.SubscriptionID,
+		Endpoint: subscription.Endpoint,
+		P256DH:   subscription.P256Dh,
+		Auth:     subscription.Auth,
+	}
+}

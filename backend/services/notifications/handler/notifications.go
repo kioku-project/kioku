@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	"github.com/SherClockHolmes/webpush-go"
+	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
@@ -11,7 +11,6 @@ import (
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	"go-micro.dev/v4/logger"
 
-	pb "github.com/kioku-project/kioku/services/notifications/proto"
 	"github.com/kioku-project/kioku/store"
 )
 
@@ -24,7 +23,7 @@ func New(s store.NotificationsStore, cds pbSrs.SrsService) *Notifications {
 	return &Notifications{store: s, srsService: cds}
 }
 
-func (e *Notifications) Subscribe(ctx context.Context, req *pb.PushSubscriptionRequest, rsp *pb.PushSubscription) error {
+func (e *Notifications) Subscribe(ctx context.Context, req *pbCommon.PushSubscriptionRequest, rsp *pbCommon.PushSubscription) error {
 	logger.Infof("Received Notifications.Enroll request: %v", req)
 	subscription := &model.PushSubscription{
 		UserID:   req.UserID,
@@ -49,7 +48,19 @@ func (e *Notifications) Subscribe(ctx context.Context, req *pb.PushSubscriptionR
 	return nil
 }
 
-func (e *Notifications) Unsubscribe(ctx context.Context, req *pb.PushSubscriptionRequest, rsp *pbCommon.Success) error {
+func (e *Notifications) GetUserNotificationSubscriptions(ctx context.Context, req *pbCommon.User, rsp *pbCommon.PushSubscriptions) error {
+	logger.Infof("Received Notifications.GetUserNotificationSubscriptions request: %v", req)
+	subscriptions, err := e.store.FindPushSubscriptionsByUserID(ctx, req.UserID)
+	if err != nil {
+		return err
+	}
+	protoSubscriptions := converter.ConvertToTypeArray(subscriptions, converter.StoreNotificationSubscriptionToProtoNotificationSubscriptionConverter)
+	*rsp = pbCommon.PushSubscriptions{Subscriptions: protoSubscriptions}
+	return nil
+
+}
+
+func (e *Notifications) Unsubscribe(ctx context.Context, req *pbCommon.PushSubscriptionRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received Notifications.Unenroll request: %v", req)
 	subscription, err := e.store.FindPushSubscriptionByID(ctx, req.Subscription.SubscriptionID)
 	if err != nil {

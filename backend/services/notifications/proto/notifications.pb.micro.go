@@ -37,8 +37,9 @@ func NewNotificationsEndpoints() []*api.Endpoint {
 // Client API for Notifications service
 
 type NotificationsService interface {
-	Subscribe(ctx context.Context, in *PushSubscriptionRequest, opts ...client.CallOption) (*PushSubscription, error)
-	Unsubscribe(ctx context.Context, in *PushSubscriptionRequest, opts ...client.CallOption) (*proto1.Success, error)
+	Subscribe(ctx context.Context, in *proto1.PushSubscriptionRequest, opts ...client.CallOption) (*proto1.PushSubscription, error)
+	Unsubscribe(ctx context.Context, in *proto1.PushSubscriptionRequest, opts ...client.CallOption) (*proto1.Success, error)
+	GetUserNotificationSubscriptions(ctx context.Context, in *proto1.User, opts ...client.CallOption) (*proto1.PushSubscriptions, error)
 }
 
 type notificationsService struct {
@@ -53,9 +54,9 @@ func NewNotificationsService(name string, c client.Client) NotificationsService 
 	}
 }
 
-func (c *notificationsService) Subscribe(ctx context.Context, in *PushSubscriptionRequest, opts ...client.CallOption) (*PushSubscription, error) {
+func (c *notificationsService) Subscribe(ctx context.Context, in *proto1.PushSubscriptionRequest, opts ...client.CallOption) (*proto1.PushSubscription, error) {
 	req := c.c.NewRequest(c.name, "Notifications.Subscribe", in)
-	out := new(PushSubscription)
+	out := new(proto1.PushSubscription)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -63,9 +64,19 @@ func (c *notificationsService) Subscribe(ctx context.Context, in *PushSubscripti
 	return out, nil
 }
 
-func (c *notificationsService) Unsubscribe(ctx context.Context, in *PushSubscriptionRequest, opts ...client.CallOption) (*proto1.Success, error) {
+func (c *notificationsService) Unsubscribe(ctx context.Context, in *proto1.PushSubscriptionRequest, opts ...client.CallOption) (*proto1.Success, error) {
 	req := c.c.NewRequest(c.name, "Notifications.Unsubscribe", in)
 	out := new(proto1.Success)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *notificationsService) GetUserNotificationSubscriptions(ctx context.Context, in *proto1.User, opts ...client.CallOption) (*proto1.PushSubscriptions, error) {
+	req := c.c.NewRequest(c.name, "Notifications.GetUserNotificationSubscriptions", in)
+	out := new(proto1.PushSubscriptions)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,14 +87,16 @@ func (c *notificationsService) Unsubscribe(ctx context.Context, in *PushSubscrip
 // Server API for Notifications service
 
 type NotificationsHandler interface {
-	Subscribe(context.Context, *PushSubscriptionRequest, *PushSubscription) error
-	Unsubscribe(context.Context, *PushSubscriptionRequest, *proto1.Success) error
+	Subscribe(context.Context, *proto1.PushSubscriptionRequest, *proto1.PushSubscription) error
+	Unsubscribe(context.Context, *proto1.PushSubscriptionRequest, *proto1.Success) error
+	GetUserNotificationSubscriptions(context.Context, *proto1.User, *proto1.PushSubscriptions) error
 }
 
 func RegisterNotificationsHandler(s server.Server, hdlr NotificationsHandler, opts ...server.HandlerOption) error {
 	type notifications interface {
-		Subscribe(ctx context.Context, in *PushSubscriptionRequest, out *PushSubscription) error
-		Unsubscribe(ctx context.Context, in *PushSubscriptionRequest, out *proto1.Success) error
+		Subscribe(ctx context.Context, in *proto1.PushSubscriptionRequest, out *proto1.PushSubscription) error
+		Unsubscribe(ctx context.Context, in *proto1.PushSubscriptionRequest, out *proto1.Success) error
+		GetUserNotificationSubscriptions(ctx context.Context, in *proto1.User, out *proto1.PushSubscriptions) error
 	}
 	type Notifications struct {
 		notifications
@@ -96,10 +109,14 @@ type notificationsHandler struct {
 	NotificationsHandler
 }
 
-func (h *notificationsHandler) Subscribe(ctx context.Context, in *PushSubscriptionRequest, out *PushSubscription) error {
+func (h *notificationsHandler) Subscribe(ctx context.Context, in *proto1.PushSubscriptionRequest, out *proto1.PushSubscription) error {
 	return h.NotificationsHandler.Subscribe(ctx, in, out)
 }
 
-func (h *notificationsHandler) Unsubscribe(ctx context.Context, in *PushSubscriptionRequest, out *proto1.Success) error {
+func (h *notificationsHandler) Unsubscribe(ctx context.Context, in *proto1.PushSubscriptionRequest, out *proto1.Success) error {
 	return h.NotificationsHandler.Unsubscribe(ctx, in, out)
+}
+
+func (h *notificationsHandler) GetUserNotificationSubscriptions(ctx context.Context, in *proto1.User, out *proto1.PushSubscriptions) error {
+	return h.NotificationsHandler.GetUserNotificationSubscriptions(ctx, in, out)
 }

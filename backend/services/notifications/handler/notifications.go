@@ -36,9 +36,9 @@ func (e *Notifications) Subscribe(ctx context.Context, req *pb.PushSubscriptionR
 		return err
 	}
 	notification := &model.PushNotification{
-		Title: "Welcome to Kioku!",
+		Title: "Welcome!",
 		Options: model.PushNotificationOptions{
-			Body:    "You will now receive reminders so you don't forget your cards'!",
+			Body:    "Reminders will be sent to help you keep track of due cards.",
 			Actions: []map[string]string{},
 			Vibrate: []int{200, 100, 200},
 			Tag:     "Kioku",

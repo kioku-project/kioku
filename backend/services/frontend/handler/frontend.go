@@ -980,6 +980,10 @@ func (e *Frontend) SubscribeNotificationsHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(subscription); err != nil {
 		return err
 	}
+	if err := helper.EnsureNotEmpty(subscription.Endpoint, subscription.Auth, subscription.P256Dh); err != nil {
+		return err
+	}
+
 	rspSubscribeNotifications, err := e.notificationsService.Subscribe(c.Context(), &pbNotifications.PushSubscriptionRequest{
 		UserID: userID,
 		Subscription: &pbNotifications.PushSubscription{

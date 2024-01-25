@@ -244,11 +244,3 @@ func StoreNotificationSubscriptionToProtoNotificationSubscriptionConverter(subsc
 		Auth:           subscription.Auth,
 	}
 }
-func ProtoPushSubscriptionToModelPushSubscriptionConverter(subscription *pbCommon.PushSubscription) *model.PushSubscription {
-	return &model.PushSubscription{
-		ID:       subscription.SubscriptionID,
-		Endpoint: subscription.Endpoint,
-		P256DH:   subscription.P256Dh,
-		Auth:     subscription.Auth,
-	}
-}

@@ -2,8 +2,10 @@ import { Trans } from "@lingui/macro";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/input/Button";
+import { InstallPWAModal } from "@/components/modal/InstallPWAModal";
 import { deleteRequest, postRequest } from "@/util/api";
 import { useNotifications } from "@/util/swr";
+import { getOS } from "@/util/utils";
 
 interface NotificationButtonProps {
 	/**
@@ -23,6 +25,13 @@ export const NotificationButton = ({
 	const { subscriptions } = useNotifications();
 	const [subscribed, setSubscribed] = useState<boolean>();
 
+	const [installModalVisible, setInstallModalVisible] =
+		useState<boolean>(false);
+
+	const isPWA = window.matchMedia("(display-mode: standalone)").matches;
+	const isMobile = getOS() === "ios" || getOS() === "android";
+	const hasNotifications = notificationSupported() && (!isMobile || isPWA);
+
 	useEffect(() => {
 		setSubscribed(
 			subscriptions?.includes(localStorage.getItem("SubscriptionId"))
@@ -30,26 +39,34 @@ export const NotificationButton = ({
 	}, [subscriptions]);
 
 	return (
-		<Button
-			buttonStyle="primary"
-			buttonTextSize="3xs"
-			className={`w-full justify-center ${className}`}
-			onClick={() => {
-				if (notificationSupported()) {
-					subscribed
-						? unsubscribe(localStorage.getItem("SubscriptionId"))
-						: subscribe();
-				}
-			}}
-		>
-			{!notificationSupported() && (
-				<Trans>Please install the PWA first!</Trans>
-			)}
-			{notificationSupported() && subscribed && (
-				<Trans>Unsubscribe</Trans>
-			)}
-			{notificationSupported() && !subscribed && <Trans>Subscribe</Trans>}
-		</Button>
+		<>
+			<InstallPWAModal
+				visible={installModalVisible}
+				setVisible={setInstallModalVisible}
+			/>
+			<Button
+				buttonStyle="primary"
+				buttonTextSize="3xs"
+				className={`w-full justify-center ${className}`}
+				onClick={() => {
+					if (hasNotifications) {
+						subscribed
+							? unsubscribe(
+									localStorage.getItem("SubscriptionId")
+							  )
+							: subscribe();
+					} else {
+						setInstallModalVisible(true);
+					}
+				}}
+			>
+				{!hasNotifications && (
+					<Trans>Please install the PWA first!</Trans>
+				)}
+				{hasNotifications && subscribed && <Trans>Unsubscribe</Trans>}
+				{hasNotifications && !subscribed && <Trans>Subscribe</Trans>}
+			</Button>
+		</>
 	);
 
 	async function subscribe() {

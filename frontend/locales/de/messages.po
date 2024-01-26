@@ -57,7 +57,7 @@ msgstr "Bereits registriert?"
 msgid "Available"
 msgstr "Verfügbar"
 
-#: pages/deck/[id]/learn.tsx:84
+#: pages/deck/[id]/learn.tsx:90
 msgid "Back to Deck!"
 msgstr "Zurück zum Stapel!"
 
@@ -73,7 +73,7 @@ msgstr "Karte erstellt!"
 msgid "Card updated!"
 msgstr "Karte aktualisiert!"
 
-#: pages/deck/[id]/index.tsx:41
+#: pages/deck/[id]/index.tsx:38
 msgid "Cards"
 msgstr "Karten"
 
@@ -87,9 +87,13 @@ msgstr "Ändere, wie andere der Gruppe beitreten können"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:100
 #: components/navigation/Tabs/GroupSettingsTab.tsx:132
-#: components/navigation/Tabs/UserSettingsTab.tsx:70
+#: components/navigation/Tabs/UserSettingsTab.tsx:106
 msgid "Click again"
 msgstr "Nochmal klicken"
+
+#: components/modal/InstallPWAModal.tsx:142
+msgid "Click on \"Add page to\""
+msgstr "Klicke auf \"Seite hinzufügen zu\""
 
 #: pages/features.tsx:72
 msgid "Collaborate with your friends and fellow students in groups and work on shared decks. Learn together and motivate each other!"
@@ -103,7 +107,7 @@ msgstr "Kollaborativ"
 msgid "Compatible"
 msgstr "Kompatibel"
 
-#: pages/deck/[id]/learn.tsx:69
+#: pages/deck/[id]/learn.tsx:75
 msgid "Congratulations!"
 msgstr "Glückwunsch!"
 
@@ -129,7 +133,7 @@ msgstr "Gruppe erstellen"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:72
 #: components/navigation/Tabs/GroupSettingsTab.tsx:80
-#: components/navigation/Tabs/UserSettingsTab.tsx:59
+#: components/navigation/Tabs/UserSettingsTab.tsx:95
 msgid "Danger Zone"
 msgstr "Gefahrenzone"
 
@@ -158,12 +162,12 @@ msgstr "Stapel Name"
 msgid "Deck updated!"
 msgstr "Stapel aktualisiert!"
 
-#: pages/group/[id]/index.tsx:43
+#: pages/group/[id]/index.tsx:42
 #: pages/index.tsx:49
 msgid "Decks"
 msgstr "Stapel"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:71
+#: components/navigation/Tabs/UserSettingsTab.tsx:107
 msgid "Delete Account"
 msgstr "Account löschen"
 
@@ -183,7 +187,7 @@ msgstr "Lösche diesen Stapel"
 msgid "Delete this group"
 msgstr "Lösche diese Gruppe"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:64
+#: components/navigation/Tabs/UserSettingsTab.tsx:100
 msgid "Delete your Account"
 msgstr "Lösche Deinen Account"
 
@@ -202,6 +206,10 @@ msgstr "Entdecke die Funktionen unserer kostenlosen Karteikarten Anwendung. Impo
 #: pages/login.tsx:217
 msgid "Don't have an account?"
 msgstr "Noch kein Account?"
+
+#: components/modal/InstallPWAModal.tsx:78
+msgid "Done"
+msgstr "Erledigt"
 
 #: components/flashcard/Flashcard.tsx:260
 msgid "Easy"
@@ -281,9 +289,17 @@ msgstr "Gruppen"
 msgid "Hard"
 msgstr "Schwierig"
 
+#: components/modal/InstallPWAModal.tsx:45
+msgid "here"
+msgstr "hier"
+
 #: components/statistics/StatisticOverview.tsx:38
 msgid "Hit Rate"
 msgstr "Erfolgsquote"
+
+#: components/modal/InstallPWAModal.tsx:26
+msgid "How to install Kioku"
+msgstr "So installiert man Kioku"
 
 #: pages/features.tsx:77
 msgid "Individual"
@@ -293,9 +309,13 @@ msgstr "Individuell"
 msgid "Informative"
 msgstr "Informativ"
 
-#: pages/index.tsx:63
-msgid "Invitations"
-msgstr "Einladungen"
+#: components/input/NotificationButton.tsx:63
+msgid "Install Kioku"
+msgstr "Kioku installieren"
+
+#: components/modal/InstallPWAModal.tsx:54
+msgid "Install Kioku for a native experience and to receive notifications."
+msgstr "Installiere Kioku für ein natives Erlebnis und um Benachrichtigungen zu erhalten."
 
 #: components/group/Member.tsx:132
 msgid "Invite user with email"
@@ -362,9 +382,19 @@ msgstr "Mittel"
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Mindestens {passwordMinLength} Zeichen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:66
+#: components/navigation/Tabs/UserSettingsTab.tsx:62
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+#: components/navigation/Tabs/UserSettingsTab.tsx:102
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Nachdem Du Deinen Benutzer gelöscht hast, gibt es kein Zurück mehr."
+
+#: components/modal/InstallPWAModal.tsx:111
+#: components/modal/InstallPWAModal.tsx:136
+#: components/modal/InstallPWAModal.tsx:167
+msgid "Open menu"
+msgstr "Menü öffnen"
 
 #: pages/login.tsx:106
 msgid "Password"
@@ -397,7 +427,7 @@ msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten An
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:57
 #: components/navigation/Tabs/GroupSettingsTab.tsx:54
-#: components/navigation/Tabs/UserSettingsTab.tsx:48
+#: components/navigation/Tabs/UserSettingsTab.tsx:51
 msgid "Rename"
 msgstr "Umbenennen"
 
@@ -413,13 +443,29 @@ msgstr "Anfrage ausstehend"
 msgid "Save"
 msgstr "Speichern"
 
+#: components/modal/InstallPWAModal.tsx:98
+msgid "Select \"Add to Home Screen\""
+msgstr "Wähle \"Zum Home-Bildschirm\""
+
+#: components/modal/InstallPWAModal.tsx:148
+msgid "Select \"Home screen\""
+msgstr "Wähle \"Startbildschirm\""
+
+#: components/modal/InstallPWAModal.tsx:117
+msgid "Select \"Install app\""
+msgstr "App installieren\""
+
+#: components/modal/InstallPWAModal.tsx:173
+msgid "Select \"Install\""
+msgstr "Wähle \"Installieren\""
+
 #: components/layout/Header.tsx:168
 msgid "Sent request!"
 msgstr "Anfrage gesendet!"
 
-#: pages/deck/[id]/index.tsx:55
-#: pages/group/[id]/index.tsx:60
-#: pages/index.tsx:78
+#: pages/deck/[id]/index.tsx:43
+#: pages/group/[id]/index.tsx:52
+#: pages/index.tsx:63
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -439,29 +485,55 @@ msgstr "Registrieren"
 msgid "Sign up now!"
 msgstr "Jetzt registrieren!"
 
+#: components/modal/InstallPWAModal.tsx:159
+msgid "Since Firefox is not fully supporting PWAs, we recommend to use Chrome for the best experience."
+msgstr "Da Firefox PWAs nicht vollständig unterstützt, empfehlen wir die Verwendung von Chrome für die beste Erfahrung."
+
+#: components/modal/InstallPWAModal.tsx:128
+msgid "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend to use Chrome for the best experience."
+msgstr "Da der Samsung Internet Browser PWAs nicht vollständig unterstützt, empfehlen wir die Verwendung von Chrome für die beste Erfahrung."
+
+#: components/modal/InstallPWAModal.tsx:47
+msgid "so that we can support even more devices in the future. We recommend to use Chrome on Android and Safari on iOS for the best experience."
+msgstr "melden, damit wir in Zukunft noch mehr Geräte unterstützen können. in Zukunft unterstützen können. Wir empfehlen die Verwendung von Chrome auf Android und Safari auf iOS für die beste Erfahrung."
+
 #: pages/home.tsx:53
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
 
-#: pages/deck/[id]/index.tsx:48
-#: pages/group/[id]/index.tsx:53
-#: pages/index.tsx:71
-msgid "Statistics"
-msgstr "Statistiken"
+#: components/input/NotificationButton.tsx:65
+msgid "Subscribe"
+msgstr "Aktivieren"
+
+#: components/navigation/Tabs/UserSettingsTab.tsx:82
+msgid "Subscribe to get daily reminders to review your pending cards!"
+msgstr "Benachrichtigungen aktivieren, um täglich an das Lernen von anstehenden Karten erinnert zu werden."
+
+#: components/modal/InstallPWAModal.tsx:92
+msgid "Tap on share"
+msgstr "Tippe auf teilen"
 
 #: components/statistics/StatisticOverview.tsx:44
 msgid "Test"
 msgstr "Test"
 
+#: components/navigation/Tabs/UserSettingsTab.tsx:75
+msgid "Turn on Notifications"
+msgstr "Benachrichtigungen aktivieren"
+
 #: components/navigation/Tabs/GroupSettingsTab.tsx:113
 msgid "Unexpected group type"
 msgstr "Unerwarteter Gruppentyp"
 
-#: pages/group/[id]/index.tsx:48
+#: components/input/NotificationButton.tsx:64
+msgid "Unsubscribe"
+msgstr "Deaktivieren"
+
+#: pages/group/[id]/index.tsx:47
 msgid "User"
 msgstr "Benutzer"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:100
+#: components/navigation/Tabs/UserSettingsTab.tsx:136
 msgid "User deleted!"
 msgstr "Benutzer gelöscht!"
 
@@ -469,11 +541,11 @@ msgstr "Benutzer gelöscht!"
 msgid "User invited"
 msgstr "Benutzer eingeladen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:90
+#: components/navigation/Tabs/UserSettingsTab.tsx:126
 msgid "User updated!"
 msgstr "Benutzer aktualisiert!"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:46
+#: components/navigation/Tabs/UserSettingsTab.tsx:49
 #: pages/login.tsx:96
 msgid "Username"
 msgstr "Benutzername"
@@ -498,7 +570,11 @@ msgstr "Willkommen bei Kioku - der cloudbasierten Karteikarten Anwendung, die si
 msgid "Wrong username or password"
 msgstr "Falscher Benutzername oder falsches Passwort"
 
-#: pages/deck/[id]/learn.tsx:72
+#: components/modal/InstallPWAModal.tsx:34
+msgid "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"
+msgstr "Sie verwenden einen unbekannten Browser oder ein unbekanntes Betriebssystem, daher können wir Ihnen keine Hinweise geben, wie Sie Kioku auf Ihrem Gerät installieren können. Wir würden uns freuen, wenn Sie dieses Problem"
+
+#: pages/deck/[id]/learn.tsx:78
 msgid "You did it! There are no cards left in this deck to learn today."
 msgstr "Du hast es geschafft! Für heute gibt es keine Karten mehr zu lernen."
 

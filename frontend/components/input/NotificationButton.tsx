@@ -60,9 +60,7 @@ export const NotificationButton = ({
 					}
 				}}
 			>
-				{!hasNotifications && (
-					<Trans>Please install the PWA first!</Trans>
-				)}
+				{!hasNotifications && <Trans>Install Kioku</Trans>}
 				{hasNotifications && subscribed && <Trans>Unsubscribe</Trans>}
 				{hasNotifications && !subscribed && <Trans>Subscribe</Trans>}
 			</Button>

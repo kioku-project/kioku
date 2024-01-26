@@ -87,7 +87,7 @@ msgstr "Change how others join this group"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:100
 #: components/navigation/Tabs/GroupSettingsTab.tsx:132
-#: components/navigation/Tabs/UserSettingsTab.tsx:106
+#: components/navigation/Tabs/UserSettingsTab.tsx:119
 msgid "Click again"
 msgstr "Click again"
 
@@ -133,7 +133,7 @@ msgstr "Create new Group"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:72
 #: components/navigation/Tabs/GroupSettingsTab.tsx:80
-#: components/navigation/Tabs/UserSettingsTab.tsx:95
+#: components/navigation/Tabs/UserSettingsTab.tsx:108
 msgid "Danger Zone"
 msgstr "Danger Zone"
 
@@ -167,7 +167,7 @@ msgstr "Deck updated!"
 msgid "Decks"
 msgstr "Decks"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:107
+#: components/navigation/Tabs/UserSettingsTab.tsx:120
 msgid "Delete Account"
 msgstr "Delete Account"
 
@@ -187,7 +187,7 @@ msgstr "Delete this deck"
 msgid "Delete this group"
 msgstr "Delete this group"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:100
+#: components/navigation/Tabs/UserSettingsTab.tsx:113
 msgid "Delete your Account"
 msgstr "Delete your Account"
 
@@ -309,7 +309,7 @@ msgstr "Individual"
 msgid "Informative"
 msgstr "Informative"
 
-#: components/input/NotificationButton.tsx:63
+#: components/input/NotificationButton.tsx:60
 msgid "Install Kioku"
 msgstr "Install Kioku"
 
@@ -382,11 +382,11 @@ msgstr "Medium"
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Minimum {passwordMinLength} characters"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:62
+#: components/navigation/Tabs/UserSettingsTab.tsx:69
 msgid "Notifications"
 msgstr "Notifications"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:102
+#: components/navigation/Tabs/UserSettingsTab.tsx:115
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Once you delete your user, there is no going back. Please be certain."
 
@@ -427,7 +427,7 @@ msgstr "Register today and start using the free flashcard application together w
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:57
 #: components/navigation/Tabs/GroupSettingsTab.tsx:54
-#: components/navigation/Tabs/UserSettingsTab.tsx:51
+#: components/navigation/Tabs/UserSettingsTab.tsx:58
 msgid "Rename"
 msgstr "Rename"
 
@@ -501,11 +501,11 @@ msgstr "so that we can support even more devices in the future. We recommend to 
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 
-#: components/input/NotificationButton.tsx:65
+#: components/input/NotificationButton.tsx:62
 msgid "Subscribe"
 msgstr "Subscribe"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:82
+#: components/navigation/Tabs/UserSettingsTab.tsx:89
 msgid "Subscribe to get daily reminders to review your pending cards!"
 msgstr "Subscribe to get daily reminders to review your pending cards!"
 
@@ -517,7 +517,7 @@ msgstr "Tap on share"
 msgid "Test"
 msgstr "Test"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:75
+#: components/navigation/Tabs/UserSettingsTab.tsx:82
 msgid "Turn on Notifications"
 msgstr "Turn on Notifications"
 
@@ -525,7 +525,7 @@ msgstr "Turn on Notifications"
 msgid "Unexpected group type"
 msgstr "Unexpected group type"
 
-#: components/input/NotificationButton.tsx:64
+#: components/input/NotificationButton.tsx:61
 msgid "Unsubscribe"
 msgstr "Unsubscribe"
 
@@ -533,7 +533,7 @@ msgstr "Unsubscribe"
 msgid "User"
 msgstr "User"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:136
+#: components/navigation/Tabs/UserSettingsTab.tsx:150
 msgid "User deleted!"
 msgstr "User deleted!"
 
@@ -541,11 +541,11 @@ msgstr "User deleted!"
 msgid "User invited"
 msgstr "User invited"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:126
+#: components/navigation/Tabs/UserSettingsTab.tsx:140
 msgid "User updated!"
 msgstr "User updated!"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:49
+#: components/navigation/Tabs/UserSettingsTab.tsx:56
 #: pages/login.tsx:96
 msgid "Username"
 msgstr "Username"

@@ -11,6 +11,7 @@ import { DangerAction } from "@/components/input/DangerAction";
 import { InputAction } from "@/components/input/InputAction";
 import { NotificationButton } from "@/components/input/NotificationButton";
 import { Section } from "@/components/layout/Section";
+import { InstallPWAModal } from "@/components/modal/InstallPWAModal";
 import { User } from "@/types/User";
 import { deleteRequest, putRequests } from "@/util/api";
 
@@ -34,90 +35,103 @@ export const UserSettingsTab = ({
 }: UserSettingsTabProps) => {
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
+	const { _ } = useLingui();
 
 	const [userName, setUserName] = useState(user.userName);
 
 	const [isConfirmDeletion, setConfirmDeletion] = useState(false);
-
-	const { _ } = useLingui();
+	const [installModalVisible, setInstallModalVisible] =
+		useState<boolean>(false);
 
 	return (
-		<div className={`space-y-5 ${className}`}>
-			<Section id="generalUserSettingsSectionId" header="General">
-				<InputAction
-					id="userNameInputAction"
-					header={_(msg`Username`)}
-					value={userName}
-					button={_(msg`Rename`)}
-					onChange={(event: ChangeEvent<HTMLInputElement>) => {
-						setUserName(event.target.value);
-					}}
-					onClick={() => {
-						modifyUser({ userName: userName });
-					}}
-				/>
-			</Section>
-			<Section
-				id="userSettingsNotificatioSectionId"
-				header={_(msg`Notifications`)}
-			>
-				<div
-					className={`flex flex-col justify-between space-y-1 p-3 sm:flex-row sm:items-center sm:space-x-3 ${className}`}
+		<>
+			<InstallPWAModal
+				visible={installModalVisible}
+				setVisible={setInstallModalVisible}
+			/>
+			<div className={`space-y-5 ${className}`}>
+				<Section id="generalUserSettingsSectionId" header="General">
+					<InputAction
+						id="userNameInputAction"
+						header={_(msg`Username`)}
+						value={userName}
+						button={_(msg`Rename`)}
+						onChange={(event: ChangeEvent<HTMLInputElement>) => {
+							setUserName(event.target.value);
+						}}
+						onClick={() => {
+							modifyUser({ userName: userName });
+						}}
+					/>
+				</Section>
+				<Section
+					id="userSettingsNotificatioSectionId"
+					header={_(msg`Notifications`)}
 				>
-					<Action
-						description={
-							<>
-								<Text
-									textStyle="primary"
-									textSize="3xs"
-									className="font-bold"
-								>
-									<Trans>Turn on Notifications</Trans>
-								</Text>
-								<Text
-									textStyle="secondary"
-									textSize="3xs"
-									className="font-medium"
-								>
-									<Trans>
-										Subscribe to get daily reminders to
-										review your pending cards!
-									</Trans>
-								</Text>
-							</>
+					<div
+						className={`flex flex-col justify-between space-y-1 p-3 sm:flex-row sm:items-center sm:space-x-3 ${className}`}
+					>
+						<Action
+							description={
+								<>
+									<Text
+										textStyle="primary"
+										textSize="3xs"
+										className="font-bold"
+									>
+										<Trans>Turn on Notifications</Trans>
+									</Text>
+									<Text
+										textStyle="secondary"
+										textSize="3xs"
+										className="font-medium"
+									>
+										<Trans>
+											Subscribe to get daily reminders to
+											review your pending cards!
+										</Trans>
+									</Text>
+								</>
+							}
+							button={
+								<NotificationButton
+									setInstallModalVisible={
+										setInstallModalVisible
+									}
+								/>
+							}
+						></Action>
+					</div>
+				</Section>
+				<Section
+					id="userSettingsDangerZoneSectionId"
+					header={_(msg`Danger Zone`)}
+					style="error"
+				>
+					<DangerAction
+						id="deleteAccountDangerAction"
+						header={_(msg`Delete your Account`)}
+						description={_(
+							msg`Once you delete your user, there is no going back. Please be certain.`
+						)}
+						button={
+							isConfirmDeletion
+								? _(msg`Click again`)
+								: _(msg`Delete Account`)
 						}
-						button={<NotificationButton />}
-					></Action>
-				</div>
-			</Section>
-			<Section
-				id="userSettingsDangerZoneSectionId"
-				header={_(msg`Danger Zone`)}
-				style="error"
-			>
-				<DangerAction
-					id="deleteAccountDangerAction"
-					header={_(msg`Delete your Account`)}
-					description={_(
-						msg`Once you delete your user, there is no going back. Please be certain.`
-					)}
-					button={
-						isConfirmDeletion
-							? _(msg`Click again`)
-							: _(msg`Delete Account`)
-					}
-					onClick={() => {
-						if (isConfirmDeletion) {
-							deleteUser()
-								.then((result) => {})
-								.catch((error) => {});
-						} else {
-							setConfirmDeletion(true);
-						}
-					}}
-				/>
-			</Section>
-		</div>
+						onClick={() => {
+							if (isConfirmDeletion) {
+								deleteUser()
+									.then((result) => {})
+									.catch((error) => {});
+							} else {
+								setConfirmDeletion(true);
+							}
+						}}
+					/>
+				</Section>
+			</div>
+		</>
 	);
 
 	async function modifyUser(body: { userName?: string }) {

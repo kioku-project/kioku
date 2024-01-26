@@ -1,13 +1,16 @@
 import { Trans } from "@lingui/macro";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { Button } from "@/components/input/Button";
-import { InstallPWAModal } from "@/components/modal/InstallPWAModal";
 import { deleteRequest, postRequest } from "@/util/api";
 import { useNotifications } from "@/util/swr";
 import { getOS } from "@/util/utils";
 
 interface NotificationButtonProps {
+	/**
+	 * Change modal visibility
+	 */
+	setInstallModalVisible: Dispatch<SetStateAction<boolean>>;
 	/**
 	 * Additional classes
 	 */
@@ -20,13 +23,11 @@ const notificationSupported = () =>
 	"PushManager" in window;
 
 export const NotificationButton = ({
+	setInstallModalVisible,
 	className = "",
 }: NotificationButtonProps) => {
 	const { subscriptions } = useNotifications();
 	const [subscribed, setSubscribed] = useState<boolean>();
-
-	const [installModalVisible, setInstallModalVisible] =
-		useState<boolean>(false);
 
 	const isPWA = window.matchMedia("(display-mode: standalone)").matches;
 	const isMobile = getOS() === "ios" || getOS() === "android";
@@ -40,10 +41,6 @@ export const NotificationButton = ({
 
 	return (
 		<>
-			<InstallPWAModal
-				visible={installModalVisible}
-				setVisible={setInstallModalVisible}
-			/>
 			<Button
 				buttonStyle="primary"
 				buttonTextSize="3xs"

@@ -87,7 +87,7 @@ msgstr "Ändere, wie andere der Gruppe beitreten können"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:100
 #: components/navigation/Tabs/GroupSettingsTab.tsx:132
-#: components/navigation/Tabs/UserSettingsTab.tsx:106
+#: components/navigation/Tabs/UserSettingsTab.tsx:119
 msgid "Click again"
 msgstr "Nochmal klicken"
 
@@ -133,7 +133,7 @@ msgstr "Gruppe erstellen"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:72
 #: components/navigation/Tabs/GroupSettingsTab.tsx:80
-#: components/navigation/Tabs/UserSettingsTab.tsx:95
+#: components/navigation/Tabs/UserSettingsTab.tsx:108
 msgid "Danger Zone"
 msgstr "Gefahrenzone"
 
@@ -167,7 +167,7 @@ msgstr "Stapel aktualisiert!"
 msgid "Decks"
 msgstr "Stapel"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:107
+#: components/navigation/Tabs/UserSettingsTab.tsx:120
 msgid "Delete Account"
 msgstr "Account löschen"
 
@@ -187,7 +187,7 @@ msgstr "Lösche diesen Stapel"
 msgid "Delete this group"
 msgstr "Lösche diese Gruppe"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:100
+#: components/navigation/Tabs/UserSettingsTab.tsx:113
 msgid "Delete your Account"
 msgstr "Lösche Deinen Account"
 
@@ -309,7 +309,7 @@ msgstr "Individuell"
 msgid "Informative"
 msgstr "Informativ"
 
-#: components/input/NotificationButton.tsx:63
+#: components/input/NotificationButton.tsx:60
 msgid "Install Kioku"
 msgstr "Kioku installieren"
 
@@ -382,11 +382,11 @@ msgstr "Mittel"
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Mindestens {passwordMinLength} Zeichen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:62
+#: components/navigation/Tabs/UserSettingsTab.tsx:69
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:102
+#: components/navigation/Tabs/UserSettingsTab.tsx:115
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Nachdem Du Deinen Benutzer gelöscht hast, gibt es kein Zurück mehr."
 
@@ -427,7 +427,7 @@ msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten An
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:57
 #: components/navigation/Tabs/GroupSettingsTab.tsx:54
-#: components/navigation/Tabs/UserSettingsTab.tsx:51
+#: components/navigation/Tabs/UserSettingsTab.tsx:58
 msgid "Rename"
 msgstr "Umbenennen"
 
@@ -453,7 +453,7 @@ msgstr "Wähle \"Startbildschirm\""
 
 #: components/modal/InstallPWAModal.tsx:117
 msgid "Select \"Install app\""
-msgstr "App installieren\""
+msgstr "Wähle \"App installieren\""
 
 #: components/modal/InstallPWAModal.tsx:173
 msgid "Select \"Install\""
@@ -501,11 +501,11 @@ msgstr "melden, damit wir in Zukunft noch mehr Geräte unterstützen können. in
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
 
-#: components/input/NotificationButton.tsx:65
+#: components/input/NotificationButton.tsx:62
 msgid "Subscribe"
 msgstr "Aktivieren"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:82
+#: components/navigation/Tabs/UserSettingsTab.tsx:89
 msgid "Subscribe to get daily reminders to review your pending cards!"
 msgstr "Benachrichtigungen aktivieren, um täglich an das Lernen von anstehenden Karten erinnert zu werden."
 
@@ -517,7 +517,7 @@ msgstr "Tippe auf teilen"
 msgid "Test"
 msgstr "Test"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:75
+#: components/navigation/Tabs/UserSettingsTab.tsx:82
 msgid "Turn on Notifications"
 msgstr "Benachrichtigungen aktivieren"
 
@@ -525,7 +525,7 @@ msgstr "Benachrichtigungen aktivieren"
 msgid "Unexpected group type"
 msgstr "Unerwarteter Gruppentyp"
 
-#: components/input/NotificationButton.tsx:64
+#: components/input/NotificationButton.tsx:61
 msgid "Unsubscribe"
 msgstr "Deaktivieren"
 
@@ -533,7 +533,7 @@ msgstr "Deaktivieren"
 msgid "User"
 msgstr "Benutzer"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:136
+#: components/navigation/Tabs/UserSettingsTab.tsx:150
 msgid "User deleted!"
 msgstr "Benutzer gelöscht!"
 
@@ -541,11 +541,11 @@ msgstr "Benutzer gelöscht!"
 msgid "User invited"
 msgstr "Benutzer eingeladen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:126
+#: components/navigation/Tabs/UserSettingsTab.tsx:140
 msgid "User updated!"
 msgstr "Benutzer aktualisiert!"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:49
+#: components/navigation/Tabs/UserSettingsTab.tsx:56
 #: pages/login.tsx:96
 msgid "Username"
 msgstr "Benutzername"

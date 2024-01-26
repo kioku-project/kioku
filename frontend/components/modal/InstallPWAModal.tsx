@@ -56,7 +56,6 @@ export const InstallPWAModal = ({ setVisible, ...props }: ModalProps) => {
 							notifications.
 						</Trans>
 					)}
-					{/* {window.navigator.userAgent} */}
 				</Text>
 				{os === "ios" && browser === "safari" && (
 					<IosSafariInstructions />

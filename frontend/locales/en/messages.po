@@ -91,7 +91,7 @@ msgstr "Change how others join this group"
 msgid "Click again"
 msgstr "Click again"
 
-#: components/modal/InstallPWAModal.tsx:142
+#: components/modal/InstallPWAModal.tsx:141
 msgid "Click on \"Add page to\""
 msgstr "Click on \"Add page to\""
 
@@ -207,7 +207,7 @@ msgstr "Discover the features of our free flashcard application. Import decks fr
 msgid "Don't have an account?"
 msgstr "Don't have an account?"
 
-#: components/modal/InstallPWAModal.tsx:78
+#: components/modal/InstallPWAModal.tsx:77
 msgid "Done"
 msgstr "Done"
 
@@ -390,9 +390,9 @@ msgstr "Notifications"
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Once you delete your user, there is no going back. Please be certain."
 
-#: components/modal/InstallPWAModal.tsx:111
-#: components/modal/InstallPWAModal.tsx:136
-#: components/modal/InstallPWAModal.tsx:167
+#: components/modal/InstallPWAModal.tsx:110
+#: components/modal/InstallPWAModal.tsx:135
+#: components/modal/InstallPWAModal.tsx:166
 msgid "Open menu"
 msgstr "Open menu"
 
@@ -443,19 +443,19 @@ msgstr "Request pending"
 msgid "Save"
 msgstr "Save"
 
-#: components/modal/InstallPWAModal.tsx:98
+#: components/modal/InstallPWAModal.tsx:97
 msgid "Select \"Add to Home Screen\""
 msgstr "Select \"Add to Home Screen\""
 
-#: components/modal/InstallPWAModal.tsx:148
+#: components/modal/InstallPWAModal.tsx:147
 msgid "Select \"Home screen\""
 msgstr "Select \"Home screen\""
 
-#: components/modal/InstallPWAModal.tsx:117
+#: components/modal/InstallPWAModal.tsx:116
 msgid "Select \"Install app\""
 msgstr "Select \"Install app\""
 
-#: components/modal/InstallPWAModal.tsx:173
+#: components/modal/InstallPWAModal.tsx:172
 msgid "Select \"Install\""
 msgstr "Select \"Install\""
 
@@ -485,11 +485,11 @@ msgstr "Sign up"
 msgid "Sign up now!"
 msgstr "Sign up now!"
 
-#: components/modal/InstallPWAModal.tsx:159
+#: components/modal/InstallPWAModal.tsx:158
 msgid "Since Firefox is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 msgstr "Since Firefox is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 
-#: components/modal/InstallPWAModal.tsx:128
+#: components/modal/InstallPWAModal.tsx:127
 msgid "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 msgstr "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 
@@ -509,7 +509,7 @@ msgstr "Subscribe"
 msgid "Subscribe to get daily reminders to review your pending cards!"
 msgstr "Subscribe to get daily reminders to review your pending cards!"
 
-#: components/modal/InstallPWAModal.tsx:92
+#: components/modal/InstallPWAModal.tsx:91
 msgid "Tap on share"
 msgstr "Tap on share"
 

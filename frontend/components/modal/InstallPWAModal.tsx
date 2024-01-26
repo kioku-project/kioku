@@ -94,7 +94,7 @@ const IosSafariInstructions = () => {
 			<div className="flex flex-row items-center space-x-3">
 				<PlusSquare size={20} />
 				<Text textSize="5xs">
-					<Trans>Select "Add to Home Screen"</Trans>
+					<Trans>Select &quot;Add to Home Screen&quot;</Trans>
 				</Text>
 			</div>
 		</>
@@ -113,7 +113,7 @@ const AndroidChromeInstructions = () => {
 			<div className="flex flex-row items-center space-x-3">
 				<Download size={20} />
 				<Text textSize="5xs">
-					<Trans>Select "Install app"</Trans>
+					<Trans>Select &quot;Install app&quot;</Trans>
 				</Text>
 			</div>
 		</>
@@ -138,13 +138,13 @@ const AndroidSamsungInstructions = () => {
 			<div className="flex flex-row items-center space-x-3">
 				<Plus size={20} />
 				<Text textSize="5xs">
-					<Trans>Click on "Add page to"</Trans>
+					<Trans>Click on &quot;Add page to&quot;</Trans>
 				</Text>
 			</div>
 			<div className="flex flex-row items-center space-x-3">
 				<Home size={20} />
 				<Text textSize="5xs">
-					<Trans>Select "Home screen"</Trans>
+					<Trans>Select &quot;Home screen&quot;</Trans>
 				</Text>
 			</div>
 		</>
@@ -169,7 +169,7 @@ const AndroidFirefoxInstructions = () => {
 			<div className="flex flex-row items-center space-x-3">
 				<Download size={20} />
 				<Text textSize="5xs">
-					<Trans>Select "Install"</Trans>
+					<Trans>Select &quot;Install&quot;</Trans>
 				</Text>
 			</div>
 		</>

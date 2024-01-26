@@ -40,28 +40,24 @@ export const NotificationButton = ({
 	}, [subscriptions]);
 
 	return (
-		<>
-			<Button
-				buttonStyle="primary"
-				buttonTextSize="3xs"
-				className={`w-full justify-center ${className}`}
-				onClick={() => {
-					if (hasNotifications) {
-						subscribed
-							? unsubscribe(
-									localStorage.getItem("SubscriptionId")
-							  )
-							: subscribe();
-					} else {
-						setInstallModalVisible(true);
-					}
-				}}
-			>
-				{!hasNotifications && <Trans>Install Kioku</Trans>}
-				{hasNotifications && subscribed && <Trans>Unsubscribe</Trans>}
-				{hasNotifications && !subscribed && <Trans>Subscribe</Trans>}
-			</Button>
-		</>
+		<Button
+			buttonStyle="primary"
+			buttonTextSize="3xs"
+			className={`w-full justify-center ${className}`}
+			onClick={() => {
+				if (hasNotifications) {
+					subscribed
+						? unsubscribe(localStorage.getItem("SubscriptionId"))
+						: subscribe();
+				} else {
+					setInstallModalVisible(true);
+				}
+			}}
+		>
+			{!hasNotifications && <Trans>Install Kioku</Trans>}
+			{hasNotifications && subscribed && <Trans>Unsubscribe</Trans>}
+			{hasNotifications && !subscribed && <Trans>Subscribe</Trans>}
+		</Button>
 	);
 
 	async function subscribe() {

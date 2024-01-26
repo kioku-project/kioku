@@ -91,7 +91,7 @@ msgstr "Ändere, wie andere der Gruppe beitreten können"
 msgid "Click again"
 msgstr "Nochmal klicken"
 
-#: components/modal/InstallPWAModal.tsx:142
+#: components/modal/InstallPWAModal.tsx:141
 msgid "Click on \"Add page to\""
 msgstr "Klicke auf \"Seite hinzufügen zu\""
 
@@ -207,7 +207,7 @@ msgstr "Entdecke die Funktionen unserer kostenlosen Karteikarten Anwendung. Impo
 msgid "Don't have an account?"
 msgstr "Noch kein Account?"
 
-#: components/modal/InstallPWAModal.tsx:78
+#: components/modal/InstallPWAModal.tsx:77
 msgid "Done"
 msgstr "Erledigt"
 
@@ -390,9 +390,9 @@ msgstr "Benachrichtigungen"
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Nachdem Du Deinen Benutzer gelöscht hast, gibt es kein Zurück mehr."
 
-#: components/modal/InstallPWAModal.tsx:111
-#: components/modal/InstallPWAModal.tsx:136
-#: components/modal/InstallPWAModal.tsx:167
+#: components/modal/InstallPWAModal.tsx:110
+#: components/modal/InstallPWAModal.tsx:135
+#: components/modal/InstallPWAModal.tsx:166
 msgid "Open menu"
 msgstr "Menü öffnen"
 
@@ -443,19 +443,19 @@ msgstr "Anfrage ausstehend"
 msgid "Save"
 msgstr "Speichern"
 
-#: components/modal/InstallPWAModal.tsx:98
+#: components/modal/InstallPWAModal.tsx:97
 msgid "Select \"Add to Home Screen\""
 msgstr "Wähle \"Zum Home-Bildschirm\""
 
-#: components/modal/InstallPWAModal.tsx:148
+#: components/modal/InstallPWAModal.tsx:147
 msgid "Select \"Home screen\""
 msgstr "Wähle \"Startbildschirm\""
 
-#: components/modal/InstallPWAModal.tsx:117
+#: components/modal/InstallPWAModal.tsx:116
 msgid "Select \"Install app\""
 msgstr "Wähle \"App installieren\""
 
-#: components/modal/InstallPWAModal.tsx:173
+#: components/modal/InstallPWAModal.tsx:172
 msgid "Select \"Install\""
 msgstr "Wähle \"Installieren\""
 
@@ -485,11 +485,11 @@ msgstr "Registrieren"
 msgid "Sign up now!"
 msgstr "Jetzt registrieren!"
 
-#: components/modal/InstallPWAModal.tsx:159
+#: components/modal/InstallPWAModal.tsx:158
 msgid "Since Firefox is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 msgstr "Da Firefox PWAs nicht vollständig unterstützt, empfehlen wir die Verwendung von Chrome für die beste Erfahrung."
 
-#: components/modal/InstallPWAModal.tsx:128
+#: components/modal/InstallPWAModal.tsx:127
 msgid "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 msgstr "Da der Samsung Internet Browser PWAs nicht vollständig unterstützt, empfehlen wir die Verwendung von Chrome für die beste Erfahrung."
 
@@ -509,7 +509,7 @@ msgstr "Aktivieren"
 msgid "Subscribe to get daily reminders to review your pending cards!"
 msgstr "Benachrichtigungen aktivieren, um täglich an das Lernen von anstehenden Karten erinnert zu werden."
 
-#: components/modal/InstallPWAModal.tsx:92
+#: components/modal/InstallPWAModal.tsx:91
 msgid "Tap on share"
 msgstr "Tippe auf teilen"
 

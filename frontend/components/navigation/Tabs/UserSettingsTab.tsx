@@ -1,12 +1,15 @@
-import { msg, t } from "@lingui/macro";
+import { Trans, msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
+import { Text } from "@/components/Text";
+import { Action } from "@/components/input/Action";
 import { DangerAction } from "@/components/input/DangerAction";
 import { InputAction } from "@/components/input/InputAction";
+import { NotificationButton } from "@/components/input/NotificationButton";
 import { Section } from "@/components/layout/Section";
 import { User } from "@/types/User";
 import { deleteRequest, putRequests } from "@/util/api";
@@ -53,6 +56,39 @@ export const UserSettingsTab = ({
 						modifyUser({ userName: userName });
 					}}
 				/>
+			</Section>
+			<Section
+				id="userSettingsNotificatioSectionId"
+				header={_(msg`Notifications`)}
+			>
+				<div
+					className={`flex flex-col justify-between space-y-1 p-3 sm:flex-row sm:items-center sm:space-x-3 ${className}`}
+				>
+					<Action
+						description={
+							<>
+								<Text
+									textStyle="primary"
+									textSize="3xs"
+									className="font-bold"
+								>
+									<Trans>Turn on Notifications</Trans>
+								</Text>
+								<Text
+									textStyle="secondary"
+									textSize="3xs"
+									className="font-medium"
+								>
+									<Trans>
+										Subscribe to get daily reminders to
+										review your pending cards!
+									</Trans>
+								</Text>
+							</>
+						}
+						button={<NotificationButton />}
+					></Action>
+				</div>
 			</Section>
 			<Section
 				id="userSettingsDangerZoneSectionId"

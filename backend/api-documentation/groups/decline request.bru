@@ -1,0 +1,21 @@
+meta {
+  name: decline request
+  type: http
+  seq: 14
+}
+
+delete {
+  url: {{baseUrl}}/api/groups/{{groupID}}/members/invitation
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "invitedUserEmail": "test@test.de"
+  }
+}

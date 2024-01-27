@@ -70,7 +70,8 @@ export default function Page() {
 							<Logo
 								href={"/home"}
 								text={false}
-								className="m-10 w-32 sm:m-3 sm:w-16 md:w-20 lg:w-24"
+								logoSize="w-32 sm:w-16 md:w-20"
+								className="m-10 sm:m-3"
 							/>
 							<form
 								className="w-full space-y-3 text-black"
@@ -84,7 +85,7 @@ export default function Page() {
 									type="email"
 									placeholder={_(msg`Email`)}
 									required
-									className="bg-neutral-200 p-3 text-base sm:text-xs"
+									className="bg-neutral-100 p-3 text-base sm:text-xs"
 									ref={emailInput}
 								/>
 								{!login && (
@@ -93,7 +94,7 @@ export default function Page() {
 										type="text"
 										placeholder={_(msg`Username`)}
 										required
-										className="bg-neutral-200 p-3 text-base sm:text-xs"
+										className="bg-neutral-100 p-3 text-base sm:text-xs"
 										ref={nameInput}
 									/>
 								)}
@@ -101,10 +102,10 @@ export default function Page() {
 									id="passwordInputFieldId"
 									type={"password"}
 									placeholder={_(msg`Password`)}
-									inputFieldIconStyle="text-neutral-400]"
+									inputFieldIconStyle="text-neutral-400"
 									required
 									minLength={passwordMinLength}
-									className="bg-neutral-200 p-3 text-base sm:text-xs"
+									className="bg-neutral-100 p-3 text-base sm:text-xs"
 									onChange={(event) => {
 										event.target.setCustomValidity("");
 										setPassword(event.target.value);
@@ -134,7 +135,7 @@ export default function Page() {
 											inputFieldIconStyle="text-neutral-400"
 											required
 											pattern={password}
-											className="bg-neutral-200 p-3 text-base sm:text-xs"
+											className="bg-neutral-100 p-3 text-base sm:text-xs"
 											ref={repeatPasswordInput}
 											onChange={(event) => {
 												event.target.setCustomValidity(
@@ -300,7 +301,7 @@ const PasswordCheck = ({ text, valid }: { text: string; valid: boolean }) => {
 		<div className="flex flex-row items-center space-x-1">
 			<Check
 				size={12}
-				className={valid ? "text-[#2DE100]" : "text-neutral-300"}
+				className={valid ? "text-[#2DE100]" : "text-neutral-400"}
 			/>
 			<Text textSize="5xs">{text}</Text>
 		</div>

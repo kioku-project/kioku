@@ -213,7 +213,7 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pbCommon.GroupRequest
 	}
 	protoGroup := converter.StoreGroupToProtoGroupConverter(*group)
 
-  groupRole, err := e.store.FindGroupUserRole(ctx, req.UserID, req.Group.GroupID)
+	groupRole, err := e.store.FindGroupUserRole(ctx, req.UserID, req.Group.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			logger.Infof("User does not have a group role")
@@ -222,7 +222,7 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pbCommon.GroupRequest
 		}
 		return err
 	}
-  protoRole := converter.MigrateModelRoleToProtoRole(groupRole)
+	protoRole := converter.MigrateModelRoleToProtoRole(groupRole)
 	*rsp = pbCommon.Group{
 		GroupID:          protoGroup.GroupID,
 		GroupName:        protoGroup.GroupName,

@@ -1,11 +1,11 @@
 meta {
-  name: leave group
+  name: decline invitation
   type: http
-  seq: 12
+  seq: 13
 }
 
 delete {
-  url: {{baseUrl}}/api/groups/{{groupID}}/members
+  url: {{baseUrl}}/api/groups/{{groupID}}/members/request
   body: none
   auth: bearer
 }

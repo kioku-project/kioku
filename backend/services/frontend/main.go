@@ -118,15 +118,15 @@ func main() {
 
 	app.Get("/api/groups/:groupID/members", svc.GetGroupMembersHandler)
 	app.Delete("/api/groups/:groupID/members", svc.LeaveGroupHandler)
-	app.Put("/api/groups/:groupID/members/:userID", svc.ModifyGroupMemberHandler)
-	app.Delete("/api/groups/:groupID/members/:userID", svc.KickGroupMemberHandler)
 	app.Get("/api/groups/:groupID/members/requests", svc.GetGroupMemberRequestsHandler)
 	app.Get("/api/groups/:groupID/members/invitations", svc.GetInvitationsForGroupHandler)
-
 	app.Post("/api/groups/:groupID/members/invitation", svc.AddUserGroupInviteHandler)
 	app.Delete("/api/groups/:groupID/members/invitation", svc.RemoveUserGroupInviteHandler)
 	app.Post("/api/groups/:groupID/members/request", svc.AddUserGroupRequestHandler)
 	app.Delete("/api/groups/:groupID/members/request", svc.RemoveUserGroupRequestHandler)
+
+	app.Put("/api/groups/:groupID/members/:userID", svc.ModifyGroupMemberHandler)
+	app.Delete("/api/groups/:groupID/members/:userID", svc.KickGroupMemberHandler)
 
 	app.Get("/api/decks/favorites", svc.GetFavoriteDecksHandler)
 	app.Post("/api/decks/favorites", svc.AddFavoriteDeckHandler)

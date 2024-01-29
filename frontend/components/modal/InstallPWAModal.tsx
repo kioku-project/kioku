@@ -47,14 +47,16 @@ export const InstallPWAModal = ({ setVisible, ...props }: ModalProps) => {
 							</Link>{" "}
 							<Trans>
 								so that we can support even more devices in the
-								future. We recommend to use Chrome on Android
-								and Safari on iOS for the best experience.
+								future. We recommend using Chrome on Android and
+								Safari on iOS for the best experience.
 							</Trans>
 						</>
 					) : (
 						<Trans>
-							Install Kioku for a native experience and to receive
-							notifications.
+							You first need to install Kioku before you can
+							subscribe and receive notifications. Follow the
+							instructions below to install the app and enjoy a
+							native experience.
 						</Trans>
 					)}
 				</Text>
@@ -122,7 +124,7 @@ const AndroidSamsungInstructions = () => {
 			<Text textSize="5xs" className="text-kiokuRed">
 				<Trans>
 					Since the Samsung Internet Browser is not fully supporting
-					PWAs, we recommend to use Chrome for the best experience.
+					PWAs, we recommend using Chrome for the best experience.
 				</Trans>
 			</Text>
 			<Instruction icon={<Menu size={20} />} text={_(msg`Open menu`)} />
@@ -144,8 +146,8 @@ const AndroidFirefoxInstructions = () => {
 		<>
 			<Text textSize="5xs" className="text-kiokuRed">
 				<Trans>
-					Since Firefox is not fully supporting PWAs, we recommend to
-					use Chrome for the best experience.
+					Since Firefox is not fully supporting PWAs, we recommend
+					using Chrome for the best experience.
 				</Trans>
 			</Text>
 			<Instruction

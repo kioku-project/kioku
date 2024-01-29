@@ -88,7 +88,7 @@ export const UserSettingsTab = ({
 									>
 										<Trans>
 											Subscribe to get daily reminders to
-											review your pending cards!
+											review your pending cards.
 										</Trans>
 									</Text>
 								</>

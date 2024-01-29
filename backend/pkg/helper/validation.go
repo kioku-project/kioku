@@ -1,10 +1,10 @@
 package helper
 
-func EnsureNotEmpty(fields ...string) error {
+func SomeEmpty(fields ...string) bool {
 	for _, field := range fields {
 		if field == "" {
-			return NewMicroMissingParameterErr(NotificationsServiceID)
+			return true
 		}
 	}
-	return nil
+	return false
 }

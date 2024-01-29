@@ -980,8 +980,8 @@ func (e *Frontend) SubscribeNotificationsHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(subscription); err != nil {
 		return err
 	}
-	if err := helper.EnsureNotEmpty(subscription.Endpoint, subscription.Auth, subscription.P256Dh); err != nil {
-		return err
+	if helper.SomeEmpty(subscription.Endpoint, subscription.Auth, subscription.P256Dh) {
+		return helper.NewFiberBadRequestErr("missing subscription data")
 	}
 
 	rspSubscribeNotifications, err := e.notificationsService.Subscribe(c.Context(), &pbCommon.PushSubscriptionRequest{

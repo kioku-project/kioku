@@ -7,7 +7,7 @@ import (
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
-	notifications "github.com/kioku-project/kioku/pkg/util"
+	"github.com/kioku-project/kioku/pkg/util"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	"go-micro.dev/v4/logger"
 
@@ -16,11 +16,11 @@ import (
 
 type Notifications struct {
 	store       store.NotificationsStore
-	pushHandler *notifications.PushHandler
+	pushHandler *util.PushHandler
 	srsService  pbSrs.SrsService
 }
 
-func New(s store.NotificationsStore, ph *notifications.PushHandler, cds pbSrs.SrsService) *Notifications {
+func NewNotifications(s store.NotificationsStore, ph *util.PushHandler, cds pbSrs.SrsService) *Notifications {
 	return &Notifications{store: s, pushHandler: ph, srsService: cds}
 }
 
@@ -39,12 +39,13 @@ func (e *Notifications) Subscribe(ctx context.Context, req *pbCommon.PushSubscri
 		Title: "Welcome!",
 		Options: model.PushNotificationOptions{
 			Body:    "Reminders will be sent to help you keep track of due cards.",
-			Actions: []map[string]string{},
 			Vibrate: []int{200, 100, 200},
 			Tag:     "Kioku",
 		},
 	}
-	e.pushHandler.SendNotification(subscription, notification)
+	if err := e.pushHandler.SendNotification(subscription, notification); err != nil {
+		return err
+	}
 	rsp.SubscriptionID = subscription.ID
 	return nil
 }

@@ -42,7 +42,15 @@ func main() {
 	if err != nil {
 		logger.Fatal("Failed to initialize database:", err)
 	}
-	pushHandler := notifications.New()
+	privateVapidKey, success := os.LookupEnv("VAPID_PRIVATE_KEY")
+	if !success {
+		logger.Fatal("VAPID_PRIVATE_KEY not set")
+	}
+	publicVapidKey, success := os.LookupEnv("VAPID_PUBLIC_KEY")
+	if !success {
+		logger.Fatal("VAPID_PUBLIC_KEY not set")
+	}
+	pushHandler := util.NewNotifications(publicVapidKey, privateVapidKey)
 
 	logger.Info("Trying to listen on: ", serviceAddress)
 
@@ -72,7 +80,7 @@ func main() {
 
 	// Create a new instance of the service handler with the initialized database connection
 	srsService := pbSrs.NewSrsService("srs", srv.Client())
-	svc := handler.New(dbStore, pushHandler, srsService)
+	svc := handler.NewNotifications(dbStore, pushHandler, srsService)
 
 	// Register handler
 	if err := pb.RegisterNotificationsHandler(srv.Server(), svc); err != nil {
@@ -86,6 +94,7 @@ func main() {
 		subscriptions, err := dbStore.FindAllPushSubscriptions(ctx)
 		if err != nil {
 			logger.Errorf("Cronjob: Error while gathering subscriptions: %s", err)
+			return
 		}
 		for _, subscription := range subscriptions {
 
@@ -93,31 +102,27 @@ func main() {
 				UserID: subscription.UserID,
 			})
 			if err != nil {
-				logger.Fatal(err)
+				logger.Error(err)
 			}
 			if userDueRsp.DueCards == 0 {
 				continue
 			}
 
-			cardString := "card"
-			if userDueRsp.DueCards > 1 {
-				cardString += "s"
-			}
-			deckString := "deck"
-			if userDueRsp.DueDecks > 1 {
-				deckString += "s"
-			}
-
 			notification := &model.PushNotification{
 				Title: "Don't forget to review your cards!",
 				Options: model.PushNotificationOptions{
-					Body:    fmt.Sprintf("You have %d %s in %d %s to learn", userDueRsp.DueCards, cardString, userDueRsp.DueDecks, deckString),
-					Actions: []map[string]string{},
+					Body: fmt.Sprintf("You have %d %s in %d %s to learn",
+						userDueRsp.DueCards,
+						util.PluralSingularSelector(userDueRsp.DueCards, "card", "cards"),
+						userDueRsp.DueDecks,
+						util.PluralSingularSelector(userDueRsp.DueDecks, "deck", "decks")),
 					Vibrate: []int{200, 100, 200},
 					Tag:     "Kioku",
 				},
 			}
-			pushHandler.SendNotification(subscription, notification)
+			if err := pushHandler.SendNotification(subscription, notification); err != nil {
+				logger.Errorf("Cronjob: Error while sending push message: %s", err)
+			}
 		}
 	})
 	c.Start()

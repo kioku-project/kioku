@@ -1,8 +1,7 @@
-package notifications
+package util
 
 import (
 	"encoding/json"
-	"os"
 
 	"github.com/SherClockHolmes/webpush-go"
 	"github.com/kioku-project/kioku/pkg/model"
@@ -14,44 +13,36 @@ type PushHandler struct {
 	publicVapidKey  string
 }
 
-func New() *PushHandler {
-	privateVapidKey, success := os.LookupEnv("VAPID_PRIVATE_KEY")
-	if !success {
-		logger.Fatal("VAPID_PRIVATE_KEY not set")
-	}
-	publicVapidKey, success := os.LookupEnv("VAPID_PUBLIC_KEY")
-	if !success {
-		logger.Fatal("VAPID_PUBLIC_KEY not set")
-	}
+func NewNotifications(publicVapidKey string, privateVapidKey string) *PushHandler {
 	return &PushHandler{
 		privateVapidKey: privateVapidKey,
 		publicVapidKey:  publicVapidKey,
 	}
 }
 
-func (ph *PushHandler) SendNotification(subscription *model.PushSubscription, notification *model.PushNotification) {
-	s := &webpush.Subscription{
-		Endpoint: subscription.Endpoint,
-		Keys: webpush.Keys{
-			P256dh: subscription.P256DH,
-			Auth:   subscription.Auth,
-		},
-	}
+func (ph *PushHandler) SendNotification(subscription *model.PushSubscription, notification *model.PushNotification) error {
 	jsonNotification, err := json.Marshal(notification)
 	if err != nil {
-		logger.Errorf("Error while marshalling subscriptions: %s", err)
-		logger.Info(notification)
-		return
+		return err
 	}
 
-	resp, err := webpush.SendNotification(jsonNotification, s, &webpush.Options{
-		Subscriber:      "web-push@kioku.dev",
-		VAPIDPublicKey:  ph.publicVapidKey,
-		VAPIDPrivateKey: ph.privateVapidKey,
-		TTL:             30,
-	})
+	resp, err := webpush.SendNotification(jsonNotification,
+		&webpush.Subscription{
+			Endpoint: subscription.Endpoint,
+			Keys: webpush.Keys{
+				P256dh: subscription.P256DH,
+				Auth:   subscription.Auth,
+			},
+		},
+		&webpush.Options{
+			Subscriber:      "web-push@kioku.dev",
+			VAPIDPublicKey:  ph.publicVapidKey,
+			VAPIDPrivateKey: ph.privateVapidKey,
+			TTL:             30,
+		})
 	if err != nil {
 		logger.Errorf("Error while sending push message: %s", err)
 	}
 	defer resp.Body.Close()
+	return nil
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/kioku-project/kioku/pkg/helper"
 	"github.com/kioku-project/kioku/pkg/model"
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
-	"github.com/kioku-project/kioku/pkg/util"
+	notifications "github.com/kioku-project/kioku/pkg/util"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	"go-micro.dev/v4/logger"
 
@@ -15,12 +15,13 @@ import (
 )
 
 type Notifications struct {
-	store      store.NotificationsStore
-	srsService pbSrs.SrsService
+	store       store.NotificationsStore
+	pushHandler *notifications.PushHandler
+	srsService  pbSrs.SrsService
 }
 
-func New(s store.NotificationsStore, cds pbSrs.SrsService) *Notifications {
-	return &Notifications{store: s, srsService: cds}
+func New(s store.NotificationsStore, ph *notifications.PushHandler, cds pbSrs.SrsService) *Notifications {
+	return &Notifications{store: s, pushHandler: ph, srsService: cds}
 }
 
 func (e *Notifications) Subscribe(ctx context.Context, req *pbCommon.PushSubscriptionRequest, rsp *pbCommon.PushSubscription) error {
@@ -43,7 +44,7 @@ func (e *Notifications) Subscribe(ctx context.Context, req *pbCommon.PushSubscri
 			Tag:     "Kioku",
 		},
 	}
-	util.SendNotification(subscription, notification)
+	e.pushHandler.SendNotification(subscription, notification)
 	rsp.SubscriptionID = subscription.ID
 	return nil
 }

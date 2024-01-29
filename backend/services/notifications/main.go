@@ -42,6 +42,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("Failed to initialize database:", err)
 	}
+	pushHandler := notifications.New()
 
 	logger.Info("Trying to listen on: ", serviceAddress)
 
@@ -71,7 +72,7 @@ func main() {
 
 	// Create a new instance of the service handler with the initialized database connection
 	srsService := pbSrs.NewSrsService("srs", srv.Client())
-	svc := handler.New(dbStore, srsService)
+	svc := handler.New(dbStore, pushHandler, srsService)
 
 	// Register handler
 	if err := pb.RegisterNotificationsHandler(srv.Server(), svc); err != nil {
@@ -116,7 +117,7 @@ func main() {
 					Tag:     "Kioku",
 				},
 			}
-			util.SendNotification(subscription, notification)
+			pushHandler.SendNotification(subscription, notification)
 		}
 	})
 	c.Start()

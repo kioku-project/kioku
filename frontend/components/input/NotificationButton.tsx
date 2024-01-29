@@ -1,10 +1,12 @@
 import { Trans } from "@lingui/macro";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
+import { mutate } from "swr";
 
 import { Button } from "@/components/input/Button";
 import { deleteRequest, postRequest } from "@/util/api";
+import { Platform, getPlatform } from "@/util/client";
+import { useLocalStorage } from "@/util/hooks";
 import { useNotifications } from "@/util/swr";
-import { getOS } from "@/util/utils";
 
 interface NotificationButtonProps {
 	/**
@@ -22,22 +24,22 @@ const notificationSupported = () =>
 	"serviceWorker" in navigator &&
 	"PushManager" in window;
 
+/**
+ * UI component for the NotificationButton
+ */
 export const NotificationButton = ({
 	setInstallModalVisible,
 	className = "",
 }: NotificationButtonProps) => {
 	const { subscriptions } = useNotifications();
-	const [subscribed, setSubscribed] = useState<boolean>();
+	const [subscriptionId, setSubscriptionId] =
+		useLocalStorage<string>("SubscriptionId");
+	const isSubscribed =
+		subscriptions && subscriptions.includes(subscriptionId);
 
 	const isPWA = window.matchMedia("(display-mode: standalone)").matches;
-	const isMobile = getOS() === "ios" || getOS() === "android";
+	const isMobile = getPlatform(navigator.userAgent) === Platform.MOBILE;
 	const hasNotifications = notificationSupported() && (!isMobile || isPWA);
-
-	useEffect(() => {
-		setSubscribed(
-			subscriptions?.includes(localStorage.getItem("SubscriptionId"))
-		);
-	}, [subscriptions]);
 
 	return (
 		<Button
@@ -46,16 +48,18 @@ export const NotificationButton = ({
 			className={`w-full justify-center ${className}`}
 			onClick={() => {
 				if (hasNotifications) {
-					subscribed
-						? unsubscribe(localStorage.getItem("SubscriptionId"))
-						: subscribe();
+					isSubscribed ? unsubscribe(subscriptionId) : subscribe();
 				} else {
 					setInstallModalVisible(true);
 				}
 			}}
 		>
-			{subscribed && <Trans>Unsubscribe</Trans>}
-			{!subscribed && <Trans>Subscribe</Trans>}
+			{subscriptions &&
+				(isSubscribed ? (
+					<Trans>Unsubscribe</Trans>
+				) : (
+					<Trans>Subscribe</Trans>
+				))}
 		</Button>
 	);
 
@@ -71,22 +75,18 @@ export const NotificationButton = ({
 			const subscription = await swRegistration.pushManager.subscribe(
 				options
 			);
-			localStorage.setItem(
-				"SubscriptionId",
-				await saveSubscription(subscription)
-			);
-			setSubscribed(true);
+			setSubscriptionId(await saveSubscription(subscription));
+			mutate("/api/user/notifications");
 		} catch (err) {}
 	}
 
-	async function unsubscribe(subscriptionId: string | null) {
-		if (!subscriptionId) return;
+	async function unsubscribe(subscriptionId: string) {
 		const response = await deleteRequest(
 			`/api/user/notifications/${subscriptionId}`
 		);
 		if (response.ok) {
-			localStorage.removeItem("SubscriptionId");
-			setSubscribed(false);
+			setSubscriptionId("");
+			mutate("/api/user/notifications");
 		}
 	}
 

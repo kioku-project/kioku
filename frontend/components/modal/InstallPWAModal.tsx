@@ -15,12 +15,17 @@ import {
 import { Text } from "@/components/Text";
 import { Button } from "@/components/input/Button";
 import { Modal, ModalProps } from "@/components/modal/modal";
-import { getBrowser, getOS } from "@/util/utils";
+import {
+	Browser,
+	OperatingSystem,
+	getBrowser,
+	getOperatingSystem,
+} from "@/util/client";
 
 export const InstallPWAModal = ({ setVisible, ...props }: ModalProps) => {
 	const { _ } = useLingui();
-	const os = getOS();
-	const browser = getBrowser();
+	const os = getOperatingSystem(navigator.userAgent);
+	const browser = getBrowser(navigator.userAgent);
 
 	return (
 		<Modal
@@ -30,7 +35,8 @@ export const InstallPWAModal = ({ setVisible, ...props }: ModalProps) => {
 		>
 			<div className="space-y-5">
 				<Text textSize="xs">
-					{os === "unknown" || browser === "unknown" ? (
+					{os === OperatingSystem.UNKNOWN ||
+					browser === Browser.UNKNOWN ? (
 						<>
 							<Trans>
 								You are using an unknown browser or operating
@@ -43,7 +49,7 @@ export const InstallPWAModal = ({ setVisible, ...props }: ModalProps) => {
 								href="https://github.com/kioku-project/kioku/issues/new/choose"
 								className="underline"
 							>
-								<Trans> here </Trans>
+								<Trans>here</Trans>
 							</Link>{" "}
 							<Trans>
 								so that we can support even more devices in the
@@ -60,26 +66,26 @@ export const InstallPWAModal = ({ setVisible, ...props }: ModalProps) => {
 						</Trans>
 					)}
 				</Text>
-				{os === "ios" && browser === "safari" && (
+				{os === OperatingSystem.IOS && browser === Browser.SAFARI && (
 					<IosSafariInstructions />
 				)}
-				{os === "android" && browser === "chrome" && (
-					<AndroidChromeInstructions />
-				)}
-				{os === "android" && browser === "samsung" && (
-					<AndroidSamsungInstructions />
-				)}
-				{os === "android" && browser === "firefox" && (
-					<AndroidFirefoxInstructions />
-				)}
-				<div className="flex flex-row justify-end space-x-1">
-					<Button
-						buttonStyle="secondary"
-						onClick={() => setVisible(false)}
-					>
-						<Trans>Done</Trans>
-					</Button>
-				</div>
+				{os === OperatingSystem.ANDROID &&
+					browser === Browser.CHROME && <AndroidChromeInstructions />}
+				{os === OperatingSystem.ANDROID &&
+					browser === Browser.SAMSUNG && (
+						<AndroidSamsungInstructions />
+					)}
+				{os === OperatingSystem.ANDROID &&
+					browser === Browser.FIREFOX && (
+						<AndroidFirefoxInstructions />
+					)}
+				<Button
+					buttonStyle="secondary"
+					onClick={() => setVisible(false)}
+					className="ml-auto"
+				>
+					<Trans>Done</Trans>
+				</Button>
 			</div>
 		</Modal>
 	);

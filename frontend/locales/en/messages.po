@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {# card left} other {# cards left}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 
-#: pages/login.tsx:295
+#: pages/login.tsx:292
 msgid "Account already exists!"
 msgstr "Account already exists!"
 
-#: pages/login.tsx:289
+#: pages/login.tsx:286
 msgid "Account created!"
 msgstr "Account created!"
 
@@ -49,7 +49,7 @@ msgstr "Achievements and leaderboards make learning more engaging and motivating
 msgid "Active Decks"
 msgstr "Active Decks"
 
-#: pages/login.tsx:221
+#: pages/login.tsx:218
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -91,7 +91,7 @@ msgstr "Change how others join this group"
 msgid "Click again"
 msgstr "Click again"
 
-#: components/modal/InstallPWAModal.tsx:141
+#: components/modal/InstallPWAModal.tsx:131
 msgid "Click on \"Add page to\""
 msgstr "Click on \"Add page to\""
 
@@ -203,11 +203,11 @@ msgstr "Discover Kioku's awesome Features"
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 msgstr "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 
-#: pages/login.tsx:217
+#: pages/login.tsx:214
 msgid "Don't have an account?"
 msgstr "Don't have an account?"
 
-#: components/modal/InstallPWAModal.tsx:77
+#: components/modal/InstallPWAModal.tsx:78
 msgid "Done"
 msgstr "Done"
 
@@ -289,7 +289,7 @@ msgstr "Groups"
 msgid "Hard"
 msgstr "Hard"
 
-#: components/modal/InstallPWAModal.tsx:45
+#: components/modal/InstallPWAModal.tsx:46
 msgid "here"
 msgstr "here"
 
@@ -297,7 +297,7 @@ msgstr "here"
 msgid "Hit Rate"
 msgstr "Hit Rate"
 
-#: components/modal/InstallPWAModal.tsx:26
+#: components/modal/InstallPWAModal.tsx:27
 msgid "How to install Kioku"
 msgstr "How to install Kioku"
 
@@ -309,11 +309,7 @@ msgstr "Individual"
 msgid "Informative"
 msgstr "Informative"
 
-#: components/input/NotificationButton.tsx:60
-msgid "Install Kioku"
-msgstr "Install Kioku"
-
-#: components/modal/InstallPWAModal.tsx:54
+#: components/modal/InstallPWAModal.tsx:55
 msgid "Install Kioku for a native experience and to receive notifications."
 msgstr "Install Kioku for a native experience and to receive notifications."
 
@@ -366,7 +362,7 @@ msgstr "Leave Group"
 msgid "Left group!"
 msgstr "Left group!"
 
-#: pages/login.tsx:261
+#: pages/login.tsx:258
 msgid "Logged in!"
 msgstr "Logged in!"
 
@@ -378,7 +374,7 @@ msgstr "Login"
 msgid "Medium"
 msgstr "Medium"
 
-#: pages/login.tsx:166
+#: pages/login.tsx:164
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Minimum {passwordMinLength} characters"
 
@@ -390,22 +386,22 @@ msgstr "Notifications"
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Once you delete your user, there is no going back. Please be certain."
 
-#: components/modal/InstallPWAModal.tsx:110
-#: components/modal/InstallPWAModal.tsx:135
-#: components/modal/InstallPWAModal.tsx:166
+#: components/modal/InstallPWAModal.tsx:108
+#: components/modal/InstallPWAModal.tsx:128
+#: components/modal/InstallPWAModal.tsx:153
 msgid "Open menu"
 msgstr "Open menu"
 
-#: pages/login.tsx:106
+#: pages/login.tsx:104
 msgid "Password"
 msgstr "Password"
 
-#: pages/login.tsx:123
+#: pages/login.tsx:121
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Password must have at least {passwordMinLength} characters"
 
-#: pages/login.tsx:152
-#: pages/login.tsx:177
+#: pages/login.tsx:150
+#: pages/login.tsx:175
 msgid "Passwords have to match"
 msgstr "Passwords have to match"
 
@@ -431,7 +427,7 @@ msgstr "Register today and start using the free flashcard application together w
 msgid "Rename"
 msgstr "Rename"
 
-#: pages/login.tsx:135
+#: pages/login.tsx:133
 msgid "Repeat Password"
 msgstr "Repeat Password"
 
@@ -443,19 +439,19 @@ msgstr "Request pending"
 msgid "Save"
 msgstr "Save"
 
-#: components/modal/InstallPWAModal.tsx:97
+#: components/modal/InstallPWAModal.tsx:96
 msgid "Select \"Add to Home Screen\""
 msgstr "Select \"Add to Home Screen\""
 
-#: components/modal/InstallPWAModal.tsx:147
+#: components/modal/InstallPWAModal.tsx:135
 msgid "Select \"Home screen\""
 msgstr "Select \"Home screen\""
 
-#: components/modal/InstallPWAModal.tsx:116
+#: components/modal/InstallPWAModal.tsx:112
 msgid "Select \"Install app\""
 msgstr "Select \"Install app\""
 
-#: components/modal/InstallPWAModal.tsx:172
+#: components/modal/InstallPWAModal.tsx:157
 msgid "Select \"Install\""
 msgstr "Select \"Install\""
 
@@ -469,31 +465,31 @@ msgstr "Sent request!"
 msgid "Settings"
 msgstr "Settings"
 
-#: pages/login.tsx:205
+#: pages/login.tsx:202
 msgid "Sign in"
 msgstr "Sign in"
 
-#: pages/login.tsx:235
+#: pages/login.tsx:232
 msgid "Sign in now!"
 msgstr "Sign in now!"
 
-#: pages/login.tsx:207
+#: pages/login.tsx:204
 msgid "Sign up"
 msgstr "Sign up"
 
-#: pages/login.tsx:233
+#: pages/login.tsx:230
 msgid "Sign up now!"
 msgstr "Sign up now!"
 
-#: components/modal/InstallPWAModal.tsx:158
+#: components/modal/InstallPWAModal.tsx:146
 msgid "Since Firefox is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 msgstr "Since Firefox is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 
-#: components/modal/InstallPWAModal.tsx:127
+#: components/modal/InstallPWAModal.tsx:123
 msgid "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 msgstr "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 
-#: components/modal/InstallPWAModal.tsx:47
+#: components/modal/InstallPWAModal.tsx:48
 msgid "so that we can support even more devices in the future. We recommend to use Chrome on Android and Safari on iOS for the best experience."
 msgstr "so that we can support even more devices in the future. We recommend to use Chrome on Android and Safari on iOS for the best experience."
 
@@ -501,7 +497,7 @@ msgstr "so that we can support even more devices in the future. We recommend to 
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 
-#: components/input/NotificationButton.tsx:62
+#: components/input/NotificationButton.tsx:58
 msgid "Subscribe"
 msgstr "Subscribe"
 
@@ -509,7 +505,7 @@ msgstr "Subscribe"
 msgid "Subscribe to get daily reminders to review your pending cards!"
 msgstr "Subscribe to get daily reminders to review your pending cards!"
 
-#: components/modal/InstallPWAModal.tsx:91
+#: components/modal/InstallPWAModal.tsx:92
 msgid "Tap on share"
 msgstr "Tap on share"
 
@@ -525,7 +521,7 @@ msgstr "Turn on Notifications"
 msgid "Unexpected group type"
 msgstr "Unexpected group type"
 
-#: components/input/NotificationButton.tsx:61
+#: components/input/NotificationButton.tsx:57
 msgid "Unsubscribe"
 msgstr "Unsubscribe"
 
@@ -546,7 +542,7 @@ msgid "User updated!"
 msgstr "User updated!"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:56
-#: pages/login.tsx:96
+#: pages/login.tsx:95
 msgid "Username"
 msgstr "Username"
 
@@ -566,11 +562,11 @@ msgstr "Welcome {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 
-#: pages/login.tsx:264
+#: pages/login.tsx:261
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 
-#: components/modal/InstallPWAModal.tsx:34
+#: components/modal/InstallPWAModal.tsx:35
 msgid "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"
 msgstr "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"
 

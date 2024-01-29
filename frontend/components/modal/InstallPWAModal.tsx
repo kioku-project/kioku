@@ -1,6 +1,7 @@
 import { Trans, msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import Link from "next/link";
+import { ReactElement } from "react";
 import {
 	Download,
 	Home,
@@ -83,44 +84,39 @@ export const InstallPWAModal = ({ setVisible, ...props }: ModalProps) => {
 };
 
 const IosSafariInstructions = () => {
+	const { _ } = useLingui();
 	return (
 		<>
-			<div className="flex flex-row items-center space-x-3">
-				<Share size={20} />
-				<Text textSize="5xs">
-					<Trans>Tap on share</Trans>
-				</Text>
-			</div>
-			<div className="flex flex-row items-center space-x-3">
-				<PlusSquare size={20} />
-				<Text textSize="5xs">
-					<Trans>Select &quot;Add to Home Screen&quot;</Trans>
-				</Text>
-			</div>
+			<Instruction
+				icon={<Share size={20} />}
+				text={_(msg`Tap on share`)}
+			/>
+			<Instruction
+				icon={<PlusSquare size={20} />}
+				text={_(msg`Select "Add to Home Screen"`)}
+			/>
 		</>
 	);
 };
 
 const AndroidChromeInstructions = () => {
+	const { _ } = useLingui();
 	return (
 		<>
-			<div className="flex flex-row items-center space-x-3">
-				<MoreVertical size={20} />
-				<Text textSize="5xs">
-					<Trans>Open menu</Trans>
-				</Text>
-			</div>
-			<div className="flex flex-row items-center space-x-3">
-				<Download size={20} />
-				<Text textSize="5xs">
-					<Trans>Select &quot;Install app&quot;</Trans>
-				</Text>
-			</div>
+			<Instruction
+				icon={<MoreVertical size={20} />}
+				text={_(msg`Open menu`)}
+			/>
+			<Instruction
+				icon={<Download size={20} />}
+				text={_(msg`Select "Install app"`)}
+			/>
 		</>
 	);
 };
 
 const AndroidSamsungInstructions = () => {
+	const { _ } = useLingui();
 	return (
 		<>
 			<Text textSize="5xs" className="text-kiokuRed">
@@ -129,29 +125,21 @@ const AndroidSamsungInstructions = () => {
 					PWAs, we recommend to use Chrome for the best experience.
 				</Trans>
 			</Text>
-			<div className="flex flex-row items-center space-x-3">
-				<Menu size={20} />
-				<Text textSize="5xs">
-					<Trans>Open menu</Trans>
-				</Text>
-			</div>
-			<div className="flex flex-row items-center space-x-3">
-				<Plus size={20} />
-				<Text textSize="5xs">
-					<Trans>Click on &quot;Add page to&quot;</Trans>
-				</Text>
-			</div>
-			<div className="flex flex-row items-center space-x-3">
-				<Home size={20} />
-				<Text textSize="5xs">
-					<Trans>Select &quot;Home screen&quot;</Trans>
-				</Text>
-			</div>
+			<Instruction icon={<Menu size={20} />} text={_(msg`Open menu`)} />
+			<Instruction
+				icon={<Plus size={20} />}
+				text={_(msg`Click on "Add page to"`)}
+			/>
+			<Instruction
+				icon={<Home size={20} />}
+				text={_(msg`Select "Home screen"`)}
+			/>
 		</>
 	);
 };
 
 const AndroidFirefoxInstructions = () => {
+	const { _ } = useLingui();
 	return (
 		<>
 			<Text textSize="5xs" className="text-kiokuRed">
@@ -160,18 +148,28 @@ const AndroidFirefoxInstructions = () => {
 					use Chrome for the best experience.
 				</Trans>
 			</Text>
-			<div className="flex flex-row items-center space-x-3">
-				<MoreVertical size={20} />
-				<Text textSize="5xs">
-					<Trans>Open menu</Trans>
-				</Text>
-			</div>
-			<div className="flex flex-row items-center space-x-3">
-				<Download size={20} />
-				<Text textSize="5xs">
-					<Trans>Select &quot;Install&quot;</Trans>
-				</Text>
-			</div>
+			<Instruction
+				icon={<MoreVertical size={20} />}
+				text={_(msg`Open menu`)}
+			/>
+			<Instruction
+				icon={<Download size={20} />}
+				text={_(msg`Select "Install"`)}
+			/>
 		</>
+	);
+};
+
+interface InstructionProps {
+	icon: ReactElement;
+	text: string;
+}
+
+const Instruction = ({ icon, text }: InstructionProps) => {
+	return (
+		<div className="flex flex-row items-center space-x-3">
+			{icon}
+			<Text textSize="5xs">{text}</Text>
+		</div>
 	);
 };

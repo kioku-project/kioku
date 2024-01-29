@@ -54,9 +54,8 @@ export const NotificationButton = ({
 				}
 			}}
 		>
-			{!hasNotifications && <Trans>Install Kioku</Trans>}
-			{hasNotifications && subscribed && <Trans>Unsubscribe</Trans>}
-			{hasNotifications && !subscribed && <Trans>Subscribe</Trans>}
+			{subscribed && <Trans>Unsubscribe</Trans>}
+			{!subscribed && <Trans>Subscribe</Trans>}
 		</Button>
 	);
 

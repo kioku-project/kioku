@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {Eine Karte übrig} other {# Karten übrig}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Greife von überall und jederzeit auf Deine Karteikarten zu. Wechsle nahtlos zwischen verschiedenen Plattformen und verpasse nie wieder eine Lerngelegenheit!"
 
-#: pages/login.tsx:295
+#: pages/login.tsx:292
 msgid "Account already exists!"
 msgstr "Account existiert bereits!"
 
-#: pages/login.tsx:289
+#: pages/login.tsx:286
 msgid "Account created!"
 msgstr "Account erstellt!"
 
@@ -49,7 +49,7 @@ msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivier
 msgid "Active Decks"
 msgstr "Aktive Decks"
 
-#: pages/login.tsx:221
+#: pages/login.tsx:218
 msgid "Already have an account?"
 msgstr "Bereits registriert?"
 
@@ -91,7 +91,7 @@ msgstr "Ändere, wie andere der Gruppe beitreten können"
 msgid "Click again"
 msgstr "Nochmal klicken"
 
-#: components/modal/InstallPWAModal.tsx:141
+#: components/modal/InstallPWAModal.tsx:131
 msgid "Click on \"Add page to\""
 msgstr "Klicke auf \"Seite hinzufügen zu\""
 
@@ -203,11 +203,11 @@ msgstr "Entdecke Kiokus einzigartige Funktionen"
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 msgstr "Entdecke die Funktionen unserer kostenlosen Karteikarten Anwendung. Importiere Stapel aus Anki, erstelle Gruppen, lerne gemeinsam mit Freunden und vergleicht Eure Statistiken. Jetzt auf allen Geräten!"
 
-#: pages/login.tsx:217
+#: pages/login.tsx:214
 msgid "Don't have an account?"
 msgstr "Noch kein Account?"
 
-#: components/modal/InstallPWAModal.tsx:77
+#: components/modal/InstallPWAModal.tsx:78
 msgid "Done"
 msgstr "Erledigt"
 
@@ -289,7 +289,7 @@ msgstr "Gruppen"
 msgid "Hard"
 msgstr "Schwierig"
 
-#: components/modal/InstallPWAModal.tsx:45
+#: components/modal/InstallPWAModal.tsx:46
 msgid "here"
 msgstr "hier"
 
@@ -297,7 +297,7 @@ msgstr "hier"
 msgid "Hit Rate"
 msgstr "Erfolgsquote"
 
-#: components/modal/InstallPWAModal.tsx:26
+#: components/modal/InstallPWAModal.tsx:27
 msgid "How to install Kioku"
 msgstr "So installiert man Kioku"
 
@@ -309,11 +309,7 @@ msgstr "Individuell"
 msgid "Informative"
 msgstr "Informativ"
 
-#: components/input/NotificationButton.tsx:60
-msgid "Install Kioku"
-msgstr "Kioku installieren"
-
-#: components/modal/InstallPWAModal.tsx:54
+#: components/modal/InstallPWAModal.tsx:55
 msgid "Install Kioku for a native experience and to receive notifications."
 msgstr "Installiere Kioku für ein natives Erlebnis und um Benachrichtigungen zu erhalten."
 
@@ -366,7 +362,7 @@ msgstr "Gruppe verlassen"
 msgid "Left group!"
 msgstr "Gruppe verlassen!"
 
-#: pages/login.tsx:261
+#: pages/login.tsx:258
 msgid "Logged in!"
 msgstr "Eingeloggt!"
 
@@ -378,7 +374,7 @@ msgstr "Einloggen"
 msgid "Medium"
 msgstr "Mittel"
 
-#: pages/login.tsx:166
+#: pages/login.tsx:164
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Mindestens {passwordMinLength} Zeichen"
 
@@ -390,22 +386,22 @@ msgstr "Benachrichtigungen"
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Nachdem Du Deinen Benutzer gelöscht hast, gibt es kein Zurück mehr."
 
-#: components/modal/InstallPWAModal.tsx:110
-#: components/modal/InstallPWAModal.tsx:135
-#: components/modal/InstallPWAModal.tsx:166
+#: components/modal/InstallPWAModal.tsx:108
+#: components/modal/InstallPWAModal.tsx:128
+#: components/modal/InstallPWAModal.tsx:153
 msgid "Open menu"
 msgstr "Menü öffnen"
 
-#: pages/login.tsx:106
+#: pages/login.tsx:104
 msgid "Password"
 msgstr "Passwort"
 
-#: pages/login.tsx:123
+#: pages/login.tsx:121
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Passwort muss mindestens {passwordMinLength} Zeichen lang sein"
 
-#: pages/login.tsx:152
-#: pages/login.tsx:177
+#: pages/login.tsx:150
+#: pages/login.tsx:175
 msgid "Passwords have to match"
 msgstr "Passwörter müssen übereinstimmen"
 
@@ -431,7 +427,7 @@ msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten An
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: pages/login.tsx:135
+#: pages/login.tsx:133
 msgid "Repeat Password"
 msgstr "Passwort wiederholen"
 
@@ -443,19 +439,19 @@ msgstr "Anfrage ausstehend"
 msgid "Save"
 msgstr "Speichern"
 
-#: components/modal/InstallPWAModal.tsx:97
+#: components/modal/InstallPWAModal.tsx:96
 msgid "Select \"Add to Home Screen\""
 msgstr "Wähle \"Zum Home-Bildschirm\""
 
-#: components/modal/InstallPWAModal.tsx:147
+#: components/modal/InstallPWAModal.tsx:135
 msgid "Select \"Home screen\""
 msgstr "Wähle \"Startbildschirm\""
 
-#: components/modal/InstallPWAModal.tsx:116
+#: components/modal/InstallPWAModal.tsx:112
 msgid "Select \"Install app\""
 msgstr "Wähle \"App installieren\""
 
-#: components/modal/InstallPWAModal.tsx:172
+#: components/modal/InstallPWAModal.tsx:157
 msgid "Select \"Install\""
 msgstr "Wähle \"Installieren\""
 
@@ -469,31 +465,31 @@ msgstr "Anfrage gesendet!"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: pages/login.tsx:205
+#: pages/login.tsx:202
 msgid "Sign in"
 msgstr "Einloggen"
 
-#: pages/login.tsx:235
+#: pages/login.tsx:232
 msgid "Sign in now!"
 msgstr "Jetzt anmelden!"
 
-#: pages/login.tsx:207
+#: pages/login.tsx:204
 msgid "Sign up"
 msgstr "Registrieren"
 
-#: pages/login.tsx:233
+#: pages/login.tsx:230
 msgid "Sign up now!"
 msgstr "Jetzt registrieren!"
 
-#: components/modal/InstallPWAModal.tsx:158
+#: components/modal/InstallPWAModal.tsx:146
 msgid "Since Firefox is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 msgstr "Da Firefox PWAs nicht vollständig unterstützt, empfehlen wir die Verwendung von Chrome für die beste Erfahrung."
 
-#: components/modal/InstallPWAModal.tsx:127
+#: components/modal/InstallPWAModal.tsx:123
 msgid "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend to use Chrome for the best experience."
 msgstr "Da der Samsung Internet Browser PWAs nicht vollständig unterstützt, empfehlen wir die Verwendung von Chrome für die beste Erfahrung."
 
-#: components/modal/InstallPWAModal.tsx:47
+#: components/modal/InstallPWAModal.tsx:48
 msgid "so that we can support even more devices in the future. We recommend to use Chrome on Android and Safari on iOS for the best experience."
 msgstr "melden, damit wir in Zukunft noch mehr Geräte unterstützen können. in Zukunft unterstützen können. Wir empfehlen die Verwendung von Chrome auf Android und Safari auf iOS für die beste Erfahrung."
 
@@ -501,7 +497,7 @@ msgstr "melden, damit wir in Zukunft noch mehr Geräte unterstützen können. in
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
 
-#: components/input/NotificationButton.tsx:62
+#: components/input/NotificationButton.tsx:58
 msgid "Subscribe"
 msgstr "Aktivieren"
 
@@ -509,7 +505,7 @@ msgstr "Aktivieren"
 msgid "Subscribe to get daily reminders to review your pending cards!"
 msgstr "Benachrichtigungen aktivieren, um täglich an das Lernen von anstehenden Karten erinnert zu werden."
 
-#: components/modal/InstallPWAModal.tsx:91
+#: components/modal/InstallPWAModal.tsx:92
 msgid "Tap on share"
 msgstr "Tippe auf teilen"
 
@@ -525,7 +521,7 @@ msgstr "Benachrichtigungen aktivieren"
 msgid "Unexpected group type"
 msgstr "Unerwarteter Gruppentyp"
 
-#: components/input/NotificationButton.tsx:61
+#: components/input/NotificationButton.tsx:57
 msgid "Unsubscribe"
 msgstr "Deaktivieren"
 
@@ -546,7 +542,7 @@ msgid "User updated!"
 msgstr "Benutzer aktualisiert!"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:56
-#: pages/login.tsx:96
+#: pages/login.tsx:95
 msgid "Username"
 msgstr "Benutzername"
 
@@ -566,11 +562,11 @@ msgstr "Willkommen, {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Willkommen bei Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die gemeinsame Erstellung von Lerninhalten konzentriert. Unsere innovative Plattform ermöglicht es Dir, Dein Wissen auf Karteikarten zu organisieren und diese mit anderen Nutzern zu teilen, um Dein Wissen auf die nächste Stufe zu heben. Melde Dich noch heute bei Kioku an und erlebe die Zukunft des Lernens."
 
-#: pages/login.tsx:264
+#: pages/login.tsx:261
 msgid "Wrong username or password"
 msgstr "Falscher Benutzername oder falsches Passwort"
 
-#: components/modal/InstallPWAModal.tsx:34
+#: components/modal/InstallPWAModal.tsx:35
 msgid "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"
 msgstr "Sie verwenden einen unbekannten Browser oder ein unbekanntes Betriebssystem, daher können wir Ihnen keine Hinweise geben, wie Sie Kioku auf Ihrem Gerät installieren können. Wir würden uns freuen, wenn Sie dieses Problem"
 

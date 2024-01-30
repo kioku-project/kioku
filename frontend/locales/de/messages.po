@@ -499,7 +499,7 @@ msgstr "Aktivieren"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:89
 msgid "Subscribe to get daily reminders to review your pending cards."
-msgstr "Benachrichtigungen aktivieren, um täglich an das Lernen von anstehenden Karten erinnert zu werden."
+msgstr "Werde täglich an das Lernen von anstehenden Karten erinnert."
 
 #: components/modal/InstallPWAModal.tsx:94
 msgid "Tap on share"

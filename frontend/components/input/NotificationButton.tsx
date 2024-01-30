@@ -34,8 +34,7 @@ export const NotificationButton = ({
 	const { subscriptions } = useNotifications();
 	const [subscriptionId, setSubscriptionId] =
 		useLocalStorage<string>("SubscriptionId");
-	const isSubscribed =
-		subscriptions && subscriptions.includes(subscriptionId);
+	const isSubscribed = subscriptions?.includes(subscriptionId);
 
 	const isPWA = window.matchMedia("(display-mode: standalone)").matches;
 	const isMobile = getPlatform(navigator.userAgent) === Platform.MOBILE;
@@ -105,6 +104,6 @@ export const NotificationButton = ({
 				p256dh: subscription.toJSON().keys?.p256dh,
 			})
 		);
-		return response.text();
+		return response.ok ? response.text() : "";
 	}
 };

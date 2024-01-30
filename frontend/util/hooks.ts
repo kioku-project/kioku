@@ -1,18 +1,12 @@
-import { useEffect, useState } from "react";
+import { useReducer } from "react";
 
-export const useLocalStorage = <T>(
-	key: string,
-	defaultValue?: T
-): [T, (value: T) => void] => {
-	const [value, setValue] = useState<T>(
-		(localStorage.getItem(key) ?? defaultValue) as T
-	);
-	useEffect(() => {
-		if (value) {
-			localStorage.setItem(key, String(value));
+export const useLocalStorage = <T>(key: string): [T, (value: T) => void] => {
+	return useReducer((state: T, action: T) => {
+		if (action) {
+			localStorage.setItem(key, String(action));
 		} else {
 			localStorage.removeItem(key);
 		}
-	}, [value, key]);
-	return [value, setValue];
+		return action;
+	}, localStorage.getItem(key) as T);
 };

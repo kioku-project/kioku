@@ -42,6 +42,7 @@ func (ph *PushHandler) SendNotification(subscription *model.PushSubscription, no
 		})
 	if err != nil {
 		logger.Errorf("Error while sending push message: %s", err)
+		return err
 	}
 	defer resp.Body.Close()
 	return nil

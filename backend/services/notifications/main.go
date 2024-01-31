@@ -96,7 +96,6 @@ func main() {
 			return
 		}
 		for _, subscription := range subscriptions {
-
 			userDueRsp, err := srsService.GetUserCardsDue(ctx, &pbCommon.User{
 				UserID: subscription.UserID,
 			})

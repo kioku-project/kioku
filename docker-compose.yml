@@ -17,6 +17,11 @@ services:
       - ./backend/.env
     depends_on:
       - db
+      - user_service
+      - carddeck_service
+      - collaboration_service
+      - srs_service
+      - notifications_service
 
   user_service:
     build:
@@ -85,6 +90,8 @@ services:
       - user_service
       - carddeck_service
       - collaboration_service
+      - srs_service
+      - notifications_service
   
   go-micro-dashboard:
     image: xpunch/go-micro-dashboard:latest

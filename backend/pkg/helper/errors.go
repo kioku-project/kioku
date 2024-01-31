@@ -28,9 +28,6 @@ var (
 func NewMicroNotAuthorizedErr(id ClientID) error {
 	return microErrors.Unauthorized(string(id), "user not authorized")
 }
-func NewMicroMissingParameterErr(id ClientID) error {
-	return microErrors.Unauthorized(string(id), "Missing parameter in REST call")
-}
 
 func NewMicroNoEntryWithIDErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "no entry with id")

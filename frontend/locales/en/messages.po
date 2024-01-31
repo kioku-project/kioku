@@ -379,8 +379,8 @@ msgid "Notifications"
 msgstr "Notifications"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:115
-msgid "Once you deleted your user, there is no going back. Please be certain."
-msgstr "Once you deleted your user, there is no going back. Please be certain."
+msgid "Once you delete your user, there is no going back. Please be certain."
+msgstr "Once you delete your user, there is no going back. Please be certain."
 
 #: components/modal/InstallPWAModal.tsx:116
 #: components/modal/InstallPWAModal.tsx:136
@@ -525,7 +525,7 @@ msgstr "Unsubscribe"
 msgid "User"
 msgstr "User"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:150
+#: components/navigation/Tabs/UserSettingsTab.tsx:148
 msgid "User deleted!"
 msgstr "User deleted!"
 
@@ -533,7 +533,7 @@ msgstr "User deleted!"
 msgid "User invited"
 msgstr "User invited"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:140
+#: components/navigation/Tabs/UserSettingsTab.tsx:138
 msgid "User updated!"
 msgstr "User updated!"
 

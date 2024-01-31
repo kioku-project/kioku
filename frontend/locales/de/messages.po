@@ -379,7 +379,7 @@ msgid "Notifications"
 msgstr "Benachrichtigungen"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:115
-msgid "Once you deleted your user, there is no going back. Please be certain."
+msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden. Bitte sei vorsichtig."
 
 #: components/modal/InstallPWAModal.tsx:116
@@ -525,7 +525,7 @@ msgstr "Deaktivieren"
 msgid "User"
 msgstr "Benutzer"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:150
+#: components/navigation/Tabs/UserSettingsTab.tsx:148
 msgid "User deleted!"
 msgstr "Benutzer gelöscht!"
 
@@ -533,7 +533,7 @@ msgstr "Benutzer gelöscht!"
 msgid "User invited"
 msgstr "Benutzer eingeladen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:140
+#: components/navigation/Tabs/UserSettingsTab.tsx:138
 msgid "User updated!"
 msgstr "Benutzer aktualisiert!"
 
@@ -564,7 +564,7 @@ msgstr "Falscher Benutzername oder falsches Passwort"
 
 #: components/modal/InstallPWAModal.tsx:41
 msgid "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"
-msgstr "Sie verwenden einen unbekannten Browser oder ein unbekanntes Betriebssystem, daher können wir Ihnen keine Hinweise geben, wie Sie Kioku auf Ihrem Gerät installieren können. Wir würden uns freuen, wenn Sie dieses Problem"
+msgstr "Leider stehen keine Hinweise zur Verfügung, wie Kioku auf diesem Gerät mit dem aktuellen Browser installiert werden kann. Wir würden uns freuen, wenn Sie dieses Problem"
 
 #: pages/deck/[id]/learn.tsx:78
 msgid "You did it! There are no cards left in this deck to learn today."
@@ -572,7 +572,7 @@ msgstr "Du hast es geschafft! Für heute gibt es keine Karten mehr zu lernen."
 
 #: components/modal/InstallPWAModal.tsx:61
 msgid "You first need to install Kioku before you can subscribe and receive notifications. Follow the instructions below to install the app and enjoy a native experience."
-msgstr "Bevor die Benachrichtigungen aktiviert werden können, muss Kioku installiert werden. Folgen Sie der Installationsanleitung, um die App zu installieren und ein natives Erlebnis zu genießen."
+msgstr "Bevor die Benachrichtigungen aktiviert werden können, muss Kioku installiert werden. Folge der Installationsanleitung, um die App zu installieren und ein natives Erlebnis zu genießen."
 
 #: components/navigation/Tabs/GroupSettingsTab.tsx:88
 msgid "You must either be invited or request to join the group again."

@@ -197,6 +197,20 @@ func (e *Frontend) DeleteUserHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	dueCards, err := e.srsService.GetUserCardsDue(c.Context(), &pbCommon.User{
+		UserID: userID,
+	})
+	if err != nil {
+		return err
+	}
+	return c.JSON(converter.FiberGetDueResponseBody{
+		DueCards: dueCards.DueCards,
+		DueDecks: dueCards.DueDecks,
+	})
+}
+
 func (e *Frontend) GetGroupInvitationsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	rspGroupInvitations, err := e.collaborationService.GetGroupInvitations(c.Context(), &pbCommon.User{
@@ -251,27 +265,6 @@ func (e *Frontend) CreateGroupHandler(c *fiber.Ctx) error {
 		return err
 	}
 	return c.SendString(rspCreateGroup.GroupID)
-}
-
-func (e *Frontend) LeaveGroupHandler(c *fiber.Ctx) error {
-	groupID := c.Params("groupID")
-	userID := helper.GetUserIDFromContext(c)
-	rspLeaveGroup, err := e.collaborationService.LeaveGroupSafe(
-		c.Context(),
-		&pbCommon.GroupRequest{
-			UserID: userID,
-			Group: &pbCommon.Group{
-				GroupID: groupID,
-			},
-		},
-	)
-	if err != nil {
-		return err
-	}
-	if !rspLeaveGroup.Success {
-		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
-	}
-	return c.SendStatus(200)
 }
 
 func (e *Frontend) GetGroupHandler(c *fiber.Ctx) error {
@@ -347,51 +340,22 @@ func (e *Frontend) GetGroupMembersHandler(c *fiber.Ctx) error {
 	})
 }
 
-func (e *Frontend) ModifyGroupMemberHandler(c *fiber.Ctx) error {
-	var data map[string]string
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
+func (e *Frontend) LeaveGroupHandler(c *fiber.Ctx) error {
+	groupID := c.Params("groupID")
 	userID := helper.GetUserIDFromContext(c)
-	var groupRole pbCommon.GroupRole
-	if dataGroupRole, ok := data["groupRole"]; ok {
-		if gr := strings.TrimSpace(dataGroupRole); gr != "" {
-			groupRole = converter.MigrateStringRoleToProtoRole(gr)
-		}
-	}
-	rspModifyGroupUser, err := e.collaborationService.ModifyGroupUserRequest(
+	rspLeaveGroup, err := e.collaborationService.LeaveGroupSafe(
 		c.Context(),
-		&pbCommon.GroupModUserRequest{
+		&pbCommon.GroupRequest{
 			UserID: userID,
 			Group: &pbCommon.Group{
-				GroupID: c.Params("groupID"),
-				Role:    groupRole,
+				GroupID: groupID,
 			},
-			ModUserID: c.Params("userID"),
 		},
 	)
 	if err != nil {
 		return err
 	}
-	if !rspModifyGroupUser.Success {
-		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
-	}
-	return c.SendStatus(200)
-}
-
-func (e *Frontend) KickGroupMemberHandler(c *fiber.Ctx) error {
-	userID := helper.GetUserIDFromContext(c)
-	rspKickGroupUser, err := e.collaborationService.KickGroupUser(c.Context(), &pbCommon.GroupModUserRequest{
-		UserID: userID,
-		Group: &pbCommon.Group{
-			GroupID: c.Params("groupID"),
-		},
-		ModUserID: c.Params("userID"),
-	})
-	if err != nil {
-		return err
-	}
-	if !rspKickGroupUser.Success {
+	if !rspLeaveGroup.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)
@@ -414,44 +378,6 @@ func (e *Frontend) GetGroupMemberRequestsHandler(c *fiber.Ctx) error {
 			converter.ProtoGroupMemberRequestToFiberGroupMemberRequestConverter,
 		),
 	})
-}
-
-func (e *Frontend) AddUserGroupRequestHandler(c *fiber.Ctx) error {
-	userID := helper.GetUserIDFromContext(c)
-	rspJoinGroupRequest, err := e.collaborationService.AddGroupUserRequest(
-		c.Context(),
-		&pbCommon.GroupRequest{
-			UserID: userID,
-			Group: &pbCommon.Group{
-				GroupID: c.Params("groupID"),
-			},
-		},
-	)
-	if err != nil {
-		return err
-	} else if !rspJoinGroupRequest.Success {
-		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
-	}
-	return c.SendStatus(200)
-}
-
-func (e *Frontend) RemoveUserGroupRequestHandler(c *fiber.Ctx) error {
-	userID := helper.GetUserIDFromContext(c)
-	rspJoinGroupRequest, err := e.collaborationService.RemoveGroupUserRequest(
-		c.Context(),
-		&pbCommon.GroupRequest{
-			UserID: userID,
-			Group: &pbCommon.Group{
-				GroupID: c.Params("groupID"),
-			},
-		},
-	)
-	if err != nil {
-		return err
-	} else if !rspJoinGroupRequest.Success {
-		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
-	}
-	return c.SendStatus(200)
 }
 
 func (e *Frontend) GetInvitationsForGroupHandler(c *fiber.Ctx) error {
@@ -521,6 +447,186 @@ func (e *Frontend) RemoveUserGroupInviteHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	} else if !rspInviteUser.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) AddUserGroupRequestHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspJoinGroupRequest, err := e.collaborationService.AddGroupUserRequest(
+		c.Context(),
+		&pbCommon.GroupRequest{
+			UserID: userID,
+			Group: &pbCommon.Group{
+				GroupID: c.Params("groupID"),
+			},
+		},
+	)
+	if err != nil {
+		return err
+	} else if !rspJoinGroupRequest.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) RemoveUserGroupRequestHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspJoinGroupRequest, err := e.collaborationService.RemoveGroupUserRequest(
+		c.Context(),
+		&pbCommon.GroupRequest{
+			UserID: userID,
+			Group: &pbCommon.Group{
+				GroupID: c.Params("groupID"),
+			},
+		},
+	)
+	if err != nil {
+		return err
+	} else if !rspJoinGroupRequest.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) ModifyGroupMemberHandler(c *fiber.Ctx) error {
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userID := helper.GetUserIDFromContext(c)
+	var groupRole pbCommon.GroupRole
+	if dataGroupRole, ok := data["groupRole"]; ok {
+		if gr := strings.TrimSpace(dataGroupRole); gr != "" {
+			groupRole = converter.MigrateStringRoleToProtoRole(gr)
+		}
+	}
+	rspModifyGroupUser, err := e.collaborationService.ModifyGroupUserRequest(
+		c.Context(),
+		&pbCommon.GroupModUserRequest{
+			UserID: userID,
+			Group: &pbCommon.Group{
+				GroupID: c.Params("groupID"),
+				Role:    groupRole,
+			},
+			ModUserID: c.Params("userID"),
+		},
+	)
+	if err != nil {
+		return err
+	}
+	if !rspModifyGroupUser.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) KickGroupMemberHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspKickGroupUser, err := e.collaborationService.KickGroupUser(c.Context(), &pbCommon.GroupModUserRequest{
+		UserID: userID,
+		Group: &pbCommon.Group{
+			GroupID: c.Params("groupID"),
+		},
+		ModUserID: c.Params("userID"),
+	})
+	if err != nil {
+		return err
+	}
+	if !rspKickGroupUser.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) GetFavoriteDecksHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGetFavoriteDecks, err := e.cardDeckService.GetUserFavoriteDecks(c.Context(), &pbCommon.User{UserID: userID})
+	if err != nil {
+		return err
+	}
+	decks := converter.ConvertToTypeArray(rspGetFavoriteDecks.Decks, converter.ProtoDeckToFiberDeckConverter)
+
+	return c.JSON(converter.FiberGetGroupDecksResponseBody{
+		Decks: decks,
+	})
+}
+
+func (e *Frontend) AddFavoriteDeckHandler(c *fiber.Ctx) error {
+	var deck = &pbCommon.Deck{}
+	if err := c.BodyParser(deck); err != nil {
+		return err
+	}
+	if deck.DeckID == "" {
+		return helper.NewFiberMissingDeckIDErr()
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspAddFavoriteDeck, err := e.cardDeckService.AddUserFavoriteDeck(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck:   deck,
+	})
+	if err != nil {
+		return err
+	}
+	if !rspAddFavoriteDeck.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) DeleteFavoriteDeckHandler(c *fiber.Ctx) error {
+	var deck = &pbCommon.Deck{}
+	if err := c.BodyParser(deck); err != nil {
+		return err
+	}
+	if deck.DeckID == "" {
+		return helper.NewFiberMissingDeckIDErr()
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspDelFavoriteDeck, err := e.cardDeckService.DeleteUserFavoriteDeck(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck:   deck,
+	})
+	if err != nil {
+		return err
+	}
+	if !rspDelFavoriteDeck.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
+func (e *Frontend) GetActiveDecksHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspGetActiveDecks, err := e.cardDeckService.GetUserActiveDecks(c.Context(), &pbCommon.User{UserID: userID})
+	if err != nil {
+		return err
+	}
+	decks := converter.ConvertToTypeArray(rspGetActiveDecks.Decks, converter.ProtoDeckToFiberDeckConverter)
+
+	return c.JSON(converter.FiberGetGroupDecksResponseBody{
+		Decks: decks,
+	})
+}
+
+func (e *Frontend) DeleteActiveDeckHandler(c *fiber.Ctx) error {
+	var deck = &pbCommon.Deck{}
+	if err := c.BodyParser(deck); err != nil {
+		return err
+	}
+	if deck.DeckID == "" {
+		return helper.NewFiberMissingDeckIDErr()
+	}
+	userID := helper.GetUserIDFromContext(c)
+	rspDelActiveDeck, err := e.cardDeckService.DeleteUserActiveDeck(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck:   deck,
+	})
+	if err != nil {
+		return err
+	}
+	if !rspDelActiveDeck.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)
@@ -614,6 +720,22 @@ func (e *Frontend) ModifyDeckHandler(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
+	userID := helper.GetUserIDFromContext(c)
+	rspDeleteDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck: &pbCommon.Deck{
+			DeckID: c.Params("deckID"),
+		},
+	})
+	if err != nil {
+		return err
+	} else if !rspDeleteDeck.Success {
+		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
+	}
+	return c.SendStatus(200)
+}
+
 type copyDeckBody struct {
 	DeckName      string `json:"deckName"`
 	DeckType      string `json:"deckType"`
@@ -647,22 +769,6 @@ func (e *Frontend) CopyDeckHandler(c *fiber.Ctx) error {
 		return err
 	}
 	return c.SendString(rsp.DeckID)
-}
-
-func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
-	userID := helper.GetUserIDFromContext(c)
-	rspDeleteDeck, err := e.cardDeckService.DeleteDeck(c.Context(), &pbCommon.DeckRequest{
-		UserID: userID,
-		Deck: &pbCommon.Deck{
-			DeckID: c.Params("deckID"),
-		},
-	})
-	if err != nil {
-		return err
-	} else if !rspDeleteDeck.Success {
-		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
-	}
-	return c.SendStatus(200)
 }
 
 func (e *Frontend) GetDeckCardsHandler(c *fiber.Ctx) error {
@@ -750,98 +856,6 @@ func (e *Frontend) DeleteCardHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	} else if !rspDeleteCard.Success {
-		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
-	}
-	return c.SendStatus(200)
-}
-
-func (e *Frontend) GetFavoriteDecksHandler(c *fiber.Ctx) error {
-	userID := helper.GetUserIDFromContext(c)
-	rspGetFavoriteDecks, err := e.cardDeckService.GetUserFavoriteDecks(c.Context(), &pbCommon.User{UserID: userID})
-	if err != nil {
-		return err
-	}
-	decks := converter.ConvertToTypeArray(rspGetFavoriteDecks.Decks, converter.ProtoDeckToFiberDeckConverter)
-
-	return c.JSON(converter.FiberGetGroupDecksResponseBody{
-		Decks: decks,
-	})
-}
-
-func (e *Frontend) AddFavoriteDeckHandler(c *fiber.Ctx) error {
-	var deck = &pbCommon.Deck{}
-	if err := c.BodyParser(deck); err != nil {
-		return err
-	}
-	if deck.DeckID == "" {
-		return helper.NewFiberMissingDeckIDErr()
-	}
-	userID := helper.GetUserIDFromContext(c)
-	rspAddFavoriteDeck, err := e.cardDeckService.AddUserFavoriteDeck(c.Context(), &pbCommon.DeckRequest{
-		UserID: userID,
-		Deck:   deck,
-	})
-	if err != nil {
-		return err
-	}
-	if !rspAddFavoriteDeck.Success {
-		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
-	}
-	return c.SendStatus(200)
-}
-
-func (e *Frontend) DeleteFavoriteDeckHandler(c *fiber.Ctx) error {
-	var deck = &pbCommon.Deck{}
-	if err := c.BodyParser(deck); err != nil {
-		return err
-	}
-	if deck.DeckID == "" {
-		return helper.NewFiberMissingDeckIDErr()
-	}
-	userID := helper.GetUserIDFromContext(c)
-	rspDelFavoriteDeck, err := e.cardDeckService.DeleteUserFavoriteDeck(c.Context(), &pbCommon.DeckRequest{
-		UserID: userID,
-		Deck:   deck,
-	})
-	if err != nil {
-		return err
-	}
-	if !rspDelFavoriteDeck.Success {
-		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
-	}
-	return c.SendStatus(200)
-}
-
-func (e *Frontend) GetActiveDecksHandler(c *fiber.Ctx) error {
-	userID := helper.GetUserIDFromContext(c)
-	rspGetActiveDecks, err := e.cardDeckService.GetUserActiveDecks(c.Context(), &pbCommon.User{UserID: userID})
-	if err != nil {
-		return err
-	}
-	decks := converter.ConvertToTypeArray(rspGetActiveDecks.Decks, converter.ProtoDeckToFiberDeckConverter)
-
-	return c.JSON(converter.FiberGetGroupDecksResponseBody{
-		Decks: decks,
-	})
-}
-
-func (e *Frontend) DeleteActiveDeckHandler(c *fiber.Ctx) error {
-	var deck = &pbCommon.Deck{}
-	if err := c.BodyParser(deck); err != nil {
-		return err
-	}
-	if deck.DeckID == "" {
-		return helper.NewFiberMissingDeckIDErr()
-	}
-	userID := helper.GetUserIDFromContext(c)
-	rspDelActiveDeck, err := e.cardDeckService.DeleteUserActiveDeck(c.Context(), &pbCommon.DeckRequest{
-		UserID: userID,
-		Deck:   deck,
-	})
-	if err != nil {
-		return err
-	}
-	if !rspDelActiveDeck.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)
@@ -960,18 +974,14 @@ func (e *Frontend) SrsDeckDueHandler(c *fiber.Ctx) error {
 	})
 }
 
-func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
+func (e *Frontend) GetUserNotificationSubscriptionsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	dueCards, err := e.srsService.GetUserCardsDue(c.Context(), &pbCommon.User{
-		UserID: userID,
-	})
+	rspGetUserSubscriptions, err := e.notificationService.GetUserNotificationSubscriptions(c.Context(), &pbCommon.User{UserID: userID})
 	if err != nil {
 		return err
 	}
-	return c.JSON(converter.FiberGetDueResponseBody{
-		DueCards: dueCards.DueCards,
-		DueDecks: dueCards.DueDecks,
-	})
+	ids := converter.ConvertToTypeArray(rspGetUserSubscriptions.Subscriptions, converter.ProtoNotificationSubscriptionToIDStringConverter)
+	return c.JSON(converter.FiberGetUserSubscriptionsResponseBody{UserSubscriptions: ids})
 }
 
 func (e *Frontend) SubscribeNotificationHandler(c *fiber.Ctx) error {
@@ -996,16 +1006,6 @@ func (e *Frontend) SubscribeNotificationHandler(c *fiber.Ctx) error {
 		return err
 	}
 	return c.SendString(rspSubscribeNotification.SubscriptionID)
-}
-
-func (e *Frontend) GetUserNotificationSubscriptionsHandler(c *fiber.Ctx) error {
-	userID := helper.GetUserIDFromContext(c)
-	rspGetUserSubscriptions, err := e.notificationService.GetUserNotificationSubscriptions(c.Context(), &pbCommon.User{UserID: userID})
-	if err != nil {
-		return err
-	}
-	ids := converter.ConvertToTypeArray(rspGetUserSubscriptions.Subscriptions, converter.ProtoNotificationSubscriptionToIDStringConverter)
-	return c.JSON(converter.FiberGetUserSubscriptionsResponseBody{UserSubscriptions: ids})
 }
 
 func (e *Frontend) UnsubscribeNotificationHandler(c *fiber.Ctx) error {

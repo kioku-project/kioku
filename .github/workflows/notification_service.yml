@@ -1,0 +1,16 @@
+name: Notification Service
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+    - 'backend/services/notifications/**'
+    - 'backend/store/**'
+
+jobs:
+  build-notifications:
+    uses: ./.github/workflows/build_service.yml
+    with:
+      image-name: kioku_notifications
+      path: ./backend/services/notifications
+      context: ./backend

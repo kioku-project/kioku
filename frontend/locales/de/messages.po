@@ -91,7 +91,7 @@ msgstr "Ändere, wie andere der Gruppe beitreten können"
 msgid "Click again"
 msgstr "Nochmal klicken"
 
-#: components/modal/InstallPWAModal.tsx:133
+#: components/modal/InstallPWAModal.tsx:139
 msgid "Click on \"Add page to\""
 msgstr "Klicke auf \"Seite hinzufügen zu\""
 
@@ -189,7 +189,7 @@ msgstr "Lösche diese Gruppe"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:113
 msgid "Delete your Account"
-msgstr "Lösche Deinen Account"
+msgstr "Account löschen"
 
 #: components/flashcard/Flashcard.tsx:194
 msgid "Description"
@@ -207,7 +207,7 @@ msgstr "Entdecke die Funktionen unserer kostenlosen Karteikarten Anwendung. Impo
 msgid "Don't have an account?"
 msgstr "Noch kein Account?"
 
-#: components/modal/InstallPWAModal.tsx:80
+#: components/modal/InstallPWAModal.tsx:87
 msgid "Done"
 msgstr "Erledigt"
 
@@ -289,7 +289,7 @@ msgstr "Gruppen"
 msgid "Hard"
 msgstr "Schwierig"
 
-#: components/modal/InstallPWAModal.tsx:46
+#: components/modal/InstallPWAModal.tsx:52
 msgid "here"
 msgstr "hier"
 
@@ -297,7 +297,7 @@ msgstr "hier"
 msgid "Hit Rate"
 msgstr "Erfolgsquote"
 
-#: components/modal/InstallPWAModal.tsx:27
+#: components/modal/InstallPWAModal.tsx:32
 msgid "How to install Kioku"
 msgstr "So installiert man Kioku"
 
@@ -379,12 +379,12 @@ msgid "Notifications"
 msgstr "Benachrichtigungen"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:115
-msgid "Once you delete your user, there is no going back. Please be certain."
-msgstr "Nachdem Du Deinen Benutzer gelöscht hast, gibt es kein Zurück mehr."
+msgid "Once you deleted your user, there is no going back. Please be certain."
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden. Bitte sei vorsichtig."
 
-#: components/modal/InstallPWAModal.tsx:110
-#: components/modal/InstallPWAModal.tsx:130
-#: components/modal/InstallPWAModal.tsx:155
+#: components/modal/InstallPWAModal.tsx:116
+#: components/modal/InstallPWAModal.tsx:136
+#: components/modal/InstallPWAModal.tsx:161
 msgid "Open menu"
 msgstr "Menü öffnen"
 
@@ -435,19 +435,19 @@ msgstr "Anfrage ausstehend"
 msgid "Save"
 msgstr "Speichern"
 
-#: components/modal/InstallPWAModal.tsx:98
+#: components/modal/InstallPWAModal.tsx:104
 msgid "Select \"Add to Home Screen\""
 msgstr "Wähle \"Zum Home-Bildschirm\""
 
-#: components/modal/InstallPWAModal.tsx:137
+#: components/modal/InstallPWAModal.tsx:143
 msgid "Select \"Home screen\""
 msgstr "Wähle \"Startbildschirm\""
 
-#: components/modal/InstallPWAModal.tsx:114
+#: components/modal/InstallPWAModal.tsx:120
 msgid "Select \"Install app\""
 msgstr "Wähle \"App installieren\""
 
-#: components/modal/InstallPWAModal.tsx:159
+#: components/modal/InstallPWAModal.tsx:165
 msgid "Select \"Install\""
 msgstr "Wähle \"Installieren\""
 
@@ -477,15 +477,15 @@ msgstr "Registrieren"
 msgid "Sign up now!"
 msgstr "Jetzt registrieren!"
 
-#: components/modal/InstallPWAModal.tsx:148
+#: components/modal/InstallPWAModal.tsx:154
 msgid "Since Firefox is not fully supporting PWAs, we recommend using Chrome for the best experience."
 msgstr "Da Firefox PWAs nicht vollständig unterstützt, empfehlen wir die Verwendung von Chrome für die beste Erfahrung."
 
-#: components/modal/InstallPWAModal.tsx:125
+#: components/modal/InstallPWAModal.tsx:131
 msgid "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend using Chrome for the best experience."
 msgstr "Da der Samsung Internet Browser PWAs nicht vollständig unterstützt, empfehlen wir die Verwendung von Chrome für die beste Erfahrung."
 
-#: components/modal/InstallPWAModal.tsx:48
+#: components/modal/InstallPWAModal.tsx:54
 msgid "so that we can support even more devices in the future. We recommend using Chrome on Android and Safari on iOS for the best experience."
 msgstr "melden, damit wir in Zukunft noch mehr Geräte unterstützen können. Wir empfehlen die Verwendung von Chrome auf Android und Safari auf iOS für die beste Erfahrung."
 
@@ -493,7 +493,7 @@ msgstr "melden, damit wir in Zukunft noch mehr Geräte unterstützen können. Wi
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
 
-#: components/input/NotificationButton.tsx:58
+#: components/input/NotificationButton.tsx:60
 msgid "Subscribe"
 msgstr "Aktivieren"
 
@@ -501,7 +501,7 @@ msgstr "Aktivieren"
 msgid "Subscribe to get daily reminders to review your pending cards."
 msgstr "Werde täglich an das Lernen von anstehenden Karten erinnert."
 
-#: components/modal/InstallPWAModal.tsx:94
+#: components/modal/InstallPWAModal.tsx:100
 msgid "Tap on share"
 msgstr "Tippe auf teilen"
 
@@ -517,7 +517,7 @@ msgstr "Benachrichtigungen aktivieren"
 msgid "Unexpected group type"
 msgstr "Unerwarteter Gruppentyp"
 
-#: components/input/NotificationButton.tsx:57
+#: components/input/NotificationButton.tsx:58
 msgid "Unsubscribe"
 msgstr "Deaktivieren"
 
@@ -562,7 +562,7 @@ msgstr "Willkommen bei Kioku - der cloudbasierten Karteikarten Anwendung, die si
 msgid "Wrong username or password"
 msgstr "Falscher Benutzername oder falsches Passwort"
 
-#: components/modal/InstallPWAModal.tsx:35
+#: components/modal/InstallPWAModal.tsx:41
 msgid "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"
 msgstr "Sie verwenden einen unbekannten Browser oder ein unbekanntes Betriebssystem, daher können wir Ihnen keine Hinweise geben, wie Sie Kioku auf Ihrem Gerät installieren können. Wir würden uns freuen, wenn Sie dieses Problem"
 
@@ -570,7 +570,7 @@ msgstr "Sie verwenden einen unbekannten Browser oder ein unbekanntes Betriebssys
 msgid "You did it! There are no cards left in this deck to learn today."
 msgstr "Du hast es geschafft! Für heute gibt es keine Karten mehr zu lernen."
 
-#: components/modal/InstallPWAModal.tsx:55
+#: components/modal/InstallPWAModal.tsx:61
 msgid "You first need to install Kioku before you can subscribe and receive notifications. Follow the instructions below to install the app and enjoy a native experience."
 msgstr "Bevor die Benachrichtigungen aktiviert werden können, muss Kioku installiert werden. Folgen Sie der Installationsanleitung, um die App zu installieren und ein natives Erlebnis zu genießen."
 

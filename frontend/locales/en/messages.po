@@ -91,7 +91,7 @@ msgstr "Change how others join this group"
 msgid "Click again"
 msgstr "Click again"
 
-#: components/modal/InstallPWAModal.tsx:133
+#: components/modal/InstallPWAModal.tsx:139
 msgid "Click on \"Add page to\""
 msgstr "Click on \"Add page to\""
 
@@ -207,7 +207,7 @@ msgstr "Discover the features of our free flashcard application. Import decks fr
 msgid "Don't have an account?"
 msgstr "Don't have an account?"
 
-#: components/modal/InstallPWAModal.tsx:80
+#: components/modal/InstallPWAModal.tsx:87
 msgid "Done"
 msgstr "Done"
 
@@ -289,7 +289,7 @@ msgstr "Groups"
 msgid "Hard"
 msgstr "Hard"
 
-#: components/modal/InstallPWAModal.tsx:46
+#: components/modal/InstallPWAModal.tsx:52
 msgid "here"
 msgstr "here"
 
@@ -297,7 +297,7 @@ msgstr "here"
 msgid "Hit Rate"
 msgstr "Hit Rate"
 
-#: components/modal/InstallPWAModal.tsx:27
+#: components/modal/InstallPWAModal.tsx:32
 msgid "How to install Kioku"
 msgstr "How to install Kioku"
 
@@ -379,12 +379,12 @@ msgid "Notifications"
 msgstr "Notifications"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:115
-msgid "Once you delete your user, there is no going back. Please be certain."
-msgstr "Once you delete your user, there is no going back. Please be certain."
+msgid "Once you deleted your user, there is no going back. Please be certain."
+msgstr "Once you deleted your user, there is no going back. Please be certain."
 
-#: components/modal/InstallPWAModal.tsx:110
-#: components/modal/InstallPWAModal.tsx:130
-#: components/modal/InstallPWAModal.tsx:155
+#: components/modal/InstallPWAModal.tsx:116
+#: components/modal/InstallPWAModal.tsx:136
+#: components/modal/InstallPWAModal.tsx:161
 msgid "Open menu"
 msgstr "Open menu"
 
@@ -435,19 +435,19 @@ msgstr "Request pending"
 msgid "Save"
 msgstr "Save"
 
-#: components/modal/InstallPWAModal.tsx:98
+#: components/modal/InstallPWAModal.tsx:104
 msgid "Select \"Add to Home Screen\""
 msgstr "Select \"Add to Home Screen\""
 
-#: components/modal/InstallPWAModal.tsx:137
+#: components/modal/InstallPWAModal.tsx:143
 msgid "Select \"Home screen\""
 msgstr "Select \"Home screen\""
 
-#: components/modal/InstallPWAModal.tsx:114
+#: components/modal/InstallPWAModal.tsx:120
 msgid "Select \"Install app\""
 msgstr "Select \"Install app\""
 
-#: components/modal/InstallPWAModal.tsx:159
+#: components/modal/InstallPWAModal.tsx:165
 msgid "Select \"Install\""
 msgstr "Select \"Install\""
 
@@ -477,15 +477,15 @@ msgstr "Sign up"
 msgid "Sign up now!"
 msgstr "Sign up now!"
 
-#: components/modal/InstallPWAModal.tsx:148
+#: components/modal/InstallPWAModal.tsx:154
 msgid "Since Firefox is not fully supporting PWAs, we recommend using Chrome for the best experience."
 msgstr "Since Firefox is not fully supporting PWAs, we recommend using Chrome for the best experience."
 
-#: components/modal/InstallPWAModal.tsx:125
+#: components/modal/InstallPWAModal.tsx:131
 msgid "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend using Chrome for the best experience."
 msgstr "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend using Chrome for the best experience."
 
-#: components/modal/InstallPWAModal.tsx:48
+#: components/modal/InstallPWAModal.tsx:54
 msgid "so that we can support even more devices in the future. We recommend using Chrome on Android and Safari on iOS for the best experience."
 msgstr "so that we can support even more devices in the future. We recommend using Chrome on Android and Safari on iOS for the best experience."
 
@@ -493,7 +493,7 @@ msgstr "so that we can support even more devices in the future. We recommend usi
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 
-#: components/input/NotificationButton.tsx:58
+#: components/input/NotificationButton.tsx:60
 msgid "Subscribe"
 msgstr "Subscribe"
 
@@ -501,7 +501,7 @@ msgstr "Subscribe"
 msgid "Subscribe to get daily reminders to review your pending cards."
 msgstr "Subscribe to get daily reminders to review your pending cards."
 
-#: components/modal/InstallPWAModal.tsx:94
+#: components/modal/InstallPWAModal.tsx:100
 msgid "Tap on share"
 msgstr "Tap on share"
 
@@ -517,7 +517,7 @@ msgstr "Turn on Notifications"
 msgid "Unexpected group type"
 msgstr "Unexpected group type"
 
-#: components/input/NotificationButton.tsx:57
+#: components/input/NotificationButton.tsx:58
 msgid "Unsubscribe"
 msgstr "Unsubscribe"
 
@@ -562,7 +562,7 @@ msgstr "Welcome to Kioku - the cloud native flashcard application that focuses o
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 
-#: components/modal/InstallPWAModal.tsx:35
+#: components/modal/InstallPWAModal.tsx:41
 msgid "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"
 msgstr "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"
 
@@ -570,7 +570,7 @@ msgstr "You are using an unknown browser or operating system, so we cannot provi
 msgid "You did it! There are no cards left in this deck to learn today."
 msgstr "You did it! There are no cards left in this deck to learn today."
 
-#: components/modal/InstallPWAModal.tsx:55
+#: components/modal/InstallPWAModal.tsx:61
 msgid "You first need to install Kioku before you can subscribe and receive notifications. Follow the instructions below to install the app and enjoy a native experience."
 msgstr "You first need to install Kioku before you can subscribe and receive notifications. Follow the instructions below to install the app and enjoy a native experience."
 

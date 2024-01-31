@@ -112,7 +112,7 @@ export const UserSettingsTab = ({
 						id="deleteAccountDangerAction"
 						header={_(msg`Delete your Account`)}
 						description={_(
-							msg`Once you delete your user, there is no going back. Please be certain.`
+							msg`Once you deleted your user, there is no going back. Please be certain.`
 						)}
 						button={
 							isConfirmDeletion

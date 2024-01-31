@@ -103,6 +103,7 @@ func main() {
 			})
 			if err != nil {
 				logger.Error(err)
+				continue
 			}
 			if userDueRsp.DueCards == 0 {
 				continue

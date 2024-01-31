@@ -1004,11 +1004,8 @@ func (e *Frontend) GetUserNotificationSubscriptionsHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	ids := make([]string, len(rspGetUserSubscriptions.Subscriptions))
-	for i, subscription := range rspGetUserSubscriptions.Subscriptions {
-		ids[i] = subscription.SubscriptionID
-	}
-	return c.JSON(ids)
+	ids := converter.ConvertToTypeArray(rspGetUserSubscriptions.Subscriptions, converter.ProtoNotificationSubscriptionToIDStringConverter)
+	return c.JSON(converter.FiberGetUserSubscriptionsResponseBody{UserSubscriptions: ids})
 }
 
 func (e *Frontend) UnsubscribeNotificationsHandler(c *fiber.Ctx) error {

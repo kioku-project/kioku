@@ -244,3 +244,7 @@ func StoreNotificationSubscriptionToProtoNotificationSubscriptionConverter(subsc
 		Auth:           subscription.Auth,
 	}
 }
+
+func ProtoNotificationSubscriptionToIDStringConverter(subscription *pbCommon.PushSubscription) string {
+	return subscription.SubscriptionID
+}

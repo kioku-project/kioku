@@ -88,8 +88,7 @@ func main() {
 	}
 
 	c := cron.New()
-	// TODO: change to daily at 6pm
-	c.AddFunc("* * * * *", func() {
+	c.AddFunc("* 11,14,17 * * *", func() {
 		logger.Info("Cronjob: Sending daily notification reminder")
 		subscriptions, err := dbStore.FindAllPushSubscriptions(ctx)
 		if err != nil {

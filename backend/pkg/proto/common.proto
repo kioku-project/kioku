@@ -111,11 +111,12 @@ enum DeckType {
 message Deck {
   string deckID = 1;
   string deckName = 2;
-  DeckType deckType = 3;
-  int64 createdAt = 4;
-  string groupID = 5;
-  bool isActive = 6;
-  bool isFavorite = 7;
+  string deckDescription = 3;
+  DeckType deckType = 4;
+  int64 createdAt = 5;
+  string groupID = 6;
+  bool isActive = 7;
+  bool isFavorite = 8;
 }
 message DeckRequest {
   string userID = 1;

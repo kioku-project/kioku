@@ -15,15 +15,16 @@ const (
 )
 
 type Deck struct {
-	ID         string   `gorm:"primaryKey"`
-	Name       string   `gorm:"not null"`
-	DeckType   DeckType `gorm:"not null"`
-	CreatedAt  time.Time
-	GroupID    string `gorm:"not null"`
-	Group      Group
-	Cards      []Card `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	IsFavorite bool   `gorm:"-"`
-	IsActive   bool   `gorm:"-"`
+	ID          string `gorm:"primaryKey"`
+	Name        string `gorm:"not null"`
+	Description string
+	DeckType    DeckType `gorm:"not null"`
+	CreatedAt   time.Time
+	GroupID     string `gorm:"not null"`
+	Group       Group
+	Cards       []Card `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	IsFavorite  bool   `gorm:"-"`
+	IsActive    bool   `gorm:"-"`
 }
 
 func (d *Deck) BeforeCreate(db *gorm.DB) (err error) {

@@ -10,8 +10,8 @@ type Unsigned interface {
 }
 
 func PluralSingularSelector[Number Signed | Unsigned, T any](count Number, singular, plural T) T {
-	if count > 1 {
-		return plural
+	if count == 1 {
+		return singular
 	}
-	return singular
+	return plural
 }

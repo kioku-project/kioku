@@ -56,8 +56,9 @@ export function useNotifications() {
 		`/api/user/notifications`,
 		fetcher
 	);
+	console.log(data);
 	return {
-		subscriptions: data,
+		subscriptions: data?.userSubscriptions,
 		error,
 		isLoading,
 		isValidating,

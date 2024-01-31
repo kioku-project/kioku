@@ -8,6 +8,14 @@ interface GroupListProps {
 	 * Groups
 	 */
 	groups: GroupType[];
+	/**
+	 * Filter groups
+	 */
+	filter?: string;
+	/**
+	 * Reverse group order
+	 */
+	reverse?: boolean;
 	/*
 	 * Additional classes
 	 */
@@ -16,11 +24,18 @@ interface GroupListProps {
 
 export default function GroupList({
 	groups,
+	filter = "",
+	reverse = false,
 	className,
 }: Readonly<GroupListProps>) {
+	const filteredGroups = groups?.filter(
+		(group) => !group.isDefault && group.groupName.includes(filter)
+	);
+	const sortedGroups = reverse ? filteredGroups?.reverse() : filteredGroups;
+
 	return (
 		<div className={`space-y-3 ${className}`}>
-			{groups.map((group: GroupType) => {
+			{sortedGroups.map((group: GroupType) => {
 				return (
 					<Link key={group.groupID} href={`/group/${group.groupID}`}>
 						<DeckList

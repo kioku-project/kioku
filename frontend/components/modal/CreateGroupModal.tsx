@@ -35,7 +35,7 @@ export const CreateGroupModal = ({
 					<InputField
 						id="groupNameInputFieldId"
 						type="text"
-						label={_(msg`Group name`)}
+						label={_(msg`Group Name`)}
 						inputFieldLabelStyle="text-gray-400"
 						required
 						placeholder={_(msg`Enter group name`)}

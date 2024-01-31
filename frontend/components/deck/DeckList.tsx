@@ -12,6 +12,14 @@ interface DeckListProps {
 	 */
 	decks?: DeckType[];
 	/**
+	 * Filter decks
+	 */
+	filter?: string;
+	/**
+	 * Reverse deck order
+	 */
+	reverse?: boolean;
+	/**
 	 * Additional classes
 	 */
 	className?: string;
@@ -23,8 +31,15 @@ interface DeckListProps {
 export default function DeckList({
 	header,
 	decks,
+	filter = "",
+	reverse = false,
 	className = "",
 }: Readonly<DeckListProps>) {
+	const filteredDecks = decks?.filter((deck) =>
+		deck.deckName.includes(filter)
+	);
+	const sortedDecks = reverse ? filteredDecks?.reverse() : filteredDecks;
+
 	return (
 		<Section
 			header={header}
@@ -32,7 +47,7 @@ export default function DeckList({
 			className={`overflow-auto pb-5 ${className}`}
 		>
 			<div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
-				{decks?.map((deck) => (
+				{sortedDecks?.map((deck) => (
 					<FetchDeck key={deck.deckID} deck={deck} />
 				))}
 			</div>

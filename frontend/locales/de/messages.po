@@ -152,12 +152,12 @@ msgstr "Stapel gelöscht!"
 
 #: components/modal/CreateDeckModal.tsx:59
 msgid "Deck description"
-msgstr "Stapel Beschreibung"
+msgstr "Stapelbeschreibung"
 
 #: components/modal/CreateDeckModal.tsx:47
 #: components/navigation/Tabs/DeckSettingsTab.tsx:55
 msgid "Deck name"
-msgstr "Stapel Name"
+msgstr "Stapelname"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:127
 msgid "Deck updated!"
@@ -218,19 +218,19 @@ msgstr "E-Mail"
 
 #: components/modal/CreateDeckModal.tsx:61
 msgid "Enter deck description"
-msgstr "Stapel Beschreibung eingeben"
+msgstr "Stapelbeschreibung eingeben"
 
 #: components/modal/CreateDeckModal.tsx:50
 msgid "Enter deck name"
-msgstr "Stapel Namen eingeben"
+msgstr "Stapelnamen eingeben"
 
 #: components/modal/CreateGroupModal.tsx:52
 msgid "Enter group description"
-msgstr "Gruppen Beschreibung eingeben"
+msgstr "Gruppenbeschreibung eingeben"
 
 #: components/modal/CreateGroupModal.tsx:41
 msgid "Enter group name"
-msgstr "Gruppen Namen eingeben"
+msgstr "Gruppennamen eingeben"
 
 #: pages/features.tsx:109
 msgid "Entertaining"
@@ -273,12 +273,9 @@ msgstr "Gruppe gelöscht!"
 #: components/modal/CreateGroupModal.tsx:50
 #: components/navigation/Tabs/GroupSettingsTab.tsx:66
 msgid "Group description"
-msgstr "Gruppen Beschreibung"
+msgstr "Gruppenbeschreibung"
 
 #: components/modal/CreateGroupModal.tsx:38
-msgid "Group name"
-msgstr "Gruppen Name"
-
 #: components/navigation/Tabs/GroupSettingsTab.tsx:52
 msgid "Group Name"
 msgstr "Gruppenname"

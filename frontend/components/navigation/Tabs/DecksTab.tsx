@@ -49,21 +49,7 @@ export const DecksTab = ({ group }: DecksTabProps) => {
 					}}
 					onAdd={() => setShowModal(true)}
 				/>
-				<DeckList
-					decks={
-						reverse
-							? decks
-									?.filter((deck) =>
-										deck.deckName
-											.toUpperCase()
-											.includes(filter)
-									)
-									.reverse()
-							: decks?.filter((deck) =>
-									deck.deckName.toUpperCase().includes(filter)
-							  )
-					}
-				/>
+				<DeckList decks={decks} filter={filter} reverse={reverse} />
 			</div>
 		</>
 	);

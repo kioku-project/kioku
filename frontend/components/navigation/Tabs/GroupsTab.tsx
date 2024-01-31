@@ -45,27 +45,7 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 					}}
 					onAdd={() => setShowModal(true)}
 				/>
-				<GroupList
-					groups={
-						reverse
-							? groups
-									?.filter(
-										(group) =>
-											!group.isDefault &&
-											group.groupName
-												.toUpperCase()
-												.includes(filter)
-									)
-									.reverse()
-							: groups.filter(
-									(group) =>
-										!group.isDefault &&
-										group.groupName
-											.toUpperCase()
-											.includes(filter)
-							  )
-					}
-				/>
+				<GroupList groups={groups} filter={filter} reverse={reverse} />
 			</div>
 		</>
 	);

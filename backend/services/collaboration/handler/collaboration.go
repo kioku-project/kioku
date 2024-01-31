@@ -490,6 +490,13 @@ func (e *Collaboration) AddGroupUserInvite(
 	if err := e.checkUserAuthorized(ctx, req.UserID, req.Group.GroupID, model.RoleAdmin); err != nil {
 		return err
 	}
+	group, err := e.store.FindGroupByID(ctx, req.Group.GroupID)
+	if err != nil {
+		return err
+	}
+	if group.IsDefault {
+		return helper.NewMicroCantInviteToHomegroupErr(helper.CollaborationServiceID)
+	}
 
 	userRsp, err := e.userService.GetUserIDFromEmail(ctx, &pbCommon.User{UserEmail: req.InviteUserEmail})
 	if err != nil {

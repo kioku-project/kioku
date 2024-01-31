@@ -487,7 +487,7 @@ msgstr "Da der Samsung Internet Browser PWAs nicht vollständig unterstützt, em
 
 #: components/modal/InstallPWAModal.tsx:54
 msgid "so that we can support even more devices in the future. We recommend using Chrome on Android and Safari on iOS for the best experience."
-msgstr "melden, damit wir in Zukunft noch mehr Geräte unterstützen können. Wir empfehlen die Verwendung von Chrome auf Android und Safari auf iOS für die beste Erfahrung."
+msgstr "gemeldet wird, damit wir in Zukunft noch mehr Geräte unterstützen können. Wir empfehlen die Verwendung von Chrome auf Android und Safari auf iOS für die beste Erfahrung."
 
 #: pages/home.tsx:53
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
@@ -564,7 +564,7 @@ msgstr "Falscher Benutzername oder falsches Passwort"
 
 #: components/modal/InstallPWAModal.tsx:41
 msgid "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"
-msgstr "Leider stehen keine Hinweise zur Verfügung, wie Kioku auf diesem Gerät mit dem aktuellen Browser installiert werden kann. Wir würden uns freuen, wenn Sie dieses Problem"
+msgstr "Leider stehen keine Hinweise zur Verfügung, wie Kioku auf diesem Gerät mit dem aktuellen Browser installiert werden kann. Wir würden uns freuen, wenn dieses Problem"
 
 #: pages/deck/[id]/learn.tsx:78
 msgid "You did it! There are no cards left in this deck to learn today."

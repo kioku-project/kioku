@@ -1,0 +1,15 @@
+meta {
+  name: decline invitation
+  type: http
+  seq: 13
+}
+
+delete {
+  url: {{baseUrl}}/api/groups/{{groupID}}/members/request
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

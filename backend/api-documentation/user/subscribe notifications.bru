@@ -1,0 +1,23 @@
+meta {
+  name: subscribe notifications
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/user/notification
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "endpoint": "",
+    "auth": "",
+    "p256dh": ""
+  }
+}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	pbNotification "github.com/kioku-project/kioku/services/notification/proto"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	microErrors "go-micro.dev/v4/errors"
 
@@ -69,6 +70,7 @@ func main() {
 		pbCardDeck.NewCardDeckService("cardDeck", srv.Client()),
 		pbCollaboration.NewCollaborationService("collaboration", srv.Client()),
 		pbSrs.NewSrsService("srs", srv.Client()),
+		pbNotification.NewNotificationService("notification", srv.Client()),
 	)
 
 	fiberConfig := fiber.Config{
@@ -118,15 +120,15 @@ func main() {
 
 	app.Get("/api/groups/:groupID/members", svc.GetGroupMembersHandler)
 	app.Delete("/api/groups/:groupID/members", svc.LeaveGroupHandler)
-	app.Put("/api/groups/:groupID/members/:userID", svc.ModifyGroupMemberHandler)
-	app.Delete("/api/groups/:groupID/members/:userID", svc.KickGroupMemberHandler)
 	app.Get("/api/groups/:groupID/members/requests", svc.GetGroupMemberRequestsHandler)
 	app.Get("/api/groups/:groupID/members/invitations", svc.GetInvitationsForGroupHandler)
-
 	app.Post("/api/groups/:groupID/members/invitation", svc.AddUserGroupInviteHandler)
 	app.Delete("/api/groups/:groupID/members/invitation", svc.RemoveUserGroupInviteHandler)
 	app.Post("/api/groups/:groupID/members/request", svc.AddUserGroupRequestHandler)
 	app.Delete("/api/groups/:groupID/members/request", svc.RemoveUserGroupRequestHandler)
+
+	app.Put("/api/groups/:groupID/members/:userID", svc.ModifyGroupMemberHandler)
+	app.Delete("/api/groups/:groupID/members/:userID", svc.KickGroupMemberHandler)
 
 	app.Get("/api/decks/favorites", svc.GetFavoriteDecksHandler)
 	app.Post("/api/decks/favorites", svc.AddFavoriteDeckHandler)
@@ -154,6 +156,10 @@ func main() {
 	app.Get("/api/decks/:deckID/pull", svc.SrsPullHandler)
 	app.Post("/api/decks/:deckID/push", svc.SrsPushHandler)
 	app.Get("/api/decks/:deckID/dueCards", svc.SrsDeckDueHandler)
+
+	app.Get("/api/user/notification", svc.GetUserNotificationSubscriptionsHandler)
+	app.Post("/api/user/notification", svc.SubscribeNotificationHandler)
+	app.Delete("/api/user/notification/:subscriptionID", svc.UnsubscribeNotificationHandler)
 
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {

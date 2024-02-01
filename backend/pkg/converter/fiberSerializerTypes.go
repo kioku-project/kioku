@@ -81,3 +81,7 @@ type FiberGetGroupMemberRequestsResponseBody struct {
 type FiberGetInvitationsForGroupResponseBody struct {
 	MemberRequests []FiberGroupMemberAdmission `json:"groupInvitations"`
 }
+
+type FiberGetUserSubscriptionsResponseBody struct {
+	UserSubscriptions []string `json:"userSubscriptions"`
+}

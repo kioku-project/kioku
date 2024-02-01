@@ -75,17 +75,17 @@ export const NotificationButton = ({
 				options
 			);
 			setSubscriptionId(await saveSubscription(subscription));
-			mutate("/api/user/notifications");
+			mutate("/api/user/notification");
 		} catch (err) {}
 	}
 
 	async function unsubscribe(subscriptionId: string) {
 		const response = await deleteRequest(
-			`/api/user/notifications/${subscriptionId}`
+			`/api/user/notification/${subscriptionId}`
 		);
 		if (response.ok) {
 			setSubscriptionId("");
-			mutate("/api/user/notifications");
+			mutate("/api/user/notification");
 		}
 	}
 
@@ -95,7 +95,7 @@ export const NotificationButton = ({
 
 	async function saveSubscription(subscription: PushSubscription) {
 		const ORIGIN = window.location.origin;
-		const BACKEND_URL = `${ORIGIN}/api/user/notifications`;
+		const BACKEND_URL = `${ORIGIN}/api/user/notification`;
 		const response = await postRequest(
 			BACKEND_URL,
 			JSON.stringify({

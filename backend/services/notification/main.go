@@ -13,8 +13,8 @@ import (
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	"go-micro.dev/v4/server"
 
-	"github.com/kioku-project/kioku/services/notifications/handler"
-	pb "github.com/kioku-project/kioku/services/notifications/proto"
+	"github.com/kioku-project/kioku/services/notification/handler"
+	pb "github.com/kioku-project/kioku/services/notification/proto"
 	"github.com/kioku-project/kioku/store"
 
 	"go-micro.dev/v4"
@@ -30,7 +30,7 @@ import (
 )
 
 var (
-	service        = "notifications"
+	service        = "notification"
 	version        = "latest"
 	serviceAddress = fmt.Sprintf("%s%s", os.Getenv("HOSTNAME"), ":8080")
 )
@@ -50,7 +50,7 @@ func main() {
 	if !success {
 		logger.Fatal("VAPID_PUBLIC_KEY not set")
 	}
-	pushHandler := util.NewNotifications(publicVapidKey, privateVapidKey)
+	pushHandler := util.NewNotification(publicVapidKey, privateVapidKey)
 
 	logger.Info("Trying to listen on: ", serviceAddress)
 
@@ -80,10 +80,10 @@ func main() {
 
 	// Create a new instance of the service handler with the initialized database connection
 	srsService := pbSrs.NewSrsService("srs", srv.Client())
-	svc := handler.NewNotifications(dbStore, pushHandler, srsService)
+	svc := handler.NewNotification(dbStore, pushHandler, srsService)
 
 	// Register handler
-	if err := pb.RegisterNotificationsHandler(srv.Server(), svc); err != nil {
+	if err := pb.RegisterNotificationHandler(srv.Server(), svc); err != nil {
 		logger.Fatal(err)
 	}
 

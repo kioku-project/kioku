@@ -14,18 +14,18 @@ import (
 	"github.com/kioku-project/kioku/store"
 )
 
-type Notifications struct {
-	store       store.NotificationsStore
+type Notification struct {
+	store       store.NotificationStore
 	pushHandler *util.PushHandler
 	srsService  pbSrs.SrsService
 }
 
-func NewNotifications(s store.NotificationsStore, ph *util.PushHandler, cds pbSrs.SrsService) *Notifications {
-	return &Notifications{store: s, pushHandler: ph, srsService: cds}
+func NewNotification(s store.NotificationStore, ph *util.PushHandler, cds pbSrs.SrsService) *Notification {
+	return &Notification{store: s, pushHandler: ph, srsService: cds}
 }
 
-func (e *Notifications) Subscribe(ctx context.Context, req *pbCommon.PushSubscriptionRequest, rsp *pbCommon.PushSubscription) error {
-	logger.Infof("Received Notifications.Enroll request: %v", req)
+func (e *Notification) Subscribe(ctx context.Context, req *pbCommon.PushSubscriptionRequest, rsp *pbCommon.PushSubscription) error {
+	logger.Infof("Received Notification.Subscribe request: %v", req)
 	subscription := &model.PushSubscription{
 		UserID:   req.UserID,
 		Endpoint: req.Subscription.Endpoint,
@@ -50,8 +50,8 @@ func (e *Notifications) Subscribe(ctx context.Context, req *pbCommon.PushSubscri
 	return nil
 }
 
-func (e *Notifications) GetUserNotificationSubscriptions(ctx context.Context, req *pbCommon.User, rsp *pbCommon.PushSubscriptions) error {
-	logger.Infof("Received Notifications.GetUserNotificationSubscriptions request: %v", req)
+func (e *Notification) GetUserNotificationSubscriptions(ctx context.Context, req *pbCommon.User, rsp *pbCommon.PushSubscriptions) error {
+	logger.Infof("Received Notification.GetUserNotificationSubscriptions request: %v", req)
 	subscriptions, err := e.store.FindPushSubscriptionsByUserID(ctx, req.UserID)
 	if err != nil {
 		return err
@@ -62,14 +62,14 @@ func (e *Notifications) GetUserNotificationSubscriptions(ctx context.Context, re
 
 }
 
-func (e *Notifications) Unsubscribe(ctx context.Context, req *pbCommon.PushSubscriptionRequest, rsp *pbCommon.Success) error {
-	logger.Infof("Received Notifications.Unsubscribe request: %v", req)
+func (e *Notification) Unsubscribe(ctx context.Context, req *pbCommon.PushSubscriptionRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received Notification.Unsubscribe request: %v", req)
 	subscription, err := e.store.FindPushSubscriptionByID(ctx, req.Subscription.SubscriptionID)
 	if err != nil {
 		return err
 	}
 	if subscription.UserID != req.UserID {
-		return helper.NewMicroNotAuthorizedErr(helper.NotificationsServiceID)
+		return helper.NewMicroNotAuthorizedErr(helper.NotificationServiceID)
 	}
 
 	if err := e.store.DeletePushSubscription(ctx, subscription); err != nil {

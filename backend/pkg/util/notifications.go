@@ -14,7 +14,7 @@ type PushHandler struct {
 	publicVapidKey  string
 }
 
-func NewNotifications(publicVapidKey string, privateVapidKey string) *PushHandler {
+func NewNotification(publicVapidKey string, privateVapidKey string) *PushHandler {
 	return &PushHandler{
 		privateVapidKey: privateVapidKey,
 		publicVapidKey:  publicVapidKey,

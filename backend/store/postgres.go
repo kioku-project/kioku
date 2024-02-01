@@ -563,7 +563,7 @@ func (s *SrsStoreImpl) ModifyUserCard(ctx context.Context, userCard *model.UserC
 	}).Error
 }
 
-func NewNotificationStore(ctx context.Context) (NotificationsStore, error) {
+func NewNotificationStore(ctx context.Context) (NotificationStore, error) {
 	db, err := NewPostgresStore(ctx)
 	if err != nil {
 		return nil, err

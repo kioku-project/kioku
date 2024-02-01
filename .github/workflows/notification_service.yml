@@ -4,13 +4,13 @@ on:
   pull_request:
     branches: [ main ]
     paths:
-    - 'backend/services/notifications/**'
+    - 'backend/services/notification/**'
     - 'backend/store/**'
 
 jobs:
-  build-notifications:
+  build-notification:
     uses: ./.github/workflows/build_service.yml
     with:
-      image-name: kioku_notifications
-      path: ./backend/services/notifications
+      image-name: kioku_notification
+      path: ./backend/services/notification
       context: ./backend

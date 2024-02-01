@@ -3,6 +3,7 @@ module github.com/kioku-project/kioku
 go 1.20
 
 require (
+	github.com/SherClockHolmes/webpush-go v1.3.0
 	github.com/go-micro/plugins/v4/client/grpc v1.2.1
 	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.2
 	github.com/go-micro/plugins/v4/server/grpc v1.2.0
@@ -10,6 +11,7 @@ require (
 	github.com/gofiber/jwt/v3 v3.3.10
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/joho/godotenv v1.5.1
+	github.com/robfig/cron/v3 v3.0.0
 	go-micro.dev/v4 v4.10.2
 	go.opentelemetry.io/otel v1.22.0
 	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a
@@ -19,7 +21,6 @@ require (
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
-	github.com/SherClockHolmes/webpush-go v1.3.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/cyphar/filepath-securejoin v0.2.4 // indirect
@@ -41,7 +42,6 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
-	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect

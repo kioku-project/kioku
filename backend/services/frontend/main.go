@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	pbNotifications "github.com/kioku-project/kioku/services/notifications/proto"
+	pbNotification "github.com/kioku-project/kioku/services/notification/proto"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	microErrors "go-micro.dev/v4/errors"
 
@@ -70,7 +70,7 @@ func main() {
 		pbCardDeck.NewCardDeckService("cardDeck", srv.Client()),
 		pbCollaboration.NewCollaborationService("collaboration", srv.Client()),
 		pbSrs.NewSrsService("srs", srv.Client()),
-		pbNotifications.NewNotificationsService("notifications", srv.Client()),
+		pbNotification.NewNotificationService("notification", srv.Client()),
 	)
 
 	fiberConfig := fiber.Config{
@@ -157,9 +157,9 @@ func main() {
 	app.Post("/api/decks/:deckID/push", svc.SrsPushHandler)
 	app.Get("/api/decks/:deckID/dueCards", svc.SrsDeckDueHandler)
 
-	app.Get("/api/user/notifications", svc.GetUserNotificationSubscriptionsHandler)
-	app.Post("/api/user/notifications", svc.SubscribeNotificationsHandler)
-	app.Delete("/api/user/notifications/:subscriptionID", svc.UnsubscribeNotificationsHandler)
+	app.Get("/api/user/notification", svc.GetUserNotificationSubscriptionsHandler)
+	app.Post("/api/user/notification", svc.SubscribeNotificationHandler)
+	app.Delete("/api/user/notification/:subscriptionID", svc.UnsubscribeNotificationHandler)
 
 	// Register the handler with the micro framework
 	// if err := micro.RegisterHandler(srv.Server(), grpcHandler); err != nil {

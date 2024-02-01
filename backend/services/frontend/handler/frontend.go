@@ -14,7 +14,7 @@ import (
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
-	pbNotifications "github.com/kioku-project/kioku/services/notifications/proto"
+	pbNotification "github.com/kioku-project/kioku/services/notification/proto"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	pbUser "github.com/kioku-project/kioku/services/user/proto"
 )
@@ -24,7 +24,7 @@ type Frontend struct {
 	cardDeckService      pbCardDeck.CardDeckService
 	collaborationService pbCollaboration.CollaborationService
 	srsService           pbSrs.SrsService
-	notificationsService pbNotifications.NotificationsService
+	notificationService  pbNotification.NotificationService
 }
 
 func New(
@@ -32,14 +32,14 @@ func New(
 	cardDeckService pbCardDeck.CardDeckService,
 	collaborationService pbCollaboration.CollaborationService,
 	srsService pbSrs.SrsService,
-	notificationsService pbNotifications.NotificationsService,
+	notificationService pbNotification.NotificationService,
 ) *Frontend {
 	return &Frontend{
 		userService:          userService,
 		cardDeckService:      cardDeckService,
 		collaborationService: collaborationService,
 		srsService:           srsService,
-		notificationsService: notificationsService,
+		notificationService:  notificationService,
 	}
 }
 
@@ -974,7 +974,7 @@ func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
 	})
 }
 
-func (e *Frontend) SubscribeNotificationsHandler(c *fiber.Ctx) error {
+func (e *Frontend) SubscribeNotificationHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
 	subscription := &pbCommon.PushSubscription{}
 	if err := c.BodyParser(subscription); err != nil {
@@ -984,7 +984,7 @@ func (e *Frontend) SubscribeNotificationsHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("missing subscription data")
 	}
 
-	rspSubscribeNotifications, err := e.notificationsService.Subscribe(c.Context(), &pbCommon.PushSubscriptionRequest{
+	rspSubscribeNotification, err := e.notificationService.Subscribe(c.Context(), &pbCommon.PushSubscriptionRequest{
 		UserID: userID,
 		Subscription: &pbCommon.PushSubscription{
 			Endpoint: subscription.Endpoint,
@@ -995,12 +995,12 @@ func (e *Frontend) SubscribeNotificationsHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.SendString(rspSubscribeNotifications.SubscriptionID)
+	return c.SendString(rspSubscribeNotification.SubscriptionID)
 }
 
 func (e *Frontend) GetUserNotificationSubscriptionsHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspGetUserSubscriptions, err := e.notificationsService.GetUserNotificationSubscriptions(c.Context(), &pbCommon.User{UserID: userID})
+	rspGetUserSubscriptions, err := e.notificationService.GetUserNotificationSubscriptions(c.Context(), &pbCommon.User{UserID: userID})
 	if err != nil {
 		return err
 	}
@@ -1008,9 +1008,9 @@ func (e *Frontend) GetUserNotificationSubscriptionsHandler(c *fiber.Ctx) error {
 	return c.JSON(converter.FiberGetUserSubscriptionsResponseBody{UserSubscriptions: ids})
 }
 
-func (e *Frontend) UnsubscribeNotificationsHandler(c *fiber.Ctx) error {
+func (e *Frontend) UnsubscribeNotificationHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspUnsubscribeNotifications, err := e.notificationsService.Unsubscribe(c.Context(), &pbCommon.PushSubscriptionRequest{
+	rspUnsubscribeNotification, err := e.notificationService.Unsubscribe(c.Context(), &pbCommon.PushSubscriptionRequest{
 		UserID: userID,
 		Subscription: &pbCommon.PushSubscription{
 			SubscriptionID: c.Params("subscriptionID"),
@@ -1019,7 +1019,7 @@ func (e *Frontend) UnsubscribeNotificationsHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	if !rspUnsubscribeNotifications.Success {
+	if !rspUnsubscribeNotification.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)

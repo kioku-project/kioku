@@ -70,7 +70,7 @@ type SrsStore interface {
 	ModifyUserCard(ctx context.Context, card *model.UserCardBinding) error
 }
 
-type NotificationsStore interface {
+type NotificationStore interface {
 	FindAllPushSubscriptions(ctx context.Context) ([]*model.PushSubscription, error)
 	CreatePushSubscription(ctx context.Context, newSubscription *model.PushSubscription) error
 	DeletePushSubscription(ctx context.Context, subscription *model.PushSubscription) error

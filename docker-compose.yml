@@ -21,7 +21,7 @@ services:
       - carddeck_service
       - collaboration_service
       - srs_service
-      - notifications_service
+      - notification_service
 
   user_service:
     build:
@@ -67,11 +67,11 @@ services:
     depends_on:
       - db
 
-  notifications_service:
+  notification_service:
     build:
       context: backend
-      dockerfile: services/notifications/Dockerfile
-    container_name: kioku-notifications_service
+      dockerfile: services/notification/Dockerfile
+    container_name: kioku-notification_service
     restart: always
     env_file:
       - ./backend/.env
@@ -91,7 +91,7 @@ services:
       - carddeck_service
       - collaboration_service
       - srs_service
-      - notifications_service
+      - notification_service
   
   go-micro-dashboard:
     image: xpunch/go-micro-dashboard:latest

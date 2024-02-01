@@ -16,16 +16,16 @@ wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-pro
 chmod +x /bin/grpc_health_probe
 
 # Build Go binary
-COPY services/notifications/Makefile go.mod go.sum ./
+COPY services/notification/Makefile go.mod go.sum ./
 RUN make init && go mod download 
-COPY services/notifications/ services/notifications
+COPY services/notification/ services/notification
 COPY services/srs/ services/srs
 COPY services/carddeck/proto/carddeck.* services/carddeck/proto/
 COPY services/user/proto/user.* services/user/proto/
 COPY services/collaboration/proto/collaboration.* services/collaboration/proto/
 COPY store/ store/
 COPY pkg/ pkg/
-WORKDIR /go/src/kioku/services/notifications
+WORKDIR /go/src/kioku/services/notification
 RUN make proto tidy build
 
 # Deployment container
@@ -35,6 +35,6 @@ USER kioku
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /bin/grpc_health_probe /bin/
-COPY --from=builder /go/src/kioku/services/notifications/notifications /notifications
-ENTRYPOINT ["/notifications"]
+COPY --from=builder /go/src/kioku/services/notification/notification /notification
+ENTRYPOINT ["/notification"]
 CMD []

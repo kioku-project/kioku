@@ -53,10 +53,10 @@ jobs:
       image-tag: prod
       path: ./backend/services/srs
       context: ./backend
-  build-notifications:
+  build-notification:
     uses: ./.github/workflows/build_service.yml
     with:
-      image-name: kioku_notifications
+      image-name: kioku_notification
       image-tag: prod
-      path: ./backend/services/notifications
+      path: ./backend/services/notification
       context: ./backend

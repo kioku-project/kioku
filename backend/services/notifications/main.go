@@ -119,7 +119,7 @@ func main() {
 					Tag:     "Kioku",
 				},
 			}
-			if err := pushHandler.SendNotification(subscription, notification); err != nil {
+			if err := pushHandler.SendNotification(ctx, subscription, notification); err != nil {
 				logger.Errorf("Cronjob: Error while sending push message: %s", err)
 			}
 		}

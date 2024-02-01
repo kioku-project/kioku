@@ -1,6 +1,7 @@
 package util
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/SherClockHolmes/webpush-go"
@@ -20,7 +21,7 @@ func NewNotifications(publicVapidKey string, privateVapidKey string) *PushHandle
 	}
 }
 
-func (ph *PushHandler) SendNotification(subscription *model.PushSubscription, notification *model.PushNotification) error {
+func (ph *PushHandler) SendNotification(ctx context.Context, subscription *model.PushSubscription, notification *model.PushNotification) error {
 	jsonNotification, err := json.Marshal(notification)
 	if err != nil {
 		return err

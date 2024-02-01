@@ -43,7 +43,7 @@ func (e *Notifications) Subscribe(ctx context.Context, req *pbCommon.PushSubscri
 			Tag:     "Kioku",
 		},
 	}
-	if err := e.pushHandler.SendNotification(subscription, notification); err != nil {
+	if err := e.pushHandler.SendNotification(ctx, subscription, notification); err != nil {
 		return err
 	}
 	rsp.SubscriptionID = subscription.ID

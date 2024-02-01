@@ -63,7 +63,7 @@ export const GroupSettingsTab = ({
 				<hr className="border-kiokuLightBlue" />
 				<InputAction
 					id="GroupDescriptionInputAction"
-					header={_(msg`Group description`)}
+					header={_(msg`Group Description`)}
 					value={groupDescription}
 					button={_(msg`Save`)}
 					disabled={!isAdmin}

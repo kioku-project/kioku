@@ -181,6 +181,7 @@ func ProtoDeckToFiberDeckConverter(deck *pbCommon.Deck) FiberDeck {
 		GroupID:         deck.GroupID,
 		IsActive:        deck.IsActive,
 		IsFavorite:      deck.IsFavorite,
+		DeckRole:        deck.DeckRole.String(),
 	}
 }
 
@@ -193,6 +194,7 @@ func ProtoDeckRespToFiberDeckConverter(deck *pbCommon.Deck) FiberDeck {
 		GroupID:         deck.GroupID,
 		IsActive:        deck.IsActive,
 		IsFavorite:      deck.IsFavorite,
+		DeckRole:        deck.DeckRole.String(),
 	}
 }
 

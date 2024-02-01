@@ -221,6 +221,18 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pbCommon.GroupRequest
 	}
 
 	rsp.Decks = converter.ConvertToTypeArray(decks, converter.StoreDeckToProtoDeckConverter)
+	for _, deck := range rsp.Decks {
+		deckRole, err := e.collaborationService.GetGroupUserRole(ctx, &pbCommon.GroupRequest{
+			UserID: req.UserID,
+			Group: &pbCommon.Group{
+				GroupID: deck.GroupID,
+			},
+		})
+		if err != nil {
+			return err
+		}
+		deck.DeckRole = deckRole.Role
+	}
 	logger.Infof("Found %d decks in group with id %s", len(decks), req.Group.GroupID)
 	return nil
 }
@@ -300,6 +312,16 @@ func (e *CardDeck) GetDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *
 		return err
 	}
 	*rsp = *converter.StoreDeckToProtoDeckConverter(*deck)
+	role, err := e.collaborationService.GetGroupUserRole(ctx, &pbCommon.GroupRequest{
+		UserID: req.UserID,
+		Group: &pbCommon.Group{
+			GroupID: deck.GroupID,
+		},
+	})
+	if err != nil {
+		return err
+	}
+	rsp.DeckRole = role.Role
 	logger.Infof("Successfully got information for deck %s", req.Deck.DeckID)
 	return nil
 }

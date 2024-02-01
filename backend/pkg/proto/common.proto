@@ -112,12 +112,14 @@ message Deck {
   string deckID = 1;
   string deckName = 2;
   string deckDescription = 3;
-  DeckType deckType = 4;
-  int64 createdAt = 5;
-  string groupID = 6;
-  bool isActive = 7;
-  bool isFavorite = 8;
+  GroupRole deckRole = 4;
+  DeckType deckType = 5;
+  int64 createdAt = 6;
+  string groupID = 7;
+  bool isActive = 8;
+  bool isFavorite = 9;
 }
+
 message DeckRequest {
   string userID = 1;
   Deck deck = 2;

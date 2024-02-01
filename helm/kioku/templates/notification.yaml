@@ -2,23 +2,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ .Values.notifications.name }}-deployment"
+  name: "{{ .Values.notification.name }}-deployment"
   labels:
-    {{- include "kioku.notifications.labels" . | nindent 4 }}
+    {{- include "kioku.notification.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "kioku.notifications.labels" . | nindent 6 }}
+      {{- include "kioku.notification.labels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "kioku.notifications.labels" . | nindent 8 }}
+        {{- include "kioku.notification.labels" . | nindent 8 }}
     spec:
       serviceAccountName: go-micro
       containers:
-      - name: {{ .Values.notifications.name }}
-        image: "{{ .Values.notifications.image }}:{{ .Values.notifications.tag }}"
+      - name: {{ .Values.notification.name }}
+        image: "{{ .Values.notification.image }}:{{ .Values.notification.tag }}"
       {{ if eq .Values.mode "production" }}
         imagePullPolicy: Always
       {{ else }}
@@ -49,6 +49,8 @@ spec:
         envFrom:
           - secretRef:
               name: {{ .Values.database.secret.name }}
+          - secretRef:
+              name: {{ .Values.vapidSecret }}
           - configMapRef:
               name: service-env
           - configMapRef:
@@ -57,10 +59,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Values.notifications.name }}-service"
+  name: "{{ .Values.notification.name }}-service"
 spec:
   selector:
-    {{- include "kioku.notifications.labels" . | nindent 4 }}
+    {{- include "kioku.notification.labels" . | nindent 4 }}
   ports:
     - port: 8080
       targetPort: 8080
@@ -68,12 +70,12 @@ spec:
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: "hpa-{{ .Values.notifications.name }}-deployment"
+ name: "hpa-{{ .Values.notification.name }}-deployment"
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: "{{ .Values.notifications.name }}-deployment"
- minReplicas: {{ .Values.notifications.autoscaler.min }}
- maxReplicas: {{ .Values.notifications.autoscaler.max }}
- targetCPUUtilizationPercentage: {{ .Values.notifications.autoscaler.targetCPUUtilizationPercentage }}
+   name: "{{ .Values.notification.name }}-deployment"
+ minReplicas: {{ .Values.notification.autoscaler.min }}
+ maxReplicas: {{ .Values.notification.autoscaler.max }}
+ targetCPUUtilizationPercentage: {{ .Values.notification.autoscaler.targetCPUUtilizationPercentage }}

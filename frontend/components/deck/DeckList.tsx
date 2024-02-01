@@ -41,7 +41,8 @@ export default function DeckList({
 		const filteredDecks = decks?.filter((deck) =>
 			deck.deckName.toUpperCase().includes(filter)
 		);
-		return reverse ? filteredDecks?.toReversed() : filteredDecks;
+		reverse && filteredDecks?.reverse();
+		return filteredDecks;
 	}, [decks, filter, reverse]);
 
 	return (

@@ -1,4 +1,5 @@
 import type { StorybookConfig } from "@storybook/nextjs";
+import path from "path";
 
 const config: StorybookConfig = {
 	stories: [
@@ -11,19 +12,21 @@ const config: StorybookConfig = {
 		"@storybook/addon-links",
 		"@storybook/addon-essentials",
 		"@storybook/addon-interactions",
-		{
-			name: "storybook-addon-swc",
-			options: {
-				swcLoaderOptions: {
-					jsc: {
-						experimental: {
-							plugins: [["@lingui/swc-plugin", {}]],
-						},
-					},
-				},
-			},
-		},
+		"@storybook/addon-a11y",
 	],
+	async babel(config) {
+		config.plugins?.push("macros");
+		return config;
+	},
+	webpackFinal: async (config) => {
+		if (config.resolve) {
+			config.resolve.alias = {
+				...config.resolve.alias,
+				"@": path.resolve(__dirname, ".."),
+			};
+		}
+		return config;
+	},
 	framework: {
 		name: "@storybook/nextjs",
 		options: {},

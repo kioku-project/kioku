@@ -21,10 +21,12 @@ type FiberGroup struct {
 }
 
 type FiberDeck struct {
-	DeckID   string `json:"deckID"`
-	DeckName string `json:"deckName"`
-	DeckType string `json:"deckType"`
-	GroupID  string `json:"groupID"`
+	DeckID     string `json:"deckID"`
+	DeckName   string `json:"deckName"`
+	DeckType   string `json:"deckType"`
+	GroupID    string `json:"groupID"`
+	IsActive   bool   `json:"isActive"`
+	IsFavorite bool   `json:"isFavorite"`
 }
 
 type FiberGroupMemberAdmission struct {
@@ -63,9 +65,9 @@ type FiberGetGroupDecksResponseBody struct {
 	Decks []FiberDeck `json:"decks"`
 }
 
-type FiberGetUserDueCardsResponseBody struct {
+type FiberGetDueResponseBody struct {
 	DueCards int64 `json:"dueCards"`
-	DueDecks int64 `json:"dueDecks"`
+	DueDecks int64 `json:"dueDecks,omitempty"`
 }
 
 type FiberGetUserGroupsResponseBody struct {

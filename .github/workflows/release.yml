@@ -3,6 +3,9 @@ name: Build Production Images
 on:
   workflow_dispatch:
 
+env:
+  NEXT_PUBLIC_SEO: "True"
+
 jobs:
   build-frontend:
     uses: ./.github/workflows/build_service.yml

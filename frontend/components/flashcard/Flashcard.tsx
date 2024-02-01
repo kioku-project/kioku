@@ -13,11 +13,11 @@ import {
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
-import { Card as CardType } from "../../types/Card";
-import { authedFetch } from "../../util/reauth";
-import { InputField } from "../form/InputField";
-import { TextArea } from "../form/TextArea";
-import { Button } from "../input/Button";
+import { InputField } from "@/components/form/InputField";
+import { TextArea } from "@/components/form/TextArea";
+import { Button } from "@/components/input/Button";
+import { Card as CardType } from "@/types/Card";
+import { putRequests } from "@/util/api";
 
 interface FlashcardProps {
 	/**
@@ -101,15 +101,14 @@ export const Flashcard = ({
 							name="headerInput"
 							value={tempCard.sides[side]?.header}
 							placeholder={edit ? "Header" : ""}
-							statusIcon="none"
-							inputFieldStyle="secondary"
 							readOnly={!edit}
+							inputFieldStyle="primary"
 							className="text-lg sm:text-xl md:text-2xl lg:text-3xl"
-							ref={headerInput}
 							onChange={(event) => {
 								editField("header", event.target.value);
 							}}
-						></InputField>
+							ref={headerInput}
+						/>
 						{edit ? (
 							<div className="flex flex-row items-center space-x-5">
 								{tempCard.sides.length > 1 && (
@@ -128,7 +127,7 @@ export const Flashcard = ({
 											card.sides.splice(side, 1);
 											setTempCard(card);
 										}}
-									></FileMinus>
+									/>
 								)}
 								<FilePlus
 									id="addSideButtonId"
@@ -154,7 +153,7 @@ export const Flashcard = ({
 										setSide(side + 1);
 										headerInput.current?.focus();
 									}}
-								></FilePlus>
+								/>
 								<div className="flex flex-row items-center space-x-3">
 									<Check
 										id="saveButtonId"
@@ -163,7 +162,7 @@ export const Flashcard = ({
 											setEdit(false);
 											modifyCard(tempCard);
 										}}
-									></Check>
+									/>
 									<X
 										id="cancelButtonId"
 										className="hover:cursor-pointer"
@@ -171,7 +170,7 @@ export const Flashcard = ({
 											setTempCard(card);
 											setEdit(false);
 										}}
-									></X>
+									/>
 								</div>
 							</div>
 						) : (
@@ -184,7 +183,7 @@ export const Flashcard = ({
 											: "text-gray-200 hover:cursor-not-allowed"
 									}`}
 									onClick={() => setEdit(editable)}
-								></Edit2>
+								/>
 							</div>
 						)}
 					</div>
@@ -199,7 +198,7 @@ export const Flashcard = ({
 						onChange={(event) =>
 							editField("description", event.target.value)
 						}
-					></TextArea>
+					/>
 				</div>
 			</div>
 			{(!fullSize || tempCard.sides.length > 1) && (
@@ -223,7 +222,7 @@ export const Flashcard = ({
 						id="arrowLeftId"
 						className="h-8 hover:cursor-pointer md:h-10 lg:h-12"
 						onClick={() => setSide(side - 1)}
-					></ArrowLeft>
+					/>
 				)}
 				{/* Show arrow right if not on the last side */}
 				{side < tempCard.sides.length - 1 && (
@@ -231,14 +230,14 @@ export const Flashcard = ({
 						id="arrowRightId"
 						className="h-8 hover:cursor-pointer md:h-10 lg:h-12"
 						onClick={() => setSide(side + 1)}
-					></ArrowRight>
+					/>
 				)}
 				{/* Show rating buttons if on last side */}
 				{!fullSize && side >= tempCard.sides.length - 1 && !edit && (
 					<div className="flex flex-row justify-end space-x-1">
 						<Button
 							id="buttonHardId"
-							buttonSize="sm"
+							buttonStyle="primary"
 							className="w-auto"
 							onClick={() => pushCard(0)}
 						>
@@ -246,7 +245,7 @@ export const Flashcard = ({
 						</Button>
 						<Button
 							id="buttonMediumId"
-							buttonSize="sm"
+							buttonStyle="primary"
 							className="w-auto"
 							onClick={() => pushCard(1)}
 						>
@@ -254,7 +253,7 @@ export const Flashcard = ({
 						</Button>
 						<Button
 							id="buttonEasyId"
-							buttonSize="sm"
+							buttonStyle="primary"
 							className="w-auto"
 							onClick={() => pushCard(2)}
 						>
@@ -273,15 +272,12 @@ export const Flashcard = ({
 	}
 
 	async function modifyCard(card: CardType) {
-		const response = await authedFetch(`/api/cards/${card.cardID}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		const response = await putRequests(
+			`/api/cards/${card.cardID}`,
+			JSON.stringify({
 				sides: card.sides,
-			}),
-		});
+			})
+		);
 		if (response?.ok) {
 			toast.info(t`Card updated!`, { toastId: "updatedCardToast" });
 		} else {

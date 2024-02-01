@@ -1,172 +1,31 @@
 syntax = "proto3";
 
-package collaboration;
+import "pkg/proto/common.proto";
 
-option go_package = "./proto;collaboration";
+package collaborationService;
+
+option go_package ="github.com/kioku-project/kioku/services/collaboration/proto;collaboration";
+
 
 service Collaboration {
-	rpc GetGroupInvitations(UserIDRequest) returns (GroupInvitationsResponse) {}
-	rpc GetUserGroups(UserIDRequest) returns (UserGroupsResponse) {}
-	rpc CreateNewGroupWithAdmin(CreateGroupRequest) returns (IDResponse) {}
-	rpc GetGroup(GroupRequest) returns (GroupWithUserRole) {}
-	rpc ModifyGroup(ModifyGroupRequest) returns (SuccessResponse) {}
-	rpc DeleteGroup(GroupRequest) returns (SuccessResponse) {}
-	rpc GetGroupMembers(GroupRequest) returns (GroupMembersResponse) {}
-	rpc GetGroupMemberRequests(GroupRequest) returns (GroupMemberAdmissionResponse) {}
-	rpc GetInvitationsForGroup(GroupRequest) returns (GroupMemberAdmissionResponse) {}
-	rpc GetGroupUserRole(GroupRequest) returns (GroupRoleResponse) {}
-	rpc FindGroupByID(GroupRequest) returns (Group) {}
+	rpc GetGroupInvitations(common.User) returns (common.Groups) {}
+	rpc GetUserGroups(common.User) returns (common.Groups) {}
+	rpc CreateNewGroupWithAdmin(common.GroupRequest) returns (common.Group) {}
+	rpc GetGroup(common.GroupRequest) returns (common.Group) {}
+	rpc ModifyGroup(common.GroupRequest) returns (common.Success) {}
+	rpc DeleteGroup(common.GroupRequest) returns (common.Success) {}
+	rpc GetGroupMembers(common.GroupRequest) returns (common.GroupMembers) {}
+	rpc GetGroupMemberRequests(common.GroupRequest) returns (common.GroupMembers) {}
+	rpc GetInvitationsForGroup(common.GroupRequest) returns (common.GroupMembers) {}
+	rpc GetGroupUserRole(common.GroupRequest) returns (common.Group) {}
+	rpc FindGroupByID(common.GroupRequest) returns (common.Group) {}
 
-	rpc AddGroupUserRequest(GroupUserRequest) returns (SuccessResponse) {}
-	rpc RemoveGroupUserRequest(GroupUserRequest) returns (SuccessResponse) {}
-	rpc ModifyGroupUserRequest(GroupModUserRequest) returns (SuccessResponse) {}
-	rpc KickGroupUser(GroupKickUserRequest) returns (SuccessResponse) {}
-	rpc AddGroupUserInvite(GroupUserInvite) returns (SuccessResponse) {}
-	rpc RemoveGroupUserInvite(GroupUserInvite) returns (SuccessResponse) {}
-	rpc LeaveGroup(GroupRequest) returns (SuccessResponse) {}
-	rpc LeaveGroupSafe(GroupRequest) returns (SuccessResponse) {}
-}
-
-message UserIDRequest {
-	string userID = 1;
-}
-
-message GroupInvitationsResponse {
-	repeated GroupInvitation groupInvitation = 1;
-}
-
-message GroupInvitation {
-	string groupID = 1;
-	string groupName = 2;
-}
-
-message ManageGroupInvitationRequest {
-	string userID = 1;
-	string admissionID = 2;
-	bool requestResponse = 3;
-}
-
-message UserGroupsResponse {
-	repeated GroupWithUserRole groups = 1;
-}
-
-message GroupWithUserRole {
-	Group group = 1;
-	GroupRole role = 2;
-}
-
-message Group {
-	string groupID = 1;
-	string groupName = 2;
-	string groupDescription = 3;
-	bool isDefault = 4;
-	GroupType groupType = 5;
-}
-
-message CreateGroupRequest {
-	string userID = 1;
-	string groupName = 2;
-	string groupDescription = 3;
-	bool isDefault = 4;
-}
-
-message ModifyGroupRequest {
-	string userID = 1;
-	string groupID = 2;
-	optional string groupName = 3;
-	optional string groupDescription = 4;
-	optional GroupType groupType = 5;
-}
-
-enum GroupType {
-	REQUEST = 0;
-	OPEN = 1;
-	CLOSED = 2;
-	INVALID = 3;
-}
-
-message IDResponse {
-	string ID = 1;
-}
-
-message GroupRequest {
-	string userID = 1;
-	string groupID = 2;
-}
-
-message SuccessResponse {
-	bool success = 1;
-}
-
-message GroupMembersResponse {
-	repeated UserWithRole users = 1;
-}
-
-message GroupMemberAdmissionResponse {
-	repeated MemberAdmission memberAdmissions = 1;
-}
-
-message MemberAdmission {
-	User user = 1;
-}
-
-message User {
-	string userID = 1;
-	string name = 2;
-	optional string email = 3;
-}
-
-message ManageGroupMemberRequestRequest {
-	string userID = 1;
-	string groupID = 2;
-	bool requestResponse = 3;
-}
-
-message GroupUserRequest {
-	string userID = 1;
-	string groupID = 2;
-}
-
-message GroupModUserRequest {
-	string userID = 1;
-	string groupID = 2;
-        string modUserID = 3;
-        GroupRole newRole = 4;
-}
-
-message GroupKickUserRequest {
-	string userID = 1;
-	string groupID = 2;
-        string delUserID = 3;
-}
-
-message GroupUserInvite {
-	string userID = 1;
-	string groupID = 2;
-	string inviteUserEmail = 3;
-}
-
-message GroupInvitationRequest {
-	string userID = 1;
-	string groupID = 2;
-	string invitedUserEmail = 3;
-}
-
-message UserWithRole {
-	User user = 1;
-	GroupRole groupRole = 2;
-}
-
-message GroupRoleResponse {
-	string groupID = 1;
-	GroupRole groupRole = 2;
-}
-
-enum GroupRole {
-	EXTERNAL = 0;
-	REQUESTED = 1;
-	INVITED = 2;
-	READ = 3;
-	WRITE = 4;
-	ADMIN = 5;
+	rpc AddGroupUserRequest(common.GroupRequest) returns (common.Success) {}
+	rpc RemoveGroupUserRequest(common.GroupRequest) returns (common.Success) {}
+	rpc ModifyGroupUserRequest(common.GroupModUserRequest) returns (common.Success) {}
+	rpc KickGroupUser(common.GroupModUserRequest) returns (common.Success) {}
+	rpc AddGroupUserInvite(common.GroupInviteRequest) returns (common.Success) {}
+	rpc RemoveGroupUserInvite(common.GroupInviteRequest) returns (common.Success) {}
+	rpc LeaveGroup(common.GroupRequest) returns (common.Success) {}
+	rpc LeaveGroupSafe(common.GroupRequest) returns (common.Success) {}
 }

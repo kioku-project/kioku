@@ -6,9 +6,10 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 
-import { Card as CardType } from "../../types/Card";
-import { authedFetch } from "../../util/reauth";
-import { Text } from "../Text";
+import { Text } from "@/components/Text";
+import { InputField } from "@/components/form/InputField";
+import { Card as CardType } from "@/types/Card";
+import { deleteRequest, postRequest } from "@/util/api";
 
 interface CardProps {
 	/**
@@ -49,8 +50,9 @@ export const Card = ({
 			{card.cardID ? (
 				<div className="flex w-full flex-row items-center border-b-2 border-kiokuLightBlue p-2 md:p-3">
 					<Text
+						textStyle="primary"
+						textSize="xs"
 						className="w-full hover:cursor-pointer"
-						size="xs"
 						onClick={() => setCard?.(card)}
 					>
 						{card.sides[0].header}
@@ -65,11 +67,11 @@ export const Card = ({
 											.then((result) => {})
 											.catch((error) => {});
 									}}
-								></Check>
+								/>
 								<X
 									className="hover:cursor-pointer"
 									onClick={() => setDelete(false)}
-								></X>
+								/>
 							</div>
 						) : (
 							<Trash
@@ -82,7 +84,7 @@ export const Card = ({
 								}`}
 								size={20}
 								onClick={() => setDelete(editable)}
-							></Trash>
+							/>
 						)}
 						{/* <Edit2
 							className="hover:cursor-pointer"
@@ -92,17 +94,17 @@ export const Card = ({
 									setCard(card);
 								}
 							}}
-						></Edit2> */}
+						/> */}
 					</div>
 				</div>
 			) : (
 				<div className="flex w-full flex-row justify-between p-2 md:p-3">
-					<input
+					<InputField
 						id="cardNameInput"
-						className="w-full bg-transparent text-xs outline-none sm:text-sm md:text-base lg:text-lg xl:text-xl"
 						type="text"
 						placeholder={_(msg`Create Card`)}
-						ref={cardNameInput}
+						inputFieldStyle="primary"
+						inputFieldSize="xs"
 						onKeyUp={(event) => {
 							if (event.key === "Enter") {
 								createCard()
@@ -110,6 +112,7 @@ export const Card = ({
 									.catch((error) => {});
 							}
 						}}
+						ref={cardNameInput}
 					/>
 				</div>
 			)}
@@ -121,19 +124,16 @@ export const Card = ({
 			cardNameInput.current?.focus();
 			return;
 		}
-		const response = await authedFetch(`/api/decks/${card.deckID}/cards`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
+		const response = await postRequest(
+			`/api/decks/${card.deckID}/cards`,
+			JSON.stringify({
 				sides: [
 					{
 						header: cardNameInput.current.value,
 					},
 				],
-			}),
-		});
+			})
+		);
 		if (response?.ok) {
 			cardNameInput.current.value = "";
 			toast.info(t`Card created!`, { toastId: "newCardToast" });
@@ -146,12 +146,7 @@ export const Card = ({
 	}
 
 	async function deleteCard() {
-		const response = await authedFetch(`/api/cards/${card.cardID}`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+		const response = await deleteRequest(`/api/cards/${card.cardID}`);
 		if (response?.ok) {
 			toast.info("Card deleted!", { toastId: "deletedCardToast" });
 			mutate(`/api/decks/${card.deckID}/cards`);

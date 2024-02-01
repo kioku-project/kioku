@@ -4,17 +4,17 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import React, { ReactNode, useState } from "react";
 
-import Authenticated from "../components/accessControl/Authenticated";
-import { FetchHeader } from "../components/layout/Header";
-import { DecksTab } from "../components/navigation/Tabs/DecksTab";
-import { GroupsTab } from "../components/navigation/Tabs/GroupsTab";
-import { InvitationsTab } from "../components/navigation/Tabs/InvitationsTabs";
-import { StatisticsTab } from "../components/navigation/Tabs/StatisticsTab";
-import { TabBar } from "../components/navigation/Tabs/TabBar";
-import { TabHeader } from "../components/navigation/Tabs/TabHeader";
-import { UserSettingsTab } from "../components/navigation/Tabs/UserSettingsTab";
-import { useGroups, useInvitations, useUser, useUserDue } from "../util/swr";
-import { loadCatalog } from "./_app";
+import { FetchHeader } from "@/components/layout/Header";
+import { DashboardTab } from "@/components/navigation/Tabs/DashboardTab";
+import { DecksTab } from "@/components/navigation/Tabs/DecksTab";
+import { GroupsTab } from "@/components/navigation/Tabs/GroupsTab";
+import { InvitationsTab } from "@/components/navigation/Tabs/InvitationsTabs";
+import { StatisticsTab } from "@/components/navigation/Tabs/StatisticsTab";
+import { TabBar } from "@/components/navigation/Tabs/TabBar";
+import { TabHeader } from "@/components/navigation/Tabs/TabHeader";
+import { UserSettingsTab } from "@/components/navigation/Tabs/UserSettingsTab";
+import { loadCatalog } from "@/pages/_app";
+import { useGroups, useInvitations, useUser, useUserDue } from "@/util/swr";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -31,51 +31,45 @@ export default function Home() {
 	const { invitations } = useInvitations();
 	const { groups } = useGroups();
 
+	const homeGroup = groups?.filter((group) => group.isDefault)[0];
+
 	const { _ } = useLingui();
 
 	const tabs: { [tab: string]: ReactNode } = {
+		dashboard: (
+			<TabHeader
+				id="dashboardTabHeaderId"
+				name={_(msg`Dashboard`)}
+				icon="Home"
+			/>
+		),
 		decks: (
 			<TabHeader
 				id="decksTabHeaderId"
 				name={_(msg`Decks`)}
-				style="decks"
-			></TabHeader>
+				icon="Layers"
+			/>
 		),
 		groups: (
 			<TabHeader
 				id="groupTabHeaderId"
 				name={_(msg`Groups`)}
-				style="groups"
-			></TabHeader>
-		),
-		invitations: (
-			<TabHeader
-				id="invitationTabHeaderId"
-				name={_(msg`Invitations`)}
-				style="invitations"
-				notificationBadgeContent={`${invitations?.length ?? ""}`}
-			></TabHeader>
-		),
-		statistics: (
-			<TabHeader
-				id="StatisticsTabHeaderId"
-				name={_(msg`Statistics`)}
-				style="statistics"
-			></TabHeader>
+				icon="Users"
+			/>
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
 				name={_(msg`Settings`)}
-				style="settings"
-			></TabHeader>
+				icon="Settings"
+			/>
 		),
 	};
 
-	const [currentTab, setCurrentTab] = useState("decks");
+	const [currentTab, setCurrentTab] = useState("dashboard");
 
 	return (
-		<div>
+		<div className="flex flex-1 overflow-auto">
 			<Head>
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
@@ -91,51 +85,40 @@ export default function Home() {
 					href="https://app.kioku.dev/de"
 				/>
 			</Head>
-			<Authenticated>
-				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-					{user && groups && (
-						<div className="flex flex-col space-y-3 px-5 py-1 md:space-y-5 md:px-10 md:py-3">
-							<FetchHeader
-								id="userPageHeaderId"
-								user={{ ...user, ...due }}
-							/>
+			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
+				{user && groups && (
+					<div className="flex h-full flex-col px-5 py-1 md:space-y-5 md:px-10 md:py-3">
+						<FetchHeader
+							id="userPageHeaderId"
+							user={{ ...user, ...due }}
+						/>
+						<div className="flex h-full flex-1 flex-col-reverse justify-between space-y-5 overflow-auto md:flex-col md:justify-normal">
 							<TabBar
 								id="deckTabBarId"
 								tabs={tabs}
 								currentTab={currentTab}
 								setTab={setCurrentTab}
-							></TabBar>
-							<div>
+							/>
+							<div className="overflow-auto">
 								{{
-									decks: (
-										<DecksTab
-											group={
-												groups.filter(
-													(group) => group.isDefault
-												)[0]
-											}
-										></DecksTab>
+									decks: homeGroup && (
+										<DecksTab group={homeGroup} />
 									),
-									groups: (
-										<GroupsTab groups={groups}></GroupsTab>
-									),
+									groups: <GroupsTab groups={groups} />,
 									invitations: invitations && (
 										<InvitationsTab
 											invitations={invitations}
-										></InvitationsTab>
+										/>
 									),
-									statistics: <StatisticsTab></StatisticsTab>,
-									settings: (
-										<UserSettingsTab
-											user={user}
-										></UserSettingsTab>
-									),
+									settings: <UserSettingsTab user={user} />,
+									statistics: <StatisticsTab />,
+									dashboard: homeGroup && <DashboardTab />,
 								}[currentTab] ?? <div>Error</div>}
 							</div>
 						</div>
-					)}
-				</div>
-			</Authenticated>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

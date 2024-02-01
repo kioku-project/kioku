@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { ChevronDown, ChevronRight } from "react-feather";
 
+import { FetchCardList } from "@/components/flashcard/CardList";
+import { Flashcard } from "@/components/flashcard/Flashcard";
+import { Card as CardType } from "@/types/Card";
 import { Deck as DeckType } from "@/types/Deck";
 import { GroupRole } from "@/types/GroupRole";
-
-import { Card as CardType } from "../../../types/Card";
-import { FetchCardList } from "../../flashcard/CardList";
-import { Flashcard } from "../../flashcard/Flashcard";
 
 interface CardsTabProps {
 	/**

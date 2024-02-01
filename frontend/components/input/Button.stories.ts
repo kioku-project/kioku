@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { Button } from "./Button";
+import { Button } from "@/components/input/Button";
 
 const meta: Meta<typeof Button> = {
 	title: "Input/Button",
@@ -28,6 +28,20 @@ export const Secondary: Story = {
 	},
 };
 
+export const Tertiary: Story = {
+	args: {
+		children: "Tertiary",
+		buttonStyle: "tertiary",
+	},
+};
+
+export const Cancel: Story = {
+	args: {
+		children: "Cancel",
+		buttonStyle: "cancel",
+	},
+};
+
 export const Error: Story = {
 	args: {
 		children: "Error",
@@ -49,23 +63,10 @@ export const Disabled: Story = {
 	},
 };
 
-export const Small: Story = {
+export const Icon: Story = {
 	args: {
-		children: "Small",
-		buttonSize: "sm",
-	},
-};
-
-export const Medium: Story = {
-	args: {
-		children: "Medium",
-		buttonSize: "md",
-	},
-};
-
-export const Large: Story = {
-	args: {
-		children: "Large",
-		buttonSize: "lg",
+		children: "Let's go",
+		buttonStyle: "primary",
+		buttonIcon: "ArrowRight",
 	},
 };

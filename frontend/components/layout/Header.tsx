@@ -1,17 +1,18 @@
 import { Trans, plural, t } from "@lingui/macro";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 import { preload, useSWRConfig } from "swr";
 
-import { Deck as DeckType } from "../../types/Deck";
-import { Group as GroupType } from "../../types/Group";
-import { User } from "../../types/User";
-import { authedFetch } from "../../util/reauth";
-import { fetcher } from "../../util/swr";
-import { Text } from "../Text";
-import { Badge } from "../graphics/Badge";
-import { Button } from "../input/Button";
+import { Text } from "@/components/Text";
+import { Badge } from "@/components/graphics/Badge";
+import { Button } from "@/components/input/Button";
+import { Deck as DeckType } from "@/types/Deck";
+import { Group as GroupType } from "@/types/Group";
+import { User } from "@/types/User";
+import { authedFetch } from "@/util/reauth";
+import { fetcher } from "@/util/swr";
 
 interface HeaderProps {
 	/**
@@ -54,7 +55,7 @@ export const FetchHeader = ({ deck, group, ...props }: HeaderProps) => {
 			preload(`/api/decks/${deck.deckID}`, fetcher);
 		}
 	}, [deck, router]);
-	return <Header deck={deck} group={group} {...props}></Header>;
+	return <Header deck={deck} group={group} {...props} />;
 };
 
 /**
@@ -68,7 +69,6 @@ export const Header = ({
 	onClick,
 	...props
 }: HeaderProps) => {
-	const router = useRouter();
 	const { mutate } = useSWRConfig();
 
 	return (
@@ -78,7 +78,7 @@ export const Header = ({
 		>
 			<div className="flex flex-col font-black">
 				<div className="flex flex-row items-center space-x-3">
-					<Text style="primary" size="xl">
+					<Text id="headerTitleId" textStyle="primary" textSize="xl">
 						{deck?.deckName}
 						{!deck && group && group.groupName}
 						{user && <Trans>Welcome {user.userName}</Trans>}
@@ -98,25 +98,12 @@ export const Header = ({
 						/>
 					)}
 				</div>
-				<Text style="secondary" size="xs">
+				<Text textStyle="secondary" textSize="xs">
 					{deck && group && !group.isDefault && (
 						<div className="flex flex-row">
-							<div
-								className="hover:cursor-pointer"
-								onClick={() =>
-									router.push(`/group/${group.groupID}`)
-								}
-								onKeyUp={(event) => {
-									if (event.key === "Enter") {
-										event.target.dispatchEvent(
-											new Event("click", {
-												bubbles: true,
-											})
-										);
-									}
-								}}
-								tabIndex={0}
-							>{`${group.groupName}`}</div>
+							<Link
+								href={`/group/${group.groupID}`}
+							>{`${group.groupName}`}</Link>
 							<div>&nbsp;{`/ ${deck.deckName}`}</div>
 						</div>
 					)}
@@ -135,22 +122,13 @@ export const Header = ({
 					)}
 				</Text>
 			</div>
-			{/* If on user page, display learn button */}
-			{/* {user && (
-				<Button
-					id="learnButtonId"
-					buttonSize="sm"
-					onClick={() => router.push("/user/learn")}
-				>
-					Start learning
-				</Button>
-			)} */}
 			{/* if on deck page, display learn deck button */}
 			{deck && (
 				<Button
 					id="learnDeckButtonId"
-					buttonSize="sm"
-					onClick={() => router.push(`/deck/${deck.deckID}/learn`)}
+					href={`/deck/${deck.deckID}/learn`}
+					buttonStyle="primary"
+					buttonTextSize="xs"
 				>
 					<Trans>Learn Deck</Trans>
 				</Button>
@@ -161,7 +139,8 @@ export const Header = ({
 				(group.groupRole == "INVITED" || !group.groupRole) && (
 					<Button
 						id="joinGroupButtonId"
-						buttonSize="sm"
+						buttonStyle="primary"
+						buttonTextSize="xs"
 						onClick={() => {
 							joinGroup();
 						}}
@@ -171,7 +150,7 @@ export const Header = ({
 				)}
 			{/* if on group page and user already requested, display info text */}
 			{!deck && group?.groupRole == "REQUESTED" && (
-				<Text className="italic" style="primary">
+				<Text textStyle="secondary" className="italic">
 					<Trans>Request pending</Trans>
 				</Text>
 			)}

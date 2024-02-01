@@ -1,8 +1,11 @@
 import { MouseEventHandler } from "react";
 
-import { Text } from "../Text";
-import { Action } from "./Action";
-import { ToggleButtonGroup, ToggleButtonGroupProps } from "./ToggleButtonGroup";
+import { Text } from "@/components/Text";
+import { Action } from "@/components/input/Action";
+import {
+	ToggleButtonGroup,
+	ToggleButtonGroupProps,
+} from "@/components/input/ToggleButtonGroup";
 
 interface ToggleActionProps {
 	/**
@@ -67,14 +70,16 @@ export const ToggleAction = ({
 				description={
 					<>
 						<Text
-							size="3xs"
-							className="font-bold text-kiokuDarkBlue"
+							textStyle="primary"
+							textSize="3xs"
+							className="font-bold"
 						>
 							{header}
 						</Text>
 						<Text
-							size="3xs"
-							className="font-medium text-kiokuLightBlue"
+							textStyle="secondary"
+							textSize="3xs"
+							className="font-medium"
 						>
 							{description}
 						</Text>
@@ -92,9 +97,9 @@ export const ToggleAction = ({
 						onChange={(event) => {
 							!disabled && onChange?.(event);
 						}}
-					></ToggleButtonGroup>
+					/>
 				}
-			></Action>
+			/>
 		</div>
 	);
 };

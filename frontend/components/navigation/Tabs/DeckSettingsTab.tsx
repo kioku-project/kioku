@@ -5,14 +5,13 @@ import { ChangeEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
+import { DangerAction } from "@/components/input/DangerAction";
+import { InputAction } from "@/components/input/InputAction";
+import { Section } from "@/components/layout/Section";
 import { Deck } from "@/types/Deck";
-
-import { Group as GroupType } from "../../../types/Group";
-import { GroupRole } from "../../../types/GroupRole";
-import { authedFetch } from "../../../util/reauth";
-import { DangerAction } from "../../input/DangerAction";
-import { InputAction } from "../../input/InputAction";
-import { Section } from "../../layout/Section";
+import { Group as GroupType } from "@/types/Group";
+import { GroupRole } from "@/types/GroupRole";
+import { deleteRequest, putRequests } from "@/util/api";
 
 interface DeckSettingsTabProps {
 	/**
@@ -43,7 +42,7 @@ export const DeckSettingsTab = ({
 	const [deckState, setDeckState] = useState<Deck>(deck);
 	const [isConfirmDeletion, setConfirmDeletion] = useState(false);
 
-	const isAdmin = GroupRole[group.groupRole!] >= GroupRole.ADMIN;
+	const isAdmin = GroupRole[group.groupRole] >= GroupRole.ADMIN;
 
 	const { _ } = useLingui();
 
@@ -53,7 +52,7 @@ export const DeckSettingsTab = ({
 			<Section id="generalDeckSettingsId" header="General">
 				<InputAction
 					id="deckNameInputAction"
-					header={_(msg`Deck Name`)}
+					header={_(msg`Deck name`)}
 					value={deckState.deckName}
 					button={_(msg`Rename`)}
 					disabled={!isAdmin}
@@ -66,7 +65,7 @@ export const DeckSettingsTab = ({
 					onClick={() => {
 						modifyDeck(deckState);
 					}}
-				></InputAction>
+				/>
 			</Section>
 			<Section
 				id={"deckSettingsDangerZoneSectionId"}
@@ -88,7 +87,7 @@ export const DeckSettingsTab = ({
 									: "PRIVATE",
 						});
 					}}
-				></DangerAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				<DangerAction
 					id="deleteDeckDangerAction"
@@ -111,7 +110,7 @@ export const DeckSettingsTab = ({
 							setConfirmDeletion(true);
 						}
 					}}
-				></DangerAction>
+				/>
 			</Section>
 		</div>
 	);
@@ -120,13 +119,10 @@ export const DeckSettingsTab = ({
 		deckName?: string;
 		deckType?: "PUBLIC" | "PRIVATE";
 	}) {
-		const response = await authedFetch(`/api/decks/${deck.deckID}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(body),
-		});
+		const response = await putRequests(
+			`/api/decks/${deck.deckID}`,
+			JSON.stringify(body)
+		);
 		if (response?.ok) {
 			toast.info(t`Deck updated!`, { toastId: "updatedDeckToast" });
 		} else {
@@ -136,12 +132,7 @@ export const DeckSettingsTab = ({
 	}
 
 	async function deleteDeck() {
-		const response = await authedFetch(`/api/decks/${deck.deckID}`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+		const response = await deleteRequest(`/api/decks/${deck.deckID}`);
 		if (response?.ok) {
 			toast.info(t`Deck deleted!`, { toastId: "deletedDeckToast" });
 		} else {

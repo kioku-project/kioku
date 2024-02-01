@@ -1,4 +1,3 @@
-import React from "react";
 import {
 	ArrowDown,
 	ArrowDownRight,
@@ -41,15 +40,15 @@ interface StatisticProps {
 function getArrow(change: number) {
 	const className = "w-4";
 	if (change > 10) {
-		return <ArrowUp className={className}></ArrowUp>;
+		return <ArrowUp className={className} />;
 	} else if (change > 0) {
-		return <ArrowUpRight className={className}></ArrowUpRight>;
+		return <ArrowUpRight className={className} />;
 	} else if (change == 0) {
-		return <ArrowRight className={className}></ArrowRight>;
+		return <ArrowRight className={className} />;
 	} else if (change > -10) {
-		return <ArrowDownRight className={className}></ArrowDownRight>;
+		return <ArrowDownRight className={className} />;
 	} else {
-		return <ArrowDown className={className}></ArrowDown>;
+		return <ArrowDown className={className} />;
 	}
 }
 

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { DangerAction } from "./DangerAction";
+import { DangerAction } from "@/components/input/DangerAction";
 
 const meta: Meta<typeof DangerAction> = {
 	title: "Input/DangerAction",
@@ -17,7 +17,7 @@ type Story = StoryObj<typeof DangerAction>;
 export const Default: Story = {
 	args: {
 		header: "DangerAction",
-		description: "Danger",
+		description: "This is a very dangerous action, be cautious!",
 		button: "Action",
 	},
 };
@@ -25,7 +25,7 @@ export const Default: Story = {
 export const Disabled: Story = {
 	args: {
 		header: "DangerAction",
-		description: "Danger",
+		description: "This is a very dangerous action, be cautious!",
 		button: "Action",
 		disabled: true,
 	},
@@ -40,7 +40,7 @@ export const Header: Story = {
 
 export const Description: Story = {
 	args: {
-		description: "Danger",
+		description: "This is a very dangerous action, be cautious!",
 		button: "Action",
 	},
 };

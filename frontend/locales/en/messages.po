@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2023-11-07 09:37+0100\n"
+"POT-Creation-Date: 2023-11-29 23:51+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,132 +13,152 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: components/layout/Header.tsx:133
+#: components/deck/Deck.tsx:145
+msgid "{0, plural, one {# card due} other {# cards due}}"
+msgstr "{0, plural, one {# card due} other {# cards due}}"
+
+#: components/layout/Header.tsx:117
 msgid "{0, plural, one {in # deck to learn} other {in # decks to learn}}"
 msgstr "{0, plural, one {in # deck to learn} other {in # decks to learn}}"
 
-#: components/layout/Header.tsx:129
+#: components/layout/Header.tsx:113
 msgid "{0, plural, one {You have # card} other {You have # cards}}"
 msgstr "{0, plural, one {You have # card} other {You have # cards}}"
 
-#: components/flashcard/Flashcard.tsx:214
+#: components/flashcard/Flashcard.tsx:213
 msgid "{dueCards, plural, one {# card left} other {# cards left}}"
 msgstr "{dueCards, plural, one {# card left} other {# cards left}}"
 
-#: pages/features.tsx:112
+#: pages/features.tsx:104
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 
-#: pages/login.tsx:254
+#: pages/login.tsx:295
 msgid "Account already exists!"
 msgstr "Account already exists!"
 
-#: pages/login.tsx:248
+#: pages/login.tsx:289
 msgid "Account created!"
 msgstr "Account created!"
 
-#: pages/features.tsx:121
+#: pages/features.tsx:111
 msgid "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 msgstr "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 
-#: pages/login.tsx:96
-msgid "Already registered?"
-msgstr "Already registered?"
+#: components/navigation/Tabs/DashboardTab.tsx:25
+msgid "Active Decks"
+msgstr "Active Decks"
 
-#: pages/features.tsx:110
+#: pages/login.tsx:221
+msgid "Already have an account?"
+msgstr "Already have an account?"
+
+#: pages/features.tsx:102
 msgid "Available"
 msgstr "Available"
 
-#: pages/deck/[id]/learn.tsx:75
+#: pages/deck/[id]/learn.tsx:84
 msgid "Back to Deck!"
 msgstr "Back to Deck!"
+
+#: components/modal/CreateDeckModal.tsx:76
+msgid "Cancel"
+msgstr "Cancel"
 
 #: components/flashcard/Card.tsx:139
 msgid "Card created!"
 msgstr "Card created!"
 
-#: components/flashcard/Flashcard.tsx:286
+#: components/flashcard/Flashcard.tsx:282
 msgid "Card updated!"
 msgstr "Card updated!"
 
-#: pages/deck/[id]/index.tsx:42
+#: pages/deck/[id]/index.tsx:41
 msgid "Cards"
 msgstr "Cards"
 
-#: components/statistics/StatisticOverview.tsx:30
+#: components/statistics/StatisticOverview.tsx:29
 msgid "Cards learned"
 msgstr "Cards learned"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:100
+#: components/navigation/Tabs/GroupSettingsTab.tsx:99
 msgid "Change how others join this group"
 msgstr "Change how others join this group"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:101
-#: components/navigation/Tabs/GroupSettingsTab.tsx:133
+#: components/navigation/Tabs/DeckSettingsTab.tsx:100
+#: components/navigation/Tabs/GroupSettingsTab.tsx:132
 #: components/navigation/Tabs/UserSettingsTab.tsx:70
 msgid "Click again"
 msgstr "Click again"
 
-#: pages/features.tsx:74
+#: pages/features.tsx:72
 msgid "Collaborate with your friends and fellow students in groups and work on shared decks. Learn together and motivate each other!"
 msgstr "Collaborate with your friends and fellow students in groups and work on shared decks. Learn together and motivate each other!"
 
-#: pages/features.tsx:72
+#: pages/features.tsx:70
 msgid "Collaborative"
 msgstr "Collaborative"
 
-#: pages/features.tsx:92
+#: pages/features.tsx:86
 msgid "Compatible"
 msgstr "Compatible"
 
-#: pages/deck/[id]/learn.tsx:62
+#: pages/deck/[id]/learn.tsx:69
 msgid "Congratulations!"
 msgstr "Congratulations!"
 
-#: pages/login.tsx:87
-#: pages/login.tsx:117
-msgid "Create an account"
-msgstr "Create an account"
-
-#: pages/features.tsx:83
+#: pages/features.tsx:79
 msgid "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 msgstr "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 
-#: components/flashcard/Card.tsx:104
+#: components/flashcard/Card.tsx:105
 msgid "Create Card"
 msgstr "Create Card"
 
-#: components/deck/DeckOverview.tsx:91
-msgid "Create Group"
-msgstr "Create Group"
+#: components/modal/CreateDeckModal.tsx:87
+msgid "Create Deck"
+msgstr "Create Deck"
 
-#: components/deck/Deck.tsx:127
+#: components/modal/CreateDeckModal.tsx:37
 msgid "Create new Deck"
 msgstr "Create new Deck"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:73
-#: components/navigation/Tabs/GroupSettingsTab.tsx:81
+#: components/navigation/Tabs/GroupsTab.tsx:38
+msgid "Create new Group"
+msgstr "Create new Group"
+
+#: components/navigation/Tabs/DeckSettingsTab.tsx:72
+#: components/navigation/Tabs/GroupSettingsTab.tsx:80
 #: components/navigation/Tabs/UserSettingsTab.tsx:59
 msgid "Danger Zone"
 msgstr "Danger Zone"
 
-#: components/deck/Deck.tsx:168
+#: pages/index.tsx:42
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: components/modal/CreateDeckModal.tsx:109
 msgid "Deck created!"
 msgstr "Deck created!"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:146
+#: components/navigation/Tabs/DeckSettingsTab.tsx:137
 msgid "Deck deleted!"
 msgstr "Deck deleted!"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:56
-msgid "Deck Name"
-msgstr "Deck Name"
+#: components/modal/CreateDeckModal.tsx:59
+msgid "Deck description"
+msgstr "Deck description"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:131
+#: components/modal/CreateDeckModal.tsx:47
+#: components/navigation/Tabs/DeckSettingsTab.tsx:55
+msgid "Deck name"
+msgstr "Deck name"
+
+#: components/navigation/Tabs/DeckSettingsTab.tsx:127
 msgid "Deck updated!"
 msgstr "Deck updated!"
 
-#: pages/group/[id]/index.tsx:41
+#: pages/group/[id]/index.tsx:43
 #: pages/index.tsx:49
 msgid "Decks"
 msgstr "Decks"
@@ -147,19 +167,19 @@ msgstr "Decks"
 msgid "Delete Account"
 msgstr "Delete Account"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:102
+#: components/navigation/Tabs/DeckSettingsTab.tsx:101
 msgid "Delete Deck"
 msgstr "Delete Deck"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:134
+#: components/navigation/Tabs/GroupSettingsTab.tsx:133
 msgid "Delete Group"
 msgstr "Delete Group"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:95
+#: components/navigation/Tabs/DeckSettingsTab.tsx:94
 msgid "Delete this deck"
 msgstr "Delete this deck"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:127
+#: components/navigation/Tabs/GroupSettingsTab.tsx:126
 msgid "Delete this group"
 msgstr "Delete this group"
 
@@ -167,61 +187,81 @@ msgstr "Delete this group"
 msgid "Delete your Account"
 msgstr "Delete your Account"
 
-#: components/flashcard/Flashcard.tsx:195
+#: components/flashcard/Flashcard.tsx:194
 msgid "Description"
 msgstr "Description"
 
-#: pages/features.tsx:55
+#: pages/features.tsx:53
 msgid "Discover Kioku's awesome Features"
 msgstr "Discover Kioku's awesome Features"
 
-#: components/flashcard/Flashcard.tsx:261
+#: pages/features.tsx:29
+msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
+msgstr "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
+
+#: pages/login.tsx:217
+msgid "Don't have an account?"
+msgstr "Don't have an account?"
+
+#: components/flashcard/Flashcard.tsx:260
 msgid "Easy"
 msgstr "Easy"
 
-#: pages/login.tsx:140
+#: pages/login.tsx:86
 msgid "Email"
 msgstr "Email"
 
-#: pages/features.tsx:119
+#: components/modal/CreateDeckModal.tsx:61
+msgid "Enter deck description"
+msgstr "Enter deck description"
+
+#: components/modal/CreateDeckModal.tsx:50
+msgid "Enter deck name"
+msgstr "Enter deck name"
+
+#: pages/features.tsx:109
 msgid "Entertaining"
 msgstr "Entertaining"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:104
+#: components/navigation/Tabs/GroupSettingsTab.tsx:103
 msgid "Everyone can join this group"
 msgstr "Everyone can join this group"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:107
+#: components/navigation/Tabs/GroupSettingsTab.tsx:106
 msgid "Everyone can request to join this group"
 msgstr "Everyone can request to join this group"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:111
+#: components/navigation/Tabs/GroupSettingsTab.tsx:110
 msgid "Everyone has to be invited to join this group"
 msgstr "Everyone has to be invited to join this group"
 
-#: components/statistics/StatisticOverview.tsx:32
-#: components/statistics/StatisticOverview.tsx:47
+#: components/navigation/Tabs/DashboardTab.tsx:26
+msgid "Favorite Decks"
+msgstr "Favorite Decks"
+
+#: components/statistics/StatisticOverview.tsx:31
+#: components/statistics/StatisticOverview.tsx:46
 msgid "from"
 msgstr "from"
 
-#: pages/features.tsx:52
-#: pages/home.tsx:57
+#: pages/features.tsx:50
+#: pages/home.tsx:68
 msgid "Get started"
 msgstr "Get started"
 
-#: components/deck/DeckOverview.tsx:121
+#: components/navigation/Tabs/GroupsTab.tsx:87
 msgid "Group created!"
 msgstr "Group created!"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:198
+#: components/navigation/Tabs/GroupSettingsTab.tsx:183
 msgid "Group deleted!"
 msgstr "Group deleted!"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:67
+#: components/navigation/Tabs/GroupSettingsTab.tsx:66
 msgid "Group Description"
 msgstr "Group Description"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:53
+#: components/navigation/Tabs/GroupSettingsTab.tsx:52
 msgid "Group Name"
 msgstr "Group Name"
 
@@ -229,7 +269,7 @@ msgstr "Group Name"
 msgid "Group Statistics"
 msgstr "Group Statistics"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:164
+#: components/navigation/Tabs/GroupSettingsTab.tsx:160
 msgid "Group updated!"
 msgstr "Group updated!"
 
@@ -237,19 +277,19 @@ msgstr "Group updated!"
 msgid "Groups"
 msgstr "Groups"
 
-#: components/flashcard/Flashcard.tsx:245
+#: components/flashcard/Flashcard.tsx:244
 msgid "Hard"
 msgstr "Hard"
 
-#: components/statistics/StatisticOverview.tsx:39
+#: components/statistics/StatisticOverview.tsx:38
 msgid "Hit Rate"
 msgstr "Hit Rate"
 
-#: pages/features.tsx:81
+#: pages/features.tsx:77
 msgid "Individual"
 msgstr "Individual"
 
-#: pages/features.tsx:99
+#: pages/features.tsx:93
 msgid "Informative"
 msgstr "Informative"
 
@@ -261,143 +301,159 @@ msgstr "Invitations"
 msgid "Invite user with email"
 msgstr "Invite user with email"
 
-#: components/layout/Header.tsx:172
+#: components/layout/Header.tsx:148
 msgid "Join Group"
 msgstr "Join Group"
 
-#: pages/features.tsx:94
+#: pages/features.tsx:27
+msgid "Kioku | Features of the Kioku platform"
+msgstr "Kioku | Features of the Kioku platform"
+
+#: pages/login.tsx:52
+msgid "Kioku | Login or register for Kioku!"
+msgstr "Kioku | Login or register for Kioku!"
+
+#: pages/home.tsx:29
+msgid "Kioku | The free flashcard application that focusses on collaborative content creation!"
+msgstr "Kioku | The free flashcard application that focusses on collaborative content creation!"
+
+#: pages/home.tsx:32
+msgid "Kioku is a free flashcard application. You can create or import decks from Anki and edit your flashcards together. Learn your flashcards with our customized spaced repetition algorithm (SRS) and compare your statistics with your friends. Motivate each other and keep learning!"
+msgstr "Kioku is a free flashcard application. You can create or import decks from Anki and edit your flashcards together. Learn your flashcards with our customized spaced repetition algorithm (SRS) and compare your statistics with your friends. Motivate each other and keep learning!"
+
+#: pages/features.tsx:88
 msgid "Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
 msgstr "Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
 
-#: components/layout/Header.tsx:158
+#: components/deck/Deck.tsx:174
+msgid "Learn"
+msgstr "Learn"
+
+#: components/layout/Header.tsx:133
 msgid "Learn Deck"
 msgstr "Learn Deck"
 
-#: pages/home.tsx:66
+#: pages/home.tsx:78
 msgid "Learn more"
 msgstr "Learn more"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:87
-#: components/navigation/Tabs/GroupSettingsTab.tsx:91
+#: components/navigation/Tabs/GroupSettingsTab.tsx:86
+#: components/navigation/Tabs/GroupSettingsTab.tsx:90
 msgid "Leave Group"
 msgstr "Leave Group"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:182
+#: components/navigation/Tabs/GroupSettingsTab.tsx:172
 msgid "Left group!"
 msgstr "Left group!"
 
-#: pages/login.tsx:220
+#: pages/login.tsx:261
 msgid "Logged in!"
 msgstr "Logged in!"
 
-#: components/navigation/Navbar.tsx:60
-#: pages/login.tsx:186
+#: components/navigation/Navbar.tsx:61
 msgid "Login"
 msgstr "Login"
 
-#: components/flashcard/Flashcard.tsx:253
+#: components/flashcard/Flashcard.tsx:252
 msgid "Medium"
 msgstr "Medium"
 
-#: pages/login.tsx:150
-msgid "Name"
-msgstr "Name"
-
-#: components/deck/Deck.tsx:145
-msgid "No decks in group"
-msgstr "No decks in group"
-
-#: pages/login.tsx:94
-msgid "Not registered?"
-msgstr "Not registered?"
+#: pages/login.tsx:166
+msgid "Minimum {passwordMinLength} characters"
+msgstr "Minimum {passwordMinLength} characters"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:66
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Once you delete your user, there is no going back. Please be certain."
 
-#: pages/login.tsx:160
+#: pages/login.tsx:106
 msgid "Password"
 msgstr "Password"
 
-#: pages/login.tsx:175
-msgid "Passwords have to match."
-msgstr "Passwords have to match."
+#: pages/login.tsx:123
+msgid "Password must have at least {passwordMinLength} characters"
+msgstr "Password must have at least {passwordMinLength} characters"
+
+#: pages/login.tsx:152
+#: pages/login.tsx:177
+msgid "Passwords have to match"
+msgstr "Passwords have to match"
 
 #: components/navigation/Tabs/StatisticsTab.tsx:23
 msgid "Personal Statistics"
 msgstr "Personal Statistics"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:129
+#: components/navigation/Tabs/GroupSettingsTab.tsx:128
 msgid "Please be certain before deleting a group, as there is no way to undo this action."
 msgstr "Please be certain before deleting a group, as there is no way to undo this action."
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:97
+#: components/navigation/Tabs/DeckSettingsTab.tsx:96
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Please be certain when deleting a deck, as there is no way to undo this action."
 
-#: components/form/InputField.tsx:81
-msgid "Please enter a valid {type}."
-msgstr "Please enter a valid {type}."
+#: pages/login.tsx:54
+msgid "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
+msgstr "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
 
-#: components/form/InputField.tsx:169
-msgid "Please fill out this field."
-msgstr "Please fill out this field."
-
-#: pages/login.tsx:186
-msgid "Register"
-msgstr "Register"
-
-#: components/navigation/Tabs/DeckSettingsTab.tsx:58
-#: components/navigation/Tabs/GroupSettingsTab.tsx:55
+#: components/navigation/Tabs/DeckSettingsTab.tsx:57
+#: components/navigation/Tabs/GroupSettingsTab.tsx:54
 #: components/navigation/Tabs/UserSettingsTab.tsx:48
 msgid "Rename"
 msgstr "Rename"
 
-#: pages/login.tsx:174
+#: pages/login.tsx:135
 msgid "Repeat Password"
 msgstr "Repeat Password"
 
-#: components/layout/Header.tsx:178
+#: components/layout/Header.tsx:154
 msgid "Request pending"
 msgstr "Request pending"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:69
+#: components/navigation/Tabs/GroupSettingsTab.tsx:68
 msgid "Save"
 msgstr "Save"
 
-#: components/layout/Header.tsx:192
+#: components/layout/Header.tsx:168
 msgid "Sent request!"
 msgstr "Sent request!"
 
-#: pages/deck/[id]/index.tsx:56
-#: pages/group/[id]/index.tsx:62
-#: pages/index.tsx:80
+#: pages/deck/[id]/index.tsx:55
+#: pages/group/[id]/index.tsx:60
+#: pages/index.tsx:78
 msgid "Settings"
 msgstr "Settings"
 
-#: pages/login.tsx:119
+#: pages/login.tsx:205
 msgid "Sign in"
 msgstr "Sign in"
 
-#: pages/login.tsx:85
-msgid "Sign in to your account"
-msgstr "Sign in to your account"
+#: pages/login.tsx:235
+msgid "Sign in now!"
+msgstr "Sign in now!"
 
-#: pages/home.tsx:42
+#: pages/login.tsx:207
+msgid "Sign up"
+msgstr "Sign up"
+
+#: pages/login.tsx:233
+msgid "Sign up now!"
+msgstr "Sign up now!"
+
+#: pages/home.tsx:53
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 
-#: pages/deck/[id]/index.tsx:49
-#: pages/group/[id]/index.tsx:55
-#: pages/index.tsx:73
+#: pages/deck/[id]/index.tsx:48
+#: pages/group/[id]/index.tsx:53
+#: pages/index.tsx:71
 msgid "Statistics"
 msgstr "Statistics"
 
-#: components/statistics/StatisticOverview.tsx:45
+#: components/statistics/StatisticOverview.tsx:44
 msgid "Test"
 msgstr "Test"
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:114
+#: components/navigation/Tabs/GroupSettingsTab.tsx:113
 msgid "Unexpected group type"
 msgstr "Unexpected group type"
 
@@ -405,46 +461,47 @@ msgstr "Unexpected group type"
 msgid "User"
 msgstr "User"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:111
+#: components/navigation/Tabs/UserSettingsTab.tsx:100
 msgid "User deleted!"
 msgstr "User deleted!"
 
-#: components/group/Member.tsx:165
+#: components/group/Member.tsx:162
 msgid "User invited"
 msgstr "User invited"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:96
+#: components/navigation/Tabs/UserSettingsTab.tsx:90
 msgid "User updated!"
 msgstr "User updated!"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:46
+#: pages/login.tsx:96
 msgid "Username"
 msgstr "Username"
 
-#: pages/features.tsx:101
+#: pages/features.tsx:95
 msgid "We provide you with detailed statistics and insights into your study progress. Identify areas of improvement to optimize your strategy for maximum effectiveness!"
 msgstr "We provide you with detailed statistics and insights into your study progress. Identify areas of improvement to optimize your strategy for maximum effectiveness!"
 
-#: pages/home.tsx:37
+#: pages/home.tsx:48
 msgid "We're changing the way people learn."
 msgstr "We're changing the way people learn."
 
-#: components/layout/Header.tsx:87
+#: components/layout/Header.tsx:84
 msgid "Welcome {0}"
 msgstr "Welcome {0}"
 
-#: pages/features.tsx:58
+#: pages/features.tsx:56
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 
-#: pages/login.tsx:223
+#: pages/login.tsx:264
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 
-#: pages/deck/[id]/learn.tsx:65
+#: pages/deck/[id]/learn.tsx:72
 msgid "You did it! There are no cards left in this deck to learn today."
 msgstr "You did it! There are no cards left in this deck to learn today."
 
-#: components/navigation/Tabs/GroupSettingsTab.tsx:89
+#: components/navigation/Tabs/GroupSettingsTab.tsx:88
 msgid "You must either be invited or request to join the group again."
 msgstr "You must either be invited or request to join the group again."

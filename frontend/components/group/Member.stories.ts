@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { userEvent, within } from "@storybook/testing-library";
 
-import Member from "./Member";
+import Member from "@/components/group/Member";
 
 const meta: Meta<typeof Member> = {
 	title: "Components/Member",

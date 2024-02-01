@@ -1,19 +1,29 @@
 import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
+import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 
-import Authenticated from "../../../components/accessControl/Authenticated";
-import { FetchHeader } from "../../../components/layout/Header";
-import { DecksTab } from "../../../components/navigation/Tabs/DecksTab";
-import { GroupSettingsTab } from "../../../components/navigation/Tabs/GroupSettingsTab";
-import { MembersTab } from "../../../components/navigation/Tabs/MembersTab";
-import { StatisticsTab } from "../../../components/navigation/Tabs/StatisticsTab";
-import { TabBar } from "../../../components/navigation/Tabs/TabBar";
-import { TabHeader } from "../../../components/navigation/Tabs/TabHeader";
-import { useGroup } from "../../../util/swr";
+import { FetchHeader } from "@/components/layout/Header";
+import { DecksTab } from "@/components/navigation/Tabs/DecksTab";
+import { GroupSettingsTab } from "@/components/navigation/Tabs/GroupSettingsTab";
+import { MembersTab } from "@/components/navigation/Tabs/MembersTab";
+import { StatisticsTab } from "@/components/navigation/Tabs/StatisticsTab";
+import { TabBar } from "@/components/navigation/Tabs/TabBar";
+import { TabHeader } from "@/components/navigation/Tabs/TabHeader";
+import { loadCatalog } from "@/pages/_app";
+import { useGroup } from "@/util/swr";
+
+export const getServerSideProps: GetStaticProps = async (ctx) => {
+	const translation = await loadCatalog(ctx.locale!);
+	return {
+		props: {
+			translation,
+		},
+	};
+};
 
 export default function Page() {
 	const router = useRouter();
@@ -30,36 +40,25 @@ export default function Page() {
 			<TabHeader
 				id="DecksTabHeaderId"
 				name={_(msg`Decks`)}
-				style="decks"
-			></TabHeader>
+				icon="Layers"
+			/>
 		),
 		user: (
-			<TabHeader
-				id="UserTabHeaderId"
-				name={_(msg`User`)}
-				style="user"
-			></TabHeader>
-		),
-		statistics: (
-			<TabHeader
-				id="StatisticsTabHeaderId"
-				name={_(msg`Statistics`)}
-				style="statistics"
-			></TabHeader>
+			<TabHeader id="UserTabHeaderId" name={_(msg`User`)} icon="Users" />
 		),
 		settings: (
 			<TabHeader
 				id="SettingsTabHeaderId"
 				name={_(msg`Settings`)}
-				style="settings"
-			></TabHeader>
+				icon="Settings"
+			/>
 		),
 	};
 
 	const [currentTab, setCurrentTab] = useState("decks");
 
 	return (
-		<div>
+		<div className="flex flex-1 overflow-auto">
 			<Head>
 				<title>Kioku</title>
 				<meta name="description" content="Kioku" />
@@ -76,35 +75,31 @@ export default function Page() {
 				/>
 			</Head>
 
-			<Authenticated>
-				<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-					{group && (
-						<div className="space-y-5 px-5 py-1 md:px-10 md:py-3">
-							<FetchHeader id="groupPageHeaderId" group={group} />
+			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
+				{group && (
+					<div className="flex h-full flex-col px-5 py-1 md:space-y-5 md:px-10 md:py-3">
+						<FetchHeader id="groupPageHeaderId" group={group} />
+						<div className="flex h-full flex-1 flex-col-reverse justify-between space-y-5 overflow-auto md:flex-col md:justify-normal">
 							<TabBar
 								id="groupTabBarId"
 								tabs={tabs}
 								currentTab={currentTab}
 								setTab={setCurrentTab}
-							></TabBar>
-							<div>
+							/>
+							<div className="overflow-auto">
 								{{
-									decks: <DecksTab group={group}></DecksTab>,
-									user: (
-										<MembersTab group={group}></MembersTab>
-									),
+									decks: <DecksTab group={group} />,
+									user: <MembersTab group={group} />,
 									settings: (
-										<GroupSettingsTab
-											group={group}
-										></GroupSettingsTab>
+										<GroupSettingsTab group={group} />
 									),
-									statistics: <StatisticsTab></StatisticsTab>,
+									statistics: <StatisticsTab />,
 								}[currentTab] ?? <div>Error</div>}
 							</div>
 						</div>
-					)}
-				</div>
-			</Authenticated>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

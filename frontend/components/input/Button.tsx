@@ -1,6 +1,15 @@
-import React, { ButtonHTMLAttributes } from "react";
+import Link, { LinkProps } from "next/link";
+import React, { ButtonHTMLAttributes, ReactNode } from "react";
+
+import { Text } from "@/components/Text";
+import { Icon, IconName } from "@/components/graphics/Icon";
+import { Size } from "@/types/Size";
 
 export interface ButtonProps {
+	/**
+	 * If href is set, a Link will be returned
+	 */
+	href?: string;
 	/**
 	 * Button styling
 	 */
@@ -8,38 +17,87 @@ export interface ButtonProps {
 	/**
 	 * Button size
 	 */
-	buttonSize?: keyof typeof getSize;
+	buttonSize?: string;
+	/**
+	 * Text size
+	 */
+	buttonTextSize?: Size;
+	/**
+	 * Icon that will be displayed in the Button
+	 */
+	buttonIcon?: IconName | ReactNode;
+	/**
+	 * Icon size
+	 */
+	buttonIconSize?: number;
 }
 
 const getStyle = {
-	none: "",
-	primary: "bg-kiokuDarkBlue text-eggshell shadow-sm hover:scale-105",
+	primary: "bg-kiokuDarkBlue font-medium text-white hover:scale-[1.02]",
 	secondary:
-		"bg-transparent text-kiokuDarkBlue hover:bg-gray-100 hover:scale-105",
-	error: "bg-kiokuRed text-white hover:scale-105",
-	warning: "bg-kiokuYellow text-white hover:scale-105",
-	disabled: "bg-gray-200 text-gray-400 hover:cursor-not-allowed",
-} as const;
-
-const getSize = {
-	sm: "px-3 py-1.5 text-xs sm:text-xs md:text-sm lg:px-3 lg:py-1.5 lg:text-base xl:text-lg",
-	md: "px-3 py-1.5 text-xs sm:text-sm md:text-base lg:px-5 lg:py-3 lg:text-lg xl:text-xl",
-	lg: "px-5 py-3 text-sm sm:text-base md:text-lg lg:px-5 lg:py-3 lg:text-xl xl:text-2xl",
+		"bg-black font-medium text-white hover:scale-[1.02] hover:bg-neutral-900",
+	tertiary:
+		"bg-transparent font-medium text-kiokuDarkBlue hover:scale-105 hover:bg-gray-100",
+	cancel: "bg-transparent font-normal text-gray-400 hover:bg-gray-100",
+	error: "bg-kiokuRed font-medium text-white hover:scale-105",
+	warning: "bg-kiokuYellow font-medium text-white hover:scale-105",
+	disabled: "bg-gray-200 font-medium text-gray-400 hover:cursor-not-allowed",
 } as const;
 
 /**
  * UI component for user interactions
  */
 export const Button = ({
+	href,
+	replace,
+	scroll,
+	buttonStyle,
+	buttonSize = "px-3 py-1.5 lg:px-3 lg:py-2",
+	buttonTextSize,
+	buttonIcon,
+	buttonIconSize = 16,
 	className = "",
-	buttonStyle = "primary",
-	buttonSize = "md",
+	children,
 	...props
-}: ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>) => {
-	return (
-		<button
-			className={`flex items-center justify-center rounded-md text-center font-semibold outline-none transition ${getStyle[buttonStyle]} ${getSize[buttonSize]} ${className}`}
-			{...props}
-		></button>
+}: ButtonProps &
+	ButtonHTMLAttributes<HTMLButtonElement> &
+	Pick<LinkProps, "replace" | "scroll">) => {
+	const innerButton = (
+		<>
+			<Text textSize={buttonTextSize}>{children}</Text>
+			{buttonIcon &&
+				(typeof buttonIcon === "string" ? (
+					<Icon
+						icon={buttonIcon as IconName}
+						size={buttonIconSize}
+						className="flex-none"
+					/>
+				) : (
+					buttonIcon
+				))}
+		</>
+	);
+	const classNames = [
+		"flex items-center space-x-1 rounded-md outline-none transition",
+		className,
+	];
+	if (buttonStyle) {
+		classNames.push(getStyle[buttonStyle]);
+	}
+	classNames.push(buttonSize);
+
+	return href ? (
+		<Link
+			href={href}
+			replace={replace}
+			scroll={scroll}
+			className={classNames.join(" ")}
+		>
+			{innerButton}
+		</Link>
+	) : (
+		<button className={classNames.join(" ")} {...props}>
+			{innerButton}
+		</button>
 	);
 };

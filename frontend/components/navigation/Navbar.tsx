@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ArrowRight, LogOut } from "react-feather";
 
-import { authedFetch } from "../../util/reauth";
-import { Logo } from "../graphics/Logo";
-import { Button } from "../input/Button";
+import { Logo } from "@/components/graphics/Logo";
+import { Button } from "@/components/input/Button";
+import { authedFetch } from "@/util/reauth";
 
 interface NavbarProps {
 	/**
@@ -27,16 +27,15 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 		} else {
 			setLoggedIn(hasCookie("access_token"));
 		}
-	});
+	}, [router.pathname]);
+	if (loggedIn == undefined) {
+		return <></>;
+	}
 	return (
 		<nav
 			className={`flex items-center justify-between p-5 md:p-10 ${className}`}
 		>
-			<Logo
-				onClick={() =>
-					loggedIn ? router.push("/") : router.push("/home")
-				}
-			></Logo>
+			<Logo href={loggedIn ? "/" : "/home"} />
 			{loggedIn == true && (
 				<LogOut
 					className="text-kiokuDarkBlue hover:cursor-pointer"
@@ -48,17 +47,18 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 							router.replace("/home");
 						}
 					}}
-				></LogOut>
+				/>
 			)}
 			{loggedIn == false && (
 				<Button
 					id="loginButton"
-					buttonStyle="secondary"
+					href="/login"
+					buttonStyle="tertiary"
+					buttonTextSize="xs"
+					buttonIcon={<ArrowRight size={16} />}
 					className="invisible sm:visible"
-					onClick={() => router.push("/login")}
 				>
 					<Trans>Login</Trans>
-					<ArrowRight className="ml-1 h-2/3"></ArrowRight>
 				</Button>
 			)}
 		</nav>

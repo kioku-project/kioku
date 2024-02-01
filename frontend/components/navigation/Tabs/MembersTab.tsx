@@ -1,5 +1,5 @@
-import { Group as GroupType } from "../../../types/Group";
-import MemberList from "../../group/MemberList";
+import MemberList from "@/components/group/MemberList";
+import { Group as GroupType } from "@/types/Group";
 
 interface MembersTabProps {
 	/**
@@ -18,7 +18,7 @@ interface MembersTabProps {
 export const MembersTab = ({ group, className = "" }: MembersTabProps) => {
 	return (
 		<div className={`${className}`}>
-			<MemberList group={group}></MemberList>
+			<MemberList group={group} />
 		</div>
 	);
 };

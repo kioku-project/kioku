@@ -1,0 +1,21 @@
+meta {
+  name: delete favorite
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{baseUrl}}/api/decks/favorites
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "deckID": "D-12345678"
+  }
+}

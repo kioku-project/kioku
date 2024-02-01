@@ -1,9 +1,10 @@
 import { Inter } from "next/font/google";
 import Image from "next/image";
-import React from "react";
+import Link, { LinkProps } from "next/link";
 
-import kiokuLogo from "../../public/kioku-logo.svg";
-import { Text } from "../Text";
+import { Text } from "@/components/Text";
+import kiokuLogo from "@/public/kioku-logo.svg";
+import { Size } from "@/types/Size";
 
 const inter = Inter({
 	weight: ["200", "400"],
@@ -16,45 +17,43 @@ interface LogoProps {
 	 */
 	text?: boolean;
 	/**
+	 * Text size
+	 */
+	textSize?: Size;
+	/**
+	 * Logo size
+	 */
+	logoSize?: string;
+	/**
 	 * Additional classes
 	 */
 	className?: string;
-	/**
-	 * alternative click handler
-	 */
-	onClick?: () => void;
 }
 
 /**
  * UI component for displaying the Kioku Logo
  */
-export const Logo = ({ className = "", text = true, onClick }: LogoProps) => {
+export const Logo = ({
+	text = true,
+	textSize = "lg",
+	logoSize = "w-14 sm:w-16 md:w-20 lg:w-24",
+	className = "",
+	...props
+}: LogoProps & LinkProps) => {
 	return (
-		<div
+		<Link
 			className={`flex flex-row items-center hover:cursor-pointer ${className}`}
-			onClick={onClick}
-			onKeyUp={(event) => {
-				if (event.key === "Enter") {
-					onClick?.();
-				}
-			}}
-			tabIndex={0}
+			{...props}
 		>
-			<Image
-				src={kiokuLogo}
-				alt="Kioku"
-				height={0}
-				width={0}
-				className="w-16 hover:cursor-pointer md:w-20 lg:w-28"
-			/>
+			<Image src={kiokuLogo} alt="Kioku" className={`${logoSize}`} />
 			{text && (
 				<Text
-					size="lg"
+					textSize={textSize}
 					className={`ml-3 font-extralight tracking-[0.5em] ${inter.className}`}
 				>
 					Kioku
 				</Text>
 			)}
-		</div>
+		</Link>
 	);
 };

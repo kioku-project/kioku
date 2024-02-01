@@ -1,6 +1,6 @@
-import { Text } from "../Text";
-import { Action } from "./Action";
-import { Button } from "./Button";
+import { Text } from "@/components/Text";
+import { Action } from "@/components/input/Action";
+import { Button } from "@/components/input/Button";
 
 interface DangerActionProps {
 	/**
@@ -56,14 +56,16 @@ export const DangerAction = ({
 				description={
 					<>
 						<Text
-							size="3xs"
-							className="font-bold text-kiokuDarkBlue"
+							textStyle="primary"
+							textSize="3xs"
+							className="font-bold"
 						>
 							{header}
 						</Text>
 						<Text
-							size="3xs"
-							className="font-medium text-kiokuLightBlue"
+							textStyle="secondary"
+							textSize="3xs"
+							className="font-medium"
 						>
 							{description}
 						</Text>
@@ -73,14 +75,14 @@ export const DangerAction = ({
 					<Button
 						id={`${id}ButtonId`}
 						buttonStyle={disabled ? "disabled" : "error"}
-						buttonSize="sm"
-						className="w-full"
+						buttonTextSize="3xs"
+						className="w-full justify-center"
 						onClick={() => !disabled && onClick?.()}
 					>
 						{button}
 					</Button>
 				}
-			></Action>
+			/>
 		</div>
 	);
 };

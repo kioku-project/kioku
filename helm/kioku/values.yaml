@@ -1,5 +1,7 @@
 mode: production
 
+vapidSecret: vapid-secret
+
 cassandra:
   username: cassandra
   password: cassandra
@@ -62,6 +64,16 @@ carddeck:
 srs:
   name: kioku-srs
   image: ghcr.io/kioku-project/kioku_srs
+  tag: prod
+
+  autoscaler:
+    min: 1
+    max: 10
+    targetCPUUtilizationPercentage: 50
+
+notifications:
+  name: kioku-notifications
+  image: ghcr.io/kioku-project/kioku_notifications
   tag: prod
 
   autoscaler:

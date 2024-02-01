@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {# card left} other {# cards left}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 
-#: pages/login.tsx:295
+#: pages/login.tsx:292
 msgid "Account already exists!"
 msgstr "Account already exists!"
 
-#: pages/login.tsx:289
+#: pages/login.tsx:286
 msgid "Account created!"
 msgstr "Account created!"
 
@@ -49,7 +49,7 @@ msgstr "Achievements and leaderboards make learning more engaging and motivating
 msgid "Active Decks"
 msgstr "Active Decks"
 
-#: pages/login.tsx:221
+#: pages/login.tsx:218
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -57,7 +57,7 @@ msgstr "Already have an account?"
 msgid "Available"
 msgstr "Available"
 
-#: pages/deck/[id]/learn.tsx:84
+#: pages/deck/[id]/learn.tsx:90
 msgid "Back to Deck!"
 msgstr "Back to Deck!"
 
@@ -73,7 +73,7 @@ msgstr "Card created!"
 msgid "Card updated!"
 msgstr "Card updated!"
 
-#: pages/deck/[id]/index.tsx:41
+#: pages/deck/[id]/index.tsx:38
 msgid "Cards"
 msgstr "Cards"
 
@@ -87,9 +87,13 @@ msgstr "Change how others join this group"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:100
 #: components/navigation/Tabs/GroupSettingsTab.tsx:132
-#: components/navigation/Tabs/UserSettingsTab.tsx:70
+#: components/navigation/Tabs/UserSettingsTab.tsx:119
 msgid "Click again"
 msgstr "Click again"
+
+#: components/modal/InstallPWAModal.tsx:139
+msgid "Click on \"Add page to\""
+msgstr "Click on \"Add page to\""
 
 #: pages/features.tsx:72
 msgid "Collaborate with your friends and fellow students in groups and work on shared decks. Learn together and motivate each other!"
@@ -103,7 +107,7 @@ msgstr "Collaborative"
 msgid "Compatible"
 msgstr "Compatible"
 
-#: pages/deck/[id]/learn.tsx:69
+#: pages/deck/[id]/learn.tsx:75
 msgid "Congratulations!"
 msgstr "Congratulations!"
 
@@ -129,7 +133,7 @@ msgstr "Create new Group"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:72
 #: components/navigation/Tabs/GroupSettingsTab.tsx:80
-#: components/navigation/Tabs/UserSettingsTab.tsx:59
+#: components/navigation/Tabs/UserSettingsTab.tsx:108
 msgid "Danger Zone"
 msgstr "Danger Zone"
 
@@ -158,12 +162,12 @@ msgstr "Deck name"
 msgid "Deck updated!"
 msgstr "Deck updated!"
 
-#: pages/group/[id]/index.tsx:43
+#: pages/group/[id]/index.tsx:42
 #: pages/index.tsx:49
 msgid "Decks"
 msgstr "Decks"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:71
+#: components/navigation/Tabs/UserSettingsTab.tsx:120
 msgid "Delete Account"
 msgstr "Delete Account"
 
@@ -183,7 +187,7 @@ msgstr "Delete this deck"
 msgid "Delete this group"
 msgstr "Delete this group"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:64
+#: components/navigation/Tabs/UserSettingsTab.tsx:113
 msgid "Delete your Account"
 msgstr "Delete your Account"
 
@@ -199,9 +203,13 @@ msgstr "Discover Kioku's awesome Features"
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 msgstr "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 
-#: pages/login.tsx:217
+#: pages/login.tsx:214
 msgid "Don't have an account?"
 msgstr "Don't have an account?"
+
+#: components/modal/InstallPWAModal.tsx:87
+msgid "Done"
+msgstr "Done"
 
 #: components/flashcard/Flashcard.tsx:260
 msgid "Easy"
@@ -281,9 +289,17 @@ msgstr "Groups"
 msgid "Hard"
 msgstr "Hard"
 
+#: components/modal/InstallPWAModal.tsx:52
+msgid "here"
+msgstr "here"
+
 #: components/statistics/StatisticOverview.tsx:38
 msgid "Hit Rate"
 msgstr "Hit Rate"
+
+#: components/modal/InstallPWAModal.tsx:32
+msgid "How to install Kioku"
+msgstr "How to install Kioku"
 
 #: pages/features.tsx:77
 msgid "Individual"
@@ -292,10 +308,6 @@ msgstr "Individual"
 #: pages/features.tsx:93
 msgid "Informative"
 msgstr "Informative"
-
-#: pages/index.tsx:63
-msgid "Invitations"
-msgstr "Invitations"
 
 #: components/group/Member.tsx:132
 msgid "Invite user with email"
@@ -346,7 +358,7 @@ msgstr "Leave Group"
 msgid "Left group!"
 msgstr "Left group!"
 
-#: pages/login.tsx:261
+#: pages/login.tsx:258
 msgid "Logged in!"
 msgstr "Logged in!"
 
@@ -358,24 +370,34 @@ msgstr "Login"
 msgid "Medium"
 msgstr "Medium"
 
-#: pages/login.tsx:166
+#: pages/login.tsx:164
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Minimum {passwordMinLength} characters"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:66
+#: components/navigation/Tabs/UserSettingsTab.tsx:69
+msgid "Notifications"
+msgstr "Notifications"
+
+#: components/navigation/Tabs/UserSettingsTab.tsx:115
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Once you delete your user, there is no going back. Please be certain."
 
-#: pages/login.tsx:106
+#: components/modal/InstallPWAModal.tsx:116
+#: components/modal/InstallPWAModal.tsx:136
+#: components/modal/InstallPWAModal.tsx:161
+msgid "Open menu"
+msgstr "Open menu"
+
+#: pages/login.tsx:104
 msgid "Password"
 msgstr "Password"
 
-#: pages/login.tsx:123
+#: pages/login.tsx:121
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Password must have at least {passwordMinLength} characters"
 
-#: pages/login.tsx:152
-#: pages/login.tsx:177
+#: pages/login.tsx:150
+#: pages/login.tsx:175
 msgid "Passwords have to match"
 msgstr "Passwords have to match"
 
@@ -397,11 +419,11 @@ msgstr "Register today and start using the free flashcard application together w
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:57
 #: components/navigation/Tabs/GroupSettingsTab.tsx:54
-#: components/navigation/Tabs/UserSettingsTab.tsx:48
+#: components/navigation/Tabs/UserSettingsTab.tsx:58
 msgid "Rename"
 msgstr "Rename"
 
-#: pages/login.tsx:135
+#: pages/login.tsx:133
 msgid "Repeat Password"
 msgstr "Repeat Password"
 
@@ -413,55 +435,97 @@ msgstr "Request pending"
 msgid "Save"
 msgstr "Save"
 
+#: components/modal/InstallPWAModal.tsx:104
+msgid "Select \"Add to Home Screen\""
+msgstr "Select \"Add to Home Screen\""
+
+#: components/modal/InstallPWAModal.tsx:143
+msgid "Select \"Home screen\""
+msgstr "Select \"Home screen\""
+
+#: components/modal/InstallPWAModal.tsx:120
+msgid "Select \"Install app\""
+msgstr "Select \"Install app\""
+
+#: components/modal/InstallPWAModal.tsx:165
+msgid "Select \"Install\""
+msgstr "Select \"Install\""
+
 #: components/layout/Header.tsx:168
 msgid "Sent request!"
 msgstr "Sent request!"
 
-#: pages/deck/[id]/index.tsx:55
-#: pages/group/[id]/index.tsx:60
-#: pages/index.tsx:78
+#: pages/deck/[id]/index.tsx:43
+#: pages/group/[id]/index.tsx:52
+#: pages/index.tsx:63
 msgid "Settings"
 msgstr "Settings"
 
-#: pages/login.tsx:205
+#: pages/login.tsx:202
 msgid "Sign in"
 msgstr "Sign in"
 
-#: pages/login.tsx:235
+#: pages/login.tsx:232
 msgid "Sign in now!"
 msgstr "Sign in now!"
 
-#: pages/login.tsx:207
+#: pages/login.tsx:204
 msgid "Sign up"
 msgstr "Sign up"
 
-#: pages/login.tsx:233
+#: pages/login.tsx:230
 msgid "Sign up now!"
 msgstr "Sign up now!"
+
+#: components/modal/InstallPWAModal.tsx:154
+msgid "Since Firefox is not fully supporting PWAs, we recommend using Chrome for the best experience."
+msgstr "Since Firefox is not fully supporting PWAs, we recommend using Chrome for the best experience."
+
+#: components/modal/InstallPWAModal.tsx:131
+msgid "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend using Chrome for the best experience."
+msgstr "Since the Samsung Internet Browser is not fully supporting PWAs, we recommend using Chrome for the best experience."
+
+#: components/modal/InstallPWAModal.tsx:54
+msgid "so that we can support even more devices in the future. We recommend using Chrome on Android and Safari on iOS for the best experience."
+msgstr "so that we can support even more devices in the future. We recommend using Chrome on Android and Safari on iOS for the best experience."
 
 #: pages/home.tsx:53
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 
-#: pages/deck/[id]/index.tsx:48
-#: pages/group/[id]/index.tsx:53
-#: pages/index.tsx:71
-msgid "Statistics"
-msgstr "Statistics"
+#: components/input/NotificationButton.tsx:60
+msgid "Subscribe"
+msgstr "Subscribe"
+
+#: components/navigation/Tabs/UserSettingsTab.tsx:89
+msgid "Subscribe to get daily reminders to review your pending cards."
+msgstr "Subscribe to get daily reminders to review your pending cards."
+
+#: components/modal/InstallPWAModal.tsx:100
+msgid "Tap on share"
+msgstr "Tap on share"
 
 #: components/statistics/StatisticOverview.tsx:44
 msgid "Test"
 msgstr "Test"
 
+#: components/navigation/Tabs/UserSettingsTab.tsx:82
+msgid "Turn on Notifications"
+msgstr "Turn on Notifications"
+
 #: components/navigation/Tabs/GroupSettingsTab.tsx:113
 msgid "Unexpected group type"
 msgstr "Unexpected group type"
 
-#: pages/group/[id]/index.tsx:48
+#: components/input/NotificationButton.tsx:58
+msgid "Unsubscribe"
+msgstr "Unsubscribe"
+
+#: pages/group/[id]/index.tsx:47
 msgid "User"
 msgstr "User"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:100
+#: components/navigation/Tabs/UserSettingsTab.tsx:148
 msgid "User deleted!"
 msgstr "User deleted!"
 
@@ -469,12 +533,12 @@ msgstr "User deleted!"
 msgid "User invited"
 msgstr "User invited"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:90
+#: components/navigation/Tabs/UserSettingsTab.tsx:138
 msgid "User updated!"
 msgstr "User updated!"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:46
-#: pages/login.tsx:96
+#: components/navigation/Tabs/UserSettingsTab.tsx:56
+#: pages/login.tsx:95
 msgid "Username"
 msgstr "Username"
 
@@ -494,13 +558,21 @@ msgstr "Welcome {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 
-#: pages/login.tsx:264
+#: pages/login.tsx:261
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 
-#: pages/deck/[id]/learn.tsx:72
+#: components/modal/InstallPWAModal.tsx:41
+msgid "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"
+msgstr "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"
+
+#: pages/deck/[id]/learn.tsx:78
 msgid "You did it! There are no cards left in this deck to learn today."
 msgstr "You did it! There are no cards left in this deck to learn today."
+
+#: components/modal/InstallPWAModal.tsx:61
+msgid "You first need to install Kioku before you can subscribe and receive notifications. Follow the instructions below to install the app and enjoy a native experience."
+msgstr "You first need to install Kioku before you can subscribe and receive notifications. Follow the instructions below to install the app and enjoy a native experience."
 
 #: components/navigation/Tabs/GroupSettingsTab.tsx:88
 msgid "You must either be invited or request to join the group again."

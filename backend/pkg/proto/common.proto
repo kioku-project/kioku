@@ -126,3 +126,18 @@ message Decks {
   repeated Deck decks = 1;
 }
 
+message PushSubscriptionRequest {
+  string userID = 1;
+  PushSubscription subscription = 2;
+}
+
+message PushSubscription {
+  string subscriptionID = 1;
+  string endpoint = 2;
+  string auth = 3;
+  string p256dh = 4;
+}
+
+message PushSubscriptions {
+  repeated PushSubscription subscriptions = 1;
+}

@@ -103,9 +103,7 @@ export const DeckSettingsTab = ({
 					disabled={!isAdmin}
 					onClick={() => {
 						if (isConfirmDeletion) {
-							deleteDeck()
-								.then((result) => {})
-								.catch((error) => {});
+							deleteDeck();
 						} else {
 							setConfirmDeletion(true);
 						}

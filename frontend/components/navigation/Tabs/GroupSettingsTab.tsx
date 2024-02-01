@@ -135,9 +135,7 @@ export const GroupSettingsTab = ({
 					disabled={!isAdmin}
 					onClick={() => {
 						if (isConfirmDeletion) {
-							deleteGroup()
-								.then((result) => {})
-								.catch((error) => {});
+							deleteGroup();
 						} else {
 							setConfirmDelete(true);
 						}

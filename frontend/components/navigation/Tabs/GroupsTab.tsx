@@ -40,9 +40,7 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 					className="w-full bg-transparent font-medium text-kiokuDarkBlue outline-none"
 					onKeyUp={(event) => {
 						if (event.key === "Enter") {
-							createGroup()
-								.then((result) => {})
-								.catch((error) => {});
+							createGroup();
 						}
 					}}
 					ref={groupNameInput}

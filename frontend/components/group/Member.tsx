@@ -59,9 +59,7 @@ export default function Member({
 											<Check
 												className="hover:cursor-pointer"
 												onClick={() => {
-													deleteMember(user)
-														.then((result) => {})
-														.catch((error) => {});
+													deleteMember(user);
 												}}
 											/>
 											<X
@@ -90,9 +88,7 @@ export default function Member({
 											inviteUser(
 												user.userEmail ?? "",
 												true
-											)
-												.then((result) => {})
-												.catch((error) => {});
+											);
 										}}
 									/>
 									<UserX
@@ -101,9 +97,7 @@ export default function Member({
 											inviteUser(
 												user.userEmail ?? "",
 												false
-											)
-												.then((result) => {})
-												.catch((error) => {});
+											);
 										}}
 									/>
 								</div>
@@ -137,9 +131,7 @@ export default function Member({
 								userInputField.current &&
 								event.key === "Enter"
 							) {
-								inviteUser(userInputField.current?.value, true)
-									.then((result) => {})
-									.catch((error) => {});
+								inviteUser(userInputField.current?.value, true);
 								userInputField.current.value = "";
 							}
 						}}

@@ -63,9 +63,7 @@ export const Card = ({
 								<Check
 									className="hover:cursor-pointer"
 									onClick={() => {
-										deleteCard()
-											.then((result) => {})
-											.catch((error) => {});
+										deleteCard();
 									}}
 								/>
 								<X
@@ -107,9 +105,7 @@ export const Card = ({
 						inputFieldSize="xs"
 						onKeyUp={(event) => {
 							if (event.key === "Enter") {
-								createCard()
-									.then((result) => {})
-									.catch((error) => {});
+								createCard();
 							}
 						}}
 						ref={cardNameInput}

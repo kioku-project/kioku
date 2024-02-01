@@ -54,7 +54,7 @@ export const UserSettingsTab = ({
 					onClick={() => {
 						modifyUser({ userName: userName });
 					}}
-				></InputAction>
+				/>
 				<hr className="border-kiokuLightBlue" />
 				<InputAction
 					id="userEmailInputAction"

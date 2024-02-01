@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from "react";
+import { ChangeEventHandler, InputHTMLAttributes } from "react";
 
 import { InputField } from "@/components/form/InputField";
 import { Action } from "@/components/input/Action";
@@ -9,10 +9,6 @@ interface InputActionProps {
 	 * Unique identifier
 	 */
 	id: string;
-	/**
-	 * Type
-	 */
-	type: string;
 	/**
 	 * Header
 	 */
@@ -48,7 +44,6 @@ interface InputActionProps {
  */
 export const InputAction = ({
 	id,
-	type,
 	header,
 	value,
 	button,
@@ -57,19 +52,17 @@ export const InputAction = ({
 	onChange,
 	onClick,
 	...props
-}: InputActionProps) => {
+}: InputActionProps & InputHTMLAttributes<HTMLInputElement>) => {
 	return (
 		<form
 			id={id}
 			onSubmit={(e) => e.preventDefault()}
 			className={`flex flex-col justify-between space-y-1 p-3 sm:flex-row sm:items-center sm:space-x-3 ${className}`}
-			{...props}
 		>
 			<Action
 				description={
 					<InputField
 						id={`${id}InputFieldId`}
-						type={type}
 						name="actionInput"
 						label={header}
 						value={value}
@@ -77,6 +70,7 @@ export const InputAction = ({
 						inputFieldStyle="secondary"
 						inputFieldSize="3xs"
 						onChange={onChange}
+						{...props}
 					/>
 				}
 				button={

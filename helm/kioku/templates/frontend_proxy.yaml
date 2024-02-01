@@ -44,6 +44,8 @@ spec:
               name: tracing-config
           - secretRef:
               name: {{ .Values.frontend_proxy.keySecret }}
+          - secretRef:
+              name: {{ .Values.vapidSecret }}
 ---
 apiVersion: v1
 kind: Service

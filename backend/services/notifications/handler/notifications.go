@@ -63,7 +63,7 @@ func (e *Notifications) GetUserNotificationSubscriptions(ctx context.Context, re
 }
 
 func (e *Notifications) Unsubscribe(ctx context.Context, req *pbCommon.PushSubscriptionRequest, rsp *pbCommon.Success) error {
-	logger.Infof("Received Notifications.Unenroll request: %v", req)
+	logger.Infof("Received Notifications.Unsubscribe request: %v", req)
 	subscription, err := e.store.FindPushSubscriptionByID(ctx, req.Subscription.SubscriptionID)
 	if err != nil {
 		return err

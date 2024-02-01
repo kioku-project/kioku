@@ -116,6 +116,7 @@ func main() {
 						userDueRsp.DueDecks,
 						util.PluralSingularSelector(userDueRsp.DueDecks, "deck", "decks")),
 					Vibrate: []int{200, 100, 200},
+					Actions: []map[string]string{},
 					Tag:     "Kioku",
 				},
 			}

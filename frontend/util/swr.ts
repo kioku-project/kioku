@@ -53,10 +53,9 @@ export function useInvitations() {
 
 export function useNotifications() {
 	const { data, error, isLoading, isValidating } = useSWR(
-		`/api/user/notifications`,
+		`/api/user/notification`,
 		fetcher
 	);
-	console.log(data);
 	return {
 		subscriptions: data?.userSubscriptions,
 		error,

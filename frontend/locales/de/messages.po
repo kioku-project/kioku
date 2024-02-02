@@ -62,6 +62,7 @@ msgid "Back to Deck!"
 msgstr "Zurück zum Stapel!"
 
 #: components/modal/CreateDeckModal.tsx:76
+#: components/modal/CreateGroupModal.tsx:67
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -123,11 +124,15 @@ msgstr "Karte erstellen"
 msgid "Create Deck"
 msgstr "Stapel erstellen"
 
+#: components/modal/CreateGroupModal.tsx:78
+msgid "Create Group"
+msgstr "Gruppe erstellen"
+
 #: components/modal/CreateDeckModal.tsx:37
 msgid "Create new Deck"
 msgstr "Neuen Stapel erstellen"
 
-#: components/navigation/Tabs/GroupsTab.tsx:38
+#: components/modal/CreateGroupModal.tsx:28
 msgid "Create new Group"
 msgstr "Gruppe erstellen"
 
@@ -151,12 +156,12 @@ msgstr "Stapel gelöscht!"
 
 #: components/modal/CreateDeckModal.tsx:59
 msgid "Deck description"
-msgstr "Stapel Beschreibung"
+msgstr "Stapelbeschreibung"
 
 #: components/modal/CreateDeckModal.tsx:47
 #: components/navigation/Tabs/DeckSettingsTab.tsx:55
 msgid "Deck name"
-msgstr "Stapel Name"
+msgstr "Stapelname"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:127
 msgid "Deck updated!"
@@ -221,11 +226,19 @@ msgstr "E-Mail"
 
 #: components/modal/CreateDeckModal.tsx:61
 msgid "Enter deck description"
-msgstr "Stapel Beschreibung eingeben"
+msgstr "Stapelbeschreibung eingeben"
 
 #: components/modal/CreateDeckModal.tsx:50
 msgid "Enter deck name"
-msgstr "Stapel Namen eingeben"
+msgstr "Stapelnamen eingeben"
+
+#: components/modal/CreateGroupModal.tsx:52
+msgid "Enter group description"
+msgstr "Gruppenbeschreibung eingeben"
+
+#: components/modal/CreateGroupModal.tsx:41
+msgid "Enter group name"
+msgstr "Gruppennamen eingeben"
 
 #: pages/features.tsx:109
 msgid "Entertaining"
@@ -257,7 +270,7 @@ msgstr "von"
 msgid "Get started"
 msgstr "Los geht's"
 
-#: components/navigation/Tabs/GroupsTab.tsx:87
+#: components/modal/CreateGroupModal.tsx:98
 msgid "Group created!"
 msgstr "Gruppe erstellt!"
 
@@ -265,10 +278,12 @@ msgstr "Gruppe erstellt!"
 msgid "Group deleted!"
 msgstr "Gruppe gelöscht!"
 
+#: components/modal/CreateGroupModal.tsx:50
 #: components/navigation/Tabs/GroupSettingsTab.tsx:66
 msgid "Group Description"
 msgstr "Gruppenbeschreibung"
 
+#: components/modal/CreateGroupModal.tsx:38
 #: components/navigation/Tabs/GroupSettingsTab.tsx:52
 msgid "Group Name"
 msgstr "Gruppenname"
@@ -434,6 +449,18 @@ msgstr "Anfrage ausstehend"
 #: components/navigation/Tabs/GroupSettingsTab.tsx:68
 msgid "Save"
 msgstr "Speichern"
+
+#: components/input/ActionBar.tsx:36
+msgid "Search"
+msgstr "Suchen"
+
+#: components/navigation/Tabs/DecksTab.tsx:43
+msgid "Search decks..."
+msgstr "Stapel suchen..."
+
+#: components/navigation/Tabs/GroupsTab.tsx:39
+msgid "Search groups..."
+msgstr "Gruppe suchen..."
 
 #: components/modal/InstallPWAModal.tsx:104
 msgid "Select \"Add to Home Screen\""

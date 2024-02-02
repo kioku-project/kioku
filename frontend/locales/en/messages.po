@@ -62,6 +62,7 @@ msgid "Back to Deck!"
 msgstr "Back to Deck!"
 
 #: components/modal/CreateDeckModal.tsx:76
+#: components/modal/CreateGroupModal.tsx:67
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -123,11 +124,15 @@ msgstr "Create Card"
 msgid "Create Deck"
 msgstr "Create Deck"
 
+#: components/modal/CreateGroupModal.tsx:78
+msgid "Create Group"
+msgstr "Create Group"
+
 #: components/modal/CreateDeckModal.tsx:37
 msgid "Create new Deck"
 msgstr "Create new Deck"
 
-#: components/navigation/Tabs/GroupsTab.tsx:38
+#: components/modal/CreateGroupModal.tsx:28
 msgid "Create new Group"
 msgstr "Create new Group"
 
@@ -227,6 +232,14 @@ msgstr "Enter deck description"
 msgid "Enter deck name"
 msgstr "Enter deck name"
 
+#: components/modal/CreateGroupModal.tsx:52
+msgid "Enter group description"
+msgstr "Enter group description"
+
+#: components/modal/CreateGroupModal.tsx:41
+msgid "Enter group name"
+msgstr "Enter group name"
+
 #: pages/features.tsx:109
 msgid "Entertaining"
 msgstr "Entertaining"
@@ -257,7 +270,7 @@ msgstr "from"
 msgid "Get started"
 msgstr "Get started"
 
-#: components/navigation/Tabs/GroupsTab.tsx:87
+#: components/modal/CreateGroupModal.tsx:98
 msgid "Group created!"
 msgstr "Group created!"
 
@@ -265,10 +278,12 @@ msgstr "Group created!"
 msgid "Group deleted!"
 msgstr "Group deleted!"
 
+#: components/modal/CreateGroupModal.tsx:50
 #: components/navigation/Tabs/GroupSettingsTab.tsx:66
 msgid "Group Description"
 msgstr "Group Description"
 
+#: components/modal/CreateGroupModal.tsx:38
 #: components/navigation/Tabs/GroupSettingsTab.tsx:52
 msgid "Group Name"
 msgstr "Group Name"
@@ -434,6 +449,18 @@ msgstr "Request pending"
 #: components/navigation/Tabs/GroupSettingsTab.tsx:68
 msgid "Save"
 msgstr "Save"
+
+#: components/input/ActionBar.tsx:36
+msgid "Search"
+msgstr "Search"
+
+#: components/navigation/Tabs/DecksTab.tsx:43
+msgid "Search decks..."
+msgstr "Search decks..."
+
+#: components/navigation/Tabs/GroupsTab.tsx:39
+msgid "Search groups..."
+msgstr "Search groups..."
 
 #: components/modal/InstallPWAModal.tsx:104
 msgid "Select \"Add to Home Screen\""

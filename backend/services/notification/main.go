@@ -88,7 +88,7 @@ func main() {
 	}
 
 	c := cron.New()
-	c.AddFunc("* 11,14,17 * * *", func() {
+	c.AddFunc("0 10,13,16 * * *", func() {
 		logger.Info("Cronjob: Sending daily notification reminder")
 		subscriptions, err := dbStore.FindAllPushSubscriptions(ctx)
 		if err != nil {
@@ -116,6 +116,7 @@ func main() {
 						userDueRsp.DueDecks,
 						util.PluralSingularSelector(userDueRsp.DueDecks, "deck", "decks")),
 					Vibrate: []int{200, 100, 200},
+					Actions: []map[string]string{},
 					Tag:     "Kioku",
 				},
 			}

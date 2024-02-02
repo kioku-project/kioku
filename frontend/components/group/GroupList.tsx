@@ -39,8 +39,7 @@ export default function GroupList({
 				(group.groupName.toUpperCase().includes(filter) ||
 					group.groupDescription?.toUpperCase().includes(filter))
 		);
-		reverse && filteredGroups?.reverse();
-		return filteredGroups;
+		return reverse ? filteredGroups?.toReversed() : filteredGroups;
 	}, [groups, filter, reverse]);
 
 	return (

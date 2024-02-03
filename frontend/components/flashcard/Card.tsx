@@ -10,6 +10,7 @@ import { Text } from "@/components/Text";
 import { InputField } from "@/components/form/InputField";
 import { Card as CardType } from "@/types/Card";
 import { deleteRequest, postRequest } from "@/util/api";
+import { onEnterHandler } from "@/util/utils";
 
 interface CardProps {
 	/**
@@ -103,11 +104,7 @@ export const Card = ({
 						placeholder={_(msg`Create Card`)}
 						inputFieldStyle="primary"
 						inputFieldSize="xs"
-						onKeyUp={(event) => {
-							if (event.key === "Enter") {
-								createCard();
-							}
-						}}
+						onKeyUp={(event) => onEnterHandler(event, createCard)}
 						ref={cardNameInput}
 					/>
 				</div>

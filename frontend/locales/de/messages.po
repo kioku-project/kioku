@@ -86,7 +86,7 @@ msgstr "Gelernte Karten"
 msgid "Change how others join this group"
 msgstr "Ändere, wie andere der Gruppe beitreten können"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:100
+#: components/navigation/Tabs/DeckSettingsTab.tsx:117
 #: components/navigation/Tabs/GroupSettingsTab.tsx:132
 #: components/navigation/Tabs/UserSettingsTab.tsx:119
 msgid "Click again"
@@ -136,7 +136,7 @@ msgstr "Neuen Stapel erstellen"
 msgid "Create new Group"
 msgstr "Gruppe erstellen"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:72
+#: components/navigation/Tabs/DeckSettingsTab.tsx:89
 #: components/navigation/Tabs/GroupSettingsTab.tsx:80
 #: components/navigation/Tabs/UserSettingsTab.tsx:108
 msgid "Danger Zone"
@@ -150,20 +150,21 @@ msgstr "Dashboard"
 msgid "Deck created!"
 msgstr "Stapel erstellt!"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:135
+#: components/navigation/Tabs/DeckSettingsTab.tsx:152
 msgid "Deck deleted!"
 msgstr "Stapel gelöscht!"
 
 #: components/modal/CreateDeckModal.tsx:59
-msgid "Deck description"
+#: components/navigation/Tabs/DeckSettingsTab.tsx:72
+msgid "Deck Description"
 msgstr "Stapelbeschreibung"
 
 #: components/modal/CreateDeckModal.tsx:47
 #: components/navigation/Tabs/DeckSettingsTab.tsx:55
-msgid "Deck name"
+msgid "Deck Name"
 msgstr "Stapelname"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:125
+#: components/navigation/Tabs/DeckSettingsTab.tsx:142
 msgid "Deck updated!"
 msgstr "Stapel aktualisiert!"
 
@@ -176,7 +177,7 @@ msgstr "Stapel"
 msgid "Delete Account"
 msgstr "Account löschen"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:101
+#: components/navigation/Tabs/DeckSettingsTab.tsx:118
 msgid "Delete Deck"
 msgstr "Stapel löschen"
 
@@ -184,7 +185,7 @@ msgstr "Stapel löschen"
 msgid "Delete Group"
 msgstr "Gruppe löschen"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:94
+#: components/navigation/Tabs/DeckSettingsTab.tsx:111
 msgid "Delete this deck"
 msgstr "Lösche diesen Stapel"
 
@@ -424,7 +425,7 @@ msgstr "Persönliche Statistiken"
 msgid "Please be certain before deleting a group, as there is no way to undo this action."
 msgstr "Nachdem Du die Gruppe gelöscht hast, gibt es kein Zurück mehr."
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:96
+#: components/navigation/Tabs/DeckSettingsTab.tsx:113
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Nachdem Du den Stapel gelöscht hast, gibt es kein Zurück mehr."
 
@@ -446,6 +447,7 @@ msgstr "Passwort wiederholen"
 msgid "Request pending"
 msgstr "Anfrage ausstehend"
 
+#: components/navigation/Tabs/DeckSettingsTab.tsx:74
 #: components/navigation/Tabs/GroupSettingsTab.tsx:68
 msgid "Save"
 msgstr "Speichern"

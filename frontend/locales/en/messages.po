@@ -86,7 +86,7 @@ msgstr "Cards learned"
 msgid "Change how others join this group"
 msgstr "Change how others join this group"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:100
+#: components/navigation/Tabs/DeckSettingsTab.tsx:117
 #: components/navigation/Tabs/GroupSettingsTab.tsx:132
 #: components/navigation/Tabs/UserSettingsTab.tsx:119
 msgid "Click again"
@@ -136,7 +136,7 @@ msgstr "Create new Deck"
 msgid "Create new Group"
 msgstr "Create new Group"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:72
+#: components/navigation/Tabs/DeckSettingsTab.tsx:89
 #: components/navigation/Tabs/GroupSettingsTab.tsx:80
 #: components/navigation/Tabs/UserSettingsTab.tsx:108
 msgid "Danger Zone"
@@ -150,20 +150,21 @@ msgstr "Dashboard"
 msgid "Deck created!"
 msgstr "Deck created!"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:135
+#: components/navigation/Tabs/DeckSettingsTab.tsx:152
 msgid "Deck deleted!"
 msgstr "Deck deleted!"
 
 #: components/modal/CreateDeckModal.tsx:59
-msgid "Deck description"
-msgstr "Deck description"
+#: components/navigation/Tabs/DeckSettingsTab.tsx:72
+msgid "Deck Description"
+msgstr "Deck Description"
 
 #: components/modal/CreateDeckModal.tsx:47
 #: components/navigation/Tabs/DeckSettingsTab.tsx:55
-msgid "Deck name"
-msgstr "Deck name"
+msgid "Deck Name"
+msgstr "Deck Name"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:125
+#: components/navigation/Tabs/DeckSettingsTab.tsx:142
 msgid "Deck updated!"
 msgstr "Deck updated!"
 
@@ -176,7 +177,7 @@ msgstr "Decks"
 msgid "Delete Account"
 msgstr "Delete Account"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:101
+#: components/navigation/Tabs/DeckSettingsTab.tsx:118
 msgid "Delete Deck"
 msgstr "Delete Deck"
 
@@ -184,7 +185,7 @@ msgstr "Delete Deck"
 msgid "Delete Group"
 msgstr "Delete Group"
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:94
+#: components/navigation/Tabs/DeckSettingsTab.tsx:111
 msgid "Delete this deck"
 msgstr "Delete this deck"
 
@@ -424,7 +425,7 @@ msgstr "Personal Statistics"
 msgid "Please be certain before deleting a group, as there is no way to undo this action."
 msgstr "Please be certain before deleting a group, as there is no way to undo this action."
 
-#: components/navigation/Tabs/DeckSettingsTab.tsx:96
+#: components/navigation/Tabs/DeckSettingsTab.tsx:113
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Please be certain when deleting a deck, as there is no way to undo this action."
 
@@ -446,6 +447,7 @@ msgstr "Repeat Password"
 msgid "Request pending"
 msgstr "Request pending"
 
+#: components/navigation/Tabs/DeckSettingsTab.tsx:74
 #: components/navigation/Tabs/GroupSettingsTab.tsx:68
 msgid "Save"
 msgstr "Save"

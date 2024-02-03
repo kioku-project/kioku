@@ -250,9 +250,10 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 		return err
 	}
 	newDeck := model.Deck{
-		Name:     req.Deck.DeckName,
-		GroupID:  req.Deck.GroupID,
-		DeckType: dt,
+		Name:        req.Deck.DeckName,
+		GroupID:     req.Deck.GroupID,
+		DeckType:    dt,
+		Description: req.Deck.DeckDescription,
 	}
 	if err := e.store.CreateDeck(ctx, &newDeck); err != nil {
 		return err
@@ -341,6 +342,13 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 			return err
 		}
 		deck.Name = req.Deck.DeckName
+	}
+	if req.Deck.DeckDescription != "" {
+		err := helper.CheckForValidName(req.Deck.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID)
+		if err != nil {
+			return err
+		}
+		deck.Description = req.Deck.DeckDescription
 	}
 	if req.Deck.DeckType != pbCommon.DeckType_DT_INVALID {
 		dt, err := converter.MigrateProtoDeckTypeToModelDeckType(req.Deck.DeckType)

@@ -54,8 +54,8 @@ export const CardsTab = ({ deck, className = "" }: CardsTabProps) => {
 								cardSide={0}
 								fullSize={true}
 								editable={
-									deck.groupRole &&
-									GroupRole[deck.groupRole] >= GroupRole.WRITE
+									deck.deckRole &&
+									GroupRole[deck.deckRole] >= GroupRole.WRITE
 								}
 							/>
 						)}
@@ -64,7 +64,6 @@ export const CardsTab = ({ deck, className = "" }: CardsTabProps) => {
 			)}
 		</div>
 	);
-
 	function setNewCard(newCard: CardType) {
 		setCard(card?.cardID !== newCard.cardID ? newCard : undefined);
 	}

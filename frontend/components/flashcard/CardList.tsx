@@ -47,13 +47,13 @@ export const CardList = ({
 						setCard={setCard}
 						card={{ ...card, deckID: deck.deckID }}
 						editable={
-							deck.groupRole &&
-							GroupRole[deck.groupRole] >= GroupRole.WRITE
+							deck.deckRole &&
+							GroupRole[deck.deckRole] >= GroupRole.WRITE
 						}
 					/>
 				))}
 			</div>
-			{deck.groupRole && GroupRole[deck.groupRole] >= GroupRole.WRITE && (
+			{deck.deckRole && GroupRole[deck.deckRole] >= GroupRole.WRITE && (
 				<Card card={{ cardID: "", sides: [], deckID: deck.deckID }} />
 			)}
 		</div>

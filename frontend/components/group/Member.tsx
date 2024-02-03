@@ -57,13 +57,13 @@ export default function Member({
 									{isDelete && (
 										<div className="flex flex-row space-x-3">
 											<Check
-												className="hover:cursor-pointer"
+												className="cursor-pointer"
 												onClick={() => {
 													deleteMember(user);
 												}}
 											/>
 											<X
-												className="hover:cursor-pointer"
+												className="cursor-pointer"
 												onClick={() => setDelete(false)}
 											/>
 										</div>
@@ -72,7 +72,7 @@ export default function Member({
 										<UserMinus
 											data-testid={`deleteUserButtonId`}
 											id={`deleteUser${user.userID}ButtonId`}
-											className="hover:cursor-pointer"
+											className="cursor-pointer"
 											onClick={() => setDelete(true)}
 										/>
 									)}
@@ -83,7 +83,7 @@ export default function Member({
 							<div className="flex flex-row space-x-3">
 								<div className="flex flex-row space-x-3">
 									<UserCheck
-										className="hover:cursor-pointer"
+										className="cursor-pointer"
 										onClick={() => {
 											inviteUser(
 												user.userEmail ?? "",
@@ -92,7 +92,7 @@ export default function Member({
 										}}
 									/>
 									<UserX
-										className="hover:cursor-pointer"
+										className="cursor-pointer"
 										onClick={() => {
 											inviteUser(
 												user.userEmail ?? "",
@@ -109,7 +109,7 @@ export default function Member({
 									pending
 								</div>
 								<X
-									className="hover:cursor-pointer"
+									className="cursor-pointer"
 									onClick={() => {
 										inviteUser(user.userEmail ?? "", false);
 									}}

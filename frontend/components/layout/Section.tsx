@@ -53,9 +53,7 @@ export const Section = ({
 			<Text
 				textStyle="primary"
 				textSize="xs"
-				className={`font-extrabold ${
-					onClick ? "hover:cursor-pointer" : ""
-				}`}
+				className={`font-extrabold ${onClick ? "cursor-pointer" : ""}`}
 				onClick={onClick}
 				onKeyUp={(event) => {
 					if (event.key === "Enter") {

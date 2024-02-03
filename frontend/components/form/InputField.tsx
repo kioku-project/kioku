@@ -126,7 +126,7 @@ export const InputField = forwardRef(
 							icon={statusIcon}
 							size={inputFieldIconSize}
 							className={`ml-1 ${inputFieldIconStyle} ${
-								onClickIcon ? "hover:cursor-pointer" : ""
+								onClickIcon ? "cursor-pointer" : ""
 							}`}
 							data-tooltip-id={`tooltip-${id}`}
 							data-testid={`inputFieldIconId`}

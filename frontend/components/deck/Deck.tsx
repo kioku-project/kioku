@@ -70,7 +70,7 @@ export const Deck = ({
 
 	return (
 		<Link
-			className={`group rounded-lg shadow-lg transition-transform hover:cursor-pointer ${className}`}
+			className={`group cursor-pointer rounded-lg shadow-lg transition-transform ${className}`}
 			href={`/deck/${deck.deckID}`}
 			onKeyUp={(event) => {
 				if (event.key === "Enter") {
@@ -121,7 +121,7 @@ export const Deck = ({
 									<Heart
 										size={20}
 										fill={"#DB2B39"}
-										className="absolute animate-[ping_0.7s_ease-out_1] hover:cursor-pointer"
+										className="absolute animate-[ping_0.7s_ease-out_1] cursor-pointer"
 									/>
 								)}
 								<Heart
@@ -190,7 +190,7 @@ export const Deck = ({
 						</div>
 						<MoreVertical
 							size={20}
-							className="flex-none text-gray-500 hover:cursor-pointer"
+							className="flex-none cursor-pointer text-gray-500"
 						/>
 					</div>
 				</div>

@@ -37,11 +37,11 @@ export const CardsTab = ({ deck, className = "" }: CardsTabProps) => {
 				<>
 					<div className="flex flex-row items-center justify-center p-1 sm:p-3 md:p-5">
 						<ChevronRight
-							className="hidden text-kiokuLightBlue hover:cursor-pointer md:block "
+							className="hidden cursor-pointer text-kiokuLightBlue md:block "
 							onClick={() => setCard(undefined)}
 						/>
 						<ChevronDown
-							className="text-kiokuLightBlue hover:cursor-pointer md:hidden "
+							className="cursor-pointer text-kiokuLightBlue md:hidden "
 							onClick={() => setCard(undefined)}
 						/>
 					</div>

@@ -85,6 +85,8 @@ services:
     restart: always
     ports:
       - "127.0.0.1:3000:3000"
+    env_file:
+      - ./backend/.env
     depends_on:
       - frontend_proxy
       - user_service

@@ -1,15 +1,11 @@
-import { msg, t } from "@lingui/macro";
+import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
-import Link from "next/link";
-import { useRef } from "react";
-import { PlusSquare } from "react-feather";
-import { toast } from "react-toastify";
-import { mutate } from "swr";
+import { useState } from "react";
 
-import DeckList from "@/components/deck/DeckList";
-import { InputField } from "@/components/form/InputField";
+import GroupList from "@/components/group/GroupList";
+import { ActionBar } from "@/components/input/ActionBar";
+import { CreateGroupModal } from "@/components/modal/CreateGroupModal";
 import { Group as GroupType } from "@/types/Group";
-import { postRequest } from "@/util/api";
 
 interface GroupsTabProps {
 	/**
@@ -28,64 +24,29 @@ interface GroupsTabProps {
 export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 	const { _ } = useLingui();
 
-	const groupNameInput = useRef<HTMLInputElement>(null);
+	const [showModal, setShowModal] = useState(false);
+	const [filter, setFilter] = useState("");
+	const [reverse, setReverse] = useState(false);
 
 	return (
-		<div className={`space-y-3 ${className}`}>
-			<div className="flex w-full items-center justify-between rounded-md bg-neutral-100 px-4 py-3">
-				<InputField
-					id={`groupNameInput`}
-					placeholder={_(msg`Create new Group`)}
-					inputFieldSize="xs"
-					className="w-full bg-transparent font-medium text-kiokuDarkBlue outline-none"
-					onKeyUp={(event) => {
-						if (event.key === "Enter") {
-							createGroup();
-						}
-					}}
-					ref={groupNameInput}
-				/>
-				<PlusSquare
-					className="text-kiokuDarkBlue transition hover:scale-110 hover:cursor-pointer"
-					onClick={createGroup}
-				/>
-			</div>
+		<>
+			<CreateGroupModal
+				visible={showModal}
+				setVisible={setShowModal}
+			></CreateGroupModal>
 			<div className={`space-y-3 ${className}`}>
-				{groups
-					?.filter((group: GroupType) => !group.isDefault)
-					.map((group: GroupType) => {
-						return (
-							<Link
-								key={group.groupID}
-								href={`/group/${group.groupID}`}
-							>
-								<DeckList
-									header={group.groupName}
-									key={group.groupID}
-								/>
-							</Link>
-						);
-					})}
-				<DeckList />
+				<ActionBar
+					placeholder={_(msg`Search groups...`)}
+					writePermission
+					reverse={reverse}
+					onReverse={() => setReverse((prev) => !prev)}
+					onSearch={(event) => {
+						setFilter(event.target.value.toUpperCase());
+					}}
+					onAdd={() => setShowModal(true)}
+				/>
+				<GroupList groups={groups} filter={filter} reverse={reverse} />
 			</div>
-		</div>
+		</>
 	);
-
-	async function createGroup() {
-		if (!groupNameInput.current?.value) {
-			groupNameInput.current?.focus();
-			return;
-		}
-		const response = await postRequest(
-			`/api/groups`,
-			JSON.stringify({ groupName: groupNameInput.current.value })
-		);
-		if (response?.ok) {
-			groupNameInput.current.value = "";
-			toast.info(t`Group created!`, { toastId: "newGroupToast" });
-		} else {
-			toast.error("Error!", { toastId: "newGroupToast" });
-		}
-		mutate(`/api/groups`);
-	}
 };

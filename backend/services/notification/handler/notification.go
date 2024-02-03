@@ -40,6 +40,7 @@ func (e *Notification) Subscribe(ctx context.Context, req *pbCommon.PushSubscrip
 		Options: model.PushNotificationOptions{
 			Body:    "Reminders will be sent to help you keep track of due cards.",
 			Vibrate: []int{200, 100, 200},
+			Actions: []map[string]string{},
 			Tag:     "Kioku",
 		},
 	}

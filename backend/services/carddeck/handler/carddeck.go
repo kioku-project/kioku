@@ -328,7 +328,7 @@ func (e *CardDeck) GetDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *
 }
 
 func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
-	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
+	logger.Infof("Received CardDeck.ModifyDeck request: %v", req)
 	deck, err := e.store.FindDeckByID(ctx, req.Deck.DeckID, req.UserID)
 	if err != nil {
 		return err
@@ -344,7 +344,7 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 		deck.Name = req.Deck.DeckName
 	}
 	if req.Deck.DeckDescription != "" {
-		err := helper.CheckForValidName(req.Deck.DeckName, helper.GroupAndDeckNameRegex, helper.UserServiceID)
+		err := helper.CheckForValidName(req.Deck.DeckDescription, helper.GroupAndDeckNameRegex, helper.UserServiceID)
 		if err != nil {
 			return err
 		}

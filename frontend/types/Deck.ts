@@ -4,6 +4,7 @@ import { GroupRole } from "@/types/GroupRole";
 export type Deck = {
 	deckID: string;
 	deckName: string;
+	deckDescription: string;
 	deckType: "PUBLIC" | "PRIVATE";
 	isActive?: boolean;
 	isFavorite?: boolean;

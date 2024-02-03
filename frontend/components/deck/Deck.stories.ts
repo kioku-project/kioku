@@ -17,6 +17,7 @@ export const PrivateDeck: Story = {
 		deck: {
 			deckID: "D-12345678",
 			deckName: "Example Deck",
+			deckDescription: "This is a deck description",
 			deckType: "PRIVATE",
 			groupID: "G-12345678",
 		},
@@ -28,6 +29,7 @@ export const PublicDeck: Story = {
 		deck: {
 			deckID: "D-12345678",
 			deckName: "Example Deck",
+			deckDescription: "This is a deck description",
 			deckType: "PUBLIC",
 			groupID: "G-12345678",
 		},
@@ -39,6 +41,7 @@ export const CardsDue: Story = {
 		deck: {
 			deckID: "D-12345678",
 			deckName: "Example Deck",
+			deckDescription: "This is a deck description",
 			deckType: "PUBLIC",
 			groupID: "G-12345678",
 			dueCards: 8,
@@ -51,6 +54,7 @@ export const MoreStats: Story = {
 		deck: {
 			deckID: "D-12345678",
 			deckName: "Example Deck",
+			deckDescription: "This is a deck description",
 			deckType: "PUBLIC",
 			groupID: "G-12345678",
 			dueCards: 8,
@@ -73,6 +77,7 @@ export const WithNotification: Story = {
 		deck: {
 			deckID: "D-12345678",
 			deckName: "Example Deck",
+			deckDescription: "This is a deck description",
 			deckType: "PUBLIC",
 			groupID: "G-12345678",
 		},

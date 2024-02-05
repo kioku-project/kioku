@@ -150,10 +150,10 @@ export const DeckSettingsTab = ({
 		const response = await deleteRequest(`/api/decks/${deck.deckID}`);
 		if (response?.ok) {
 			toast.info(t`Deck deleted!`, { toastId: "deletedDeckToast" });
+			mutate(`/api/groups/${group.groupID}/decks`);
+			router.push(group.isDefault ? "/" : `/group/${group.groupID}`);
 		} else {
 			toast.error("Error!", { toastId: "deletedDeckToast" });
 		}
-		mutate(`/api/groups/${group.groupID}/decks`);
-		router.push(`/group/${group.groupID}`);
 	}
 };

@@ -39,6 +39,7 @@ export const PublicDeck: Story = {
 			deckName: "Test Deck",
 			deckDescription: "Deck Description",
 			deckType: "PUBLIC",
+			deckRole: "ADMIN",
 			groupID: "G-12345678",
 		},
 		group: {
@@ -59,6 +60,7 @@ export const PrivateDeck: Story = {
 			deckName: "Test Deck",
 			deckDescription: "Deck Description",
 			deckType: "PRIVATE",
+			deckRole: "ADMIN",
 			groupID: "G-12345678",
 		},
 		group: {

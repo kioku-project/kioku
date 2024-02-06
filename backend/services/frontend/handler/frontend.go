@@ -421,7 +421,8 @@ func (e *Frontend) AddUserGroupInviteHandler(c *fiber.Ctx) error {
 	})
 	if err != nil {
 		return err
-	} else if !rspInviteUser.Success {
+	}
+	if !rspInviteUser.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)
@@ -446,7 +447,8 @@ func (e *Frontend) RemoveUserGroupInviteHandler(c *fiber.Ctx) error {
 	})
 	if err != nil {
 		return err
-	} else if !rspInviteUser.Success {
+	}
+	if !rspInviteUser.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)
@@ -576,7 +578,7 @@ func (e *Frontend) AddFavoriteDeckHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) DeleteFavoriteDeckHandler(c *fiber.Ctx) error {
-	var deck = &pbCommon.Deck{}
+	deck := &pbCommon.Deck{}
 	if err := c.BodyParser(deck); err != nil {
 		return err
 	}
@@ -611,7 +613,7 @@ func (e *Frontend) GetActiveDecksHandler(c *fiber.Ctx) error {
 }
 
 func (e *Frontend) DeleteActiveDeckHandler(c *fiber.Ctx) error {
-	var deck = &pbCommon.Deck{}
+	deck := &pbCommon.Deck{}
 	if err := c.BodyParser(deck); err != nil {
 		return err
 	}
@@ -732,7 +734,8 @@ func (e *Frontend) DeleteDeckHandler(c *fiber.Ctx) error {
 	})
 	if err != nil {
 		return err
-	} else if !rspDeleteDeck.Success {
+	}
+	if !rspDeleteDeck.Success {
 		return helper.NewMicroNotSuccessfulResponseErr(helper.FrontendServiceID)
 	}
 	return c.SendStatus(200)

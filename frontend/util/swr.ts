@@ -14,7 +14,10 @@ export const fetcher = (url: RequestInfo | URL) =>
 	}).then((res) => res?.json());
 
 export function useUser() {
-	const { data, error, isLoading, isValidating } = useSWR<User>(`/api/user`, fetcher);
+	const { data, error, isLoading, isValidating } = useSWR<User>(
+		`/api/user`,
+		fetcher
+	);
 	return {
 		user: data,
 		error,
@@ -42,6 +45,19 @@ export function useInvitations() {
 	}>(`/api/user/invitations`, fetcher);
 	return {
 		invitations: data?.groupInvitation,
+		error,
+		isLoading,
+		isValidating,
+	};
+}
+
+export function useNotifications() {
+	const { data, error, isLoading, isValidating } = useSWR(
+		`/api/user/notification`,
+		fetcher
+	);
+	return {
+		subscriptions: data?.userSubscriptions,
 		error,
 		isLoading,
 		isValidating,
@@ -159,10 +175,9 @@ export function useDeck(deckID?: string) {
 }
 
 export function useDueCards(deckID?: string) {
-	const { data, error, isLoading, isValidating } = useSWR<{ dueCards: number }>(
-		deckID ? `/api/decks/${deckID}/dueCards` : null,
-		fetcher
-	);
+	const { data, error, isLoading, isValidating } = useSWR<{
+		dueCards: number;
+	}>(deckID ? `/api/decks/${deckID}/dueCards` : null, fetcher);
 	return {
 		dueCards: data?.dueCards,
 		error,

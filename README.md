@@ -120,6 +120,12 @@ You can generate the `JWT_PRIVATE_KEY` with the following command
 openssl ecparam -name secp521r1 -genkey -noout -out my.key.pem
 ```
 
+To enable notification support, you will have to generate a VAPID keypair and add the public and private key to the frontend and backend `.env` files.
+To do this, you can type the following command in the frontend folder:
+```bash
+npx web-push generate-vapid-keys
+```
+
 > [!WARNING]
 > The example environment file is populated with default values, be sure to change all values before using the application in production!
 

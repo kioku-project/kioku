@@ -1,7 +1,9 @@
+import { msg } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { useState } from "react";
-import { PlusSquare } from "react-feather";
 
 import DeckList from "@/components/deck/DeckList";
+import { ActionBar } from "@/components/input/ActionBar";
 import { CreateDeckModal } from "@/components/modal/CreateDeckModal";
 import { Group as GroupType } from "@/types/Group";
 import { GroupRole } from "@/types/GroupRole";
@@ -18,9 +20,13 @@ interface DecksTabProps {
  * UI component for the DecksTab
  */
 export const DecksTab = ({ group }: DecksTabProps) => {
+	const { _ } = useLingui();
+
 	const { decks } = useDecks(group.groupID);
 
 	const [showModal, setShowModal] = useState(false);
+	const [filter, setFilter] = useState("");
+	const [reverse, setReverse] = useState(false);
 
 	const hasWrite =
 		group.groupRole && GroupRole[group.groupRole] >= GroupRole.WRITE;
@@ -33,21 +39,17 @@ export const DecksTab = ({ group }: DecksTabProps) => {
 				setVisible={setShowModal}
 			/>
 			<div className="flex h-full flex-col space-y-3">
-				<div className="flex w-full items-center justify-end rounded-md bg-neutral-100 px-4 py-3">
-					<PlusSquare
-						className={`${
-							hasWrite
-								? "text-kiokuDarkBlue hover:scale-110 hover:cursor-pointer"
-								: "text-gray-400 hover:cursor-not-allowed"
-						} transition`}
-						onClick={() => {
-							if (hasWrite) {
-								setShowModal(true);
-							}
-						}}
-					/>
-				</div>
-				<DeckList decks={decks} />
+				<ActionBar
+					placeholder={_(msg`Search decks...`)}
+					writePermission={hasWrite}
+					reverse={reverse}
+					onReverse={() => setReverse((prev) => !prev)}
+					onSearch={(event) => {
+						setFilter(event.target.value.toUpperCase());
+					}}
+					onAdd={() => setShowModal(true)}
+				/>
+				<DeckList decks={decks} filter={filter} reverse={reverse} />
 			</div>
 		</>
 	);

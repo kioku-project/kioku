@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "pkg/proto/common.proto";
+
+package notification;
+
+option go_package ="github.com/kioku-project/kioku/services/notification/proto;notification";
+
+service Notification {
+	rpc Subscribe(common.PushSubscriptionRequest) returns (common.PushSubscription) {}
+	rpc Unsubscribe(common.PushSubscriptionRequest) returns (common.Success) {}
+	rpc GetUserNotificationSubscriptions(common.User) returns (common.PushSubscriptions) {}
+}

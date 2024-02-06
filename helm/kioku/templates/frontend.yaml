@@ -34,6 +34,9 @@ spec:
           # TODO: Export to values.yaml
           - name: NEXT_PUBLIC_ENVIRONMENT
             value: production
+        envFrom:
+          - secretRef:
+              name: {{ .Values.vapidSecret }}
 
 ---
 apiVersion: v1

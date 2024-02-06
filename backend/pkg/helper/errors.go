@@ -15,6 +15,7 @@ const (
 	FrontendServiceID      ClientID = "services.frontend"
 	UserServiceID          ClientID = "services.user"
 	SrsServiceID           ClientID = "services.srs"
+	NotificationServiceID  ClientID = "services.notification"
 )
 
 var (

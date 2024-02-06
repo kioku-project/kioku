@@ -3,6 +3,7 @@ module github.com/kioku-project/kioku
 go 1.20
 
 require (
+	github.com/SherClockHolmes/webpush-go v1.3.0
 	github.com/go-micro/plugins/v4/client/grpc v1.2.1
 	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.2
 	github.com/go-micro/plugins/v4/server/grpc v1.2.0
@@ -10,6 +11,7 @@ require (
 	github.com/gofiber/jwt/v3 v3.3.10
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/joho/godotenv v1.5.1
+	github.com/robfig/cron/v3 v3.0.0
 	go-micro.dev/v4 v4.10.2
 	go.opentelemetry.io/otel v1.22.0
 	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a
@@ -25,6 +27,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

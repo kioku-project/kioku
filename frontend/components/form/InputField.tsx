@@ -149,7 +149,7 @@ export const InputField = forwardRef(
 								}
 								onClickIcon?.(event);
 							}}
-							onKeyUp={(event) => clickOnEnter(event)}
+							onKeyUp={clickOnEnter}
 						/>
 					)}
 					<Tooltip id={`tooltip-${id}`} content={tooltip} />

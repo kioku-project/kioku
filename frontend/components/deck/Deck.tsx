@@ -70,7 +70,7 @@ export const Deck = ({
 
 	return (
 		<Link
-			className={`group cursor-pointer rounded-lg shadow-lg transition-transform ${className}`}
+			className={`group rounded-lg shadow-lg transition-transform ${className}`}
 			href={`/deck/${deck.deckID}`}
 		>
 			<div className="flex h-[6.5rem] w-full flex-row bg-gradient-to-r to-60% transition-all first:rounded-t-md last:rounded-b-md group-hover:from-[#F7EBEB] sm:h-28 md:h-32 lg:h-32">
@@ -113,7 +113,7 @@ export const Deck = ({
 									<Heart
 										size={20}
 										fill={"#DB2B39"}
-										className="absolute animate-[ping_0.7s_ease-out_1] cursor-pointer"
+										className="absolute animate-[ping_0.7s_ease-out_1]"
 									/>
 								)}
 								<Heart
@@ -182,7 +182,7 @@ export const Deck = ({
 						</div>
 						<MoreVertical
 							size={20}
-							className="flex-none cursor-pointer text-gray-500"
+							className="flex-none text-gray-500"
 						/>
 					</div>
 				</div>

@@ -16,7 +16,7 @@ interface DeckListProps {
 	/**
 	 * Filter decks
 	 */
-	filter?: string;
+	filter?: Uppercase<string>;
 	/**
 	 * Reverse deck order
 	 */

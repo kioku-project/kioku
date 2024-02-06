@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { ReactNode } from "react";
 
 import { Text } from "@/components/Text";
@@ -54,9 +55,9 @@ export const Section = ({
 			<Text
 				textStyle="primary"
 				textSize="xs"
-				className={`font-extrabold ${onClick ? "cursor-pointer" : ""}`}
+				className={clsx("font-extrabold", onClick && "cursor-pointer")}
 				onClick={onClick}
-				onKeyUp={(event) => clickOnEnter(event)}
+				onKeyUp={clickOnEnter}
 				tabIndex={onClick ? 0 : -1}
 			>
 				{header}

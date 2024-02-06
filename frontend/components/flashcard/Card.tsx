@@ -103,9 +103,9 @@ export const Card = ({
 						placeholder={_(msg`Create Card`)}
 						inputFieldStyle="primary"
 						inputFieldSize="xs"
-						onKeyUp={(event) => {
-							if (event.key === "Enter") createCard();
-						}}
+						onKeyUp={(event) =>
+							event.key === "Enter" && createCard()
+						}
 						ref={cardNameInput}
 					/>
 				</div>

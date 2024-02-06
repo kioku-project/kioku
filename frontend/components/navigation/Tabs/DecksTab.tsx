@@ -45,7 +45,7 @@ export const DecksTab = ({ group }: DecksTabProps) => {
 					reverse={reverse}
 					onReverse={() => setReverse((prev) => !prev)}
 					onSearch={(event) => {
-						setFilter(event.target.value.toUpperCase());
+						setFilter(event.target.value);
 					}}
 					onAdd={() => setShowModal(true)}
 				/>

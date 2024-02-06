@@ -16,7 +16,7 @@ interface DeckListProps {
 	/**
 	 * Filter decks
 	 */
-	filter?: Uppercase<string>;
+	filter?: string;
 	/**
 	 * Reverse deck order
 	 */
@@ -40,8 +40,10 @@ export default function DeckList({
 	const filteredDecks = useMemo(() => {
 		const filteredDecks = decks?.filter(
 			(deck) =>
-				deck.deckName.toUpperCase().includes(filter) ||
-				deck.deckDescription.toUpperCase().includes(filter)
+				deck.deckName.toUpperCase().includes(filter.toUpperCase()) ||
+				deck.deckDescription
+					.toUpperCase()
+					.includes(filter.toUpperCase())
 		);
 		return reverse ? filteredDecks?.toReversed() : filteredDecks;
 	}, [decks, filter, reverse]);

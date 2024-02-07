@@ -1,7 +1,7 @@
 import { Trans, msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 
@@ -36,6 +36,8 @@ export const UserSettingsTab = ({
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 	const { _ } = useLingui();
+	const userNameInputAction = useRef<HTMLInputElement>(null);
+	const userEmailInputAction = useRef<HTMLInputElement>(null);
 
 	const [userName, setUserName] = useState(user.userName);
 	const [userEmail, setUserEmail] = useState(user.userEmail);
@@ -54,34 +56,44 @@ export const UserSettingsTab = ({
 				<Section id="generalUserSettingsSectionId" header="General">
 					<InputAction
 						id="userNameInputAction"
-						type="text"
 						header={_(msg`Username`)}
 						value={userName}
+						type="text"
+						name="userName"
+						placeholder={_(msg`Enter Username`)}
+						required
 						button={_(msg`Rename`)}
 						onChange={(event: ChangeEvent<HTMLInputElement>) => {
 							setUserName(event.target.value);
 						}}
 						onClick={() => {
-							modifyUser({ userName: userName });
+							userNameInputAction.current &&
+								modifyUser(userNameInputAction.current);
 						}}
+						ref={userNameInputAction}
 					/>
 					<hr className="border-kiokuLightBlue" />
 					<InputAction
 						id="userEmailInputAction"
-						type="email"
 						header={_(msg`Email`)}
 						value={userEmail}
+						type="email"
+						name="userEmail"
+						placeholder={_(msg`Enter Email`)}
+						required
 						button={_(msg`Change`)}
 						onChange={(event: ChangeEvent<HTMLInputElement>) => {
 							setUserEmail(event.target.value);
 						}}
 						onClick={() => {
-							modifyUser({ userEmail: userEmail });
+							userEmailInputAction.current &&
+								modifyUser(userEmailInputAction.current);
 						}}
+						ref={userEmailInputAction}
 					></InputAction>
 				</Section>
 				<Section
-					id="userSettingsNotificatioSectionId"
+					id="userSettingsNotificationSectionId"
 					header={_(msg`Notifications`)}
 				>
 					<div
@@ -148,7 +160,12 @@ export const UserSettingsTab = ({
 		</>
 	);
 
-	async function modifyUser(body: { userName?: string; userEmail?: string }) {
+	async function modifyUser(input: HTMLInputElement) {
+		if (!input.checkValidity()) {
+			return;
+		}
+		const body: Record<string, string> = {};
+		body[input.name] = input.value;
 		const response = await putRequests(`/api/user`, JSON.stringify(body));
 		if (response?.ok) {
 			toast.info(t`User updated!`, { toastId: "updatedUserToast" });

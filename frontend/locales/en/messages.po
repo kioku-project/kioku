@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {# card left} other {# cards left}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 
-#: pages/login.tsx:292
+#: pages/login.tsx:293
 msgid "Account already exists!"
 msgstr "Account already exists!"
 
-#: pages/login.tsx:286
+#: pages/login.tsx:287
 msgid "Account created!"
 msgstr "Account created!"
 
@@ -49,7 +49,7 @@ msgstr "Achievements and leaderboards make learning more engaging and motivating
 msgid "Active Decks"
 msgstr "Active Decks"
 
-#: pages/login.tsx:218
+#: pages/login.tsx:219
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -82,13 +82,17 @@ msgstr "Cards"
 msgid "Cards learned"
 msgstr "Cards learned"
 
+#: components/navigation/Tabs/UserSettingsTab.tsx:84
+msgid "Change"
+msgstr "Change"
+
 #: components/navigation/Tabs/GroupSettingsTab.tsx:99
 msgid "Change how others join this group"
 msgstr "Change how others join this group"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:100
 #: components/navigation/Tabs/GroupSettingsTab.tsx:132
-#: components/navigation/Tabs/UserSettingsTab.tsx:119
+#: components/navigation/Tabs/UserSettingsTab.tsx:147
 msgid "Click again"
 msgstr "Click again"
 
@@ -138,7 +142,7 @@ msgstr "Create new Group"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:72
 #: components/navigation/Tabs/GroupSettingsTab.tsx:80
-#: components/navigation/Tabs/UserSettingsTab.tsx:108
+#: components/navigation/Tabs/UserSettingsTab.tsx:136
 msgid "Danger Zone"
 msgstr "Danger Zone"
 
@@ -172,7 +176,7 @@ msgstr "Deck updated!"
 msgid "Decks"
 msgstr "Decks"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:120
+#: components/navigation/Tabs/UserSettingsTab.tsx:148
 msgid "Delete Account"
 msgstr "Delete Account"
 
@@ -192,7 +196,7 @@ msgstr "Delete this deck"
 msgid "Delete this group"
 msgstr "Delete this group"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:113
+#: components/navigation/Tabs/UserSettingsTab.tsx:141
 msgid "Delete your Account"
 msgstr "Delete your Account"
 
@@ -208,7 +212,7 @@ msgstr "Discover Kioku's awesome Features"
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 msgstr "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 
-#: pages/login.tsx:214
+#: pages/login.tsx:215
 msgid "Don't have an account?"
 msgstr "Don't have an account?"
 
@@ -220,7 +224,8 @@ msgstr "Done"
 msgid "Easy"
 msgstr "Easy"
 
-#: pages/login.tsx:86
+#: components/navigation/Tabs/UserSettingsTab.tsx:78
+#: pages/login.tsx:87
 msgid "Email"
 msgstr "Email"
 
@@ -232,6 +237,10 @@ msgstr "Enter deck description"
 msgid "Enter deck name"
 msgstr "Enter deck name"
 
+#: components/navigation/Tabs/UserSettingsTab.tsx:82
+msgid "Enter Email"
+msgstr "Enter Email"
+
 #: components/modal/CreateGroupModal.tsx:52
 msgid "Enter group description"
 msgstr "Enter group description"
@@ -239,6 +248,10 @@ msgstr "Enter group description"
 #: components/modal/CreateGroupModal.tsx:41
 msgid "Enter group name"
 msgstr "Enter group name"
+
+#: components/navigation/Tabs/UserSettingsTab.tsx:63
+msgid "Enter Username"
+msgstr "Enter Username"
 
 #: pages/features.tsx:109
 msgid "Entertaining"
@@ -373,7 +386,7 @@ msgstr "Leave Group"
 msgid "Left group!"
 msgstr "Left group!"
 
-#: pages/login.tsx:258
+#: pages/login.tsx:259
 msgid "Logged in!"
 msgstr "Logged in!"
 
@@ -385,15 +398,15 @@ msgstr "Login"
 msgid "Medium"
 msgstr "Medium"
 
-#: pages/login.tsx:164
+#: pages/login.tsx:165
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Minimum {passwordMinLength} characters"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:69
+#: components/navigation/Tabs/UserSettingsTab.tsx:97
 msgid "Notifications"
 msgstr "Notifications"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:115
+#: components/navigation/Tabs/UserSettingsTab.tsx:143
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Once you delete your user, there is no going back. Please be certain."
 
@@ -403,16 +416,16 @@ msgstr "Once you delete your user, there is no going back. Please be certain."
 msgid "Open menu"
 msgstr "Open menu"
 
-#: pages/login.tsx:104
+#: pages/login.tsx:105
 msgid "Password"
 msgstr "Password"
 
-#: pages/login.tsx:121
+#: pages/login.tsx:122
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Password must have at least {passwordMinLength} characters"
 
-#: pages/login.tsx:150
-#: pages/login.tsx:175
+#: pages/login.tsx:151
+#: pages/login.tsx:176
 msgid "Passwords have to match"
 msgstr "Passwords have to match"
 
@@ -434,11 +447,11 @@ msgstr "Register today and start using the free flashcard application together w
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:57
 #: components/navigation/Tabs/GroupSettingsTab.tsx:54
-#: components/navigation/Tabs/UserSettingsTab.tsx:58
+#: components/navigation/Tabs/UserSettingsTab.tsx:65
 msgid "Rename"
 msgstr "Rename"
 
-#: pages/login.tsx:133
+#: pages/login.tsx:134
 msgid "Repeat Password"
 msgstr "Repeat Password"
 
@@ -488,19 +501,19 @@ msgstr "Sent request!"
 msgid "Settings"
 msgstr "Settings"
 
-#: pages/login.tsx:202
+#: pages/login.tsx:203
 msgid "Sign in"
 msgstr "Sign in"
 
-#: pages/login.tsx:232
+#: pages/login.tsx:233
 msgid "Sign in now!"
 msgstr "Sign in now!"
 
-#: pages/login.tsx:204
+#: pages/login.tsx:205
 msgid "Sign up"
 msgstr "Sign up"
 
-#: pages/login.tsx:230
+#: pages/login.tsx:231
 msgid "Sign up now!"
 msgstr "Sign up now!"
 
@@ -524,7 +537,7 @@ msgstr "Start your learning journey today with Kioku - the cloud native flashcar
 msgid "Subscribe"
 msgstr "Subscribe"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:89
+#: components/navigation/Tabs/UserSettingsTab.tsx:117
 msgid "Subscribe to get daily reminders to review your pending cards."
 msgstr "Subscribe to get daily reminders to review your pending cards."
 
@@ -536,7 +549,7 @@ msgstr "Tap on share"
 msgid "Test"
 msgstr "Test"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:82
+#: components/navigation/Tabs/UserSettingsTab.tsx:110
 msgid "Turn on Notifications"
 msgstr "Turn on Notifications"
 
@@ -552,7 +565,7 @@ msgstr "Unsubscribe"
 msgid "User"
 msgstr "User"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:148
+#: components/navigation/Tabs/UserSettingsTab.tsx:181
 msgid "User deleted!"
 msgstr "User deleted!"
 
@@ -560,12 +573,12 @@ msgstr "User deleted!"
 msgid "User invited"
 msgstr "User invited"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:138
+#: components/navigation/Tabs/UserSettingsTab.tsx:171
 msgid "User updated!"
 msgstr "User updated!"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:56
-#: pages/login.tsx:95
+#: components/navigation/Tabs/UserSettingsTab.tsx:59
+#: pages/login.tsx:96
 msgid "Username"
 msgstr "Username"
 
@@ -585,7 +598,7 @@ msgstr "Welcome {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 
-#: pages/login.tsx:261
+#: pages/login.tsx:262
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 

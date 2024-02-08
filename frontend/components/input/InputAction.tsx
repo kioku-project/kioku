@@ -1,9 +1,4 @@
-import {
-	ChangeEventHandler,
-	InputHTMLAttributes,
-	Ref,
-	forwardRef,
-} from "react";
+import { InputHTMLAttributes, Ref, forwardRef } from "react";
 
 import { InputField } from "@/components/form/InputField";
 import { Action } from "@/components/input/Action";

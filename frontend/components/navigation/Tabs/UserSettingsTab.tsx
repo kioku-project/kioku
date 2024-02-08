@@ -1,7 +1,7 @@
 import { Trans, msg, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
-import { ChangeEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useSWRConfig } from "swr";
 

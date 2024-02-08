@@ -33,11 +33,11 @@ msgstr "{dueCards, plural, one {Eine Karte übrig} other {# Karten übrig}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Greife von überall und jederzeit auf Deine Karteikarten zu. Wechsle nahtlos zwischen verschiedenen Plattformen und verpasse nie wieder eine Lerngelegenheit!"
 
-#: pages/login.tsx:292
+#: pages/login.tsx:293
 msgid "Account already exists!"
 msgstr "Account existiert bereits!"
 
-#: pages/login.tsx:286
+#: pages/login.tsx:287
 msgid "Account created!"
 msgstr "Account erstellt!"
 
@@ -49,7 +49,7 @@ msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivier
 msgid "Active Decks"
 msgstr "Aktive Decks"
 
-#: pages/login.tsx:218
+#: pages/login.tsx:219
 msgid "Already have an account?"
 msgstr "Bereits registriert?"
 
@@ -82,13 +82,17 @@ msgstr "Karten"
 msgid "Cards learned"
 msgstr "Gelernte Karten"
 
+#: components/navigation/Tabs/UserSettingsTab.tsx:84
+msgid "Change"
+msgstr "Ändern"
+
 #: components/navigation/Tabs/GroupSettingsTab.tsx:99
 msgid "Change how others join this group"
 msgstr "Ändere, wie andere der Gruppe beitreten können"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:100
 #: components/navigation/Tabs/GroupSettingsTab.tsx:132
-#: components/navigation/Tabs/UserSettingsTab.tsx:119
+#: components/navigation/Tabs/UserSettingsTab.tsx:147
 msgid "Click again"
 msgstr "Nochmal klicken"
 
@@ -138,7 +142,7 @@ msgstr "Gruppe erstellen"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:72
 #: components/navigation/Tabs/GroupSettingsTab.tsx:80
-#: components/navigation/Tabs/UserSettingsTab.tsx:108
+#: components/navigation/Tabs/UserSettingsTab.tsx:136
 msgid "Danger Zone"
 msgstr "Gefahrenzone"
 
@@ -172,7 +176,7 @@ msgstr "Stapel aktualisiert!"
 msgid "Decks"
 msgstr "Stapel"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:120
+#: components/navigation/Tabs/UserSettingsTab.tsx:148
 msgid "Delete Account"
 msgstr "Account löschen"
 
@@ -192,7 +196,7 @@ msgstr "Lösche diesen Stapel"
 msgid "Delete this group"
 msgstr "Lösche diese Gruppe"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:113
+#: components/navigation/Tabs/UserSettingsTab.tsx:141
 msgid "Delete your Account"
 msgstr "Account löschen"
 
@@ -208,7 +212,7 @@ msgstr "Entdecke Kiokus einzigartige Funktionen"
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 msgstr "Entdecke die Funktionen unserer kostenlosen Karteikarten Anwendung. Importiere Stapel aus Anki, erstelle Gruppen, lerne gemeinsam mit Freunden und vergleicht Eure Statistiken. Jetzt auf allen Geräten!"
 
-#: pages/login.tsx:214
+#: pages/login.tsx:215
 msgid "Don't have an account?"
 msgstr "Noch kein Account?"
 
@@ -220,7 +224,8 @@ msgstr "Erledigt"
 msgid "Easy"
 msgstr "Einfach"
 
-#: pages/login.tsx:86
+#: components/navigation/Tabs/UserSettingsTab.tsx:78
+#: pages/login.tsx:87
 msgid "Email"
 msgstr "E-Mail"
 
@@ -232,6 +237,10 @@ msgstr "Stapelbeschreibung eingeben"
 msgid "Enter deck name"
 msgstr "Stapelnamen eingeben"
 
+#: components/navigation/Tabs/UserSettingsTab.tsx:82
+msgid "Enter Email"
+msgstr "Email eingeben"
+
 #: components/modal/CreateGroupModal.tsx:52
 msgid "Enter group description"
 msgstr "Gruppenbeschreibung eingeben"
@@ -239,6 +248,10 @@ msgstr "Gruppenbeschreibung eingeben"
 #: components/modal/CreateGroupModal.tsx:41
 msgid "Enter group name"
 msgstr "Gruppennamen eingeben"
+
+#: components/navigation/Tabs/UserSettingsTab.tsx:63
+msgid "Enter Username"
+msgstr "Benutzernamen eingeben"
 
 #: pages/features.tsx:109
 msgid "Entertaining"
@@ -373,7 +386,7 @@ msgstr "Gruppe verlassen"
 msgid "Left group!"
 msgstr "Gruppe verlassen!"
 
-#: pages/login.tsx:258
+#: pages/login.tsx:259
 msgid "Logged in!"
 msgstr "Eingeloggt!"
 
@@ -385,15 +398,15 @@ msgstr "Einloggen"
 msgid "Medium"
 msgstr "Mittel"
 
-#: pages/login.tsx:164
+#: pages/login.tsx:165
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Mindestens {passwordMinLength} Zeichen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:69
+#: components/navigation/Tabs/UserSettingsTab.tsx:97
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:115
+#: components/navigation/Tabs/UserSettingsTab.tsx:143
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden. Bitte sei vorsichtig."
 
@@ -403,16 +416,16 @@ msgstr "Diese Aktion kann nicht rückgängig gemacht werden. Bitte sei vorsichti
 msgid "Open menu"
 msgstr "Menü öffnen"
 
-#: pages/login.tsx:104
+#: pages/login.tsx:105
 msgid "Password"
 msgstr "Passwort"
 
-#: pages/login.tsx:121
+#: pages/login.tsx:122
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Passwort muss mindestens {passwordMinLength} Zeichen lang sein"
 
-#: pages/login.tsx:150
-#: pages/login.tsx:175
+#: pages/login.tsx:151
+#: pages/login.tsx:176
 msgid "Passwords have to match"
 msgstr "Passwörter müssen übereinstimmen"
 
@@ -434,11 +447,11 @@ msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten An
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:57
 #: components/navigation/Tabs/GroupSettingsTab.tsx:54
-#: components/navigation/Tabs/UserSettingsTab.tsx:58
+#: components/navigation/Tabs/UserSettingsTab.tsx:65
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: pages/login.tsx:133
+#: pages/login.tsx:134
 msgid "Repeat Password"
 msgstr "Passwort wiederholen"
 
@@ -488,19 +501,19 @@ msgstr "Anfrage gesendet!"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: pages/login.tsx:202
+#: pages/login.tsx:203
 msgid "Sign in"
 msgstr "Einloggen"
 
-#: pages/login.tsx:232
+#: pages/login.tsx:233
 msgid "Sign in now!"
 msgstr "Jetzt anmelden!"
 
-#: pages/login.tsx:204
+#: pages/login.tsx:205
 msgid "Sign up"
 msgstr "Registrieren"
 
-#: pages/login.tsx:230
+#: pages/login.tsx:231
 msgid "Sign up now!"
 msgstr "Jetzt registrieren!"
 
@@ -524,7 +537,7 @@ msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteik
 msgid "Subscribe"
 msgstr "Aktivieren"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:89
+#: components/navigation/Tabs/UserSettingsTab.tsx:117
 msgid "Subscribe to get daily reminders to review your pending cards."
 msgstr "Werde täglich an das Lernen von anstehenden Karten erinnert."
 
@@ -536,7 +549,7 @@ msgstr "Tippe auf teilen"
 msgid "Test"
 msgstr "Test"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:82
+#: components/navigation/Tabs/UserSettingsTab.tsx:110
 msgid "Turn on Notifications"
 msgstr "Benachrichtigungen aktivieren"
 
@@ -552,7 +565,7 @@ msgstr "Deaktivieren"
 msgid "User"
 msgstr "Benutzer"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:148
+#: components/navigation/Tabs/UserSettingsTab.tsx:181
 msgid "User deleted!"
 msgstr "Benutzer gelöscht!"
 
@@ -560,12 +573,12 @@ msgstr "Benutzer gelöscht!"
 msgid "User invited"
 msgstr "Benutzer eingeladen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:138
+#: components/navigation/Tabs/UserSettingsTab.tsx:171
 msgid "User updated!"
 msgstr "Benutzer aktualisiert!"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:56
-#: pages/login.tsx:95
+#: components/navigation/Tabs/UserSettingsTab.tsx:59
+#: pages/login.tsx:96
 msgid "Username"
 msgstr "Benutzername"
 
@@ -585,7 +598,7 @@ msgstr "Willkommen, {0}"
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Willkommen bei Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die gemeinsame Erstellung von Lerninhalten konzentriert. Unsere innovative Plattform ermöglicht es Dir, Dein Wissen auf Karteikarten zu organisieren und diese mit anderen Nutzern zu teilen, um Dein Wissen auf die nächste Stufe zu heben. Melde Dich noch heute bei Kioku an und erlebe die Zukunft des Lernens."
 
-#: pages/login.tsx:261
+#: pages/login.tsx:262
 msgid "Wrong username or password"
 msgstr "Falscher Benutzername oder falsches Passwort"
 

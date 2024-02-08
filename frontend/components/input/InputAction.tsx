@@ -19,10 +19,6 @@ interface InputActionProps {
 	 */
 	header?: string;
 	/**
-	 * Input value
-	 */
-	value?: string;
-	/**
 	 * Button content
 	 */
 	button: string;
@@ -34,10 +30,6 @@ interface InputActionProps {
 	 * Additional classes
 	 */
 	className?: string;
-	/**
-	 * Change handler
-	 */
-	onChange: ChangeEventHandler<HTMLInputElement>;
 	/**
 	 * Click handler
 	 */
@@ -52,11 +44,9 @@ export const InputAction = forwardRef(
 		{
 			id,
 			header,
-			value,
 			button,
 			disabled = false,
 			className = "",
-			onChange,
 			onClick,
 			...props
 		}: InputActionProps & InputHTMLAttributes<HTMLInputElement>,
@@ -73,11 +63,9 @@ export const InputAction = forwardRef(
 						<InputField
 							id={`${id}InputFieldId`}
 							label={header}
-							value={value}
 							readOnly={disabled}
 							inputFieldStyle="secondary"
 							inputFieldSize="3xs"
-							onChange={onChange}
 							{...props}
 							ref={ref}
 						/>

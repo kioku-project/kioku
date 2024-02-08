@@ -36,11 +36,11 @@ export const UserSettingsTab = ({
 	const router = useRouter();
 	const { mutate } = useSWRConfig();
 	const { _ } = useLingui();
-	const userNameInputAction = useRef<HTMLInputElement>(null);
-	const userEmailInputAction = useRef<HTMLInputElement>(null);
 
 	const [userName, setUserName] = useState(user.userName);
+	const userNameInputAction = useRef<HTMLInputElement>(null);
 	const [userEmail, setUserEmail] = useState(user.userEmail);
+	const userEmailInputAction = useRef<HTMLInputElement>(null);
 
 	const [isConfirmDeletion, setConfirmDeletion] = useState(false);
 	const [installModalVisible, setInstallModalVisible] =
@@ -63,7 +63,7 @@ export const UserSettingsTab = ({
 						placeholder={_(msg`Enter Username`)}
 						required
 						button={_(msg`Rename`)}
-						onChange={(event: ChangeEvent<HTMLInputElement>) => {
+						onChange={(event) => {
 							setUserName(event.target.value);
 						}}
 						onClick={() => {
@@ -82,7 +82,7 @@ export const UserSettingsTab = ({
 						placeholder={_(msg`Enter Email`)}
 						required
 						button={_(msg`Change`)}
-						onChange={(event: ChangeEvent<HTMLInputElement>) => {
+						onChange={(event) => {
 							setUserEmail(event.target.value);
 						}}
 						onClick={() => {

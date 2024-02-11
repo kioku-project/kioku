@@ -29,7 +29,6 @@ COPY --from=builder /etc/passwd /etc/passwd
 USER kioku
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder /bin/grpc_health_probe /bin/
 COPY --from=builder /go/src/kioku/services/user/user /user
 ENTRYPOINT ["/user"]
 CMD []

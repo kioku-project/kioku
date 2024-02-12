@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: components/deck/Deck.tsx:145
+#: components/deck/Deck.tsx:137
 msgid "{0, plural, one {# card due} other {# cards due}}"
 msgstr "{0, plural, one {# Karte fällig} other {# Karten fällig}}"
 
@@ -66,7 +66,7 @@ msgstr "Zurück zum Stapel!"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: components/flashcard/Card.tsx:135
+#: components/flashcard/Card.tsx:133
 msgid "Card created!"
 msgstr "Karte erstellt!"
 
@@ -82,13 +82,17 @@ msgstr "Karten"
 msgid "Cards learned"
 msgstr "Gelernte Karten"
 
+#: components/navigation/Tabs/UserSettingsTab.tsx:84
+msgid "Change"
+msgstr "Ändern"
+
 #: components/navigation/Tabs/GroupSettingsTab.tsx:99
 msgid "Change how others join this group"
 msgstr "Ändere, wie andere der Gruppe beitreten können"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:117
 #: components/navigation/Tabs/GroupSettingsTab.tsx:132
-#: components/navigation/Tabs/UserSettingsTab.tsx:119
+#: components/navigation/Tabs/UserSettingsTab.tsx:147
 msgid "Click again"
 msgstr "Nochmal klicken"
 
@@ -138,7 +142,7 @@ msgstr "Gruppe erstellen"
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:89
 #: components/navigation/Tabs/GroupSettingsTab.tsx:80
-#: components/navigation/Tabs/UserSettingsTab.tsx:108
+#: components/navigation/Tabs/UserSettingsTab.tsx:136
 msgid "Danger Zone"
 msgstr "Gefahrenzone"
 
@@ -173,7 +177,7 @@ msgstr "Stapel aktualisiert!"
 msgid "Decks"
 msgstr "Stapel"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:120
+#: components/navigation/Tabs/UserSettingsTab.tsx:148
 msgid "Delete Account"
 msgstr "Account löschen"
 
@@ -193,7 +197,7 @@ msgstr "Lösche diesen Stapel"
 msgid "Delete this group"
 msgstr "Lösche diese Gruppe"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:113
+#: components/navigation/Tabs/UserSettingsTab.tsx:141
 msgid "Delete your Account"
 msgstr "Account löschen"
 
@@ -221,6 +225,7 @@ msgstr "Erledigt"
 msgid "Easy"
 msgstr "Einfach"
 
+#: components/navigation/Tabs/UserSettingsTab.tsx:78
 #: pages/login.tsx:86
 msgid "Email"
 msgstr "E-Mail"
@@ -233,6 +238,10 @@ msgstr "Stapelbeschreibung eingeben"
 msgid "Enter deck name"
 msgstr "Stapelnamen eingeben"
 
+#: components/navigation/Tabs/UserSettingsTab.tsx:82
+msgid "Enter Email"
+msgstr "Email eingeben"
+
 #: components/modal/CreateGroupModal.tsx:52
 msgid "Enter group description"
 msgstr "Gruppenbeschreibung eingeben"
@@ -240,6 +249,10 @@ msgstr "Gruppenbeschreibung eingeben"
 #: components/modal/CreateGroupModal.tsx:41
 msgid "Enter group name"
 msgstr "Gruppennamen eingeben"
+
+#: components/navigation/Tabs/UserSettingsTab.tsx:63
+msgid "Enter Username"
+msgstr "Benutzernamen eingeben"
 
 #: pages/features.tsx:109
 msgid "Entertaining"
@@ -353,7 +366,7 @@ msgstr "Kioku ist eine kostenlose Karteikarten Anwendung. Du kannst Stapel erste
 msgid "Kioku is compatible with Anki, allowing you to import and export your existing decks into our application while taking advantage of Kioku's collaborative features!"
 msgstr "Kioku ist mit Anki kompatibel, sodass Du Deine bestehenden Stapel in unsere Anwendung importieren und auch wieder exportieren kannst, während Du die Vorteile der kollaborativen Funktionen von Kioku entdeckst!"
 
-#: components/deck/Deck.tsx:174
+#: components/deck/Deck.tsx:166
 msgid "Learn"
 msgstr "Lernen"
 
@@ -390,11 +403,11 @@ msgstr "Mittel"
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Mindestens {passwordMinLength} Zeichen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:69
+#: components/navigation/Tabs/UserSettingsTab.tsx:97
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:115
+#: components/navigation/Tabs/UserSettingsTab.tsx:143
 msgid "Once you delete your user, there is no going back. Please be certain."
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden. Bitte sei vorsichtig."
 
@@ -435,7 +448,7 @@ msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten An
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:57
 #: components/navigation/Tabs/GroupSettingsTab.tsx:54
-#: components/navigation/Tabs/UserSettingsTab.tsx:58
+#: components/navigation/Tabs/UserSettingsTab.tsx:65
 msgid "Rename"
 msgstr "Umbenennen"
 
@@ -526,7 +539,7 @@ msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteik
 msgid "Subscribe"
 msgstr "Aktivieren"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:89
+#: components/navigation/Tabs/UserSettingsTab.tsx:117
 msgid "Subscribe to get daily reminders to review your pending cards."
 msgstr "Werde täglich an das Lernen von anstehenden Karten erinnert."
 
@@ -538,7 +551,7 @@ msgstr "Tippe auf teilen"
 msgid "Test"
 msgstr "Test"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:82
+#: components/navigation/Tabs/UserSettingsTab.tsx:110
 msgid "Turn on Notifications"
 msgstr "Benachrichtigungen aktivieren"
 
@@ -554,7 +567,7 @@ msgstr "Deaktivieren"
 msgid "User"
 msgstr "Benutzer"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:148
+#: components/navigation/Tabs/UserSettingsTab.tsx:181
 msgid "User deleted!"
 msgstr "Benutzer gelöscht!"
 
@@ -562,11 +575,11 @@ msgstr "Benutzer gelöscht!"
 msgid "User invited"
 msgstr "Benutzer eingeladen"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:138
+#: components/navigation/Tabs/UserSettingsTab.tsx:171
 msgid "User updated!"
 msgstr "Benutzer aktualisiert!"
 
-#: components/navigation/Tabs/UserSettingsTab.tsx:56
+#: components/navigation/Tabs/UserSettingsTab.tsx:59
 #: pages/login.tsx:95
 msgid "Username"
 msgstr "Benutzername"

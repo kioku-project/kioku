@@ -6,3 +6,18 @@ export function mapIgnoreCase<T>(
 		toCheck.toLowerCase().includes(key.toLowerCase())
 	)?.[1];
 }
+
+export function onEnterHandler(
+	event: React.KeyboardEvent,
+	callback: () => void
+) {
+	if (event.key === "Enter") {
+		callback();
+	}
+}
+
+export function clickOnEnter(event: React.KeyboardEvent) {
+	onEnterHandler(event, () =>
+		event.target.dispatchEvent(new Event("click", { bubbles: true }))
+	);
+}

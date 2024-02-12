@@ -38,7 +38,7 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 			<Logo href={loggedIn ? "/" : "/home"} />
 			{loggedIn == true && (
 				<LogOut
-					className="text-kiokuDarkBlue hover:cursor-pointer"
+					className="cursor-pointer text-kiokuDarkBlue"
 					onClick={async () => {
 						const response = await authedFetch("/api/logout", {
 							method: "POST",

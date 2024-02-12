@@ -61,6 +61,10 @@ func NewMicroCantLeaveAsLastAdminErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "You can't leave when you are the last admin")
 }
 
+func NewMicroCantInviteToHomegroupErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "You can't invite users to your homegroup")
+}
+
 func NewMicroUserAdmissionInProgressErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "user already invited")
 }

@@ -234,11 +234,12 @@ func (s *CardDeckStoreImpl) CreateDeck(ctx context.Context, newDeck *model.Deck)
 
 func (s *CardDeckStoreImpl) ModifyDeck(ctx context.Context, deck *model.Deck) (err error) {
 	err = s.db.WithContext(ctx).Save(&model.Deck{
-		ID:        deck.ID,
-		Name:      deck.Name,
-		GroupID:   deck.GroupID,
-		CreatedAt: deck.CreatedAt,
-		DeckType:  deck.DeckType,
+		ID:          deck.ID,
+		Name:        deck.Name,
+		GroupID:     deck.GroupID,
+		CreatedAt:   deck.CreatedAt,
+		DeckType:    deck.DeckType,
+		Description: deck.Description,
 	}).Error
 	return
 }

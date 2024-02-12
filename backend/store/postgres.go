@@ -170,12 +170,13 @@ func (s *CardDeckStoreImpl) PopulateDeckFavoriteAttribute(ctx context.Context, d
 }
 
 func (s *CardDeckStoreImpl) PopulateDeckActiveAttribute(ctx context.Context, deck *model.Deck, userID string) error {
-	var count int64
-	if err := s.db.WithContext(ctx).Model(&model.UserActiveDecks{}).Where(&model.UserActiveDecks{UserID: userID, DeckID: deck.ID}).Count(&count).Error; err != nil {
+	var userActiveDeck model.UserActiveDecks
+	if err := s.db.WithContext(ctx).Model(&model.UserActiveDecks{}).Where(&model.UserActiveDecks{UserID: userID, DeckID: deck.ID}).Find(&userActiveDeck).Error; err != nil {
 		return err
 	}
-	if count > 0 {
+	if userActiveDeck.UserID == userID {
 		deck.IsActive = true
+		deck.Algorithm = userActiveDeck.Algorithm
 	}
 	return nil
 }

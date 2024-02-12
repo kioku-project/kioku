@@ -22,9 +22,10 @@ type Deck struct {
 	CreatedAt   time.Time
 	GroupID     string `gorm:"not null"`
 	Group       Group
-	Cards       []Card `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	IsFavorite  bool   `gorm:"-"`
-	IsActive    bool   `gorm:"-"`
+	Cards       []Card        `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	IsFavorite  bool          `gorm:"-"`
+	IsActive    bool          `gorm:"-"`
+	Algorithm   AlgorithmType `gorm:"-"`
 }
 
 func (d *Deck) BeforeCreate(db *gorm.DB) (err error) {

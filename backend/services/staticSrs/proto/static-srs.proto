@@ -1,11 +1,11 @@
 syntax = "proto3";
 import "pkg/proto/common.proto";
 
-package srs;
+package staticSrs;
 
-option go_package ="github.com/kioku-project/kioku/services/srs/proto;srs";
+option go_package ="github.com/kioku-project/kioku/services/staticSrs/proto;staticSrs";
 
-service Srs {
+service StaticSrs {
 	rpc Push(common.SrsPushRequest) returns (common.Success) {}
 	rpc Pull(common.DeckRequest) returns (common.Card) {}
 	rpc AddUserCardBinding(common.BindingRequest) returns (common.Success) {}

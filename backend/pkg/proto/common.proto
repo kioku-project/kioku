@@ -108,6 +108,14 @@ enum DeckType {
   PRIVATE = 2;
 }
 
+enum AlgoType {
+  AT_INVALID = 0;
+  DYNAMIC_SRS = 1;
+  LINEAR_SRS = 2;
+  STATIC_SRS = 3;
+  AI_SRS = 4;
+}
+
 message Deck {
   string deckID = 1;
   string deckName = 2;
@@ -118,6 +126,7 @@ message Deck {
   string groupID = 7;
   bool isActive = 8;
   bool isFavorite = 9;
+  AlgoType algorithm = 10;
 }
 
 message DeckRequest {
@@ -143,4 +152,21 @@ message PushSubscription {
 
 message PushSubscriptions {
   repeated PushSubscription subscriptions = 1;
+}
+
+message UserDueResponse {
+  int64 dueCards = 1;
+  int64 dueDecks = 2;
+}
+
+message SrsPushRequest {
+  string userID = 1;
+  string cardID = 2;
+  string deckID = 3;
+  int64 rating = 4;
+}
+message BindingRequest {
+  string userID = 1;
+  string cardID = 2;
+  string deckID = 3;
 }

@@ -155,6 +155,28 @@ services:
     depends_on:
       - db
 
+  linear_srs_service:
+    build:
+      context: backend
+      dockerfile: services/linearSrs/Dockerfile
+    container_name: kioku-linearSrs_service
+    restart: always
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+
+  static_srs_service:
+    build:
+      context: backend
+      dockerfile: services/staticSrs/Dockerfile
+    container_name: kioku-staticSrs_service
+    restart: always
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+
   frontend:
     container_name: kioku-frontend
     restart: always

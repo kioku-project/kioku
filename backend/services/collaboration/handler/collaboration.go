@@ -133,7 +133,7 @@ func (e *Collaboration) createUserCardBindingsForWholeGroup(ctx context.Context,
 			return err
 		}
 		for _, card := range cards.Cards {
-			_, err := e.srsService.AddUserCardBinding(ctx, &pbSrs.BindingRequest{
+			_, err := e.srsService.AddUserCardBinding(ctx, &pbCommon.BindingRequest{
 				UserID: userID,
 				CardID: card.CardID,
 				DeckID: deck.DeckID,

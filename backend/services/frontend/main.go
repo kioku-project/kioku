@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	pbLinearSrs "github.com/kioku-project/kioku/services/linearSrs/proto"
+	pbStaticSrs "github.com/kioku-project/kioku/services/staticSrs/proto"
 	"os"
 
 	pbNotification "github.com/kioku-project/kioku/services/notification/proto"
@@ -71,6 +73,8 @@ func main() {
 		pbCollaboration.NewCollaborationService("collaboration", srv.Client()),
 		pbSrs.NewSrsService("srs", srv.Client()),
 		pbNotification.NewNotificationService("notification", srv.Client()),
+		pbLinearSrs.NewLinearSrsService("linearSrs", srv.Client()),
+		pbStaticSrs.NewStaticSrsService("staticSrs", srv.Client()),
 	)
 
 	fiberConfig := fiber.Config{

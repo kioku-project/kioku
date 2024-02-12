@@ -439,7 +439,7 @@ func (e *CardDeck) CreateCard(ctx context.Context, req *pbCommon.CardRequest, rs
 		return err
 	}
 	for _, user := range membersResp.Users {
-		if _, err = e.srsService.AddUserCardBinding(ctx, &pbSrs.BindingRequest{
+		if _, err = e.srsService.AddUserCardBinding(ctx, &pbCommon.BindingRequest{
 			UserID: user.UserID,
 			CardID: newCard.ID,
 			DeckID: newCard.DeckID,

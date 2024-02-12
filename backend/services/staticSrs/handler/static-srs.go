@@ -15,17 +15,17 @@ import (
 	"github.com/kioku-project/kioku/store"
 )
 
-type Srs struct {
+type StaticSrs struct {
 	store           store.SrsStore
 	cardDeckService pbCardDeck.CardDeckService
 }
 
-func New(s store.SrsStore, cds pbCardDeck.CardDeckService) *Srs {
-	return &Srs{store: s, cardDeckService: cds}
+func New(s store.SrsStore, cds pbCardDeck.CardDeckService) *StaticSrs {
+	return &StaticSrs{store: s, cardDeckService: cds}
 }
 
-func (e *Srs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp *pbCommon.Success) error {
-	logger.Infof("Received Srs.Push request: %v", req)
+func (e *StaticSrs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received StaticSrs.Push request: %v", req)
 	cardBinding, err := e.store.FindCardBinding(ctx, req.UserID, req.CardID)
 	if err != nil {
 		return err
@@ -37,15 +37,15 @@ func (e *Srs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp *pbCom
 	// calculate new due date
 	switch req.Rating {
 	case 0: // Forgotten
-		newInterval := 0
+		newInterval := math.Max(float64(cardBinding.LastInterval-1), 0)
 		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newInterval)).Unix()
 		cardBinding.LastInterval = uint32(newInterval)
 	case 1: // Hard
-		newIvl := math.Max(float64(cardBinding.LastInterval), 1)
+		newIvl := cardBinding.LastInterval
 		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
-		cardBinding.LastInterval = uint32(newIvl)
+		cardBinding.LastInterval = newIvl
 	case 2: // Easy
-		newIvl := math.Max(float64(cardBinding.LastInterval*2), 1)
+		newIvl := cardBinding.LastInterval + 1
 		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
 		cardBinding.LastInterval = uint32(newIvl)
 	default:
@@ -69,8 +69,11 @@ func (e *Srs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp *pbCom
 	return nil
 }
 
-func (e *Srs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Card) error {
-	logger.Infof("Received Srs.Pull request: %v", req)
+func (e *StaticSrs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Card) error {
+	logger.Infof("Received StaticSrs.Pull request: %v", req)
+	if _, err := e.cardDeckService.AddUserActiveDeck(ctx, &pbCommon.DeckRequest{UserID: req.UserID, Deck: &pbCommon.Deck{DeckID: req.Deck.DeckID}}); err != nil {
+		return err
+	}
 	cards, err := e.store.FindUserDeckCards(
 		ctx, req.UserID,
 		req.Deck.DeckID,
@@ -118,8 +121,8 @@ func (e *Srs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon
 	return nil
 }
 
-func (e *Srs) AddUserCardBinding(ctx context.Context, req *pbCommon.BindingRequest, rsp *pbCommon.Success) error {
-	logger.Infof("Received Srs.AddUserCardBinding request: %v", req)
+func (e *StaticSrs) AddUserCardBinding(ctx context.Context, req *pbCommon.BindingRequest, rsp *pbCommon.Success) error {
+	logger.Infof("Received StaticSrs.AddUserCardBinding request: %v", req)
 	err := e.store.CreateUserCard(ctx,
 		&model.UserCardBinding{
 			UserID:       req.UserID,
@@ -137,8 +140,8 @@ func (e *Srs) AddUserCardBinding(ctx context.Context, req *pbCommon.BindingReque
 	return nil
 }
 
-func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.UserDueResponse) error {
-	logger.Infof("Received Srs.GetDeckCardsDue request: %v", req)
+func (e *StaticSrs) GetDeckCardsDue(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.UserDueResponse) error {
+	logger.Infof("Received StaticSrs.GetDeckCardsDue request: %v", req)
 	cards, err := e.store.FindUserDeckCards(
 		ctx,
 		req.UserID,
@@ -156,8 +159,8 @@ func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pbCommon.DeckRequest, rs
 	rsp.DueCards = int64(len(dueCards))
 	return nil
 }
-func (e *Srs) GetUserCardsDue(ctx context.Context, req *pbCommon.User, rsp *pbCommon.UserDueResponse) error {
-	logger.Infof("Received Srs.GetUserCardsDue request: %v", req)
+func (e *StaticSrs) GetUserCardsDue(ctx context.Context, req *pbCommon.User, rsp *pbCommon.UserDueResponse) error {
+	logger.Infof("Received StaticSrs.GetUserCardsDue request: %v", req)
 	cards, err := e.store.FindUserCards(ctx, req.UserID)
 	if err != nil {
 		return err

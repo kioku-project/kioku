@@ -37,6 +37,33 @@ func MigrateProtoRoleToModelRole(protoRole pbCommon.GroupRole) (modelRole model.
 	return
 }
 
+func MigrateModelAlgorithmToProtoAlgorithm(modelAlgo model.AlgorithmType) (protoAlgo pbCommon.AlgoType) {
+	if modelAlgo == model.AlgoDynamicSRS {
+		protoAlgo = pbCommon.AlgoType_DYNAMIC_SRS
+	} else if modelAlgo == model.AlgoLinearSRS {
+		protoAlgo = pbCommon.AlgoType_LINEAR_SRS
+	} else if modelAlgo == model.AlgoStaticSRS {
+		protoAlgo = pbCommon.AlgoType_STATIC_SRS
+	} else if modelAlgo == model.AlgoAISRS {
+		protoAlgo = pbCommon.AlgoType_AI_SRS
+	}
+	return
+}
+
+func MigrateProtoAlgorithmToModelAlgorithm(protoAlgo pbCommon.AlgoType) (modelAlgo model.AlgorithmType) {
+	switch protoAlgo {
+	case pbCommon.AlgoType_DYNAMIC_SRS:
+		modelAlgo = model.AlgoDynamicSRS
+	case pbCommon.AlgoType_LINEAR_SRS:
+		modelAlgo = model.AlgoLinearSRS
+	case pbCommon.AlgoType_STATIC_SRS:
+		modelAlgo = model.AlgoStaticSRS
+	case pbCommon.AlgoType_AI_SRS:
+		modelAlgo = model.AlgoAISRS
+	}
+	return
+}
+
 func MigrateStringRoleToProtoRole(stringRole string) (protoRole pbCommon.GroupRole) {
 	switch stringRole {
 	case pbCommon.GroupRole_REQUESTED.String():
@@ -208,6 +235,7 @@ func StoreDeckToProtoDeckConverter(deck model.Deck) *pbCommon.Deck {
 		GroupID:         deck.GroupID,
 		IsFavorite:      deck.IsFavorite,
 		IsActive:        deck.IsActive,
+		Algorithm:       MigrateModelAlgorithmToProtoAlgorithm(deck.Algorithm),
 	}
 }
 

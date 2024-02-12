@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"go-micro.dev/v4/logger"
 	"strings"
 	"time"
 
@@ -14,8 +15,10 @@ import (
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	pbCollaboration "github.com/kioku-project/kioku/services/collaboration/proto"
+	pbLinearSrs "github.com/kioku-project/kioku/services/linearSrs/proto"
 	pbNotification "github.com/kioku-project/kioku/services/notification/proto"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
+	pbStaticSrs "github.com/kioku-project/kioku/services/staticSrs/proto"
 	pbUser "github.com/kioku-project/kioku/services/user/proto"
 )
 
@@ -25,6 +28,8 @@ type Frontend struct {
 	collaborationService pbCollaboration.CollaborationService
 	srsService           pbSrs.SrsService
 	notificationService  pbNotification.NotificationService
+	linearSrsService     pbLinearSrs.LinearSrsService
+	staticSrsService     pbStaticSrs.StaticSrsService
 }
 
 func New(
@@ -33,6 +38,8 @@ func New(
 	collaborationService pbCollaboration.CollaborationService,
 	srsService pbSrs.SrsService,
 	notificationService pbNotification.NotificationService,
+	linearSrsService pbLinearSrs.LinearSrsService,
+	staticSrsService pbStaticSrs.StaticSrsService,
 ) *Frontend {
 	return &Frontend{
 		userService:          userService,
@@ -40,6 +47,8 @@ func New(
 		collaborationService: collaborationService,
 		srsService:           srsService,
 		notificationService:  notificationService,
+		linearSrsService:     linearSrsService,
+		staticSrsService:     staticSrsService,
 	}
 }
 
@@ -927,7 +936,10 @@ func (e *Frontend) DeleteCardSideHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) SrsPullHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspSrsPull, err := e.srsService.Pull(c.Context(), &pbCommon.DeckRequest{
+	if _, err := e.cardDeckService.AddUserActiveDeck(c.Context(), &pbCommon.DeckRequest{UserID: userID, Deck: &pbCommon.Deck{DeckID: c.Params("deckID")}}); err != nil {
+		return err
+	}
+	rspDeck, err := e.cardDeckService.GetDeck(c.Context(), &pbCommon.DeckRequest{
 		UserID: userID,
 		Deck: &pbCommon.Deck{
 			DeckID: c.Params("deckID"),
@@ -936,7 +948,38 @@ func (e *Frontend) SrsPullHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(rspSrsPull)
+	deckRequest := &pbCommon.DeckRequest{
+		UserID: userID,
+		Deck: &pbCommon.Deck{
+			DeckID: c.Params("deckID"),
+		},
+	}
+	switch rspDeck.Algorithm {
+	case pbCommon.AlgoType_DYNAMIC_SRS:
+		logger.Info("dynamic srs!")
+		rspSrsPull, err := e.srsService.Pull(c.Context(), deckRequest)
+		if err != nil {
+			return err
+		}
+		return c.JSON(rspSrsPull)
+
+	case pbCommon.AlgoType_LINEAR_SRS:
+		logger.Info("linear srs!")
+		rspSrsPull, err := e.linearSrsService.Pull(c.Context(), deckRequest)
+		if err != nil {
+			return err
+		}
+		return c.JSON(rspSrsPull)
+
+	case pbCommon.AlgoType_STATIC_SRS:
+		logger.Info("static srs!")
+		rspSrsPull, err := e.staticSrsService.Pull(c.Context(), deckRequest)
+		if err != nil {
+			return err
+		}
+		return c.JSON(rspSrsPull)
+	}
+	return c.SendStatus(200)
 }
 
 func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
@@ -948,17 +991,45 @@ func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
 		return helper.NewFiberBadRequestErr("no cardID given")
 	}
 	userID := helper.GetUserIDFromContext(c)
-	rspSrsPush, err := e.srsService.Push(c.Context(), &pbSrs.SrsPushRequest{
+	rspDeck, err := e.cardDeckService.GetDeck(c.Context(), &pbCommon.DeckRequest{
 		UserID: userID,
-		CardID: data.CardID,
-		DeckID: c.Params("deckID"),
-		Rating: data.Rating,
+		Deck: &pbCommon.Deck{
+			DeckID: c.Params("deckID"),
+		},
 	})
 	if err != nil {
 		return err
 	}
-	if err != nil || !rspSrsPush.Success {
-		return err
+	srsPushRequest := &pbCommon.SrsPushRequest{
+		UserID: userID,
+		CardID: data.CardID,
+		DeckID: c.Params("deckID"),
+		Rating: data.Rating,
+	}
+	switch rspDeck.Algorithm {
+	case pbCommon.AlgoType_DYNAMIC_SRS:
+		logger.Info("dynamic srs!")
+		rspSrsPull, err := e.srsService.Push(c.Context(), srsPushRequest)
+		if err != nil {
+			return err
+		}
+		return c.JSON(rspSrsPull)
+
+	case pbCommon.AlgoType_LINEAR_SRS:
+		logger.Info("linear srs!")
+		rspSrsPull, err := e.linearSrsService.Push(c.Context(), srsPushRequest)
+		if err != nil {
+			return err
+		}
+		return c.JSON(rspSrsPull)
+
+	case pbCommon.AlgoType_STATIC_SRS:
+		logger.Info("static srs!")
+		rspSrsPull, err := e.staticSrsService.Push(c.Context(), srsPushRequest)
+		if err != nil {
+			return err
+		}
+		return c.JSON(rspSrsPull)
 	}
 	return c.SendStatus(200)
 }

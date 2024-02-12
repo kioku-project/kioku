@@ -5,6 +5,7 @@ type AlgorithmType string
 const (
 	AlgoDynamicSRS AlgorithmType = "Dynamic-Spaced-Repetition"
 	AlgoLinearSRS                = "Linear-Spaced-Repetition"
+	AlgoStaticSRS                = "Static-Spaced-Repetition"
 	AlgoAISRS                    = "AI-Spaced-Repetition"
 )
 

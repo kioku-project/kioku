@@ -40,16 +40,17 @@ export const Card = ({
 }: CardProps) => {
 	const { mutate } = useSWRConfig();
 	const [isDelete, setDelete] = useState(false);
-	const cardNameInput = useRef<HTMLInputElement>(null);
-
-	const { _ } = useLingui();
 
 	return (
-		<div
-			className={`flex w-full cursor-pointer flex-row items-center border-b-2 border-kiokuLightBlue p-2 font-semibold text-kiokuDarkBlue md:p-3 ${className}`}
+		<button
+			className={`flex w-full flex-row border-b-2 border-kiokuLightBlue p-2 font-semibold text-kiokuDarkBlue md:p-3 ${className}`}
 			onClick={() => setCard?.(card)}
 		>
-			<Text textStyle="primary" textSize="xs" className="w-full">
+			<Text
+				textStyle="primary"
+				textSize="xs"
+				className="flex w-full justify-start"
+			>
 				{card.sides[0].header}
 			</Text>
 			<div className="flex flex-row items-center space-x-5">
@@ -95,7 +96,7 @@ export const Card = ({
 							}}
 						/> */}
 			</div>
-		</div>
+		</button>
 	);
 
 	async function deleteCard() {

@@ -70,16 +70,8 @@ export const Deck = ({
 
 	return (
 		<Link
-			className={`group rounded-lg shadow-lg transition-transform hover:cursor-pointer ${className}`}
+			className={`group rounded-lg shadow-lg transition-transform ${className}`}
 			href={`/deck/${deck.deckID}`}
-			onKeyUp={(event) => {
-				if (event.key === "Enter") {
-					event.target.dispatchEvent(
-						new Event("click", { bubbles: true })
-					);
-				}
-			}}
-			tabIndex={0}
 		>
 			<div className="flex h-[6.5rem] w-full flex-row bg-gradient-to-r to-60% transition-all first:rounded-t-md last:rounded-b-md group-hover:from-[#F7EBEB] sm:h-28 md:h-32 lg:h-32">
 				<div className="relative my-3 ml-3 flex aspect-square items-center justify-center rounded bg-[#F31212]/50">
@@ -121,7 +113,7 @@ export const Deck = ({
 									<Heart
 										size={20}
 										fill={"#DB2B39"}
-										className="absolute animate-[ping_0.7s_ease-out_1] hover:cursor-pointer"
+										className="absolute animate-[ping_0.7s_ease-out_1]"
 									/>
 								)}
 								<Heart
@@ -190,7 +182,7 @@ export const Deck = ({
 						</div>
 						<MoreVertical
 							size={20}
-							className="flex-none text-gray-500 hover:cursor-pointer"
+							className="flex-none text-gray-500"
 						/>
 					</div>
 				</div>

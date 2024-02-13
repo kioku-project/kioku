@@ -41,7 +41,7 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 					reverse={reverse}
 					onReverse={() => setReverse((prev) => !prev)}
 					onSearch={(event) => {
-						setFilter(event.target.value.toUpperCase());
+						setFilter(event.target.value);
 					}}
 					onAdd={() => setShowModal(true)}
 				/>

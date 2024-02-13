@@ -45,7 +45,7 @@ export const TabBar = ({
 					<Text
 						textSize="xs"
 						key={tab}
-						className={`flex-1 border-kiokuDarkBlue p-3 font-bold transition hover:cursor-pointer md:flex-initial ${
+						className={`flex-1 cursor-pointer border-kiokuDarkBlue p-3 font-bold transition md:flex-initial ${
 							currentTab === tab
 								? "border-b-2 text-kiokuDarkBlue"
 								: "border-none text-kiokuLightBlue"

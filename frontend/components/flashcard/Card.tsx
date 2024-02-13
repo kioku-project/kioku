@@ -52,7 +52,7 @@ export const Card = ({
 					<Text
 						textStyle="primary"
 						textSize="xs"
-						className="w-full hover:cursor-pointer"
+						className="w-full cursor-pointer"
 						onClick={() => setCard?.(card)}
 					>
 						{card.sides[0].header}
@@ -61,15 +61,13 @@ export const Card = ({
 						{isDelete ? (
 							<div className="flex flex-row space-x-1">
 								<Check
-									className="hover:cursor-pointer"
+									className="cursor-pointer"
 									onClick={() => {
-										deleteCard()
-											.then((result) => {})
-											.catch((error) => {});
+										deleteCard();
 									}}
 								/>
 								<X
-									className="hover:cursor-pointer"
+									className="cursor-pointer"
 									onClick={() => setDelete(false)}
 								/>
 							</div>
@@ -79,7 +77,7 @@ export const Card = ({
 								data-testid={`deleteCardButtonId`}
 								className={`${
 									editable
-										? "hover:cursor-pointer"
+										? "cursor-pointer"
 										: "text-gray-200 hover:cursor-not-allowed"
 								}`}
 								size={20}
@@ -87,7 +85,7 @@ export const Card = ({
 							/>
 						)}
 						{/* <Edit2
-							className="hover:cursor-pointer"
+							className="cursor-pointer"
 							size={20}
 							onClick={() => {
 								if (setCard) {
@@ -105,13 +103,9 @@ export const Card = ({
 						placeholder={_(msg`Create Card`)}
 						inputFieldStyle="primary"
 						inputFieldSize="xs"
-						onKeyUp={(event) => {
-							if (event.key === "Enter") {
-								createCard()
-									.then((result) => {})
-									.catch((error) => {});
-							}
-						}}
+						onKeyUp={(event) =>
+							event.key === "Enter" && createCard()
+						}
 						ref={cardNameInput}
 					/>
 				</div>

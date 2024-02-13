@@ -42,7 +42,7 @@ export const Logo = ({
 }: LogoProps & LinkProps) => {
 	return (
 		<Link
-			className={`flex flex-row items-center hover:cursor-pointer ${className}`}
+			className={`flex cursor-pointer flex-row items-center ${className}`}
 			{...props}
 		>
 			<Image src={kiokuLogo} alt="Kioku" className={`${logoSize}`} />

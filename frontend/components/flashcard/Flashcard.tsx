@@ -114,7 +114,7 @@ export const Flashcard = ({
 								{tempCard.sides.length > 1 && (
 									<FileMinus
 										id="deleteSideButtonId"
-										className="hover:cursor-pointer"
+										className="cursor-pointer"
 										onClick={() => {
 											setSide((oldSide) =>
 												Math.min(
@@ -131,7 +131,7 @@ export const Flashcard = ({
 								)}
 								<FilePlus
 									id="addSideButtonId"
-									className="hover:cursor-pointer"
+									className="cursor-pointer"
 									onClick={() => {
 										setTempCard({
 											...tempCard,
@@ -157,7 +157,7 @@ export const Flashcard = ({
 								<div className="flex flex-row items-center space-x-3">
 									<Check
 										id="saveButtonId"
-										className="hover:cursor-pointer"
+										className="cursor-pointer"
 										onClick={() => {
 											setEdit(false);
 											modifyCard(tempCard);
@@ -165,7 +165,7 @@ export const Flashcard = ({
 									/>
 									<X
 										id="cancelButtonId"
-										className="hover:cursor-pointer"
+										className="cursor-pointer"
 										onClick={() => {
 											setTempCard(card);
 											setEdit(false);
@@ -179,7 +179,7 @@ export const Flashcard = ({
 									id="editButtonId"
 									className={`${
 										editable
-											? "hover:cursor-pointer"
+											? "cursor-pointer"
 											: "text-gray-200 hover:cursor-not-allowed"
 									}`}
 									onClick={() => setEdit(editable)}
@@ -220,7 +220,7 @@ export const Flashcard = ({
 				{side > 0 && (
 					<ArrowLeft
 						id="arrowLeftId"
-						className="h-8 hover:cursor-pointer md:h-10 lg:h-12"
+						className="h-8 cursor-pointer md:h-10 lg:h-12"
 						onClick={() => setSide(side - 1)}
 					/>
 				)}
@@ -228,7 +228,7 @@ export const Flashcard = ({
 				{side < tempCard.sides.length - 1 && (
 					<ArrowRight
 						id="arrowRightId"
-						className="h-8 hover:cursor-pointer md:h-10 lg:h-12"
+						className="h-8 cursor-pointer md:h-10 lg:h-12"
 						onClick={() => setSide(side + 1)}
 					/>
 				)}

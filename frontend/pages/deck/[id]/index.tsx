@@ -87,7 +87,6 @@ export default function Page() {
 										<CardsTab
 											deck={{
 												...deck,
-												groupRole: group.groupRole,
 											}}
 										/>
 									),

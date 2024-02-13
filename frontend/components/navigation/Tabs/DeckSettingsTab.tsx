@@ -52,7 +52,7 @@ export const DeckSettingsTab = ({
 			<Section id="generalDeckSettingsId" header="General">
 				<InputAction
 					id="deckNameInputAction"
-					header={_(msg`Deck name`)}
+					header={_(msg`Deck Name`)}
 					value={deckState.deckName}
 					button={_(msg`Rename`)}
 					disabled={!isAdmin}
@@ -60,6 +60,23 @@ export const DeckSettingsTab = ({
 						setDeckState({
 							...deckState,
 							deckName: event.target.value,
+						});
+					}}
+					onClick={() => {
+						modifyDeck(deckState);
+					}}
+				/>
+				<hr className="border-kiokuLightBlue" />
+				<InputAction
+					id="deckDescriptionInputAction"
+					header={_(msg`Deck Description`)}
+					value={deckState.deckDescription}
+					button={_(msg`Save`)}
+					disabled={!isAdmin}
+					onChange={(event: ChangeEvent<HTMLInputElement>) => {
+						setDeckState({
+							...deckState,
+							deckDescription: event.target.value,
 						});
 					}}
 					onClick={() => {
@@ -103,9 +120,7 @@ export const DeckSettingsTab = ({
 					disabled={!isAdmin}
 					onClick={() => {
 						if (isConfirmDeletion) {
-							deleteDeck()
-								.then((result) => {})
-								.catch((error) => {});
+							deleteDeck();
 						} else {
 							setConfirmDeletion(true);
 						}
@@ -135,10 +150,10 @@ export const DeckSettingsTab = ({
 		const response = await deleteRequest(`/api/decks/${deck.deckID}`);
 		if (response?.ok) {
 			toast.info(t`Deck deleted!`, { toastId: "deletedDeckToast" });
+			mutate(`/api/groups/${group.groupID}/decks`);
+			router.push(group.isDefault ? "/" : `/group/${group.groupID}`);
 		} else {
 			toast.error("Error!", { toastId: "deletedDeckToast" });
 		}
-		mutate(`/api/groups/${group.groupID}/decks`);
-		router.push(`/group/${group.groupID}`);
 	}
 };

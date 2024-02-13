@@ -38,8 +38,12 @@ export default function DeckList({
 	className = "",
 }: Readonly<DeckListProps>) {
 	const filteredDecks = useMemo(() => {
-		const filteredDecks = decks?.filter((deck) =>
-			deck.deckName.toUpperCase().includes(filter)
+		const filteredDecks = decks?.filter(
+			(deck) =>
+				deck.deckName.toUpperCase().includes(filter.toUpperCase()) ||
+				deck.deckDescription
+					.toUpperCase()
+					.includes(filter.toUpperCase())
 		);
 		return reverse ? filteredDecks?.toReversed() : filteredDecks;
 	}, [decks, filter, reverse]);

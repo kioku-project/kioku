@@ -49,7 +49,7 @@ export const ActionBar = ({
 				onChange={onSearch}
 			/>
 			<ChevronsUp
-				className={`flex-none text-kiokuDarkBlue transition hover:cursor-pointer ${
+				className={`flex-none cursor-pointer text-kiokuDarkBlue transition ${
 					reverse ? "rotate-180" : ""
 				}`}
 				onClick={onReverse}
@@ -57,7 +57,7 @@ export const ActionBar = ({
 			<PlusSquare
 				className={`${
 					writePermission
-						? "text-kiokuDarkBlue hover:scale-110 hover:cursor-pointer"
+						? "cursor-pointer text-kiokuDarkBlue hover:scale-110"
 						: "text-gray-400 hover:cursor-not-allowed"
 				} flex-none transition`}
 				onClick={(event) => {

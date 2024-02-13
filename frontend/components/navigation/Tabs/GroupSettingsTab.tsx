@@ -1,9 +1,7 @@
-import { msg, t } from "@lingui/macro";
+import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
-import { toast } from "react-toastify";
-import { useSWRConfig } from "swr";
 
 import { DangerAction } from "@/components/input/DangerAction";
 import { InputAction } from "@/components/input/InputAction";
@@ -11,7 +9,7 @@ import { ToggleAction } from "@/components/input/ToggleAction";
 import { Section } from "@/components/layout/Section";
 import { Group as GroupType } from "@/types/Group";
 import { GroupRole } from "@/types/GroupRole";
-import { deleteRequest, putRequests } from "@/util/api";
+import { deleteGroup, leaveGroup, modifyGroup } from "@/util/api";
 
 interface GroupSettingsTabProps {
 	/**
@@ -32,7 +30,6 @@ export const GroupSettingsTab = ({
 	className = "",
 }: GroupSettingsTabProps) => {
 	const router = useRouter();
-	const { mutate } = useSWRConfig();
 	const [groupDescription, setGroupDescription] = useState(
 		group.groupDescription
 	);
@@ -57,7 +54,7 @@ export const GroupSettingsTab = ({
 						setGroupName(event.target.value);
 					}}
 					onClick={() => {
-						modifyGroup({ groupName: groupName });
+						modifyGroup(group.groupID, { groupName: groupName });
 					}}
 				/>
 				<hr className="border-kiokuLightBlue" />
@@ -71,7 +68,9 @@ export const GroupSettingsTab = ({
 						setGroupDescription(event.target.value);
 					}}
 					onClick={() => {
-						modifyGroup({ groupDescription: groupDescription });
+						modifyGroup(group.groupID, {
+							groupDescription: groupDescription,
+						});
 					}}
 				/>
 			</Section>
@@ -88,8 +87,9 @@ export const GroupSettingsTab = ({
 						msg`You must either be invited or request to join the group again.`
 					)}
 					button={_(msg`Leave Group`)}
-					onClick={() => {
-						leaveGroup();
+					onClick={async () => {
+						const response = await leaveGroup(group.groupID);
+						if (response?.ok) router.push(`/`);
 					}}
 				/>
 				<hr className="border-kiokuLightBlue" />
@@ -117,7 +117,9 @@ export const GroupSettingsTab = ({
 					activeButton={group.groupType}
 					disabled={!isAdmin}
 					onChange={(event) => {
-						modifyGroup({ groupType: event.currentTarget.value });
+						modifyGroup(group.groupID, {
+							groupType: event.currentTarget.value,
+						});
 					}}
 				/>
 				<hr className="border-kiokuLightBlue" />
@@ -133,9 +135,10 @@ export const GroupSettingsTab = ({
 							: _(msg`Delete Group`)
 					}
 					disabled={!isAdmin}
-					onClick={() => {
+					onClick={async () => {
 						if (isConfirmDeletion) {
-							deleteGroup();
+							const response = await deleteGroup(group.groupID);
+							if (response?.ok) router.push(`/`);
 						} else {
 							setConfirmDelete(true);
 						}
@@ -144,45 +147,4 @@ export const GroupSettingsTab = ({
 			</Section>
 		</div>
 	);
-
-	async function modifyGroup(body: {
-		groupName?: string;
-		groupDescription?: string;
-		groupType?: string;
-	}) {
-		const response = await putRequests(
-			`/api/groups/${group.groupID}`,
-			JSON.stringify(body)
-		);
-		if (response?.ok) {
-			toast.info(t`Group updated!`, { toastId: "updatedGroupToast" });
-		} else {
-			toast.error("Error!", { toastId: "updatedGroupToast" });
-		}
-		mutate(`/api/groups/${group.groupID}`);
-	}
-
-	async function leaveGroup() {
-		const response = await deleteRequest(
-			`/api/groups/${group.groupID}/members`
-		);
-		if (response?.ok) {
-			toast.info(t`Left group!`, { toastId: "leftGroupToast" });
-			router.push(`/`);
-		} else {
-			toast.error("Error!", { toastId: "leftGroupToast" });
-		}
-		mutate(`/api/groups`);
-	}
-
-	async function deleteGroup() {
-		const response = await deleteRequest(`/api/groups/${group.groupID}`);
-		if (response?.ok) {
-			toast.info(t`Group deleted!`, { toastId: "deletedGroupToast" });
-			router.push(`/`);
-		} else {
-			toast.error("Error!", { toastId: "deletedGroupToast" });
-		}
-		mutate(`/api/groups`);
-	}
 };

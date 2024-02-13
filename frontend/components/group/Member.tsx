@@ -1,15 +1,17 @@
-import { msg, t } from "@lingui/macro";
+import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import React, { useRef, useState } from "react";
 import { Check, UserCheck, UserMinus, UserX, X } from "react-feather";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSWRConfig } from "swr";
 
 import { Text } from "@/components/Text";
 import { InputField } from "@/components/form/InputField";
 import { User } from "@/types/User";
-import { apiRequest, deleteRequest } from "@/util/api";
+import {
+	declineGroupInvitation,
+	deleteMember,
+	sendGroupInvitation,
+} from "@/util/api";
 
 interface MemberProps {
 	/**
@@ -34,11 +36,12 @@ export default function Member({
 	user,
 	className = "",
 }: Readonly<MemberProps>) {
-	const { mutate } = useSWRConfig();
-	const [isDelete, setDelete] = useState(false);
+	const { _ } = useLingui();
+
 	const userInputField = useRef<HTMLInputElement>(null);
 
-	const { _ } = useLingui();
+	const [isDelete, setDelete] = useState(false);
+
 	return (
 		<div
 			id={id ?? `user${user?.userID}`}
@@ -58,9 +61,13 @@ export default function Member({
 										<div className="flex flex-row space-x-3">
 											<Check
 												className="cursor-pointer"
-												onClick={() => {
-													deleteMember(user);
-												}}
+												onClick={() =>
+													user.groupID &&
+													deleteMember(
+														user.groupID,
+														user.userID
+													)
+												}
 											/>
 											<X
 												className="cursor-pointer"
@@ -84,21 +91,23 @@ export default function Member({
 								<div className="flex flex-row space-x-3">
 									<UserCheck
 										className="cursor-pointer"
-										onClick={() => {
-											inviteUser(
-												user.userEmail ?? "",
-												true
-											);
-										}}
+										onClick={() =>
+											user.groupID &&
+											sendGroupInvitation(
+												user.groupID,
+												user.userEmail ?? ""
+											)
+										}
 									/>
 									<UserX
 										className="cursor-pointer"
-										onClick={() => {
-											inviteUser(
-												user.userEmail ?? "",
-												false
-											);
-										}}
+										onClick={() =>
+											user.groupID &&
+											declineGroupInvitation(
+												user.groupID,
+												user.userEmail ?? ""
+											)
+										}
 									/>
 								</div>
 							</div>
@@ -110,9 +119,13 @@ export default function Member({
 								</div>
 								<X
 									className="cursor-pointer"
-									onClick={() => {
-										inviteUser(user.userEmail ?? "", false);
-									}}
+									onClick={() =>
+										user.groupID &&
+										declineGroupInvitation(
+											user.groupID,
+											user.userEmail ?? ""
+										)
+									}
 								/>
 							</div>
 						)}
@@ -128,10 +141,14 @@ export default function Member({
 						inputFieldSize="xs"
 						onKeyUp={(event) => {
 							if (
-								userInputField.current &&
-								event.key === "Enter"
+								event.key === "Enter" &&
+								user.groupID &&
+								userInputField.current
 							) {
-								inviteUser(userInputField.current?.value, true);
+								sendGroupInvitation(
+									user.groupID,
+									userInputField.current?.value
+								);
 								userInputField.current.value = "";
 							}
 						}}
@@ -141,36 +158,4 @@ export default function Member({
 			)}
 		</div>
 	);
-
-	async function inviteUser(userEmail: string, invite: boolean) {
-		const response = await apiRequest(
-			invite ? "POST" : "DELETE",
-			`/api/groups/${user.groupID}/members/invitation`,
-			JSON.stringify({
-				invitedUserEmail: userEmail,
-			})
-		);
-		if (response?.ok) {
-			toast.info(t`User invited`, {
-				toastId: "invitedUserToast",
-			});
-		} else {
-			toast.error("Error!", { toastId: "invitedUserToast" });
-		}
-		mutate(`/api/groups/${user.groupID}/members`);
-		mutate(`/api/groups/${user.groupID}/members/invitations`);
-		mutate(`/api/groups/${user.groupID}/members/requests`);
-	}
-
-	async function deleteMember(user: User) {
-		const response = await deleteRequest(
-			`/api/groups/${user.groupID}/members/${user.userID}`
-		);
-		if (response?.ok) {
-			toast.info("User removed!", { toastId: "removedUserToast" });
-			mutate(`/api/groups/${user.groupID}/members`);
-		} else {
-			toast.error("Error!", { toastId: "removedUserToast" });
-		}
-	}
 }

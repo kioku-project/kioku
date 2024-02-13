@@ -10,14 +10,13 @@ import {
 	FilePlus,
 	X,
 } from "react-feather";
-import { toast } from "react-toastify";
-import { useSWRConfig } from "swr";
 
 import { InputField } from "@/components/form/InputField";
 import { TextArea } from "@/components/form/TextArea";
 import { Button } from "@/components/input/Button";
 import { Card as CardType } from "@/types/Card";
-import { putRequests } from "@/util/api";
+import { modifyCard, pushCard } from "@/util/api";
+import { useDueCards } from "@/util/swr";
 
 interface FlashcardProps {
 	/**
@@ -25,13 +24,13 @@ interface FlashcardProps {
 	 */
 	id: string;
 	/**
+	 * deckID
+	 */
+	deckID: string;
+	/**
 	 * Flashcard
 	 */
 	card: CardType;
-	/**
-	 * Cards left to learn
-	 */
-	dueCards?: number;
 	/**
 	 * Flashcard side to show
 	 */
@@ -52,10 +51,6 @@ interface FlashcardProps {
 	 * Additional classes
 	 */
 	className?: string;
-	/**
-	 * Callback to push rating
-	 */
-	push?: (body: { cardID: string; rating: number }) => void;
 }
 
 /**
@@ -63,25 +58,26 @@ interface FlashcardProps {
  */
 export const Flashcard = ({
 	id,
+	deckID,
 	card,
-	dueCards,
 	cardSide = 0,
 	isEdit = false,
 	fullSize = false,
 	className = "",
-	push,
 	editable = false,
 }: FlashcardProps) => {
-	const { mutate } = useSWRConfig();
+	const { _ } = useLingui();
+
+	const { dueCards } = useDueCards(deckID);
+
+	const headerInput = useRef<HTMLInputElement>(null);
+	const descriptionInput = useRef<HTMLTextAreaElement>(null);
+
 	const [tempCard, setTempCard] = useState<CardType>(card);
 	const [side, setSide] = useState<number>(
 		cardSide % (card.sides?.length || 1)
 	);
 	const [edit, setEdit] = useState<boolean>(isEdit);
-	const headerInput = useRef<HTMLInputElement>(null);
-	const descriptionInput = useRef<HTMLTextAreaElement>(null);
-
-	const { _ } = useLingui();
 
 	return (
 		<div
@@ -239,7 +235,7 @@ export const Flashcard = ({
 							id="buttonHardId"
 							buttonStyle="primary"
 							className="w-auto"
-							onClick={() => pushCard(0)}
+							onClick={() => pushCard(deckID, card.cardID, 0)}
 						>
 							<Trans>Hard</Trans>
 						</Button>
@@ -247,7 +243,7 @@ export const Flashcard = ({
 							id="buttonMediumId"
 							buttonStyle="primary"
 							className="w-auto"
-							onClick={() => pushCard(1)}
+							onClick={() => pushCard(deckID, card.cardID, 1)}
 						>
 							<Trans>Medium</Trans>
 						</Button>
@@ -255,7 +251,7 @@ export const Flashcard = ({
 							id="buttonEasyId"
 							buttonStyle="primary"
 							className="w-auto"
-							onClick={() => pushCard(2)}
+							onClick={() => pushCard(deckID, card.cardID, 2)}
 						>
 							<Trans>Easy</Trans>
 						</Button>
@@ -269,27 +265,5 @@ export const Flashcard = ({
 		const card = structuredClone(tempCard);
 		card.sides[side][field] = value;
 		setTempCard(card);
-	}
-
-	async function modifyCard(card: CardType) {
-		const response = await putRequests(
-			`/api/cards/${card.cardID}`,
-			JSON.stringify({
-				sides: card.sides,
-			})
-		);
-		if (response?.ok) {
-			toast.info(t`Card updated!`, { toastId: "updatedCardToast" });
-		} else {
-			toast.error("Error!", { toastId: "updatedCardToast" });
-		}
-		mutate(`/api/decks/${card.deckID}/cards`);
-	}
-
-	function pushCard(rating: number) {
-		push?.({
-			cardID: card.cardID,
-			rating: rating,
-		});
 	}
 };

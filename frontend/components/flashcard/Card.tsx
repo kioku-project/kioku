@@ -1,15 +1,13 @@
-import { msg, t } from "@lingui/macro";
+import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import React, { useRef, useState } from "react";
 import { Check, Trash, X } from "react-feather";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSWRConfig } from "swr";
 
 import { Text } from "@/components/Text";
 import { InputField } from "@/components/form/InputField";
 import { Card as CardType } from "@/types/Card";
-import { deleteRequest, postRequest } from "@/util/api";
+import { createCard, deleteCard } from "@/util/api";
 
 interface CardProps {
 	/**
@@ -39,11 +37,11 @@ export const Card = ({
 	className = "",
 	setCard,
 }: CardProps) => {
-	const { mutate } = useSWRConfig();
-	const [isDelete, setDelete] = useState(false);
+	const { _ } = useLingui();
+
 	const cardNameInput = useRef<HTMLInputElement>(null);
 
-	const { _ } = useLingui();
+	const [isDelete, setDelete] = useState(false);
 
 	return (
 		<div className={`font-semibold text-kiokuDarkBlue ${className}`}>
@@ -62,9 +60,10 @@ export const Card = ({
 							<div className="flex flex-row space-x-1">
 								<Check
 									className="cursor-pointer"
-									onClick={() => {
-										deleteCard();
-									}}
+									onClick={() =>
+										card.deckID &&
+										deleteCard(card.deckID, card.cardID)
+									}
 								/>
 								<X
 									className="cursor-pointer"
@@ -104,7 +103,10 @@ export const Card = ({
 						inputFieldStyle="primary"
 						inputFieldSize="xs"
 						onKeyUp={(event) =>
-							event.key === "Enter" && createCard()
+							event.key === "Enter" &&
+							card.deckID &&
+							cardNameInput.current &&
+							createCard(card.deckID, cardNameInput.current)
 						}
 						ref={cardNameInput}
 					/>
@@ -112,42 +114,4 @@ export const Card = ({
 			)}
 		</div>
 	);
-
-	async function createCard() {
-		if (!cardNameInput.current?.value) {
-			cardNameInput.current?.focus();
-			return;
-		}
-		const response = await postRequest(
-			`/api/decks/${card.deckID}/cards`,
-			JSON.stringify({
-				sides: [
-					{
-						header: cardNameInput.current.value,
-					},
-				],
-			})
-		);
-		if (response?.ok) {
-			cardNameInput.current.value = "";
-			toast.info(t`Card created!`, { toastId: "newCardToast" });
-			mutate(`/api/decks/${card.deckID}/cards`);
-			mutate(`/api/decks/${card.deckID}/pull`);
-			mutate(`/api/decks/${card.deckID}/dueCards`);
-		} else {
-			toast.error("Error!", { toastId: "newCardToast" });
-		}
-	}
-
-	async function deleteCard() {
-		const response = await deleteRequest(`/api/cards/${card.cardID}`);
-		if (response?.ok) {
-			toast.info("Card deleted!", { toastId: "deletedCardToast" });
-			mutate(`/api/decks/${card.deckID}/cards`);
-			mutate(`/api/decks/${card.deckID}/pull`);
-			mutate(`/api/decks/${card.deckID}/dueCards`);
-		} else {
-			toast.error("Error!", { toastId: "deletedCardToast" });
-		}
-	}
 };

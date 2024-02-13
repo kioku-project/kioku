@@ -13,6 +13,7 @@ import { InputField } from "@/components/form/InputField";
 import { Logo } from "@/components/graphics/Logo";
 import { Button } from "@/components/input/Button";
 import { loadCatalog } from "@/pages/_app";
+import { loginRoute, reauthRoute, registerRoute, submitForm } from "@/util/api";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -39,7 +40,7 @@ export default function Page() {
 
 	useEffect(() => {
 		(async () => {
-			const response = await fetch("/api/reauth");
+			const response = await fetch(reauthRoute);
 			if (response.status === 200) {
 				router.replace("/");
 			}
@@ -83,6 +84,7 @@ export default function Page() {
 								<InputField
 									id="emailInputFieldId"
 									type="email"
+									name="userEmail"
 									placeholder={_(msg`Email`)}
 									required
 									className="bg-neutral-100 p-3 text-base sm:text-xs"
@@ -92,6 +94,7 @@ export default function Page() {
 									<InputField
 										id="usernameInputFieldId"
 										type="text"
+										name="userName"
 										placeholder={_(msg`Username`)}
 										required
 										className="bg-neutral-100 p-3 text-base sm:text-xs"
@@ -101,6 +104,7 @@ export default function Page() {
 								<InputField
 									id="passwordInputFieldId"
 									type={"password"}
+									name="userPassword"
 									placeholder={_(msg`Password`)}
 									inputFieldIconStyle="text-neutral-400"
 									required
@@ -241,19 +245,17 @@ export default function Page() {
 	);
 
 	async function loginLogic() {
-		if (!form.current?.checkValidity()) {
+		if (
+			!form.current?.checkValidity() ||
+			!emailInput.current ||
+			!passwordInput.current
+		) {
 			return;
 		}
-		const response = await fetch(`/api/login`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				userEmail: emailInput.current?.value,
-				userPassword: passwordInput.current?.value,
-			}),
-		});
+		const response = await submitForm(loginRoute, [
+			emailInput.current,
+			passwordInput.current,
+		]);
 		if (response.ok) {
 			toast.info(<Trans>Logged in!</Trans>, { toastId: "accountToast" });
 			router.push("/");
@@ -267,21 +269,19 @@ export default function Page() {
 	async function registerLogic() {
 		if (
 			!form.current?.checkValidity() ||
-			passwordInput.current?.value !== repeatPasswordInput.current?.value
+			passwordInput.current?.value !==
+				repeatPasswordInput.current?.value ||
+			!emailInput.current ||
+			!nameInput.current ||
+			!passwordInput.current
 		) {
 			return;
 		}
-		const response = await fetch(`/api/register`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				userEmail: emailInput.current?.value,
-				userName: nameInput.current?.value,
-				userPassword: passwordInput.current?.value,
-			}),
-		});
+		const response = await submitForm(registerRoute, [
+			emailInput.current,
+			nameInput.current,
+			passwordInput.current,
+		]);
 		if (response.ok) {
 			toast.info(<Trans>Account created!</Trans>, {
 				toastId: "accountToast",

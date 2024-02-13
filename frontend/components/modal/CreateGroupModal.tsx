@@ -1,13 +1,11 @@
-import { Trans, msg, t } from "@lingui/macro";
+import { Trans, msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { useRef } from "react";
-import { toast } from "react-toastify";
-import { useSWRConfig } from "swr";
 
 import { InputField } from "@/components/form/InputField";
 import { Button } from "@/components/input/Button";
 import { Modal, ModalProps } from "@/components/modal/modal";
-import { postRequest } from "@/util/api";
+import { createGroup } from "@/util/api";
 
 /**
  * Modal for creating groups
@@ -17,7 +15,6 @@ export const CreateGroupModal = ({
 	setVisible,
 	...props
 }: ModalProps) => {
-	const { mutate } = useSWRConfig();
 	const { _ } = useLingui();
 
 	const groupNameInput = useRef<HTMLInputElement>(null);
@@ -30,11 +27,25 @@ export const CreateGroupModal = ({
 			setVisible={setVisible}
 			{...props}
 		>
-			<form className="space-y-5">
+			<form
+				onSubmit={(event) => {
+					event.preventDefault();
+					event.currentTarget.checkValidity() &&
+						groupNameInput.current &&
+						groupDescriptionInput.current &&
+						createGroup([
+							groupNameInput.current,
+							groupDescriptionInput.current,
+						]);
+					setVisible(false);
+				}}
+				className="space-y-5"
+			>
 				<div className="space-y-3">
 					<InputField
 						id="groupNameInputFieldId"
 						type="text"
+						name="groupName"
 						label={_(msg`Group Name`)}
 						inputFieldLabelStyle="text-gray-400"
 						required
@@ -47,6 +58,7 @@ export const CreateGroupModal = ({
 					<InputField
 						id="groupDescriptionInputFieldId"
 						type="text"
+						name="groupDescription"
 						label={_(msg`Group Description`)}
 						inputFieldLabelStyle="text-gray-400"
 						placeholder={_(msg`Enter group description`)}
@@ -70,10 +82,6 @@ export const CreateGroupModal = ({
 						type="submit"
 						buttonStyle="secondary"
 						buttonTextSize="3xs"
-						onClick={() => {
-							createGroup();
-							setVisible(false);
-						}}
 					>
 						<Trans>Create Group</Trans>
 					</Button>
@@ -81,24 +89,4 @@ export const CreateGroupModal = ({
 			</form>
 		</Modal>
 	);
-
-	async function createGroup() {
-		if (!groupNameInput.current?.value || !groupDescriptionInput.current) {
-			groupNameInput.current?.focus();
-			return;
-		}
-		const response = await postRequest(
-			`/api/groups`,
-			JSON.stringify({
-				groupName: groupNameInput.current.value,
-				groupDescription: groupDescriptionInput.current?.value || "",
-			})
-		);
-		if (response?.ok) {
-			toast.info(t`Group created!`, { toastId: "newGroupToast" });
-		} else {
-			toast.error("Error!", { toastId: "newGroupToast" });
-		}
-		mutate(`/api/groups`);
-	}
 };

@@ -20,8 +20,7 @@ COPY services/user/ services/user
 COPY store/ store/
 COPY pkg/ pkg/
 WORKDIR /go/src/kioku/services/user
-RUN make proto
-RUN make build
+RUN make proto build
 
 # Deployment container
 FROM scratch

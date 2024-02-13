@@ -61,14 +61,23 @@ msgstr "Verfügbar"
 msgid "Back to Deck!"
 msgstr "Zurück zum Stapel!"
 
+#: components/modal/CreateCardModal.tsx:76
 #: components/modal/CreateDeckModal.tsx:76
 #: components/modal/CreateGroupModal.tsx:67
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: components/flashcard/Card.tsx:133
+#: components/modal/CreateCardModal.tsx:59
+msgid "Card back"
+msgstr "Kartenrückseite"
+
+#: components/modal/CreateCardModal.tsx:113
 msgid "Card created!"
 msgstr "Karte erstellt!"
+
+#: components/modal/CreateCardModal.tsx:47
+msgid "Card front"
+msgstr "Kartenvorderseite"
 
 #: components/flashcard/Flashcard.tsx:282
 msgid "Card updated!"
@@ -120,7 +129,7 @@ msgstr "Glückwunsch!"
 msgid "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 msgstr "Erstelle und individualisiere Karteikarten, die genau auf Deine Bedürfnisse und Vorlieben zugeschnitten sind. Bestimme Dein eigenes Tempo mit unserem Spaced Repetition System, um Dein Potenzial zu maximieren!"
 
-#: components/flashcard/Card.tsx:103
+#: components/modal/CreateCardModal.tsx:87
 msgid "Create Card"
 msgstr "Karte erstellen"
 
@@ -131,6 +140,10 @@ msgstr "Stapel erstellen"
 #: components/modal/CreateGroupModal.tsx:78
 msgid "Create Group"
 msgstr "Gruppe erstellen"
+
+#: components/modal/CreateCardModal.tsx:37
+msgid "Create new Card"
+msgstr "Neue Karte erstellen"
 
 #: components/modal/CreateDeckModal.tsx:37
 msgid "Create new Deck"
@@ -229,6 +242,14 @@ msgstr "Einfach"
 #: pages/login.tsx:86
 msgid "Email"
 msgstr "E-Mail"
+
+#: components/modal/CreateCardModal.tsx:61
+msgid "Enter card back"
+msgstr "Kartenrückseite eingeben"
+
+#: components/modal/CreateCardModal.tsx:50
+msgid "Enter card front"
+msgstr "Kartenvorderseite eingeben"
 
 #: components/modal/CreateDeckModal.tsx:61
 msgid "Enter deck description"

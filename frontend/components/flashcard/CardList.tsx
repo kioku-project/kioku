@@ -14,6 +14,14 @@ interface CardListProps {
 	 */
 	cards?: CardType[];
 	/**
+	 * Filter cards
+	 */
+	filter?: string;
+	/**
+	 * Reverse card list
+	 */
+	reverse?: boolean;
+	/**
 	 * Additional classes
 	 */
 	className?: string;
@@ -34,13 +42,17 @@ export const FetchCardList = ({ deck, ...props }: CardListProps) => {
 export const CardList = ({
 	deck,
 	cards,
+	filter = "",
+	reverse = false,
 	className = "",
 	setCard,
 }: CardListProps) => {
+	const filteredCards = cards?.filter((card) => filterCard(card, filter));
+	const sortedCards = reverse ? filteredCards?.reverse() : filteredCards;
 	return (
 		<div id="cardListId" className={`flex h-full flex-col ${className}`}>
 			<div className="snap-y overflow-y-auto">
-				{cards?.map((card: CardType) => (
+				{sortedCards?.map((card: CardType) => (
 					<Card
 						className="snap-center"
 						key={card.cardID}
@@ -53,9 +65,14 @@ export const CardList = ({
 					/>
 				))}
 			</div>
-			{deck.deckRole && GroupRole[deck.deckRole] >= GroupRole.WRITE && (
-				<Card card={{ cardID: "", sides: [], deckID: deck.deckID }} />
-			)}
 		</div>
 	);
+
+	function filterCard(card: CardType, filter: string): boolean {
+		return card.sides.some(
+			(side) =>
+				side.header?.toUpperCase().includes(filter) ||
+				side.description?.toUpperCase().includes(filter)
+		);
+	}
 };

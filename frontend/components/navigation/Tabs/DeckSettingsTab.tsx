@@ -116,11 +116,11 @@ export const DeckSettingsTab = ({
 					disabled={!isAdmin}
 					onClick={async () => {
 						if (isConfirmDeletion) {
-							const resposne = await deleteDeck(
+							const response = await deleteDeck(
 								deck.deckID,
 								group.groupID
 							);
-							if (resposne?.ok)
+							if (response?.ok)
 								router.push(
 									group.isDefault
 										? "/"

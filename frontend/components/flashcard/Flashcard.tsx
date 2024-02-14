@@ -1,4 +1,4 @@
-import { Trans, msg, plural, t } from "@lingui/macro";
+import { Trans, msg, plural } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import React, { useRef, useState } from "react";
 import {

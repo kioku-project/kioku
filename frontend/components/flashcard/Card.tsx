@@ -1,6 +1,5 @@
-import { useLingui } from "@lingui/react";
 import clsx from "clsx";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Check, Trash, X } from "react-feather";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

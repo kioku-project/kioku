@@ -57,7 +57,7 @@ export const TabBar = ({
 						className={clsx(
 							"flex-1 cursor-pointer border-t-2 p-3 font-bold transition md:flex-initial md:border-t-0",
 							currentTab === tab
-								? " border-kiokuDarkBlue text-kiokuDarkBlue md:border-b-2"
+								? "border-kiokuDarkBlue text-kiokuDarkBlue md:border-b-2"
 								: "border-kiokuLightBlue text-kiokuLightBlue"
 						)}
 						onClick={() => {

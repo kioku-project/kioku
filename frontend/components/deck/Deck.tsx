@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { Globe, Heart, Lock, MoreVertical } from "react-feather";
-import "react-toastify/dist/ReactToastify.css";
 import { preload } from "swr";
 
 import { Text } from "@/components/Text";

@@ -5,8 +5,6 @@ import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "react-feather";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import { Text } from "@/components/Text";
 import { InputField } from "@/components/form/InputField";
@@ -257,12 +255,7 @@ export default function Page() {
 			passwordInput.current,
 		]);
 		if (response.ok) {
-			toast.info(<Trans>Logged in!</Trans>, { toastId: "accountToast" });
 			router.push("/");
-		} else {
-			toast.error(<Trans>Wrong username or password</Trans>, {
-				toastId: "accountToast",
-			});
 		}
 	}
 
@@ -283,15 +276,8 @@ export default function Page() {
 			passwordInput.current,
 		]);
 		if (response.ok) {
-			toast.info(<Trans>Account created!</Trans>, {
-				toastId: "accountToast",
-			});
 			setLogin(true);
 			emailInput.current?.focus();
-		} else {
-			toast.error(<Trans>Account already exists!</Trans>, {
-				toastId: "accountToast",
-			});
 		}
 	}
 }

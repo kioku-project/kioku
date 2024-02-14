@@ -2,7 +2,6 @@ import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import React, { useRef, useState } from "react";
 import { Check, UserCheck, UserMinus, UserX, X } from "react-feather";
-import "react-toastify/dist/ReactToastify.css";
 
 import { Text } from "@/components/Text";
 import { InputField } from "@/components/form/InputField";

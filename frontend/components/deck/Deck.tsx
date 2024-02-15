@@ -9,7 +9,8 @@ import { Text } from "@/components/Text";
 import { IconLabel, IconLabelType } from "@/components/graphics/IconLabel";
 import { Button } from "@/components/input/Button";
 import { Deck as DeckType } from "@/types/Deck";
-import { deckRoute, toggleFavorite } from "@/util/api";
+import { toggleFavorite } from "@/util/api";
+import { deckRoute } from "@/util/endpoints";
 import { fetcher, useDueCards } from "@/util/swr";
 
 interface DeckProps {

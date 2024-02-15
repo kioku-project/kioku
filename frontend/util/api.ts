@@ -1,53 +1,26 @@
 import { mutate } from "swr";
 
 import { Card as CardType } from "@/types/Card";
+import {
+	activeDecksRoute,
+	cardRoute,
+	cardRoutes,
+	cardsRoute,
+	deckRoute,
+	decksRoute,
+	favoriteDecksRoute,
+	groupMemberRoutes,
+	groupRoute,
+	groupsRoute,
+	invitationsRoute,
+	memberRoute,
+	membersRoute,
+	pushCardsRoute,
+	requestsRoute,
+	userRoute,
+} from "@/util/endpoints";
 
 import { authedFetch } from "./reauth";
-
-// User routes
-export const userRoute = "/api/user";
-export const notificationsRoute = "/api/user/notification";
-export const notificationRoute = (notificationID: string) =>
-	`/api/user/notification/${notificationID}`;
-export const registerRoute = "/api/register";
-export const loginRoute = "/api/login";
-export const reauthRoute = "/api/reauth";
-export const logoutRoute = "/api/logout";
-
-// Group routes
-export const groupsRoute = "/api/groups";
-export const groupRoute = (groupID: string) => `/api/groups/${groupID}`;
-export const decksRoute = (groupID: string) => `/api/groups/${groupID}/decks`;
-export const membersRoute = (groupID: string) =>
-	`/api/groups/${groupID}/members`;
-export const memberRoute = (groupID: string, userID: string) =>
-	`/api/groups/${groupID}/members/${userID}`;
-export const invitationsRoute = (groupID: string) =>
-	`/api/groups/${groupID}/members/invitations`;
-export const requestsRoute = (groupID: string) =>
-	`/api/groups/${groupID}/members/requests`;
-const groupMemberRoutes = (groupID: string) => [
-	membersRoute(groupID),
-	invitationsRoute(groupID),
-	requestsRoute(groupID),
-];
-
-// Deck routes
-export const activeDecksRoute = "/api/decks/active";
-export const favoriteDecksRoute = "/api/decks/favorites";
-export const deckRoute = (deckID: string) => `/api/decks/${deckID}`;
-export const cardsRoute = (deckID: string) => `/api/decks/${deckID}/cards`;
-export const pullCardsRoute = (deckID: string) => `/api/decks/${deckID}/pull`;
-export const pushCardsRoute = (deckID: string) => `/api/decks/${deckID}/push`;
-export const dueCardsRoute = (deckID: string) =>
-	`/api/decks/${deckID}/dueCards`;
-
-// Card routes
-export const cardRoute = (cardID: string) => `/api/cards/${cardID}`;
-const cardRoutes = (deckID: string) => [
-	pullCardsRoute(deckID),
-	dueCardsRoute(deckID),
-];
 
 export async function apiRequest(method: string, url: string, body?: string) {
 	const response = await authedFetch(url, {

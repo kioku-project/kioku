@@ -10,7 +10,8 @@ import { Button } from "@/components/input/Button";
 import { Deck as DeckType } from "@/types/Deck";
 import { Group as GroupType } from "@/types/Group";
 import { User } from "@/types/User";
-import { deckRoute, groupRoute, joinGroup } from "@/util/api";
+import { joinGroup } from "@/util/api";
+import { deckRoute, groupRoute } from "@/util/endpoints";
 import { fetcher } from "@/util/swr";
 
 interface HeaderProps {

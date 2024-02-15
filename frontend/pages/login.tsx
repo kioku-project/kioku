@@ -11,7 +11,8 @@ import { InputField } from "@/components/form/InputField";
 import { Logo } from "@/components/graphics/Logo";
 import { Button } from "@/components/input/Button";
 import { loadCatalog } from "@/pages/_app";
-import { loginRoute, reauthRoute, registerRoute, submitForm } from "@/util/api";
+import { submitForm } from "@/util/api";
+import { loginRoute, reauthRoute, registerRoute } from "@/util/endpoints";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);

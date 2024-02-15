@@ -6,7 +6,7 @@ import { ArrowRight, LogOut } from "react-feather";
 
 import { Logo } from "@/components/graphics/Logo";
 import { Button } from "@/components/input/Button";
-import { logoutRoute } from "@/util/api";
+import { logoutRoute } from "@/util/endpoints";
 import { authedFetch } from "@/util/reauth";
 
 interface NavbarProps {

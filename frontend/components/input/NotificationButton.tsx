@@ -3,13 +3,9 @@ import { Dispatch, SetStateAction } from "react";
 import { mutate } from "swr";
 
 import { Button } from "@/components/input/Button";
-import {
-	deleteRequest,
-	notificationRoute,
-	notificationsRoute,
-	postRequest,
-} from "@/util/api";
+import { deleteRequest, postRequest } from "@/util/api";
 import { Platform, getPlatform } from "@/util/client";
+import { notificationRoute, notificationsRoute } from "@/util/endpoints";
 import { useLocalStorage } from "@/util/hooks";
 import { useNotifications } from "@/util/swr";
 

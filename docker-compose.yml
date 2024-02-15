@@ -15,6 +15,8 @@ services:
       dockerfile: services/frontend/Dockerfile
     env_file:
       - ./backend/.env
+    depends_on:
+      - db
 
   user_service:
     container_name: kioku-user_service
@@ -40,6 +42,8 @@ services:
     command: /go/src/kioku/services/user/user
     env_file:
       - ./backend/.env
+    depends_on:
+      - db
 
   carddeck_service:
     container_name: kioku-carddeck_service
@@ -65,6 +69,8 @@ services:
     command: /go/src/kioku/services/carddeck/carddeck
     env_file:
       - ./backend/.env
+    depends_on:
+      - db
 
   collaboration_service:
     container_name: kioku-collaboration_service
@@ -90,6 +96,8 @@ services:
     command: /go/src/kioku/services/collaboration/collaboration
     env_file:
       - ./backend/.env
+    depends_on:
+      - db
 
   srs_service:
     container_name: kioku-srs_service
@@ -115,6 +123,8 @@ services:
     command: /go/src/kioku/services/srs/srs
     env_file:
       - ./backend/.env
+    depends_on:
+      - db
 
   notification_service:
     container_name: kioku-notification_service
@@ -140,6 +150,8 @@ services:
     command: /go/src/kioku/services/notification/notification
     env_file:
       - ./backend/.env
+    depends_on:
+      - db
 
   frontend:
     container_name: kioku-frontend

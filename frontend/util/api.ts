@@ -9,14 +9,14 @@ import {
 	deckRoute,
 	decksRoute,
 	favoriteDecksRoute,
+	groupMemberRoute,
 	groupMemberRoutes,
+	groupMembersRoute,
 	groupRoute,
 	groupsRoute,
-	invitationsRoute,
-	memberRoute,
-	membersRoute,
+	invitationsGroupRoute,
 	pushCardsRoute,
-	requestsRoute,
+	requestsGroupRoute,
 	userRoute,
 } from "@/util/endpoints";
 

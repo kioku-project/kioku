@@ -11,7 +11,7 @@ import { Button } from "@/components/input/Button";
 import { Deck as DeckType } from "@/types/Deck";
 import { toggleFavorite } from "@/util/api";
 import { deckRoute } from "@/util/endpoints";
-import { fetcher, useDueCards } from "@/util/swr";
+import { fetcher, useDeckDueCards } from "@/util/swr";
 
 interface DeckProps {
 	/**
@@ -35,7 +35,7 @@ interface DeckProps {
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 	const router = useRouter();
 
-	const { dueCards } = useDueCards(deck.deckID);
+	const { dueCards } = useDeckDueCards(deck.deckID);
 
 	useEffect(() => {
 		if (deck) {

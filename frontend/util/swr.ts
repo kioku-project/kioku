@@ -5,6 +5,24 @@ import { Deck } from "@/types/Deck";
 import { Group } from "@/types/Group";
 import { Invitation } from "@/types/Invitation";
 import { User } from "@/types/User";
+import {
+	activeDecksRoute,
+	cardsRoute,
+	deckRoute,
+	decksRoute,
+	dueCardsDeckRoute,
+	dueCardsUserRoute,
+	favoriteDecksRoute,
+	groupMembersRoute,
+	groupRoute,
+	groupsRoute,
+	invitationsGroupRoute,
+	invitationsUserRoute,
+	notificationsRoute,
+	pullCardsRoute,
+	requestsGroupRoute,
+	userRoute,
+} from "@/util/endpoints";
 
 import { authedFetch } from "./reauth";
 
@@ -15,7 +33,7 @@ export const fetcher = (url: RequestInfo | URL) =>
 
 export function useUser() {
 	const { data, error, isLoading, isValidating } = useSWR<User>(
-		`/api/user`,
+		userRoute,
 		fetcher
 	);
 	return {
@@ -30,7 +48,7 @@ export function useUserDue() {
 	const { data, error, isLoading, isValidating } = useSWR<{
 		dueCards: number;
 		dueDecks: number;
-	}>(`/api/user/dueCards`, fetcher);
+	}>(dueCardsUserRoute, fetcher);
 	return {
 		due: data,
 		error,
@@ -39,12 +57,12 @@ export function useUserDue() {
 	};
 }
 
-export function useInvitations() {
+export function useInvitations(condition: boolean = true) {
 	const { data, error, isLoading, isValidating } = useSWR<{
-		groupInvitation: Invitation[];
-	}>(`/api/user/invitations`, fetcher);
+		groups: Invitation[];
+	}>(condition ? invitationsUserRoute : null, fetcher);
 	return {
-		invitations: data?.groupInvitation,
+		invitations: data?.groups,
 		error,
 		isLoading,
 		isValidating,
@@ -53,7 +71,7 @@ export function useInvitations() {
 
 export function useNotifications() {
 	const { data, error, isLoading, isValidating } = useSWR(
-		`/api/user/notification`,
+		notificationsRoute,
 		fetcher
 	);
 	return {
@@ -67,7 +85,7 @@ export function useNotifications() {
 export function useGroups() {
 	const { data, error, isLoading, isValidating } = useSWR<{
 		groups: Group[];
-	}>(`/api/groups`, fetcher);
+	}>(groupsRoute, fetcher);
 	return {
 		groups: data?.groups,
 		error,
@@ -78,7 +96,7 @@ export function useGroups() {
 
 export function useGroup(groupID?: string) {
 	const { data, error, isLoading, isValidating } = useSWR<Group>(
-		groupID ? `/api/groups/${groupID}` : null,
+		groupID ? groupRoute(groupID) : null,
 		fetcher
 	);
 	return {
@@ -92,21 +110,9 @@ export function useGroup(groupID?: string) {
 export function useMembers(groupID?: string) {
 	const { data, error, isLoading, isValidating } = useSWR<{
 		users: User[];
-	}>(groupID ? `/api/groups/${groupID}/members` : null, fetcher);
+	}>(groupID ? groupMembersRoute(groupID) : null, fetcher);
 	return {
 		members: data?.users,
-		error,
-		isLoading,
-		isValidating,
-	};
-}
-
-export function useRequestedUser(groupID?: string) {
-	const { data, error, isLoading, isValidating } = useSWR<{
-		memberRequests: User[];
-	}>(groupID ? `/api/groups/${groupID}/members/requests` : null, fetcher);
-	return {
-		requestedUser: data?.memberRequests,
 		error,
 		isLoading,
 		isValidating,
@@ -116,9 +122,21 @@ export function useRequestedUser(groupID?: string) {
 export function useInvitedUser(groupID?: string) {
 	const { data, error, isLoading, isValidating } = useSWR<{
 		groupInvitations: User[];
-	}>(groupID ? `/api/groups/${groupID}/members/invitations` : null, fetcher);
+	}>(groupID ? invitationsGroupRoute(groupID) : null, fetcher);
 	return {
 		invitedUser: data?.groupInvitations,
+		error,
+		isLoading,
+		isValidating,
+	};
+}
+
+export function useRequestedUser(groupID?: string) {
+	const { data, error, isLoading, isValidating } = useSWR<{
+		memberRequests: User[];
+	}>(groupID ? requestsGroupRoute(groupID) : null, fetcher);
+	return {
+		requestedUser: data?.memberRequests,
 		error,
 		isLoading,
 		isValidating,
@@ -128,7 +146,7 @@ export function useInvitedUser(groupID?: string) {
 export function useDecks(groupID?: string) {
 	const { data, error, isLoading, isValidating } = useSWR<{
 		decks: Deck[];
-	}>(groupID ? `/api/groups/${groupID}/decks` : null, fetcher);
+	}>(groupID ? decksRoute(groupID) : null, fetcher);
 	return {
 		decks: data?.decks,
 		error,
@@ -140,7 +158,7 @@ export function useDecks(groupID?: string) {
 export function useFavoriteDecks() {
 	const { data, error, isLoading, isValidating } = useSWR<{
 		decks: Deck[];
-	}>(`/api/decks/favorites`, fetcher);
+	}>(favoriteDecksRoute, fetcher);
 	return {
 		decks: data?.decks,
 		error,
@@ -152,7 +170,7 @@ export function useFavoriteDecks() {
 export function useActiveDecks() {
 	const { data, error, isLoading, isValidating } = useSWR<{
 		decks: Deck[];
-	}>(`/api/decks/active`, fetcher);
+	}>(activeDecksRoute, fetcher);
 	return {
 		decks: data?.decks,
 		error,
@@ -163,7 +181,7 @@ export function useActiveDecks() {
 
 export function useDeck(deckID?: string) {
 	const { data, error, isLoading, isValidating } = useSWR<Deck>(
-		deckID ? `/api/decks/${deckID}` : null,
+		deckID ? deckRoute(deckID) : null,
 		fetcher
 	);
 	return {
@@ -174,10 +192,10 @@ export function useDeck(deckID?: string) {
 	};
 }
 
-export function useDueCards(deckID?: string) {
+export function useDeckDueCards(deckID?: string) {
 	const { data, error, isLoading, isValidating } = useSWR<{
 		dueCards: number;
-	}>(deckID ? `/api/decks/${deckID}/dueCards` : null, fetcher);
+	}>(deckID ? dueCardsDeckRoute(deckID) : null, fetcher);
 	return {
 		dueCards: data?.dueCards,
 		error,
@@ -189,7 +207,7 @@ export function useDueCards(deckID?: string) {
 export function useCards(deckID?: string) {
 	const { data, error, isLoading, isValidating } = useSWR<{
 		cards: Card[];
-	}>(deckID ? `/api/decks/${deckID}/cards` : null, fetcher);
+	}>(deckID ? cardsRoute(deckID) : null, fetcher);
 	return {
 		cards: data?.cards,
 		error,
@@ -200,7 +218,7 @@ export function useCards(deckID?: string) {
 
 export function usePullCard(deckID?: string) {
 	const { data, error, isLoading, isValidating } = useSWR<Card>(
-		deckID ? `/api/decks/${deckID}/pull` : null,
+		deckID ? pullCardsRoute(deckID) : null,
 		fetcher
 	);
 	return {

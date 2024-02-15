@@ -16,7 +16,7 @@ import { TextArea } from "@/components/form/TextArea";
 import { Button } from "@/components/input/Button";
 import { Card as CardType } from "@/types/Card";
 import { modifyCard, pushCard } from "@/util/api";
-import { useDueCards } from "@/util/swr";
+import { useDeckDueCards } from "@/util/swr";
 
 interface FlashcardProps {
 	/**
@@ -68,7 +68,7 @@ export const Flashcard = ({
 }: FlashcardProps) => {
 	const { _ } = useLingui();
 
-	const { dueCards } = useDueCards(deckID);
+	const { dueCards } = useDeckDueCards(deckID);
 
 	const headerInput = useRef<HTMLInputElement>(null);
 	const descriptionInput = useRef<HTMLTextAreaElement>(null);

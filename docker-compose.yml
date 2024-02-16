@@ -147,6 +147,8 @@ services:
           action: rebuild
         - path: backend/services/collaboration/proto
           action: rebuild
+        - path: backend/services/srs/proto
+          action: rebuild
     command: /go/src/kioku/services/notification/notification
     env_file:
       - ./backend/.env

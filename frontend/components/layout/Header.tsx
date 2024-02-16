@@ -73,7 +73,7 @@ export const Header = ({
 
 	return (
 		<div
-			className={`flex flex-row items-center justify-between ${className}`}
+			className={`flex flex-row items-center justify-between px-5 md:px-10 ${className}`}
 			{...props}
 		>
 			<div className="flex flex-col font-black">

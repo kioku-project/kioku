@@ -35,12 +35,12 @@ export const TabHeader = ({
 }: TabHeaderProps) => {
 	return (
 		<div
-			className={`flex flex-row items-center justify-center space-x-2 ${className}`}
+			className={`flex flex-col items-center justify-center sm:flex-row sm:space-x-2 ${className}`}
 			{...props}
 		>
 			<Icon icon={icon} />
 
-			<div className="hidden sm:flex">{name}</div>
+			<div>{name}</div>
 			{notificationBadgeContent && (
 				<div className="relative flex h-full text-sm text-eggshell">
 					<div className="absolute inline-flex h-full w-full animate-[ping_1s_ease-out_3] rounded-full bg-kiokuRed opacity-75" />

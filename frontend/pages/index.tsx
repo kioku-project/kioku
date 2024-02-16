@@ -87,7 +87,7 @@ export default function Home() {
 			</Head>
 			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 				{user && groups && (
-					<div className="flex h-full flex-col px-5 py-1 md:space-y-5 md:px-10 md:py-3">
+					<div className="flex h-full flex-col md:space-y-5">
 						<FetchHeader
 							id="userPageHeaderId"
 							user={{ ...user, ...due }}
@@ -99,7 +99,7 @@ export default function Home() {
 								currentTab={currentTab}
 								setTab={setCurrentTab}
 							/>
-							<div className="overflow-auto">
+							<div className="overflow-auto px-5 md:px-10">
 								{{
 									decks: homeGroup && (
 										<DecksTab group={homeGroup} />

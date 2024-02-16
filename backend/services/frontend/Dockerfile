@@ -35,7 +35,6 @@ COPY --from=builder /etc/passwd /etc/passwd
 USER kioku
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder /bin/grpc_health_probe /bin/
 COPY --from=builder /go/src/kioku/services/frontend/frontend /frontend
 ENTRYPOINT ["/frontend"]
 CMD []

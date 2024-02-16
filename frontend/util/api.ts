@@ -87,13 +87,14 @@ export async function modifyGroup(
 	return response;
 }
 
+// handle group invitations
 async function groupInvitation(
 	groupID: string,
 	userEmail: string,
-	request: (url: string, body: string) => Promise<Response>
+	request: (url: string, body?: string) => Promise<Response>
 ) {
 	const response = await request(
-		invitationsRoute(groupID),
+		invitationsGroupRoute(groupID),
 		JSON.stringify({
 			invitedUserEmail: userEmail,
 		})
@@ -102,31 +103,50 @@ async function groupInvitation(
 	return response;
 }
 
+// Invite user to group or accept group request
 export async function sendGroupInvitation(groupID: string, userEmail: string) {
 	return groupInvitation(groupID, userEmail, postRequest);
 }
 
-export async function declineGroupInvitation(
-	groupID: string,
-	userEmail: string
-) {
+// Decline group request or revoke group invitation
+export async function declineGroupRequest(groupID: string, userEmail: string) {
 	return groupInvitation(groupID, userEmail, deleteRequest);
 }
 
-export async function deleteMember(groupID: string, userID: string) {
-	const response = await deleteRequest(memberRoute(groupID, userID));
-	if (response?.ok) mutate(membersRoute(groupID));
+// handle group requests
+async function groupRequest(
+	groupID: string,
+	request: (url: string, body?: string) => Promise<Response>
+) {
+	const response = await request(requestsGroupRoute(groupID));
+	if (response?.ok)
+		mutateAll([
+			`/api/user/invitations`,
+			groupsRoute,
+			groupRoute(groupID),
+			...groupMemberRoutes(groupID),
+		]);
 	return response;
 }
 
-export async function joinGroup(groupID: string) {
-	const response = await postRequest(requestsRoute(groupID));
-	if (response?.ok) mutateAll([groupsRoute, ...groupMemberRoutes(groupID)]);
+// send group request or accept group invitation
+export async function sendGroupRequest(groupID: string) {
+	return groupRequest(groupID, postRequest);
+}
+
+// decline group invitation or revoke group request
+export async function declineGroupInvitation(groupID: string) {
+	return groupRequest(groupID, deleteRequest);
+}
+
+export async function deleteMember(groupID: string, userID: string) {
+	const response = await deleteRequest(groupMemberRoute(groupID, userID));
+	if (response?.ok) mutate(groupMembersRoute(groupID));
 	return response;
 }
 
 export async function leaveGroup(groupID: string) {
-	const response = await deleteRequest(membersRoute(groupID));
+	const response = await deleteRequest(groupMembersRoute(groupID));
 	if (response?.ok) mutate(groupsRoute);
 	return response;
 }

@@ -7,7 +7,7 @@ import { Text } from "@/components/Text";
 import { InputField } from "@/components/form/InputField";
 import { User } from "@/types/User";
 import {
-	declineGroupInvitation,
+	declineGroupRequest,
 	deleteMember,
 	sendGroupInvitation,
 } from "@/util/api";
@@ -102,7 +102,7 @@ export default function Member({
 										className="cursor-pointer"
 										onClick={() =>
 											user.groupID &&
-											declineGroupInvitation(
+											declineGroupRequest(
 												user.groupID,
 												user.userEmail ?? ""
 											)
@@ -120,7 +120,7 @@ export default function Member({
 									className="cursor-pointer"
 									onClick={() =>
 										user.groupID &&
-										declineGroupInvitation(
+										declineGroupRequest(
 											user.groupID,
 											user.userEmail ?? ""
 										)

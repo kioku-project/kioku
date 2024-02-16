@@ -10,7 +10,7 @@ import { Button } from "@/components/input/Button";
 import { Deck as DeckType } from "@/types/Deck";
 import { Group as GroupType } from "@/types/Group";
 import { User } from "@/types/User";
-import { joinGroup } from "@/util/api";
+import { sendGroupRequest } from "@/util/api";
 import { deckRoute, groupRoute } from "@/util/endpoints";
 import { fetcher } from "@/util/swr";
 
@@ -139,7 +139,7 @@ export const Header = ({
 						id="joinGroupButtonId"
 						buttonStyle="primary"
 						buttonTextSize="xs"
-						onClick={() => joinGroup(group.groupID)}
+						onClick={() => sendGroupRequest(group.groupID)}
 					>
 						<Trans>Join Group</Trans>
 					</Button>

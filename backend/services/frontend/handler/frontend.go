@@ -216,6 +216,7 @@ func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
 	}
 	return c.JSON(converter.FiberGetDueResponseBody{
 		DueCards: dueCards.DueCards,
+		NewCards: dueCards.NewCards,
 		DueDecks: dueCards.DueDecks,
 	})
 }
@@ -1047,6 +1048,7 @@ func (e *Frontend) SrsDeckDueHandler(c *fiber.Ctx) error {
 	}
 	return c.JSON(converter.FiberGetDueResponseBody{
 		DueCards: rspSrsDue.DueCards,
+		NewCards: rspSrsDue.NewCards,
 	})
 }
 

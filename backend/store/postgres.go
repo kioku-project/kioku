@@ -386,7 +386,7 @@ func (s *CardDeckStoreImpl) FindActiveDecks(ctx context.Context, userID string) 
 }
 
 func (s *CardDeckStoreImpl) AddActiveDeck(ctx context.Context, userID string, deckID string) error {
-	return s.db.WithContext(ctx).Create(&model.UserActiveDecks{UserID: userID, DeckID: deckID, Algorithm: model.AlgoDynamicSRS}).Error
+	return s.db.WithContext(ctx).Create(&model.UserActiveDecks{UserID: userID, DeckID: deckID, Algorithm: model.AlgoDynamicSRS, NewCardsPerDay: 5}).Error
 }
 
 func (s *CardDeckStoreImpl) DeleteActiveDeck(ctx context.Context, userID string, deckID string) error {
@@ -538,6 +538,50 @@ func (s *SrsStoreImpl) FindUserDeckCards(ctx context.Context, userID string, dec
 		err = helper.ErrStoreNoEntryWithID
 	}
 	return
+}
+
+func (s *SrsStoreImpl) FindUserDeckDueCards(ctx context.Context, userID string, deckID string) (userCards []*model.UserCardBinding, err error) {
+	now := time.Now()
+	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+	tomorrow := today.Add(24 * time.Hour)
+
+	if err = s.db.WithContext(ctx).Where(model.UserCardBinding{UserID: userID, DeckID: deckID}).
+		Not("user_card_bindings.due = ?", 0).
+		Where("user_card_bindings.due <= ?", tomorrow.Unix()).
+		Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *SrsStoreImpl) FindUserDeckNewCards(ctx context.Context, userID string, deckID string) (userCards []*model.UserCardBinding, err error) {
+	if err = s.db.WithContext(ctx).
+		Where(model.UserCardBinding{UserID: userID, DeckID: deckID}).
+		Where("user_card_bindings.due = ?", 0).
+		Find(&userCards).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *SrsStoreImpl) FindUserDeckNewCardsLearnedToday(ctx context.Context, userID string, deckID string) (count int64, err error) {
+
+	now := time.Now()
+	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+	tomorrow := today.Add(24 * time.Hour)
+
+	err = s.db.Debug().WithContext(ctx).
+		Model(&model.Revlog{}).
+		Select("revlogs.id").
+		Joins("LEFT JOIN user_card_bindings ON revlogs.card_id = user_card_bindings.card_id").
+		Where(&model.Revlog{UserID: userID}).
+		Where("user_card_bindings.deck_id = ?", deckID).
+		Where("revlogs.due = ?", 0).
+		Where("date >= ?", today.Unix()).
+		Where("date <= ?", tomorrow.Unix()).
+		Count(&count).Error
+
+	return count, err
 }
 
 func (s *SrsStoreImpl) FindUserCards(ctx context.Context, userID string) (userCards []*model.UserCardBinding, err error) {

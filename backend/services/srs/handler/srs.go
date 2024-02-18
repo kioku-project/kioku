@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"math"
+	"math/rand"
 	"sort"
 	"time"
 
@@ -33,20 +34,33 @@ func (e *Srs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp *pbCom
 	if cardBinding.DeckID != req.DeckID {
 		return helper.NewMicroWrongDeckIDErr(helper.SrsServiceID)
 	}
+	now := time.Now()
+
+	// Add revlog entry
+	if err = e.store.CreateRevlog(ctx,
+		&model.Revlog{
+			CardID: req.CardID,
+			UserID: req.UserID,
+			Date:   now.Unix(),
+			Rating: req.Rating,
+			Due:    cardBinding.Due,
+		}); err != nil {
+		return err
+	}
 
 	// calculate new due date
 	switch req.Rating {
 	case 0: // Forgotten
 		newInterval := 0
-		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newInterval)).Unix()
+		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newInterval)).Unix()
 		cardBinding.LastInterval = uint32(newInterval)
 	case 1: // Hard
 		newIvl := math.Max(float64(cardBinding.LastInterval), 1)
-		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
+		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
 		cardBinding.LastInterval = uint32(newIvl)
 	case 2: // Easy
 		newIvl := math.Max(float64(cardBinding.LastInterval*2), 1)
-		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
+		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
 		cardBinding.LastInterval = uint32(newIvl)
 	default:
 		return helper.NewMicroWrongRatingErr(helper.SrsServiceID)
@@ -55,51 +69,50 @@ func (e *Srs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp *pbCom
 		return err
 	}
 
-	// Add revlog entry
-	if err = e.store.CreateRevlog(ctx,
-		&model.Revlog{
-			CardID: req.CardID,
-			UserID: req.UserID,
-			Date:   time.Now().Unix(),
-			Rating: req.Rating,
-		}); err != nil {
-		return err
-	}
 	rsp.Success = true
 	return nil
 }
 
 func (e *Srs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Card) error {
 	logger.Infof("Received Srs.Pull request: %v", req)
-	cards, err := e.store.FindUserDeckCards(
-		ctx, req.UserID,
-		req.Deck.DeckID,
-	)
+	dueCards, err := e.store.FindUserDeckDueCards(ctx, req.UserID, req.Deck.DeckID)
 	if err != nil {
 		return err
 	}
-	var dueCards []*model.UserCardBinding
-	for _, card := range cards {
-		if card.Due <= time.Now().Unix() {
-			dueCards = append(dueCards, card)
-		}
+	// TODO: Implement carddeck service call here
+	userNewCardsPerDay := int64(5)
+
+	// get new cards learned today
+	newCardsAmount, err := e.store.FindUserDeckNewCardsLearnedToday(ctx, req.UserID, req.Deck.DeckID)
+	if err != nil {
+		return err
 	}
+	logger.Infof("newCardsAmount: %v", newCardsAmount)
 	// determine smartest card to return
 	// sort by oldest first
+	now := time.Now().Unix()
 	sort.Slice(dueCards, func(i, j int) bool {
-		return dueCards[i].Due < dueCards[j].Due
+		return (math.Abs(float64(dueCards[i].Due - now))) > math.Abs(float64((dueCards[j].Due - now)))
 	})
-	// if no more cards are due, return empty card
-	if len(dueCards) == 0 {
-		*rsp = pbCommon.Card{
-			CardID: "",
-			Sides:  nil,
+
+	var returnedCard *pbCommon.Card
+	if len(dueCards) > 0 {
+		returnedCard = &pbCommon.Card{CardID: dueCards[0].CardID}
+	} else {
+		newCards, err := e.store.FindUserDeckNewCards(ctx, req.UserID, req.Deck.DeckID)
+		if err != nil {
+			return err
 		}
-		return nil
+		rand.Shuffle(len(newCards), func(i, j int) { newCards[i], newCards[j] = newCards[j], newCards[i] })
+		if newCardsAmount >= userNewCardsPerDay || len(newCards) == 0 {
+			*rsp = pbCommon.Card{
+				CardID: "",
+				Sides:  nil,
+			}
+			return nil
+		}
+		returnedCard = &pbCommon.Card{CardID: newCards[0].CardID}
 	}
-
-	returnedCard := &pbCommon.Card{CardID: dueCards[0].CardID}
-
 	// get content of card
 	cardWithContent, err := e.cardDeckService.GetCard(ctx, &pbCommon.CardRequest{
 		UserID: req.UserID,
@@ -126,7 +139,7 @@ func (e *Srs) AddUserCardBinding(ctx context.Context, req *pbCommon.BindingReque
 			CardID:       req.CardID,
 			DeckID:       req.DeckID,
 			Type:         0,
-			Due:          time.Now().Unix(),
+			Due:          0,
 			LastInterval: 0,
 			Factor:       1,
 		})
@@ -139,7 +152,7 @@ func (e *Srs) AddUserCardBinding(ctx context.Context, req *pbCommon.BindingReque
 
 func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.UserDueResponse) error {
 	logger.Infof("Received Srs.GetDeckCardsDue request: %v", req)
-	cards, err := e.store.FindUserDeckCards(
+	dueCards, err := e.store.FindUserDeckDueCards(
 		ctx,
 		req.UserID,
 		req.Deck.DeckID,
@@ -147,35 +160,53 @@ func (e *Srs) GetDeckCardsDue(ctx context.Context, req *pbCommon.DeckRequest, rs
 	if err != nil {
 		return err
 	}
-	var dueCards []*model.UserCardBinding
-	for _, card := range cards {
-		if card.Due <= time.Now().Unix() {
-			dueCards = append(dueCards, card)
-		}
+	// TODO: Implement carddeck service call here
+	userNewCardsPerDay := int64(5)
+
+	// get new cards learned today
+	newCardsAmount, err := e.store.FindUserDeckNewCardsLearnedToday(ctx, req.UserID, req.Deck.DeckID)
+	newCards, err := e.store.FindUserDeckNewCards(
+		ctx,
+		req.UserID,
+		req.Deck.DeckID,
+	)
+	if err != nil {
+		return err
 	}
 	rsp.DueCards = int64(len(dueCards))
+	rsp.NewCards = int64(math.Min(math.Max(float64(userNewCardsPerDay)-float64(newCardsAmount), 0), float64(len(newCards))))
 	return nil
 }
 func (e *Srs) GetUserCardsDue(ctx context.Context, req *pbCommon.User, rsp *pbCommon.UserDueResponse) error {
 	logger.Infof("Received Srs.GetUserCardsDue request: %v", req)
-	cards, err := e.store.FindUserCards(ctx, req.UserID)
+	activeDecks, err := e.cardDeckService.GetUserActiveDecks(ctx, &pbCommon.User{UserID: req.UserID})
 	if err != nil {
 		return err
 	}
-	decksDueMap := map[string]int64{}
-	decksDueCount := 0
-	var dueCards []*model.UserCardBinding
-	for _, card := range cards {
-		if card.Due <= time.Now().Unix() {
-			dueCards = append(dueCards, card)
-			if _, ok := decksDueMap[card.DeckID]; !ok {
-				decksDueMap[card.DeckID] = 0
-				decksDueCount++
-			}
-			decksDueMap[card.DeckID]++
+	for _, deck := range activeDecks.Decks {
+		dueCards, err := e.store.FindUserDeckDueCards(ctx, req.UserID, deck.DeckID)
+		if err != nil {
+			return err
 		}
+		// TODO: Implement carddeck service call here
+		userNewCardsPerDay := int64(5)
+
+		// get new cards learned today
+		newCardsAmount, err := e.store.FindUserDeckNewCardsLearnedToday(ctx, req.UserID, deck.DeckID)
+		unrestrictedNewCards, err := e.store.FindUserDeckNewCards(
+			ctx,
+			req.UserID,
+			deck.DeckID,
+		)
+		if err != nil {
+			return err
+		}
+		newCards := int64(math.Min(math.Max(float64(userNewCardsPerDay)-float64(newCardsAmount), 0), float64(len(unrestrictedNewCards))))
+		if len(dueCards) > 0 || newCards > 0 {
+			rsp.DueDecks++
+		}
+		rsp.DueCards += int64(len(dueCards))
+		rsp.NewCards += newCards
 	}
-	rsp.DueCards = int64(len(dueCards))
-	rsp.DueDecks = int64(decksDueCount)
 	return nil
 }

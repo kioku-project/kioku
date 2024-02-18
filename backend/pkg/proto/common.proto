@@ -156,7 +156,8 @@ message PushSubscriptions {
 
 message UserDueResponse {
   int64 dueCards = 1;
-  int64 dueDecks = 2;
+  int64 newCards = 2;
+  int64 dueDecks = 3;
 }
 
 message SrsPushRequest {

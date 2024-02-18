@@ -10,11 +10,12 @@ const (
 )
 
 type UserActiveDecks struct {
-	Algorithm AlgorithmType `gorm:"not null"`
-	UserID    string        `gorm:"not null;primaryKey"`
-	User      User          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	DeckID    string        `gorm:"not null;primaryKey"`
-	Deck      Deck          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	UserID         string        `gorm:"not null;primaryKey"`
+	User           User          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	DeckID         string        `gorm:"not null;primaryKey"`
+	Deck           Deck          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Algorithm      AlgorithmType `gorm:"not null"`
+	NewCardsPerDay uint64        `gorm:"not null"`
 }
 
 type UserFavoriteDecks struct {

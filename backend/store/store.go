@@ -65,6 +65,9 @@ type SrsStore interface {
 	CreateRevlog(ctx context.Context, newRev *model.Revlog) error
 	FindCardBinding(ctx context.Context, userID string, cardID string) (*model.UserCardBinding, error)
 	FindUserDeckCards(ctx context.Context, userID string, deckID string) ([]*model.UserCardBinding, error)
+	FindUserDeckDueCards(ctx context.Context, userID string, deckID string) ([]*model.UserCardBinding, error)
+	FindUserDeckNewCards(ctx context.Context, userID string, deckID string) ([]*model.UserCardBinding, error)
+	FindUserDeckNewCardsLearnedToday(ctx context.Context, userID string, deckID string) (int64, error)
 	FindUserCards(ctx context.Context, userID string) ([]*model.UserCardBinding, error)
 	CreateUserCard(ctx context.Context, newCard *model.UserCardBinding) error
 	ModifyUserCard(ctx context.Context, card *model.UserCardBinding) error

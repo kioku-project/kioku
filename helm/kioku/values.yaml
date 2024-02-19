@@ -43,13 +43,12 @@ frontend_proxy:
   keySecret: frontend-proxy-key-secret
 
   port: 80
-  containerPort: 80
+  containerPort: 8090
 
   autoscaler:
     min: 1
     max: 10
     targetCPUUtilizationPercentage: 50
-
 
 carddeck:
   name: kioku-carddeck

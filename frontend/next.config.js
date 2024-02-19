@@ -14,7 +14,7 @@ const nextConfig = {
 		return [
 			{
 				source: "/api/:path*",
-				destination: "http://frontend_proxy:80/api/:path*",
+				destination: "http://frontend_proxy:8090/api/:path*",
 			},
 		];
 	},

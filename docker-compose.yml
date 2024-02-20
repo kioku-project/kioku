@@ -6,6 +6,11 @@ services:
     restart: always
     env_file:
       - ./backend/.env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kioku"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   frontend_proxy:
     container_name: kioku-frontend_proxy
@@ -16,7 +21,10 @@ services:
     env_file:
       - ./backend/.env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    ports:
+      - 80:80
 
   user_service:
     container_name: kioku-user_service
@@ -43,7 +51,8 @@ services:
     env_file:
       - ./backend/.env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   carddeck_service:
     container_name: kioku-carddeck_service
@@ -70,7 +79,8 @@ services:
     env_file:
       - ./backend/.env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   collaboration_service:
     container_name: kioku-collaboration_service
@@ -97,7 +107,8 @@ services:
     env_file:
       - ./backend/.env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   srs_service:
     container_name: kioku-srs_service
@@ -124,7 +135,8 @@ services:
     env_file:
       - ./backend/.env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   notification_service:
     container_name: kioku-notification_service
@@ -153,7 +165,8 @@ services:
     env_file:
       - ./backend/.env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
     container_name: kioku-frontend

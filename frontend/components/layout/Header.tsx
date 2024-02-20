@@ -108,13 +108,13 @@ export const Header = ({
 						</div>
 					)}
 					{!deck && group && <div>{group.groupDescription}</div>}
-					{!!user?.dueCards && !!user.dueDecks && (
+					{user?.due && (
 						<div>
-							{plural(user.dueCards, {
+							{plural(user.due.dueCards + user.due.newCards, {
 								one: "You have # card",
 								other: "You have # cards",
 							})}{" "}
-							{plural(user.dueDecks, {
+							{plural(user.due.dueDecks, {
 								one: "in # deck to learn",
 								other: "in # decks to learn",
 							})}

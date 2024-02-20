@@ -10,7 +10,7 @@ export type Deck = {
 	groupID: string;
 	isActive?: boolean;
 	isFavorite?: boolean;
-	dueCards?: number;
+	due?: { dueCards: number; newCards: number };
 	notification?: IconLabelType;
 	createdAt?: number;
 };

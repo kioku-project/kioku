@@ -29,11 +29,11 @@ export function useUser() {
 export function useUserDue() {
 	const { data, error, isLoading, isValidating } = useSWR<{
 		dueCards: number;
-    newCards: number;
+		newCards: number;
 		dueDecks: number;
 	}>(`/api/user/dueCards`, fetcher);
 	return {
-		due: {dueCards: data?.dueCards + data?.newCards, dueDecks: data?.dueDecks},
+		due: data,
 		error,
 		isLoading,
 		isValidating,
@@ -181,7 +181,7 @@ export function useDueCards(deckID?: string) {
 		newCards: number;
 	}>(deckID ? `/api/decks/${deckID}/dueCards` : null, fetcher);
 	return {
-		dueCards: data?.dueCards + data?.newCards,
+		due: data,
 		error,
 		isLoading,
 		isValidating,

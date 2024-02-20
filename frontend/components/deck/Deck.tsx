@@ -35,7 +35,7 @@ interface DeckProps {
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 	const router = useRouter();
 
-	const { dueCards } = useDueCards(deck.deckID);
+	const { due } = useDueCards(deck.deckID);
 
 	useEffect(() => {
 		if (deck) {
@@ -45,8 +45,8 @@ export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 	}, [router, deck]);
 
 	const newDeck = useMemo(() => {
-		return { ...deck, dueCards: dueCards };
-	}, [deck, dueCards]);
+		return { ...deck, due: due };
+	}, [deck, due]);
 
 	return <Deck deck={newDeck} {...props} />;
 };
@@ -78,7 +78,7 @@ export const Deck = ({
 					<Text textSize="lg" className="font-black text-[#7B100E]">
 						{deck.deckName.slice(0, 2).toUpperCase()}
 					</Text>
-					{!!deck.dueCards && (
+					{(!!deck.due?.dueCards || !!deck.due?.newCards) && (
 						<div className="absolute right-[-0.35rem] top-[-0.35rem] h-4 w-4 flex-none rounded-full bg-kiokuRed">
 							<div className="absolute h-full w-full animate-[ping_0.8s_ease-out_3] rounded-full bg-kiokuRed" />
 						</div>
@@ -130,14 +130,18 @@ export const Deck = ({
 							</div>
 						</div>
 						<div className="flex flex-row space-x-2 overflow-hidden sm:space-x-3 md:space-x-3 lg:space-x-3">
-							{!!deck.dueCards && (
+							{(deck.due?.dueCards || deck.due?.newCards) && (
 								<IconLabel
 									iconLabel={{
 										icon: "Activity",
-										header: plural(deck.dueCards, {
-											one: "# card due",
-											other: "# cards due",
-										}),
+										header: plural(
+											deck.due?.dueCards +
+												deck.due?.newCards,
+											{
+												one: "# card due",
+												other: "# cards due",
+											}
+										),
 									}}
 									className="text-kiokuRed"
 								/>

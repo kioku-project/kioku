@@ -29,7 +29,7 @@ export default function Page() {
 	const deckID = router.query.id as string;
 	const { isLoading:isCardLoading, isValidating:isCardValidating, card } = usePullCard(deckID);
 	const { deck } = useDeck(deckID);
-	const { dueCards } = useDueCards(deckID);
+	const { due } = useDueCards(deckID);
 	const { group } = useGroup(deck?.groupID);
 	return (
 		<>
@@ -49,17 +49,17 @@ export default function Page() {
 				/>
 			</Head>
 			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-				{isCardLoading || isCardValidating && (
+				{(isCardLoading || isCardValidating) && (
 					<div className="flex-grow flex items-center justify-center">
 						<LoadingSpinner className="w-16" delay={3000}/>
 					</div>
 				)}
-				{!isCardLoading && !isCardValidating && card?.cardID && (
+				{!isCardLoading && !isCardValidating && card?.cardID && due && (
 					<Flashcard
 						id="flashcardId"
 						key={card.cardID}
 						card={card}
-						dueCards={dueCards}
+						dueCards={due.dueCards + due.newCards}
 						push={push}
 						editable={
 							group?.groupRole &&

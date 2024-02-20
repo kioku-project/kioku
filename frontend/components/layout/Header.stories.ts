@@ -26,8 +26,11 @@ export const UserWithDescription: Story = {
 		user: {
 			userID: "U-12345678",
 			userName: "Test User",
-			dueCards: 7,
-			dueDecks: 2,
+			due: {
+				dueCards: 7,
+				newCards: 3,
+				dueDecks: 2,
+			},
 		},
 	},
 };

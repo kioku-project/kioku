@@ -47,7 +47,10 @@ export const CardsDue: Story = {
 			deckType: "PUBLIC",
 			deckRole: "ADMIN",
 			groupID: "G-12345678",
-			dueCards: 8,
+			due: {
+				dueCards: 8,
+				newCards: 2,
+			},
 		},
 	},
 };
@@ -61,7 +64,10 @@ export const MoreStats: Story = {
 			deckType: "PUBLIC",
 			deckRole: "ADMIN",
 			groupID: "G-12345678",
-			dueCards: 8,
+			due: {
+				dueCards: 8,
+				newCards: 2,
+			},
 		},
 		stats: [
 			{

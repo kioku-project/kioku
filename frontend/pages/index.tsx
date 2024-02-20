@@ -90,7 +90,7 @@ export default function Home() {
 					<div className="flex h-full flex-col md:space-y-5">
 						<FetchHeader
 							id="userPageHeaderId"
-							user={{ ...user, ...due }}
+							user={{ ...user, due: due }}
 						/>
 						<div className="flex h-full flex-1 flex-col-reverse justify-between space-y-5 overflow-auto md:flex-col md:justify-normal">
 							<TabBar

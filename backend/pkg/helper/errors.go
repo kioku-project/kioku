@@ -26,31 +26,35 @@ var (
 )
 
 func NewMicroNotAuthorizedErr(id ClientID) error {
-	return microErrors.Unauthorized(string(id), "user not authorized")
+	return microErrors.Unauthorized(string(id), "User not authorized")
 }
 
 func NewMicroNoEntryWithIDErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "no entry with id")
+	return microErrors.BadRequest(string(id), "No entry with id")
 }
 
 func NewMicroNoExistingUserWithEmailErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "no existing user with email")
+	return microErrors.BadRequest(string(id), "User does not exist")
 }
 
 func NewMicroUserAlreadyExistsErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "this user already exists")
+	return microErrors.BadRequest(string(id), "This user already exists")
 }
 
-func NewMicroInvalidUserNameFormatErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "invalid user name format")
+func NewMicroInvalidNameFormatErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "Invalid name format")
 }
 
 func NewMicroInvalidParameterDataErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "invalid parameter data")
+	return microErrors.BadRequest(string(id), "Invalid parameter data")
+}
+
+func NewMicroMissingParameterDataErr(id ClientID) error {
+	return microErrors.BadRequest(string(id), "Missing request parameters")
 }
 
 func NewMicroUserAlreadyInGroupErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "user already in group")
+	return microErrors.BadRequest(string(id), "User already in group")
 }
 
 func NewMicroCantLeaveDefaultGroupErr(id ClientID) error {
@@ -58,7 +62,7 @@ func NewMicroCantLeaveDefaultGroupErr(id ClientID) error {
 }
 
 func NewMicroCantLeaveAsLastAdminErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "You can't leave when you are the last admin")
+	return microErrors.BadRequest(string(id), "You can't leave as last admin")
 }
 
 func NewMicroCantInviteToHomegroupErr(id ClientID) error {
@@ -66,71 +70,78 @@ func NewMicroCantInviteToHomegroupErr(id ClientID) error {
 }
 
 func NewMicroUserAdmissionInProgressErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "user already invited")
+	return microErrors.BadRequest(string(id), "User already invited")
 }
 
 func NewMicroCardSideNotInGivenCardErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "card side not in given card")
+	return microErrors.BadRequest(string(id), "Card side not in given card")
 }
 
 func NewMicroDeckTypeNotValidErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "invalid deck type")
+	return microErrors.BadRequest(string(id), "Invalid deck type")
 }
 
 func NewMicroAlreadyRequestedErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "user access already requested")
+	return microErrors.BadRequest(string(id), "User access already requested")
 }
 
 func NewMicroAlreadyInvitedErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "user already invited")
+	return microErrors.BadRequest(string(id), "User already invited")
+}
+
+func NewMicroCantModifyGroupAdminErr(id ClientID) error {
+	return microErrors.Unauthorized(string(id), "You can not modify group admins")
+}
+
+func NewMicroCantKickGroupAdminErr(id ClientID) error {
+	return microErrors.Unauthorized(string(id), "You can not kick group admins")
 }
 
 func NewMicroHashingFailedErr(id ClientID) error {
-	return microErrors.InternalServerError(string(id), "error while hashing password")
+	return microErrors.InternalServerError(string(id), "Error while hashing password")
 }
 
 func NewMicroInvalidEmailOrPasswordErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "invalid email or password")
-}
-
-func NewMicroInvalidPasswordErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "invalid password")
+	return microErrors.BadRequest(string(id), "Invalid email or password")
 }
 
 func NewMicroNotSuccessfulResponseErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "operation not successful")
+	return microErrors.BadRequest(string(id), "Operation not successful")
 }
 
 func NewMicroWrongRatingErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "invalid rating")
+	return microErrors.BadRequest(string(id), "Invalid rating")
 }
 
 func NewMicroWrongDeckIDErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "wrong deck id")
+	return microErrors.BadRequest(string(id), "Wrong deck id")
 }
 
 func NewMicroDeckAlreadyFavoriteErr(id ClientID) error {
 	return microErrors.BadRequest(string(id), "This Deck is already your favorite")
 }
 
+func NewFiberReauthenticateError() error {
+	return fiber.NewError(fiber.StatusUnauthorized, "Please re-authenticate")
+}
 func NewFiberBadRequestErr(detail string) error {
 	return fiber.NewError(fiber.StatusBadRequest, detail)
 }
 
 func NewFiberMissingEmailErr() error {
-	return fiber.NewError(fiber.StatusBadRequest, "no Email provided")
+	return fiber.NewError(fiber.StatusBadRequest, "No Email provided")
 }
 
 func NewFiberMissingNameErr() error {
-	return fiber.NewError(fiber.StatusBadRequest, "no Name provided")
+	return fiber.NewError(fiber.StatusBadRequest, "No Name provided")
 }
 
 func NewFiberMissingPasswordErr() error {
-	return fiber.NewError(fiber.StatusBadRequest, "no Password provided")
+	return fiber.NewError(fiber.StatusBadRequest, "No Password provided")
 }
 
 func NewFiberMissingDeckIDErr() error {
-	return fiber.NewError(fiber.StatusBadRequest, "no deckID provided")
+	return fiber.NewError(fiber.StatusBadRequest, "No deckID provided")
 }
 
 func NewFiberUnauthorizedErr(detail string) error {

@@ -32,7 +32,6 @@ RUN make proto tidy build
 # Deployment container
 FROM scratch
 COPY --from=builder /etc/passwd /etc/passwd
-USER kioku
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /go/src/kioku/services/frontend/frontend /frontend

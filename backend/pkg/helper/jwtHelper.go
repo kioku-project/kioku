@@ -38,7 +38,7 @@ func GetJWTPublicKey() (crypto.PublicKey, error) {
 
 func ParseJWTToken(tokenString string) (*jwt.Token, error) {
 	if tokenString == "" {
-		return nil, errors.New("please re-authenticate")
+		return nil, NewFiberReauthenticateError()
 	}
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Validate the alg is what you expect:

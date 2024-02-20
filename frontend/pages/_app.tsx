@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 
 import { Navbar } from "@/components/navigation/Navbar";
 import "@/styles/globals.css";
@@ -83,6 +84,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				/>
 				<Navbar />
 				<Component {...pageProps} />
+				<Toaster />
 			</I18nProvider>
 		</div>
 	);

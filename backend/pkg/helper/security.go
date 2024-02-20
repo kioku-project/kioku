@@ -18,8 +18,17 @@ func IsAuthorized(groupRole pbCommon.GroupRole, requiredRole pbCommon.GroupRole)
 func CheckForValidName(name string, pattern *regexp.Regexp, clientID ClientID) error {
 	logger.Infof("Check name %s for valid format", name)
 	if !pattern.MatchString(name) {
-		return NewMicroInvalidUserNameFormatErr(clientID)
+		return NewMicroInvalidNameFormatErr(clientID)
 	}
 	logger.Infof("Name %s is valid", name)
+	return nil
+}
+
+func CheckForValidPassword(password string, clientID ClientID) error {
+	logger.Infof("Check password for valid format")
+	if len(password) < 3 {
+		return NewMicroInvalidParameterDataErr(clientID)
+	}
+	logger.Infof("Password is valid")
 	return nil
 }

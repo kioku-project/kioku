@@ -1,8 +1,9 @@
-import { Trans } from "@lingui/macro";
+import { Trans, t } from "@lingui/macro";
 import { hasCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ArrowRight, LogOut } from "react-feather";
+import toast from "react-hot-toast";
 
 import { Logo } from "@/components/graphics/Logo";
 import { Button } from "@/components/input/Button";
@@ -44,7 +45,8 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 						const response = await authedFetch(logoutRoute, {
 							method: "POST",
 						});
-						if (response?.ok) {
+						if (response.ok) {
+							toast.success(t`Logged out`, { id: "logoutToast" });
 							router.replace("/home");
 						}
 					}}

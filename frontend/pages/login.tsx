@@ -5,6 +5,7 @@ import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "react-feather";
+import { toast } from "react-hot-toast";
 
 import { Text } from "@/components/Text";
 import { InputField } from "@/components/form/InputField";
@@ -51,7 +52,7 @@ export default function Page() {
 			<NextSeo
 				title={_(msg`Kioku | Login or register for Kioku!`)}
 				description={_(
-					msg`Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups.`
+					msg`Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups.`,
 				)}
 				languageAlternates={[
 					{ hrefLang: "en", href: "https://app.kioku.dev/login" },
@@ -96,6 +97,7 @@ export default function Page() {
 										name="userName"
 										placeholder={_(msg`Username`)}
 										required
+										minLength={3}
 										className="bg-neutral-100 p-3 text-base sm:text-xs"
 										ref={nameInput}
 									/>
@@ -114,14 +116,14 @@ export default function Page() {
 										setPassword(event.target.value);
 										setPasswordsMatching(
 											repeatPasswordInput.current
-												?.value === event.target.value
+												?.value === event.target.value,
 										);
 										if (
 											event.target.validity.tooShort ||
 											event.target.validity.valueMissing
 										) {
 											event.target.setCustomValidity(
-												t`Password must have at least ${passwordMinLength} characters`
+												t`Password must have at least ${passwordMinLength} characters`,
 											);
 										}
 									}}
@@ -133,7 +135,7 @@ export default function Page() {
 											id="repeatPasswordInputFieldId"
 											type={"password"}
 											placeholder={_(
-												msg`Repeat Password`
+												msg`Repeat Password`,
 											)}
 											inputFieldIconStyle="text-neutral-400"
 											required
@@ -142,7 +144,7 @@ export default function Page() {
 											ref={repeatPasswordInput}
 											onChange={(event) => {
 												event.target.setCustomValidity(
-													""
+													"",
 												);
 												if (
 													passwordInput.current
@@ -150,13 +152,13 @@ export default function Page() {
 													event.target.value
 												) {
 													event.target.setCustomValidity(
-														t`Passwords have to match`
+														t`Passwords have to match`,
 													);
 												}
 												setPasswordsMatching(
 													passwordInput.current
 														?.value ===
-														event.target.value
+														event.target.value,
 												);
 											}}
 										/>
@@ -164,7 +166,7 @@ export default function Page() {
 										<div className="space-y-1 py-1 font-light text-neutral-500">
 											<PasswordCheck
 												text={_(
-													msg`Minimum ${passwordMinLength} characters`
+													msg`Minimum ${passwordMinLength} characters`,
 												)}
 												valid={
 													!passwordInput.current
@@ -175,7 +177,7 @@ export default function Page() {
 											/>
 											<PasswordCheck
 												text={_(
-													msg`Passwords have to match`
+													msg`Passwords have to match`,
 												)}
 												valid={passwordsMatching}
 											></PasswordCheck>
@@ -251,12 +253,17 @@ export default function Page() {
 		) {
 			return;
 		}
+		const toastID = toast.loading(t`Logging in...`, { id: "loginToast" });
 		const response = await submitForm(loginRoute, [
 			emailInput.current,
 			passwordInput.current,
 		]);
 		if (response.ok) {
+			toast.success(t`Logged in!`, { id: toastID });
 			router.push("/");
+		} else {
+			const error = await response.text();
+			toast.error(error, { id: toastID });
 		}
 	}
 
@@ -271,14 +278,21 @@ export default function Page() {
 		) {
 			return;
 		}
+		const toastID = toast.loading(t`Registering account...`, {
+			id: "registerToast",
+		});
 		const response = await submitForm(registerRoute, [
 			emailInput.current,
 			nameInput.current,
 			passwordInput.current,
 		]);
 		if (response.ok) {
+			toast.success(t`Account created!`, { id: toastID });
 			setLogin(true);
 			emailInput.current?.focus();
+		} else {
+			const error = await response.text();
+			toast.error(error, { id: toastID });
 		}
 	}
 }

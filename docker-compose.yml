@@ -23,8 +23,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    ports:
-      - 80:80
 
   user_service:
     container_name: kioku-user_service

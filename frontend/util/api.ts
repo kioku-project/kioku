@@ -14,9 +14,9 @@ import {
 	groupMembersRoute,
 	groupRoute,
 	groupsRoute,
-	invitationsGroupRoute,
+	invitationGroupRoute,
 	pushCardsRoute,
-	requestsGroupRoute,
+	requestGroupRoute,
 	userRoute,
 } from "@/util/endpoints";
 
@@ -94,7 +94,7 @@ async function groupInvitation(
 	request: (url: string, body?: string) => Promise<Response>
 ) {
 	const response = await request(
-		invitationsGroupRoute(groupID),
+		invitationGroupRoute(groupID),
 		JSON.stringify({
 			invitedUserEmail: userEmail,
 		})
@@ -118,7 +118,7 @@ async function groupRequest(
 	groupID: string,
 	request: (url: string, body?: string) => Promise<Response>
 ) {
-	const response = await request(requestsGroupRoute(groupID));
+	const response = await request(requestGroupRoute(groupID));
 	if (response?.ok)
 		mutateAll([
 			`/api/user/invitations`,

@@ -19,15 +19,19 @@ export const groupMembersRoute = (groupID: string) =>
 export const groupMemberRoute = (groupID: string, userID: string) =>
 	`/api/groups/${groupID}/members/${userID}`;
 export const invitationsGroupRoute = (groupID: string) =>
+	`/api/groups/${groupID}/members/invitations`;
+export const invitationGroupRoute = (groupID: string) =>
 	`/api/groups/${groupID}/members/invitation`;
 export const requestsGroupRoute = (groupID: string) =>
+	`/api/groups/${groupID}/members/requests`;
+export const requestGroupRoute = (groupID: string) =>
 	`/api/groups/${groupID}/members/request`;
 export const groupMemberRoutes = (groupID: string) => [
 	groupMembersRoute(groupID),
 	invitationsGroupRoute(groupID),
-	`/api/groups/${groupID}/members/invitations`,
+	invitationGroupRoute(groupID),
 	requestsGroupRoute(groupID),
-	`/api/groups/${groupID}/members/requests`,
+	requestGroupRoute(groupID),
 ];
 
 // Deck routes

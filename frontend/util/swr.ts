@@ -57,10 +57,10 @@ export function useUserDue() {
 	};
 }
 
-export function useInvitations(condition: boolean = true) {
+export function useInvitations() {
 	const { data, error, isLoading, isValidating } = useSWR<{
 		groups: Invitation[];
-	}>(condition ? invitationsUserRoute : null, fetcher);
+	}>(invitationsUserRoute, fetcher);
 	return {
 		invitations: data?.groups,
 		error,

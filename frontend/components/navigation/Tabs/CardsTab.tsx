@@ -49,7 +49,7 @@ export const CardsTab = ({ deck, className = "" }: CardsTabProps) => {
 						setReverse((prev) => !prev);
 					}}
 					onSearch={(event) => {
-						setFilter(event.target.value.toUpperCase());
+						setFilter(event.target.value);
 					}}
 					onAdd={() => setShowModal(true)}
 				></ActionBar>

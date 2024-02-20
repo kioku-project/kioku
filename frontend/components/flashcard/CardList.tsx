@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { Card } from "@/components/flashcard/Card";
 import { Card as CardType } from "@/types/Card";
 import { Deck as DeckType } from "@/types/Deck";
@@ -47,12 +49,14 @@ export const CardList = ({
 	className = "",
 	setCard,
 }: CardListProps) => {
-	const filteredCards = cards?.filter((card) => filterCard(card, filter));
-	const sortedCards = reverse ? filteredCards?.reverse() : filteredCards;
+	const filteredCards = useMemo(() => {
+		const filteredCards = cards?.filter((card) => filterCard(card, filter));
+		return reverse ? filteredCards?.reverse() : filteredCards;
+	}, [cards, filter, reverse]);
 	return (
 		<div id="cardListId" className={`flex h-full flex-col ${className}`}>
 			<div className="snap-y overflow-y-auto">
-				{sortedCards?.map((card: CardType) => (
+				{filteredCards?.map((card: CardType) => (
 					<Card
 						className="snap-center"
 						key={card.cardID}
@@ -69,10 +73,11 @@ export const CardList = ({
 	);
 
 	function filterCard(card: CardType, filter: string): boolean {
+		const upperCaseFilter = filter.toUpperCase();
 		return card.sides.some(
 			(side) =>
-				side.header?.toUpperCase().includes(filter) ||
-				side.description?.toUpperCase().includes(filter)
+				side.header?.toUpperCase().includes(upperCaseFilter) ||
+				side.description?.toUpperCase().includes(upperCaseFilter)
 		);
 	}
 };

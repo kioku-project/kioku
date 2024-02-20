@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSWRConfig } from "swr";
 
 import { Text } from "@/components/Text";
+import { Button } from "@/components/input/Button";
 import { Card as CardType } from "@/types/Card";
 import { deleteRequest } from "@/util/api";
 
@@ -42,7 +43,10 @@ export const Card = ({
 
 	return (
 		<button
-			className={`flex w-full flex-row border-b-2 border-kiokuLightBlue p-2 font-semibold text-kiokuDarkBlue md:p-3 ${className}`}
+			className={clsx(
+				"flex w-full flex-row border-b-2 border-kiokuLightBlue p-2 font-semibold text-kiokuDarkBlue md:p-3",
+				className
+			)}
 			onClick={() => setCard?.(card)}
 		>
 			<Text
@@ -55,15 +59,17 @@ export const Card = ({
 			<div className="flex flex-row items-center space-x-5">
 				{isDelete ? (
 					<div className="flex flex-row space-x-1">
-						<Check
-							className="cursor-pointer"
+						<Button
+							buttonSize=""
+							buttonIcon={<Check />}
 							onClick={(event) => {
 								deleteCard();
 								event.stopPropagation();
 							}}
 						/>
-						<X
-							className="cursor-pointer"
+						<Button
+							buttonSize=""
+							buttonIcon={<X />}
 							onClick={(event) => {
 								setDelete(false);
 								event.stopPropagation();

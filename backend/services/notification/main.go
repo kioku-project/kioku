@@ -103,7 +103,8 @@ func main() {
 				logger.Error(err)
 				continue
 			}
-			if userDueRsp.DueCards == 0 {
+			dueCards := userDueRsp.DueCards + userDueRsp.NewCards
+			if dueCards == 0 {
 				continue
 			}
 
@@ -111,7 +112,7 @@ func main() {
 				Title: "Don't forget to review your cards!",
 				Options: model.PushNotificationOptions{
 					Body: fmt.Sprintf("You have %d %s in %d %s to learn",
-						userDueRsp.DueCards,
+						dueCards,
 						util.PluralSingularSelector(userDueRsp.DueCards, "card", "cards"),
 						userDueRsp.DueDecks,
 						util.PluralSingularSelector(userDueRsp.DueDecks, "deck", "decks")),

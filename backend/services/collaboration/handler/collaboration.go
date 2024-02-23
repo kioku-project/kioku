@@ -3,6 +3,8 @@ package handler
 import (
 	"context"
 	"errors"
+	"github.com/kioku-project/kioku/pkg/comparators"
+	"golang.org/x/exp/slices"
 
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
@@ -153,6 +155,7 @@ func (e *Collaboration) GetUserGroups(ctx context.Context, req *pbCommon.User, r
 	if err != nil {
 		return err
 	}
+	slices.SortFunc(groups, comparators.GroupModelDateComparator)
 	protoGroups := converter.ConvertToTypeArray(groups, converter.StoreGroupToProtoGroupConverter)
 	protoRoles := make([]pbCommon.GroupRole, len(protoGroups))
 	for index, group := range protoGroups {
@@ -307,14 +310,16 @@ func (e *Collaboration) GetGroupMembers(ctx context.Context, req *pbCommon.Group
 	if err != nil {
 		return err
 	}
-	rsp.Users = make([]*pbCommon.User, len(users.Users))
+	groupUsers := make([]*pbCommon.User, len(users.Users))
 	for i, user := range users.Users {
-		rsp.Users[i] = &pbCommon.User{
+		groupUsers[i] = &pbCommon.User{
 			UserID:    user.UserID,
 			UserName:  user.UserName,
 			GroupRole: converter.MigrateModelRoleToProtoRole(groupMembers[i].RoleType),
 		}
 	}
+	slices.SortFunc(groupUsers, comparators.GroupUserProtoRoleComparator)
+	rsp.Users = groupUsers
 	logger.Infof("Found %d users in group with id %s", len(rsp.Users), req.Group.GroupID)
 	return nil
 }

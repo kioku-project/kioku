@@ -4,7 +4,6 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
-import "react-toastify/dist/ReactToastify.css";
 
 import { FetchHeader } from "@/components/layout/Header";
 import { DecksTab } from "@/components/navigation/Tabs/DecksTab";

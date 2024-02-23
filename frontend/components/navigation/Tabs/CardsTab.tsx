@@ -49,7 +49,7 @@ export const CardsTab = ({ deck, className = "" }: CardsTabProps) => {
 						{card && (
 							<Flashcard
 								id={"FlashcardId"}
-								key={card.cardID}
+								deckID={deck.deckID}
 								card={card}
 								cardSide={0}
 								fullSize={true}

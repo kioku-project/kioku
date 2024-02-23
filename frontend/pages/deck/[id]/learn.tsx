@@ -2,8 +2,6 @@ import { Trans } from "@lingui/macro";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { toast } from "react-toastify";
-import { useSWRConfig } from "swr";
 
 import { Flashcard } from "@/components/flashcard/Flashcard";
 import KiokuAward from "@/components/graphics/KiokuAward";
@@ -11,8 +9,7 @@ import LoadingSpinner from "@/components/graphics/LoadingSpinner";
 import { Button } from "@/components/input/Button";
 import { loadCatalog } from "@/pages/_app";
 import { GroupRole } from "@/types/GroupRole";
-import { postRequest } from "@/util/api";
-import { useDeck, useDueCards, useGroup, usePullCard } from "@/util/swr";
+import { useDeck, usePullCard } from "@/util/swr";
 
 export const getServerSideProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -25,12 +22,13 @@ export const getServerSideProps: GetStaticProps = async (ctx) => {
 
 export default function Page() {
 	const router = useRouter();
-	const { mutate } = useSWRConfig();
 	const deckID = router.query.id as string;
-	const { isLoading:isCardLoading, isValidating:isCardValidating, card } = usePullCard(deckID);
+	const {
+		isLoading: isCardLoading,
+		isValidating: isCardValidating,
+		card,
+	} = usePullCard(deckID);
 	const { deck } = useDeck(deckID);
-	const { dueCards } = useDueCards(deckID);
-	const { group } = useGroup(deck?.groupID);
 	return (
 		<>
 			<Head>
@@ -49,21 +47,19 @@ export default function Page() {
 				/>
 			</Head>
 			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
-				{isCardLoading || isCardValidating && (
-					<div className="flex-grow flex items-center justify-center">
-						<LoadingSpinner className="w-16" delay={3000}/>
+				{(isCardLoading || isCardValidating) && (
+					<div className="flex flex-grow items-center justify-center">
+						<LoadingSpinner className="w-16" delay={3000} />
 					</div>
 				)}
 				{!isCardLoading && !isCardValidating && card?.cardID && (
 					<Flashcard
 						id="flashcardId"
-						key={card.cardID}
+						deckID={deckID}
 						card={card}
-						dueCards={dueCards}
-						push={push}
 						editable={
-							group?.groupRole &&
-							GroupRole[group.groupRole] >= GroupRole.WRITE
+							deck?.deckRole &&
+							GroupRole[deck.deckRole] >= GroupRole.WRITE
 						}
 					/>
 				)}
@@ -94,17 +90,4 @@ export default function Page() {
 			</div>
 		</>
 	);
-
-	async function push(body: { cardID: string; rating: number }) {
-		const response = await postRequest(
-			`/api/decks/${deckID}/push`,
-			JSON.stringify(body)
-		);
-		if (response?.ok) {
-			mutate(`/api/decks/${deckID}/pull`);
-			mutate(`/api/decks/${deckID}/dueCards`);
-		} else {
-			toast.error("Error!", { toastId: "updatedGroupToast" });
-		}
-	}
 }

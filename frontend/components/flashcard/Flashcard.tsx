@@ -24,7 +24,7 @@ interface FlashcardProps {
 	 */
 	id: string;
 	/**
-	 * deckID
+	 * Deck ID
 	 */
 	deckID: string;
 	/**

@@ -102,9 +102,10 @@ export default function Member({
 										className="cursor-pointer"
 										onClick={() =>
 											user.groupID &&
+											user.userEmail &&
 											declineGroupRequest(
 												user.groupID,
-												user.userEmail ?? ""
+												user.userEmail
 											)
 										}
 									/>
@@ -120,9 +121,10 @@ export default function Member({
 									className="cursor-pointer"
 									onClick={() =>
 										user.groupID &&
+										user.userEmail &&
 										declineGroupRequest(
 											user.groupID,
-											user.userEmail ?? ""
+											user.userEmail
 										)
 									}
 								/>

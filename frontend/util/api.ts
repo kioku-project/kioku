@@ -15,6 +15,7 @@ import {
 	groupRoute,
 	groupsRoute,
 	invitationGroupRoute,
+	invitationsUserRoute,
 	pushCardsRoute,
 	requestGroupRoute,
 	userRoute,
@@ -121,7 +122,7 @@ async function groupRequest(
 	const response = await request(requestGroupRoute(groupID));
 	if (response?.ok)
 		mutateAll([
-			`/api/user/invitations`,
+			invitationsUserRoute,
 			groupsRoute,
 			groupRoute(groupID),
 			...groupMemberRoutes(groupID),

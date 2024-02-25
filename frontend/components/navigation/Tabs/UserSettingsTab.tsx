@@ -1,9 +1,7 @@
-import { Trans, msg, t } from "@lingui/macro";
+import { Trans, msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { toast } from "react-toastify";
-import { useSWRConfig } from "swr";
 
 import { Text } from "@/components/Text";
 import { Action } from "@/components/input/Action";
@@ -13,7 +11,7 @@ import { NotificationButton } from "@/components/input/NotificationButton";
 import { Section } from "@/components/layout/Section";
 import { InstallPWAModal } from "@/components/modal/InstallPWAModal";
 import { User } from "@/types/User";
-import { deleteRequest, putRequests } from "@/util/api";
+import { deleteUser, modifyUser } from "@/util/api";
 
 interface UserSettingsTabProps {
 	/**
@@ -34,7 +32,6 @@ export const UserSettingsTab = ({
 	className = "",
 }: UserSettingsTabProps) => {
 	const router = useRouter();
-	const { mutate } = useSWRConfig();
 	const { _ } = useLingui();
 
 	const [userName, setUserName] = useState(user.userName);
@@ -68,7 +65,7 @@ export const UserSettingsTab = ({
 						}}
 						onClick={() => {
 							userNameInputAction.current &&
-								modifyUser(userNameInputAction.current);
+								modifyUser([userNameInputAction.current]);
 						}}
 						ref={userNameInputAction}
 					/>
@@ -87,7 +84,7 @@ export const UserSettingsTab = ({
 						}}
 						onClick={() => {
 							userEmailInputAction.current &&
-								modifyUser(userEmailInputAction.current);
+								modifyUser([userEmailInputAction.current]);
 						}}
 						ref={userEmailInputAction}
 					></InputAction>
@@ -147,9 +144,10 @@ export const UserSettingsTab = ({
 								? _(msg`Click again`)
 								: _(msg`Delete Account`)
 						}
-						onClick={() => {
+						onClick={async () => {
 							if (isConfirmDeletion) {
-								deleteUser();
+								const response = await deleteUser();
+								if (response?.ok) router.push("/");
 							} else {
 								setConfirmDeletion(true);
 							}
@@ -159,29 +157,4 @@ export const UserSettingsTab = ({
 			</div>
 		</>
 	);
-
-	async function modifyUser(input: HTMLInputElement) {
-		if (!input.checkValidity()) {
-			return;
-		}
-		const body: Record<string, string> = {};
-		body[input.name] = input.value;
-		const response = await putRequests(`/api/user`, JSON.stringify(body));
-		if (response?.ok) {
-			toast.info(t`User updated!`, { toastId: "updatedUserToast" });
-		} else {
-			toast.error("Error!", { toastId: "updatedGroupToast" });
-		}
-		mutate(`/api/user`);
-	}
-
-	async function deleteUser() {
-		const response = await deleteRequest(`/api/user`);
-		if (response?.ok) {
-			toast.info(t`User deleted!`, { toastId: "deletedUserToast" });
-		} else {
-			toast.error("Error!", { toastId: "deletedUserToast" });
-		}
-		router.push(`/home`);
-	}
 };

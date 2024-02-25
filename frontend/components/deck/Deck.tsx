@@ -3,15 +3,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { Globe, Heart, Lock, MoreVertical } from "react-feather";
-import "react-toastify/dist/ReactToastify.css";
-import { preload, useSWRConfig } from "swr";
+import { preload } from "swr";
 
 import { Text } from "@/components/Text";
 import { IconLabel, IconLabelType } from "@/components/graphics/IconLabel";
 import { Button } from "@/components/input/Button";
 import { Deck as DeckType } from "@/types/Deck";
-import { deleteRequest, postRequest } from "@/util/api";
-import { fetcher, useDueCards } from "@/util/swr";
+import { toggleFavorite } from "@/util/api";
+import { deckRoute } from "@/util/endpoints";
+import { fetcher, useDeckDueCards } from "@/util/swr";
 
 interface DeckProps {
 	/**
@@ -35,12 +35,12 @@ interface DeckProps {
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 	const router = useRouter();
 
-	const { dueCards } = useDueCards(deck.deckID);
+	const { dueCards } = useDeckDueCards(deck.deckID);
 
 	useEffect(() => {
 		if (deck) {
 			router.prefetch(`/deck/${deck.deckID}`);
-			preload(`/api/decks/${deck.deckID}`, fetcher);
+			preload(deckRoute(deck.deckID), fetcher);
 		}
 	}, [router, deck]);
 
@@ -60,8 +60,6 @@ export const Deck = ({
 	deckNotification,
 	className = "",
 }: DeckProps) => {
-	const { mutate } = useSWRConfig();
-
 	const [isFavorite, setFavorite] = useState(deck.isFavorite);
 
 	useEffect(() => {
@@ -123,7 +121,11 @@ export const Deck = ({
 									}
 									className="relative hover:scale-105"
 									onClick={(event) => {
-										modifyFavorite(deck);
+										toggleFavorite(
+											deck.deckID,
+											deck.groupID,
+											isFavorite
+										);
 										event.preventDefault();
 									}}
 								/>
@@ -196,24 +198,4 @@ export const Deck = ({
 			)}
 		</Link>
 	);
-
-	async function modifyFavorite(deck: DeckType) {
-		const response = isFavorite
-			? await deleteRequest(
-					"/api/decks/favorites",
-					JSON.stringify({
-						deckID: deck.deckID,
-					})
-			  )
-			: await postRequest(
-					"/api/decks/favorites",
-					JSON.stringify({
-						deckID: deck.deckID,
-					})
-			  );
-		setFavorite((prev) => !prev);
-		mutate(`/api/groups/${deck.groupID}/decks`);
-		mutate("/api/decks/favorites");
-		mutate("/api/decks/active");
-	}
 };

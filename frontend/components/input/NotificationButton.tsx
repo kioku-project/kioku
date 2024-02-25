@@ -5,6 +5,7 @@ import { mutate } from "swr";
 import { Button } from "@/components/input/Button";
 import { deleteRequest, postRequest } from "@/util/api";
 import { Platform, getPlatform } from "@/util/client";
+import { notificationRoute, notificationsRoute } from "@/util/endpoints";
 import { useLocalStorage } from "@/util/hooks";
 import { useNotifications } from "@/util/swr";
 
@@ -75,17 +76,15 @@ export const NotificationButton = ({
 				options
 			);
 			setSubscriptionId(await saveSubscription(subscription));
-			mutate("/api/user/notification");
+			mutate(notificationsRoute);
 		} catch (err) {}
 	}
 
 	async function unsubscribe(subscriptionId: string) {
-		const response = await deleteRequest(
-			`/api/user/notification/${subscriptionId}`
-		);
+		const response = await deleteRequest(notificationRoute(subscriptionId));
 		if (response.ok) {
 			setSubscriptionId("");
-			mutate("/api/user/notification");
+			mutate(notificationsRoute);
 		}
 	}
 
@@ -95,7 +94,7 @@ export const NotificationButton = ({
 
 	async function saveSubscription(subscription: PushSubscription) {
 		const ORIGIN = window.location.origin;
-		const BACKEND_URL = `${ORIGIN}/api/user/notification`;
+		const BACKEND_URL = `${ORIGIN}${notificationsRoute}`;
 		const response = await postRequest(
 			BACKEND_URL,
 			JSON.stringify({

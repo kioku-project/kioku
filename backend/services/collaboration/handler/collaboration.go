@@ -91,6 +91,7 @@ func (e *Collaboration) generateGroupMemberAdmissionResponse(
 			UserEmail: user.UserEmail,
 		}
 	}
+	slices.SortFunc(memberAdmissions, comparators.UserProtoNameComparator)
 	logger.Infof("Successfully received user information from %d users and added it to request information",
 		len(users.Users))
 	return

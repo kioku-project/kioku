@@ -41,3 +41,6 @@ next-env.d.ts
 
 # Storybook
 build-storybook.log
+
+# Lingui
+messages.ts

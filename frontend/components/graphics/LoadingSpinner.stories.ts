@@ -24,3 +24,11 @@ export const NoDelay: Story = {
 		delay: 0,
 	},
 };
+
+export const SimpleTheme: Story = {
+	args: {
+		className: "w-16",
+		delay: 0,
+		theme: "simple",
+	},
+};

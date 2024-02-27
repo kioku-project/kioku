@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
-
+	"github.com/kioku-project/kioku/pkg/comparators"
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	"gorm.io/gorm"
@@ -173,10 +173,6 @@ func (e *CardDeck) updateCardReferences(ctx context.Context, cardSideToDelete *m
 	return isLastCardSide, nil
 }
 
-func cardModelDateComparator(a, b model.Card) int {
-	return a.CreatedAt.Compare(b.CreatedAt)
-}
-
 func (e *CardDeck) copyCards(ctx context.Context, cards []*model.Card, deckID string) error {
 	for _, card := range cards {
 		newCard := &model.Card{
@@ -219,7 +215,7 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pbCommon.GroupRequest
 			return err
 		}
 	}
-
+	slices.SortFunc(decks, comparators.DeckModelDateComparator)
 	rsp.Decks = converter.ConvertToTypeArray(decks, converter.StoreDeckToProtoDeckConverter)
 	for _, deck := range rsp.Decks {
 		deckRole, err := e.collaborationService.GetGroupUserRole(ctx, &pbCommon.GroupRequest{
@@ -393,7 +389,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pbCommon.DeckRequest, 
 	if err := e.checkUserDeckAccess(ctx, req.UserID, deck.ID); err != nil {
 		return err
 	}
-	slices.SortFunc(deck.Cards, cardModelDateComparator)
+	slices.SortFunc(deck.Cards, comparators.CardModelDateComparator)
 	rsp.Cards = make([]*pbCommon.Card, len(deck.Cards))
 	for i, card := range deck.Cards {
 		cardSides, err := e.store.FindCardSidesByCardID(ctx, card.ID)

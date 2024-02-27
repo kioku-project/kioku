@@ -456,6 +456,7 @@ func (s *CollaborationStoreImpl) ModifyGroup(ctx context.Context, group *model.G
 		Name:        group.Name,
 		Description: group.Description,
 		IsDefault:   group.IsDefault,
+		CreatedAt:   group.CreatedAt,
 		GroupType:   group.GroupType,
 	}).Error
 	return

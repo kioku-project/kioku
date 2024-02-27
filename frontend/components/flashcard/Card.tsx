@@ -1,14 +1,11 @@
 import clsx from "clsx";
 import React, { useState } from "react";
 import { Check, Trash, X } from "react-feather";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useSWRConfig } from "swr";
 
 import { Text } from "@/components/Text";
 import { Button } from "@/components/input/Button";
 import { Card as CardType } from "@/types/Card";
-import { deleteRequest } from "@/util/api";
+import { deleteCard } from "@/util/api";
 
 interface CardProps {
 	/**
@@ -38,7 +35,6 @@ export const Card = ({
 	className = "",
 	setCard,
 }: CardProps) => {
-	const { mutate } = useSWRConfig();
 	const [isDelete, setDelete] = useState(false);
 
 	return (
@@ -63,7 +59,8 @@ export const Card = ({
 							buttonSize=""
 							buttonIcon={<Check />}
 							onClick={(event) => {
-								deleteCard();
+								card.deckID &&
+									deleteCard(card.deckID, card.cardID);
 								event.stopPropagation();
 							}}
 						/>
@@ -91,28 +88,7 @@ export const Card = ({
 						}}
 					/>
 				)}
-				{/* <Edit2
-							className="cursor-pointer"
-							size={20}
-							onClick={() => {
-								if (setCard) {
-									setCard(card);
-								}
-							}}
-						/> */}
 			</div>
 		</button>
 	);
-
-	async function deleteCard() {
-		const response = await deleteRequest(`/api/cards/${card.cardID}`);
-		if (response?.ok) {
-			toast.info("Card deleted!", { toastId: "deletedCardToast" });
-			mutate(`/api/decks/${card.deckID}/cards`);
-			mutate(`/api/decks/${card.deckID}/pull`);
-			mutate(`/api/decks/${card.deckID}/dueCards`);
-		} else {
-			toast.error("Error!", { toastId: "deletedCardToast" });
-		}
-	}
 };

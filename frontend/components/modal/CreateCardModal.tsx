@@ -1,14 +1,12 @@
-import { Trans, msg, t } from "@lingui/macro";
+import { Trans, msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { useRef } from "react";
-import { toast } from "react-toastify";
-import { useSWRConfig } from "swr";
 
 import { InputField } from "@/components/form/InputField";
 import { Button } from "@/components/input/Button";
 import { Modal, ModalProps } from "@/components/modal/modal";
 import { Deck as DeckType } from "@/types/Deck";
-import { postRequest } from "@/util/api";
+import { createCard } from "@/util/api";
 
 interface CreateCardModalProps {
 	/**
@@ -26,7 +24,6 @@ export const CreateCardModal = ({
 	setVisible,
 	...props
 }: CreateCardModalProps & ModalProps) => {
-	const { mutate } = useSWRConfig();
 	const { _ } = useLingui();
 
 	const cardFrontInput = useRef<HTMLInputElement>(null);
@@ -80,7 +77,13 @@ export const CreateCardModal = ({
 						buttonStyle="secondary"
 						buttonTextSize="3xs"
 						onClick={() => {
-							createCard();
+							cardFrontInput.current &&
+								cardBackInput.current &&
+								createCard(
+									deck.deckID,
+									cardFrontInput.current,
+									cardBackInput.current
+								);
 							setVisible(false);
 						}}
 					>
@@ -90,32 +93,4 @@ export const CreateCardModal = ({
 			</form>
 		</Modal>
 	);
-
-	async function createCard() {
-		if (!cardFrontInput.current?.value) {
-			cardFrontInput.current?.focus();
-			return;
-		}
-		const response = await postRequest(
-			`/api/decks/${deck.deckID}/cards`,
-			JSON.stringify({
-				sides: [
-					{
-						header: cardFrontInput.current.value,
-					},
-					{
-						header: cardBackInput.current?.value,
-					},
-				],
-			})
-		);
-		if (response?.ok) {
-			toast.info(t`Card created!`, { toastId: "newCardToast" });
-			mutate(`/api/decks/${deck.deckID}/cards`);
-			mutate(`/api/decks/${deck.deckID}/pull`);
-			mutate(`/api/decks/${deck.deckID}/dueCards`);
-		} else {
-			toast.error("Error!", { toastId: "newCardToast" });
-		}
-	}
 };

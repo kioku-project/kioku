@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { Card } from "@/components/flashcard/Card";
 import { Card as CardType } from "@/types/Card";
 import { Deck as DeckType } from "@/types/Deck";
@@ -13,6 +15,14 @@ interface CardListProps {
 	 * Cards
 	 */
 	cards?: CardType[];
+	/**
+	 * Filter cards
+	 */
+	filter?: string;
+	/**
+	 * Reverse card list
+	 */
+	reverse?: boolean;
 	/**
 	 * Additional classes
 	 */
@@ -34,13 +44,19 @@ export const FetchCardList = ({ deck, ...props }: CardListProps) => {
 export const CardList = ({
 	deck,
 	cards,
+	filter = "",
+	reverse = false,
 	className = "",
 	setCard,
 }: CardListProps) => {
+	const filteredCards = useMemo(() => {
+		const filteredCards = cards?.filter((card) => filterCard(card, filter));
+		return reverse ? filteredCards?.reverse() : filteredCards;
+	}, [cards, filter, reverse]);
 	return (
 		<div id="cardListId" className={`flex h-full flex-col ${className}`}>
 			<div className="snap-y overflow-y-auto">
-				{cards?.map((card: CardType) => (
+				{filteredCards?.map((card: CardType) => (
 					<Card
 						className="snap-center"
 						key={card.cardID}
@@ -53,9 +69,15 @@ export const CardList = ({
 					/>
 				))}
 			</div>
-			{deck.deckRole && GroupRole[deck.deckRole] >= GroupRole.WRITE && (
-				<Card card={{ cardID: "", sides: [], deckID: deck.deckID }} />
-			)}
 		</div>
 	);
+
+	function filterCard(card: CardType, filter: string): boolean {
+		const upperCaseFilter = filter.toUpperCase();
+		return card.sides.some(
+			(side) =>
+				side.header?.toUpperCase().includes(upperCaseFilter) ||
+				side.description?.toUpperCase().includes(upperCaseFilter)
+		);
+	}
 };

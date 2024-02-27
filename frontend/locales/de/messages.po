@@ -17,11 +17,11 @@ msgstr ""
 msgid "{0, plural, one {# card due} other {# cards due}}"
 msgstr "{0, plural, one {# Karte fällig} other {# Karten fällig}}"
 
-#: components/layout/Header.tsx:114
+#: components/layout/Header.tsx:115
 msgid "{0, plural, one {in # deck to learn} other {in # decks to learn}}"
 msgstr "{0, plural, one {in einem Stapel zu lernen} other {in # Stapeln zu lernen}}"
 
-#: components/layout/Header.tsx:110
+#: components/layout/Header.tsx:111
 msgid "{0, plural, one {You have # card} other {You have # cards}}"
 msgstr "{0, plural, one {Du hast eine Karte} other {Du hast # Karten}}"
 
@@ -33,14 +33,6 @@ msgstr "{dueCards, plural, one {Eine Karte übrig} other {# Karten übrig}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Greife von überall und jederzeit auf Deine Karteikarten zu. Wechsle nahtlos zwischen verschiedenen Plattformen und verpasse nie wieder eine Lerngelegenheit!"
 
-#: pages/login.tsx:292
-msgid "Account already exists!"
-msgstr "Account existiert bereits!"
-
-#: pages/login.tsx:286
-msgid "Account created!"
-msgstr "Account erstellt!"
-
 #: pages/features.tsx:111
 msgid "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivierender. Kioku hilft Dir, bessere Ergebnisse zu erzielen und Deine persönlichen Lernziele zu erreichen!"
@@ -49,7 +41,7 @@ msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivier
 msgid "Active Decks"
 msgstr "Aktive Stapel"
 
-#: pages/login.tsx:222
+#: pages/login.tsx:221
 msgid "Already have an account?"
 msgstr "Bereits registriert?"
 
@@ -61,12 +53,25 @@ msgstr "Verfügbar"
 msgid "Back to Deck!"
 msgstr "Zurück zum Stapel!"
 
+#: components/modal/CreateCardModal.tsx:76
 #: components/modal/CreateDeckModal.tsx:91
 #: components/modal/CreateGroupModal.tsx:79
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: pages/deck/[id]/index.tsx:38
+#: components/modal/CreateCardModal.tsx:59
+msgid "Card back"
+msgstr "Kartenrückseite"
+
+#: components/modal/CreateCardModal.tsx:113
+msgid "Card created!"
+msgstr "Karte erstellt!"
+
+#: components/modal/CreateCardModal.tsx:47
+msgid "Card front"
+msgstr "Kartenvorderseite"
+
+#: pages/deck/[id]/index.tsx:37
 msgid "Cards"
 msgstr "Karten"
 
@@ -112,7 +117,7 @@ msgstr "Glückwunsch!"
 msgid "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 msgstr "Erstelle und individualisiere Karteikarten, die genau auf Deine Bedürfnisse und Vorlieben zugeschnitten sind. Bestimme Dein eigenes Tempo mit unserem Spaced Repetition System, um Dein Potenzial zu maximieren!"
 
-#: components/flashcard/Card.tsx:102
+#: components/modal/CreateCardModal.tsx:87
 msgid "Create Card"
 msgstr "Karte erstellen"
 
@@ -123,6 +128,10 @@ msgstr "Stapel erstellen"
 #: components/modal/CreateGroupModal.tsx:86
 msgid "Create Group"
 msgstr "Gruppe erstellen"
+
+#: components/modal/CreateCardModal.tsx:37
+msgid "Create new Card"
+msgstr "Neue Karte erstellen"
 
 #: components/modal/CreateDeckModal.tsx:34
 msgid "Create new Deck"
@@ -152,7 +161,7 @@ msgstr "Stapelbeschreibung"
 msgid "Deck Name"
 msgstr "Stapelname"
 
-#: pages/group/[id]/index.tsx:42
+#: pages/group/[id]/index.tsx:41
 #: pages/index.tsx:49
 msgid "Decks"
 msgstr "Stapel"
@@ -193,7 +202,7 @@ msgstr "Entdecke Kiokus einzigartige Funktionen"
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 msgstr "Entdecke die Funktionen unserer kostenlosen Karteikarten Anwendung. Importiere Stapel aus Anki, erstelle Gruppen, lerne gemeinsam mit Freunden und vergleicht Eure Statistiken. Jetzt auf allen Geräten!"
 
-#: pages/login.tsx:218
+#: pages/login.tsx:217
 msgid "Don't have an account?"
 msgstr "Noch kein Account?"
 
@@ -206,9 +215,17 @@ msgid "Easy"
 msgstr "Einfach"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:75
-#: pages/login.tsx:88
+#: pages/login.tsx:87
 msgid "Email"
 msgstr "E-Mail"
+
+#: components/modal/CreateCardModal.tsx:61
+msgid "Enter card back"
+msgstr "Kartenrückseite eingeben"
+
+#: components/modal/CreateCardModal.tsx:50
+msgid "Enter card front"
+msgstr "Kartenvorderseite eingeben"
 
 #: components/modal/CreateDeckModal.tsx:76
 msgid "Enter deck description"
@@ -306,11 +323,11 @@ msgstr "Individuell"
 msgid "Informative"
 msgstr "Informativ"
 
-#: components/group/Member.tsx:139
+#: components/group/Member.tsx:140
 msgid "Invite user with email"
 msgstr "Benutzer per E-Mail einladen"
 
-#: components/layout/Header.tsx:143
+#: components/layout/Header.tsx:144
 msgid "Join Group"
 msgstr "Gruppe beitreten"
 
@@ -318,7 +335,7 @@ msgstr "Gruppe beitreten"
 msgid "Kioku | Features of the Kioku platform"
 msgstr "Kioku | Funktionen der Kioku Plattform!"
 
-#: pages/login.tsx:53
+#: pages/login.tsx:52
 msgid "Kioku | Login or register for Kioku!"
 msgstr "Kioku | Logge Dich ein oder registriere Dich für Kioku"
 
@@ -338,7 +355,7 @@ msgstr "Kioku ist mit Anki kompatibel, sodass Du Deine bestehenden Stapel in uns
 msgid "Learn"
 msgstr "Lernen"
 
-#: components/layout/Header.tsx:130
+#: components/layout/Header.tsx:131
 msgid "Learn Deck"
 msgstr "Stapel lernen"
 
@@ -351,10 +368,6 @@ msgstr "Erfahre mehr"
 msgid "Leave Group"
 msgstr "Gruppe verlassen"
 
-#: pages/login.tsx:260
-msgid "Logged in!"
-msgstr "Eingeloggt!"
-
 #: components/navigation/Navbar.tsx:62
 msgid "Login"
 msgstr "Einloggen"
@@ -363,7 +376,7 @@ msgstr "Einloggen"
 msgid "Medium"
 msgstr "Mittel"
 
-#: pages/login.tsx:168
+#: pages/login.tsx:167
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Mindestens {passwordMinLength} Zeichen"
 
@@ -381,16 +394,16 @@ msgstr "Diese Aktion kann nicht rückgängig gemacht werden. Bitte sei vorsichti
 msgid "Open menu"
 msgstr "Menü öffnen"
 
-#: pages/login.tsx:108
+#: pages/login.tsx:107
 msgid "Password"
 msgstr "Passwort"
 
-#: pages/login.tsx:125
+#: pages/login.tsx:124
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Passwort muss mindestens {passwordMinLength} Zeichen lang sein"
 
-#: pages/login.tsx:154
-#: pages/login.tsx:179
+#: pages/login.tsx:153
+#: pages/login.tsx:178
 msgid "Passwords have to match"
 msgstr "Passwörter müssen übereinstimmen"
 
@@ -406,7 +419,7 @@ msgstr "Nachdem Du die Gruppe gelöscht hast, gibt es kein Zurück mehr."
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Nachdem Du den Stapel gelöscht hast, gibt es kein Zurück mehr."
 
-#: pages/login.tsx:55
+#: pages/login.tsx:54
 msgid "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
 msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten Anwendung zusammen mit Deinen Freunden zu nutzen. Erstelle einfach neue Stapel oder importiere bestehende Stapel aus Anki und arbeite in Gruppen zusammen."
 
@@ -416,11 +429,11 @@ msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten An
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: pages/login.tsx:137
+#: pages/login.tsx:136
 msgid "Repeat Password"
 msgstr "Passwort wiederholen"
 
-#: components/layout/Header.tsx:149
+#: components/layout/Header.tsx:150
 msgid "Request pending"
 msgstr "Anfrage ausstehend"
 
@@ -457,25 +470,25 @@ msgstr "Wähle \"App installieren\""
 msgid "Select \"Install\""
 msgstr "Wähle \"Installieren\""
 
-#: pages/deck/[id]/index.tsx:43
-#: pages/group/[id]/index.tsx:52
+#: pages/deck/[id]/index.tsx:42
+#: pages/group/[id]/index.tsx:51
 #: pages/index.tsx:63
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: pages/login.tsx:206
+#: pages/login.tsx:205
 msgid "Sign in"
 msgstr "Einloggen"
 
-#: pages/login.tsx:236
+#: pages/login.tsx:235
 msgid "Sign in now!"
 msgstr "Jetzt anmelden!"
 
-#: pages/login.tsx:208
+#: pages/login.tsx:207
 msgid "Sign up"
 msgstr "Registrieren"
 
-#: pages/login.tsx:234
+#: pages/login.tsx:233
 msgid "Sign up now!"
 msgstr "Jetzt registrieren!"
 
@@ -495,7 +508,7 @@ msgstr "gemeldet wird, damit wir in Zukunft noch mehr Geräte unterstützen kön
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
 
-#: components/input/NotificationButton.tsx:65
+#: components/input/NotificationButton.tsx:61
 msgid "Subscribe"
 msgstr "Aktivieren"
 
@@ -519,16 +532,16 @@ msgstr "Benachrichtigungen aktivieren"
 msgid "Unexpected group type"
 msgstr "Unerwarteter Gruppentyp"
 
-#: components/input/NotificationButton.tsx:63
+#: components/input/NotificationButton.tsx:59
 msgid "Unsubscribe"
 msgstr "Deaktivieren"
 
-#: pages/group/[id]/index.tsx:47
+#: pages/group/[id]/index.tsx:46
 msgid "User"
 msgstr "Benutzer"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:56
-#: pages/login.tsx:98
+#: pages/login.tsx:97
 msgid "Username"
 msgstr "Benutzername"
 
@@ -540,17 +553,13 @@ msgstr "Wir stellen Dir detaillierte Statistiken und Einblicke in Deinen Studien
 msgid "We're changing the way people learn."
 msgstr "Wir revolutionieren, wie Menschen lernen."
 
-#: components/layout/Header.tsx:81
+#: components/layout/Header.tsx:82
 msgid "Welcome {0}"
 msgstr "Willkommen, {0}"
 
 #: pages/features.tsx:56
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Willkommen bei Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die gemeinsame Erstellung von Lerninhalten konzentriert. Unsere innovative Plattform ermöglicht es Dir, Dein Wissen auf Karteikarten zu organisieren und diese mit anderen Nutzern zu teilen, um Dein Wissen auf die nächste Stufe zu heben. Melde Dich noch heute bei Kioku an und erlebe die Zukunft des Lernens."
-
-#: pages/login.tsx:263
-msgid "Wrong username or password"
-msgstr "Falscher Benutzername oder falsches Passwort"
 
 #: components/modal/InstallPWAModal.tsx:41
 msgid "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"

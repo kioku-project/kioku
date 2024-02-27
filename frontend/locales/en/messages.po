@@ -17,11 +17,11 @@ msgstr ""
 msgid "{0, plural, one {# card due} other {# cards due}}"
 msgstr "{0, plural, one {# card due} other {# cards due}}"
 
-#: components/layout/Header.tsx:114
+#: components/layout/Header.tsx:115
 msgid "{0, plural, one {in # deck to learn} other {in # decks to learn}}"
 msgstr "{0, plural, one {in # deck to learn} other {in # decks to learn}}"
 
-#: components/layout/Header.tsx:110
+#: components/layout/Header.tsx:111
 msgid "{0, plural, one {You have # card} other {You have # cards}}"
 msgstr "{0, plural, one {You have # card} other {You have # cards}}"
 
@@ -33,14 +33,6 @@ msgstr "{dueCards, plural, one {# card left} other {# cards left}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 
-#: pages/login.tsx:292
-msgid "Account already exists!"
-msgstr "Account already exists!"
-
-#: pages/login.tsx:286
-msgid "Account created!"
-msgstr "Account created!"
-
 #: pages/features.tsx:111
 msgid "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 msgstr "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
@@ -49,7 +41,7 @@ msgstr "Achievements and leaderboards make learning more engaging and motivating
 msgid "Active Decks"
 msgstr "Active Decks"
 
-#: pages/login.tsx:222
+#: pages/login.tsx:221
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -61,12 +53,25 @@ msgstr "Available"
 msgid "Back to Deck!"
 msgstr "Back to Deck!"
 
+#: components/modal/CreateCardModal.tsx:76
 #: components/modal/CreateDeckModal.tsx:91
 #: components/modal/CreateGroupModal.tsx:79
 msgid "Cancel"
 msgstr "Cancel"
 
-#: pages/deck/[id]/index.tsx:38
+#: components/modal/CreateCardModal.tsx:59
+msgid "Card back"
+msgstr "Card back"
+
+#: components/modal/CreateCardModal.tsx:113
+msgid "Card created!"
+msgstr "Card created!"
+
+#: components/modal/CreateCardModal.tsx:47
+msgid "Card front"
+msgstr "Card front"
+
+#: pages/deck/[id]/index.tsx:37
 msgid "Cards"
 msgstr "Cards"
 
@@ -112,7 +117,7 @@ msgstr "Congratulations!"
 msgid "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 msgstr "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 
-#: components/flashcard/Card.tsx:102
+#: components/modal/CreateCardModal.tsx:87
 msgid "Create Card"
 msgstr "Create Card"
 
@@ -123,6 +128,10 @@ msgstr "Create Deck"
 #: components/modal/CreateGroupModal.tsx:86
 msgid "Create Group"
 msgstr "Create Group"
+
+#: components/modal/CreateCardModal.tsx:37
+msgid "Create new Card"
+msgstr "Create new Card"
 
 #: components/modal/CreateDeckModal.tsx:34
 msgid "Create new Deck"
@@ -152,7 +161,7 @@ msgstr "Deck Description"
 msgid "Deck Name"
 msgstr "Deck Name"
 
-#: pages/group/[id]/index.tsx:42
+#: pages/group/[id]/index.tsx:41
 #: pages/index.tsx:49
 msgid "Decks"
 msgstr "Decks"
@@ -193,7 +202,7 @@ msgstr "Discover Kioku's awesome Features"
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 msgstr "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 
-#: pages/login.tsx:218
+#: pages/login.tsx:217
 msgid "Don't have an account?"
 msgstr "Don't have an account?"
 
@@ -206,9 +215,17 @@ msgid "Easy"
 msgstr "Easy"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:75
-#: pages/login.tsx:88
+#: pages/login.tsx:87
 msgid "Email"
 msgstr "Email"
+
+#: components/modal/CreateCardModal.tsx:61
+msgid "Enter card back"
+msgstr "Enter card back"
+
+#: components/modal/CreateCardModal.tsx:50
+msgid "Enter card front"
+msgstr "Enter card front"
 
 #: components/modal/CreateDeckModal.tsx:76
 msgid "Enter deck description"
@@ -306,11 +323,11 @@ msgstr "Individual"
 msgid "Informative"
 msgstr "Informative"
 
-#: components/group/Member.tsx:139
+#: components/group/Member.tsx:140
 msgid "Invite user with email"
 msgstr "Invite user with email"
 
-#: components/layout/Header.tsx:143
+#: components/layout/Header.tsx:144
 msgid "Join Group"
 msgstr "Join Group"
 
@@ -318,7 +335,7 @@ msgstr "Join Group"
 msgid "Kioku | Features of the Kioku platform"
 msgstr "Kioku | Features of the Kioku platform"
 
-#: pages/login.tsx:53
+#: pages/login.tsx:52
 msgid "Kioku | Login or register for Kioku!"
 msgstr "Kioku | Login or register for Kioku!"
 
@@ -338,7 +355,7 @@ msgstr "Kioku is compatible with Anki, allowing you to import and export your ex
 msgid "Learn"
 msgstr "Learn"
 
-#: components/layout/Header.tsx:130
+#: components/layout/Header.tsx:131
 msgid "Learn Deck"
 msgstr "Learn Deck"
 
@@ -351,10 +368,6 @@ msgstr "Learn more"
 msgid "Leave Group"
 msgstr "Leave Group"
 
-#: pages/login.tsx:260
-msgid "Logged in!"
-msgstr "Logged in!"
-
 #: components/navigation/Navbar.tsx:62
 msgid "Login"
 msgstr "Login"
@@ -363,7 +376,7 @@ msgstr "Login"
 msgid "Medium"
 msgstr "Medium"
 
-#: pages/login.tsx:168
+#: pages/login.tsx:167
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Minimum {passwordMinLength} characters"
 
@@ -381,16 +394,16 @@ msgstr "Once you delete your user, there is no going back. Please be certain."
 msgid "Open menu"
 msgstr "Open menu"
 
-#: pages/login.tsx:108
+#: pages/login.tsx:107
 msgid "Password"
 msgstr "Password"
 
-#: pages/login.tsx:125
+#: pages/login.tsx:124
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Password must have at least {passwordMinLength} characters"
 
-#: pages/login.tsx:154
-#: pages/login.tsx:179
+#: pages/login.tsx:153
+#: pages/login.tsx:178
 msgid "Passwords have to match"
 msgstr "Passwords have to match"
 
@@ -406,7 +419,7 @@ msgstr "Please be certain before deleting a group, as there is no way to undo th
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Please be certain when deleting a deck, as there is no way to undo this action."
 
-#: pages/login.tsx:55
+#: pages/login.tsx:54
 msgid "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
 msgstr "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
 
@@ -416,11 +429,11 @@ msgstr "Register today and start using the free flashcard application together w
 msgid "Rename"
 msgstr "Rename"
 
-#: pages/login.tsx:137
+#: pages/login.tsx:136
 msgid "Repeat Password"
 msgstr "Repeat Password"
 
-#: components/layout/Header.tsx:149
+#: components/layout/Header.tsx:150
 msgid "Request pending"
 msgstr "Request pending"
 
@@ -457,25 +470,25 @@ msgstr "Select \"Install app\""
 msgid "Select \"Install\""
 msgstr "Select \"Install\""
 
-#: pages/deck/[id]/index.tsx:43
-#: pages/group/[id]/index.tsx:52
+#: pages/deck/[id]/index.tsx:42
+#: pages/group/[id]/index.tsx:51
 #: pages/index.tsx:63
 msgid "Settings"
 msgstr "Settings"
 
-#: pages/login.tsx:206
+#: pages/login.tsx:205
 msgid "Sign in"
 msgstr "Sign in"
 
-#: pages/login.tsx:236
+#: pages/login.tsx:235
 msgid "Sign in now!"
 msgstr "Sign in now!"
 
-#: pages/login.tsx:208
+#: pages/login.tsx:207
 msgid "Sign up"
 msgstr "Sign up"
 
-#: pages/login.tsx:234
+#: pages/login.tsx:233
 msgid "Sign up now!"
 msgstr "Sign up now!"
 
@@ -495,7 +508,7 @@ msgstr "so that we can support even more devices in the future. We recommend usi
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 
-#: components/input/NotificationButton.tsx:65
+#: components/input/NotificationButton.tsx:61
 msgid "Subscribe"
 msgstr "Subscribe"
 
@@ -519,16 +532,16 @@ msgstr "Turn on Notifications"
 msgid "Unexpected group type"
 msgstr "Unexpected group type"
 
-#: components/input/NotificationButton.tsx:63
+#: components/input/NotificationButton.tsx:59
 msgid "Unsubscribe"
 msgstr "Unsubscribe"
 
-#: pages/group/[id]/index.tsx:47
+#: pages/group/[id]/index.tsx:46
 msgid "User"
 msgstr "User"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:56
-#: pages/login.tsx:98
+#: pages/login.tsx:97
 msgid "Username"
 msgstr "Username"
 
@@ -540,17 +553,13 @@ msgstr "We provide you with detailed statistics and insights into your study pro
 msgid "We're changing the way people learn."
 msgstr "We're changing the way people learn."
 
-#: components/layout/Header.tsx:81
+#: components/layout/Header.tsx:82
 msgid "Welcome {0}"
 msgstr "Welcome {0}"
 
 #: pages/features.tsx:56
 msgid "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
 msgstr "Welcome to Kioku - the cloud native flashcard application that focuses on collaborative content creation. Our innovative platform allows you to organize your knowledge on flashcards and share them with other users to take your knowledge to the next level. Sign up for Kioku today and experience the future of learning."
-
-#: pages/login.tsx:263
-msgid "Wrong username or password"
-msgstr "Wrong username or password"
 
 #: components/modal/InstallPWAModal.tsx:41
 msgid "You are using an unknown browser or operating system, so we cannot provide you with instructions on how to install Kioku on your device. We would be happy if you report this issue"

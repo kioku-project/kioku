@@ -66,14 +66,14 @@ export const NotificationButton = ({
 				)
 			) : (
 				<div className="flex items-center space-x-2">
-					<div role="status">
+					<output>
 						<LoadingSpinner
 							className="h-full"
 							delay={0}
 							theme="simple"
 						/>
 						<span className="sr-only">Loading...</span>
-					</div>
+					</output>
 					<span>
 						<Trans>Loading...</Trans>
 					</span>

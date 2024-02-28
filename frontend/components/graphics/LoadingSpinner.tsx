@@ -23,7 +23,7 @@ export default function LoadingSpinner({
 	className = "",
 	delay = 1000,
 	theme = "kioku",
-}: SpinnerProps) {
+}: Readonly<SpinnerProps>) {
 	const [delayed, setDelayed] = useState(true);
 	useEffect(() => {
 		const timeout = setTimeout(() => setDelayed(false), delay);
@@ -31,17 +31,6 @@ export default function LoadingSpinner({
 	}, [delay]);
 	if (delayed) return <></>;
 	switch (theme) {
-		default:
-			return (
-				<Image
-					src="/loading_spinner.svg"
-					width={0}
-					height={0}
-					alt="Loading spinner"
-					className={`animate-spin ${className}`}
-					priority={true}
-				/>
-			);
 		case "simple":
 			return (
 				<svg
@@ -62,6 +51,17 @@ export default function LoadingSpinner({
 						fill="currentFill"
 					/>
 				</svg>
+			);
+		default:
+			return (
+				<Image
+					src="/loading_spinner.svg"
+					width={0}
+					height={0}
+					alt="Loading spinner"
+					className={`animate-spin ${className}`}
+					priority={true}
+				/>
 			);
 	}
 }

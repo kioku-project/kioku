@@ -36,18 +36,21 @@ func (e *LinearSrs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp 
 
 	// calculate new due date
 	switch req.Rating {
-	case 0: // Forgotten
-		newInterval := math.Max(float64(cardBinding.LastInterval-1), 0)
-		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newInterval)).Unix()
-		cardBinding.LastInterval = uint32(newInterval)
-	case 1: // Hard
+	case 0: // Hard
+		newInterval := math.Max(float64(cardBinding.LastInterval-(1*cardBinding.Factor)), 1)
+		cardBinding.Due = time.Now().Unix()
+		cardBinding.LastInterval = newInterval
+		cardBinding.Factor = 0
+	case 1: // Medium
 		newIvl := cardBinding.LastInterval
 		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
 		cardBinding.LastInterval = newIvl
+		cardBinding.Factor = 1
 	case 2: // Easy
-		newIvl := cardBinding.LastInterval + 1
+		newIvl := cardBinding.LastInterval + (2 * cardBinding.Factor)
 		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
-		cardBinding.LastInterval = uint32(newIvl)
+		cardBinding.LastInterval = newIvl
+		cardBinding.Factor = 1
 	default:
 		return helper.NewMicroWrongRatingErr(helper.SrsServiceID)
 	}

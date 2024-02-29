@@ -6,17 +6,17 @@ import (
 )
 
 type UserCardBinding struct {
-	ID           string `gorm:"primaryKey"`
-	UserID       string `gorm:"not null"`
-	User         User   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	CardID       string `gorm:"not null"`
-	Card         Card   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	DeckID       string `gorm:"not null"`
-	Deck         Deck   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	Type         uint8  `gorm:"not null"`
-	Due          int64  `gorm:"not null"`
-	LastInterval uint32 `gorm:"not null"`
-	Factor       uint32 `gorm:"not null"`
+	ID           string  `gorm:"primaryKey"`
+	UserID       string  `gorm:"not null"`
+	User         User    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	CardID       string  `gorm:"not null"`
+	Card         Card    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	DeckID       string  `gorm:"not null"`
+	Deck         Deck    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Type         uint8   `gorm:"not null"`
+	Due          int64   `gorm:"not null"`
+	LastInterval float64 `gorm:"not null"`
+	Factor       float64 `gorm:"not null"`
 }
 
 func (a *UserCardBinding) BeforeCreate(db *gorm.DB) (err error) {

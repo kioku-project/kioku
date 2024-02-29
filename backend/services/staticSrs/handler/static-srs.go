@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"math"
 	"sort"
 	"time"
 
@@ -36,18 +35,18 @@ func (e *StaticSrs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp 
 
 	// calculate new due date
 	switch req.Rating {
-	case 0: // Forgotten
-		newInterval := math.Max(float64(cardBinding.LastInterval-1), 0)
+	case 0: // Hard
+		newInterval := 0.0
 		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newInterval)).Unix()
-		cardBinding.LastInterval = uint32(newInterval)
-	case 1: // Hard
-		newIvl := cardBinding.LastInterval
+		cardBinding.LastInterval = newInterval
+	case 1: // Medium
+		newIvl := 3.0
 		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
 		cardBinding.LastInterval = newIvl
 	case 2: // Easy
-		newIvl := cardBinding.LastInterval + 1
+		newIvl := 5.0
 		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
-		cardBinding.LastInterval = uint32(newIvl)
+		cardBinding.LastInterval = newIvl
 	default:
 		return helper.NewMicroWrongRatingErr(helper.SrsServiceID)
 	}
@@ -131,7 +130,7 @@ func (e *StaticSrs) AddUserCardBinding(ctx context.Context, req *pbCommon.Bindin
 			Type:         0,
 			Due:          time.Now().Unix(),
 			LastInterval: 0,
-			Factor:       1,
+			Factor:       0,
 		})
 	if err != nil {
 		return err

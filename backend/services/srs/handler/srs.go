@@ -50,18 +50,41 @@ func (e *Srs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp *pbCom
 
 	// calculate new due date
 	switch req.Rating {
-	case 0: // Forgotten
-		newInterval := 0
-		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newInterval)).Unix()
-		cardBinding.LastInterval = uint32(newInterval)
-	case 1: // Hard
-		newIvl := math.Max(float64(cardBinding.LastInterval), 1)
+	case 0: // Hard
+		if cardBinding.Factor != 0 {
+			cardBinding.Factor = math.Max(float64(cardBinding.Factor-0.2), 0.1)
+		}
+		cardBinding.Due = now.Unix()
+		cardBinding.LastInterval = 0
+	case 1: // Medium
+		var newIvl float64
+		if cardBinding.LastInterval < 1 {
+			cardBinding.Due = now.Unix()
+			cardBinding.LastInterval += 0.5
+			break
+		} else if cardBinding.Factor == 0 {
+			cardBinding.Factor = 2.5
+			newIvl = 1
+		} else {
+			newIvl = math.Max(cardBinding.LastInterval*cardBinding.Factor, 1)
+		}
 		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
-		cardBinding.LastInterval = uint32(newIvl)
+		cardBinding.LastInterval = newIvl
 	case 2: // Easy
-		newIvl := math.Max(float64(cardBinding.LastInterval*2), 1)
+		var newIvl float64
+		if cardBinding.LastInterval < 1 {
+			cardBinding.Due = now.Unix()
+			cardBinding.LastInterval = 1
+			break
+		} else if cardBinding.Factor == 0 {
+			cardBinding.Factor = 2.5
+			newIvl = 1
+		} else {
+			cardBinding.Factor = cardBinding.Factor + 0.3
+			newIvl = math.Max(cardBinding.LastInterval*cardBinding.Factor, 1)
+		}
 		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
-		cardBinding.LastInterval = uint32(newIvl)
+		cardBinding.LastInterval = newIvl
 	default:
 		return helper.NewMicroWrongRatingErr(helper.SrsServiceID)
 	}
@@ -80,39 +103,37 @@ func (e *Srs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon
 		return err
 	}
 	// TODO: Implement carddeck service call here
-	userNewCardsPerDay := int64(5)
+	targetNewCards := int64(5)
 
 	// get new cards learned today
-	newCardsAmount, err := e.store.FindUserDeckNewCardsLearnedToday(ctx, req.UserID, req.Deck.DeckID)
+	currentNewCards, err := e.store.FindUserDeckNewCardsLearnedToday(ctx, req.UserID, req.Deck.DeckID)
 	if err != nil {
 		return err
 	}
-	logger.Infof("newCardsAmount: %v", newCardsAmount)
-	// determine smartest card to return
-	// sort by oldest first
-	now := time.Now().Unix()
-	sort.Slice(dueCards, func(i, j int) bool {
-		return (math.Abs(float64(dueCards[i].Due - now))) > math.Abs(float64((dueCards[j].Due - now)))
-	})
-
-	var returnedCard *pbCommon.Card
-	if len(dueCards) > 0 {
-		returnedCard = &pbCommon.Card{CardID: dueCards[0].CardID}
-	} else {
-		newCards, err := e.store.FindUserDeckNewCards(ctx, req.UserID, req.Deck.DeckID)
-		if err != nil {
-			return err
-		}
-		rand.Shuffle(len(newCards), func(i, j int) { newCards[i], newCards[j] = newCards[j], newCards[i] })
-		if newCardsAmount >= userNewCardsPerDay || len(newCards) == 0 {
-			*rsp = pbCommon.Card{
-				CardID: "",
-				Sides:  nil,
-			}
-			return nil
-		}
-		returnedCard = &pbCommon.Card{CardID: newCards[0].CardID}
+	newCards, err := e.store.FindUserDeckNewCards(ctx, req.UserID, req.Deck.DeckID)
+	if err != nil {
+		return err
 	}
+	var returnedCard *pbCommon.Card
+	if len(dueCards) >= 5 || ((currentNewCards >= targetNewCards || len(newCards) == 0) && len(dueCards) == 0) {
+		// determine smartest card to return
+		// sort by oldest first
+		now := time.Now().Unix()
+		sort.Slice(dueCards, func(i, j int) bool {
+			return (math.Abs(float64(dueCards[i].Due - now))) > math.Abs(float64((dueCards[j].Due - now)))
+		})
+		returnedCard = &pbCommon.Card{CardID: dueCards[0].CardID}
+	} else if currentNewCards < targetNewCards && len(newCards) > 0 {
+		rand.Shuffle(len(newCards), func(i, j int) { newCards[i], newCards[j] = newCards[j], newCards[i] })
+		returnedCard = &pbCommon.Card{CardID: newCards[0].CardID}
+	} else {
+		*rsp = pbCommon.Card{
+			CardID: "",
+			Sides:  nil,
+		}
+		return nil
+	}
+
 	// get content of card
 	cardWithContent, err := e.cardDeckService.GetCard(ctx, &pbCommon.CardRequest{
 		UserID: req.UserID,
@@ -141,7 +162,7 @@ func (e *Srs) AddUserCardBinding(ctx context.Context, req *pbCommon.BindingReque
 			Type:         0,
 			Due:          0,
 			LastInterval: 0,
-			Factor:       1,
+			Factor:       0,
 		})
 	if err != nil {
 		return err

@@ -130,7 +130,7 @@ export const Deck = ({
 							</div>
 						</div>
 						<div className="flex flex-row space-x-2 overflow-hidden sm:space-x-3 md:space-x-3 lg:space-x-3">
-							{(deck.due?.dueCards || deck.due?.newCards) && (
+							{(!!deck.due?.dueCards || !!deck.due?.newCards) && (
 								<IconLabel
 									iconLabel={{
 										icon: "Activity",

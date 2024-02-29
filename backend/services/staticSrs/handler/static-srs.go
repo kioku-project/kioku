@@ -2,6 +2,8 @@ package handler
 
 import (
 	"context"
+	"math"
+	"math/rand"
 	"sort"
 	"time"
 
@@ -70,37 +72,41 @@ func (e *StaticSrs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp 
 
 func (e *StaticSrs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Card) error {
 	logger.Infof("Received StaticSrs.Pull request: %v", req)
-	if _, err := e.cardDeckService.AddUserActiveDeck(ctx, &pbCommon.DeckRequest{UserID: req.UserID, Deck: &pbCommon.Deck{DeckID: req.Deck.DeckID}}); err != nil {
-		return err
-	}
-	cards, err := e.store.FindUserDeckCards(
-		ctx, req.UserID,
-		req.Deck.DeckID,
-	)
+	dueCards, err := e.store.FindUserDeckDueCards(ctx, req.UserID, req.Deck.DeckID)
 	if err != nil {
 		return err
 	}
-	var dueCards []*model.UserCardBinding
-	for _, card := range cards {
-		if card.Due <= time.Now().Unix() {
-			dueCards = append(dueCards, card)
-		}
+	// TODO: Implement carddeck service call here
+	targetNewCards := int64(5)
+
+	// get new cards learned today
+	currentNewCards, err := e.store.FindUserDeckNewCardsLearnedToday(ctx, req.UserID, req.Deck.DeckID)
+	if err != nil {
+		return err
 	}
-	// determine smartest card to return
-	// sort by oldest first
-	sort.Slice(dueCards, func(i, j int) bool {
-		return dueCards[i].Due < dueCards[j].Due
-	})
-	// if no more cards are due, return empty card
-	if len(dueCards) == 0 {
+	newCards, err := e.store.FindUserDeckNewCards(ctx, req.UserID, req.Deck.DeckID)
+	if err != nil {
+		return err
+	}
+	var returnedCard *pbCommon.Card
+	if len(dueCards) >= 5 || ((currentNewCards >= targetNewCards || len(newCards) == 0) && len(dueCards) > 0) {
+		// determine smartest card to return
+		// sort by oldest first
+		now := time.Now().Unix()
+		sort.Slice(dueCards, func(i, j int) bool {
+			return (math.Abs(float64(dueCards[i].Due - now))) > math.Abs(float64((dueCards[j].Due - now)))
+		})
+		returnedCard = &pbCommon.Card{CardID: dueCards[0].CardID}
+	} else if currentNewCards < targetNewCards && len(newCards) > 0 {
+		rand.Shuffle(len(newCards), func(i, j int) { newCards[i], newCards[j] = newCards[j], newCards[i] })
+		returnedCard = &pbCommon.Card{CardID: newCards[0].CardID}
+	} else {
 		*rsp = pbCommon.Card{
 			CardID: "",
 			Sides:  nil,
 		}
 		return nil
 	}
-
-	returnedCard := &pbCommon.Card{CardID: dueCards[0].CardID}
 
 	// get content of card
 	cardWithContent, err := e.cardDeckService.GetCard(ctx, &pbCommon.CardRequest{

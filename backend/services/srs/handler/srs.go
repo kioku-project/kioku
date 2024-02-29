@@ -115,7 +115,7 @@ func (e *Srs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon
 		return err
 	}
 	var returnedCard *pbCommon.Card
-	if len(dueCards) >= 5 || ((currentNewCards >= targetNewCards || len(newCards) == 0) && len(dueCards) == 0) {
+	if len(dueCards) >= 5 || ((currentNewCards >= targetNewCards || len(newCards) == 0) && len(dueCards) > 0) {
 		// determine smartest card to return
 		// sort by oldest first
 		now := time.Now().Unix()

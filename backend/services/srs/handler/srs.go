@@ -65,7 +65,8 @@ func (e *Srs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp *pbCom
 			cardBinding.Factor = 2.5
 			newIvl = 1
 		} else {
-			newIvl = math.Max(cardBinding.LastInterval*cardBinding.Factor, 1)
+			actualInterval := cardBinding.LastInterval + (math.Max(float64(now.Unix()-cardBinding.Due)/float64(time.Hour*24), 0))
+			newIvl = math.Max(actualInterval*cardBinding.Factor, 1)
 		}
 		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
 		cardBinding.LastInterval = newIvl
@@ -80,7 +81,8 @@ func (e *Srs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp *pbCom
 			newIvl = 1
 		} else {
 			cardBinding.Factor = cardBinding.Factor + 0.3
-			newIvl = math.Max(cardBinding.LastInterval*cardBinding.Factor, 1)
+			actualInterval := cardBinding.LastInterval + (math.Max(float64(now.Unix()-cardBinding.Due)/float64(time.Hour*24), 0))
+			newIvl = math.Max(actualInterval*cardBinding.Factor, 1)
 		}
 		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
 		cardBinding.LastInterval = newIvl

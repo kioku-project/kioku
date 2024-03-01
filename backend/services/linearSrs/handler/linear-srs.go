@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"math"
-	"math/rand"
 	"sort"
 	"time"
 
@@ -101,7 +100,9 @@ func (e *LinearSrs) Pull(ctx context.Context, req *pbCommon.DeckRequest, rsp *pb
 		})
 		returnedCard = &pbCommon.Card{CardID: dueCards[0].CardID}
 	} else if currentNewCards < targetNewCards && len(newCards) > 0 {
-		rand.Shuffle(len(newCards), func(i, j int) { newCards[i], newCards[j] = newCards[j], newCards[i] })
+		sort.Slice(newCards, func(i, j int) bool {
+			return (newCards[i].CardID) > (newCards[j].CardID)
+		})
 		returnedCard = &pbCommon.Card{CardID: newCards[0].CardID}
 	} else {
 		*rsp = pbCommon.Card{

@@ -57,10 +57,19 @@ msgstr "Verfügbar"
 msgid "Back to Deck!"
 msgstr "Zurück zum Stapel!"
 
+#: components/modal/CreateCardModal.tsx:73
 #: components/modal/CreateDeckModal.tsx:91
 #: components/modal/CreateGroupModal.tsx:79
 msgid "Cancel"
 msgstr "Abbrechen"
+
+#: components/modal/CreateCardModal.tsx:56
+msgid "Card back"
+msgstr "Kartenrückseite"
+
+#: components/modal/CreateCardModal.tsx:44
+msgid "Card front"
+msgstr "Kartenvorderseite"
 
 #: pages/deck/[id]/index.tsx:37
 msgid "Cards"
@@ -108,7 +117,7 @@ msgstr "Glückwunsch!"
 msgid "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 msgstr "Erstelle und individualisiere Karteikarten, die genau auf Deine Bedürfnisse und Vorlieben zugeschnitten sind. Bestimme Dein eigenes Tempo mit unserem Spaced Repetition System, um Dein Potenzial zu maximieren!"
 
-#: components/flashcard/Card.tsx:101
+#: components/modal/CreateCardModal.tsx:90
 msgid "Create Card"
 msgstr "Karte erstellen"
 
@@ -119,6 +128,10 @@ msgstr "Stapel erstellen"
 #: components/modal/CreateGroupModal.tsx:86
 msgid "Create Group"
 msgstr "Gruppe erstellen"
+
+#: components/modal/CreateCardModal.tsx:34
+msgid "Create new Card"
+msgstr "Neue Karte erstellen"
 
 #: components/modal/CreateDeckModal.tsx:34
 msgid "Create new Deck"
@@ -221,6 +234,14 @@ msgstr "Einfach"
 #: pages/login.tsx:88
 msgid "Email"
 msgstr "E-Mail"
+
+#: components/modal/CreateCardModal.tsx:58
+msgid "Enter card back"
+msgstr "Kartenrückseite eingeben"
+
+#: components/modal/CreateCardModal.tsx:47
+msgid "Enter card front"
+msgstr "Kartenvorderseite eingeben"
 
 #: components/modal/CreateDeckModal.tsx:76
 msgid "Enter deck description"
@@ -375,7 +396,7 @@ msgstr "Verlasse Gruppe..."
 msgid "Left group"
 msgstr "Gruppe verlassen"
 
-#: components/input/NotificationButton.tsx:90
+#: components/input/NotificationButton.tsx:78
 msgid "Loading..."
 msgstr "Lade..."
 
@@ -535,7 +556,7 @@ msgstr "gemeldet wird, damit wir in Zukunft noch mehr Geräte unterstützen kön
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
 
-#: components/input/NotificationButton.tsx:66
+#: components/input/NotificationButton.tsx:65
 msgid "Subscribe"
 msgstr "Aktivieren"
 
@@ -559,7 +580,7 @@ msgstr "Benachrichtigungen aktivieren"
 msgid "Unexpected group type"
 msgstr "Unerwarteter Gruppentyp"
 
-#: components/input/NotificationButton.tsx:64
+#: components/input/NotificationButton.tsx:63
 msgid "Unsubscribe"
 msgstr "Deaktivieren"
 

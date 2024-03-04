@@ -275,9 +275,13 @@ export async function toggleFavorite(
 	return response;
 }
 
-export async function createCard(deckID: string, input: HTMLInputElement) {
-	if (!input.value) {
-		input.focus();
+export async function createCard(
+	deckID: string,
+	front: HTMLInputElement,
+	back: HTMLInputElement
+) {
+	if (!front.value) {
+		front.focus();
 		return;
 	}
 	const response = await postRequest(
@@ -285,7 +289,10 @@ export async function createCard(deckID: string, input: HTMLInputElement) {
 		JSON.stringify({
 			sides: [
 				{
-					header: input.value,
+					header: front.value,
+				},
+				{
+					header: back.value,
 				},
 			],
 		}),

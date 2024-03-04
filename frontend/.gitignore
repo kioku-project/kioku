@@ -44,3 +44,4 @@ build-storybook.log
 
 # Lingui
 messages.ts
+messages.d.ts

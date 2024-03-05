@@ -8,13 +8,12 @@ import { FetchHeader } from "@/components/layout/Header";
 import { DashboardTab } from "@/components/navigation/Tabs/DashboardTab";
 import { DecksTab } from "@/components/navigation/Tabs/DecksTab";
 import { GroupsTab } from "@/components/navigation/Tabs/GroupsTab";
-import { InvitationsTab } from "@/components/navigation/Tabs/InvitationsTabs";
 import { StatisticsTab } from "@/components/navigation/Tabs/StatisticsTab";
 import { TabBar } from "@/components/navigation/Tabs/TabBar";
 import { TabHeader } from "@/components/navigation/Tabs/TabHeader";
 import { UserSettingsTab } from "@/components/navigation/Tabs/UserSettingsTab";
 import { loadCatalog } from "@/pages/_app";
-import { useGroups, useInvitations, useUser, useUserDue } from "@/util/swr";
+import { useGroups, useUser, useUserDue } from "@/util/swr";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -28,7 +27,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 export default function Home() {
 	const { user } = useUser();
 	const { due } = useUserDue();
-	const { invitations } = useInvitations();
 	const { groups } = useGroups();
 
 	const homeGroup = groups?.filter((group) => group.isDefault)[0];
@@ -105,11 +103,6 @@ export default function Home() {
 										<DecksTab group={homeGroup} />
 									),
 									groups: <GroupsTab groups={groups} />,
-									invitations: invitations && (
-										<InvitationsTab
-											invitations={invitations}
-										/>
-									),
 									settings: <UserSettingsTab user={user} />,
 									statistics: <StatisticsTab />,
 									dashboard: homeGroup && <DashboardTab />,

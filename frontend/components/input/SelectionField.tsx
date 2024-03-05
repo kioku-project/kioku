@@ -70,7 +70,7 @@ export const SelectionField = ({
 			</div>
 
 			{visible && (
-				<div className="absolute z-10 m-2 h-fit w-fit max-w-80 items-start space-y-2 rounded-2xl bg-black px-4 pb-3 text-sm text-white before:relative before:-top-2 before:left-[5.64rem] before:block before:h-5 before:w-5 before:rotate-45 before:bg-black">
+				<div className="absolute z-10 my-2 h-fit w-fit max-w-80 items-start space-y-2 rounded-2xl bg-black px-4 pb-3 text-sm text-white before:relative before:-top-2 before:left-[5.64rem] before:block before:h-5 before:w-5 before:rotate-45 before:bg-black">
 					{list?.map((selectionItem) => (
 						<div
 							key={selectionItem.title}

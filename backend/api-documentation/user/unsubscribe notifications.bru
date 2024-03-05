@@ -1,0 +1,15 @@
+meta {
+  name: unsubscribe notifications
+  type: http
+  seq: 10
+}
+
+delete {
+  url: {{baseUrl}}/api/user/notification/{{subscriptionID}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

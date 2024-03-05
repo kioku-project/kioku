@@ -1,9 +1,7 @@
-import { msg, t } from "@lingui/macro";
+import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
-import { toast } from "react-toastify";
-import { useSWRConfig } from "swr";
 
 import { DangerAction } from "@/components/input/DangerAction";
 import { InputAction } from "@/components/input/InputAction";
@@ -11,7 +9,7 @@ import { Section } from "@/components/layout/Section";
 import { Deck } from "@/types/Deck";
 import { Group as GroupType } from "@/types/Group";
 import { GroupRole } from "@/types/GroupRole";
-import { deleteRequest, putRequests } from "@/util/api";
+import { deleteDeck, modifyDeck } from "@/util/api";
 
 interface DeckSettingsTabProps {
 	/**
@@ -37,14 +35,12 @@ export const DeckSettingsTab = ({
 	className = "",
 }: DeckSettingsTabProps) => {
 	const router = useRouter();
-	const { mutate } = useSWRConfig();
+	const { _ } = useLingui();
 
 	const [deckState, setDeckState] = useState<Deck>(deck);
 	const [isConfirmDeletion, setConfirmDeletion] = useState(false);
 
 	const isAdmin = GroupRole[group.groupRole] >= GroupRole.ADMIN;
-
-	const { _ } = useLingui();
 
 	return (
 		<div className={`space-y-5 ${className}`}>
@@ -52,7 +48,7 @@ export const DeckSettingsTab = ({
 			<Section id="generalDeckSettingsId" header="General">
 				<InputAction
 					id="deckNameInputAction"
-					header={_(msg`Deck name`)}
+					header={_(msg`Deck Name`)}
 					value={deckState.deckName}
 					button={_(msg`Rename`)}
 					disabled={!isAdmin}
@@ -63,7 +59,24 @@ export const DeckSettingsTab = ({
 						});
 					}}
 					onClick={() => {
-						modifyDeck(deckState);
+						modifyDeck(deck.deckID, deckState);
+					}}
+				/>
+				<hr className="border-kiokuLightBlue" />
+				<InputAction
+					id="deckDescriptionInputAction"
+					header={_(msg`Deck Description`)}
+					value={deckState.deckDescription}
+					button={_(msg`Save`)}
+					disabled={!isAdmin}
+					onChange={(event: ChangeEvent<HTMLInputElement>) => {
+						setDeckState({
+							...deckState,
+							deckDescription: event.target.value,
+						});
+					}}
+					onClick={() => {
+						modifyDeck(deck.deckID, deckState);
 					}}
 				/>
 			</Section>
@@ -80,7 +93,7 @@ export const DeckSettingsTab = ({
 					button="Change Visibility"
 					disabled={!isAdmin}
 					onClick={() => {
-						modifyDeck({
+						modifyDeck(deck.deckID, {
 							deckType:
 								deck.deckType === "PRIVATE"
 									? "PUBLIC"
@@ -101,11 +114,18 @@ export const DeckSettingsTab = ({
 							: _(msg`Delete Deck`)
 					}
 					disabled={!isAdmin}
-					onClick={() => {
+					onClick={async () => {
 						if (isConfirmDeletion) {
-							deleteDeck()
-								.then((result) => {})
-								.catch((error) => {});
+							const response = await deleteDeck(
+								deck.deckID,
+								group.groupID
+							);
+							if (response?.ok)
+								router.push(
+									group.isDefault
+										? "/"
+										: `/group/${group.groupID}`
+								);
 						} else {
 							setConfirmDeletion(true);
 						}
@@ -114,31 +134,4 @@ export const DeckSettingsTab = ({
 			</Section>
 		</div>
 	);
-
-	async function modifyDeck(body: {
-		deckName?: string;
-		deckType?: "PUBLIC" | "PRIVATE";
-	}) {
-		const response = await putRequests(
-			`/api/decks/${deck.deckID}`,
-			JSON.stringify(body)
-		);
-		if (response?.ok) {
-			toast.info(t`Deck updated!`, { toastId: "updatedDeckToast" });
-		} else {
-			toast.error("Error!", { toastId: "updatedDeckToast" });
-		}
-		mutate(`/api/decks/${deck.deckID}`);
-	}
-
-	async function deleteDeck() {
-		const response = await deleteRequest(`/api/decks/${deck.deckID}`);
-		if (response?.ok) {
-			toast.info(t`Deck deleted!`, { toastId: "deletedDeckToast" });
-		} else {
-			toast.error("Error!", { toastId: "deletedDeckToast" });
-		}
-		mutate(`/api/groups/${group.groupID}/decks`);
-		router.push(`/group/${group.groupID}`);
-	}
 };

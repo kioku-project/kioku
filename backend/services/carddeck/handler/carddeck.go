@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
-
+	"github.com/kioku-project/kioku/pkg/comparators"
 	pbCommon "github.com/kioku-project/kioku/pkg/proto"
 	pbCardDeck "github.com/kioku-project/kioku/services/carddeck/proto"
 	"gorm.io/gorm"
@@ -173,10 +173,6 @@ func (e *CardDeck) updateCardReferences(ctx context.Context, cardSideToDelete *m
 	return isLastCardSide, nil
 }
 
-func cardModelDateComparator(a, b model.Card) int {
-	return a.CreatedAt.Compare(b.CreatedAt)
-}
-
 func (e *CardDeck) copyCards(ctx context.Context, cards []*model.Card, deckID string) error {
 	for _, card := range cards {
 		newCard := &model.Card{
@@ -219,8 +215,20 @@ func (e *CardDeck) GetGroupDecks(ctx context.Context, req *pbCommon.GroupRequest
 			return err
 		}
 	}
-
+	slices.SortFunc(decks, comparators.DeckModelDateComparator)
 	rsp.Decks = converter.ConvertToTypeArray(decks, converter.StoreDeckToProtoDeckConverter)
+	for _, deck := range rsp.Decks {
+		deckRole, err := e.collaborationService.GetGroupUserRole(ctx, &pbCommon.GroupRequest{
+			UserID: req.UserID,
+			Group: &pbCommon.Group{
+				GroupID: deck.GroupID,
+			},
+		})
+		if err != nil {
+			return err
+		}
+		deck.DeckRole = deckRole.Role
+	}
 	logger.Infof("Found %d decks in group with id %s", len(decks), req.Group.GroupID)
 	return nil
 }
@@ -238,9 +246,10 @@ func (e *CardDeck) CreateDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 		return err
 	}
 	newDeck := model.Deck{
-		Name:     req.Deck.DeckName,
-		GroupID:  req.Deck.GroupID,
-		DeckType: dt,
+		Name:        req.Deck.DeckName,
+		GroupID:     req.Deck.GroupID,
+		DeckType:    dt,
+		Description: req.Deck.DeckDescription,
 	}
 	if err := e.store.CreateDeck(ctx, &newDeck); err != nil {
 		return err
@@ -300,12 +309,22 @@ func (e *CardDeck) GetDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *
 		return err
 	}
 	*rsp = *converter.StoreDeckToProtoDeckConverter(*deck)
+	role, err := e.collaborationService.GetGroupUserRole(ctx, &pbCommon.GroupRequest{
+		UserID: req.UserID,
+		Group: &pbCommon.Group{
+			GroupID: deck.GroupID,
+		},
+	})
+	if err != nil {
+		return err
+	}
+	rsp.DeckRole = role.Role
 	logger.Infof("Successfully got information for deck %s", req.Deck.DeckID)
 	return nil
 }
 
 func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rsp *pbCommon.Success) error {
-	logger.Infof("Received CardDeck.ModifyCard request: %v", req)
+	logger.Infof("Received CardDeck.ModifyDeck request: %v", req)
 	deck, err := e.store.FindDeckByID(ctx, req.Deck.DeckID, req.UserID)
 	if err != nil {
 		return err
@@ -319,6 +338,13 @@ func (e *CardDeck) ModifyDeck(ctx context.Context, req *pbCommon.DeckRequest, rs
 			return err
 		}
 		deck.Name = req.Deck.DeckName
+	}
+	if req.Deck.DeckDescription != "" {
+		err := helper.CheckForValidName(req.Deck.DeckDescription, helper.GroupAndDeckNameRegex, helper.UserServiceID)
+		if err != nil {
+			return err
+		}
+		deck.Description = req.Deck.DeckDescription
 	}
 	if req.Deck.DeckType != pbCommon.DeckType_DT_INVALID {
 		dt, err := converter.MigrateProtoDeckTypeToModelDeckType(req.Deck.DeckType)
@@ -363,7 +389,7 @@ func (e *CardDeck) GetDeckCards(ctx context.Context, req *pbCommon.DeckRequest, 
 	if err := e.checkUserDeckAccess(ctx, req.UserID, deck.ID); err != nil {
 		return err
 	}
-	slices.SortFunc(deck.Cards, cardModelDateComparator)
+	slices.SortFunc(deck.Cards, comparators.CardModelDateComparator)
 	rsp.Cards = make([]*pbCommon.Card, len(deck.Cards))
 	for i, card := range deck.Cards {
 		cardSides, err := e.store.FindCardSidesByCardID(ctx, card.ID)

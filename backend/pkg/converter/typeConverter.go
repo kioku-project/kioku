@@ -174,35 +174,40 @@ func ProtoGroupWithRoleToFiberGroupConverter(group *pbCommon.Group) FiberGroup {
 
 func ProtoDeckToFiberDeckConverter(deck *pbCommon.Deck) FiberDeck {
 	return FiberDeck{
-		DeckID:     deck.DeckID,
-		DeckName:   deck.DeckName,
-		DeckType:   deck.DeckType.String(),
-		GroupID:    deck.GroupID,
-		IsActive:   deck.IsActive,
-		IsFavorite: deck.IsFavorite,
+		DeckID:          deck.DeckID,
+		DeckName:        deck.DeckName,
+		DeckDescription: deck.DeckDescription,
+		DeckType:        deck.DeckType.String(),
+		GroupID:         deck.GroupID,
+		IsActive:        deck.IsActive,
+		IsFavorite:      deck.IsFavorite,
+		DeckRole:        deck.DeckRole.String(),
 	}
 }
 
 func ProtoDeckRespToFiberDeckConverter(deck *pbCommon.Deck) FiberDeck {
 	return FiberDeck{
-		DeckID:     deck.DeckID,
-		DeckName:   deck.DeckName,
-		DeckType:   deck.DeckType.String(),
-		GroupID:    deck.GroupID,
-		IsActive:   deck.IsActive,
-		IsFavorite: deck.IsFavorite,
+		DeckID:          deck.DeckID,
+		DeckName:        deck.DeckName,
+		DeckDescription: deck.DeckDescription,
+		DeckType:        deck.DeckType.String(),
+		GroupID:         deck.GroupID,
+		IsActive:        deck.IsActive,
+		IsFavorite:      deck.IsFavorite,
+		DeckRole:        deck.DeckRole.String(),
 	}
 }
 
 func StoreDeckToProtoDeckConverter(deck model.Deck) *pbCommon.Deck {
 	dt, _ := MigrateModelDeckTypeToProtoDeckType(deck.DeckType)
 	return &pbCommon.Deck{
-		DeckID:     deck.ID,
-		DeckName:   deck.Name,
-		DeckType:   dt,
-		GroupID:    deck.GroupID,
-		IsFavorite: deck.IsFavorite,
-		IsActive:   deck.IsActive,
+		DeckID:          deck.ID,
+		DeckName:        deck.Name,
+		DeckDescription: deck.Description,
+		DeckType:        dt,
+		GroupID:         deck.GroupID,
+		IsFavorite:      deck.IsFavorite,
+		IsActive:        deck.IsActive,
 	}
 }
 
@@ -234,4 +239,17 @@ func ProtoUserWithRoleToFiberGroupMember(groupMembers *pbCommon.User) FiberGroup
 		Name:      groupMembers.UserName,
 		GroupRole: groupMembers.GroupRole.String(),
 	}
+}
+
+func StoreNotificationSubscriptionToProtoNotificationSubscriptionConverter(subscription *model.PushSubscription) *pbCommon.PushSubscription {
+	return &pbCommon.PushSubscription{
+		SubscriptionID: subscription.ID,
+		Endpoint:       subscription.Endpoint,
+		P256Dh:         subscription.P256DH,
+		Auth:           subscription.Auth,
+	}
+}
+
+func ProtoNotificationSubscriptionToIDStringConverter(subscription *pbCommon.PushSubscription) string {
+	return subscription.SubscriptionID
 }

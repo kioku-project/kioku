@@ -96,6 +96,13 @@ Collaboration labels
 app.kubernetes.io/name: {{ .Values.collaboration.name }}
 {{- end }}
 
+{{/*
+Notification labels
+*/}}
+{{- define "kioku.notification.labels" -}}
+app.kubernetes.io/name: {{ .Values.notification.name }}
+{{- end }}
+
 
 {{/*
 Selector labels

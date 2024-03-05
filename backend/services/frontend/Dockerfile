@@ -23,6 +23,7 @@ COPY services/user/proto/user.* services/user/proto/
 COPY services/carddeck/proto/carddeck.* services/carddeck/proto/
 COPY services/collaboration/proto/collaboration.* services/collaboration/proto/
 COPY services/srs/proto/srs.* services/srs/proto/
+COPY services/notification/proto/notification.* services/notification/proto/
 COPY store/ store/
 COPY pkg/ pkg/
 WORKDIR /go/src/kioku/services/frontend
@@ -34,7 +35,6 @@ COPY --from=builder /etc/passwd /etc/passwd
 USER kioku
 
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder /bin/grpc_health_probe /bin/
 COPY --from=builder /go/src/kioku/services/frontend/frontend /frontend
 ENTRYPOINT ["/frontend"]
 CMD []

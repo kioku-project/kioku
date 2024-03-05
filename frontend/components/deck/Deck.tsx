@@ -3,15 +3,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { Globe, Heart, Lock, MoreVertical } from "react-feather";
-import "react-toastify/dist/ReactToastify.css";
-import { preload, useSWRConfig } from "swr";
+import { preload } from "swr";
 
 import { Text } from "@/components/Text";
 import { IconLabel, IconLabelType } from "@/components/graphics/IconLabel";
 import { Button } from "@/components/input/Button";
 import { Deck as DeckType } from "@/types/Deck";
-import { deleteRequest, postRequest } from "@/util/api";
-import { fetcher, useDueCards } from "@/util/swr";
+import { toggleFavorite } from "@/util/api";
+import { deckRoute } from "@/util/endpoints";
+import { fetcher, useDeckDueCards } from "@/util/swr";
 
 interface DeckProps {
 	/**
@@ -35,12 +35,12 @@ interface DeckProps {
 export const FetchDeck = ({ deck, ...props }: DeckProps) => {
 	const router = useRouter();
 
-	const { dueCards } = useDueCards(deck.deckID);
+	const { dueCards } = useDeckDueCards(deck.deckID);
 
 	useEffect(() => {
 		if (deck) {
 			router.prefetch(`/deck/${deck.deckID}`);
-			preload(`/api/decks/${deck.deckID}`, fetcher);
+			preload(deckRoute(deck.deckID), fetcher);
 		}
 	}, [router, deck]);
 
@@ -60,8 +60,6 @@ export const Deck = ({
 	deckNotification,
 	className = "",
 }: DeckProps) => {
-	const { mutate } = useSWRConfig();
-
 	const [isFavorite, setFavorite] = useState(deck.isFavorite);
 
 	useEffect(() => {
@@ -70,16 +68,8 @@ export const Deck = ({
 
 	return (
 		<Link
-			className={`group rounded-lg shadow-lg transition-transform hover:cursor-pointer ${className}`}
+			className={`group rounded-lg shadow-lg transition-transform ${className}`}
 			href={`/deck/${deck.deckID}`}
-			onKeyUp={(event) => {
-				if (event.key === "Enter") {
-					event.target.dispatchEvent(
-						new Event("click", { bubbles: true })
-					);
-				}
-			}}
-			tabIndex={0}
 		>
 			<div className="flex h-[6.5rem] w-full flex-row bg-gradient-to-r to-60% transition-all first:rounded-t-md last:rounded-b-md group-hover:from-[#F7EBEB] sm:h-28 md:h-32 lg:h-32">
 				<div className="relative my-3 ml-3 flex aspect-square items-center justify-center rounded bg-[#F31212]/50">
@@ -121,7 +111,7 @@ export const Deck = ({
 									<Heart
 										size={20}
 										fill={"#DB2B39"}
-										className="absolute animate-[ping_0.7s_ease-out_1] hover:cursor-pointer"
+										className="absolute animate-[ping_0.7s_ease-out_1]"
 									/>
 								)}
 								<Heart
@@ -131,7 +121,11 @@ export const Deck = ({
 									}
 									className="relative hover:scale-105"
 									onClick={(event) => {
-										modifyFavorite(deck);
+										toggleFavorite(
+											deck.deckID,
+											deck.groupID,
+											isFavorite
+										);
 										event.preventDefault();
 									}}
 								/>
@@ -190,7 +184,7 @@ export const Deck = ({
 						</div>
 						<MoreVertical
 							size={20}
-							className="flex-none text-gray-500 hover:cursor-pointer"
+							className="flex-none text-gray-500"
 						/>
 					</div>
 				</div>
@@ -204,24 +198,4 @@ export const Deck = ({
 			)}
 		</Link>
 	);
-
-	async function modifyFavorite(deck: DeckType) {
-		const response = isFavorite
-			? await deleteRequest(
-					"/api/decks/favorites",
-					JSON.stringify({
-						deckID: deck.deckID,
-					})
-			  )
-			: await postRequest(
-					"/api/decks/favorites",
-					JSON.stringify({
-						deckID: deck.deckID,
-					})
-			  );
-		setFavorite((prev) => !prev);
-		mutate(`/api/groups/${deck.groupID}/decks`);
-		mutate("/api/decks/favorites");
-		mutate("/api/decks/active");
-	}
 };

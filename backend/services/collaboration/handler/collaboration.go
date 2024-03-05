@@ -3,6 +3,8 @@ package handler
 import (
 	"context"
 	"errors"
+	"github.com/kioku-project/kioku/pkg/comparators"
+	"golang.org/x/exp/slices"
 
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
@@ -89,6 +91,7 @@ func (e *Collaboration) generateGroupMemberAdmissionResponse(
 			UserEmail: user.UserEmail,
 		}
 	}
+	slices.SortFunc(memberAdmissions, comparators.UserProtoNameComparator)
 	logger.Infof("Successfully received user information from %d users and added it to request information",
 		len(users.Users))
 	return
@@ -153,6 +156,7 @@ func (e *Collaboration) GetUserGroups(ctx context.Context, req *pbCommon.User, r
 	if err != nil {
 		return err
 	}
+	slices.SortFunc(groups, comparators.GroupModelDateComparator)
 	protoGroups := converter.ConvertToTypeArray(groups, converter.StoreGroupToProtoGroupConverter)
 	protoRoles := make([]pbCommon.GroupRole, len(protoGroups))
 	for index, group := range protoGroups {
@@ -213,7 +217,7 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pbCommon.GroupRequest
 	}
 	protoGroup := converter.StoreGroupToProtoGroupConverter(*group)
 
-	_, err = e.store.FindGroupUserRole(ctx, req.UserID, req.Group.GroupID)
+	groupRole, err := e.store.FindGroupUserRole(ctx, req.UserID, req.Group.GroupID)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoEntryWithID) {
 			logger.Infof("User does not have a group role")
@@ -222,15 +226,7 @@ func (e *Collaboration) GetGroup(ctx context.Context, req *pbCommon.GroupRequest
 		}
 		return err
 	}
-	group, protoRole, err := e.checkUserRoleAccessWithGroupAndRoleReturn(
-		ctx,
-		req.UserID,
-		req.Group.GroupID,
-		pbCommon.GroupRole_INVITED,
-	)
-	if err != nil {
-		return err
-	}
+	protoRole := converter.MigrateModelRoleToProtoRole(groupRole)
 	*rsp = pbCommon.Group{
 		GroupID:          protoGroup.GroupID,
 		GroupName:        protoGroup.GroupName,
@@ -315,14 +311,16 @@ func (e *Collaboration) GetGroupMembers(ctx context.Context, req *pbCommon.Group
 	if err != nil {
 		return err
 	}
-	rsp.Users = make([]*pbCommon.User, len(users.Users))
+	groupUsers := make([]*pbCommon.User, len(users.Users))
 	for i, user := range users.Users {
-		rsp.Users[i] = &pbCommon.User{
+		groupUsers[i] = &pbCommon.User{
 			UserID:    user.UserID,
 			UserName:  user.UserName,
 			GroupRole: converter.MigrateModelRoleToProtoRole(groupMembers[i].RoleType),
 		}
 	}
+	slices.SortFunc(groupUsers, comparators.GroupUserProtoRoleComparator)
+	rsp.Users = groupUsers
 	logger.Infof("Found %d users in group with id %s", len(rsp.Users), req.Group.GroupID)
 	return nil
 }
@@ -497,6 +495,13 @@ func (e *Collaboration) AddGroupUserInvite(
 
 	if err := e.checkUserAuthorized(ctx, req.UserID, req.Group.GroupID, model.RoleAdmin); err != nil {
 		return err
+	}
+	group, err := e.store.FindGroupByID(ctx, req.Group.GroupID)
+	if err != nil {
+		return err
+	}
+	if group.IsDefault {
+		return helper.NewMicroCantInviteToHomegroupErr(helper.CollaborationServiceID)
 	}
 
 	userRsp, err := e.userService.GetUserIDFromEmail(ctx, &pbCommon.User{UserEmail: req.InviteUserEmail})

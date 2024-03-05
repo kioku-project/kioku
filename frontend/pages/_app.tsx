@@ -5,7 +5,6 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { ToastContainer } from "react-toastify";
 
 import { Navbar } from "@/components/navigation/Navbar";
 import "@/styles/globals.css";
@@ -28,7 +27,7 @@ export function useLinguiInit(messages: Messages) {
 		// to avoid calling loadAndActivate for (worst case) each request, but right now that's what we do
 		i18n.loadAndActivate({ locale, messages });
 	}
-	if (isClient && i18n.locale === undefined) {
+	if (isClient && !i18n.locale) {
 		// first client render
 		i18n.loadAndActivate({ locale, messages });
 	}
@@ -84,12 +83,6 @@ export default function App({ Component, pageProps }: AppProps) {
 				/>
 				<Navbar />
 				<Component {...pageProps} />
-				<ToastContainer
-					position="bottom-center"
-					autoClose={3000}
-					hideProgressBar
-					pauseOnFocusLoss
-				/>
 			</I18nProvider>
 		</div>
 	);

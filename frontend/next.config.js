@@ -3,14 +3,7 @@ const nextConfig = {
 	reactStrictMode: true,
 	swcMinify: true,
 	experimental: {
-		swcPlugins: [
-			[
-				"@lingui/swc-plugin",
-				{
-
-				}
-			]
-		]
+		swcPlugins: [["@lingui/swc-plugin", {}]],
 	},
 	output: "standalone",
 	i18n: {
@@ -21,10 +14,16 @@ const nextConfig = {
 		return [
 			{
 				source: "/api/:path*",
-				destination: "http://frontend_proxy:80/api/:path*",
+				destination: "http://frontend_proxy:8090/api/:path*",
 			},
 		];
 	},
 };
 
-module.exports = nextConfig;
+const withPWA = require("next-pwa")({
+	dest: "public",
+	register: false,
+	skipWaiting: false,
+});
+
+module.exports = withPWA(nextConfig);

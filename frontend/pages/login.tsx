@@ -5,14 +5,14 @@ import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "react-feather";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import { Text } from "@/components/Text";
 import { InputField } from "@/components/form/InputField";
 import { Logo } from "@/components/graphics/Logo";
 import { Button } from "@/components/input/Button";
 import { loadCatalog } from "@/pages/_app";
+import { submitForm } from "@/util/api";
+import { loginRoute, reauthRoute, registerRoute } from "@/util/endpoints";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -39,7 +39,7 @@ export default function Page() {
 
 	useEffect(() => {
 		(async () => {
-			const response = await fetch("/api/reauth");
+			const response = await fetch(reauthRoute);
 			if (response.status === 200) {
 				router.replace("/");
 			}
@@ -63,18 +63,18 @@ export default function Page() {
 					url: "https://app.kioku.dev/login",
 				}}
 			/>
-			<div className="min-w-screen flex flex-1 bg-[#F8F8F8]">
+			<div className="min-w-screen flex flex-1 bg-neutral-50">
 				<div className="h-full w-full bg-gradient-to-bl from-[#FF83FA]/20 to-50%">
-					<div className="flex h-full w-full items-center justify-center bg-gradient-to-tr from-[#83DAFF]/20 p-3 sm:p-5">
-						<div className="flex w-80 flex-col items-center space-y-3 rounded-md bg-white p-5 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)] md:px-7">
+					<div className="flex h-full w-full items-center justify-center bg-gradient-to-tr from-[#83DAFF]/20 sm:p-5">
+						<div className="flex h-full w-full flex-col items-center justify-center space-y-3 rounded-md bg-white p-8 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)] sm:h-fit sm:w-80 md:px-7">
 							<Logo
 								href={"/home"}
 								text={false}
-								logoSize="sm"
-								className="p-3"
+								logoSize="w-32 sm:w-16 md:w-20"
+								className="m-10 sm:m-3"
 							/>
 							<form
-								className="w-full space-y-3"
+								className="w-full space-y-3 text-black"
 								onSubmit={(event) => {
 									event.preventDefault();
 								}}
@@ -83,31 +83,32 @@ export default function Page() {
 								<InputField
 									id="emailInputFieldId"
 									type="email"
+									name="userEmail"
 									placeholder={_(msg`Email`)}
 									required
-									inputFieldSize="5xs"
-									className="bg-[#ECECEC] p-3 text-[#A4A4A4]"
+									className="bg-neutral-100 p-3 text-base sm:text-xs"
 									ref={emailInput}
 								/>
 								{!login && (
 									<InputField
 										id="usernameInputFieldId"
 										type="text"
+										name="userName"
 										placeholder={_(msg`Username`)}
 										required
-										inputFieldSize="5xs"
-										className="bg-[#ECECEC] p-3 text-[#A4A4A4]"
+										className="bg-neutral-100 p-3 text-base sm:text-xs"
 										ref={nameInput}
 									/>
 								)}
 								<InputField
 									id="passwordInputFieldId"
 									type={"password"}
+									name="userPassword"
 									placeholder={_(msg`Password`)}
+									inputFieldIconStyle="text-neutral-400"
 									required
 									minLength={passwordMinLength}
-									inputFieldSize="5xs"
-									className="bg-[#ECECEC] p-3 text-[#A4A4A4]"
+									className="bg-neutral-100 p-3 text-base sm:text-xs"
 									onChange={(event) => {
 										event.target.setCustomValidity("");
 										setPassword(event.target.value);
@@ -134,10 +135,10 @@ export default function Page() {
 											placeholder={_(
 												msg`Repeat Password`
 											)}
+											inputFieldIconStyle="text-neutral-400"
 											required
 											pattern={password}
-											inputFieldSize="5xs"
-											className="bg-[#ECECEC] p-3 text-[#A4A4A4]"
+											className="bg-neutral-100 p-3 text-base sm:text-xs"
 											ref={repeatPasswordInput}
 											onChange={(event) => {
 												event.target.setCustomValidity(
@@ -160,7 +161,7 @@ export default function Page() {
 											}}
 										/>
 
-										<div className="space-y-1 py-1 font-light text-[#676767]">
+										<div className="space-y-1 py-1 font-light text-neutral-500">
 											<PasswordCheck
 												text={_(
 													msg`Minimum ${passwordMinLength} characters`
@@ -191,8 +192,7 @@ export default function Page() {
 											className="flex-none"
 										/>
 									}
-									buttonTextSize="5xs"
-									className="w-full justify-between"
+									className="w-full justify-between text-base sm:text-xs"
 									onClick={() => {
 										if (login) {
 											loginLogic();
@@ -210,7 +210,7 @@ export default function Page() {
 							</form>
 							<Text
 								textSize="5xs"
-								className="flex flex-row flex-wrap justify-center space-x-1 p-3 text-[#8E8E8E] md:p-5"
+								className="flex flex-row flex-wrap justify-center space-x-1 p-3 text-neutral-400 md:p-5"
 							>
 								<span className="whitespace-nowrap">
 									{login ? (
@@ -244,57 +244,41 @@ export default function Page() {
 	);
 
 	async function loginLogic() {
-		if (!form.current?.checkValidity()) {
+		if (
+			!form.current?.checkValidity() ||
+			!emailInput.current ||
+			!passwordInput.current
+		) {
 			return;
 		}
-		const response = await fetch(`/api/login`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				userEmail: emailInput.current?.value,
-				userPassword: passwordInput.current?.value,
-			}),
-		});
+		const response = await submitForm(loginRoute, [
+			emailInput.current,
+			passwordInput.current,
+		]);
 		if (response.ok) {
-			toast.info(<Trans>Logged in!</Trans>, { toastId: "accountToast" });
 			router.push("/");
-		} else {
-			toast.error(<Trans>Wrong username or password</Trans>, {
-				toastId: "accountToast",
-			});
 		}
 	}
 
 	async function registerLogic() {
 		if (
 			!form.current?.checkValidity() ||
-			passwordInput.current?.value !== repeatPasswordInput.current?.value
+			passwordInput.current?.value !==
+				repeatPasswordInput.current?.value ||
+			!emailInput.current ||
+			!nameInput.current ||
+			!passwordInput.current
 		) {
 			return;
 		}
-		const response = await fetch(`/api/register`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				userEmail: emailInput.current?.value,
-				userName: nameInput.current?.value,
-				userPassword: passwordInput.current?.value,
-			}),
-		});
+		const response = await submitForm(registerRoute, [
+			emailInput.current,
+			nameInput.current,
+			passwordInput.current,
+		]);
 		if (response.ok) {
-			toast.info(<Trans>Account created!</Trans>, {
-				toastId: "accountToast",
-			});
 			setLogin(true);
 			emailInput.current?.focus();
-		} else {
-			toast.error(<Trans>Account already exists!</Trans>, {
-				toastId: "accountToast",
-			});
 		}
 	}
 }
@@ -304,7 +288,7 @@ const PasswordCheck = ({ text, valid }: { text: string; valid: boolean }) => {
 		<div className="flex flex-row items-center space-x-1">
 			<Check
 				size={12}
-				className={valid ? "text-[#2DE100]" : "text-[#C2C2C2]"}
+				className={valid ? "text-[#2DE100]" : "text-neutral-400"}
 			/>
 			<Text textSize="5xs">{text}</Text>
 		</div>

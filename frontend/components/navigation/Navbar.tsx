@@ -6,6 +6,7 @@ import { ArrowRight, LogOut } from "react-feather";
 
 import { Logo } from "@/components/graphics/Logo";
 import { Button } from "@/components/input/Button";
+import { logoutRoute } from "@/util/endpoints";
 import { authedFetch } from "@/util/reauth";
 
 interface NavbarProps {
@@ -38,9 +39,9 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 			<Logo href={loggedIn ? "/" : "/home"} />
 			{loggedIn == true && (
 				<LogOut
-					className="text-kiokuDarkBlue hover:cursor-pointer"
+					className="cursor-pointer text-kiokuDarkBlue"
 					onClick={async () => {
-						const response = await authedFetch("/api/logout", {
+						const response = await authedFetch(logoutRoute, {
 							method: "POST",
 						});
 						if (response?.ok) {

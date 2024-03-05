@@ -3,5 +3,4 @@
 *secret.yaml
 private_key.yaml
 .DS_STORE
-frontend/build-storybook.log
 *.pem

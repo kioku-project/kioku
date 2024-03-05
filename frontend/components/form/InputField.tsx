@@ -9,6 +9,7 @@ import { Tooltip } from "react-tooltip";
 
 import { Text } from "@/components/Text";
 import { Icon, IconName } from "@/components/graphics/Icon";
+import { clickOnEnter } from "@/util/utils";
 
 interface InputFieldProps {
 	/**
@@ -115,7 +116,7 @@ export const InputField = forwardRef(
 					<input
 						id={id}
 						type={inputType}
-						className={`w-full border-none bg-transparent font-medium outline-none ${
+						className={`w-full border-none bg-transparent outline-none ${
 							inputFieldSize ? getSize[inputFieldSize] : ""
 						}`}
 						ref={ref}
@@ -125,8 +126,8 @@ export const InputField = forwardRef(
 						<Icon
 							icon={statusIcon}
 							size={inputFieldIconSize}
-							className={`${inputFieldIconStyle} ${
-								onClickIcon ? "hover:cursor-pointer" : ""
+							className={`ml-1 ${inputFieldIconStyle} ${
+								onClickIcon ? "cursor-pointer" : ""
 							}`}
 							data-tooltip-id={`tooltip-${id}`}
 							data-testid={`inputFieldIconId`}
@@ -148,13 +149,7 @@ export const InputField = forwardRef(
 								}
 								onClickIcon?.(event);
 							}}
-							onKeyUp={(event) => {
-								if (event.key === "Enter") {
-									event.target.dispatchEvent(
-										new Event("click", { bubbles: true })
-									);
-								}
-							}}
+							onKeyUp={clickOnEnter}
 						/>
 					)}
 					<Tooltip id={`tooltip-${id}`} content={tooltip} />

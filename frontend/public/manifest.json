@@ -1,0 +1,17 @@
+{
+	"theme_color": "#ffffff",
+	"background_color": "#ffffff",
+	"display": "standalone",
+	"scope": "/",
+	"start_url": "/",
+	"name": "Kioku",
+	"short_name": "Kioku",
+	"description": "Kioku is a cloud native flashcard application that focusses on collaborative content creation.",
+	"icons": [
+		{
+			"src": "/kioku-logo.png",
+			"sizes": "1000x1000",
+			"type": "image/png"
+		}
+	]
+}

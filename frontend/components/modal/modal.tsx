@@ -59,7 +59,7 @@ export const Modal = ({
 										</Text>
 										<X
 											size={16}
-											className="text-gray-400 hover:cursor-pointer"
+											className="cursor-pointer text-gray-400"
 											onClick={() => {
 												setVisible(false);
 											}}

@@ -4,7 +4,6 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
-import "react-toastify/dist/ReactToastify.css";
 
 import { FetchHeader } from "@/components/layout/Header";
 import { DecksTab } from "@/components/navigation/Tabs/DecksTab";
@@ -77,7 +76,7 @@ export default function Page() {
 
 			<div className="min-w-screen flex flex-1 flex-col bg-eggshell">
 				{group && (
-					<div className="flex h-full flex-col px-5 py-1 md:space-y-5 md:px-10 md:py-3">
+					<div className="flex h-full flex-col md:space-y-5">
 						<FetchHeader id="groupPageHeaderId" group={group} />
 						<div className="flex h-full flex-1 flex-col-reverse justify-between space-y-5 overflow-auto md:flex-col md:justify-normal">
 							<TabBar
@@ -86,7 +85,7 @@ export default function Page() {
 								currentTab={currentTab}
 								setTab={setCurrentTab}
 							/>
-							<div className="overflow-auto">
+							<div className="overflow-auto px-5 md:px-10">
 								{{
 									decks: <DecksTab group={group} />,
 									user: <MembersTab group={group} />,

@@ -1,19 +1,15 @@
-import { msg, t } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
-import React, { useRef, useState } from "react";
+import clsx from "clsx";
+import React, { useState } from "react";
 import { Check, Trash, X } from "react-feather";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useSWRConfig } from "swr";
 
 import { Text } from "@/components/Text";
-import { InputField } from "@/components/form/InputField";
+import { Button } from "@/components/input/Button";
 import { Card as CardType } from "@/types/Card";
-import { deleteRequest, postRequest } from "@/util/api";
+import { deleteCard } from "@/util/api";
 
 interface CardProps {
 	/**
-	 * Card to display. If cardID is undefined, placeholder for creating cards will be displayed.
+	 * Card to display
 	 */
 	card: CardType;
 	/**
@@ -39,121 +35,60 @@ export const Card = ({
 	className = "",
 	setCard,
 }: CardProps) => {
-	const { mutate } = useSWRConfig();
 	const [isDelete, setDelete] = useState(false);
-	const cardNameInput = useRef<HTMLInputElement>(null);
-
-	const { _ } = useLingui();
 
 	return (
-		<div className={`font-semibold text-kiokuDarkBlue ${className}`}>
-			{card.cardID ? (
-				<div className="flex w-full flex-row items-center border-b-2 border-kiokuLightBlue p-2 md:p-3">
-					<Text
-						textStyle="primary"
-						textSize="xs"
-						className="w-full hover:cursor-pointer"
-						onClick={() => setCard?.(card)}
-					>
-						{card.sides[0].header}
-					</Text>
-					<div className="flex flex-row items-center space-x-5">
-						{isDelete ? (
-							<div className="flex flex-row space-x-1">
-								<Check
-									className="hover:cursor-pointer"
-									onClick={() => {
-										deleteCard()
-											.then((result) => {})
-											.catch((error) => {});
-									}}
-								/>
-								<X
-									className="hover:cursor-pointer"
-									onClick={() => setDelete(false)}
-								/>
-							</div>
-						) : (
-							<Trash
-								id={`delete${card.cardID}ButtonId`}
-								data-testid={`deleteCardButtonId`}
-								className={`${
-									editable
-										? "hover:cursor-pointer"
-										: "text-gray-200 hover:cursor-not-allowed"
-								}`}
-								size={20}
-								onClick={() => setDelete(editable)}
-							/>
-						)}
-						{/* <Edit2
-							className="hover:cursor-pointer"
-							size={20}
-							onClick={() => {
-								if (setCard) {
-									setCard(card);
-								}
-							}}
-						/> */}
-					</div>
-				</div>
-			) : (
-				<div className="flex w-full flex-row justify-between p-2 md:p-3">
-					<InputField
-						id="cardNameInput"
-						type="text"
-						placeholder={_(msg`Create Card`)}
-						inputFieldStyle="primary"
-						inputFieldSize="xs"
-						onKeyUp={(event) => {
-							if (event.key === "Enter") {
-								createCard()
-									.then((result) => {})
-									.catch((error) => {});
-							}
-						}}
-						ref={cardNameInput}
-					/>
-				</div>
+		<button
+			className={clsx(
+				"flex w-full flex-row border-b-2 border-kiokuLightBlue p-2 font-semibold text-kiokuDarkBlue md:p-3",
+				className
 			)}
-		</div>
+			onClick={() => setCard?.(card)}
+		>
+			<Text
+				textStyle="primary"
+				textSize="xs"
+				className="flex w-full justify-start"
+			>
+				{card.sides[0].header}
+			</Text>
+			<div className="flex flex-row items-center space-x-5">
+				{isDelete ? (
+					<div className="flex flex-row space-x-1">
+						<Button
+							buttonSize=""
+							buttonIcon={<Check />}
+							onClick={(event) => {
+								card.deckID &&
+									deleteCard(card.deckID, card.cardID);
+								event.stopPropagation();
+							}}
+						/>
+						<Button
+							buttonSize=""
+							buttonIcon={<X />}
+							onClick={(event) => {
+								setDelete(false);
+								event.stopPropagation();
+							}}
+						/>
+					</div>
+				) : (
+					<Trash
+						id={`delete${card.cardID}ButtonId`}
+						data-testid={`deleteCardButtonId`}
+						className={clsx(
+							!editable &&
+								"text-gray-200 hover:cursor-not-allowed"
+						)}
+						size={20}
+						onClick={(event) => {
+							setDelete(editable);
+							event.stopPropagation();
+						}}
+					/>
+				)}
+			</div>
+		</button>
 	);
-
-	async function createCard() {
-		if (!cardNameInput.current?.value) {
-			cardNameInput.current?.focus();
-			return;
-		}
-		const response = await postRequest(
-			`/api/decks/${card.deckID}/cards`,
-			JSON.stringify({
-				sides: [
-					{
-						header: cardNameInput.current.value,
-					},
-				],
-			})
-		);
-		if (response?.ok) {
-			cardNameInput.current.value = "";
-			toast.info(t`Card created!`, { toastId: "newCardToast" });
-			mutate(`/api/decks/${card.deckID}/cards`);
-			mutate(`/api/decks/${card.deckID}/pull`);
-			mutate(`/api/decks/${card.deckID}/dueCards`);
-		} else {
-			toast.error("Error!", { toastId: "newCardToast" });
-		}
-	}
-
-	async function deleteCard() {
-		const response = await deleteRequest(`/api/cards/${card.cardID}`);
-		if (response?.ok) {
-			toast.info("Card deleted!", { toastId: "deletedCardToast" });
-			mutate(`/api/decks/${card.deckID}/cards`);
-			mutate(`/api/decks/${card.deckID}/pull`);
-			mutate(`/api/decks/${card.deckID}/dueCards`);
-		} else {
-			toast.error("Error!", { toastId: "deletedCardToast" });
-		}
-	}
 };

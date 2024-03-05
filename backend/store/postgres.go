@@ -31,6 +31,8 @@ type CollaborationStoreImpl GormStore
 
 type SrsStoreImpl GormStore
 
+type NotificationStoreImpl GormStore
+
 func NewPostgresStore(ctx context.Context) (*gorm.DB, error) {
 	_ = godotenv.Load("../.env", "../.env.example")
 	host := os.Getenv("POSTGRES_HOST")
@@ -231,11 +233,12 @@ func (s *CardDeckStoreImpl) CreateDeck(ctx context.Context, newDeck *model.Deck)
 
 func (s *CardDeckStoreImpl) ModifyDeck(ctx context.Context, deck *model.Deck) (err error) {
 	err = s.db.WithContext(ctx).Save(&model.Deck{
-		ID:        deck.ID,
-		Name:      deck.Name,
-		GroupID:   deck.GroupID,
-		CreatedAt: deck.CreatedAt,
-		DeckType:  deck.DeckType,
+		ID:          deck.ID,
+		Name:        deck.Name,
+		GroupID:     deck.GroupID,
+		CreatedAt:   deck.CreatedAt,
+		DeckType:    deck.DeckType,
+		Description: deck.Description,
 	}).Error
 	return
 }
@@ -452,6 +455,7 @@ func (s *CollaborationStoreImpl) ModifyGroup(ctx context.Context, group *model.G
 		Name:        group.Name,
 		Description: group.Description,
 		IsDefault:   group.IsDefault,
+		CreatedAt:   group.CreatedAt,
 		GroupType:   group.GroupType,
 	}).Error
 	return
@@ -558,4 +562,38 @@ func (s *SrsStoreImpl) ModifyUserCard(ctx context.Context, userCard *model.UserC
 		LastInterval: userCard.LastInterval,
 		Factor:       userCard.Factor,
 	}).Error
+}
+
+func NewNotificationStore(ctx context.Context) (NotificationStore, error) {
+	db, err := NewPostgresStore(ctx)
+	if err != nil {
+		return nil, err
+	}
+	err = db.WithContext(ctx).AutoMigrate(&model.PushSubscription{})
+	if err != nil {
+		return nil, err
+	}
+	return &NotificationStoreImpl{db: db}, nil
+}
+
+func (s *NotificationStoreImpl) CreatePushSubscription(ctx context.Context, newSubscription *model.PushSubscription) error {
+	return s.db.WithContext(ctx).Create(newSubscription).Error
+}
+
+func (s *NotificationStoreImpl) FindAllPushSubscriptions(ctx context.Context) (subscriptions []*model.PushSubscription, err error) {
+	return subscriptions, s.db.WithContext(ctx).Find(&subscriptions).Error
+}
+
+func (s *NotificationStoreImpl) FindPushSubscriptionByID(ctx context.Context, subscriptionID string) (subscription *model.PushSubscription, err error) {
+	if err = s.db.WithContext(ctx).Where(&model.PushSubscription{ID: subscriptionID}).First(&subscription).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		err = helper.ErrStoreNoEntryWithID
+	}
+	return
+}
+
+func (s *NotificationStoreImpl) DeletePushSubscription(ctx context.Context, subscription *model.PushSubscription) error {
+	return s.db.WithContext(ctx).Delete(subscription).Error
+}
+func (s *NotificationStoreImpl) FindPushSubscriptionsByUserID(ctx context.Context, userID string) (subscriptions []*model.PushSubscription, err error) {
+	return subscriptions, s.db.WithContext(ctx).Where(&model.PushSubscription{UserID: userID}).Find(&subscriptions).Error
 }

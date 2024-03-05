@@ -15,6 +15,10 @@ export type SelectionListItem = {
 
 interface SelectionFieldProps {
 	/**
+	 * Unique identifier
+	 */
+	id: string;
+	/**
 	 * Title
 	 */
 	title: string;
@@ -66,7 +70,7 @@ export const SelectionField = ({
 			</div>
 
 			{visible && (
-				<div className="absolute z-10 m-2 h-fit w-fit max-w-sm items-start space-y-2 rounded-2xl bg-black px-3 pb-3 text-sm text-white before:relative before:-top-2 before:left-[5.64rem] before:block before:h-5 before:w-5 before:rotate-45 before:bg-black">
+				<div className="absolute z-10 m-2 h-fit w-fit max-w-80 items-start space-y-2 rounded-2xl bg-black px-4 pb-3 text-sm text-white before:relative before:-top-2 before:left-[5.64rem] before:block before:h-5 before:w-5 before:rotate-45 before:bg-black">
 					{list?.map((selectionItem) => (
 						<div
 							key={selectionItem.title}
@@ -85,20 +89,21 @@ export const SelectionField = ({
 							}}
 						>
 							<Icon
-								className="w-10 pr-3"
+								className="size-10 pr-3"
 								icon={selectionItem.icon}
 							/>
 							<div>
 								<Text className="font-bold">
 									{selectionItem.title}
 								</Text>
-								<div className="flex items-center">
+								<div className=" flex w-full items-center justify-between space-x-4">
 									{" "}
-									<Text className="w-56 font-light">
+									<Text className="font-light">
 										{selectionItem.description}
 									</Text>
 									<Check
 										className={clsx(
+											"size-7",
 											selectionItem.isSelected
 												? "visible"
 												: "invisible"

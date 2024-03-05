@@ -1,8 +1,10 @@
+import clsx from "clsx";
 import { useState } from "react";
 import { Check, ChevronDown } from "react-feather";
 
 import { Text } from "@/components/Text";
 import { Icon, IconName } from "@/components/graphics/Icon";
+import { clickOnEnter } from "@/util/utils";
 
 export type SelectionListItem = {
 	title: string;
@@ -40,26 +42,27 @@ export const SelectionField = ({
 		getListSelected(list)
 	);
 	return (
-		<div>
+		<div {...props} className={className}>
 			<Text className="mb-1 text-sm font-semibold text-neutral-400">
 				{title}
 			</Text>
 			<div
-				className="flex	hover:cursor-pointer"
-				role="button"
-				onKeyDown={() => {}}
+				className="flex	cursor-pointer"
+				role="combobox"
+				onKeyUp={clickOnEnter}
+				tabIndex={0}
 				onClick={() => setVisible(!visible)}
 			>
-				<div className="w-8 align-middle">
-					{selected.icon && <Icon icon={selected.icon}></Icon>}
+				<div className="w-8">
+					{selected.icon && <Icon icon={selected.icon} />}
 				</div>
 				<Text className="w-16 truncate">{selected.title}</Text>
 				<ChevronDown
-					className={`m-0 mx-2 w-8 align-middle transition ${
-						visible ? "rotate-180 " : ""
-					}`}
-					color="gray"
-				></ChevronDown>
+					className={clsx(
+						"mx-2 align-middle text-neutral-400 transition",
+						visible && "rotate-180"
+					)}
+				/>
 			</div>
 
 			{visible && (
@@ -67,13 +70,14 @@ export const SelectionField = ({
 					{list?.map((selectionItem) => (
 						<div
 							key={selectionItem.title}
-							className={`flex hover:cursor-pointer ${
-								!selectionItem.isSelected
-									? "text-neutral-400 hover:text-neutral-300"
-									: ""
-							}`}
-							role="button"
-							onKeyDown={() => {}}
+							className={clsx(
+								"flex cursor-pointer",
+								!selectionItem.isSelected &&
+									"text-neutral-400 hover:text-neutral-300"
+							)}
+							role="option"
+							onKeyUp={clickOnEnter}
+							tabIndex={0}
 							onClick={() => {
 								setSelected(selectionItem);
 								setVisible(false);
@@ -83,23 +87,23 @@ export const SelectionField = ({
 							<Icon
 								className="w-10 pr-3"
 								icon={selectionItem.icon}
-							></Icon>
+							/>
 							<div>
 								<Text className="font-bold">
 									{selectionItem.title}
 								</Text>
-								<div className="flex">
+								<div className="flex items-center">
+									{" "}
 									<Text className="w-56 font-light">
 										{selectionItem.description}
 									</Text>
-
 									<Check
-										className={` w-8 ${
+										className={clsx(
 											selectionItem.isSelected
-												? "visible justify-end"
+												? "visible"
 												: "invisible"
-										}`}
-									></Check>
+										)}
+									/>
 								</div>
 							</div>
 						</div>

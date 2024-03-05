@@ -1,4 +1,3 @@
-import { group } from "console";
 import { Check, X } from "react-feather";
 
 import { Button } from "@/components/input/Button";
@@ -30,7 +29,7 @@ export const Invitation = ({ invitation, className }: InvitationProps) => {
 					Group Invitation
 				</Text>
 				<Text textSize="5xs" className="text-gray-500">
-					You're invited to join{" "}
+					You are invited to join{" "}
 					<a
 						href={`/group/${invitation.groupID}`}
 						className="underline hover:text-black"

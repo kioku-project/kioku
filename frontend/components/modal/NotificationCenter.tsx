@@ -60,12 +60,15 @@ export const NotificationCenterModal = ({
 		<Modal header="Notification Center" setVisible={setVisible} {...props}>
 			{invitations ? (
 				invitations.map((invitation) => (
-					<Invitation invitation={invitation} />
+					<Invitation
+						key={invitation.groupName}
+						invitation={invitation}
+					/>
 				))
 			) : (
 				<div className="flex items-center justify-center space-x-3 rounded-md border border-dashed border-gray-500 p-10 text-gray-800">
 					<Info />
-					<Text>You don't have any pending messages</Text>
+					<Text>You have no pending messages</Text>
 				</div>
 			)}
 		</Modal>

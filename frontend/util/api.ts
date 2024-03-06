@@ -242,7 +242,7 @@ export async function modifyCard(card: CardType) {
 export async function pushCard(deckID: string, cardID: string, rating: number) {
 	const response = await postRequest(
 		pushCardsRoute(deckID),
-		JSON.stringify({ body: { cardID, rating } })
+		JSON.stringify({ cardID, rating })
 	);
 	if (response?.ok) mutateAll(cardRoutes(deckID));
 	return response;

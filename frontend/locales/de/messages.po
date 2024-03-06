@@ -151,7 +151,7 @@ msgstr "Gefahrenzone"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: util/api.ts:248
+#: util/api.ts:237
 msgid "Deck deleted"
 msgstr "Stapel gelöscht"
 
@@ -194,17 +194,17 @@ msgstr "Lösche diese Gruppe"
 msgid "Delete your Account"
 msgstr "Account löschen"
 
-#: util/api.ts:245
-msgid "Deleting deck..."
-msgstr "Lösche Stapel..."
+#: util/api.ts:236
+msgid "Deleting deck"
+msgstr "Lösche Stapel"
 
-#: util/api.ts:201
-msgid "Deleting group..."
-msgstr "Lösche Gruppe..."
+#: util/api.ts:194
+msgid "Deleting group"
+msgstr "Lösche Gruppe"
 
-#: util/api.ts:74
-msgid "Deleting user..."
-msgstr "Lösche Benutzer..."
+#: util/api.ts:77
+msgid "Deleting user"
+msgstr "Lösche Benutzer"
 
 #: components/flashcard/Flashcard.tsx:190
 msgid "Description"
@@ -297,7 +297,7 @@ msgstr "von"
 msgid "Get started"
 msgstr "Los geht's"
 
-#: util/api.ts:204
+#: util/api.ts:195
 msgid "Group deleted"
 msgstr "Gruppe gelöscht"
 
@@ -388,15 +388,15 @@ msgstr "Erfahre mehr"
 msgid "Leave Group"
 msgstr "Gruppe verlassen"
 
-#: util/api.ts:188
-msgid "Leaving group..."
-msgstr "Verlasse Gruppe..."
+#: util/api.ts:181
+msgid "Leaving group"
+msgstr "Verlasse Gruppe"
 
-#: util/api.ts:191
+#: util/api.ts:182
 msgid "Left group"
 msgstr "Gruppe verlassen"
 
-#: components/input/NotificationButton.tsx:78
+#: components/input/NotificationButton.tsx:75
 msgid "Loading..."
 msgstr "Lade..."
 
@@ -412,7 +412,7 @@ msgstr "Ausgeloggt"
 msgid "Logging in..."
 msgstr "Logge ein..."
 
-#: components/navigation/Navbar.tsx:64
+#: components/navigation/Navbar.tsx:66
 msgid "Login"
 msgstr "Einloggen"
 
@@ -588,7 +588,7 @@ msgstr "Deaktivieren"
 msgid "User"
 msgstr "Benutzer"
 
-#: util/api.ts:77
+#: util/api.ts:78
 msgid "User deleted"
 msgstr "Benutzer gelöscht"
 

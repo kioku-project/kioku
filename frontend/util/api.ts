@@ -309,10 +309,7 @@ export async function modifyCard(card: CardType) {
 
 export async function pushCard(deckID: string, cardID: string, rating: number) {
 	const response = await handleWithToast(
-		postRequest(
-			pushCardsRoute(deckID),
-			JSON.stringify({ body: { cardID, rating } })
-		)
+		postRequest(pushCardsRoute(deckID), JSON.stringify({ cardID, rating }))
 	);
 	if (response.ok) {
 		mutateAll(cardRoutes(deckID));

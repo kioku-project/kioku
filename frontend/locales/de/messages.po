@@ -151,7 +151,7 @@ msgstr "Gefahrenzone"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: util/api.ts:237
+#: util/api.ts:236
 msgid "Deck deleted"
 msgstr "Stapel gelöscht"
 
@@ -194,17 +194,17 @@ msgstr "Lösche diese Gruppe"
 msgid "Delete your Account"
 msgstr "Account löschen"
 
-#: util/api.ts:236
-msgid "Deleting deck"
-msgstr "Lösche Stapel"
+#: util/api.ts:235
+msgid "Deleting deck..."
+msgstr "Lösche Stapel..."
 
-#: util/api.ts:194
-msgid "Deleting group"
-msgstr "Lösche Gruppe"
+#: util/api.ts:193
+msgid "Deleting group..."
+msgstr "Lösche Gruppe..."
 
-#: util/api.ts:77
-msgid "Deleting user"
-msgstr "Lösche Benutzer"
+#: util/api.ts:76
+msgid "Deleting user..."
+msgstr "Lösche Benutzer..."
 
 #: components/flashcard/Flashcard.tsx:190
 msgid "Description"
@@ -297,7 +297,7 @@ msgstr "von"
 msgid "Get started"
 msgstr "Los geht's"
 
-#: util/api.ts:195
+#: util/api.ts:194
 msgid "Group deleted"
 msgstr "Gruppe gelöscht"
 
@@ -388,15 +388,15 @@ msgstr "Erfahre mehr"
 msgid "Leave Group"
 msgstr "Gruppe verlassen"
 
-#: util/api.ts:181
-msgid "Leaving group"
-msgstr "Verlasse Gruppe"
+#: util/api.ts:180
+msgid "Leaving group..."
+msgstr "Verlasse Gruppe..."
 
-#: util/api.ts:182
+#: util/api.ts:181
 msgid "Left group"
 msgstr "Gruppe verlassen"
 
-#: components/input/NotificationButton.tsx:75
+#: components/input/NotificationButton.tsx:76
 msgid "Loading..."
 msgstr "Lade..."
 
@@ -556,7 +556,7 @@ msgstr "gemeldet wird, damit wir in Zukunft noch mehr Geräte unterstützen kön
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
 
-#: components/input/NotificationButton.tsx:65
+#: components/input/NotificationButton.tsx:66
 msgid "Subscribe"
 msgstr "Aktivieren"
 
@@ -580,7 +580,7 @@ msgstr "Benachrichtigungen aktivieren"
 msgid "Unexpected group type"
 msgstr "Unerwarteter Gruppentyp"
 
-#: components/input/NotificationButton.tsx:63
+#: components/input/NotificationButton.tsx:64
 msgid "Unsubscribe"
 msgstr "Deaktivieren"
 
@@ -588,7 +588,7 @@ msgstr "Deaktivieren"
 msgid "User"
 msgstr "Benutzer"
 
-#: util/api.ts:78
+#: util/api.ts:77
 msgid "User deleted"
 msgstr "Benutzer gelöscht"
 

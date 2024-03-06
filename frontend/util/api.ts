@@ -73,7 +73,7 @@ export async function deleteUser() {
 	return await handleWithToast(
 		deleteRequest(userRoute),
 		"deleteUserToastID",
-		t`Deleting user`,
+		t`Deleting user...`,
 		t`User deleted`
 	);
 }
@@ -177,7 +177,7 @@ export async function leaveGroup(groupID: string) {
 	const response = await handleWithToast(
 		deleteRequest(groupMembersRoute(groupID)),
 		"leaveGroupToastID",
-		t`Leaving group`,
+		t`Leaving group...`,
 		t`Left group`
 	);
 	if (response.ok) {
@@ -190,7 +190,7 @@ export async function deleteGroup(groupID: string) {
 	const response = await handleWithToast(
 		deleteRequest(groupRoute(groupID)),
 		"deleteGroupToastID",
-		t`Deleting group`,
+		t`Deleting group...`,
 		t`Group deleted`
 	);
 	if (response.ok) {
@@ -232,7 +232,7 @@ export async function deleteDeck(deckID: string, groupID: string) {
 	const response = await handleWithToast(
 		deleteRequest(deckRoute(deckID)),
 		"deleteDeckToastID",
-		t`Deleting deck`,
+		t`Deleting deck...`,
 		t`Deck deleted`
 	);
 	if (response.ok) {

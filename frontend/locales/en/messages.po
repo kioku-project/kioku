@@ -151,7 +151,7 @@ msgstr "Danger Zone"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: util/api.ts:237
+#: util/api.ts:236
 msgid "Deck deleted"
 msgstr "Deck deleted"
 
@@ -194,17 +194,17 @@ msgstr "Delete this group"
 msgid "Delete your Account"
 msgstr "Delete your Account"
 
-#: util/api.ts:236
-msgid "Deleting deck"
-msgstr "Deleting deck"
+#: util/api.ts:235
+msgid "Deleting deck..."
+msgstr "Deleting deck..."
 
-#: util/api.ts:194
-msgid "Deleting group"
-msgstr "Deleting group"
+#: util/api.ts:193
+msgid "Deleting group..."
+msgstr "Deleting group..."
 
-#: util/api.ts:77
-msgid "Deleting user"
-msgstr "Deleting user"
+#: util/api.ts:76
+msgid "Deleting user..."
+msgstr "Deleting user..."
 
 #: components/flashcard/Flashcard.tsx:190
 msgid "Description"
@@ -297,7 +297,7 @@ msgstr "from"
 msgid "Get started"
 msgstr "Get started"
 
-#: util/api.ts:195
+#: util/api.ts:194
 msgid "Group deleted"
 msgstr "Group deleted"
 
@@ -388,15 +388,15 @@ msgstr "Learn more"
 msgid "Leave Group"
 msgstr "Leave Group"
 
-#: util/api.ts:181
-msgid "Leaving group"
-msgstr "Leaving group"
+#: util/api.ts:180
+msgid "Leaving group..."
+msgstr "Leaving group..."
 
-#: util/api.ts:182
+#: util/api.ts:181
 msgid "Left group"
 msgstr "Left group"
 
-#: components/input/NotificationButton.tsx:75
+#: components/input/NotificationButton.tsx:76
 msgid "Loading..."
 msgstr "Loading..."
 
@@ -556,7 +556,7 @@ msgstr "so that we can support even more devices in the future. We recommend usi
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 
-#: components/input/NotificationButton.tsx:65
+#: components/input/NotificationButton.tsx:66
 msgid "Subscribe"
 msgstr "Subscribe"
 
@@ -580,7 +580,7 @@ msgstr "Turn on Notifications"
 msgid "Unexpected group type"
 msgstr "Unexpected group type"
 
-#: components/input/NotificationButton.tsx:63
+#: components/input/NotificationButton.tsx:64
 msgid "Unsubscribe"
 msgstr "Unsubscribe"
 
@@ -588,7 +588,7 @@ msgstr "Unsubscribe"
 msgid "User"
 msgstr "User"
 
-#: util/api.ts:78
+#: util/api.ts:77
 msgid "User deleted"
 msgstr "User deleted"
 

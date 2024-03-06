@@ -50,9 +50,8 @@ export const SelectionField = ({
 			<Text className="mb-1 text-sm font-semibold text-neutral-400">
 				{title}
 			</Text>
-			<div
+			<button
 				className="flex	cursor-pointer"
-				role="combobox"
 				onKeyUp={clickOnEnter}
 				tabIndex={0}
 				onClick={() => setVisible(!visible)}
@@ -67,19 +66,18 @@ export const SelectionField = ({
 						visible && "rotate-180"
 					)}
 				/>
-			</div>
+			</button>
 
 			{visible && (
 				<div className="absolute z-10 my-2 h-fit w-fit max-w-80 items-start space-y-2 rounded-2xl bg-black px-4 pb-3 text-sm text-white before:relative before:-top-2 before:left-[5.64rem] before:block before:h-5 before:w-5 before:rotate-45 before:bg-black">
 					{list?.map((selectionItem) => (
-						<div
+						<button
 							key={selectionItem.title}
 							className={clsx(
 								"flex cursor-pointer",
 								!selectionItem.isSelected &&
 									"text-neutral-400 hover:text-neutral-300"
 							)}
-							role="option"
 							onKeyUp={clickOnEnter}
 							tabIndex={0}
 							onClick={() => {
@@ -93,12 +91,12 @@ export const SelectionField = ({
 								icon={selectionItem.icon}
 							/>
 							<div>
-								<Text className="font-bold">
+								<Text className="text-left font-bold">
 									{selectionItem.title}
 								</Text>
-								<div className=" flex w-full items-center justify-between space-x-4">
+								<div className="flex w-full items-center justify-between space-x-4">
 									{" "}
-									<Text className="font-light">
+									<Text className="text-left font-light">
 										{selectionItem.description}
 									</Text>
 									<Check
@@ -111,7 +109,7 @@ export const SelectionField = ({
 									/>
 								</div>
 							</div>
-						</div>
+						</button>
 					))}
 				</div>
 			)}

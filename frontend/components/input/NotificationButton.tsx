@@ -58,13 +58,14 @@ export const NotificationButton = ({
 				}
 			}}
 		>
-			{subscriptions && !loading ? (
-				isSubscribed ? (
+			{subscriptions &&
+				!loading &&
+				(isSubscribed ? (
 					<Trans>Unsubscribe</Trans>
 				) : (
 					<Trans>Subscribe</Trans>
-				)
-			) : (
+				))}
+			{(!subscriptions || loading) && (
 				<div className="flex items-center space-x-2">
 					<LoadingSpinner
 						className="h-full"

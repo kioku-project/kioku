@@ -1,5 +1,4 @@
 import { t } from "@lingui/macro";
-import { toast } from "react-hot-toast";
 import { mutate } from "swr";
 
 import { Card as CardType } from "@/types/Card";

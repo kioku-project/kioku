@@ -1,10 +1,12 @@
 import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { useState } from "react";
+import { couldStartTrivia } from "typescript";
 
 import DeckList from "@/components/deck/DeckList";
 import { ActionBar } from "@/components/input/ActionBar";
 import { CreateDeckModal } from "@/components/modal/CreateDeckModal";
+import { GenericPlaceholder } from "@/components/placeholders/GenericPlaceholder";
 import { Group as GroupType } from "@/types/Group";
 import { GroupRole } from "@/types/GroupRole";
 import { useDecks } from "@/util/swr";
@@ -27,7 +29,7 @@ export const DecksTab = ({ group }: DecksTabProps) => {
 	const [showModal, setShowModal] = useState(false);
 	const [filter, setFilter] = useState("");
 	const [reverse, setReverse] = useState(false);
-
+	const [showTutorial, setShowTutorial] = useState(false);
 	const hasWrite =
 		group.groupRole && GroupRole[group.groupRole] >= GroupRole.WRITE;
 
@@ -47,9 +49,28 @@ export const DecksTab = ({ group }: DecksTabProps) => {
 					onSearch={(event) => {
 						setFilter(event.target.value);
 					}}
-					onAdd={() => setShowModal(true)}
+					onAdd={() => {
+						setShowModal(true);
+						setShowTutorial(false);
+					}}
+					onExit={() => {
+						setShowTutorial(false);
+					}}
+					showTutorial={showTutorial}
+					tutorialText="Click here to add a new deck!"
 				/>
-				<DeckList decks={decks} filter={filter} reverse={reverse} />
+				<DeckList
+					decks={decks}
+					filter={filter}
+					reverse={reverse}
+					title="Oh no!"
+					description="You haven't created any decks yet."
+					buttonText={"Show me how"}
+					iconName="Meh"
+					onClickPlaceholder={() => {
+						setShowTutorial(true);
+					}}
+				/>
 			</div>
 		</>
 	);

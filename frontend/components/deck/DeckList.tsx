@@ -1,8 +1,11 @@
-import { useMemo } from "react";
+import { MouseEventHandler, useMemo } from "react";
 
 import { FetchDeck } from "@/components/deck/Deck";
 import { Section } from "@/components/layout/Section";
 import { Deck as DeckType } from "@/types/Deck";
+
+import { IconName } from "../graphics/Icon";
+import { GenericPlaceholder } from "../placeholders/GenericPlaceholder";
 
 interface DeckListProps {
 	/**
@@ -13,6 +16,26 @@ interface DeckListProps {
 	 * Decks
 	 */
 	decks?: DeckType[];
+	/**
+	 * Title
+	 */
+	title: string;
+	/**
+	 * Description
+	 */
+	description: string;
+	/**
+	 * Button text
+	 */
+	buttonText?: string;
+	/**
+	 * Icon name
+	 */
+	iconName: IconName;
+	/**
+	 * Onclick function
+	 */
+	onClickPlaceholder?: MouseEventHandler;
 	/**
 	 * Filter decks
 	 */
@@ -33,6 +56,11 @@ interface DeckListProps {
 export default function DeckList({
 	header,
 	decks,
+	title,
+	description,
+	buttonText,
+	iconName,
+	onClickPlaceholder,
 	filter = "",
 	reverse = false,
 	className = "",
@@ -58,6 +86,15 @@ export default function DeckList({
 				{filteredDecks?.map((deck) => (
 					<FetchDeck key={deck.deckID} deck={deck} />
 				))}
+				{filteredDecks?.length === 0 && (
+					<GenericPlaceholder
+						title={title}
+						description={description}
+						iconName={iconName}
+						buttonText={buttonText}
+						onClick={onClickPlaceholder}
+					/>
+				)}
 			</div>
 		</Section>
 	);

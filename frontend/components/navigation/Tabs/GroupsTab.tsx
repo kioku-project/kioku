@@ -5,6 +5,7 @@ import { useState } from "react";
 import GroupList from "@/components/group/GroupList";
 import { ActionBar } from "@/components/input/ActionBar";
 import { CreateGroupModal } from "@/components/modal/CreateGroupModal";
+import { GenericPlaceholder } from "@/components/placeholders/GenericPlaceholder";
 import { Group as GroupType } from "@/types/Group";
 
 interface GroupsTabProps {
@@ -27,6 +28,7 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 	const [showModal, setShowModal] = useState(false);
 	const [filter, setFilter] = useState("");
 	const [reverse, setReverse] = useState(false);
+	const [showTutorial, setShowTutorial] = useState(false);
 
 	return (
 		<>
@@ -43,8 +45,27 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 					onSearch={(event) => {
 						setFilter(event.target.value);
 					}}
-					onAdd={() => setShowModal(true)}
+					onAdd={() => {
+						setShowModal(true);
+						setShowTutorial(false);
+					}}
+					onExit={() => {
+						setShowTutorial(false);
+					}}
+					showTutorial={showTutorial}
+					tutorialText="Click here to add a new group!"
 				/>
+				{groups.length === 1 && (
+					<GenericPlaceholder
+						title={"Create your first group!"}
+						description={"You haven't created a group yet."}
+						iconName="Plus"
+						buttonText={"Show me how"}
+						onClick={() => {
+							setShowTutorial(true);
+						}}
+					></GenericPlaceholder>
+				)}
 				<GroupList groups={groups} filter={filter} reverse={reverse} />
 			</div>
 		</>

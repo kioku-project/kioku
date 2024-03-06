@@ -34,6 +34,18 @@ func (e *LinearSrs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp 
 		return helper.NewMicroWrongDeckIDErr(helper.SrsServiceID)
 	}
 
+	// Add revlog entry
+	if err = e.store.CreateRevlog(ctx,
+		&model.Revlog{
+			CardID: req.CardID,
+			UserID: req.UserID,
+			Date:   time.Now().Unix(),
+			Rating: req.Rating,
+			Due:    cardBinding.Due,
+		}); err != nil {
+		return err
+	}
+
 	// calculate new due date
 	switch req.Rating {
 	case 0: // Hard
@@ -55,17 +67,6 @@ func (e *LinearSrs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp 
 		return helper.NewMicroWrongRatingErr(helper.SrsServiceID)
 	}
 	if err = e.store.ModifyUserCard(ctx, cardBinding); err != nil {
-		return err
-	}
-
-	// Add revlog entry
-	if err = e.store.CreateRevlog(ctx,
-		&model.Revlog{
-			CardID: req.CardID,
-			UserID: req.UserID,
-			Date:   time.Now().Unix(),
-			Rating: req.Rating,
-		}); err != nil {
 		return err
 	}
 	rsp.Success = true

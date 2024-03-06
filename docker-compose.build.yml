@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  frontend_proxy:
+    container_name: kioku-frontend_proxy
+    restart: always
+    build:
+      context: backend
+      dockerfile: services/frontend/Dockerfile
+
+  user_service:
+    container_name: kioku-user_service
+    restart: always
+    build:
+      context: backend
+      dockerfile: services/user/Dockerfile
+
+  carddeck_service:
+    container_name: kioku-carddeck_service
+    restart: always
+    build:
+      context: backend
+      dockerfile: services/carddeck/Dockerfile
+
+  collaboration_service:
+    container_name: kioku-collaboration_service
+    restart: always
+    build:
+      context: backend
+      dockerfile: services/collaboration/Dockerfile
+
+  srs_service:
+    container_name: kioku-srs_service
+    restart: always
+    build:
+      context: backend
+      dockerfile: services/srs/Dockerfile
+
+  notification_service:
+    container_name: kioku-notification_service
+    restart: always
+    build:
+      context: backend
+      dockerfile: services/notification/Dockerfile
+
+  frontend:
+    container_name: kioku-frontend
+    restart: always
+    build:
+      context: frontend

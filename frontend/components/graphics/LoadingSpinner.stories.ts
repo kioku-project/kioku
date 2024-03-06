@@ -6,28 +6,26 @@ const meta: Meta<typeof LoadingSpinner> = {
 	title: "Graphics/LoadingSpinner",
 	component: LoadingSpinner,
 	tags: ["autodocs"],
-	args: {},
+	args: {
+		className: "w-16",
+	},
 };
 
 export default meta;
 type Story = StoryObj<typeof LoadingSpinner>;
 
 export const Default: Story = {
-	args: {
-		className: "w-16",
-	},
+	args: {},
 };
 
 export const NoDelay: Story = {
 	args: {
-		className: "w-16",
 		delay: 0,
 	},
 };
 
 export const SimpleTheme: Story = {
 	args: {
-		className: "w-16",
 		delay: 0,
 		theme: "simple",
 	},

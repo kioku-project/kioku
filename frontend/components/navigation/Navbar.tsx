@@ -46,7 +46,9 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 							method: "POST",
 						});
 						if (response.ok) {
-							toast.success(t`Logged out`, { id: "logoutToast" });
+							toast.success(t`Logged out`, {
+								id: "logoutToastID",
+							});
 							router.replace("/home");
 						}
 					}}

@@ -66,14 +66,11 @@ export const NotificationButton = ({
 				)
 			) : (
 				<div className="flex items-center space-x-2">
-					<output>
-						<LoadingSpinner
-							className="h-full"
-							delay={0}
-							theme="simple"
-						/>
-						<span className="sr-only">Loading...</span>
-					</output>
+					<LoadingSpinner
+						className="h-full"
+						delay={0}
+						theme="simple"
+					/>
 					<span>
 						<Trans>Loading...</Trans>
 					</span>
@@ -92,8 +89,9 @@ export const NotificationButton = ({
 					process.env.NEXT_PUBLIC_WEBPUSH_PUBLIC_KEY,
 				userVisibleOnly: true,
 			};
-			const subscription =
-				await swRegistration.pushManager.subscribe(options);
+			const subscription = await swRegistration.pushManager.subscribe(
+				options
+			);
 			setSubscriptionId(await saveSubscription(subscription));
 			mutate(notificationsRoute);
 			setTimeout(() => {
@@ -128,7 +126,7 @@ export const NotificationButton = ({
 				endpoint: subscription.endpoint,
 				auth: subscription.toJSON().keys?.auth,
 				p256dh: subscription.toJSON().keys?.p256dh,
-			}),
+			})
 		);
 		return response.ok ? response.text() : "";
 	}

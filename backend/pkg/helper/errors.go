@@ -58,15 +58,15 @@ func NewMicroUserAlreadyInGroupErr(id ClientID) error {
 }
 
 func NewMicroCantLeaveDefaultGroupErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "You can't leave your default group")
+	return microErrors.BadRequest(string(id), "You cannot leave your default group")
 }
 
 func NewMicroCantLeaveAsLastAdminErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "You can't leave as last admin")
+	return microErrors.BadRequest(string(id), "You cannot leave as last admin")
 }
 
 func NewMicroCantInviteToHomegroupErr(id ClientID) error {
-	return microErrors.BadRequest(string(id), "You can't invite users to your homegroup")
+	return microErrors.BadRequest(string(id), "You cannot invite users to your homegroup")
 }
 
 func NewMicroUserAdmissionInProgressErr(id ClientID) error {
@@ -90,11 +90,11 @@ func NewMicroAlreadyInvitedErr(id ClientID) error {
 }
 
 func NewMicroCantModifyGroupAdminErr(id ClientID) error {
-	return microErrors.Unauthorized(string(id), "You can not modify group admins")
+	return microErrors.Unauthorized(string(id), "You cannot modify group admins")
 }
 
 func NewMicroCantKickGroupAdminErr(id ClientID) error {
-	return microErrors.Unauthorized(string(id), "You can not kick group admins")
+	return microErrors.Unauthorized(string(id), "You cannot kick group admins")
 }
 
 func NewMicroHashingFailedErr(id ClientID) error {
@@ -124,20 +124,21 @@ func NewMicroDeckAlreadyFavoriteErr(id ClientID) error {
 func NewFiberReauthenticateError() error {
 	return fiber.NewError(fiber.StatusUnauthorized, "Please re-authenticate")
 }
+
 func NewFiberBadRequestErr(detail string) error {
 	return fiber.NewError(fiber.StatusBadRequest, detail)
 }
 
 func NewFiberMissingEmailErr() error {
-	return fiber.NewError(fiber.StatusBadRequest, "No Email provided")
+	return fiber.NewError(fiber.StatusBadRequest, "No email provided")
 }
 
 func NewFiberMissingNameErr() error {
-	return fiber.NewError(fiber.StatusBadRequest, "No Name provided")
+	return fiber.NewError(fiber.StatusBadRequest, "No name provided")
 }
 
 func NewFiberMissingPasswordErr() error {
-	return fiber.NewError(fiber.StatusBadRequest, "No Password provided")
+	return fiber.NewError(fiber.StatusBadRequest, "No password provided")
 }
 
 func NewFiberMissingDeckIDErr() error {

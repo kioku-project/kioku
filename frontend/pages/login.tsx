@@ -52,7 +52,7 @@ export default function Page() {
 			<NextSeo
 				title={_(msg`Kioku | Login or register for Kioku!`)}
 				description={_(
-					msg`Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups.`,
+					msg`Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups.`
 				)}
 				languageAlternates={[
 					{ hrefLang: "en", href: "https://app.kioku.dev/login" },
@@ -116,14 +116,14 @@ export default function Page() {
 										setPassword(event.target.value);
 										setPasswordsMatching(
 											repeatPasswordInput.current
-												?.value === event.target.value,
+												?.value === event.target.value
 										);
 										if (
 											event.target.validity.tooShort ||
 											event.target.validity.valueMissing
 										) {
 											event.target.setCustomValidity(
-												t`Password must have at least ${passwordMinLength} characters`,
+												t`Password must have at least ${passwordMinLength} characters`
 											);
 										}
 									}}
@@ -135,7 +135,7 @@ export default function Page() {
 											id="repeatPasswordInputFieldId"
 											type={"password"}
 											placeholder={_(
-												msg`Repeat Password`,
+												msg`Repeat Password`
 											)}
 											inputFieldIconStyle="text-neutral-400"
 											required
@@ -144,7 +144,7 @@ export default function Page() {
 											ref={repeatPasswordInput}
 											onChange={(event) => {
 												event.target.setCustomValidity(
-													"",
+													""
 												);
 												if (
 													passwordInput.current
@@ -152,13 +152,13 @@ export default function Page() {
 													event.target.value
 												) {
 													event.target.setCustomValidity(
-														t`Passwords have to match`,
+														t`Passwords have to match`
 													);
 												}
 												setPasswordsMatching(
 													passwordInput.current
 														?.value ===
-														event.target.value,
+														event.target.value
 												);
 											}}
 										/>
@@ -166,7 +166,7 @@ export default function Page() {
 										<div className="space-y-1 py-1 font-light text-neutral-500">
 											<PasswordCheck
 												text={_(
-													msg`Minimum ${passwordMinLength} characters`,
+													msg`Minimum ${passwordMinLength} characters`
 												)}
 												valid={
 													!passwordInput.current
@@ -177,7 +177,7 @@ export default function Page() {
 											/>
 											<PasswordCheck
 												text={_(
-													msg`Passwords have to match`,
+													msg`Passwords have to match`
 												)}
 												valid={passwordsMatching}
 											></PasswordCheck>
@@ -253,7 +253,7 @@ export default function Page() {
 		) {
 			return;
 		}
-		const toastID = toast.loading(t`Logging in...`, { id: "loginToast" });
+		const toastID = toast.loading(t`Logging in...`, { id: "loginToastID" });
 		const response = await submitForm(loginRoute, [
 			emailInput.current,
 			passwordInput.current,

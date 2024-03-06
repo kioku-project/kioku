@@ -22,6 +22,7 @@ import {
 	requestGroupRoute,
 	userRoute,
 } from "@/util/endpoints";
+import { handleWithToast } from "@/util/toasts";
 
 import { authedFetch } from "./reauth";
 
@@ -50,7 +51,7 @@ export async function deleteRequest(url: string, body?: string) {
 export async function submitForm(
 	url: string,
 	inputs: HTMLInputElement[],
-	request: (url: string, body: string) => Promise<Response> = postRequest,
+	request: (url: string, body: string) => Promise<Response> = postRequest
 ) {
 	const body: Record<string, string> = {};
 	inputs.forEach((input) => {
@@ -60,35 +61,30 @@ export async function submitForm(
 }
 
 export async function modifyUser(inputs: HTMLInputElement[]) {
-	const response = await submitForm(userRoute, inputs, putRequest);
+	const response = await handleWithToast(
+		submitForm(userRoute, inputs, putRequest)
+	);
 	if (response?.ok) {
 		mutate(userRoute);
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
 
 export async function deleteUser() {
-	const toastID = toast.loading(t`Deleting user...`);
-	const response = await deleteRequest(userRoute);
-	if (response.ok) {
-		toast.success(t`User deleted`, { id: toastID });
-	} else {
-		const error = await response.text();
-		toast.error(error, { id: toastID });
-	}
-	return response;
+	return await handleWithToast(
+		deleteRequest(userRoute),
+		"deleteUserToastID",
+		t`Deleting user`,
+		t`User deleted`
+	);
 }
 
 export async function createGroup(inputs: HTMLInputElement[]) {
-	const response = await submitForm(groupsRoute, inputs, postRequest);
+	const response = await handleWithToast(
+		submitForm(groupsRoute, inputs, postRequest)
+	);
 	if (response.ok) {
 		mutate(groupsRoute);
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
@@ -99,15 +95,14 @@ export async function modifyGroup(
 		groupName?: string;
 		groupDescription?: string;
 		groupType?: string;
-	},
+	}
 ) {
 	const route = groupRoute(groupID);
-	const response = await putRequest(route, JSON.stringify(body));
+	const response = await handleWithToast(
+		putRequest(route, JSON.stringify(body))
+	);
 	if (response.ok) {
 		mutate(route);
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
@@ -116,19 +111,18 @@ export async function modifyGroup(
 async function groupInvitation(
 	groupID: string,
 	userEmail: string,
-	request: (url: string, body?: string) => Promise<Response>,
+	request: (url: string, body?: string) => Promise<Response>
 ) {
-	const response = await request(
-		invitationGroupRoute(groupID),
-		JSON.stringify({
-			invitedUserEmail: userEmail,
-		}),
+	const response = await handleWithToast(
+		request(
+			invitationGroupRoute(groupID),
+			JSON.stringify({
+				invitedUserEmail: userEmail,
+			})
+		)
 	);
 	if (response.ok) {
 		mutateAll(groupMemberRoutes(groupID));
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
@@ -146,9 +140,9 @@ export async function declineGroupRequest(groupID: string, userEmail: string) {
 // handle group requests
 async function groupRequest(
 	groupID: string,
-	request: (url: string, body?: string) => Promise<Response>,
+	request: (url: string, body?: string) => Promise<Response>
 ) {
-	const response = await request(requestGroupRoute(groupID));
+	const response = await handleWithToast(request(requestGroupRoute(groupID)));
 	if (response.ok) {
 		mutateAll([
 			invitationsUserRoute,
@@ -156,9 +150,6 @@ async function groupRequest(
 			groupRoute(groupID),
 			...groupMemberRoutes(groupID),
 		]);
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
@@ -174,50 +165,48 @@ export async function declineGroupInvitation(groupID: string) {
 }
 
 export async function deleteMember(groupID: string, userID: string) {
-	const response = await deleteRequest(groupMemberRoute(groupID, userID));
+	const response = await handleWithToast(
+		deleteRequest(groupMemberRoute(groupID, userID))
+	);
 	if (response.ok) {
 		mutate(groupMembersRoute(groupID));
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
 
 export async function leaveGroup(groupID: string) {
-	const toastID = toast.loading(t`Leaving group...`);
-	const response = await deleteRequest(groupMembersRoute(groupID));
+	const response = await handleWithToast(
+		deleteRequest(groupMembersRoute(groupID)),
+		"leaveGroupToastID",
+		t`Leaving group`,
+		t`Left group`
+	);
 	if (response.ok) {
-		toast.success(t`Left group`, { id: toastID });
 		mutate(groupsRoute);
-	} else {
-		const error = await response.text();
-		toast.error(error, { id: toastID });
 	}
 	return response;
 }
 
 export async function deleteGroup(groupID: string) {
-	const toastID = toast.loading(t`Deleting group...`);
-	const response = await deleteRequest(groupRoute(groupID));
+	const response = await handleWithToast(
+		deleteRequest(groupRoute(groupID)),
+		"deleteGroupToastID",
+		t`Deleting group`,
+		t`Group deleted`
+	);
 	if (response.ok) {
-		toast.success(t`Group deleted`, { id: toastID });
 		mutate(groupsRoute);
-	} else {
-		const error = await response.text();
-		toast.error(error, { id: toastID });
 	}
 	return response;
 }
 
 export async function createDeck(inputs: HTMLInputElement[], groupID: string) {
 	const route = decksRoute(groupID);
-	const response = await submitForm(route, inputs, postRequest);
+	const response = await handleWithToast(
+		submitForm(route, inputs, postRequest)
+	);
 	if (response.ok) {
 		mutate(route);
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
@@ -228,28 +217,27 @@ export async function modifyDeck(
 		deckName?: string;
 		deckDescription?: string;
 		deckType?: "PUBLIC" | "PRIVATE";
-	},
+	}
 ) {
 	const route = deckRoute(deckID);
-	const response = await putRequest(route, JSON.stringify(body));
+	const response = await handleWithToast(
+		putRequest(route, JSON.stringify(body))
+	);
 	if (response.ok) {
 		mutate(route);
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
 
 export async function deleteDeck(deckID: string, groupID: string) {
-	const toastID = toast.loading(t`Deleting deck...`);
-	const response = await deleteRequest(deckRoute(deckID));
+	const response = await handleWithToast(
+		deleteRequest(deckRoute(deckID)),
+		"deleteDeckToastID",
+		t`Deleting deck`,
+		t`Deck deleted`
+	);
 	if (response.ok) {
-		toast.success(t`Deck deleted`, { id: toastID });
 		mutate(decksRoute(groupID));
-	} else {
-		const error = await response.text();
-		toast.error(error, { id: toastID });
 	}
 	return response;
 }
@@ -257,20 +245,19 @@ export async function deleteDeck(deckID: string, groupID: string) {
 export async function toggleFavorite(
 	deckID: string,
 	groupID: string,
-	isFavorite: boolean | undefined,
+	isFavorite: boolean | undefined
 ) {
-	const response = await apiRequest(
-		isFavorite ? "DELETE" : "POST",
-		favoriteDecksRoute,
-		JSON.stringify({
-			deckID: deckID,
-		}),
+	const response = await handleWithToast(
+		apiRequest(
+			isFavorite ? "DELETE" : "POST",
+			favoriteDecksRoute,
+			JSON.stringify({
+				deckID: deckID,
+			})
+		)
 	);
 	if (response.ok) {
 		mutateAll([decksRoute(groupID), favoriteDecksRoute, activeDecksRoute]);
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
@@ -284,65 +271,59 @@ export async function createCard(
 		front.focus();
 		return;
 	}
-	const response = await postRequest(
-		cardsRoute(deckID),
-		JSON.stringify({
-			sides: [
-				{
-					header: front.value,
-				},
-				{
-					header: back.value,
-				},
-			],
-		}),
+	const response = await handleWithToast(
+		postRequest(
+			cardsRoute(deckID),
+			JSON.stringify({
+				sides: [
+					{
+						header: front.value,
+					},
+					{
+						header: back.value,
+					},
+				],
+			})
+		)
 	);
 	if (response.ok) {
 		mutateAll([cardsRoute(deckID), ...cardRoutes(deckID)]);
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
 
 export async function modifyCard(card: CardType) {
-	const response = await putRequest(
-		cardRoute(card.cardID),
-		JSON.stringify({
-			sides: card.sides,
-		}),
+	const response = await handleWithToast(
+		putRequest(
+			cardRoute(card.cardID),
+			JSON.stringify({
+				sides: card.sides,
+			})
+		)
 	);
 	if (response.ok && card.deckID) {
 		mutate(cardsRoute(card.deckID));
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
 
 export async function pushCard(deckID: string, cardID: string, rating: number) {
-	const response = await postRequest(
-		pushCardsRoute(deckID),
-		JSON.stringify({ body: { cardID, rating } }),
+	const response = await handleWithToast(
+		postRequest(
+			pushCardsRoute(deckID),
+			JSON.stringify({ body: { cardID, rating } })
+		)
 	);
 	if (response.ok) {
 		mutateAll(cardRoutes(deckID));
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }
 
 export async function deleteCard(deckID: string, cardID: string) {
-	const response = await deleteRequest(cardRoute(cardID));
+	const response = await handleWithToast(deleteRequest(cardRoute(cardID)));
 	if (response.ok) {
 		mutateAll([cardsRoute(deckID), ...cardRoutes(deckID)]);
-	} else {
-		const error = await response.text();
-		toast.error(error);
 	}
 	return response;
 }

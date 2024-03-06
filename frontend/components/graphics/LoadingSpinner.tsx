@@ -35,7 +35,7 @@ export default function LoadingSpinner({
 			return (
 				<svg
 					aria-hidden="true"
-					className={`animate-spin ${className} inline w-3 h-3 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300`}
+					className={`animate-spin ${className} inline h-3 w-3 animate-spin fill-gray-600 text-gray-200 dark:fill-gray-300 dark:text-gray-600`}
 					viewBox="0 0 100 101"
 					width="0"
 					height="0"

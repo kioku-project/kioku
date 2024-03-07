@@ -34,12 +34,14 @@ func (e *LinearSrs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp 
 		return helper.NewMicroWrongDeckIDErr(helper.SrsServiceID)
 	}
 
+	now := time.Now()
+
 	// Add revlog entry
 	if err = e.store.CreateRevlog(ctx,
 		&model.Revlog{
 			CardID: req.CardID,
 			UserID: req.UserID,
-			Date:   time.Now().Unix(),
+			Date:   now.Unix(),
 			Rating: req.Rating,
 			Due:    cardBinding.Due,
 		}); err != nil {
@@ -50,17 +52,17 @@ func (e *LinearSrs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp 
 	switch req.Rating {
 	case 0: // Hard
 		newInterval := math.Max(float64(cardBinding.LastInterval-(1*cardBinding.Factor)), 1)
-		cardBinding.Due = time.Now().Unix()
+		cardBinding.Due = now.Unix()
 		cardBinding.LastInterval = newInterval
 		cardBinding.Factor = 0
 	case 1: // Medium
 		newIvl := cardBinding.LastInterval
-		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
+		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
 		cardBinding.LastInterval = newIvl
 		cardBinding.Factor = 1
 	case 2: // Easy
 		newIvl := cardBinding.LastInterval + (2 * cardBinding.Factor)
-		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
+		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
 		cardBinding.LastInterval = newIvl
 		cardBinding.Factor = 1
 	default:
@@ -139,7 +141,7 @@ func (e *LinearSrs) AddUserCardBinding(ctx context.Context, req *pbCommon.Bindin
 			CardID:       req.CardID,
 			DeckID:       req.DeckID,
 			Type:         0,
-			Due:          time.Now().Unix(),
+			Due:          0,
 			LastInterval: 0,
 			Factor:       1,
 		})

@@ -34,12 +34,13 @@ func (e *StaticSrs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp 
 		return helper.NewMicroWrongDeckIDErr(helper.SrsServiceID)
 	}
 
+	now := time.Now()
 	// Add revlog entry
 	if err = e.store.CreateRevlog(ctx,
 		&model.Revlog{
 			CardID: req.CardID,
 			UserID: req.UserID,
-			Date:   time.Now().Unix(),
+			Date:   now.Unix(),
 			Rating: req.Rating,
 			Due:    cardBinding.Due,
 		}); err != nil {
@@ -50,15 +51,15 @@ func (e *StaticSrs) Push(ctx context.Context, req *pbCommon.SrsPushRequest, rsp 
 	switch req.Rating {
 	case 0: // Hard
 		newInterval := 0.0
-		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newInterval)).Unix()
+		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newInterval)).Unix()
 		cardBinding.LastInterval = newInterval
 	case 1: // Medium
 		newIvl := 3.0
-		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
+		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
 		cardBinding.LastInterval = newIvl
 	case 2: // Easy
 		newIvl := 5.0
-		cardBinding.Due = time.Now().Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
+		cardBinding.Due = now.Add(time.Hour * 24 * time.Duration(newIvl)).Unix()
 		cardBinding.LastInterval = newIvl
 	default:
 		return helper.NewMicroWrongRatingErr(helper.SrsServiceID)
@@ -137,7 +138,7 @@ func (e *StaticSrs) AddUserCardBinding(ctx context.Context, req *pbCommon.Bindin
 			CardID:       req.CardID,
 			DeckID:       req.DeckID,
 			Type:         0,
-			Due:          time.Now().Unix(),
+			Due:          0,
 			LastInterval: 0,
 			Factor:       0,
 		})

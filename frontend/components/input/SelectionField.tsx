@@ -1,17 +1,9 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { Children, ReactNode, isValidElement, useState } from "react";
 import { Check, ChevronDown } from "react-feather";
 
 import { Text } from "@/components/Text";
 import { Icon, IconName } from "@/components/graphics/Icon";
-import { clickOnEnter } from "@/util/utils";
-
-export type SelectionListItem = {
-	title: string;
-	description: string;
-	isSelected: boolean;
-	icon: IconName;
-};
 
 interface SelectionFieldProps {
 	/**
@@ -19,119 +11,197 @@ interface SelectionFieldProps {
 	 */
 	id: string;
 	/**
-	 * Title
+	 * SelectionField label
 	 */
-	title: string;
+	label: string;
 	/**
-	 * Selection list
+	 * Placeholder will be displayed when no option is selected
 	 */
-	list: SelectionListItem[];
+	placeholder?: string;
 	/**
 	 * Additional classes
 	 */
 	className?: string;
+	/**
+	 * Change handler
+	 */
+	onChange?: (name: string) => void;
+	/**
+	 * SelectionField options
+	 */
+	children: ReactNode;
 }
 
 /**
  * UI component for displaying a SelectionField
  */
 export const SelectionField = ({
-	title,
-	list,
+	label,
+	placeholder = "Select an option",
 	className = "",
+	children,
+	onChange,
 	...props
 }: SelectionFieldProps) => {
 	const [visible, setVisible] = useState(false);
-	const [selected, setSelected] = useState<SelectionListItem>(
-		getListSelected(list)
-	);
+	const [selected, setSelected] = useState<string[]>(() => {
+		const initialSelected: string[] = [];
+		Children.forEach(children, (child) => {
+			if (isValidElement(child) && child.props.isSelected) {
+				initialSelected.push(child.props.name);
+			}
+		});
+		return initialSelected;
+	});
+
 	return (
-		<div {...props} className={className}>
-			<Text className="mb-1 text-sm font-semibold text-neutral-400">
-				{title}
-			</Text>
-			<button
-				className="flex	cursor-pointer"
-				onKeyUp={clickOnEnter}
-				tabIndex={0}
-				onClick={() => setVisible(!visible)}
-			>
-				<div className="w-8">
-					{selected.icon && <Icon icon={selected.icon} />}
-				</div>
-				<Text className="w-16 truncate">{selected.title}</Text>
-				<ChevronDown
-					className={clsx(
-						"mx-2 align-middle text-neutral-400 transition",
-						visible && "rotate-180"
+		<div className={clsx("relative h-fit text-xs", className)} {...props}>
+			<div className="flex w-full flex-col rounded-md bg-gray-100 px-2 py-3">
+				<Text className="font-semibold text-gray-400">{label}</Text>
+				<button
+					className="flex items-center gap-2"
+					onClick={(event) => {
+						event.preventDefault();
+						setVisible(!visible);
+					}}
+				>
+					{selected.length ? (
+						Children.map(children, (child) => {
+							if (
+								!isValidElement(child) ||
+								!selected.includes(child.props.name)
+							)
+								return null;
+							return (
+								<>
+									<Icon
+										icon={child.props.icon}
+										size={12}
+										className="flex-none"
+									/>
+									<Text className="truncate">
+										{child.props.title}
+									</Text>
+								</>
+							);
+						})
+					) : (
+						<Text>{placeholder}</Text>
 					)}
-				/>
-			</button>
+					<div className="relative ml-auto">
+						<ChevronDown
+							className={clsx(
+								"flex-none text-gray-400 transition",
+								visible && "rotate-180"
+							)}
+							size={16}
+						/>
+						{visible && (
+							<div className="absolute h-full w-full scale-y-125">
+								<div
+									className={clsx(
+										"h-full w-full origin-center translate-y-3 rotate-45 rounded-[1px] bg-black"
+									)}
+								/>
+							</div>
+						)}
+					</div>
+				</button>
+			</div>
 
 			{visible && (
-				<div className="absolute z-10 my-2 h-fit w-fit max-w-80 items-start space-y-2 rounded-2xl bg-black px-4 pb-3 text-sm text-white before:relative before:-top-2 before:left-[5.64rem] before:block before:h-5 before:w-5 before:rotate-45 before:bg-black">
-					{list?.map((selectionItem) => (
-						<button
-							key={selectionItem.title}
-							className={clsx(
-								"flex cursor-pointer",
-								!selectionItem.isSelected &&
-									"text-neutral-400 hover:text-neutral-300"
-							)}
-							onKeyUp={clickOnEnter}
-							tabIndex={0}
-							onClick={() => {
-								setSelected(selectionItem);
-								setVisible(false);
-								setListSelected(list, selectionItem);
-							}}
-						>
-							<Icon
-								className="size-10 pr-3"
-								icon={selectionItem.icon}
-							/>
-							<div>
-								<Text className="text-left font-bold">
-									{selectionItem.title}
-								</Text>
-								<div className="flex w-full items-center justify-between space-x-4">
-									{" "}
-									<Text className="text-left font-light">
-										{selectionItem.description}
-									</Text>
-									<Check
-										className={clsx(
-											"size-7",
-											selectionItem.isSelected
-												? "visible"
-												: "invisible"
-										)}
-									/>
-								</div>
-							</div>
-						</button>
-					))}
-				</div>
+				<>
+					<button
+						className="fixed inset-0"
+						onClick={() => setVisible(false)}
+					/>
+					<div
+						className={clsx(
+							"fixed left-0 mx-2 min-w-[95%] origin-top translate-y-2 space-y-3 rounded-xl bg-black p-5 sm:absolute sm:mx-0 sm:w-80 sm:min-w-[102%] md:rounded-2xl"
+						)}
+					>
+						{Children.map(children, (child) => {
+							if (!isValidElement(child)) return null;
+							return (
+								<SelectionFieldOption
+									{...child.props}
+									key={child.props.name}
+									isSelected={selected?.includes(
+										child.props.name
+									)}
+									onClick={() => {
+										setVisible(false);
+										setSelected([child.props.name]);
+										onChange?.(child.props.name);
+									}}
+								/>
+							);
+						})}
+					</div>
+				</>
 			)}
 		</div>
 	);
 };
 
-function getListSelected(list: SelectionListItem[]) {
-	for (const listitem of list) {
-		if (listitem.isSelected) return listitem;
-	}
-	const other: SelectionListItem = {
-		title: "Select",
-		description: "",
-		isSelected: true,
-		icon: "Search",
-	};
-	return other;
+interface SelectionFieldOptionProps {
+	/**
+	 * Option title
+	 */
+	title: string;
+	/**
+	 * Option description
+	 */
+	description: string;
+	/**
+	 * Option icon
+	 */
+	icon: IconName;
+	/**
+	 * Is selected
+	 */
+	isSelected?: boolean;
+	/**
+	 * Unique identifier
+	 */
+	name?: string;
 }
-function setListSelected(list: SelectionListItem[], item: SelectionListItem) {
-	for (const listitem of list) {
-		listitem.isSelected = false;
-		if (listitem === item) listitem.isSelected = true;
-	}
-}
+
+/**
+ * UI component for displaying a SelectionField option
+ */
+export const SelectionFieldOption = ({
+	title,
+	description,
+	icon,
+	isSelected = false,
+	name,
+	...props
+}: SelectionFieldOptionProps) => {
+	return (
+		<button
+			className={clsx(
+				"flex w-full flex-row gap-3 text-left",
+				isSelected
+					? "text-white"
+					: "text-neutral-400 hover:text-neutral-300"
+			)}
+			{...props}
+		>
+			<Icon className="flex-none pt-1" icon={icon} size={24} />
+			<div className="flex w-full flex-col">
+				<Text className="font-bold">{title}</Text>
+				<div className="flex w-full items-center justify-between gap-3">
+					<Text className="font-light">{description}</Text>
+					<Check
+						className={clsx(
+							"flex-none",
+							isSelected ? "visible" : "invisible"
+						)}
+						size={20}
+					/>
+				</div>
+			</div>
+		</button>
+	);
+};

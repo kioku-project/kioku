@@ -14,37 +14,7 @@ type Story = StoryObj<typeof SelectionField>;
 
 export const Default: Story = {
 	args: {
-		list: [
-			{
-				title: "ONE",
-				description: "Description 1",
-				isSelected: true,
-				icon: "Square",
-			},
-			{
-				title: "TWO",
-				description: "Description 2",
-				isSelected: false,
-				icon: "Circle",
-			},
-		],
-	},
-};
-export const NoSelected: Story = {
-	args: {
-		list: [
-			{
-				title: "ONE",
-				description: "Description 1",
-				isSelected: false,
-				icon: "Square",
-			},
-			{
-				title: "TWO",
-				description: "Description 2",
-				isSelected: false,
-				icon: "Circle",
-			},
-		],
+		label: "SelectionField",
+		placeholder: "Select an option",
 	},
 };

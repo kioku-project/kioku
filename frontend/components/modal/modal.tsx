@@ -47,9 +47,9 @@ export const Modal = ({
 				{visible && (
 					<>
 						<div className="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
-						<div className="fixed inset-0 w-screen overflow-y-auto">
+						<div className="fixed inset-0 w-screen overflow-hidden">
 							<div className="flex min-h-full items-end justify-center text-center sm:items-center sm:p-0">
-								<div className="relative w-full space-y-5 overflow-hidden rounded-t-lg bg-white p-5 text-left shadow-xl sm:max-w-xl sm:rounded-lg">
+								<div className="relative w-full space-y-5  rounded-t-lg bg-white p-5 text-left shadow-xl sm:max-w-xl sm:rounded-lg">
 									<div className="flex w-full justify-between">
 										<Text
 											textSize="xs"

@@ -1,8 +1,12 @@
 #!/bin/bash
-# This script allows to deploy kioku to an external Kubernetes cluster
+# This script allows to deploy kioku to a Kubernetes cluster
 # Assumptions:
 #   - KUBECONFIG already targets the cluster
-#   - Script is executed from kioku-repo root folder
+VALUE_STRING=""
+if ! [ -z "$1" ]; then
+  VALUE_STRING="-f $1"
+  echo "$1"
+fi
 
 # Get dependent repositories
 helm repo add postgres-operator-charts https://opensource.zalando.com/postgres-operator/charts/postgres-operator
@@ -19,4 +23,4 @@ helm install postgres-operator postgres-operator-charts/postgres-operator
 #   --create-namespace
 
 # Install Kioku
-helm install kioku helm/kioku
+helm upgrade --install kioku helm/kioku $VALUE_STRING

@@ -9,6 +9,7 @@ import { Logo } from "@/components/graphics/Logo";
 import { Button } from "@/components/input/Button";
 import { logoutRoute } from "@/util/endpoints";
 import { authedFetch } from "@/util/reauth";
+import { handleWithToast } from "@/util/toasts";
 
 interface NavbarProps {
 	/**
@@ -42,15 +43,14 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 				<LogOut
 					className="cursor-pointer text-kiokuDarkBlue"
 					onClick={async () => {
-						const response = await authedFetch(logoutRoute, {
-							method: "POST",
-						});
-						if (response.ok) {
-							toast.success(t`Logged out`, {
-								id: "logoutToastID",
-							});
-							router.replace("/home");
-						}
+						const response = await handleWithToast(
+							authedFetch(logoutRoute, {
+								method: "POST",
+							}),
+							"logoutToastID",
+							t`Logged out`
+						);
+						if (response.ok) router.replace("/home");
 					}}
 				/>
 			)}

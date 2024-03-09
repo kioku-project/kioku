@@ -98,10 +98,10 @@ export const NotificationButton = ({
 			setTimeout(() => {
 				setLoading(false);
 			}, 500);
-		} catch (err) {
-			if (err instanceof Error) {
+		} catch (error) {
+			if (error instanceof Error) {
 				setLoading(false);
-				toast.error(err.message, { id: "notification-error" });
+				toast.error(error.message, { id: "notificationErrorToastID" });
 			}
 		}
 	}

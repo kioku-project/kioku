@@ -14,6 +14,7 @@ import { Button } from "@/components/input/Button";
 import { loadCatalog } from "@/pages/_app";
 import { submitForm } from "@/util/api";
 import { loginRoute, reauthRoute, registerRoute } from "@/util/endpoints";
+import { handleWithToast } from "@/util/toasts";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -253,18 +254,13 @@ export default function Page() {
 		) {
 			return;
 		}
-		const toastID = toast.loading(t`Logging in...`, { id: "loginToastID" });
-		const response = await submitForm(loginRoute, [
-			emailInput.current,
-			passwordInput.current,
-		]);
-		if (response.ok) {
-			toast.success(t`Logged in!`, { id: toastID });
-			router.push("/");
-		} else {
-			const error = await response.text();
-			toast.error(error, { id: toastID });
-		}
+		const response = await handleWithToast(
+			submitForm(loginRoute, [emailInput.current, passwordInput.current]),
+			"loginToastID",
+			t`Logged in!`,
+			t`Logging in...`
+		);
+		if (response.ok) router.push("/");
 	}
 
 	async function registerLogic() {
@@ -278,21 +274,19 @@ export default function Page() {
 		) {
 			return;
 		}
-		const toastID = toast.loading(t`Registering account...`, {
-			id: "registerToast",
-		});
-		const response = await submitForm(registerRoute, [
-			emailInput.current,
-			nameInput.current,
-			passwordInput.current,
-		]);
+		const response = await handleWithToast(
+			submitForm(registerRoute, [
+				emailInput.current,
+				nameInput.current,
+				passwordInput.current,
+			]),
+			"registerToastID",
+			t`Account created!`,
+			t`Registering account...`
+		);
 		if (response.ok) {
-			toast.success(t`Account created!`, { id: toastID });
 			setLogin(true);
 			emailInput.current?.focus();
-		} else {
-			const error = await response.text();
-			toast.error(error, { id: toastID });
 		}
 	}
 }

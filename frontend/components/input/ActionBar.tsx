@@ -1,6 +1,10 @@
 import { t } from "@lingui/macro";
-import { ChangeEventHandler, MouseEventHandler } from "react";
-import { ChevronsUp, PlusSquare } from "react-feather";
+import { ChangeEventHandler, MouseEventHandler, useState } from "react";
+import { ChevronRight, ChevronsUp, PlusSquare } from "react-feather";
+
+import { SpeechBubble } from "./SpeechBubble";
+import { SpeechBubbleContent } from "./SpeechBubbleContent";
+import { SpeechBubbleParent } from "./SpeechBubbleParent";
 
 export interface ActionBarProps {
 	/**
@@ -16,6 +20,14 @@ export interface ActionBarProps {
 	 */
 	reverse: boolean;
 	/**
+	 * Show tutorial?
+	 */
+	showTutorial: boolean;
+	/**
+	 * Tutorial text
+	 */
+	tutorialText?: string;
+	/**
 	 * onClick Reverse Icon Event Handler
 	 */
 	onReverse: MouseEventHandler;
@@ -27,6 +39,10 @@ export interface ActionBarProps {
 	 * onClick Add Event Handler
 	 */
 	onAdd: MouseEventHandler;
+	/**
+	 * onHide
+	 */
+	onHide: MouseEventHandler;
 }
 
 /**
@@ -36,9 +52,12 @@ export const ActionBar = ({
 	placeholder = t`Search`,
 	writePermission,
 	reverse,
+	showTutorial,
+	tutorialText,
 	onReverse,
 	onSearch,
 	onAdd,
+	onHide,
 }: ActionBarProps) => {
 	return (
 		<section className="flex w-full items-center space-x-3 rounded-md bg-neutral-100 p-3">
@@ -54,18 +73,29 @@ export const ActionBar = ({
 				}`}
 				onClick={onReverse}
 			/>
-			<PlusSquare
-				className={`${
-					writePermission
-						? "cursor-pointer text-kiokuDarkBlue hover:scale-110"
-						: "text-gray-400 hover:cursor-not-allowed"
-				} flex-none transition`}
-				onClick={(event) => {
-					if (writePermission) {
-						onAdd(event);
-					}
-				}}
-			/>
+			<div className="relative">
+				<SpeechBubble align="right" show={showTutorial} onHide={onHide}>
+					<SpeechBubbleParent>
+						<PlusSquare
+							className={`w-sm${
+								writePermission
+									? " cursor-pointer text-kiokuDarkBlue hover:scale-110"
+									: "text-gray-400 hover:cursor-not-allowed"
+							} ${showTutorial ? "animate-bounce" : ""} flex-none 
+				transition
+				`}
+							onClick={(event) => {
+								if (writePermission) {
+									onAdd(event);
+								}
+							}}
+						/>
+					</SpeechBubbleParent>
+					<SpeechBubbleContent>
+						<div>{tutorialText}</div>
+					</SpeechBubbleContent>
+				</SpeechBubble>
+			</div>
 		</section>
 	);
 };

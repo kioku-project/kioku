@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { Children, ReactNode, isValidElement, useMemo } from "react";
 
 import { FetchDeck } from "@/components/deck/Deck";
 import { Section } from "@/components/layout/Section";
@@ -25,6 +25,10 @@ interface DeckListProps {
 	 * Additional classes
 	 */
 	className?: string;
+	/**
+	 * SelectionField options
+	 */
+	children?: ReactNode;
 }
 
 /**
@@ -36,6 +40,7 @@ export default function DeckList({
 	filter = "",
 	reverse = false,
 	className = "",
+	children,
 }: Readonly<DeckListProps>) {
 	const filteredDecks = useMemo(() => {
 		const filteredDecks = decks?.filter(
@@ -58,6 +63,11 @@ export default function DeckList({
 				{filteredDecks?.map((deck) => (
 					<FetchDeck key={deck.deckID} deck={deck} />
 				))}
+				{Children.map(children, (child) => {
+					if (!isValidElement(child)) return null;
+
+					return child;
+				})}
 			</div>
 		</Section>
 	);

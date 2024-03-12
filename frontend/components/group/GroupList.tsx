@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useMemo } from "react";
+import { Children, ReactNode, isValidElement, useMemo } from "react";
 
 import DeckList from "@/components/deck/DeckList";
 import { Group as GroupType } from "@/types/Group";
@@ -21,6 +21,10 @@ interface GroupListProps {
 	 * Additional classes
 	 */
 	className?: string;
+	/**
+	 * SelectionField options
+	 */
+	children?: ReactNode;
 }
 
 /**
@@ -31,6 +35,7 @@ export default function GroupList({
 	filter = "",
 	reverse = false,
 	className,
+	children,
 }: Readonly<GroupListProps>) {
 	const filteredGroups = useMemo(() => {
 		const filteredGroups = groups?.filter(
@@ -54,7 +59,10 @@ export default function GroupList({
 					</Link>
 				);
 			})}
-			<DeckList />
+			{Children.map(children, (child) => {
+				if (!isValidElement(child)) return null;
+				return child;
+			})}
 		</div>
 	);
 }

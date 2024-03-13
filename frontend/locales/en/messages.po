@@ -53,21 +53,17 @@ msgstr "Available"
 msgid "Back to Deck!"
 msgstr "Back to Deck!"
 
-#: components/modal/CreateCardModal.tsx:76
+#: components/modal/CreateCardModal.tsx:73
 #: components/modal/CreateDeckModal.tsx:91
 #: components/modal/CreateGroupModal.tsx:79
 msgid "Cancel"
 msgstr "Cancel"
 
-#: components/modal/CreateCardModal.tsx:59
+#: components/modal/CreateCardModal.tsx:56
 msgid "Card back"
 msgstr "Card back"
 
-#: components/modal/CreateCardModal.tsx:113
-msgid "Card created!"
-msgstr "Card created!"
-
-#: components/modal/CreateCardModal.tsx:47
+#: components/modal/CreateCardModal.tsx:44
 msgid "Card front"
 msgstr "Card front"
 
@@ -117,7 +113,7 @@ msgstr "Congratulations!"
 msgid "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 msgstr "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 
-#: components/modal/CreateCardModal.tsx:87
+#: components/modal/CreateCardModal.tsx:90
 msgid "Create Card"
 msgstr "Create Card"
 
@@ -129,7 +125,7 @@ msgstr "Create Deck"
 msgid "Create Group"
 msgstr "Create Group"
 
-#: components/modal/CreateCardModal.tsx:37
+#: components/modal/CreateCardModal.tsx:34
 msgid "Create new Card"
 msgstr "Create new Card"
 
@@ -147,7 +143,7 @@ msgstr "Create new Group"
 msgid "Danger Zone"
 msgstr "Danger Zone"
 
-#: pages/index.tsx:42
+#: pages/index.tsx:40
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -162,7 +158,7 @@ msgid "Deck Name"
 msgstr "Deck Name"
 
 #: pages/group/[id]/index.tsx:41
-#: pages/index.tsx:49
+#: pages/index.tsx:47
 msgid "Decks"
 msgstr "Decks"
 
@@ -219,11 +215,11 @@ msgstr "Easy"
 msgid "Email"
 msgstr "Email"
 
-#: components/modal/CreateCardModal.tsx:61
+#: components/modal/CreateCardModal.tsx:58
 msgid "Enter card back"
 msgstr "Enter card back"
 
-#: components/modal/CreateCardModal.tsx:50
+#: components/modal/CreateCardModal.tsx:47
 msgid "Enter card front"
 msgstr "Enter card front"
 
@@ -286,6 +282,10 @@ msgstr "Get started"
 msgid "Group Description"
 msgstr "Group Description"
 
+#: components/group/Invitation.tsx:32
+msgid "Group Invitation"
+msgstr "Group Invitation"
+
 #: components/modal/CreateGroupModal.tsx:49
 #: components/navigation/Tabs/GroupSettingsTab.tsx:49
 msgid "Group Name"
@@ -295,7 +295,7 @@ msgstr "Group Name"
 msgid "Group Statistics"
 msgstr "Group Statistics"
 
-#: pages/index.tsx:56
+#: pages/index.tsx:54
 msgid "Groups"
 msgstr "Groups"
 
@@ -368,7 +368,7 @@ msgstr "Learn more"
 msgid "Leave Group"
 msgstr "Leave Group"
 
-#: components/navigation/Navbar.tsx:62
+#: components/navigation/Navbar.tsx:68
 msgid "Login"
 msgstr "Login"
 
@@ -472,7 +472,7 @@ msgstr "Select \"Install\""
 
 #: pages/deck/[id]/index.tsx:42
 #: pages/group/[id]/index.tsx:51
-#: pages/index.tsx:63
+#: pages/index.tsx:61
 msgid "Settings"
 msgstr "Settings"
 
@@ -572,6 +572,14 @@ msgstr "You did it! There are no cards left in this deck to learn today."
 #: components/modal/InstallPWAModal.tsx:61
 msgid "You first need to install Kioku before you can subscribe and receive notifications. Follow the instructions below to install the app and enjoy a native experience."
 msgstr "You first need to install Kioku before you can subscribe and receive notifications. Follow the instructions below to install the app and enjoy a native experience."
+
+#: components/group/Invitation.tsx:35
+msgid "You have been invited to join <0>{0}</0>"
+msgstr "You have been invited to join <0>{0}</0>"
+
+#: components/modal/NotificationCenter.tsx:63
+msgid "You have no pending messages"
+msgstr "You have no pending messages"
 
 #: components/navigation/Tabs/GroupSettingsTab.tsx:87
 msgid "You must either be invited or request to join the group again."

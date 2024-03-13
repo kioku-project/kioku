@@ -1,3 +1,6 @@
+import { Trans } from "@lingui/macro";
+import clsx from "clsx";
+import Link from "next/link";
 import { Check, X } from "react-feather";
 
 import { Button } from "@/components/input/Button";
@@ -22,20 +25,22 @@ interface InvitationProps {
  */
 export const Invitation = ({ invitation, className }: InvitationProps) => {
 	return (
-		<div className={`flex flex-row space-x-3 ${className}`}>
+		<div className={clsx("flex flex-row space-x-3", className)}>
 			<div className="h-8 w-8 flex-none rounded-full bg-kiokuLightBlue" />
 			<div className="w-full">
 				<Text textSize="5xs" className="font-semibold text-black">
-					Group Invitation
+					<Trans>Group Invitation</Trans>
 				</Text>
 				<Text textSize="5xs" className="text-gray-500">
-					You are invited to join{" "}
-					<a
-						href={`/group/${invitation.groupID}`}
-						className="underline hover:text-black"
-					>
-						{invitation.groupName}
-					</a>
+					<Trans>
+						You have been invited to join{" "}
+						<Link
+							href={`/group/${invitation.groupID}`}
+							className="underline hover:text-black"
+						>
+							{invitation.groupName}
+						</Link>
+					</Trans>
 				</Text>
 			</div>
 			<div className="flex flex-row space-x-1">

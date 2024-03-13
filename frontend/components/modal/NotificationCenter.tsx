@@ -1,11 +1,10 @@
+import { Trans } from "@lingui/macro";
 import { useState } from "react";
 import { Bell, Info } from "react-feather";
 
 import { Invitation } from "@/components/group/Invitation";
 import { Modal, ModalProps } from "@/components/modal/modal";
 import { useInvitations } from "@/util/swr";
-
-import { Text } from "../Text";
 
 /**
  * Component for displaying an icon that opens the notification center
@@ -39,13 +38,6 @@ export const NotificationCenter = () => {
 	);
 };
 
-interface NotificationCenterModalProps {
-	/**
-	 * Additional classes
-	 */
-	className?: string;
-}
-
 /**
  * Modal for creating decks
  */
@@ -53,7 +45,7 @@ export const NotificationCenterModal = ({
 	className = "",
 	setVisible,
 	...props
-}: NotificationCenterModalProps & ModalProps) => {
+}: ModalProps) => {
 	const { invitations } = useInvitations();
 
 	return (
@@ -68,7 +60,7 @@ export const NotificationCenterModal = ({
 			) : (
 				<div className="flex items-center justify-center space-x-3 rounded-md border border-dashed border-gray-500 p-10 text-gray-800">
 					<Info />
-					<Text>You have no pending messages</Text>
+					<Trans>You have no pending messages</Trans>
 				</div>
 			)}
 		</Modal>

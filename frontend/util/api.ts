@@ -166,9 +166,7 @@ export async function deleteMember(groupID: string, userID: string) {
 		deleteRequest(groupMemberRoute(groupID, userID)),
 		"deleteMemberToastID"
 	);
-	if (response.ok) {
-		mutate(groupMembersRoute(groupID));
-	}
+	if (response.ok) mutate(groupMembersRoute(groupID));
 	return response;
 }
 

@@ -53,21 +53,17 @@ msgstr "Verfügbar"
 msgid "Back to Deck!"
 msgstr "Zurück zum Stapel!"
 
-#: components/modal/CreateCardModal.tsx:76
+#: components/modal/CreateCardModal.tsx:73
 #: components/modal/CreateDeckModal.tsx:91
 #: components/modal/CreateGroupModal.tsx:79
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: components/modal/CreateCardModal.tsx:59
+#: components/modal/CreateCardModal.tsx:56
 msgid "Card back"
 msgstr "Kartenrückseite"
 
-#: components/modal/CreateCardModal.tsx:113
-msgid "Card created!"
-msgstr "Karte erstellt!"
-
-#: components/modal/CreateCardModal.tsx:47
+#: components/modal/CreateCardModal.tsx:44
 msgid "Card front"
 msgstr "Kartenvorderseite"
 
@@ -117,7 +113,7 @@ msgstr "Glückwunsch!"
 msgid "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 msgstr "Erstelle und individualisiere Karteikarten, die genau auf Deine Bedürfnisse und Vorlieben zugeschnitten sind. Bestimme Dein eigenes Tempo mit unserem Spaced Repetition System, um Dein Potenzial zu maximieren!"
 
-#: components/modal/CreateCardModal.tsx:87
+#: components/modal/CreateCardModal.tsx:90
 msgid "Create Card"
 msgstr "Karte erstellen"
 
@@ -129,7 +125,7 @@ msgstr "Stapel erstellen"
 msgid "Create Group"
 msgstr "Gruppe erstellen"
 
-#: components/modal/CreateCardModal.tsx:37
+#: components/modal/CreateCardModal.tsx:34
 msgid "Create new Card"
 msgstr "Neue Karte erstellen"
 
@@ -147,7 +143,7 @@ msgstr "Gruppe erstellen"
 msgid "Danger Zone"
 msgstr "Gefahrenzone"
 
-#: pages/index.tsx:42
+#: pages/index.tsx:40
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -162,7 +158,7 @@ msgid "Deck Name"
 msgstr "Stapelname"
 
 #: pages/group/[id]/index.tsx:41
-#: pages/index.tsx:49
+#: pages/index.tsx:47
 msgid "Decks"
 msgstr "Stapel"
 
@@ -219,11 +215,11 @@ msgstr "Einfach"
 msgid "Email"
 msgstr "E-Mail"
 
-#: components/modal/CreateCardModal.tsx:61
+#: components/modal/CreateCardModal.tsx:58
 msgid "Enter card back"
 msgstr "Kartenrückseite eingeben"
 
-#: components/modal/CreateCardModal.tsx:50
+#: components/modal/CreateCardModal.tsx:47
 msgid "Enter card front"
 msgstr "Kartenvorderseite eingeben"
 
@@ -286,6 +282,10 @@ msgstr "Los geht's"
 msgid "Group Description"
 msgstr "Gruppenbeschreibung"
 
+#: components/group/Invitation.tsx:32
+msgid "Group Invitation"
+msgstr "Gruppeneinladung"
+
 #: components/modal/CreateGroupModal.tsx:49
 #: components/navigation/Tabs/GroupSettingsTab.tsx:49
 msgid "Group Name"
@@ -295,7 +295,7 @@ msgstr "Gruppenname"
 msgid "Group Statistics"
 msgstr "Gruppenstatistiken"
 
-#: pages/index.tsx:56
+#: pages/index.tsx:54
 msgid "Groups"
 msgstr "Gruppen"
 
@@ -368,7 +368,7 @@ msgstr "Erfahre mehr"
 msgid "Leave Group"
 msgstr "Gruppe verlassen"
 
-#: components/navigation/Navbar.tsx:62
+#: components/navigation/Navbar.tsx:68
 msgid "Login"
 msgstr "Einloggen"
 
@@ -472,7 +472,7 @@ msgstr "Wähle \"Installieren\""
 
 #: pages/deck/[id]/index.tsx:42
 #: pages/group/[id]/index.tsx:51
-#: pages/index.tsx:63
+#: pages/index.tsx:61
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -572,6 +572,14 @@ msgstr "Du hast es geschafft! Für heute gibt es keine Karten mehr zu lernen."
 #: components/modal/InstallPWAModal.tsx:61
 msgid "You first need to install Kioku before you can subscribe and receive notifications. Follow the instructions below to install the app and enjoy a native experience."
 msgstr "Bevor die Benachrichtigungen aktiviert werden können, muss Kioku installiert werden. Folge der Installationsanleitung, um die App zu installieren und ein natives Erlebnis zu genießen."
+
+#: components/group/Invitation.tsx:35
+msgid "You have been invited to join <0>{0}</0>"
+msgstr "Du wurdest eingeladen <0>{0}</0> beizutreten"
+
+#: components/modal/NotificationCenter.tsx:63
+msgid "You have no pending messages"
+msgstr "Du hast keine neuen Nachrichten"
 
 #: components/navigation/Tabs/GroupSettingsTab.tsx:87
 msgid "You must either be invited or request to join the group again."

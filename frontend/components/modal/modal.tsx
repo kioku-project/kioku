@@ -53,7 +53,7 @@ export const Modal = ({
 									<div className="flex w-full justify-between">
 										<Text
 											textSize="xs"
-											className="font-bold"
+											className="font-bold text-black"
 										>
 											{header}
 										</Text>

@@ -6,8 +6,9 @@ import { ArrowRight, LogOut } from "react-feather";
 
 import { Logo } from "@/components/graphics/Logo";
 import { Button } from "@/components/input/Button";
+import { NotificationCenter } from "@/components/modal/NotificationCenter";
+import { postRequest } from "@/util/api";
 import { logoutRoute } from "@/util/endpoints";
-import { authedFetch } from "@/util/reauth";
 
 interface NavbarProps {
 	/**
@@ -21,7 +22,9 @@ interface NavbarProps {
  */
 export const Navbar = ({ className = "" }: NavbarProps) => {
 	const router = useRouter();
+
 	const [loggedIn, setLoggedIn] = useState<boolean>();
+
 	useEffect(() => {
 		if (router.pathname == "/login") {
 			setLoggedIn(undefined);
@@ -29,26 +32,29 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 			setLoggedIn(hasCookie("access_token"));
 		}
 	}, [router.pathname]);
+
 	if (loggedIn == undefined) {
 		return <></>;
 	}
+
 	return (
 		<nav
 			className={`flex items-center justify-between p-5 md:p-10 ${className}`}
 		>
 			<Logo href={loggedIn ? "/" : "/home"} />
 			{loggedIn == true && (
-				<LogOut
-					className="cursor-pointer text-kiokuDarkBlue"
-					onClick={async () => {
-						const response = await authedFetch(logoutRoute, {
-							method: "POST",
-						});
-						if (response?.ok) {
-							router.replace("/home");
-						}
-					}}
-				/>
+				<div className="flex flex-row space-x-8 text-kiokuDarkBlue">
+					<NotificationCenter />
+					<LogOut
+						className="cursor-pointer"
+						onClick={async () => {
+							const response = await postRequest(logoutRoute);
+							if (response?.ok) {
+								router.replace("/home");
+							}
+						}}
+					/>
+				</div>
 			)}
 			{loggedIn == false && (
 				<Button

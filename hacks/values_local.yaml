@@ -1,4 +1,4 @@
-mode: production
+mode: latestuction
 
 vapidSecret: vapid-secret
 
@@ -22,8 +22,8 @@ database:
 
 frontend:
   name: kioku-frontend
-  image: ghcr.io/kioku-project/kioku_frontend
-  tag: prod
+  image: kioku-frontend
+  tag: latest
   port: 80
   containerPort: 3000
 
@@ -36,8 +36,8 @@ frontend:
 
 frontend_proxy:
   name: kioku-frontend-proxy
-  image: ghcr.io/kioku-project/kioku_frontend_proxy
-  tag: prod
+  image: kioku-frontend_proxy
+  tag: latest
   httpPath: /api
 
   keySecret: frontend-proxy-key-secret
@@ -52,8 +52,8 @@ frontend_proxy:
 
 carddeck:
   name: kioku-carddeck
-  image: ghcr.io/kioku-project/kioku_carddeck
-  tag: prod
+  image: kioku-carddeck_service
+  tag: latest
 
   autoscaler:
     min: 1
@@ -62,8 +62,8 @@ carddeck:
 
 srs:
   name: kioku-srs
-  image: ghcr.io/kioku-project/kioku_srs
-  tag: prod
+  image: kioku-srs_service
+  tag: latest
 
   autoscaler:
     min: 1
@@ -72,8 +72,8 @@ srs:
 
 notification:
   name: kioku-notification
-  image: ghcr.io/kioku-project/kioku_notification
-  tag: prod
+  image: kioku-notification_service
+  tag: latest
 
   autoscaler:
     min: 1
@@ -82,8 +82,8 @@ notification:
 
 user:
   name: kioku-user
-  image: ghcr.io/kioku-project/kioku_user
-  tag: prod
+  image: kioku-user_service
+  tag: latest
 
   autoscaler:
     min: 1
@@ -92,8 +92,8 @@ user:
 
 collaboration:
   name: kioku-collaboration
-  image: ghcr.io/kioku-project/kioku_collaboration
-  tag: prod
+  image: kioku-collaboration_service
+  tag: latest
 
   autoscaler:
     min: 1

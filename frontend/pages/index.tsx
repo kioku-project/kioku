@@ -97,7 +97,7 @@ export default function Home() {
 								currentTab={currentTab}
 								setTab={setCurrentTab}
 							/>
-							<div className="overflow-auto px-5 md:px-10">
+							<div className="h-full overflow-auto px-5 md:px-10">
 								{{
 									decks: homeGroup && (
 										<DecksTab group={homeGroup} />

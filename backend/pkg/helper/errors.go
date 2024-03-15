@@ -129,18 +129,6 @@ func NewFiberBadRequestErr(detail string) error {
 	return fiber.NewError(fiber.StatusBadRequest, detail)
 }
 
-func NewFiberMissingEmailErr() error {
-	return fiber.NewError(fiber.StatusBadRequest, "No email provided")
-}
-
-func NewFiberMissingNameErr() error {
-	return fiber.NewError(fiber.StatusBadRequest, "No name provided")
-}
-
-func NewFiberMissingPasswordErr() error {
-	return fiber.NewError(fiber.StatusBadRequest, "No password provided")
-}
-
 func NewFiberMissingDeckIDErr() error {
 	return fiber.NewError(fiber.StatusBadRequest, "No deckID provided")
 }

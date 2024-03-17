@@ -5,7 +5,6 @@ import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "react-feather";
-import { toast } from "react-hot-toast";
 
 import { Text } from "@/components/Text";
 import { InputField } from "@/components/form/InputField";

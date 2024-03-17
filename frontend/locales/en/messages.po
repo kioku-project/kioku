@@ -147,11 +147,11 @@ msgstr "Create new Group"
 msgid "Danger Zone"
 msgstr "Danger Zone"
 
-#: pages/index.tsx:42
+#: pages/index.tsx:40
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: util/api.ts:228
+#: util/api.ts:226
 msgid "Deck deleted"
 msgstr "Deck deleted"
 
@@ -166,7 +166,7 @@ msgid "Deck Name"
 msgstr "Deck Name"
 
 #: pages/group/[id]/index.tsx:41
-#: pages/index.tsx:49
+#: pages/index.tsx:47
 msgid "Decks"
 msgstr "Decks"
 
@@ -194,11 +194,11 @@ msgstr "Delete this group"
 msgid "Delete your Account"
 msgstr "Delete your Account"
 
-#: util/api.ts:229
+#: util/api.ts:227
 msgid "Deleting deck..."
 msgstr "Deleting deck..."
 
-#: util/api.ts:191
+#: util/api.ts:189
 msgid "Deleting group..."
 msgstr "Deleting group..."
 
@@ -297,7 +297,7 @@ msgstr "from"
 msgid "Get started"
 msgstr "Get started"
 
-#: util/api.ts:190
+#: util/api.ts:188
 msgid "Group deleted"
 msgstr "Group deleted"
 
@@ -305,6 +305,10 @@ msgstr "Group deleted"
 #: components/navigation/Tabs/GroupSettingsTab.tsx:63
 msgid "Group Description"
 msgstr "Group Description"
+
+#: components/group/Invitation.tsx:32
+msgid "Group Invitation"
+msgstr "Group Invitation"
 
 #: components/modal/CreateGroupModal.tsx:49
 #: components/navigation/Tabs/GroupSettingsTab.tsx:49
@@ -315,7 +319,7 @@ msgstr "Group Name"
 msgid "Group Statistics"
 msgstr "Group Statistics"
 
-#: pages/index.tsx:56
+#: pages/index.tsx:54
 msgid "Groups"
 msgstr "Groups"
 
@@ -388,11 +392,11 @@ msgstr "Learn more"
 msgid "Leave Group"
 msgstr "Leave Group"
 
-#: util/api.ts:180
+#: util/api.ts:178
 msgid "Leaving group..."
 msgstr "Leaving group..."
 
-#: util/api.ts:179
+#: util/api.ts:177
 msgid "Left group"
 msgstr "Left group"
 
@@ -404,7 +408,7 @@ msgstr "Loading..."
 msgid "Logged in!"
 msgstr "Logged in!"
 
-#: components/navigation/Navbar.tsx:51
+#: components/navigation/Navbar.tsx:55
 msgid "Logged out"
 msgstr "Logged out"
 
@@ -412,7 +416,7 @@ msgstr "Logged out"
 msgid "Logging in..."
 msgstr "Logging in..."
 
-#: components/navigation/Navbar.tsx:66
+#: components/navigation/Navbar.tsx:73
 msgid "Login"
 msgstr "Login"
 
@@ -520,7 +524,7 @@ msgstr "Select \"Install\""
 
 #: pages/deck/[id]/index.tsx:42
 #: pages/group/[id]/index.tsx:51
-#: pages/index.tsx:63
+#: pages/index.tsx:61
 msgid "Settings"
 msgstr "Settings"
 
@@ -624,6 +628,14 @@ msgstr "You did it! There are no cards left in this deck to learn today."
 #: components/modal/InstallPWAModal.tsx:61
 msgid "You first need to install Kioku before you can subscribe and receive notifications. Follow the instructions below to install the app and enjoy a native experience."
 msgstr "You first need to install Kioku before you can subscribe and receive notifications. Follow the instructions below to install the app and enjoy a native experience."
+
+#: components/group/Invitation.tsx:35
+msgid "You have been invited to join <0>{0}</0>"
+msgstr "You have been invited to join <0>{0}</0>"
+
+#: components/modal/NotificationCenter.tsx:63
+msgid "You have no pending messages"
+msgstr "You have no pending messages"
 
 #: components/navigation/Tabs/GroupSettingsTab.tsx:87
 msgid "You must either be invited or request to join the group again."

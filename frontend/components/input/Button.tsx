@@ -37,7 +37,7 @@ const getStyle = {
 	secondary:
 		"bg-black font-medium text-white hover:scale-[1.02] hover:bg-neutral-900",
 	tertiary:
-		"bg-transparent font-medium text-kiokuDarkBlue hover:scale-105 hover:bg-gray-100",
+		"bg-transparent font-medium text-black hover:scale-105 hover:bg-gray-100",
 	cancel: "bg-transparent font-normal text-gray-400 hover:bg-gray-100",
 	error: "bg-kiokuRed font-medium text-white hover:scale-105",
 	warning: "bg-kiokuYellow font-medium text-white hover:scale-105",
@@ -78,11 +78,14 @@ export const Button = ({
 		</>
 	);
 	const classNames = [
-		"flex items-center space-x-1 rounded-md outline-none transition",
+		"flex items-center rounded-md outline-none transition",
 		className,
 	];
 	if (buttonStyle) {
 		classNames.push(getStyle[buttonStyle]);
+	}
+	if (buttonIcon && children) {
+		classNames.push("space-x-1");
 	}
 	classNames.push(buttonSize);
 

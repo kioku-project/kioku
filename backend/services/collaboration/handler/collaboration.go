@@ -415,7 +415,7 @@ func (e *Collaboration) ModifyGroupUserRequest(
 		return helper.NewMicroUserAdmissionInProgressErr(helper.CollaborationServiceID)
 	}
 	if modUserCurrRole == model.RoleAdmin {
-		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+		return helper.NewMicroCantModifyGroupAdminErr(helper.CollaborationServiceID)
 	}
 	newModelRole := converter.MigrateProtoRoleToModelRole(req.Group.Role)
 	switch newModelRole {
@@ -433,9 +433,6 @@ func (e *Collaboration) ModifyGroupUserRequest(
 func (e *Collaboration) KickGroupUser(ctx context.Context, req *pbCommon.GroupModUserRequest, rsp *pbCommon.Success) error {
 	logger.Infof("Received Collaboration.KickGroupUserRequest request: %v", req)
 
-	if req.UserID == req.ModUserID {
-		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
-	}
 	role, err := e.store.FindGroupUserRole(ctx, req.UserID, req.Group.GroupID)
 	if err != nil {
 		return err
@@ -451,7 +448,7 @@ func (e *Collaboration) KickGroupUser(ctx context.Context, req *pbCommon.GroupMo
 		return helper.NewMicroUserAdmissionInProgressErr(helper.CollaborationServiceID)
 	}
 	if delUserCurrRole == model.RoleAdmin {
-		return helper.NewMicroNotAuthorizedErr(helper.CollaborationServiceID)
+		return helper.NewMicroCantKickGroupAdminErr(helper.CollaborationServiceID)
 	}
 	if err := e.store.RemoveUserFromGroup(ctx, req.ModUserID, req.Group.GroupID); err != nil {
 		return err

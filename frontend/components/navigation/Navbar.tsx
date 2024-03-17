@@ -1,4 +1,4 @@
-import { Trans } from "@lingui/macro";
+import { Trans, t } from "@lingui/macro";
 import { hasCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import { Button } from "@/components/input/Button";
 import { NotificationCenter } from "@/components/modal/NotificationCenter";
 import { postRequest } from "@/util/api";
 import { logoutRoute } from "@/util/endpoints";
+import { handleWithToast } from "@/util/toasts";
 
 interface NavbarProps {
 	/**
@@ -48,8 +49,12 @@ export const Navbar = ({ className = "" }: NavbarProps) => {
 					<LogOut
 						className="cursor-pointer"
 						onClick={async () => {
-							const response = await postRequest(logoutRoute);
-							if (response?.ok) {
+							const response = await handleWithToast(
+								postRequest(logoutRoute),
+								"logoutToastID",
+								t`Logged out`
+							);
+							if (response.ok) {
 								router.replace("/home");
 							}
 						}}

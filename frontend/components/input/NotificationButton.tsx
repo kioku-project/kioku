@@ -1,7 +1,9 @@
 import { Trans } from "@lingui/macro";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import toast from "react-hot-toast";
 import { mutate } from "swr";
 
+import LoadingSpinner from "@/components/graphics/LoadingSpinner";
 import { Button } from "@/components/input/Button";
 import { deleteRequest, postRequest } from "@/util/api";
 import { Platform, getPlatform } from "@/util/client";
@@ -40,6 +42,7 @@ export const NotificationButton = ({
 	const isPWA = window.matchMedia("(display-mode: standalone)").matches;
 	const isMobile = getPlatform(navigator.userAgent) === Platform.MOBILE;
 	const hasNotifications = notificationSupported() && (!isMobile || isPWA);
+	const [loading, setLoading] = useState(false);
 
 	return (
 		<Button
@@ -47,6 +50,7 @@ export const NotificationButton = ({
 			buttonTextSize="3xs"
 			className={`w-full justify-center ${className}`}
 			onClick={() => {
+				if (loading) return;
 				if (hasNotifications) {
 					isSubscribed ? unsubscribe(subscriptionId) : subscribe();
 				} else {
@@ -55,15 +59,29 @@ export const NotificationButton = ({
 			}}
 		>
 			{subscriptions &&
+				!loading &&
 				(isSubscribed ? (
 					<Trans>Unsubscribe</Trans>
 				) : (
 					<Trans>Subscribe</Trans>
 				))}
+			{(!subscriptions || loading) && (
+				<div className="flex items-center space-x-2">
+					<LoadingSpinner
+						className="h-full"
+						delay={0}
+						theme="simple"
+					/>
+					<span>
+						<Trans>Loading...</Trans>
+					</span>
+				</div>
+			)}
 		</Button>
 	);
 
 	async function subscribe() {
+		setLoading(true);
 		const swRegistration = await registerServiceWorker();
 		await window.Notification.requestPermission();
 		try {
@@ -77,7 +95,15 @@ export const NotificationButton = ({
 			);
 			setSubscriptionId(await saveSubscription(subscription));
 			mutate(notificationsRoute);
-		} catch (err) {}
+			setTimeout(() => {
+				setLoading(false);
+			}, 500);
+		} catch (error) {
+			if (error instanceof Error) {
+				setLoading(false);
+				toast.error(error.message, { id: "notificationErrorToastID" });
+			}
+		}
 	}
 
 	async function unsubscribe(subscriptionId: string) {

@@ -13,6 +13,7 @@ import { Button } from "@/components/input/Button";
 import { loadCatalog } from "@/pages/_app";
 import { submitForm } from "@/util/api";
 import { loginRoute, reauthRoute, registerRoute } from "@/util/endpoints";
+import { handleWithToast } from "@/util/toasts";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
 	const translation = await loadCatalog(ctx.locale!);
@@ -96,6 +97,7 @@ export default function Page() {
 										name="userName"
 										placeholder={_(msg`Username`)}
 										required
+										minLength={3}
 										className="bg-neutral-100 p-3 text-base sm:text-xs"
 										ref={nameInput}
 									/>
@@ -251,13 +253,13 @@ export default function Page() {
 		) {
 			return;
 		}
-		const response = await submitForm(loginRoute, [
-			emailInput.current,
-			passwordInput.current,
-		]);
-		if (response.ok) {
-			router.push("/");
-		}
+		const response = await handleWithToast(
+			submitForm(loginRoute, [emailInput.current, passwordInput.current]),
+			"loginToastID",
+			t`Logged in!`,
+			t`Logging in...`
+		);
+		if (response.ok) router.push("/");
 	}
 
 	async function registerLogic() {
@@ -271,11 +273,16 @@ export default function Page() {
 		) {
 			return;
 		}
-		const response = await submitForm(registerRoute, [
-			emailInput.current,
-			nameInput.current,
-			passwordInput.current,
-		]);
+		const response = await handleWithToast(
+			submitForm(registerRoute, [
+				emailInput.current,
+				nameInput.current,
+				passwordInput.current,
+			]),
+			"registerToastID",
+			t`Account created!`,
+			t`Registering account...`
+		);
 		if (response.ok) {
 			setLogin(true);
 			emailInput.current?.focus();

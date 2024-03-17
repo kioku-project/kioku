@@ -48,15 +48,6 @@ func (e *Frontend) RegisterHandler(c *fiber.Ctx) error {
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	if data.Email == "" {
-		return helper.NewFiberMissingEmailErr()
-	}
-	if data.Name == "" {
-		return helper.NewFiberMissingNameErr()
-	}
-	if data.Password == "" {
-		return helper.NewFiberMissingPasswordErr()
-	}
 	_, err := e.userService.Register(c.Context(), &pbCommon.User{
 		UserEmail:    data.Email,
 		UserName:     data.Name,
@@ -74,12 +65,6 @@ func (e *Frontend) LoginHandler(c *fiber.Ctx) error {
 	var reqUser model.User
 	if err := c.BodyParser(&reqUser); err != nil {
 		return err
-	}
-	if reqUser.Email == "" {
-		return helper.NewFiberMissingEmailErr()
-	}
-	if reqUser.Password == "" {
-		return helper.NewFiberMissingPasswordErr()
 	}
 	rspLogin, err := e.userService.Login(c.Context(), &pbCommon.User{
 		UserEmail:    reqUser.Email,
@@ -104,11 +89,11 @@ func (e *Frontend) ReauthHandler(c *fiber.Ctx) error {
 	tokenString := c.Cookies("refresh_token")
 	refreshToken, err := helper.ParseJWTToken(tokenString)
 	if err != nil {
-		return helper.NewFiberUnauthorizedErr(err.Error())
+		return helper.NewFiberReauthenticateError()
 	}
 	claims, ok := refreshToken.Claims.(jwt.MapClaims)
 	if !ok || !refreshToken.Valid {
-		return helper.NewFiberUnauthorizedErr("Please re-authenticate")
+		return helper.NewFiberReauthenticateError()
 	}
 
 	rsp, err := e.userService.VerifyUserExists(c.Context(), &pbCommon.User{

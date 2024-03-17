@@ -18,7 +18,7 @@ func TestErrors(t *testing.T) {
 	microNoEntryWithIDErr := helper.NewMicroNoEntryWithIDErr(id)
 	microNoExistingUserWithEmailErr := helper.NewMicroNoExistingUserWithEmailErr(id)
 	microUserAlreadyExistsErr := helper.NewMicroUserAlreadyExistsErr(id)
-	microInvalidUserNameFormatErr := helper.NewMicroInvalidUserNameFormatErr(id)
+	microInvalidUserNameFormatErr := helper.NewMicroInvalidNameFormatErr(id)
 	microInvalidParameterDataErr := helper.NewMicroInvalidParameterDataErr(id)
 	microUserAlreadyInGroupErr := helper.NewMicroUserAlreadyInGroupErr(id)
 	microUserAdmissionInProgressErr := helper.NewMicroUserAdmissionInProgressErr(id)
@@ -28,7 +28,7 @@ func TestErrors(t *testing.T) {
 	microNotSuccessfulResponseErr := helper.NewMicroNotSuccessfulResponseErr(id)
 	fiberBadRequestErr := helper.NewFiberBadRequestErr(id)
 	fiberUnauthorizedErr := helper.NewFiberUnauthorizedErr(id)
-	
+
 	assert.IsType(t, microErrors.Unauthorized(string(id), "user not authorized"), microNotAuthorizedErr)
 	assert.IsType(t, microErrors.BadRequest(string(id), "no entry with id"), microNoEntryWithIDErr)
 	assert.IsType(t, microErrors.BadRequest(string(id), "no existing user with email"), microNoExistingUserWithEmailErr)

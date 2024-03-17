@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 
@@ -75,6 +76,11 @@ func main() {
 
 	fiberConfig := fiber.Config{
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			var e *fiber.Error
+			if errors.As(err, &e) {
+				logger.Infof("Fiber error %d with details (%s)!", e.Code, e.Error())
+				return ctx.Status(int(e.Code)).SendString(e.Error())
+			}
 			parsedError := microErrors.Parse(err.Error())
 			if parsedError.Code == 0 {
 				parsedError.Code = fiber.StatusInternalServerError

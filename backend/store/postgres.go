@@ -45,8 +45,8 @@ func NewPostgresStore(ctx context.Context) (*gorm.DB, error) {
 		logrus.NewWriter(),
 		logger.Config{
 			LogLevel:                  logger.Silent,
-			Colorful:                  false,
 			IgnoreRecordNotFoundError: true,
+			Colorful:                  false,
 		},
 	)
 

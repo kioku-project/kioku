@@ -137,7 +137,7 @@ export const UserSettingsTab = ({
 						id="deleteAccountDangerAction"
 						header={_(msg`Delete your Account`)}
 						description={_(
-							msg`Once you delete your user, there is no going back. Please be certain.`
+							msg`Once you delete your user, there is no going back. Please be certain.`,
 						)}
 						button={
 							isConfirmDeletion
@@ -147,7 +147,7 @@ export const UserSettingsTab = ({
 						onClick={async () => {
 							if (isConfirmDeletion) {
 								const response = await deleteUser();
-								if (response?.ok) router.push("/");
+								if (response.ok) router.push("/home");
 							} else {
 								setConfirmDeletion(true);
 							}

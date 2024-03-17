@@ -33,6 +33,10 @@ msgstr "{dueCards, plural, one {Eine Karte übrig} other {# Karten übrig}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Greife von überall und jederzeit auf Deine Karteikarten zu. Wechsle nahtlos zwischen verschiedenen Plattformen und verpasse nie wieder eine Lerngelegenheit!"
 
+#: pages/login.tsx:284
+msgid "Account created!"
+msgstr "Account erstellt!"
+
 #: pages/features.tsx:111
 msgid "Achievements and leaderboards make learning more engaging and motivating. Kioku helps you to achieve better results and stay on track with your personal learning goals!"
 msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivierender. Kioku hilft Dir, bessere Ergebnisse zu erzielen und Deine persönlichen Lernziele zu erreichen!"
@@ -41,7 +45,7 @@ msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivier
 msgid "Active Decks"
 msgstr "Aktive Stapel"
 
-#: pages/login.tsx:221
+#: pages/login.tsx:224
 msgid "Already have an account?"
 msgstr "Bereits registriert?"
 
@@ -147,6 +151,10 @@ msgstr "Gefahrenzone"
 msgid "Dashboard"
 msgstr "Dashboard"
 
+#: util/api.ts:226
+msgid "Deck deleted"
+msgstr "Stapel gelöscht"
+
 #: components/modal/CreateDeckModal.tsx:74
 #: components/navigation/Tabs/DeckSettingsTab.tsx:68
 msgid "Deck Description"
@@ -186,6 +194,18 @@ msgstr "Lösche diese Gruppe"
 msgid "Delete your Account"
 msgstr "Account löschen"
 
+#: util/api.ts:227
+msgid "Deleting deck..."
+msgstr "Lösche Stapel..."
+
+#: util/api.ts:189
+msgid "Deleting group..."
+msgstr "Lösche Gruppe..."
+
+#: util/api.ts:76
+msgid "Deleting user..."
+msgstr "Lösche Benutzer..."
+
 #: components/flashcard/Flashcard.tsx:190
 msgid "Description"
 msgstr "Beschreibung"
@@ -198,7 +218,7 @@ msgstr "Entdecke Kiokus einzigartige Funktionen"
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 msgstr "Entdecke die Funktionen unserer kostenlosen Karteikarten Anwendung. Importiere Stapel aus Anki, erstelle Gruppen, lerne gemeinsam mit Freunden und vergleicht Eure Statistiken. Jetzt auf allen Geräten!"
 
-#: pages/login.tsx:217
+#: pages/login.tsx:220
 msgid "Don't have an account?"
 msgstr "Noch kein Account?"
 
@@ -211,7 +231,7 @@ msgid "Easy"
 msgstr "Einfach"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:75
-#: pages/login.tsx:87
+#: pages/login.tsx:89
 msgid "Email"
 msgstr "E-Mail"
 
@@ -277,6 +297,10 @@ msgstr "von"
 msgid "Get started"
 msgstr "Los geht's"
 
+#: util/api.ts:188
+msgid "Group deleted"
+msgstr "Gruppe gelöscht"
+
 #: components/modal/CreateGroupModal.tsx:62
 #: components/navigation/Tabs/GroupSettingsTab.tsx:63
 msgid "Group Description"
@@ -335,7 +359,7 @@ msgstr "Gruppe beitreten"
 msgid "Kioku | Features of the Kioku platform"
 msgstr "Kioku | Funktionen der Kioku Plattform!"
 
-#: pages/login.tsx:52
+#: pages/login.tsx:54
 msgid "Kioku | Login or register for Kioku!"
 msgstr "Kioku | Logge Dich ein oder registriere Dich für Kioku"
 
@@ -366,9 +390,33 @@ msgstr "Erfahre mehr"
 #: components/navigation/Tabs/GroupSettingsTab.tsx:85
 #: components/navigation/Tabs/GroupSettingsTab.tsx:89
 msgid "Leave Group"
+msgstr "Gruppe verlassen<<<<<<< HEAD"
+
+#: util/api.ts:178
+msgid "Leaving group..."
+msgstr "Verlasse Gruppe..."
+
+#: util/api.ts:177
+msgid "Left group"
 msgstr "Gruppe verlassen"
 
-#: components/navigation/Navbar.tsx:68
+#: components/input/NotificationButton.tsx:76
+msgid "Loading..."
+msgstr "Lade..."
+
+#: pages/login.tsx:260
+msgid "Logged in!"
+msgstr "Eingeloggt!"
+
+#: components/navigation/Navbar.tsx:55
+msgid "Logged out"
+msgstr "Ausgeloggt"
+
+#: pages/login.tsx:261
+msgid "Logging in..."
+msgstr "Logge ein..."
+
+#: components/navigation/Navbar.tsx:73
 msgid "Login"
 msgstr "Einloggen"
 
@@ -376,7 +424,7 @@ msgstr "Einloggen"
 msgid "Medium"
 msgstr "Mittel"
 
-#: pages/login.tsx:167
+#: pages/login.tsx:170
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Mindestens {passwordMinLength} Zeichen"
 
@@ -394,16 +442,16 @@ msgstr "Diese Aktion kann nicht rückgängig gemacht werden. Bitte sei vorsichti
 msgid "Open menu"
 msgstr "Menü öffnen"
 
-#: pages/login.tsx:107
+#: pages/login.tsx:110
 msgid "Password"
 msgstr "Passwort"
 
-#: pages/login.tsx:124
+#: pages/login.tsx:127
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Passwort muss mindestens {passwordMinLength} Zeichen lang sein"
 
-#: pages/login.tsx:153
-#: pages/login.tsx:178
+#: pages/login.tsx:156
+#: pages/login.tsx:181
 msgid "Passwords have to match"
 msgstr "Passwörter müssen übereinstimmen"
 
@@ -419,9 +467,13 @@ msgstr "Nachdem Du die Gruppe gelöscht hast, gibt es kein Zurück mehr."
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Nachdem Du den Stapel gelöscht hast, gibt es kein Zurück mehr."
 
-#: pages/login.tsx:54
+#: pages/login.tsx:56
 msgid "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
 msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten Anwendung zusammen mit Deinen Freunden zu nutzen. Erstelle einfach neue Stapel oder importiere bestehende Stapel aus Anki und arbeite in Gruppen zusammen."
+
+#: pages/login.tsx:285
+msgid "Registering account..."
+msgstr "Registriere Account..."
 
 #: components/navigation/Tabs/DeckSettingsTab.tsx:53
 #: components/navigation/Tabs/GroupSettingsTab.tsx:51
@@ -429,7 +481,7 @@ msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten An
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: pages/login.tsx:136
+#: pages/login.tsx:139
 msgid "Repeat Password"
 msgstr "Passwort wiederholen"
 
@@ -476,19 +528,19 @@ msgstr "Wähle \"Installieren\""
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: pages/login.tsx:205
+#: pages/login.tsx:208
 msgid "Sign in"
 msgstr "Einloggen"
 
-#: pages/login.tsx:235
+#: pages/login.tsx:238
 msgid "Sign in now!"
 msgstr "Jetzt anmelden!"
 
-#: pages/login.tsx:207
+#: pages/login.tsx:210
 msgid "Sign up"
 msgstr "Registrieren"
 
-#: pages/login.tsx:233
+#: pages/login.tsx:236
 msgid "Sign up now!"
 msgstr "Jetzt registrieren!"
 
@@ -508,7 +560,7 @@ msgstr "gemeldet wird, damit wir in Zukunft noch mehr Geräte unterstützen kön
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"
 msgstr "Starte Deine Lernreise noch heute mit Kioku - der cloudbasierten Karteikarten Anwendung, die sich auf die kollaborative Erstellung von Lerninhalten konzentriert."
 
-#: components/input/NotificationButton.tsx:61
+#: components/input/NotificationButton.tsx:66
 msgid "Subscribe"
 msgstr "Aktivieren"
 
@@ -532,7 +584,7 @@ msgstr "Benachrichtigungen aktivieren"
 msgid "Unexpected group type"
 msgstr "Unerwarteter Gruppentyp"
 
-#: components/input/NotificationButton.tsx:59
+#: components/input/NotificationButton.tsx:64
 msgid "Unsubscribe"
 msgstr "Deaktivieren"
 
@@ -540,8 +592,12 @@ msgstr "Deaktivieren"
 msgid "User"
 msgstr "Benutzer"
 
+#: util/api.ts:75
+msgid "User deleted"
+msgstr "Benutzer gelöscht"
+
 #: components/navigation/Tabs/UserSettingsTab.tsx:56
-#: pages/login.tsx:97
+#: pages/login.tsx:99
 msgid "Username"
 msgstr "Benutzername"
 

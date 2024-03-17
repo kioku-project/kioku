@@ -27,6 +27,9 @@ func New(s store.UserStore, cS pbCollaboration.CollaborationService) *User {
 
 func (e *User) Register(ctx context.Context, req *pbCommon.User, rsp *pbCommon.Success) error {
 	logger.Infof("Received User.Register request")
+	if helper.SomeEmpty(req.UserEmail, req.UserName, req.UserPassword) {
+		return helper.NewMicroMissingParameterDataErr(helper.UserServiceID)
+	}
 	if _, err := e.store.FindUserByEmail(ctx, req.UserEmail); err == nil {
 		return helper.NewMicroUserAlreadyExistsErr(helper.UserServiceID)
 	} else if !errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
@@ -35,16 +38,16 @@ func (e *User) Register(ctx context.Context, req *pbCommon.User, rsp *pbCommon.S
 	if err := helper.CheckForValidName(req.UserName, helper.UserNameRegex, helper.UserServiceID); err != nil {
 		return err
 	}
+	if err := helper.CheckForValidPassword(req.UserPassword, helper.UserServiceID); err != nil {
+		return err
+	}
 	addr, err := mail.ParseAddress(req.UserEmail)
 	if err != nil {
-		return err
+		return helper.NewMicroInvalidParameterDataErr(helper.UserServiceID)
 	}
 	newUser := model.User{
 		Email: addr.Address,
 		Name:  req.UserName,
-	}
-	if req.UserPassword == "" {
-		return helper.NewMicroInvalidEmailOrPasswordErr(helper.UserServiceID)
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.UserPassword), bcrypt.MinCost)
 	if err != nil {
@@ -119,10 +122,13 @@ func (e *User) DeleteUser(ctx context.Context, req *pbCommon.User, rsp *pbCommon
 
 func (e *User) Login(ctx context.Context, req *pbCommon.User, rsp *pbCommon.User) error {
 	logger.Infof("Received User.Login request")
+	if helper.SomeEmpty(req.UserEmail, req.UserPassword) {
+		return helper.NewMicroMissingParameterDataErr(helper.UserServiceID)
+	}
 	user, err := e.store.FindUserByEmail(ctx, req.UserEmail)
 	if err != nil {
 		if errors.Is(err, helper.ErrStoreNoExistingUserWithEmail) {
-			return helper.NewMicroNoExistingUserWithEmailErr(helper.UserServiceID)
+			return helper.NewMicroInvalidEmailOrPasswordErr(helper.UserServiceID)
 		}
 		return err
 	}

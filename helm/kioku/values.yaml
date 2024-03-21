@@ -2,6 +2,10 @@ mode: production
 
 vapidSecret: vapid-secret
 
+ingress:
+  enabled: true
+  hostname: "*"
+
 cassandra:
   username: cassandra
   password: cassandra
@@ -30,9 +34,10 @@ frontend:
   httpPath: /
 
   autoscaler:
+    enabled: false
     min: 1
     max: 10
-    targetCPUUtilizationPercentage: 50
+    targetCPUUtilizationPercentage: 100
 
 frontend_proxy:
   name: kioku-frontend-proxy
@@ -46,9 +51,10 @@ frontend_proxy:
   containerPort: 8090
 
   autoscaler:
+    enabled: false
     min: 1
     max: 10
-    targetCPUUtilizationPercentage: 50
+    targetCPUUtilizationPercentage: 100
 
 carddeck:
   name: kioku-carddeck
@@ -56,9 +62,10 @@ carddeck:
   tag: prod
 
   autoscaler:
+    enabled: false
     min: 1
     max: 10
-    targetCPUUtilizationPercentage: 50
+    targetCPUUtilizationPercentage: 100
 
 srs:
   name: kioku-srs
@@ -66,9 +73,10 @@ srs:
   tag: prod
 
   autoscaler:
+    enabled: false
     min: 1
     max: 10
-    targetCPUUtilizationPercentage: 50
+    targetCPUUtilizationPercentage: 100
 
 notification:
   name: kioku-notification
@@ -76,9 +84,10 @@ notification:
   tag: prod
 
   autoscaler:
+    enabled: false
     min: 1
     max: 10
-    targetCPUUtilizationPercentage: 50
+    targetCPUUtilizationPercentage: 100
 
 user:
   name: kioku-user
@@ -86,9 +95,10 @@ user:
   tag: prod
 
   autoscaler:
+    enabled: false
     min: 1
     max: 10
-    targetCPUUtilizationPercentage: 50
+    targetCPUUtilizationPercentage: 100
 
 collaboration:
   name: kioku-collaboration
@@ -96,6 +106,7 @@ collaboration:
   tag: prod
 
   autoscaler:
+    enabled: false
     min: 1
     max: 10
-    targetCPUUtilizationPercentage: 50
+    targetCPUUtilizationPercentage: 100

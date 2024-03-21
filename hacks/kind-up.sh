@@ -1,4 +1,4 @@
-cat <<EOF | kind create cluster --config=-
+cat <<EOF | kind create cluster --name kioku --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:

@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus-deployment
-  namespace: monitoring
   labels:
     app: prometheus-server
 spec:
@@ -50,7 +49,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: prometheus-service
-  namespace: monitoring
   annotations:
       prometheus.io/scrape: 'true'
       prometheus.io/port:   '9090'
@@ -67,7 +65,6 @@ metadata:
   name: prometheus-server-conf
   labels:
     name: prometheus-server-conf
-  namespace: monitoring
 data:
   prometheus.rules: ""
   prometheus.yml: |-
@@ -218,4 +215,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: monitoring
+  namespace: {{ .Release.Namespace }}

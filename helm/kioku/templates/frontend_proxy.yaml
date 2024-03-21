@@ -30,13 +30,12 @@ spec:
         ports:
         - containerPort: {{ .Values.frontend_proxy.containerPort }}
           protocol: TCP
+      {{ if .Values.frontend_proxy.autoscaler.enabled }}
         resources:
           limits:
             cpu: 500m
             memory: 500M
-          requests:
-            cpu: 50m
-            memory: 50M
+      {{ end }}
         envFrom:
           - configMapRef:
               name: service-env
@@ -57,7 +56,9 @@ spec:
   ports:
     - port: {{ .Values.frontend_proxy.port }}
       targetPort: {{ .Values.frontend_proxy.containerPort }}
-  type: LoadBalancer
+  type: ClusterIP
+
+{{- if .Values.frontend_proxy.autoscaler.enabled -}}
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -71,3 +72,4 @@ spec:
  minReplicas: {{ .Values.frontend_proxy.autoscaler.min }}
  maxReplicas: {{ .Values.frontend_proxy.autoscaler.max }}
  targetCPUUtilizationPercentage: {{ .Values.frontend_proxy.autoscaler.targetCPUUtilizationPercentage }}
+{{- end -}}

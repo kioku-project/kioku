@@ -190,6 +190,18 @@ services:
       db:
         condition: service_healthy
 
+  test_srs_service:
+    build:
+      context: backend
+      dockerfile: services/testSrs/Dockerfile
+    container_name: kioku-testSrs_service
+    restart: always
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+
   frontend:
     container_name: kioku-frontend
     restart: always

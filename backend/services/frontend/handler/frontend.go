@@ -19,6 +19,7 @@ import (
 	pbNotification "github.com/kioku-project/kioku/services/notification/proto"
 	pbSrs "github.com/kioku-project/kioku/services/srs/proto"
 	pbStaticSrs "github.com/kioku-project/kioku/services/staticSrs/proto"
+	pbTestSrs "github.com/kioku-project/kioku/services/testSrs/proto"
 	pbUser "github.com/kioku-project/kioku/services/user/proto"
 )
 
@@ -30,6 +31,7 @@ type Frontend struct {
 	notificationService  pbNotification.NotificationService
 	linearSrsService     pbLinearSrs.LinearSrsService
 	staticSrsService     pbStaticSrs.StaticSrsService
+	testSrsService       pbTestSrs.TestSrsService
 }
 
 func New(
@@ -40,6 +42,7 @@ func New(
 	notificationService pbNotification.NotificationService,
 	linearSrsService pbLinearSrs.LinearSrsService,
 	staticSrsService pbStaticSrs.StaticSrsService,
+	testSrsService pbTestSrs.TestSrsService,
 ) *Frontend {
 	return &Frontend{
 		userService:          userService,
@@ -49,6 +52,7 @@ func New(
 		notificationService:  notificationService,
 		linearSrsService:     linearSrsService,
 		staticSrsService:     staticSrsService,
+		testSrsService:       testSrsService,
 	}
 }
 
@@ -979,6 +983,14 @@ func (e *Frontend) SrsPullHandler(c *fiber.Ctx) error {
 			return err
 		}
 		return c.JSON(rspSrsPull)
+
+	case pbCommon.AlgoType_TEST_SRS:
+		logger.Info("test srs!")
+		rspSrsPull, err := e.testSrsService.Pull(c.Context(), deckRequest)
+		if err != nil {
+			return err
+		}
+		return c.JSON(rspSrsPull)
 	}
 	return c.SendStatus(200)
 }
@@ -1027,6 +1039,14 @@ func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
 	case pbCommon.AlgoType_STATIC_SRS:
 		logger.Info("static srs!")
 		rspSrsPull, err := e.staticSrsService.Push(c.Context(), srsPushRequest)
+		if err != nil {
+			return err
+		}
+		return c.JSON(rspSrsPull)
+
+	case pbCommon.AlgoType_TEST_SRS:
+		logger.Info("test srs!")
+		rspSrsPull, err := e.testSrsService.Push(c.Context(), srsPushRequest)
 		if err != nil {
 			return err
 		}

@@ -113,7 +113,7 @@ enum AlgoType {
   DYNAMIC_SRS = 1;
   LINEAR_SRS = 2;
   STATIC_SRS = 3;
-  AI_SRS = 4;
+  TEST_SRS = 4;
 }
 
 message Deck {

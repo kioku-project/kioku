@@ -26,6 +26,7 @@ COPY services/srs/proto/srs.* services/srs/proto/
 COPY services/notification/proto/notification.* services/notification/proto/
 COPY services/linearSrs/ services/linearSrs
 COPY services/staticSrs/ services/staticSrs
+COPY services/testSrs/ services/testSrs
 COPY store/ store/
 COPY pkg/ pkg/
 WORKDIR /go/src/kioku/services/frontend

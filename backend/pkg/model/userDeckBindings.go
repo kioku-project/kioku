@@ -6,7 +6,7 @@ const (
 	AlgoDynamicSRS AlgorithmType = "Dynamic-Spaced-Repetition"
 	AlgoLinearSRS                = "Linear-Spaced-Repetition"
 	AlgoStaticSRS                = "Static-Spaced-Repetition"
-	AlgoAISRS                    = "AI-Spaced-Repetition"
+	AlgoTestSRS                  = "Test-Spaced-Repetition"
 )
 
 type UserActiveDecks struct {

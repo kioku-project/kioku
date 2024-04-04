@@ -5,6 +5,7 @@ import (
 	"fmt"
 	pbLinearSrs "github.com/kioku-project/kioku/services/linearSrs/proto"
 	pbStaticSrs "github.com/kioku-project/kioku/services/staticSrs/proto"
+	pbTestSrs "github.com/kioku-project/kioku/services/testSrs/proto"
 	"os"
 
 	pbNotification "github.com/kioku-project/kioku/services/notification/proto"
@@ -75,6 +76,7 @@ func main() {
 		pbNotification.NewNotificationService("notification", srv.Client()),
 		pbLinearSrs.NewLinearSrsService("linearSrs", srv.Client()),
 		pbStaticSrs.NewStaticSrsService("staticSrs", srv.Client()),
+		pbTestSrs.NewTestSrsService("testSrs", srv.Client()),
 	)
 
 	fiberConfig := fiber.Config{

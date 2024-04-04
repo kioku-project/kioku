@@ -1,0 +1,14 @@
+syntax = "proto3";
+import "pkg/proto/common.proto";
+
+package testSrs;
+
+option go_package ="github.com/kioku-project/kioku/services/testSrs/proto;testSrs";
+
+service TestSrs {
+	rpc Push(common.SrsPushRequest) returns (common.Success) {}
+	rpc Pull(common.DeckRequest) returns (common.Card) {}
+	rpc AddUserCardBinding(common.BindingRequest) returns (common.Success) {}
+	rpc GetDeckCardsDue(common.DeckRequest) returns (common.UserDueResponse) {}
+	rpc GetUserCardsDue(common.User) returns (common.UserDueResponse) {}
+}

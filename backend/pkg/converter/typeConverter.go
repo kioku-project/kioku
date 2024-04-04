@@ -44,8 +44,8 @@ func MigrateModelAlgorithmToProtoAlgorithm(modelAlgo model.AlgorithmType) (proto
 		protoAlgo = pbCommon.AlgoType_LINEAR_SRS
 	} else if modelAlgo == model.AlgoStaticSRS {
 		protoAlgo = pbCommon.AlgoType_STATIC_SRS
-	} else if modelAlgo == model.AlgoAISRS {
-		protoAlgo = pbCommon.AlgoType_AI_SRS
+	} else if modelAlgo == model.AlgoTestSRS {
+		protoAlgo = pbCommon.AlgoType_TEST_SRS
 	}
 	return
 }
@@ -58,8 +58,8 @@ func MigrateProtoAlgorithmToModelAlgorithm(protoAlgo pbCommon.AlgoType) (modelAl
 		modelAlgo = model.AlgoLinearSRS
 	case pbCommon.AlgoType_STATIC_SRS:
 		modelAlgo = model.AlgoStaticSRS
-	case pbCommon.AlgoType_AI_SRS:
-		modelAlgo = model.AlgoAISRS
+	case pbCommon.AlgoType_TEST_SRS:
+		modelAlgo = model.AlgoTestSRS
 	}
 	return
 }

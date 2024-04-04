@@ -26,13 +26,12 @@ spec:
       {{ end }}
         ports:
           - containerPort: 8080
+      {{ if .Values.user.autoscaler.enabled }}
         resources:
           limits:
             cpu: 500m
             memory: 500M
-          requests:
-            cpu: 50m
-            memory: 50M
+      {{ end }}
         env:
           - name: HOSTNAME
             valueFrom:
@@ -63,6 +62,8 @@ spec:
   ports:
     - port: 8080
       targetPort: 8080
+
+{{- if .Values.user.autoscaler.enabled -}}
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -76,3 +77,4 @@ spec:
  minReplicas: {{ .Values.user.autoscaler.min }}
  maxReplicas: {{ .Values.user.autoscaler.max }}
  targetCPUUtilizationPercentage: {{ .Values.user.autoscaler.targetCPUUtilizationPercentage }}
+{{- end -}}

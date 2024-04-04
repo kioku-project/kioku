@@ -212,16 +212,81 @@ func (e *Frontend) DeleteUserHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	dueCards, err := e.srsService.GetUserCardsDue(c.Context(), &pbCommon.User{
-		UserID: userID,
-	})
+	activeDecks, err := e.cardDeckService.GetUserActiveDecks(c.Context(), &pbCommon.User{UserID: userID})
 	if err != nil {
 		return err
 	}
+	dueCards := int64(0)
+	newCards := int64(0)
+	dueDecks := int64(0)
+	for _, deck := range activeDecks.Decks {
+		switch deck.Algorithm {
+		case pbCommon.AlgoType_DYNAMIC_SRS:
+			rsp, err := e.srsService.GetDeckCardsDue(c.Context(), &pbCommon.DeckRequest{
+				UserID: userID,
+				Deck: &pbCommon.Deck{
+					DeckID: deck.DeckID,
+				},
+			})
+			if err != nil {
+				return err
+			}
+			dueCards += rsp.DueCards
+			newCards += rsp.NewCards
+			if rsp.DueCards > 0 {
+				dueDecks++
+			}
+		case pbCommon.AlgoType_LINEAR_SRS:
+			rsp, err := e.linearSrsService.GetDeckCardsDue(c.Context(), &pbCommon.DeckRequest{
+				UserID: userID,
+				Deck: &pbCommon.Deck{
+					DeckID: deck.DeckID,
+				},
+			})
+			if err != nil {
+				return err
+			}
+			dueCards += rsp.DueCards
+			newCards += rsp.NewCards
+			if rsp.DueCards > 0 {
+				dueDecks++
+			}
+		case pbCommon.AlgoType_STATIC_SRS:
+			rsp, err := e.staticSrsService.GetDeckCardsDue(c.Context(), &pbCommon.DeckRequest{
+				UserID: userID,
+				Deck: &pbCommon.Deck{
+					DeckID: deck.DeckID,
+				},
+			})
+			if err != nil {
+				return err
+			}
+			dueCards += rsp.DueCards
+			newCards += rsp.NewCards
+			if rsp.DueCards > 0 {
+				dueDecks++
+			}
+		case pbCommon.AlgoType_TEST_SRS:
+			rsp, err := e.testSrsService.GetDeckCardsDue(c.Context(), &pbCommon.DeckRequest{
+				UserID: userID,
+				Deck: &pbCommon.Deck{
+					DeckID: deck.DeckID,
+				},
+			})
+			if err != nil {
+				return err
+			}
+			dueCards += rsp.DueCards
+			newCards += rsp.NewCards
+			if rsp.DueCards > 0 {
+				dueDecks++
+			}
+		}
+	}
 	return c.JSON(converter.FiberGetDueResponseBody{
-		DueCards: dueCards.DueCards,
-		NewCards: dueCards.NewCards,
-		DueDecks: dueCards.DueDecks,
+		DueCards: dueCards,
+		NewCards: int64(newCards),
+		DueDecks: dueDecks,
 	})
 }
 
@@ -1057,7 +1122,7 @@ func (e *Frontend) SrsPushHandler(c *fiber.Ctx) error {
 
 func (e *Frontend) SrsDeckDueHandler(c *fiber.Ctx) error {
 	userID := helper.GetUserIDFromContext(c)
-	rspSrsDue, err := e.srsService.GetDeckCardsDue(c.Context(), &pbCommon.DeckRequest{
+	rspDeck, err := e.cardDeckService.GetDeck(c.Context(), &pbCommon.DeckRequest{
 		UserID: userID,
 		Deck: &pbCommon.Deck{
 			DeckID: c.Params("deckID"),
@@ -1066,10 +1131,37 @@ func (e *Frontend) SrsDeckDueHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(converter.FiberGetDueResponseBody{
-		DueCards: rspSrsDue.DueCards,
-		NewCards: rspSrsDue.NewCards,
-	})
+	switch rspDeck.Algorithm {
+	case pbCommon.AlgoType_TEST_SRS:
+		rspSrsDue, err := e.testSrsService.GetDeckCardsDue(c.Context(), &pbCommon.DeckRequest{
+			UserID: userID,
+			Deck: &pbCommon.Deck{
+				DeckID: c.Params("deckID"),
+			},
+		})
+		if err != nil {
+			return err
+		}
+		return c.JSON(converter.FiberGetDueResponseBody{
+			DueCards: rspSrsDue.DueCards,
+			NewCards: rspSrsDue.NewCards,
+		})
+
+	default:
+		rspSrsDue, err := e.srsService.GetDeckCardsDue(c.Context(), &pbCommon.DeckRequest{
+			UserID: userID,
+			Deck: &pbCommon.Deck{
+				DeckID: c.Params("deckID"),
+			},
+		})
+		if err != nil {
+			return err
+		}
+		return c.JSON(converter.FiberGetDueResponseBody{
+			DueCards: rspSrsDue.DueCards,
+			NewCards: rspSrsDue.NewCards,
+		})
+	}
 }
 
 func (e *Frontend) GetUserNotificationSubscriptionsHandler(c *fiber.Ctx) error {

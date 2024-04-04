@@ -233,7 +233,7 @@ func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
 			}
 			dueCards += rsp.DueCards
 			newCards += rsp.NewCards
-			if rsp.DueCards > 0 {
+			if rsp.DueCards > 0 || rsp.NewCards > 0 {
 				dueDecks++
 			}
 		case pbCommon.AlgoType_LINEAR_SRS:
@@ -248,7 +248,7 @@ func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
 			}
 			dueCards += rsp.DueCards
 			newCards += rsp.NewCards
-			if rsp.DueCards > 0 {
+			if rsp.DueCards > 0 || rsp.NewCards > 0 {
 				dueDecks++
 			}
 		case pbCommon.AlgoType_STATIC_SRS:
@@ -263,7 +263,7 @@ func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
 			}
 			dueCards += rsp.DueCards
 			newCards += rsp.NewCards
-			if rsp.DueCards > 0 {
+			if rsp.DueCards > 0 || rsp.NewCards > 0 {
 				dueDecks++
 			}
 		case pbCommon.AlgoType_TEST_SRS:
@@ -278,14 +278,14 @@ func (e *Frontend) SrsUserDueHandler(c *fiber.Ctx) error {
 			}
 			dueCards += rsp.DueCards
 			newCards += rsp.NewCards
-			if rsp.DueCards > 0 {
+			if rsp.DueCards > 0 || rsp.NewCards > 0 {
 				dueDecks++
 			}
 		}
 	}
 	return c.JSON(converter.FiberGetDueResponseBody{
 		DueCards: dueCards,
-		NewCards: int64(newCards),
+		NewCards: newCards,
 		DueDecks: dueDecks,
 	})
 }

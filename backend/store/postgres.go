@@ -377,6 +377,7 @@ func (s *CardDeckStoreImpl) FindActiveDecks(ctx context.Context, userID string) 
 	}
 	for _, deck := range userActiveDecks {
 		deck.Deck.IsActive = true
+		deck.Deck.Algorithm = deck.Algorithm
 		if err = s.PopulateDeckFavoriteAttribute(ctx, &deck.Deck, userID); err != nil {
 			return
 		}

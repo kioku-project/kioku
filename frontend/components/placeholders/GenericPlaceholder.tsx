@@ -1,5 +1,4 @@
-import { MouseEventHandler, ReactNode } from "react";
-import { Heart, Plus } from "react-feather";
+import { MouseEventHandler } from "react";
 
 import { Text } from "@/components/Text";
 import { Icon, IconName } from "@/components/graphics/Icon";
@@ -54,7 +53,7 @@ export const GenericPlaceholder = ({
 					<Icon
 						icon={iconName}
 						className=" mx-auto size-10
-					self-center stroke-neutral-800 stroke-2  p-0"
+					self-center stroke-neutral-600 stroke-2  p-0"
 					/>
 				</div>
 				<div className="flex w-full flex-col gap-1 self-center text-neutral-800">
@@ -65,7 +64,7 @@ export const GenericPlaceholder = ({
 							onClick={onClick}
 							onKeyUp={clickOnEnter}
 							tabIndex={0}
-							className="h-fit w-fit rounded bg-black p-1 px-2 text-xs font-light  leading-snug text-white hover:scale-105"
+							className="h-fit w-fit rounded bg-black p-1 px-2 text-xs font-light leading-snug text-white hover:scale-105"
 						>
 							{buttonText}
 						</button>

@@ -79,7 +79,7 @@ export const ActionBar = ({
 						<PlusSquare
 							className={`w-sm${
 								writePermission
-									? " cursor-pointer text-kiokuDarkBlue hover:scale-110"
+									? "cursor-pointer text-kiokuDarkBlue hover:scale-110"
 									: "text-gray-400 hover:cursor-not-allowed"
 							} ${showTutorial ? "animate-bounce" : ""} flex-none 
 				transition

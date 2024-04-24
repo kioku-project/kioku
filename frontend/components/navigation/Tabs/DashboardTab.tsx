@@ -39,7 +39,6 @@ export const DashboardTab = ({ className = "" }: DashboardTabProps) => {
 					<GenericPlaceholder
 						title="Find your favorites!"
 						description="Click on the heart icon in the top right corner of a deck to add it to this list."
-						buttonText="Show me how"
 						iconName="Heart"
 					></GenericPlaceholder>
 				)}

@@ -1,17 +1,8 @@
 import clsx from "clsx";
 import React, { Children, MouseEventHandler, isValidElement } from "react";
-import { JSXElementConstructor, ReactElement, ReactNode } from "react";
-import { ChevronUp } from "react-feather";
+import { ReactNode } from "react";
 
 interface SpeechBubbleProps {
-	/**
-	 * Value
-	 */
-	// value: ReactNode;
-	// /**
-	//  * Parent
-	//  */
-	// parent: ReactNode;
 	/**
 	 * Align
 	 */
@@ -38,8 +29,6 @@ interface SpeechBubbleProps {
  * UI component for displaying a Speech Bubble
  */
 export const SpeechBubble = ({
-	// value,
-	// parent,
 	align,
 	className = "",
 	show,
@@ -77,7 +66,7 @@ export const SpeechBubble = ({
 				<div className="absolute left-1/2 top-[100%] z-10 h-0 w-0 -translate-x-1/2 self-center border-b-[1rem] border-l-[0.75rem] border-r-[0.75rem] border-t-0 border-transparent border-b-black">
 					<div
 						className={clsx(
-							" absolute h-0 w-[50vw] translate-y-[0.75rem] sm:w-[50vw] md:w-[35vw] lg:w-[25vw] xl:w-[25vw] 2xl:w-[20vw]",
+							"absolute h-0 w-[50vw] translate-y-[0.75rem] sm:w-[50vw] md:w-[35vw] lg:w-[25vw] xl:w-[25vw] 2xl:w-[20vw]",
 							align === "center" && "left-1/2 -translate-x-1/2",
 							align === "left" && "-left-8 ",
 							align === "right" && "-right-8"
@@ -85,7 +74,7 @@ export const SpeechBubble = ({
 					>
 						<div
 							className={clsx(
-								"  w-fit min-w-[30%] max-w-full space-y-2 rounded-lg border-b border-l border-r border-neutral-100  bg-black  p-3 text-sm text-white",
+								"w-fit min-w-[30%] max-w-full space-y-2 rounded-lg border-b border-l border-r border-neutral-100 bg-black p-3 text-sm text-white",
 								align === "center" && "mx-auto",
 								align === "left" && "mr-auto",
 								align === "right" && "ml-auto"

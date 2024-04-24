@@ -53,21 +53,17 @@ msgstr "Available"
 msgid "Back to Deck!"
 msgstr "Back to Deck!"
 
-#: components/modal/CreateCardModal.tsx:76
+#: components/modal/CreateCardModal.tsx:73
 #: components/modal/CreateDeckModal.tsx:91
 #: components/modal/CreateGroupModal.tsx:79
 msgid "Cancel"
 msgstr "Cancel"
 
-#: components/modal/CreateCardModal.tsx:59
+#: components/modal/CreateCardModal.tsx:56
 msgid "Card back"
 msgstr "Card back"
 
-#: components/modal/CreateCardModal.tsx:113
-msgid "Card created!"
-msgstr "Card created!"
-
-#: components/modal/CreateCardModal.tsx:47
+#: components/modal/CreateCardModal.tsx:44
 msgid "Card front"
 msgstr "Card front"
 
@@ -93,9 +89,22 @@ msgstr "Change how others join this group"
 msgid "Click again"
 msgstr "Click again"
 
+#: components/navigation/Tabs/DecksTab.tsx:59
+msgid "Click here to add a new deck."
+msgstr "Click here to add a new deck."
+
 #: components/modal/InstallPWAModal.tsx:139
 msgid "Click on \"Add page to\""
 msgstr "Click on \"Add page to\""
+
+#: components/navigation/Tabs/DashboardTab.tsx:41
+msgid "Click on the heart icon in the top right corner of a deck to add it to this list."
+msgstr "Click on the heart icon in the top right corner of a deck to add it to this list."
+
+#: components/navigation/Tabs/DecksTab.tsx:66
+#: components/navigation/Tabs/GroupsTab.tsx:61
+msgid "Click on the plus icon to create your first deck!"
+msgstr "Click on the plus icon to create your first deck!"
 
 #: pages/features.tsx:72
 msgid "Collaborate with your friends and fellow students in groups and work on shared decks. Learn together and motivate each other!"
@@ -117,7 +126,7 @@ msgstr "Congratulations!"
 msgid "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 msgstr "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 
-#: components/modal/CreateCardModal.tsx:87
+#: components/modal/CreateCardModal.tsx:90
 msgid "Create Card"
 msgstr "Create Card"
 
@@ -129,7 +138,7 @@ msgstr "Create Deck"
 msgid "Create Group"
 msgstr "Create Group"
 
-#: components/modal/CreateCardModal.tsx:37
+#: components/modal/CreateCardModal.tsx:34
 msgid "Create new Card"
 msgstr "Create new Card"
 
@@ -219,11 +228,11 @@ msgstr "Easy"
 msgid "Email"
 msgstr "Email"
 
-#: components/modal/CreateCardModal.tsx:61
+#: components/modal/CreateCardModal.tsx:58
 msgid "Enter card back"
 msgstr "Enter card back"
 
-#: components/modal/CreateCardModal.tsx:50
+#: components/modal/CreateCardModal.tsx:47
 msgid "Enter card front"
 msgstr "Enter card front"
 
@@ -267,9 +276,13 @@ msgstr "Everyone can request to join this group"
 msgid "Everyone has to be invited to join this group"
 msgstr "Everyone has to be invited to join this group"
 
-#: components/navigation/Tabs/DashboardTab.tsx:26
+#: components/navigation/Tabs/DashboardTab.tsx:36
 msgid "Favorite Decks"
 msgstr "Favorite Decks"
+
+#: components/navigation/Tabs/DashboardTab.tsx:39
+msgid "Find your favorites!"
+msgstr "Find your favorites!"
 
 #: components/statistics/StatisticOverview.tsx:31
 #: components/statistics/StatisticOverview.tsx:46
@@ -314,6 +327,10 @@ msgstr "Hit Rate"
 #: components/modal/InstallPWAModal.tsx:32
 msgid "How to install Kioku"
 msgstr "How to install Kioku"
+
+#: components/navigation/Tabs/DashboardTab.tsx:30
+msgid "If you start learning, your active decks will appear here."
+msgstr "If you start learning, your active decks will appear here."
 
 #: pages/features.tsx:77
 msgid "Individual"
@@ -380,6 +397,11 @@ msgstr "Medium"
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Minimum {passwordMinLength} characters"
 
+#: components/navigation/Tabs/DecksTab.tsx:64
+#: components/navigation/Tabs/GroupsTab.tsx:59
+msgid "No decks yet :("
+msgstr "No decks yet :("
+
 #: components/navigation/Tabs/UserSettingsTab.tsx:94
 msgid "Notifications"
 msgstr "Notifications"
@@ -442,15 +464,15 @@ msgstr "Request pending"
 msgid "Save"
 msgstr "Save"
 
-#: components/input/ActionBar.tsx:36
+#: components/input/ActionBar.tsx:52
 msgid "Search"
 msgstr "Search"
 
-#: components/navigation/Tabs/DecksTab.tsx:43
+#: components/navigation/Tabs/DecksTab.tsx:44
 msgid "Search decks..."
 msgstr "Search decks..."
 
-#: components/navigation/Tabs/GroupsTab.tsx:39
+#: components/navigation/Tabs/GroupsTab.tsx:41
 msgid "Search groups..."
 msgstr "Search groups..."
 
@@ -475,6 +497,11 @@ msgstr "Select \"Install\""
 #: pages/index.tsx:63
 msgid "Settings"
 msgstr "Settings"
+
+#: components/navigation/Tabs/DecksTab.tsx:68
+#: components/navigation/Tabs/GroupsTab.tsx:63
+msgid "Show me how"
+msgstr "Show me how"
 
 #: pages/login.tsx:205
 msgid "Sign in"
@@ -503,6 +530,10 @@ msgstr "Since the Samsung Internet Browser is not fully supporting PWAs, we reco
 #: components/modal/InstallPWAModal.tsx:54
 msgid "so that we can support even more devices in the future. We recommend using Chrome on Android and Safari on iOS for the best experience."
 msgstr "so that we can support even more devices in the future. We recommend using Chrome on Android and Safari on iOS for the best experience."
+
+#: components/navigation/Tabs/DashboardTab.tsx:28
+msgid "Start learning!"
+msgstr "Start learning!"
 
 #: pages/home.tsx:53
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"

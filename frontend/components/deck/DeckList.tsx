@@ -65,7 +65,6 @@ export default function DeckList({
 				))}
 				{Children.map(children, (child) => {
 					if (!isValidElement(child)) return null;
-
 					return child;
 				})}
 			</div>

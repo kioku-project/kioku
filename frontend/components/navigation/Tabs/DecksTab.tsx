@@ -1,11 +1,9 @@
 import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { useState } from "react";
-import { PlusSquare } from "react-feather";
 
 import DeckList from "@/components/deck/DeckList";
 import { ActionBar } from "@/components/input/ActionBar";
-import { SpeechBubble } from "@/components/input/SpeechBubble";
 import { CreateDeckModal } from "@/components/modal/CreateDeckModal";
 import { GenericPlaceholder } from "@/components/placeholders/GenericPlaceholder";
 import { Group as GroupType } from "@/types/Group";
@@ -58,14 +56,16 @@ export const DecksTab = ({ group }: DecksTabProps) => {
 					onHide={() => {
 						setShowTutorial(false);
 					}}
-					tutorialText="Click here to add a new deck."
+					tutorialText={_(msg`Click here to add a new deck.`)}
 				/>
 				<DeckList decks={decks} filter={filter} reverse={reverse}>
 					{decks?.length === 0 && (
 						<GenericPlaceholder
-							title="No decks yet :("
-							description="Click on the plus icon to create your first deck!"
-							buttonText="Show me how"
+							title={_(msg`No decks yet :(`)}
+							description={_(
+								msg`Click on the plus icon to create your first deck!`
+							)}
+							buttonText={_(msg`Show me how`)}
 							iconName="Meh"
 							onClick={() => setShowTutorial(true)}
 						></GenericPlaceholder>

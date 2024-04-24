@@ -1,6 +1,6 @@
 import { t } from "@lingui/macro";
-import { ChangeEventHandler, MouseEventHandler, useState } from "react";
-import { ChevronRight, ChevronsUp, PlusSquare } from "react-feather";
+import { ChangeEventHandler, MouseEventHandler } from "react";
+import { ChevronsUp, PlusSquare } from "react-feather";
 
 import { SpeechBubble } from "./SpeechBubble";
 import { SpeechBubbleContent } from "./SpeechBubbleContent";

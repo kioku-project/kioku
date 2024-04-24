@@ -53,21 +53,17 @@ msgstr "Verfügbar"
 msgid "Back to Deck!"
 msgstr "Zurück zum Stapel!"
 
-#: components/modal/CreateCardModal.tsx:76
+#: components/modal/CreateCardModal.tsx:73
 #: components/modal/CreateDeckModal.tsx:91
 #: components/modal/CreateGroupModal.tsx:79
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: components/modal/CreateCardModal.tsx:59
+#: components/modal/CreateCardModal.tsx:56
 msgid "Card back"
 msgstr "Kartenrückseite"
 
-#: components/modal/CreateCardModal.tsx:113
-msgid "Card created!"
-msgstr "Karte erstellt!"
-
-#: components/modal/CreateCardModal.tsx:47
+#: components/modal/CreateCardModal.tsx:44
 msgid "Card front"
 msgstr "Kartenvorderseite"
 
@@ -93,9 +89,22 @@ msgstr "Ändere, wie andere der Gruppe beitreten können"
 msgid "Click again"
 msgstr "Nochmal klicken"
 
+#: components/navigation/Tabs/DecksTab.tsx:59
+msgid "Click here to add a new deck."
+msgstr "Klicke hier, um einen neuen Stapel zu erstellen."
+
 #: components/modal/InstallPWAModal.tsx:139
 msgid "Click on \"Add page to\""
 msgstr "Klicke auf \"Seite hinzufügen zu\""
+
+#: components/navigation/Tabs/DashboardTab.tsx:41
+msgid "Click on the heart icon in the top right corner of a deck to add it to this list."
+msgstr "Klicke auf das Herz Icon in der oberen rechten Ecke eines Stapels, um ihn dieser Liste hinzufügen."
+
+#: components/navigation/Tabs/DecksTab.tsx:66
+#: components/navigation/Tabs/GroupsTab.tsx:61
+msgid "Click on the plus icon to create your first deck!"
+msgstr "Klicke auf das Plus Icon, um deinen ersten Stapel zu erstellen!"
 
 #: pages/features.tsx:72
 msgid "Collaborate with your friends and fellow students in groups and work on shared decks. Learn together and motivate each other!"
@@ -117,7 +126,7 @@ msgstr "Glückwunsch!"
 msgid "Create and customize your own flashcards tailored to your needs and preferences. Set your own pace with our spaced repetition system to maximize your potential!"
 msgstr "Erstelle und individualisiere Karteikarten, die genau auf Deine Bedürfnisse und Vorlieben zugeschnitten sind. Bestimme Dein eigenes Tempo mit unserem Spaced Repetition System, um Dein Potenzial zu maximieren!"
 
-#: components/modal/CreateCardModal.tsx:87
+#: components/modal/CreateCardModal.tsx:90
 msgid "Create Card"
 msgstr "Karte erstellen"
 
@@ -129,7 +138,7 @@ msgstr "Stapel erstellen"
 msgid "Create Group"
 msgstr "Gruppe erstellen"
 
-#: components/modal/CreateCardModal.tsx:37
+#: components/modal/CreateCardModal.tsx:34
 msgid "Create new Card"
 msgstr "Neue Karte erstellen"
 
@@ -219,11 +228,11 @@ msgstr "Einfach"
 msgid "Email"
 msgstr "E-Mail"
 
-#: components/modal/CreateCardModal.tsx:61
+#: components/modal/CreateCardModal.tsx:58
 msgid "Enter card back"
 msgstr "Kartenrückseite eingeben"
 
-#: components/modal/CreateCardModal.tsx:50
+#: components/modal/CreateCardModal.tsx:47
 msgid "Enter card front"
 msgstr "Kartenvorderseite eingeben"
 
@@ -267,9 +276,13 @@ msgstr "Jeder kann anfragen, dieser Gruppe beizutreten"
 msgid "Everyone has to be invited to join this group"
 msgstr "Jeder muss eingeladen werden, um der Gruppe beizutreten"
 
-#: components/navigation/Tabs/DashboardTab.tsx:26
+#: components/navigation/Tabs/DashboardTab.tsx:36
 msgid "Favorite Decks"
 msgstr "Favoriten"
+
+#: components/navigation/Tabs/DashboardTab.tsx:39
+msgid "Find your favorites!"
+msgstr "Finde deine Favoriten!"
 
 #: components/statistics/StatisticOverview.tsx:31
 #: components/statistics/StatisticOverview.tsx:46
@@ -314,6 +327,10 @@ msgstr "Erfolgsquote"
 #: components/modal/InstallPWAModal.tsx:32
 msgid "How to install Kioku"
 msgstr "So installiert man Kioku"
+
+#: components/navigation/Tabs/DashboardTab.tsx:30
+msgid "If you start learning, your active decks will appear here."
+msgstr "Wenn du anfängst zu lernen, werden deine aktiven Stapel hier erscheinen."
 
 #: pages/features.tsx:77
 msgid "Individual"
@@ -380,6 +397,11 @@ msgstr "Mittel"
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Mindestens {passwordMinLength} Zeichen"
 
+#: components/navigation/Tabs/DecksTab.tsx:64
+#: components/navigation/Tabs/GroupsTab.tsx:59
+msgid "No decks yet :("
+msgstr "Noch keine Stapel :("
+
 #: components/navigation/Tabs/UserSettingsTab.tsx:94
 msgid "Notifications"
 msgstr "Benachrichtigungen"
@@ -442,15 +464,15 @@ msgstr "Anfrage ausstehend"
 msgid "Save"
 msgstr "Speichern"
 
-#: components/input/ActionBar.tsx:36
+#: components/input/ActionBar.tsx:52
 msgid "Search"
 msgstr "Suchen"
 
-#: components/navigation/Tabs/DecksTab.tsx:43
+#: components/navigation/Tabs/DecksTab.tsx:44
 msgid "Search decks..."
 msgstr "Stapel suchen..."
 
-#: components/navigation/Tabs/GroupsTab.tsx:39
+#: components/navigation/Tabs/GroupsTab.tsx:41
 msgid "Search groups..."
 msgstr "Gruppe suchen..."
 
@@ -475,6 +497,11 @@ msgstr "Wähle \"Installieren\""
 #: pages/index.tsx:63
 msgid "Settings"
 msgstr "Einstellungen"
+
+#: components/navigation/Tabs/DecksTab.tsx:68
+#: components/navigation/Tabs/GroupsTab.tsx:63
+msgid "Show me how"
+msgstr "Zeig mir wie"
 
 #: pages/login.tsx:205
 msgid "Sign in"
@@ -503,6 +530,10 @@ msgstr "Da der Samsung Internet Browser PWAs nicht vollständig unterstützt, em
 #: components/modal/InstallPWAModal.tsx:54
 msgid "so that we can support even more devices in the future. We recommend using Chrome on Android and Safari on iOS for the best experience."
 msgstr "gemeldet wird, damit wir in Zukunft noch mehr Geräte unterstützen können. Wir empfehlen die Verwendung von Chrome auf Android und Safari auf iOS für die beste Erfahrung."
+
+#: components/navigation/Tabs/DashboardTab.tsx:28
+msgid "Start learning!"
+msgstr "Fang an zu lernen!"
 
 #: pages/home.tsx:53
 msgid "Start your learning journey today with Kioku - the cloud native flashcard application that focusses on collaborative content creation"

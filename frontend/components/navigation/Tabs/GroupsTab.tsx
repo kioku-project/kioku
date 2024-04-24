@@ -1,6 +1,6 @@
 import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
 
 import GroupList from "@/components/group/GroupList";
 import { ActionBar } from "@/components/input/ActionBar";
@@ -56,9 +56,11 @@ export const GroupsTab = ({ groups, className = "" }: GroupsTabProps) => {
 				<GroupList groups={groups} filter={filter} reverse={reverse}>
 					{groups?.length === 1 && (
 						<GenericPlaceholder
-							title="No decks yet :("
-							description="Click on the plus icon to create your first deck!"
-							buttonText="Show me how"
+							title={_(msg`No decks yet :(`)}
+							description={_(
+								msg`Click on the plus icon to create your first deck!`
+							)}
+							buttonText={_(msg`Show me how`)}
 							iconName="Meh"
 							onClick={() => {
 								setShowTutorial(true);

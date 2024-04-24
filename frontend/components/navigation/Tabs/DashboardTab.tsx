@@ -1,10 +1,7 @@
 import { msg } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
-import { ChangeEvent, MouseEvent } from "react";
 
 import DeckList from "@/components/deck/DeckList";
-import { ActionBar } from "@/components/input/ActionBar";
-import { SpeechBubble } from "@/components/input/SpeechBubble";
 import { GenericPlaceholder } from "@/components/placeholders/GenericPlaceholder";
 import { useActiveDecks, useFavoriteDecks } from "@/util/swr";
 
@@ -28,8 +25,10 @@ export const DashboardTab = ({ className = "" }: DashboardTabProps) => {
 			<DeckList header={_(msg`Active Decks`)} decks={activeDecks}>
 				{activeDecks?.length === 0 && (
 					<GenericPlaceholder
-						title="Start learning!"
-						description="If you start learning, your active decks will appear here."
+						title={_(msg`Start learning!`)}
+						description={_(
+							msg`If you start learning, your active decks will appear here.`
+						)}
 						iconName="Activity"
 					></GenericPlaceholder>
 				)}
@@ -37,8 +36,10 @@ export const DashboardTab = ({ className = "" }: DashboardTabProps) => {
 			<DeckList header={_(msg`Favorite Decks`)} decks={favoriteDecks}>
 				{favoriteDecks?.length === 0 && (
 					<GenericPlaceholder
-						title="Find your favorites!"
-						description="Click on the heart icon in the top right corner of a deck to add it to this list."
+						title={_(msg`Find your favorites!`)}
+						description={_(
+							msg`Click on the heart icon in the top right corner of a deck to add it to this list.`
+						)}
 						iconName="Heart"
 					></GenericPlaceholder>
 				)}

@@ -33,7 +33,7 @@ msgstr "{dueCards, plural, one {# card left} other {# cards left}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 
-#: pages/login.tsx:284
+#: pages/login.tsx:283
 msgid "Account created!"
 msgstr "Account created!"
 
@@ -45,7 +45,7 @@ msgstr "Achievements and leaderboards make learning more engaging and motivating
 msgid "Active Decks"
 msgstr "Active Decks"
 
-#: pages/login.tsx:224
+#: pages/login.tsx:223
 msgid "Already have an account?"
 msgstr "Already have an account?"
 
@@ -218,7 +218,7 @@ msgstr "Discover Kioku's awesome Features"
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 msgstr "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 
-#: pages/login.tsx:220
+#: pages/login.tsx:219
 msgid "Don't have an account?"
 msgstr "Don't have an account?"
 
@@ -231,7 +231,7 @@ msgid "Easy"
 msgstr "Easy"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:75
-#: pages/login.tsx:89
+#: pages/login.tsx:88
 msgid "Email"
 msgstr "Email"
 
@@ -359,7 +359,7 @@ msgstr "Join Group"
 msgid "Kioku | Features of the Kioku platform"
 msgstr "Kioku | Features of the Kioku platform"
 
-#: pages/login.tsx:54
+#: pages/login.tsx:53
 msgid "Kioku | Login or register for Kioku!"
 msgstr "Kioku | Login or register for Kioku!"
 
@@ -404,7 +404,7 @@ msgstr "Left group"
 msgid "Loading..."
 msgstr "Loading..."
 
-#: pages/login.tsx:260
+#: pages/login.tsx:259
 msgid "Logged in!"
 msgstr "Logged in!"
 
@@ -412,7 +412,7 @@ msgstr "Logged in!"
 msgid "Logged out"
 msgstr "Logged out"
 
-#: pages/login.tsx:261
+#: pages/login.tsx:260
 msgid "Logging in..."
 msgstr "Logging in..."
 
@@ -424,7 +424,7 @@ msgstr "Login"
 msgid "Medium"
 msgstr "Medium"
 
-#: pages/login.tsx:170
+#: pages/login.tsx:169
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Minimum {passwordMinLength} characters"
 
@@ -442,16 +442,16 @@ msgstr "Once you delete your user, there is no going back. Please be certain."
 msgid "Open menu"
 msgstr "Open menu"
 
-#: pages/login.tsx:110
+#: pages/login.tsx:109
 msgid "Password"
 msgstr "Password"
 
-#: pages/login.tsx:127
+#: pages/login.tsx:126
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Password must have at least {passwordMinLength} characters"
 
-#: pages/login.tsx:156
-#: pages/login.tsx:181
+#: pages/login.tsx:155
+#: pages/login.tsx:180
 msgid "Passwords have to match"
 msgstr "Passwords have to match"
 
@@ -467,11 +467,11 @@ msgstr "Please be certain before deleting a group, as there is no way to undo th
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Please be certain when deleting a deck, as there is no way to undo this action."
 
-#: pages/login.tsx:56
+#: pages/login.tsx:55
 msgid "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
 msgstr "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
 
-#: pages/login.tsx:285
+#: pages/login.tsx:284
 msgid "Registering account..."
 msgstr "Registering account..."
 
@@ -481,7 +481,7 @@ msgstr "Registering account..."
 msgid "Rename"
 msgstr "Rename"
 
-#: pages/login.tsx:139
+#: pages/login.tsx:138
 msgid "Repeat Password"
 msgstr "Repeat Password"
 
@@ -528,19 +528,19 @@ msgstr "Select \"Install\""
 msgid "Settings"
 msgstr "Settings"
 
-#: pages/login.tsx:208
+#: pages/login.tsx:207
 msgid "Sign in"
 msgstr "Sign in"
 
-#: pages/login.tsx:238
+#: pages/login.tsx:237
 msgid "Sign in now!"
 msgstr "Sign in now!"
 
-#: pages/login.tsx:210
+#: pages/login.tsx:209
 msgid "Sign up"
 msgstr "Sign up"
 
-#: pages/login.tsx:236
+#: pages/login.tsx:235
 msgid "Sign up now!"
 msgstr "Sign up now!"
 
@@ -597,7 +597,7 @@ msgid "User deleted"
 msgstr "User deleted"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:56
-#: pages/login.tsx:99
+#: pages/login.tsx:98
 msgid "Username"
 msgstr "Username"
 

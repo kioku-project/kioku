@@ -29,7 +29,6 @@ export const preview = {
 		},
 		mswDecorator,
 	],
-	actions: { argTypesRegex: "^on[A-Z].*" },
 	controls: {
 		matchers: {
 			color: /(background|color)$/i,
@@ -65,5 +64,6 @@ export const preview = {
 			},
 		},
 	},
+	tags: ["autodocs"],
 };
 export default preview;

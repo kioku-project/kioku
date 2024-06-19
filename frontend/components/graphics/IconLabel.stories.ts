@@ -5,7 +5,6 @@ import { IconLabel } from "@/components/graphics/IconLabel";
 const meta: Meta<typeof IconLabel> = {
 	title: "Graphics/IconLabel",
 	component: IconLabel,
-	tags: ["autodocs"],
 	args: {},
 };
 

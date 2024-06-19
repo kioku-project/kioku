@@ -5,7 +5,6 @@ import { SelectionField } from "@/components/input/SelectionField";
 const meta: Meta<typeof SelectionField> = {
 	title: "Input/SelectionField",
 	component: SelectionField,
-	tags: ["autodocs"],
 	args: {},
 };
 

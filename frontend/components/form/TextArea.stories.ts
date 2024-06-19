@@ -5,7 +5,6 @@ import { TextArea } from "@/components/form/TextArea";
 const meta: Meta<typeof TextArea> = {
 	title: "Form/TextArea",
 	component: TextArea,
-	tags: ["autodocs"],
 	args: {
 		id: "TextAreaId",
 	},

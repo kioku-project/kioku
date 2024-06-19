@@ -5,7 +5,6 @@ import { StatisticOverview } from "@/components/statistics/StatisticOverview";
 const meta: Meta<typeof StatisticOverview> = {
 	title: "Statistics/StatisticOverview",
 	component: StatisticOverview,
-	tags: ["autodocs"],
 	args: {
 		id: "StatisticId",
 	},

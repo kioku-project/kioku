@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/testing-library";
+import { userEvent, within } from "@storybook/test";
 
 import { InputField } from "@/components/form/InputField";
 
 const meta: Meta<typeof InputField> = {
 	title: "Form/InputField",
 	component: InputField,
-	tags: ["autodocs"],
 	args: {
 		id: "InputFieldId",
 	},
@@ -99,7 +98,7 @@ export const PasswordShown: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const icon = await canvas.getByTestId("inputFieldIconId");
+		const icon = canvas.getByTestId("inputFieldIconId");
 		await userEvent.click(icon);
 	},
 };

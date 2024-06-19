@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/testing-library";
+import { userEvent, within } from "@storybook/test";
 
 import { Card } from "@/components/flashcard/Card";
 
 const meta: Meta<typeof Card> = {
 	title: "Components/Card",
 	component: Card,
-	tags: ["autodocs"],
 	args: {
 		card: {
 			cardID: "C-12345678",
@@ -39,17 +38,7 @@ export const Delete: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const deleteButton = await canvas.getByTestId("deleteCardButtonId");
+		const deleteButton = canvas.getByTestId("deleteCardButtonId");
 		await userEvent.click(deleteButton);
-	},
-};
-
-export const Placeholder: Story = {
-	args: {
-		card: {
-			cardID: "",
-			sides: [],
-			deckID: "D-1234567",
-		},
 	},
 };

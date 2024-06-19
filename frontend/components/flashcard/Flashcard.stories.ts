@@ -5,7 +5,6 @@ import { Flashcard } from "@/components/flashcard/Flashcard";
 const meta: Meta<typeof Flashcard> = {
 	title: "Components/Flashcard",
 	component: Flashcard,
-	tags: ["autodocs"],
 	args: {
 		card: {
 			cardID: "C-12345678",

@@ -5,7 +5,6 @@ import LoadingSpinner from "@/components/graphics/LoadingSpinner";
 const meta: Meta<typeof LoadingSpinner> = {
 	title: "Graphics/LoadingSpinner",
 	component: LoadingSpinner,
-	tags: ["autodocs"],
 	args: {
 		className: "w-16",
 	},

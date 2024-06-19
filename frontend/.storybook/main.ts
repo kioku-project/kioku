@@ -13,6 +13,7 @@ const config: StorybookConfig = {
 		"@storybook/addon-essentials",
 		"@storybook/addon-interactions",
 		"@storybook/addon-a11y",
+		"@chromatic-com/storybook",
 	],
 	async babel(config) {
 		config.plugins?.push("macros");
@@ -31,9 +32,10 @@ const config: StorybookConfig = {
 		name: "@storybook/nextjs",
 		options: {},
 	},
-	docs: {
-		autodocs: "tag",
-	},
 	staticDirs: ["../public"],
+	typescript: {
+		reactDocgen: "react-docgen",
+	},
+	docs: {},
 };
 export default config;

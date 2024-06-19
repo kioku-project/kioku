@@ -5,7 +5,6 @@ import { TabHeader } from "@/components/navigation/Tabs/TabHeader";
 const meta: Meta<typeof TabHeader> = {
 	title: "Navigation/Tabs/TabHeader",
 	component: TabHeader,
-	tags: ["autodocs"],
 	args: {
 		id: "TabHeaderId",
 	},

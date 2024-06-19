@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/testing-library";
+import { userEvent, within } from "@storybook/test";
 
 import Member from "@/components/group/Member";
 
 const meta: Meta<typeof Member> = {
 	title: "Components/Member",
 	component: Member,
-	tags: ["autodocs"],
 	args: {},
 };
 
@@ -57,7 +56,7 @@ export const Delete: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const deleteButton = await canvas.getByTestId("deleteUserButtonId");
+		const deleteButton = canvas.getByTestId("deleteUserButtonId");
 		await userEvent.click(deleteButton);
 	},
 };

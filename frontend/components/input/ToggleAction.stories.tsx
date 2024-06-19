@@ -5,7 +5,6 @@ import { ToggleAction } from "@/components/input/ToggleAction";
 const meta: Meta<typeof ToggleAction> = {
 	title: "Input/ToggleAction",
 	component: ToggleAction,
-	tags: ["autodocs"],
 	args: {
 		id: "toggleActionId",
 		choices: ["ONE", "TWO", "THREE"],

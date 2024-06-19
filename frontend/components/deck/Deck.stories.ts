@@ -5,7 +5,6 @@ import { Deck } from "@/components/deck/Deck";
 const meta: Meta<typeof Deck> = {
 	title: "Components/Deck",
 	component: Deck,
-	tags: ["autodocs"],
 	args: {},
 };
 

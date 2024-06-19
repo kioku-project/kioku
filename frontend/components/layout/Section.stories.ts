@@ -5,7 +5,6 @@ import { Section } from "@/components/layout/Section";
 const meta: Meta<typeof Section> = {
 	title: "Layout/Section",
 	component: Section,
-	tags: ["autodocs"],
 	args: {
 		id: "sectionId",
 	},

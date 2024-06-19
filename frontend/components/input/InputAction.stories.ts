@@ -5,7 +5,6 @@ import { InputAction } from "@/components/input/InputAction";
 const meta: Meta<typeof InputAction> = {
 	title: "Input/InputAction",
 	component: InputAction,
-	tags: ["autodocs"],
 	args: {
 		id: "inputActionId",
 	},

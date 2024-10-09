@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"strings"
 
 	"github.com/kioku-project/kioku/pkg/converter"
 	"github.com/kioku-project/kioku/pkg/helper"
@@ -71,6 +72,11 @@ func (e *Notification) Unsubscribe(ctx context.Context, req *pbCommon.PushSubscr
 	}
 	if subscription.UserID != req.UserID {
 		return helper.NewMicroNotAuthorizedErr(helper.NotificationServiceID)
+	}
+
+	// Check if the request is coming from the PWA uninstall event
+	if strings.Contains(req.Subscription.Endpoint, "PWA_UNINSTALL") {
+		logger.Infof("Received PWA uninstall event for subscription: %v", req.Subscription.SubscriptionID)
 	}
 
 	if err := e.store.DeletePushSubscription(ctx, subscription); err != nil {

@@ -33,7 +33,7 @@ msgstr "{dueCards, plural, one {Eine Karte übrig} other {# Karten übrig}}"
 msgid "Access your flashcards everywhere and at any time. Switch seamlessly between multiple platforms and never miss a learning opportunity again!"
 msgstr "Greife von überall und jederzeit auf Deine Karteikarten zu. Wechsle nahtlos zwischen verschiedenen Plattformen und verpasse nie wieder eine Lerngelegenheit!"
 
-#: pages/login.tsx:284
+#: pages/login.tsx:283
 msgid "Account created!"
 msgstr "Account erstellt!"
 
@@ -45,7 +45,7 @@ msgstr "Erfolge und Ranglisten machen das Lernen noch interessanter und motivier
 msgid "Active Decks"
 msgstr "Aktive Stapel"
 
-#: pages/login.tsx:224
+#: pages/login.tsx:223
 msgid "Already have an account?"
 msgstr "Bereits registriert?"
 
@@ -218,7 +218,7 @@ msgstr "Entdecke Kiokus einzigartige Funktionen"
 msgid "Discover the features of our free flashcard application. Import decks from Anki, create groups, learn together with friends and compare your statistics. Now on all devices!"
 msgstr "Entdecke die Funktionen unserer kostenlosen Karteikarten Anwendung. Importiere Stapel aus Anki, erstelle Gruppen, lerne gemeinsam mit Freunden und vergleicht Eure Statistiken. Jetzt auf allen Geräten!"
 
-#: pages/login.tsx:220
+#: pages/login.tsx:219
 msgid "Don't have an account?"
 msgstr "Noch kein Account?"
 
@@ -231,7 +231,7 @@ msgid "Easy"
 msgstr "Einfach"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:75
-#: pages/login.tsx:89
+#: pages/login.tsx:88
 msgid "Email"
 msgstr "E-Mail"
 
@@ -359,7 +359,7 @@ msgstr "Gruppe beitreten"
 msgid "Kioku | Features of the Kioku platform"
 msgstr "Kioku | Funktionen der Kioku Plattform!"
 
-#: pages/login.tsx:54
+#: pages/login.tsx:53
 msgid "Kioku | Login or register for Kioku!"
 msgstr "Kioku | Logge Dich ein oder registriere Dich für Kioku"
 
@@ -404,7 +404,7 @@ msgstr "Gruppe verlassen"
 msgid "Loading..."
 msgstr "Lade..."
 
-#: pages/login.tsx:260
+#: pages/login.tsx:259
 msgid "Logged in!"
 msgstr "Eingeloggt!"
 
@@ -412,7 +412,7 @@ msgstr "Eingeloggt!"
 msgid "Logged out"
 msgstr "Ausgeloggt"
 
-#: pages/login.tsx:261
+#: pages/login.tsx:260
 msgid "Logging in..."
 msgstr "Logge ein..."
 
@@ -424,7 +424,7 @@ msgstr "Einloggen"
 msgid "Medium"
 msgstr "Mittel"
 
-#: pages/login.tsx:170
+#: pages/login.tsx:169
 msgid "Minimum {passwordMinLength} characters"
 msgstr "Mindestens {passwordMinLength} Zeichen"
 
@@ -442,16 +442,16 @@ msgstr "Diese Aktion kann nicht rückgängig gemacht werden. Bitte sei vorsichti
 msgid "Open menu"
 msgstr "Menü öffnen"
 
-#: pages/login.tsx:110
+#: pages/login.tsx:109
 msgid "Password"
 msgstr "Passwort"
 
-#: pages/login.tsx:127
+#: pages/login.tsx:126
 msgid "Password must have at least {passwordMinLength} characters"
 msgstr "Passwort muss mindestens {passwordMinLength} Zeichen lang sein"
 
-#: pages/login.tsx:156
-#: pages/login.tsx:181
+#: pages/login.tsx:155
+#: pages/login.tsx:180
 msgid "Passwords have to match"
 msgstr "Passwörter müssen übereinstimmen"
 
@@ -467,11 +467,11 @@ msgstr "Nachdem Du die Gruppe gelöscht hast, gibt es kein Zurück mehr."
 msgid "Please be certain when deleting a deck, as there is no way to undo this action."
 msgstr "Nachdem Du den Stapel gelöscht hast, gibt es kein Zurück mehr."
 
-#: pages/login.tsx:56
+#: pages/login.tsx:55
 msgid "Register today and start using the free flashcard application together with your friends. Simply create new decks or import existing decks from Anki and collaborate in groups."
 msgstr "Registriere Dich noch heute und fange an, die kostenlose Karteikarten Anwendung zusammen mit Deinen Freunden zu nutzen. Erstelle einfach neue Stapel oder importiere bestehende Stapel aus Anki und arbeite in Gruppen zusammen."
 
-#: pages/login.tsx:285
+#: pages/login.tsx:284
 msgid "Registering account..."
 msgstr "Registriere Account..."
 
@@ -481,7 +481,7 @@ msgstr "Registriere Account..."
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: pages/login.tsx:139
+#: pages/login.tsx:138
 msgid "Repeat Password"
 msgstr "Passwort wiederholen"
 
@@ -528,19 +528,19 @@ msgstr "Wähle \"Installieren\""
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: pages/login.tsx:208
+#: pages/login.tsx:207
 msgid "Sign in"
 msgstr "Einloggen"
 
-#: pages/login.tsx:238
+#: pages/login.tsx:237
 msgid "Sign in now!"
 msgstr "Jetzt anmelden!"
 
-#: pages/login.tsx:210
+#: pages/login.tsx:209
 msgid "Sign up"
 msgstr "Registrieren"
 
-#: pages/login.tsx:236
+#: pages/login.tsx:235
 msgid "Sign up now!"
 msgstr "Jetzt registrieren!"
 
@@ -597,7 +597,7 @@ msgid "User deleted"
 msgstr "Benutzer gelöscht"
 
 #: components/navigation/Tabs/UserSettingsTab.tsx:56
-#: pages/login.tsx:99
+#: pages/login.tsx:98
 msgid "Username"
 msgstr "Benutzername"
 

@@ -5,7 +5,6 @@ import { ToggleButtonGroup } from "@/components/input/ToggleButtonGroup";
 const meta: Meta<typeof ToggleButtonGroup> = {
 	title: "Input/ToggleButtonGroup",
 	component: ToggleButtonGroup,
-	tags: ["autodocs"],
 	args: {
 		id: "ButtonId",
 		choices: ["ONE", "TWO", "THREE"],

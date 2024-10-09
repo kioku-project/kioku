@@ -5,7 +5,6 @@ import { DangerAction } from "@/components/input/DangerAction";
 const meta: Meta<typeof DangerAction> = {
 	title: "Input/DangerAction",
 	component: DangerAction,
-	tags: ["autodocs"],
 	args: {
 		id: "dangerActionId",
 	},

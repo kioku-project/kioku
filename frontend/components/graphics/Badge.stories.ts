@@ -5,7 +5,6 @@ import { Badge } from "@/components/graphics/Badge";
 const meta: Meta<typeof Badge> = {
 	title: "Components/Badge",
 	component: Badge,
-	tags: ["autodocs"],
 	args: {},
 };
 

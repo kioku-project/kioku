@@ -5,7 +5,6 @@ import { Text } from "@/components/Text";
 const meta: Meta<typeof Text> = {
 	title: "Components/Text",
 	component: Text,
-	tags: ["autodocs"],
 	args: {},
 };
 

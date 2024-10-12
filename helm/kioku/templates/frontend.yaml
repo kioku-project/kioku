@@ -25,11 +25,11 @@ spec:
       {{ end }}
         ports:
         - containerPort: {{ .Values.frontend.port }}
+      {{ if .Values.frontend.autoscaler.enabled }}
         resources:
           limits:
             cpu: 500m
-          requests:
-            cpu: 200m
+      {{ end }}
         env:
           # TODO: Export to values.yaml
           - name: NEXT_PUBLIC_ENVIRONMENT
@@ -49,7 +49,8 @@ spec:
   ports:
     - port: {{ .Values.frontend.port }}
       targetPort: {{ .Values.frontend.containerPort }}
-  type: LoadBalancer
+  type: ClusterIP
+{{- if .Values.frontend.autoscaler.enabled -}}
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -63,3 +64,4 @@ spec:
  minReplicas: {{ .Values.frontend.autoscaler.min }}
  maxReplicas: {{ .Values.frontend.autoscaler.max }}
  targetCPUUtilizationPercentage: {{ .Values.frontend.autoscaler.targetCPUUtilizationPercentage }}
+{{- end -}}
